@@ -1,0 +1,11 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
+@import url("https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css");
+@import url(~@mdi/font/css/materialdesignicons.css);
+@import url(~vuetify/dist/vuetify.min.css);
+.v-input.search .v-input__slot {
+  margin-top: 8px; }
+
+.app--toolbar .v-toolbar__extension {
+  padding: 0 !important; }
+
+/*# sourceMappingURL=app.css.map */
