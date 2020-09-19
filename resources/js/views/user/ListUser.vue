@@ -1,76 +1,78 @@
 <template>
-  <v-row>
-    <v-col
-      class="py-0"
-      cols="12"
-    >
-      <new-user v-if="showNewModal" />
-      <edit-user v-if="showEditModal" />
-      <show-user v-if="showShowModal" />
-      <v-card>
-        <v-card-title>
-          {{
-            $vuetify.lang.t('$vuetify.titles.list', [
-              $vuetify.lang.t('$vuetify.user.user'),
-            ])
-          }}
-        </v-card-title>
-        <v-data-table
-          :headers="getUserTableColumns"
-          :items="users"
-          :loading="isTableLoading"
-          :search="search"
-          class="elevation-1"
-          sort-by="firstName"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-text-field
-                v-model="search"
-                :label="
-                  $vuetify.lang.t('$vuetify.actions.search')
-                "
-                append-icon="mdi-magnify"
-                hide-details
-                single-line
-              />
-              <v-spacer />
-              <v-btn
-                class="mb-2"
-                color="primary"
-                @click="toogleNewModal(true)"
+  <v-container>
+    <v-row>
+      <v-col
+        class="py-0"
+        cols="12"
+      >
+        <new-user v-if="showNewModal" />
+        <edit-user v-if="showEditModal" />
+        <show-user v-if="showShowModal" />
+        <v-card>
+          <v-card-title>
+            {{
+              $vuetify.lang.t('$vuetify.titles.list', [
+                $vuetify.lang.t('$vuetify.user.user'),
+              ])
+            }}
+          </v-card-title>
+          <v-data-table
+            :headers="getUserTableColumns"
+            :items="users"
+            :loading="isTableLoading"
+            :search="search"
+            class="elevation-1"
+            sort-by="firstName"
+          >
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-text-field
+                  v-model="search"
+                  :label="
+                    $vuetify.lang.t('$vuetify.actions.search')
+                  "
+                  append-icon="mdi-magnify"
+                  hide-details
+                  single-line
+                />
+                <v-spacer />
+                <v-btn
+                  class="mb-2"
+                  color="primary"
+                  @click="toogleNewModal(true)"
+                >
+                  <v-icon>mdi-account-plus</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.actions.new') }}
+                </v-btn>
+              </v-toolbar>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                class="mr-2"
+                small
+                @click="openShowModal(item.id)"
               >
-                <v-icon>mdi-account-plus</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.new') }}
-              </v-btn>
-            </v-toolbar>
-          </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              class="mr-2"
-              small
-              @click="openShowModal(item.id)"
-            >
-              mdi-eye
-            </v-icon>
-            <v-icon
-              class="mr-2"
-              small
-              @click="openEditModal(item.id)"
-            >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              small
-              @click="deleteUserHandler(item.id)"
-            >
-              mdi-delete
-            </v-icon>
-          </template>
-        </v-data-table>
-      </v-card>
-    </v-col>
-  </v-row>
+                mdi-eye
+              </v-icon>
+              <v-icon
+                class="mr-2"
+                small
+                @click="openEditModal(item.id)"
+              >
+                mdi-pencil
+              </v-icon>
+              <v-icon
+                small
+                @click="deleteUserHandler(item.id)"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

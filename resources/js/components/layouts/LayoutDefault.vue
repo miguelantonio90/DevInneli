@@ -14,9 +14,7 @@
     <v-main>
       <!-- Page Header -->
       <div class="page-wrapper">
-        <v-slide-x-transition>
-          <router-view />
-        </v-slide-x-transition>
+        <router-view />
       </div>
       <!-- App Footer -->
       <v-footer

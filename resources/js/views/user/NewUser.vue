@@ -103,7 +103,7 @@
               md="4"
             >
               <v-autocomplete
-                v-model="userData.country"
+                v-model="newUser.country"
                 :items="arrayCountry"
                 :label="
                   $vuetify.lang.t('$vuetify.country')
