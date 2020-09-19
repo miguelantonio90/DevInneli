@@ -72,7 +72,7 @@
             <v-spacer />
             <v-btn
               :disabled="!formValid"
-              :loading="loading"
+              :loading="loadingReset"
               color="primary"
               @click="changePassword"
             >
@@ -93,7 +93,6 @@ export default {
   name: 'ResetPassword',
   data () {
     return {
-      loading: false,
       formValid: false,
       hidePassword1: true,
       hidePassword2: true,
@@ -101,44 +100,44 @@ export default {
         email: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.email')
+                        ]),
           (v) =>
             /.+@.+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
+                        this.$vuetify.lang.t('$vuetify.rule.bad_email', [
+                          this.$vuetify.lang.t('$vuetify.email')
+                        ])
         ],
         password: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.password')
-              ]),
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.password')
+                        ]),
           (v) =>
             (v || '').length >= 8 ||
-              this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
+                        this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
         ],
         password_confirmation: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.confirm_password')
-              ]),
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.confirm_password')
+                        ]),
           (v) =>
             (!!v && v) === this.formReset.password ||
-              this.$vuetify.lang.t(
-                '$vuetify.rule.match',
-                [this.$vuetify.lang.t('$vuetify.password')],
-                [this.$vuetify.lang.t('$vuetify.confirm_password')]
-              )
+                        this.$vuetify.lang.t(
+                          '$vuetify.rule.match',
+                          [this.$vuetify.lang.t('$vuetify.password')],
+                          [this.$vuetify.lang.t('$vuetify.confirm_password')]
+                        )
         ]
       }
     }
   },
   computed: {
-    ...mapState('auth', ['formReset', 'successReset'])
+    ...mapState('auth', ['formReset', 'successReset', 'loadingReset'])
   },
   methods: {
     ...mapActions('auth', ['sendResetPassword']),
@@ -150,19 +149,21 @@ export default {
         password_confirmation: this.formReset.password_confirmation
       }
       this.sendResetPassword(data).then(() => {
-        this.loading = true
         if (this.successReset) {
-          this.loading = false
           const msg = this.$vuetify.lang.t(
             '$vuetify.messages.password_success'
           )
           this.$Toast.fire({
             icon: 'success',
-            title: msg,
-            timer: 5000
+            title: msg
           })
-          this.$router.push({ name: 'login' })
+        } else {
+          this.$Toast.fire({
+            icon: 'error',
+            title: 'Invalid Token.'
+          })
         }
+        this.$router.push({ name: 'login' })
       })
     }
   }
@@ -171,7 +172,7 @@ export default {
 
 <style lang="sass" scoped>
 .page-login
-  &__card
-    max-width: 600px
-    margin: 0 auto
+    &__card
+        max-width: 600px
+        margin: 0 auto
 </style>

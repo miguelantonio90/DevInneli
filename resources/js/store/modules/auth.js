@@ -9,11 +9,13 @@ const LOGOUT = 'LOGOUT'
 const LOGIN = 'LOGIN'
 const FORGOT_PASSWORD = 'FORGOT_PASSWORD'
 const SET_RESET = 'SET_RESET'
+const IN_PROCESS_RESET = 'IN_PROCESS_RESET'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
   userData: [],
   pending: false,
+  loadingReset: false,
   successForgot: false,
   successReset: false,
   fromModel: {
@@ -134,15 +136,17 @@ const actions = {
       })
   },
   async sendResetPassword ({ commit }, newData) {
+    commit(IN_PROCESS_RESET, true)
     commit('CLEAR_ERRORS', null, { root: true })
     return await auth
       .resetPassword(newData.token, newData)
       .then((response) => {
-        if (response.success) {
+        if (response.status === 200 && response.data.success) {
+          commit(IN_PROCESS_RESET, false)
           commit(SET_RESET, true)
         } else {
+          commit(IN_PROCESS_RESET, false)
           commit(SET_RESET, false)
-          commit('SET_ERRORS', response, { root: true })
         }
       })
   }
@@ -153,6 +157,10 @@ const mutations = {
   [SET_USER_DATA] (state, user) {
     state.userData = user
   },
+  [IN_PROCESS_RESET] (state, process) {
+    state.loadingReset = process
+  },
+
   [LOGIN] (state) {
     state.pending = true
   },

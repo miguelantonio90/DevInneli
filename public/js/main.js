@@ -3003,7 +3003,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 /* harmony import */ var _components_ThemeSettings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/ThemeSettings */ "./resources/js/components/ThemeSettings.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
@@ -3049,7 +3049,7 @@ __webpack_require__.r(__webpack_exports__);
       rightDrawer: false
     };
   },
-  computed: Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['errors'])),
+  computed: Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['errors'])),
   created: function created() {// add app events
   },
   methods: {
@@ -3353,7 +3353,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.keys */ "./node_modules/core-js/modules/es.object.keys.js");
 /* harmony import */ var core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util */ "./resources/js/util/index.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _config_localStorage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../config/localStorage */ "./resources/js/config/localStorage.js");
@@ -3479,7 +3479,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {};
   },
-  computed: Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])(Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])('auth', ['isLoggedIn'])), {}, {
+  computed: Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])(Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])('auth', ['isLoggedIn'])), {}, {
     toolbarColor: function toolbarColor() {
       return this.$vuetify.options.extra.mainNav;
     },
@@ -3534,7 +3534,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getUserData();
   },
-  methods: Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])(Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapActions"])('auth', ['sendLogoutRequest', 'getUserData'])), {}, {
+  methods: Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])(Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_3__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapActions"])('auth', ['sendLogoutRequest', 'getUserData'])), {}, {
     handleDrawerToggle: function handleDrawerToggle() {
       this.$emit('side-icon-click');
     },
@@ -82656,12 +82656,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _localStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./localStorage */ "./resources/js/config/localStorage.js");
 
 
-var baseUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000/api/';
+var baseUrl = "http://inneli.dev/api/";
 
 var post = function post(resource, params) {
   return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(baseUrl + resource, params, {
@@ -82701,7 +82701,6 @@ var remove = function remove(resource) {
   put: put,
   remove: remove
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -85572,12 +85571,12 @@ var getCountryToSelect = function getCountryToSelect() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 /* harmony import */ var vuetify_es5_locale_en__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetify/es5/locale/en */ "./node_modules/vuetify/es5/locale/en.js");
 /* harmony import */ var vuetify_es5_locale_en__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuetify_es5_locale_en__WEBPACK_IMPORTED_MODULE_1__);
 
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({
+/* harmony default export */ __webpack_exports__["default"] = (Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({
   label: 'English',
   // page login
   login: 'login',
@@ -85699,12 +85698,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 /* harmony import */ var vuetify_es5_locale_es__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetify/es5/locale/es */ "./node_modules/vuetify/es5/locale/es.js");
 /* harmony import */ var vuetify_es5_locale_es__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuetify_es5_locale_es__WEBPACK_IMPORTED_MODULE_1__);
 
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({
+/* harmony default export */ __webpack_exports__["default"] = (Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({
   label: 'Español',
   // page login
   login: 'login',
@@ -86553,12 +86552,12 @@ var mutations = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
 /* harmony import */ var _api_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../api/auth */ "./resources/js/api/auth.js");
 /* harmony import */ var _config_localStorage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../config/localStorage */ "./resources/js/config/localStorage.js");
 
@@ -86578,10 +86577,12 @@ var LOGOUT = 'LOGOUT';
 var LOGIN = 'LOGIN';
 var FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 var SET_RESET = 'SET_RESET';
+var IN_PROCESS_RESET = 'IN_PROCESS_RESET';
 var state = {
   isLoggedIn: !!_config_localStorage__WEBPACK_IMPORTED_MODULE_5__["default"].getToken(),
   userData: [],
   pending: false,
+  loadingReset: false,
   successForgot: false,
   successReset: false,
   fromModel: {
@@ -86623,7 +86624,7 @@ var getters = {
 
 var actions = {
   getUserData: function getUserData(_ref) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee$(_context) {
         while (1) {
@@ -86654,7 +86655,7 @@ var actions = {
     }))();
   },
   sendLoginRequest: function sendLoginRequest(_ref4, login) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee2() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee2() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee2$(_context2) {
         while (1) {
@@ -86689,7 +86690,7 @@ var actions = {
     }))();
   },
   sendRegisterRequest: function sendRegisterRequest(_ref7, register) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee3() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee3() {
       var commit, dispatch;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee3$(_context3) {
         while (1) {
@@ -86725,7 +86726,7 @@ var actions = {
     }))();
   },
   sendLogoutRequest: function sendLogoutRequest(_ref10) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee4() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee4() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee4$(_context4) {
         while (1) {
@@ -86747,7 +86748,7 @@ var actions = {
     }))();
   },
   sendVerifyResendRequest: function sendVerifyResendRequest(_ref11) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee5() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee5() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee5$(_context5) {
         while (1) {
@@ -86774,7 +86775,7 @@ var actions = {
     }))();
   },
   sendVerifyRequest: function sendVerifyRequest(_ref13, hash) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee6() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee6() {
       var dispatch;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee6$(_context6) {
         while (1) {
@@ -86798,7 +86799,7 @@ var actions = {
     }))();
   },
   sendEmailForgot: function sendEmailForgot(_ref14, email) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee7() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee7() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee7$(_context7) {
         while (1) {
@@ -86833,32 +86834,32 @@ var actions = {
     }))();
   },
   sendResetPassword: function sendResetPassword(_ref15, newData) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee8() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee8() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
               commit = _ref15.commit;
+              commit(IN_PROCESS_RESET, true);
               commit('CLEAR_ERRORS', null, {
                 root: true
               });
-              _context8.next = 4;
+              _context8.next = 5;
               return _api_auth__WEBPACK_IMPORTED_MODULE_4__["default"].resetPassword(newData.token, newData).then(function (response) {
-                if (response.success) {
+                if (response.status === 200 && response.data.success) {
+                  commit(IN_PROCESS_RESET, false);
                   commit(SET_RESET, true);
                 } else {
+                  commit(IN_PROCESS_RESET, false);
                   commit(SET_RESET, false);
-                  commit('SET_ERRORS', response, {
-                    root: true
-                  });
                 }
               });
 
-            case 4:
+            case 5:
               return _context8.abrupt("return", _context8.sent);
 
-            case 5:
+            case 6:
             case "end":
               return _context8.stop();
           }
@@ -86868,25 +86869,27 @@ var actions = {
   }
 }; // mutations
 
-var mutations = (_mutations = {}, Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, SET_USER_DATA, function (state, user) {
+var mutations = (_mutations = {}, Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, SET_USER_DATA, function (state, user) {
   state.userData = user;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, IN_PROCESS_RESET, function (state, process) {
+  state.loadingReset = process;
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN, function (state) {
   state.pending = true;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN_SUCCESS, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN_SUCCESS, function (state) {
   state.isLoggedIn = true;
   state.pending = false;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGOUT, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGOUT, function (state) {
   state.isLoggedIn = false;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, FORGOT_PASSWORD, function (state, status) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, FORGOT_PASSWORD, function (state, status) {
   state.successForgot = status;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN_FAILED, function (state, error) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, LOGIN_FAILED, function (state, error) {
   console.log({
     state: state,
     error: error
   });
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, ENV_DATA_PROCESS, function (state, pending) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, ENV_DATA_PROCESS, function (state, pending) {
   state.pending = pending;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, SET_RESET, function (state, reset) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(_mutations, SET_RESET, function (state, reset) {
   state.formReset = {
     username: '',
     email: '',
@@ -86987,8 +86990,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _api_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../api/user */ "./resources/js/api/user.js");
 
 
@@ -87056,19 +87059,19 @@ var state = {
   isActionInProgress: false,
   isTableLoading: false
 };
-var mutations = (_mutations = {}, Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_NEW_MODAL, function (state, showModal) {
+var mutations = (_mutations = {}, Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_NEW_MODAL, function (state, showModal) {
   state.showNewModal = showModal;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_EDIT_MODAL, function (state, showModal) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_EDIT_MODAL, function (state, showModal) {
   state.showEditModal = showModal;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_SHOW_MODAL, function (state, showModal) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SWITCH_USER_SHOW_MODAL, function (state, showModal) {
   state.showShowModal = showModal;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_TABLE_LOADING, function (state, isLoading) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_TABLE_LOADING, function (state, isLoading) {
   state.isUserTableLoading = isLoading;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, FETCHING_USERS, function (state, users) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, FETCHING_USERS, function (state, users) {
   state.users = users;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, ENV_DATA_PROCESS, function (state, isActionInProgress) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, ENV_DATA_PROCESS, function (state, isActionInProgress) {
   state.isActionInProgress = isActionInProgress;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_CREATED, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_CREATED, function (state) {
   state.showNewModal = false;
   state.newUser = {
     firstName: '',
@@ -87086,11 +87089,11 @@ var mutations = (_mutations = {}, Object(_var_www_html_laravel_vue_node_modules_
     avatar: ''
   };
   state.saved = true;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_EDIT, function (state, userId) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_EDIT, function (state, userId) {
   state.editUser = state.users.filter(function (node) {
     return node.id === userId;
   })[0];
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_UPDATED, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_UPDATED, function (state) {
   state.showEditModal = false;
   state.editUser = {
     id: '',
@@ -87109,14 +87112,14 @@ var mutations = (_mutations = {}, Object(_var_www_html_laravel_vue_node_modules_
     avatar: ''
   };
   state.saved = true;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SET_EDIT_USER, function (state, profile) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SET_EDIT_USER, function (state, profile) {
   state.editUser.push(profile);
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_DELETED, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, USER_DELETED, function (state) {
   state.saved = true;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SET_USER_AVATAR, function (state, avatar) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, SET_USER_AVATAR, function (state, avatar) {
   state.avatar = avatar;
   state.saved = true;
-}), Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, FAILED_USER, function (state) {
+}), Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(_mutations, FAILED_USER, function (state) {
   state.saved = false;
 }), _mutations);
 var getters = {};
@@ -87144,7 +87147,7 @@ var actions = {
     commit(USER_EDIT, userId);
   },
   getUsers: function getUsers(_ref6) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.wrap(function _callee$(_context) {
         while (1) {
@@ -87172,7 +87175,7 @@ var actions = {
     }))();
   },
   createUser: function createUser(_ref8, newUser) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee2() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee2() {
       var commit, dispatch;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.wrap(function _callee2$(_context2) {
         while (1) {
@@ -87205,7 +87208,7 @@ var actions = {
     }))();
   },
   updateUser: function updateUser(_ref9, profile) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee3() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee3() {
       var commit, dispatch, request;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.wrap(function _callee3$(_context3) {
         while (1) {
@@ -87238,7 +87241,7 @@ var actions = {
     }))();
   },
   deleteUser: function deleteUser(_ref10, userId) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee4() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee4() {
       var commit, dispatch;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.wrap(function _callee4$(_context4) {
         while (1) {
@@ -87269,7 +87272,7 @@ var actions = {
     }))();
   },
   updateAvatar: function updateAvatar(_ref11, file) {
-    return Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee5() {
+    return Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.mark(function _callee5() {
       var commit, dispatch, image, sendData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default.a.wrap(function _callee5$(_context5) {
         while (1) {
@@ -87372,8 +87375,8 @@ var toggleFullScreen = function toggleFullScreen() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/laravel-vue/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /var/www/html/laravel-vue/resources/sass/app.sass */"./resources/sass/app.sass");
+__webpack_require__(/*! /var/www/html/DevInneli/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /var/www/html/DevInneli/resources/sass/app.sass */"./resources/sass/app.sass");
 
 
 /***/ })

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import storage from './localStorage'
 
-const baseUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000/api/'
+const baseUrl = process.env.MIX_APP_URL_API
 
 const post = (resource, params) => {
   return axios.post(baseUrl + resource, params, {

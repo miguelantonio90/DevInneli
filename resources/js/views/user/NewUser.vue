@@ -102,13 +102,12 @@
               cols="12"
               md="4"
             >
-              <v-select
+              <v-autocomplete
                 v-model="userData.country"
                 :items="arrayCountry"
                 :label="
                   $vuetify.lang.t('$vuetify.country')
                 "
-                :rules="newUser.country"
                 clearable
                 item-text="name"
                 item-value="id"
@@ -139,7 +138,7 @@
                     </v-list-item-content>
                   </template>
                 </template>
-              </v-select>
+              </v-autocomplete>
             </v-col>
             <v-col
               cols="12"

@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
+/* harmony import */ var _var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/objectSpread2 */ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 //
@@ -107,7 +107,6 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     return {
-      loading: false,
       formValid: false,
       hidePassword1: true,
       hidePassword2: true,
@@ -130,8 +129,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  computed: Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('auth', ['formReset', 'successReset'])),
-  methods: Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])(Object(_var_www_html_laravel_vue_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('auth', ['sendResetPassword'])), {}, {
+  computed: Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('auth', ['formReset', 'successReset', 'loadingReset'])),
+  methods: Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])(Object(_var_www_html_DevInneli_node_modules_babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__["default"])({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('auth', ['sendResetPassword'])), {}, {
     changePassword: function changePassword() {
       var _this2 = this;
 
@@ -143,20 +142,22 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.sendResetPassword(data).then(function () {
         if (_this2.successReset) {
-          _this2.loading = false;
-
           var msg = _this2.$vuetify.lang.t('$vuetify.messages.password_success');
 
           _this2.$Toast.fire({
             icon: 'success',
-            title: msg,
-            timer: 5000
+            title: msg
           });
-
-          _this2.$router.push({
-            name: 'login'
+        } else {
+          _this2.$Toast.fire({
+            icon: 'error',
+            title: 'Invalid Token.'
           });
         }
+
+        _this2.$router.push({
+          name: 'login'
+        });
       });
     }
   })
@@ -384,7 +385,7 @@ var render = function() {
                         {
                           attrs: {
                             disabled: !_vm.formValid,
-                            loading: _vm.loading,
+                            loading: _vm.loadingReset,
                             color: "primary"
                           },
                           on: { click: _vm.changePassword }
