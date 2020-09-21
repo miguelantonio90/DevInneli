@@ -3,9 +3,11 @@
 /public/storage
 /storage/*.key
 /vendor
+/public/*.js
 /public
 .env
 .env.backup
+.env.local
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -14,8 +16,6 @@ yarn-error.log
 /public/docs
 /resources/docs
 
-.DS_Store
-node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn.lock
@@ -23,8 +23,6 @@ yarn-error.log*
 /test/unit/coverage/
 /test/e2e/reports/
 selenium-debug.log
-node_modules
-release
 
 # Editor directories and files
 .idea
@@ -33,8 +31,6 @@ release
 *.ntvs*
 *.njsproj
 *.sln
-.env.local
-.env
 
 dist/
 

@@ -2,10 +2,10 @@
   <v-navigation-drawer
     v-model="drawer"
     :dark="$vuetify.dark"
-    :mini-variant.sync="mini"
     :width="drawerWidth"
     app
     class="app--drawer"
+    expand-on-hover
   >
     <v-toolbar
       color="primary darken-1"
@@ -136,34 +136,6 @@
         </template>
       </template>
     </v-list>
-    <template v-slot:append>
-      <template v-if="drawerWidth === 64">
-        <div class="d-flex">
-          <v-btn
-            class="mx-auto"
-            icon
-            tile
-            width="64"
-            @click="handleDrawerCollapse"
-          >
-            <v-icon>mdi-arrow-collapse-right</v-icon>
-          </v-btn>
-        </div>
-      </template>
-      <template v-else>
-        <div class="d-flex">
-          <v-spacer />
-          <v-btn
-            class="mr-2"
-            icon
-            tile
-            @click="handleDrawerCollapse"
-          >
-            <v-icon>mdi-arrow-collapse-left</v-icon>
-          </v-btn>
-        </div>
-      </template>
-    </template>
   </v-navigation-drawer>
 </template>
 <script>
