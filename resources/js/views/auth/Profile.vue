@@ -103,8 +103,8 @@
         xs12
       >
         <material-card
-          :text="$vuetify.lang.t('$vuetify.user.sub_profile')"
-          :title="$vuetify.lang.t('$vuetify.user.edit_profile')"
+          :text="$vuetify.lang.t('$vuetify.employment.sub_profile')"
+          :title="$vuetify.lang.t('$vuetify.employment.edit_profile')"
           color="color"
         >
           <v-form
@@ -279,7 +279,7 @@
                     <v-icon>mdi-account-edit</v-icon>
                     {{
                       $vuetify.lang.t(
-                        '$vuetify.user.btn_edit',
+                        '$vuetify.employment.btn_edit',
                       )
                     }}
                   </v-btn>
@@ -394,10 +394,10 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['getUserData']),
-    ...mapActions('user', ['updateUser', 'updateAvatar']),
+    ...mapActions('user', ['updateEmployment', 'updateAvatar']),
     async updateProfile () {
       this.loading = true
-      await this.updateUser(this.userData).then(() => {
+      await this.updateEmployment(this.userData).then(() => {
         if (this.saved) {
           this.loading = false
           const msg = this.$vuetify.lang.t(

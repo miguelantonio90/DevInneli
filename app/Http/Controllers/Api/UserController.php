@@ -9,10 +9,9 @@ use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class EmploymentController extends Controller
 {
     public function __construct()
     {
@@ -26,7 +25,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->with('roles')->get();
+        $users = User::latest()
+            ->with('position')
+            ->where('position', '<>', 'admin')
+            ->get();
 
         return ResponseHelper::sendResponse(
             $users,
@@ -42,8 +44,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //Auth::user()->authorizeRoles('admin');
-
         $this->validator($request->all())->validate();
 
         $created = (new User())->createUser($request->all());
@@ -56,6 +56,19 @@ class UserController extends Controller
             $created,
             'User has created successfully.'
         );
+    }
+
+    /**
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
     }
 
     /**
@@ -119,25 +132,12 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-       //Auth::user()->authorizeRoles('admin');
+        //Auth::user()->authorizeRoles('admin');
 
         $delete = User::findOrFail($id)->delete();
         return ResponseHelper::sendResponse(
             $delete,
             'Users has deleted successfully.'
         );
-    }
-
-    /**
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-        ]);
     }
 }

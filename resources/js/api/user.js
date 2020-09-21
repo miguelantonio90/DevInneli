@@ -1,7 +1,7 @@
 import api from '../config/api'
 
 export default {
-  fetchUsers () {
+  fetchEmployments () {
     return api.get('user')
   },
   sendCreateRequest (user) {

@@ -7,7 +7,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.user.user'),
+            $vuetify.lang.t('$vuetify.menu.employment'),
           ])
         }}</span>
       </v-card-title>
@@ -24,7 +24,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newUser.firstName"
+                v-model="newEmployment.firstName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
@@ -37,7 +37,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newUser.lastName"
+                v-model="newEmployment.lastName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.lastName')"
                 required
@@ -49,19 +49,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newUser.company"
-                :counter="25"
-                :label="$vuetify.lang.t('$vuetify.company')"
-                :rules="formRule.company"
-                @keypress="lettersNumbers"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="newUser.email"
+                v-model="newEmployment.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
                 autocomplete="off"
@@ -73,7 +61,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newUser.username"
+                v-model="newEmployment.username"
                 :counter="8"
                 :label="$vuetify.lang.t('$vuetify.username')"
                 autocomplete="off"
@@ -87,93 +75,13 @@
               md="4"
             >
               <v-text-field
-                v-model="newUser.password"
+                v-model="newEmployment.password"
                 :label="$vuetify.lang.t('$vuetify.password')"
                 :rules="formRule.password"
                 autocomplete="off"
                 name="password"
                 required
                 type="password"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-autocomplete
-                v-model="newUser.country"
-                :items="arrayCountry"
-                :label="
-                  $vuetify.lang.t('$vuetify.country')
-                "
-                clearable
-                item-text="name"
-                item-value="id"
-                required
-              >
-                <template
-                  slot="item"
-                  slot-scope="data"
-                >
-                  <template
-                    v-if="
-                      typeof data.item !==
-                        'object'
-                    "
-                  >
-                    <v-list-item-content
-                      v-text="data.item"
-                    />
-                  </template>
-                  <template v-else>
-                    <v-list-item-avatar>
-                      {{
-                        data.item.emoji
-                      }}
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="newUser.phone"
-                :label="$vuetify.lang.t('$vuetify.phone')"
-                autocomplete="off"
-                class="hiddenSpinner"
-                name="phone"
-                required
-                @keypress="numbers"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="newUser.address"
-                :label="$vuetify.lang.t('$vuetify.address')"
-                required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="newUser.aboutMe"
-                :label="$vuetify.lang.t('$vuetify.about_me')"
-                required
               />
             </v-col>
           </v-row>
@@ -256,7 +164,7 @@ export default {
                 this.$vuetify.lang.t('$vuetify.confirm_password')
               ]),
           (v) =>
-            (!!v && v) === this.newUser.password ||
+            (!!v && v) === this.newEmployment.password ||
               this.$vuetify.lang.t(
                 '$vuetify.rule.match',
                 [this.$vuetify.lang.t('$vuetify.password')],
@@ -268,13 +176,13 @@ export default {
   },
   computed: {
     ...mapState('statics', ['arrayCountry']),
-    ...mapState('user', ['saved', 'newUser'])
+    ...mapState('employment', ['saved', 'newEmployment'])
   },
   mounted () {
     this.formValid = false
   },
   methods: {
-    ...mapActions('user', ['createUser', 'toogleNewModal']),
+    ...mapActions('employment', ['createEmployment', 'toogleNewModal']),
     changePhone (e) {
       console.log(e)
     },
@@ -309,15 +217,15 @@ export default {
       }
     },
     onCountry (digit) {
-      this.newUser.country = this.arrayCountry.filter(
+      this.newEmployment.country = this.arrayCountry.filter(
         (c) => c.code === digit
       )[0].name
-      console.log(this.newUser.country)
+      console.log(this.newEmployment.country)
     },
     async createNewUser () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createUser(this.newUser).then(() => {
+        await this.createEmployment(this.newEmployment).then(() => {
           if (this.saved) {
             this.loading = false
             const msg = this.$vuetify.lang.t(

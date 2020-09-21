@@ -5,20 +5,20 @@
         class="py-0"
         cols="12"
       >
-        <new-user v-if="showNewModal" />
-        <edit-user v-if="showEditModal" />
-        <show-user v-if="showShowModal" />
+        <new-employment v-if="showNewModal" />
+        <edit-employment v-if="showEditModal" />
+        <show-employment v-if="showShowModal" />
         <v-card>
           <v-card-title>
             {{
               $vuetify.lang.t('$vuetify.titles.list', [
-                $vuetify.lang.t('$vuetify.user.user'),
+                $vuetify.lang.t('$vuetify.menu.employment'),
               ])
             }}
           </v-card-title>
           <v-data-table
             :headers="getUserTableColumns"
-            :items="users"
+            :items="employments"
             :loading="isTableLoading"
             :search="search"
             class="elevation-1"
@@ -63,7 +63,7 @@
               </v-icon>
               <v-icon
                 small
-                @click="deleteUserHandler(item.id)"
+                @click="deleteEmploymentHandler(item.id)"
               >
                 mdi-delete
               </v-icon>
@@ -77,15 +77,15 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewUser from '../../views/user/NewUser'
-import EditUser from '../../views/user/EditUser'
-import ShowUser from '../../views/user/ShowUser'
+import NewEmployment from './NewEmployment'
+import EditEmployment from './EditEmployment'
+import ShowEmployment from './ShowEmployment'
 
 export default {
   components: {
-    ShowUser,
-    NewUser,
-    EditUser
+    ShowEmployment,
+    NewEmployment,
+    EditEmployment
   },
   data () {
     return {
@@ -93,11 +93,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', [
+    ...mapState('employment', [
       'showNewModal',
       'showEditModal',
       'showShowModal',
-      'users',
+      'employments',
       'isTableLoading'
     ]),
     getUserTableColumns () {
@@ -119,8 +119,8 @@ export default {
           value: 'email'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country'
+          text: this.$vuetify.lang.t('$vuetify.position'),
+          value: 'position.name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -131,21 +131,21 @@ export default {
     }
   },
   created () {
-    this.getUsers()
+    this.getEmployments()
   },
   methods: {
-    ...mapActions('user', [
+    ...mapActions('employment', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getUsers',
-      'deleteUser'
+      'getEmployments',
+      'deleteEmployment'
     ]),
-    deleteUserHandler (userId) {
+    deleteEmploymentHandler (userId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.user.user')
+            this.$vuetify.lang.t('$vuetify.menu.employment')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -161,7 +161,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteUser(userId)
+          if (result.value) this.deleteEmployment(userId)
         })
     }
   }
