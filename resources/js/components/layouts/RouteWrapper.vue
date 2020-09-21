@@ -1,7 +1,5 @@
 <template>
-  <v-slide-x-transition>
-    <router-view />
-  </v-slide-x-transition>
+  <router-view />
 </template>
 <script>
 export default {

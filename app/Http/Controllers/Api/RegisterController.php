@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Role;
 use App\User;
@@ -67,10 +68,6 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->getParsedBody())));
 
-        $user
-            ->roles()
-            ->attach(Role::where('name', 'user')->first());
-
         $this->guard()->login($user);
         $data = $request->getParsedBody();
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
@@ -109,11 +106,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'firstName' => $data['firstName'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'isAdmin' => 0,
         ]);
+        $user->positions()
+            ->attach(Position::where('key', 'manager')->first());
+
+        return $user;
     }
 
 

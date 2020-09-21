@@ -5,20 +5,20 @@
         class="py-0"
         cols="12"
       >
-        <new-employment v-if="showNewModal" />
-        <edit-employment v-if="showEditModal" />
-        <show-employment v-if="showShowModal" />
+        <new-user v-if="showNewModal" />
+        <edit-user v-if="showEditModal" />
+        <show-user v-if="showShowModal" />
         <v-card>
           <v-card-title>
             {{
               $vuetify.lang.t('$vuetify.titles.list', [
-                $vuetify.lang.t('$vuetify.menu.employment'),
+                $vuetify.lang.t('$vuetify.menu.user'),
               ])
             }}
           </v-card-title>
           <v-data-table
             :headers="getUserTableColumns"
-            :items="employments"
+            :items="users"
             :loading="isTableLoading"
             :search="search"
             class="elevation-1"
@@ -41,7 +41,7 @@
                   color="primary"
                   @click="toogleNewModal(true)"
                 >
-                  <v-icon>mdi-account-plus</v-icon>
+                  <v-icon>mdi-plus</v-icon>
                   {{ $vuetify.lang.t('$vuetify.actions.new') }}
                 </v-btn>
               </v-toolbar>
@@ -63,7 +63,7 @@
               </v-icon>
               <v-icon
                 small
-                @click="deleteEmploymentHandler(item.id)"
+                @click="deleteUserHandler(item.id)"
               >
                 mdi-delete
               </v-icon>
@@ -77,15 +77,15 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewEmployment from './NewEmployment'
-import EditEmployment from './EditEmployment'
-import ShowEmployment from './ShowEmployment'
+import NewUser from './NewUser'
+import EditUser from './EditUser'
+import ShowUser from './ShowUser'
 
 export default {
   components: {
-    ShowEmployment,
-    NewEmployment,
-    EditEmployment
+    ShowUser,
+    NewUser,
+    EditUser
   },
   data () {
     return {
@@ -93,11 +93,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('employment', [
+    ...mapState('user', [
       'showNewModal',
       'showEditModal',
       'showShowModal',
-      'employments',
+      'users',
       'isTableLoading'
     ]),
     getUserTableColumns () {
@@ -131,21 +131,21 @@ export default {
     }
   },
   created () {
-    this.getEmployments()
+    this.getUsers()
   },
   methods: {
-    ...mapActions('employment', [
+    ...mapActions('user', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getEmployments',
-      'deleteEmployment'
+      'getUsers',
+      'deleteUser'
     ]),
-    deleteEmploymentHandler (userId) {
+    deleteUserHandler (userId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.employment')
+            this.$vuetify.lang.t('$vuetify.menu.user')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -161,7 +161,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteEmployment(userId)
+          if (result.value) this.deleteUser(userId)
         })
     }
   }

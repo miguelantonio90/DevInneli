@@ -7,7 +7,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.employment'),
+            $vuetify.lang.t('$vuetify.menu.user'),
           ])
         }}</span>
       </v-card-title>
@@ -24,7 +24,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newEmployment.firstName"
+                v-model="newUser.firstName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
@@ -37,7 +37,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newEmployment.lastName"
+                v-model="newUser.lastName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.lastName')"
                 required
@@ -49,7 +49,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newEmployment.email"
+                v-model="newUser.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
                 autocomplete="off"
@@ -61,7 +61,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newEmployment.username"
+                v-model="newUser.username"
                 :counter="8"
                 :label="$vuetify.lang.t('$vuetify.username')"
                 autocomplete="off"
@@ -75,7 +75,7 @@
               md="4"
             >
               <v-text-field
-                v-model="newEmployment.password"
+                v-model="newUser.password"
                 :label="$vuetify.lang.t('$vuetify.password')"
                 :rules="formRule.password"
                 autocomplete="off"
@@ -164,7 +164,7 @@ export default {
                 this.$vuetify.lang.t('$vuetify.confirm_password')
               ]),
           (v) =>
-            (!!v && v) === this.newEmployment.password ||
+            (!!v && v) === this.newUser.password ||
               this.$vuetify.lang.t(
                 '$vuetify.rule.match',
                 [this.$vuetify.lang.t('$vuetify.password')],
@@ -176,13 +176,13 @@ export default {
   },
   computed: {
     ...mapState('statics', ['arrayCountry']),
-    ...mapState('employment', ['saved', 'newEmployment'])
+    ...mapState('user', ['saved', 'newUser'])
   },
   mounted () {
     this.formValid = false
   },
   methods: {
-    ...mapActions('employment', ['createEmployment', 'toogleNewModal']),
+    ...mapActions('user', ['createUser', 'toogleNewModal']),
     changePhone (e) {
       console.log(e)
     },
@@ -217,15 +217,15 @@ export default {
       }
     },
     onCountry (digit) {
-      this.newEmployment.country = this.arrayCountry.filter(
+      this.newUser.country = this.arrayCountry.filter(
         (c) => c.code === digit
       )[0].name
-      console.log(this.newEmployment.country)
+      console.log(this.newUser.country)
     },
     async createNewUser () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createEmployment(this.newEmployment).then(() => {
+        await this.createUser(this.newUser).then(() => {
           if (this.saved) {
             this.loading = false
             const msg = this.$vuetify.lang.t(

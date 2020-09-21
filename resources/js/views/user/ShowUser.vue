@@ -7,7 +7,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.show', [
-            $vuetify.lang.t('$vuetify.menu.employment'),
+            $vuetify.lang.t('$vuetify.menu.user'),
           ])
         }}</span>
       </v-card-title>
@@ -159,7 +159,7 @@ export default {
     ...mapState('statics', ['arrayCountry'])
   },
   methods: {
-    ...mapActions('user', ['updateEmployment', 'toogleShowModal'])
+    ...mapActions('user', ['updateUser', 'toogleShowModal'])
   }
 }
 </script>

@@ -7,7 +7,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.employment'),
+            $vuetify.lang.t('$vuetify.menu.user'),
           ])
         }}</span>
       </v-card-title>
@@ -25,7 +25,7 @@
               md="4"
             >
               <v-text-field
-                v-model="editEmployment.firstName"
+                v-model="editUser.firstName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
@@ -38,7 +38,7 @@
               md="4"
             >
               <v-text-field
-                v-model="editEmployment.lastName"
+                v-model="editUser.lastName"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.lastName')"
                 required
@@ -50,7 +50,7 @@
               md="4"
             >
               <v-text-field
-                v-model="editEmployment.email"
+                v-model="editUser.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
                 autocomplete="off"
@@ -62,7 +62,7 @@
               md="4"
             >
               <v-text-field
-                v-model="editEmployment.username"
+                v-model="editUser.username"
                 :counter="8"
                 :label="$vuetify.lang.t('$vuetify.username')"
                 autocomplete="off"
@@ -76,7 +76,7 @@
               md="4"
             >
               <v-text-field
-                v-model="editEmployment.password"
+                v-model="editUser.password"
                 :label="$vuetify.lang.t('$vuetify.password')"
                 :rules="formRule.password"
                 autocomplete="off"
@@ -102,7 +102,7 @@
           :disabled="!formValid"
           class="mb-2"
           color="primary"
-          @click="updateEmploymentHandler"
+          @click="updateUserHandler"
         >
           <v-icon>mdi-check</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -151,13 +151,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('employment', ['saved', 'editEmployment']),
+    ...mapState('user', ['saved', 'editUser']),
     ...mapState('statics', ['arrayCountry'])
   },
   methods: {
-    ...mapActions('employment', ['updateEmployment', 'toogleEditModal']),
+    ...mapActions('user', ['updateUser', 'toogleEditModal']),
     onCountry (digit) {
-      this.editEmployment.country = this.arrayCountry.filter((c) => c.code === digit)[0]
+      this.editUser.country = this.arrayCountry.filter((c) => c.code === digit)[0]
     },
     letters (event) {
       const regex = new RegExp('^[A-Za-z ]+$')
@@ -179,10 +179,10 @@ export default {
         return false
       }
     },
-    async updateEmploymentHandler () {
+    async updateUserHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.updateEmployment(this.editEmployment).then(() => {
+        await this.updateUser(this.editUser).then(() => {
           if (this.saved) {
             this.loading = false
             const msg = this.$vuetify.lang.t(

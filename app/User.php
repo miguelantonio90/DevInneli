@@ -4,20 +4,19 @@ namespace App;
 
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 /**
  * @method static findOrFail($id)
  * @method static latest()
  * @method find($id)
+ * @method static create(array $array)
  * @property mixed email
  * @property mixed|string password
  * @property mixed avatar
+ * @property mixed position
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,7 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'lastName', 'email', 'password', 'username', 'address', 'phone', 'country', 'company', 'aboutMe'
+        'firstName', 'lastName', 'email', 'password', 'username'
     ];
 
     /**
@@ -50,88 +49,24 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * @return BelongsToMany
-     */
-    public function roles()
+    public function positions()
     {
-        return $this
-            ->belongsToMany('App\Role')
-            ->withTimestamps();
+        return $this->belongsToMany(Position::class);
     }
 
-    /**
-     * @param $roles
-     * @return bool
-     */
-    public function authorizeRoles($roles)
+    public function shop()
     {
-        if ($this->hasAnyRole($roles)) {
-            return true;
-        }
-        abort(401, 'Unauthorized.');
+        return $this->belongsTo(Shop::class);
     }
 
-    /**
-     * @param $roles
-     * @return bool
-     */
-    public function hasAnyRole($roles)
+    public function employee()
     {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->hasRole($roles)) {
-                return true;
-            }
-        }
-        return false;
+        return $this->hasOne(Employee::class);
     }
 
-    /**
-     * @param $role
-     * @return bool
-     */
-    public function hasRole($role)
-    {
-        if ($this->roles()->where('name', $role)->first()) {
-            return true;
-        }
-        return false;
-    }
 
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
-    }
-
-    /**
-     * @param Request $request
-     * @return User
-     */
-    public function createUser( $request)
-    {
-        $user = new User();
-
-        foreach ($this->fillable as $key => $value) {
-            switch ($value) {
-                case 'password':
-                    if (!empty($request[$value])) {
-                        $user->password = Hash::make($request[$value]);
-                    }
-                    break;
-
-                default:
-                    $user->$value = $request[$value];
-                    break;
-            }
-        }
-        $user->save();
-
-        return $user;
     }
 }

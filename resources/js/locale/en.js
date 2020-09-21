@@ -26,6 +26,7 @@ export default {
   address: 'Address',
   city: 'City',
   country: 'Country',
+  position: 'Position',
   postal_code: 'Postal Code',
   about_me: 'About Me',
   phone: 'Phone',
@@ -42,8 +43,9 @@ export default {
     profile: 'User Profile',
     logout: 'Logout',
     user_list: 'User List',
-    employment: 'Employments',
-    employment_list: 'Employment List',
+    user: 'Users',
+    access: 'Access permission',
+    access_list: 'Permission List',
     client: 'Client',
     client_list: 'Client List',
     articles: 'Articles',
@@ -51,10 +53,11 @@ export default {
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
     discounts_list: 'Discounts List',
+    shop: 'Shop',
     resume: 'Resume',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
-    sell_employment: 'Sale by Employees',
+    sell_user: 'Sale by Employees',
     sell_types_payment: 'Sale by types of payment'
   },
   // settings
@@ -84,13 +87,14 @@ export default {
       'An email has been sent with the details to change password.',
     password_success: 'The password was updated successfully.'
   },
-  // user
-  user: {
+  // profile
+  profile: {
     user: 'User',
     edit_profile: 'Edit Profile',
     sub_profile: 'Complete your profile',
     btn_edit: 'Update'
-  }, // options
+  },
+  // options
   actions: {
     actions: 'Actions',
     accept: 'Accept',
@@ -109,6 +113,14 @@ export default {
     edit: 'Edit {0}',
     show: 'Show {0}',
     delete: 'Delete {0}'
+  },
+
+  access: {
+    key: 'Key',
+    name: 'Name',
+    accessPin: 'Access with Pin Code',
+    accessEmail: 'Access with Email',
+    description: 'Description'
   },
   ...en
 }

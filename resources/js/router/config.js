@@ -136,15 +136,16 @@ export const protectedRoute = [
           hiddenInMenu: true,
           requiresAuth: true
         },
-        component: () => import('../views/user/Profile')
+        component: () => import('../views/auth/Profile')
       },
       {
         path: '/resume',
         component: RouteWrapper,
-        redirect: '/resume/user',
+        redirect: '/dashboard/resume',
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
+          requiresAuth: true,
           group: 'resume'
         },
         children: [
@@ -155,7 +156,7 @@ export const protectedRoute = [
               title: 'sell_product',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
             path: '/resume/sell_category.list',
@@ -164,16 +165,16 @@ export const protectedRoute = [
               title: 'sell_category',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
-            path: '/resume/sell_employment.list',
-            name: 'sell_employment',
+            path: '/resume/sell_user.list',
+            name: 'sell_user',
             meta: {
-              title: 'sell_employment',
+              title: 'sell_user',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
             path: '/resume/sell_types_payment.list',
@@ -182,17 +183,18 @@ export const protectedRoute = [
               title: 'sell_types_payment',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           }
         ]
       },
       {
         path: '/articles',
         component: RouteWrapper,
-        redirect: '/articles/user',
+        redirect: '/dashboard/articles',
         meta: {
           title: 'articles',
           icon: 'mdi-shopping',
+          requiresAuth: true,
           group: 'articles'
         },
         children: [
@@ -203,7 +205,7 @@ export const protectedRoute = [
               title: 'product_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
             path: '/articles/category.list',
@@ -212,7 +214,7 @@ export const protectedRoute = [
               title: 'category_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
             path: '/articles/modifiers.list',
@@ -221,7 +223,7 @@ export const protectedRoute = [
               title: 'modifiers_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           },
           {
             path: '/articles/discounts.list',
@@ -230,72 +232,69 @@ export const protectedRoute = [
               title: 'discounts_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           }
         ]
       },
       {
-        path: '/employments',
+        path: '/users',
         component: RouteWrapper,
-        redirect: '/employments/user',
+        redirect: 'dashboard/users',
         meta: {
-          title: 'employment',
+          title: 'user',
           icon: 'mdi-account-star',
-          group: 'setting'
+          group: 'user'
         },
         children: [
           {
-            path: '/setting/employment.list',
-            name: 'employment_list',
+            path: '/users/user.list',
+            name: 'user_list',
             meta: {
-              title: 'employment_list',
+              title: 'user_list',
               icon: 'mdi-database-plus'
             },
             component: () => import('../views/user/ListUser')
+          }, {
+            path: '/users/access.list',
+            name: 'access',
+            meta: {
+              title: 'access',
+              icon: 'mdi-account-key'
+            },
+            component: () => import('../views/access/ListAccess')
           }
         ]
       },
       {
         path: '/clients',
         component: RouteWrapper,
-        redirect: '/setting/user',
+        redirect: 'dashboard/clients',
         meta: {
           title: 'client',
           icon: 'mdi-account-multiple',
-          group: 'setting'
+          group: 'clients',
+          requiresAuth: true
         },
         children: [
           {
-            path: '/setting/client.list',
+            path: '/clients/client.list',
             name: 'clients_list',
             meta: {
               title: 'client_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/user/ListUser')
+            component: () => import('../views/error/Deny')
           }
         ]
       },
       {
         path: '/setting',
-        component: RouteWrapper,
-        redirect: '/setting/user',
         meta: {
           title: 'setting',
           icon: 'mdi-wrench',
-          group: 'setting'
+          requiresAuth: true
         },
-        children: [
-          {
-            path: '/setting/user.list',
-            name: 'user_list',
-            meta: {
-              title: 'user_list',
-              icon: 'mdi-account'
-            },
-            component: () => import('../views/user/ListUser')
-          }
-        ]
+        component: () => import('../views/general/General')
       }
     ]
   },

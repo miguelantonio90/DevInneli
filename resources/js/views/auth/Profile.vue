@@ -26,7 +26,7 @@
               <base64-upload
                 :image-src="getAvatar"
                 :image-style="{ 'border-radius': '50%' }"
-                class="user mx-auto d-block"
+                class="profile mx-auto d-block"
                 @change="onChangeImage($event)"
               />
               <v-slide-x-transition>
@@ -103,8 +103,8 @@
         xs12
       >
         <material-card
-          :text="$vuetify.lang.t('$vuetify.employment.sub_profile')"
-          :title="$vuetify.lang.t('$vuetify.employment.edit_profile')"
+          :text="$vuetify.lang.t('$vuetify.profile.sub_profile')"
+          :title="$vuetify.lang.t('$vuetify.profile.edit_profile')"
           color="color"
         >
           <v-form
@@ -257,15 +257,6 @@
                     "
                   />
                 </v-flex>
-                <v-flex xs12>
-                  <v-textarea
-                    v-model="userData.aboutMe"
-                    :label="
-                      $vuetify.lang.t('$vuetify.about_me')
-                    "
-                    counter="250"
-                  />
-                </v-flex>
                 <v-flex
                   text-xs-right
                   xs12
@@ -279,7 +270,7 @@
                     <v-icon>mdi-account-edit</v-icon>
                     {{
                       $vuetify.lang.t(
-                        '$vuetify.employment.btn_edit',
+                        '$vuetify.profile.btn_edit',
                       )
                     }}
                   </v-btn>
@@ -394,10 +385,10 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['getUserData']),
-    ...mapActions('user', ['updateEmployment', 'updateAvatar']),
+    ...mapActions('user', ['updateUser', 'updateAvatar']),
     async updateProfile () {
       this.loading = true
-      await this.updateEmployment(this.userData).then(() => {
+      await this.updateUser(this.userData).then(() => {
         if (this.saved) {
           this.loading = false
           const msg = this.$vuetify.lang.t(
@@ -450,7 +441,7 @@ export default {
 }
 </script>
 <style scoped>
-.user {
+.profile {
   width: 150px;
   height: 150px;
   border-radius: 50%;

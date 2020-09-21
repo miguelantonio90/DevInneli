@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Role;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
-class EmploymentController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {
@@ -25,9 +25,9 @@ class EmploymentController extends Controller
      */
     public function index()
     {
-        $users = User::latest()
-            ->with('position')
-            ->where('position', '<>', 'admin')
+        $users = User::latest()->where('isAdmin', '=', 0)
+            ->with('positions')
+            ->with('employee')
             ->get();
 
         return ResponseHelper::sendResponse(
@@ -41,16 +41,13 @@ class EmploymentController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
         $this->validator($request->all())->validate();
 
-        $created = (new User())->createUser($request->all());
-
-        $created
-            ->roles()
-            ->attach(Role::where('name', 'user')->first());
+        $created = User::create($request->all());
 
         return ResponseHelper::sendResponse(
             $created,
@@ -79,7 +76,7 @@ class EmploymentController extends Controller
      */
     public function show(int $id)
     {
-        return User::latest()->with('roles')->get($id);
+        return User::latest()->get($id);
     }
 
     /**
@@ -91,8 +88,6 @@ class EmploymentController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        //Auth::user()->authorizeRoles(['user', 'admin']);
-
         $this->validator($request->all())->validate();
 
         $edit = User::findOrFail($id)->update($request->all());
@@ -105,8 +100,6 @@ class EmploymentController extends Controller
 
     public function updateAvatar(Request $request, $id)
     {
-        //Auth::user()->authorizeRoles(['user', 'admin']);
-
         if (!empty($request)) {
             $app = (new User())->find($id);
             $app->find($id);
@@ -132,7 +125,6 @@ class EmploymentController extends Controller
      */
     public function destroy(int $id)
     {
-        //Auth::user()->authorizeRoles('admin');
 
         $delete = User::findOrFail($id)->delete();
         return ResponseHelper::sendResponse(

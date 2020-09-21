@@ -1,6 +1,5 @@
 <?php
 
-use App\Role;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +12,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 1)->create()->each(function ($user) {
-            $user->roles()->save(factory(Role::class)->make());
-        });
+        factory(User::class, 1)->create();
     }
 }

@@ -18,7 +18,7 @@ export default {
   noDefined: 'No definido',
   aboutMe: 'Acerca de mi',
   activeAccount:
-    'Hola, su cuenta se ha creada, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
+        'Hola, su cuenta se ha creada, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
   confirm_password: 'Confirmar Contraseña',
   company: 'Compañía',
   first_name: 'Nombre(s)',
@@ -26,6 +26,7 @@ export default {
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
+  position: 'Cargo',
   postal_code: 'Código Postal',
   about_me: 'Acerca de mi',
   phone: 'Teléfono',
@@ -42,8 +43,9 @@ export default {
     profile: 'Perfil',
     logout: 'Salir',
     user_list: 'Listado de Usuarios',
-    employment: 'Empleados',
-    employment_list: 'Listado de Empleados',
+    user: 'Empleados',
+    access: 'Permiso de acceso',
+    access_list: 'Lista de Permisos',
     client: 'Cliente',
     client_list: 'Listado de Clientes',
     articles: 'Artículos',
@@ -51,10 +53,11 @@ export default {
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
     discounts_list: ' Listado de Descuentos',
+    shop: 'Tienda',
     resume: 'Resumen',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
-    sell_employment: 'Venta por Empleado',
+    sell_user: 'Venta por Empleado',
     sell_types_payment: 'Venta por tipos de pago'
   },
   // settings
@@ -75,8 +78,8 @@ export default {
     required_element: 'Este campo es requerido',
     bad_phone: '{0} debe ser válido'
   },
-  // user
-  user: {
+  // profile
+  profile: {
     user: 'Usuario',
     edit_profile: 'Editar Perfil',
     sub_profile: 'Complete su perfil',
@@ -109,8 +112,15 @@ export default {
     delete: 'Eliminar {0}',
     success_profile: 'Los datos han sido actualizados.',
     check_mail:
-      'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
+            'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
     password_success: 'La contraseña se actualizo correctamente.'
+  },
+  access: {
+    key: 'Llave',
+    name: 'Nombre',
+    accessPin: 'Acceso con Pin',
+    accessEmail: 'Acceso con Correo',
+    description: 'Descripción'
   },
   ...es
 }

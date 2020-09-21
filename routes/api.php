@@ -22,7 +22,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::post('login', 'LoginController@login')->name('login');
 
-    Route::post('register', 'RegisterController@register')->name('register');
+    Route::put('signup', 'RegisterController@register')->name('signup');
 
     Route::post('password/reset', 'ForgotPasswordController@sendPasswordResetLink')->name('password.reset');
     Route::post('password/reset/new/{hash}', 'ResetPasswordController@doReset')->name('password.reset.verify');
@@ -38,6 +38,10 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
         Route::resource('user', 'UserController');
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
+
+        Route::resource('access', 'AccessController');
+        Route::resource('shop', 'ShopController');
+        Route::resource('employee', 'EmployeeController');
 
     });
 

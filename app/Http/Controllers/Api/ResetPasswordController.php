@@ -31,6 +31,11 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    public function doReset(Request $request)
+    {
+        return $this->reset($request);
+    }
+
     protected function resetPassword($user, $password)
     {
         $user->password = Hash::make($password);
@@ -48,10 +53,5 @@ class ResetPasswordController extends Controller
     {
         $response = ['success' => false, 'message' => "Token Invalid"];
         return response($response, 200);
-    }
-
-    public function doReset(Request $request)
-    {
-        return $this->reset($request);
     }
 }

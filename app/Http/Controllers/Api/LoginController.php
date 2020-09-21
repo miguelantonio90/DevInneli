@@ -34,6 +34,12 @@ class LoginController extends Controller
     protected $server;
     protected $tokens;
     protected $jwt;
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     public function __construct(AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt)
     {
@@ -42,13 +48,6 @@ class LoginController extends Controller
         $this->jwt = $jwt;
         $this->tokens = $tokens;
     }
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -80,6 +79,7 @@ class LoginController extends Controller
     public function login(ServerRequestInterface $request)
     {
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
+
         $request = $request->withParsedBody($request->getParsedBody() + [
                 'grant_type' => 'password',
                 'client_id' => config('services.passport.client_id'),
