@@ -27,7 +27,8 @@ class UserController extends Controller
     {
         $users = User::latest()->where('isAdmin', '=', 0)
             ->with('positions')
-            ->with('employee')
+            ->with('employer')
+            ->with('shops')
             ->get();
 
         return ResponseHelper::sendResponse(
@@ -76,7 +77,7 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        return User::latest()->get($id);
+        return User::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**

@@ -17,13 +17,16 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->string('email')->unique();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
+            $table->string('pais')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
+
         });
     }
 
