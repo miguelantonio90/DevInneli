@@ -20,7 +20,7 @@ class CreateShopsTable extends Migration
             $table->string('email')->unique();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->string('pais')->nullable();
+            $table->string('country')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
             $table->integer('user_id')->unsigned();

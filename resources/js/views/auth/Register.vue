@@ -22,7 +22,7 @@
                             lazy-validation
                         >
                             <v-text-field
-                                v-model="formRegister.firstName"
+                                v-model="formRegister.shopName"
                                 :label="$vuetify.lang.t('$vuetify.company')"
                                 :rules="formRule.firstName"
                                 append-icon="mdi-account"
@@ -77,6 +77,7 @@
                                 :items="arrayCountry"
                                 :label="$vuetify.lang.t('$vuetify.country')"
                                 required
+                                :rules="formRule.country"
                             ></v-select>
                         </v-form>
                     </v-card-text>
@@ -159,7 +160,10 @@ export default {
                             [this.$vuetify.lang.t('$vuetify.password')],
                             [this.$vuetify.lang.t('$vuetify.confirm_password')]
                         )
-                ]
+                ],
+                country: [
+                    v => !!v|| this.$vuetify.lang.t('$vuetify.rule.select')
+                ],
             }
         }
     },

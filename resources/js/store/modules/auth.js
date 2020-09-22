@@ -23,7 +23,7 @@ const state = {
         password: ''
     },
     formRegister: {
-        firstName: '',
+        shopName: '',
         username: '',
         email: '',
         password: '',
