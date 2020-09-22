@@ -15,6 +15,7 @@ class AccessController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,6 +47,20 @@ class AccessController extends Controller
             $created,
             'Role has created successfully.'
         );
+    }
+
+    /**
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'key' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'accessPin' => ['required', 'boolean'],
+            'accessEmail' => ['required', 'boolean'],
+        ]);
     }
 
     /**
@@ -91,19 +106,5 @@ class AccessController extends Controller
             $delete,
             'Role has deleted successfully.'
         );
-    }
-
-    /**
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'key' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'accessPin' => ['required', 'boolean'],
-            'accessEmail' => ['required', 'boolean'],
-        ]);
     }
 }

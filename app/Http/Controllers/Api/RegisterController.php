@@ -10,7 +10,10 @@ use App\Providers\RouteServiceProvider;
 use App\Role;
 use App\Shop;
 use App\User;
+use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -86,10 +89,26 @@ class RegisterController extends Controller
     }
 
     /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'shopName' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'pais' => ['required'],
+        ]);
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @param array $data
-     * @return User|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return User|JsonResponse|Response
      */
     protected function create(array $data)
     {
@@ -117,24 +136,8 @@ class RegisterController extends Controller
             $user->shops()->saveMany([$shop]);
 
             return $user;
-        } catch (\Exception $err) {
+        } catch (Exception $err) {
             return ResponseHelper::sendError($err, $err->getMessage(), $err->getCode());
         }
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'shopName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'pais' => ['required'],
-        ]);
     }
 }

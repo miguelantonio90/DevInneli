@@ -13,8 +13,8 @@ class MailResetPasswordNotification extends ResetPassword
 {
     use Queueable;
 
-    protected $pageUrl;
     public $token;
+    protected $pageUrl;
 
     /**
      * Create a new notification instance.
