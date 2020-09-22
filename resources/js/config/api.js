@@ -3,7 +3,7 @@ import storage from './localStorage'
 const baseUrl = process.env.MIX_APP_URL_API
 
 const post = (resource, params) => {
-    console.log(baseUrl);
+  console.log(baseUrl)
   return axios.post(baseUrl + resource, params, {
     headers: {
       Authorization: storage.getToken()
