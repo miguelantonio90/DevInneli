@@ -99,7 +99,7 @@ class RegisterController extends Controller
             'shopName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'pais' => ['required'],
+            'country' => ['required'],
         ]);
     }
 
@@ -130,7 +130,7 @@ class RegisterController extends Controller
             $shop = new Shop();
             $shop->name = $data['shopName'];
             $shop->email = $data['email'];
-            $shop->pais = $data['pais'];
+            $shop->country = $data['country'];
 
             $user->shops()->saveMany([$shop]);
 
