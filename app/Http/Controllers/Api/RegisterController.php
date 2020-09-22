@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Employee;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ResponseHelper;
 use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Role;
+use App\Shop;
 use App\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -63,13 +64,14 @@ class RegisterController extends Controller
 
     public function register(ServerRequestInterface $request)
     {
-        //return $request->getParsedBody();
-        $this->validator($request->getParsedBody())->validate();
+        $this->validator($request->getParsedBody());
 
-        event(new Registered($user = $this->create($request->getParsedBody())));
+        $user = $this->create($request->getParsedBody());
+
 
         $this->guard()->login($user);
         $data = $request->getParsedBody();
+        return $data;
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
         $request = $request->withParsedBody([
                 'username' => $data['email'],
@@ -84,6 +86,43 @@ class RegisterController extends Controller
     }
 
     /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param array $data
+     * @return User|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    protected function create(array $data)
+    {
+        try {
+            $user = User::create([
+                'firstName' => 'Administrator',
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'isAdmin' => 0,
+            ]);
+
+            $user->positions()
+                ->attach(Position::where('key', 'manager')->first());
+
+            $employer = new Employee();
+            $employer->pinCode = 1234;
+
+            $user->employer()->save($employer);
+
+            $shop = new Shop();
+            $shop->name = $data['shopName'];
+            $shop->email = $data['email'];
+            $shop->pais = $data['pais'];
+
+            $user->shops()->saveMany([$shop]);
+
+            return $user;
+        } catch (\Exception $err) {
+            return ResponseHelper::sendError($err, $err->getMessage(), $err->getCode());
+        }
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param array $data
@@ -92,50 +131,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
+            'shopName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'pais' => ['required'],
         ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param array $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        $user = User::create([
-            'firstName' => $data['firstName'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'isAdmin' => 0,
-        ]);
-        $user->positions()
-            ->attach(Position::where('key', 'manager')->first());
-
-        return $user;
-    }
-
-
-    protected function registered(Request $request, $user)
-    {
-
-        return response()->json([
-            'token' => $user->createToken('inneli_app')->accessToken,
-            'user' => $request->user()
-        ]);
-    }
-
-    protected function createNewToken(ServerRequestInterface $request)
-    {
-        $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
-        $request = $request->withParsedBody($request->getParsedBody() + [
-                'grant_type' => 'password',
-                'client_id' => config('services.passport.client_id'),
-                'client_secret' => config('services.passport.client_secret')
-            ]);
-        return with($controller->issueToken($request));
     }
 }
