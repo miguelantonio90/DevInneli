@@ -135,46 +135,46 @@ export default {
       'deleteShop'
     ]),
     deleteShopHandler (shopId) {
-      this.shops.length >1?
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.shop')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteShop(shopId)
-        }):
-          this.$Swal
-              .fire({
-                  title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
-                      this.$vuetify.lang.t('$vuetify.actions.delete')
-                  ]),
-                  text: this.$vuetify.lang.t(
-                      '$vuetify.messages.error_delete'
-                  ),
-                  icon: 'warning',
-                  showCancelButton: true,
-                  cancelButtonText: this.$vuetify.lang.t(
-                      '$vuetify.actions.cancel'
-                  ),
-                  confirmButtonText: this.$vuetify.lang.t(
-                      '$vuetify.actions.accept'
-                  ),
-                  confirmButtonColor: 'red'
-              })
+      this.shops.length > 1
+        ? this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+              this.$vuetify.lang.t('$vuetify.menu.shop')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_delete'
+            ),
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.cancel'
+            ),
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.delete'
+            ),
+            confirmButtonColor: 'red'
+          })
+          .then((result) => {
+            if (result.value) this.deleteShop(shopId)
+          })
+        : this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
+              this.$vuetify.lang.t('$vuetify.actions.delete')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.error_delete'
+            ),
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.cancel'
+            ),
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
     }
   }
 }
