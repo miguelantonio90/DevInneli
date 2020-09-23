@@ -41,6 +41,10 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
         Route::resource('access', 'AccessController');
         Route::resource('shop', 'ShopController');
+        Route::get('shop', 'ShopController@index')->name('shops.list');
+        Route::post('shop', 'ShopController@store')->name('shops.create');
+        Route::post('shop/{id}', 'ShopController@update')->name('shops.update');
+        Route::delete('shop/{id}', 'ShopController@destroy')->name('shops.destroy');
         Route::resource('employee', 'EmployeeController');
 
     });

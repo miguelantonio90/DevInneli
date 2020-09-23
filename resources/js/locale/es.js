@@ -90,7 +90,8 @@ export default {
         refused: 'Fallido: Conexión rechazada.',
         success_avatar: 'La imagen se salvado satisfactoriamente.',
         success_profile: 'Los datos han sido actualizados.',
-        warning_delete: 'No se podrá revertir esta acción!'
+        warning_delete: 'No se podrá revertir esta acción!',
+        error_delete:'Debe existir al menos una tienda',
     },
     // options
     actions: {
@@ -108,13 +109,15 @@ export default {
     titles: {
         list: 'Lista de {0}',
         new: 'Nuevo {0}',
+        newF: 'Nueva {0}',
         edit: 'Editar {0}',
         show: 'Mostrar {0}',
         delete: 'Eliminar {0}',
         success_profile: 'Los datos han sido actualizados.',
         check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
-        password_success: 'La contraseña se actualizo correctamente.'
+        password_success: 'La contraseña se actualizo correctamente.',
+        no_action:"No se puede {0}"
     },
     access: {
         key: 'Llave',

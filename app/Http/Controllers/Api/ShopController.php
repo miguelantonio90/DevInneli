@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ResponseHelper;
 use App\Shop;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response as Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
@@ -15,13 +20,13 @@ class ShopController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * @return JsonResponse|Response
      */
     public function index()
     {
-        //
+        $shops = $this->getAllShopByUserId();
+        return ResponseHelper::sendResponse($shops, 'Shops retrieved successfully.');
+
     }
 
     /**
@@ -32,7 +37,18 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $managerEmail = DB::table('users')
+            ->select('email')
+            ->where('users.id', '=', auth()->id())
+            ->get();
+        $data['email'] = $managerEmail[0]->email;
+        $data['user_id'] = auth()->id();
+        $created = Shop::create($data);
+        return ResponseHelper::sendResponse(
+            $created,
+            'Shop has created successfully.'
+        );
     }
 
     /**
@@ -55,7 +71,11 @@ class ShopController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $edit = Shop::findOrFail($id)->update($request->all());
+        return ResponseHelper::sendResponse(
+            $edit,
+            'User has updated successfully.'
+        );
     }
 
     /**
@@ -66,6 +86,20 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (count($this->getAllShopByUserId()) > 1) {
+            $delete = Shop::findOrFail($id)->delete();
+            return ResponseHelper::sendResponse(
+                $delete,
+                'Shop has deleted successfully.'
+            );
+        }
+        return ResponseHelper::sendResponse([],"Shop can't by deleted");
+    }
+
+    private function getAllShopByUserId()
+    {
+        return Shop::latest()
+            ->where('user_id', '=', auth()->id())
+            ->get();
     }
 }

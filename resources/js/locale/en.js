@@ -83,6 +83,7 @@ export default {
         refused: 'Failed: Connections refused.',
         success_avatar: 'The image was successfully saved.',
         warning_delete: 'You won\'t be able to revert this!',
+        error_delete:'There must be at least one shop',
         success_profile: 'The data has been updated.',
         check_mail:
             'An email has been sent with the details to change password.',
@@ -106,14 +107,16 @@ export default {
         list: 'List',
         save: 'Save',
         cancel: 'Cancel',
-        close: 'Close'
+        close: 'Close',
     },
     titles: {
         list: '{0} List',
         new: 'New {0}',
+        newF: 'New {0}',
         edit: 'Edit {0}',
         show: 'Show {0}',
-        delete: 'Delete {0}'
+        delete: 'Delete {0}',
+        no_action:"Can't {0}"
     },
 
     access: {
