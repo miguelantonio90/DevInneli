@@ -75,7 +75,8 @@
                 item-value="id"
                 color="pink"
                 :items="arrayCountry"
-                :label="$vuetify.lang.t('$vuetify.country')"
+                :label="$vuetify.lang.t(
+                  '$vuetify.country')"
                 required
                 :rules="formRule.country"
               />
@@ -119,42 +120,30 @@ export default {
       hidePassword2: true,
       formRule: {
         firstName: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.name')
-                        ])
+          (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+            this.$vuetify.lang.t('$vuetify.name')
+          ])
         ],
         email: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.email')
-                        ]),
-          (v) =>
-            /.+@.+/.test(v) ||
+          (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+            this.$vuetify.lang.t('$vuetify.email')
+          ]),
+          (v) => /.+@.+\..+/.test(v) ||
                         this.$vuetify.lang.t('$vuetify.rule.bad_email', [
                           this.$vuetify.lang.t('$vuetify.email')
                         ])
         ],
         password: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.password')
-                        ]),
-          (v) =>
-            (v || '').length >= 8 ||
-                        this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
+          (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+            this.$vuetify.lang.t('$vuetify.password')
+          ]),
+          (v) => (v || '').length >= 8 || this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
         ],
         password_confirmation: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.confirm_password')
-                        ]),
-          (v) =>
-            (!!v && v) === this.formRegister.password ||
+          (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+            this.$vuetify.lang.t('$vuetify.confirm_password')
+          ]),
+          (v) => (!!v && v) === this.formRegister.password ||
                         this.$vuetify.lang.t(
                           '$vuetify.rule.match',
                           [this.$vuetify.lang.t('$vuetify.password')],

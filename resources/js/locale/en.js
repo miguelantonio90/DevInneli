@@ -13,6 +13,7 @@ export default {
   lastName: 'Last Name',
   email: 'Email',
   password: 'Password',
+  pinCode: 'Pin',
   confirm: 'Confirm',
   register: 'Register',
   noDefined: 'No defined',
@@ -20,6 +21,7 @@ export default {
   activeAccount:
         'Hello, your account has been created, but it has not been activated yet. Please access the registered email, you have been sent a message for activation.',
   confirm_password: 'Confirm Password',
+  confirm_pinCode: 'Confirm Pin Code',
   company: 'Company',
   first_name: 'First Name',
   last_name: 'Last Name',
@@ -76,7 +78,11 @@ export default {
     bad_email: '{0}  must be valid',
     required_element: 'This element is required',
     bad_phone: '{0}  must be valid',
-    select: 'Select value'
+    select: 'Select value',
+    pin: {
+      min: 'Just a minimum of {0} digits is allowed',
+      max: 'Just a maximum of {0} digits is allowed'
+    }
   },
   // error
   messages: {
@@ -125,6 +131,10 @@ export default {
     accessPin: 'Access with Pin Code',
     accessEmail: 'Access with Email',
     description: 'Description'
+  },
+  component: {
+    select: 'Select Columns',
+    others: 'others'
   },
   ...en
 }

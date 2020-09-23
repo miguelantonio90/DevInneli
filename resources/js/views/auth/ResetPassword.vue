@@ -104,7 +104,7 @@ export default {
                           this.$vuetify.lang.t('$vuetify.email')
                         ]),
           (v) =>
-            /.+@.+/.test(v) ||
+            /.+@.+\..+/.test(v) ||
                         this.$vuetify.lang.t('$vuetify.rule.bad_email', [
                           this.$vuetify.lang.t('$vuetify.email')
                         ])

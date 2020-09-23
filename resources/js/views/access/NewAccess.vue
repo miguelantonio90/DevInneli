@@ -35,7 +35,7 @@
             >
               <v-text-field
                 v-model="newAccess.name"
-                :counter="10"
+
                 :label="$vuetify.lang.t('$vuetify.access.name')"
                 required
               />
@@ -56,7 +56,7 @@
             >
               <v-text-field
                 v-model="newAccess.description"
-                :counter="10"
+
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>

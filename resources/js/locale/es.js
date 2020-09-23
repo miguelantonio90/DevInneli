@@ -13,6 +13,7 @@ export default {
   firstName: 'Nombre',
   lastName: 'Apellidos',
   password: 'Contraseña',
+  pinCode: 'Pin',
   confirm: 'Confirmación',
   register: 'Registrar',
   noDefined: 'No definido',
@@ -20,6 +21,7 @@ export default {
   activeAccount:
         'Hola, su cuenta se ha creada, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
   confirm_password: 'Confirmar Contraseña',
+  confirm_pinCode: 'Confirmar Pin',
   company: 'Compañía',
   first_name: 'Nombre(s)',
   last_name: 'Apellidos',
@@ -77,7 +79,11 @@ export default {
     bad_email: '{0} debe ser válido',
     required_element: 'Este campo es requerido',
     bad_phone: '{0} debe ser válido',
-    select: 'Seleccione un valor'
+    select: 'Seleccione un valor',
+    pin: {
+      min: 'La cantidad mínima es de {0} digítos',
+      max: 'La cantidad máxima es de {0} digítos'
+    }
   },
   // profile
   profile: {
@@ -124,6 +130,11 @@ export default {
     accessPin: 'Acceso con Pin',
     accessEmail: 'Acceso con Correo',
     description: 'Descripción'
+  },
+
+  component: {
+    select: 'Selecciona columnas',
+    others: 'otros'
   },
   ...es
 }

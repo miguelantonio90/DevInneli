@@ -6,6 +6,7 @@ use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -13,6 +14,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static latest()
  * @method find($id)
  * @method static create(array $array)
+ * @method static select(string $string, $raw)
  * @property mixed email
  * @property mixed|string password
  * @property mixed avatar
@@ -69,5 +71,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getUsers()
+    {
+        return DB::table('users')
+            ->select(
+                'users.*',
+                'employees.phone',
+                'employees.pinCode',
+                'positions.key',
+                'positions.name as position'
+            )
+            ->join('employees', 'users.id', '=', 'employees.user_id')
+            ->join('position_user', 'users.id', '=', 'position_user.user_id')
+            ->join('positions', 'positions.id', '=', 'position_user.position_id')
+            ->get();
     }
 }

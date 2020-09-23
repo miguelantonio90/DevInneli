@@ -7,8 +7,7 @@
       >
         <new-user v-if="showNewModal" />
         <edit-user v-if="showEditModal" />
-        <show-user v-if="showShowModal" />
-        <v-card>
+        <!--<v-card>
           <v-card-title>
             {{
               $vuetify.lang.t('$vuetify.titles.list', [
@@ -69,7 +68,18 @@
               </v-icon>
             </template>
           </v-data-table>
-        </v-card>
+        </v-card>-->
+        <app-data-table
+          :title="$vuetify.lang.t('$vuetify.titles.list',
+                                  [$vuetify.lang.t('$vuetify.menu.user'),])"
+          :columns="getUserTableColumns"
+          :rows="users"
+          :is-loading="isTableLoading"
+          sort-options="firstName"
+          @create-row="toogleNewModal(true)"
+          @edit-row="openEditModal($event)"
+          @delete-row="deleteUserHandler($event)"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -79,11 +89,9 @@
 import { mapActions, mapState } from 'vuex'
 import NewUser from './NewUser'
 import EditUser from './EditUser'
-import ShowUser from './ShowUser'
 
 export default {
   components: {
-    ShowUser,
     NewUser,
     EditUser
   },
@@ -111,16 +119,12 @@ export default {
           value: 'lastName'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.username'),
-          value: 'username'
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.email'),
           value: 'email'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.position'),
-          value: 'position.name'
+          value: 'position'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
