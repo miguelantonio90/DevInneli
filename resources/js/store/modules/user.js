@@ -28,11 +28,14 @@ const state = {
     email: '',
     username: '',
     password: '',
+    pinCode: '',
+    confirm_pinCode: '',
     codePin: '',
     position: '',
     phone: '',
     company: '',
-    avatar: ''
+    avatar: '',
+    shops: []
   },
   editUser: {
     id: '',
@@ -41,11 +44,13 @@ const state = {
     email: '',
     username: '',
     password: '',
-    codePin: '',
+    pinCode: '',
+    confirm_pinCode: '',
     position: '',
     phone: '',
     company: '',
-    avatar: ''
+    avatar: '',
+    shops: []
   },
   isUserTableLoading: false,
   isActionInProgress: false,
@@ -79,11 +84,12 @@ const mutations = {
       email: '',
       username: '',
       password: '',
-      codePin: '',
+      pinCode: '',
+      confirm_pinCode: '',
       position: '',
       phone: '',
       company: '',
-      avatar: ''
+      shops: []
     }
     state.saved = true
   },
@@ -99,11 +105,13 @@ const mutations = {
       email: '',
       username: '',
       password: '',
-      codePin: '',
+      pinCode: '',
+      confirm_pinCode: '',
       position: '',
       phone: '',
       company: '',
-      avatar: ''
+      avatar: '',
+      shops: []
     }
     state.saved = true
   },

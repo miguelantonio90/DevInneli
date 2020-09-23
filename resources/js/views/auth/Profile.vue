@@ -23,7 +23,7 @@
               class="pa-0"
               cols="12"
             >
-              <base64-upload
+              <avatar-picker
                 :image-src="getAvatar"
                 :image-style="{ 'border-radius': '50%' }"
                 class="profile mx-auto d-block"
@@ -285,15 +285,10 @@
 </template>
 
 <script>
-import MaterialCard from '../../components/utils/MaterialCard'
 import { mapActions, mapState } from 'vuex'
-import Base64Upload from '../../components/core/Base64Upload'
 
 export default {
-  components: {
-    Base64Upload,
-    MaterialCard
-  },
+  name: 'Profile',
   data () {
     return {
       color: 'primary',
@@ -341,7 +336,7 @@ export default {
                 this.$vuetify.lang.t('$vuetify.email')
               ]),
           (v) =>
-            /.+@.+/.test(v) ||
+            /.+@.+\..+/.test(v) ||
               this.$vuetify.lang.t('$vuetify.rule.bad_email', [
                 this.$vuetify.lang.t('$vuetify.email')
               ])

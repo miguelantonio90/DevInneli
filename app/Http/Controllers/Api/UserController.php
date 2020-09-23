@@ -25,11 +25,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->where('isAdmin', '=', 0)
-            ->with('positions')
-            ->with('employer')
-            ->with('shops')
-            ->get();
+        if (auth()->user()['isAdmin'] === 1) {
+            $users = User::latest()->get();
+        } else {
+            $users = User::getUsers();
+        }
 
         return ResponseHelper::sendResponse(
             $users,
