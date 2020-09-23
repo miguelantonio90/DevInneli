@@ -119,12 +119,12 @@ export default {
         no_action:"Can't {0}"
     },
 
-    access: {
-        key: 'Key',
-        name: 'Name',
-        accessPin: 'Access with Pin Code',
-        accessEmail: 'Access with Email',
-        description: 'Description'
-    },
-    ...en
+  access: {
+    key: 'Key',
+    name: 'Name',
+    accessPin: 'Access with Pin Code',
+    accessEmail: 'Access with Email',
+    description: 'Description'
+  },
+  ...en
 }

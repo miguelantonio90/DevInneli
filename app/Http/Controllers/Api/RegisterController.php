@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Position;
 use App\Providers\RouteServiceProvider;
-use App\Role;
 use App\Shop;
 use App\User;
 use Exception;
@@ -74,7 +73,7 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
         $data = $request->getParsedBody();
-        return $data;
+
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
         $request = $request->withParsedBody([
                 'username' => $data['email'],

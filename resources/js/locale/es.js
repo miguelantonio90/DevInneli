@@ -116,15 +116,14 @@ export default {
         success_profile: 'Los datos han sido actualizados.',
         check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
-        password_success: 'La contraseña se actualizo correctamente.',
-        no_action:"No se puede {0}"
-    },
-    access: {
-        key: 'Llave',
-        name: 'Nombre',
-        accessPin: 'Acceso con Pin',
-        accessEmail: 'Acceso con Correo',
-        description: 'Descripción'
-    },
-    ...es
+    password_success: 'La contraseña se actualizo correctamente.'
+  },
+  access: {
+    key: 'Llave',
+    name: 'Nombre',
+    accessPin: 'Acceso con Pin',
+    accessEmail: 'Acceso con Correo',
+    description: 'Descripción'
+  },
+  ...es
 }
