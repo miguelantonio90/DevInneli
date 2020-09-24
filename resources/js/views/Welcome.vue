@@ -70,10 +70,12 @@
 </template>
 
 <script>
+import Profile from '../views/auth/Profile'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Welcome',
+  components: { Profile },
   computed: {
     ...mapState('auth', ['isLoggedIn', 'userData']),
     ...mapGetters(['errors'])
