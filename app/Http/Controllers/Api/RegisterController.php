@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Employee;
 use App\Http\Controllers\Controller;
-use App\Http\Helpers\ResponseHelper;
 use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
@@ -66,12 +65,14 @@ class RegisterController extends Controller
 
     public function register(ServerRequestInterface $request)
     {
+
+
         $this->validator($request->getParsedBody());
 
         $user = $this->create($request->getParsedBody());
 
-
         $this->guard()->login($user);
+
         $data = $request->getParsedBody();
 
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
@@ -136,7 +137,8 @@ class RegisterController extends Controller
 
             return $user;
         } catch (Exception $err) {
-            return ResponseHelper::sendError($err, $err->getMessage(), $err->getCode());
+            return $err->getMessage();
+            //return ResponseHelper::sendError($err, $err->getMessage(), $err->getCode());
         }
     }
 }

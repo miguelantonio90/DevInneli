@@ -76,6 +76,7 @@
           :rows="users"
           :is-loading="isTableLoading"
           sort-options="firstName"
+          show-avatar
           @create-row="toogleNewModal(true)"
           @edit-row="openEditModal($event)"
           @delete-row="deleteUserHandler($event)"
@@ -124,7 +125,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.position'),
-          value: 'position'
+          value: 'positions[0].name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

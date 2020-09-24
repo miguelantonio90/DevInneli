@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Position;
+use App\Shop;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -28,7 +32,12 @@ class UserController extends Controller
         if (auth()->user()['isAdmin'] === 1) {
             $users = User::latest()->get();
         } else {
-            $users = User::getUsers();
+            $users = User::findOrFail(auth()->id())->where('isAdmin', '=', '0')
+                ->with('employer')->with('shops')
+                ->with('shops')
+                ->with('positions')
+                ->get();
+
         }
 
         return ResponseHelper::sendResponse(
@@ -47,11 +56,38 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validator($request->all())->validate();
+        $employ = $request->get('employer');
+        $positions = $request->get('positions');
+        $shops = $request->get('shops');
 
-        $created = User::create($request->all());
+        $user = User::create([
+            'firstName' => $request->get('firstName'),
+            'lastName' => $request->get('lastName'),
+            'avatar' => $request->get('avatar'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($employ['pinCode']),
+            'created_by' => auth()->id(),
+            'isAdmin' => 0,
+        ]);
+
+        $user->positions()
+            ->attach(Position::where('key', $positions['key'])->first());
+
+        $employer = new Employee();
+        $employer->pinCode = $employ['pinCode'];
+        $employer->phone = $employ['phone'];
+        $user->employer()->save($employer);
+
+        $idShops = [];
+        foreach ($shops as $key => $value) {
+            $idShops[$key] = $value['id'];
+        }
+
+        $employShop = Shop::find($idShops);
+        $employer->shops()->attach($employShop);
 
         return ResponseHelper::sendResponse(
-            $created,
+            $user,
             'User has created successfully.'
         );
     }

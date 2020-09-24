@@ -35,7 +35,8 @@ const state = {
     country: ''
   },
   isActionInProgress: false,
-  isTableLoading: false
+  isTableLoading: false,
+  isShopLoading: false
 }
 
 const mutations = {
@@ -50,6 +51,7 @@ const mutations = {
   },
   [SHOP_TABLE_LOADING] (state, isLoading) {
     state.isTableLoading = isLoading
+    state.isShopLoading = isLoading
   },
   [FETCHING_SHOPS] (state, shops) {
     state.shops = shops

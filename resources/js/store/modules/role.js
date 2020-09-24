@@ -37,7 +37,7 @@ const state = {
     accessEmail: '',
     description: ''
   },
-  isAccessTableLoading: false,
+  isAccessLoading: false,
   isActionInProgress: false,
   isTableLoading: false
 }
@@ -54,6 +54,7 @@ const mutations = {
   },
   [ACCESS_TABLE_LOADING] (state, isLoading) {
     state.isTableLoading = isLoading
+    state.isAccessLoading = isLoading
   },
   [FETCHING_ACCESS] (state, roles) {
     state.roles = roles

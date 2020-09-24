@@ -18,20 +18,25 @@
           class="my-10"
           lazy-validation
         >
-          <avatar-picker
-            :image-src="getAvatar"
-            :image-style="{ 'border-radius': '50%' }"
-            class="profile mx-auto d-block"
-            @change="onChangeImage($event)"
-          />
           <v-row>
             <v-col
+              align-self="start"
+              class="pa-0"
+              cols="2"
+            >
+              <avatar-picker
+                :image-src="getAvatar"
+                :image-style="{ 'border-radius': '50%','height':'80px','width':'80px' }"
+                class="profile mx-auto d-block"
+                @input="onChangeImage($event)"
+              />
+            </v-col>
+            <v-col
               cols="12"
-              md="4"
+              md="5"
             >
               <v-text-field
                 v-model="editUser.firstName"
-
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
                 required
@@ -39,7 +44,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="4"
+              md="5"
             >
               <v-text-field
                 v-model="editUser.lastName"
@@ -49,7 +54,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="4"
+              md="5"
             >
               <v-text-field
                 v-model="editUser.email"
@@ -61,21 +66,34 @@
             </v-col>
             <v-col
               cols="12"
-              md="4"
+              md="7"
             >
-              <v-text-field
-                v-model="editUser.username"
-                :label="$vuetify.lang.t('$vuetify.username')"
-                autocomplete="off"
+              <vue-tel-input-vuetify
+                v-model="editUser.employer.phone"
+                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
+                :label="$vuetify.lang.t('$vuetify.phone')"
                 required
-              />
+                :select-label="$vuetify.lang.t('$vuetify.country')"
+                v-bind="bindProps"
+                :error-messages="errorPhone"
+                @keypress="numbers"
+                @input="onInput"
+              >
+                <template #message="{ key, message }">
+                  <slot
+                    name="label"
+                    v-bind="{ key, message }"
+                  />
+                  {{ message }}
+                </template>
+              </vue-tel-input-vuetify>
             </v-col>
             <v-col
               cols="12"
-              md="4"
+              md="6"
             >
               <v-text-field
-                v-model="editUser.pinCode"
+                v-model="editUser.employer.pinCode"
                 :append-icon=" hidePinCode1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.pinCode')"
                 :rules="formRule.pinCode"
@@ -89,10 +107,10 @@
             </v-col>
             <v-col
               cols="12"
-              md="4"
+              md="6"
             >
               <v-text-field
-                v-model="editUser.confirm_pinCode"
+                v-model="editUser.employer.confirm_pinCode"
                 :append-icon="hidePinCode2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.confirm_pinCode')"
                 :rules="formRule.confirm_pinCode"
@@ -102,6 +120,35 @@
                 required
                 @keypress="numbers"
                 @click:append="hidePinCode2 = !hidePinCode2"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-select
+                v-model="editUser.positions[0].key"
+                :items="roles"
+                :label="$vuetify.lang.t('$vuetify.menu.access')"
+                item-text="name"
+                :loading="isAccessLoading"
+                :disabled="!!isAccessLoading"
+                return-object
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-select
+                v-model="editUser.shops"
+                :items="shops"
+                :label="$vuetify.lang.t('$vuetify.menu.shop')"
+                item-text="name"
+                return-object
+                multiple
+                :loading="isShopLoading"
+                :disabled="!!isShopLoading"
               />
             </v-col>
           </v-row>
@@ -141,6 +188,7 @@ export default {
       formValid: false,
       hidePinCode1: true,
       hidePinCode2: true,
+      errorPhone: null,
       formRule: {
         firstName: [
           (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
@@ -168,7 +216,7 @@ export default {
           (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
             this.$vuetify.lang.t('$vuetify.confirm_pinCode')
           ]),
-          (v) => (!!v && v) === this.editUser.pinCode ||
+          (v) => (!!v && v) === this.editUser.employer.pinCode ||
                         this.$vuetify.lang.t(
                           '$vuetify.rule.match',
                           [this.$vuetify.lang.t('$vuetify.pinCode')],
@@ -180,14 +228,35 @@ export default {
   },
   computed: {
     ...mapState('user', ['saved', 'editUser']),
-    ...mapState('statics', ['arrayCountry']),
+    ...mapState('role', ['roles', 'isAccessLoading']),
+    ...mapState('shop', ['shops', 'isShopLoading']),
     getAvatar () {
       return `${this.editUser.avatar ||
             '/assets/avatar/avatar-undefined.jpg'}`
+    },
+    bindProps () {
+      return {
+        mode: 'international',
+        defaultCountry: this.editUser.country ? this.editUser.country : 'US',
+        disabledFetchingCountry: false,
+        autocomplete: 'off',
+        dropdownOptions: {
+          disabledDialCode: false
+        },
+        inputOptions: {
+          showDialCode: false
+        }
+      }
     }
+  },
+  created () {
+    this.getRoles()
+    this.getShops()
   },
   methods: {
     ...mapActions('user', ['updateUser', 'toogleEditModal']),
+    ...mapActions('role', ['getRoles']),
+    ...mapActions('shop', ['getShops']),
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(
@@ -200,6 +269,17 @@ export default {
     },
     onChangeImage (file) {
       this.editUser.avatar = `data:${file.file.type};base64,${file.file.base64}`
+    },
+    onInput (number, object) {
+      const lang = this.$vuetify.lang
+      if (object.valid) {
+        this.editUser.employer.phone = number
+        this.errorPhone = null
+      } else {
+        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+          lang.t('$vuetify.phone')
+        ])
+      }
     },
     async updateUserHandler () {
       if (this.$refs.form.validate()) {

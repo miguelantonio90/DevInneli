@@ -33,6 +33,15 @@
           </v-btn>
         </v-toolbar>
       </template>
+      <template
+        v-if="showAvatar"
+        v-slot:item.firstName="{ item }"
+      >
+        <v-avatar>
+          <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+        </v-avatar>
+        {{ item.firstName }}
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
           v-if="viewShowButton"
@@ -71,7 +80,7 @@ export default {
       default: '',
       required: false
     },
-    hideHeaders: {
+    showAvatar: {
       type: Boolean,
       default: false,
       required: false

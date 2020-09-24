@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->boolean('isAdmin')->default(0);
             $table->longText('avatar')->nullable();
+            $table->integer('created_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

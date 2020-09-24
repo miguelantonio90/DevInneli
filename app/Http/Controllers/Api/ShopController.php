@@ -7,10 +7,8 @@ use App\Http\Helpers\ResponseHelper;
 use App\Shop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response as Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
@@ -93,7 +91,7 @@ class ShopController extends Controller
                 'Shop has deleted successfully.'
             );
         }
-        return ResponseHelper::sendResponse([],"Shop can't by deleted");
+        return ResponseHelper::sendResponse([], "Shop can't by deleted");
     }
 
     private function getAllShopByUserId()

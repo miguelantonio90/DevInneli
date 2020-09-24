@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $array)
  * @method static latest()
  * @method static findOrFail($id)
+ * @method static find(array $idShops)
  */
 class Shop extends Model
 {
@@ -25,5 +26,10 @@ class Shop extends Model
     public function user()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class);
     }
 }

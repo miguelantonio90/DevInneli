@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'lastName', 'email', 'password', 'username'
+        'firstName', 'lastName', 'email', 'password', 'username','created_by'
     ];
 
     /**
@@ -81,14 +81,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return DB::table('users')
             ->select(
                 'users.*',
+                'shops.*',
                 'employees.phone',
                 'employees.pinCode',
-                'positions.key',
+                'positions.key as role',
                 'positions.name as position'
             )
             ->join('employees', 'users.id', '=', 'employees.user_id')
             ->join('position_user', 'users.id', '=', 'position_user.user_id')
             ->join('positions', 'positions.id', '=', 'position_user.position_id')
+            ->join('shops', 'users.id', '=', 'shops.user_id')
             ->get();
     }
 }
