@@ -1,5 +1,6 @@
 <?php
 
+use App\Position;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 1)->create();
+        factory(User::class, 1)->create()(function ($user) {
+            // Seed the relation with one address
+            $position = factory(Position::class)->make();
+            $user->positions()->save($position);
+        });
     }
 }

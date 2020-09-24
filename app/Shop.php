@@ -22,9 +22,22 @@ class Shop extends Model
      * @var array
      */
     protected $fillable = ['name', 'email', 'country', 'user_id', 'address', 'description', 'phone'];
+
     //
     public function users()
     {
-        return $this->belongsToMany(Employee::class);
+        return $this->belongsToMany(User::class);
+    }
+
+    public static function createFirst($data, $company)
+    {
+        $shop = new Shop();
+        $shop->name = $data['shopName'];
+        $shop->email = $data['email'];
+        $shop->company_id = $company->id;
+        $shop->save();
+
+        return $shop;
+
     }
 }
