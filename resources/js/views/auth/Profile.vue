@@ -79,22 +79,6 @@
                 />
               </v-list-item-content>
             </v-list-item>
-            <v-divider inset />
-            <v-list-item href="#">
-              <v-list-item-action>
-                <v-icon color="indigo">
-                  mdi-phone
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title
-                  v-text="userData.phone"
-                />
-                <v-list-item-subtitle
-                  v-text="$vuetify.lang.t('$vuetify.phone')"
-                />
-              </v-list-item-content>
-            </v-list-item>
           </v-list>
         </material-card>
       </v-flex>
@@ -318,28 +302,28 @@ export default {
         username: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.username')
-              ])
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.username')
+                        ])
         ],
         lastName: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.lastName')
-              ])
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.lastName')
+                        ])
         ],
         email: [
           (v) =>
             !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
+                        this.$vuetify.lang.t('$vuetify.rule.required', [
+                          this.$vuetify.lang.t('$vuetify.email')
+                        ]),
           (v) =>
             /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
+                        this.$vuetify.lang.t('$vuetify.rule.bad_email', [
+                          this.$vuetify.lang.t('$vuetify.email')
+                        ])
         ]
       }
     }
@@ -353,7 +337,7 @@ export default {
     },
     getAvatar () {
       return `${this.userData.avatar ||
-      '/assets/avatar/avatar-undefined.jpg'}`
+            '/assets/avatar/avatar-undefined.jpg'}`
     },
     bindProps () {
       return {
@@ -437,17 +421,17 @@ export default {
 </script>
 <style scoped>
 .profile {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
 }
 
 .hiddenSpinner input[type='number'] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .hiddenSpinner input::-webkit-outer-spin-button,
 .hiddenSpinner input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
 }
 </style>
