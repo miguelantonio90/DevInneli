@@ -8,7 +8,6 @@ use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
 use App\User;
-use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -65,8 +64,6 @@ class RegisterController extends Controller
 
     public function register(ServerRequestInterface $request)
     {
-
-
         $this->validator($request->getParsedBody());
 
         $user = $this->create($request->getParsedBody());
@@ -112,33 +109,30 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        try {
-            $user = User::create([
-                'firstName' => 'Administrator',
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'isAdmin' => 0,
-            ]);
+        $user = User::create([
+            'firstName' => 'Administrator',
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'isAdmin' => 0,
+        ]);
 
-            $user->positions()
-                ->attach(Position::where('key', 'manager')->first());
+        $user->positions()
+            ->attach(Position::where('key', 'manager')->first());
 
-            $employer = new Employee();
-            $employer->pinCode = 1234;
+        $employer = new Employee();
+        $employer->pinCode = 1234;
 
-            $user->employer()->save($employer);
+        $user->employer()->save($employer);
 
-            $shop = new Shop();
-            $shop->name = $data['shopName'];
-            $shop->email = $data['email'];
-            $shop->country = $data['country'];
+        $shop = new Shop();
+        $shop->name = $data['shopName'];
+        $shop->email = $data['email'];
+        $shop->country = $data['country'];
 
-            $user->shops()->saveMany([$shop]);
+        $user->shops()->saveMany([$shop]);
 
-            return $user;
-        } catch (Exception $err) {
-            return $err->getMessage();
-            //return ResponseHelper::sendError($err, $err->getMessage(), $err->getCode());
-        }
+        $user->sendEmailVerificationNotification();
+
+        return $user;
     }
 }

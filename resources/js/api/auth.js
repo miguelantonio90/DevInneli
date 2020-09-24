@@ -15,7 +15,7 @@ const loginRequest = ({ email, password }) => {
 }
 
 const registerRequest = (user) => {
-  return api.post('register/', user)
+  return api.put('register/', user)
 }
 
 const logoutRequest = () => {
@@ -31,7 +31,7 @@ const verifyRequest = (hash) => {
 }
 
 const verifyMailForgot = (email) => {
-  return api.post('password/reset', { email: email })
+  return api.post('password/reset/link', { email: email })
 }
 const resetPassword = (hash, newData) => {
   return api.post('password/reset/new/' + hash, newData)

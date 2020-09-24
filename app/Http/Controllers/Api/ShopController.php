@@ -27,6 +27,13 @@ class ShopController extends Controller
 
     }
 
+    private function getAllShopByUserId()
+    {
+        return Shop::latest()
+            ->where('user_id', '=', auth()->id())
+            ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -92,12 +99,5 @@ class ShopController extends Controller
             );
         }
         return ResponseHelper::sendResponse([], "Shop can't by deleted");
-    }
-
-    private function getAllShopByUserId()
-    {
-        return Shop::latest()
-            ->where('user_id', '=', auth()->id())
-            ->get();
     }
 }

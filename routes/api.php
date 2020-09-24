@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
+Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.json']], function () {
 
     //Testing routes
     Route::get('ping', 'PingController@index')->name('ping');
@@ -22,12 +22,12 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::post('login', 'LoginController@login')->name('login');
 
-    Route::post('register', 'RegisterController@register')->name('register');
+    Route::put('register', 'RegisterController@register')->name('register');
 
-    Route::post('password/reset', 'ForgotPasswordController@sendPasswordResetLink')->name('password.reset');
+    Route::post('password/email/reset', 'ForgotPasswordController@sendPasswordResetLink')->name('password.reset');
     Route::post('password/reset/new/{hash}', 'ResetPasswordController@doReset')->name('password.reset.verify');
 
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api', 'respond.json']], function () {
 
         Route::get('email/verify/{hash}', 'VerificationController@verify')->name('verification.verify');
 

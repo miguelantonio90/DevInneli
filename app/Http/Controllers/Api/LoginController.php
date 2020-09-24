@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
@@ -65,6 +66,7 @@ class LoginController extends Controller
     /**
      * @param ServerRequestInterface $request
      * @return mixed
+     * @throws ValidationException
      */
     public function login(ServerRequestInterface $request)
     {
@@ -75,6 +77,9 @@ class LoginController extends Controller
                 'client_id' => config('services.passport.client_id'),
                 'client_secret' => config('services.passport.client_secret')
             ]);
-        return with($controller->issueToken($request));
+        if ($controller->issueToken($request)) {
+            return with($controller->issueToken($request));
+        }
+        return $this->sendFailedLoginResponse($request);
     }
 }

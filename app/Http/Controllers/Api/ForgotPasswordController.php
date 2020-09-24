@@ -35,7 +35,7 @@ class ForgotPasswordController extends Controller
      * @param string $response
      * @return RedirectResponse|JsonResponse
      */
-    protected function sendResetLinkResponse(Request $request, $response)
+    protected function sendResetLinkResponse(Request $request, string $response)
     {
         return response()->json([
             'message' => 'Password reset email sent.',
@@ -51,8 +51,8 @@ class ForgotPasswordController extends Controller
      * @param string $response
      * @return RedirectResponse|JsonResponse
      */
-    protected function sendResetLinkFailedResponse(Request $request, $response)
+    protected function sendResetLinkFailedResponse(Request $request, string $response)
     {
-        return response()->json(['success' => false, 'message' => 'Email could not be sent to this email address.']);
+        return response()->json(['message' => 'Email could not be sent to this email address.']);
     }
 }
