@@ -65,7 +65,6 @@
         </v-list-item>
       </v-list>
     </v-card>
-    <profile />
   </div>
 </template>
 

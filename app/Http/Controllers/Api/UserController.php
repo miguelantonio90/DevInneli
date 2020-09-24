@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Role;
+use App\Position;
+use App\Shop;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -26,7 +29,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->with('roles')->get();
+        if (auth()->user()['isAdmin'] === 1) {
+            $users = User::latest()
+                ->with('employer')
+                ->with('shops')
+                ->with('positions')
+                ->get();
+        } else {
+            $users = User::findOrFail(auth()->id())->where('isAdmin', '=', '0')
+                ->with('employer')
+                ->with('shops')
+                ->with('positions')
+                ->get();
+
+        }
 
         return ResponseHelper::sendResponse(
             $users,
@@ -39,23 +55,58 @@ class UserController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        //Auth::user()->authorizeRoles('admin');
-
         $this->validator($request->all())->validate();
+        $employ = $request->get('employer');
+        $positions = $request->get('positions');
+        $shops = $request->get('shops');
 
-        $created = (new User())->createUser($request->all());
+        $user = User::create([
+            'firstName' => $request->get('firstName'),
+            'lastName' => $request->get('lastName'),
+            'avatar' => $request->get('avatar'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($employ['pinCode']),
+            'created_by' => auth()->id(),
+            'isAdmin' => 0,
+        ]);
 
-        $created
-            ->roles()
-            ->attach(Role::where('name', 'user')->first());
+        $user->positions()
+            ->attach(Position::where('key', $positions['key'])->first());
+
+        $employer = new Employee();
+        $employer->pinCode = $employ['pinCode'];
+        $employer->phone = $employ['phone'];
+        $user->employer()->save($employer);
+
+        $idShops = [];
+        foreach ($shops as $key => $value) {
+            $idShops[$key] = $value['id'];
+        }
+
+        $employShop = Shop::find($idShops);
+        $employer->shops()->attach($employShop);
 
         return ResponseHelper::sendResponse(
-            $created,
+            $user,
             'User has created successfully.'
         );
+    }
+
+    /**
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
     }
 
     /**
@@ -66,7 +117,7 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        return User::latest()->with('roles')->get($id);
+        return User::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -78,8 +129,6 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        //Auth::user()->authorizeRoles(['user', 'admin']);
-
         $this->validator($request->all())->validate();
 
         $edit = User::findOrFail($id)->update($request->all());
@@ -92,8 +141,6 @@ class UserController extends Controller
 
     public function updateAvatar(Request $request, $id)
     {
-        //Auth::user()->authorizeRoles(['user', 'admin']);
-
         if (!empty($request)) {
             $app = (new User())->find($id);
             $app->find($id);
@@ -119,25 +166,11 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-       //Auth::user()->authorizeRoles('admin');
 
         $delete = User::findOrFail($id)->delete();
         return ResponseHelper::sendResponse(
             $delete,
             'Users has deleted successfully.'
         );
-    }
-
-    /**
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-        ]);
     }
 }

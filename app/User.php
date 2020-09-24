@@ -2,22 +2,24 @@
 
 namespace App;
 
+use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 
 /**
  * @method static findOrFail($id)
  * @method static latest()
  * @method find($id)
+ * @method static create(array $array)
+ * @method static select(string $string, $raw)
  * @property mixed email
  * @property mixed|string password
  * @property mixed avatar
+ * @property mixed position
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'lastName', 'email', 'password', 'username', 'address', 'phone', 'country', 'company', 'aboutMe'
+        'firstName', 'lastName', 'email', 'password', 'username', 'created_by'
     ];
 
     /**
@@ -50,88 +52,51 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * @return BelongsToMany
-     */
-    public function roles()
+    public function employer()
     {
-        return $this
-            ->belongsToMany('App\Role')
-            ->withTimestamps();
+        return $this->hasOne(Employee::class);
     }
 
-    /**
-     * @param $roles
-     * @return bool
-     */
-    public function authorizeRoles($roles)
+    public function positions()
     {
-        if ($this->hasAnyRole($roles)) {
-            return true;
-        }
-        abort(401, 'Unauthorized.');
+        return $this->belongsToMany(Position::class);
     }
 
-    /**
-     * @param $roles
-     * @return bool
-     */
-    public function hasAnyRole($roles)
+
+    public function shops()
     {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->hasRole($roles)) {
-                return true;
-            }
-        }
-        return false;
+        return $this->hasMany(Shop::class);
     }
 
-    /**
-     * @param $role
-     * @return bool
-     */
-    public function hasRole($role)
-    {
-        if ($this->roles()->where('name', $role)->first()) {
-            return true;
-        }
-        return false;
-    }
 
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
     }
 
-    /**
-     * @param Request $request
-     * @return User
-     */
-    public function createUser( $request)
+    public function sendPasswordResetNotification($token)
     {
-        $user = new User();
+        $this->notify(new MailResetPasswordNotification($token));
+    }
 
-        foreach ($this->fillable as $key => $value) {
-            switch ($value) {
-                case 'password':
-                    if (!empty($request[$value])) {
-                        $user->password = Hash::make($request[$value]);
-                    }
-                    break;
-
-                default:
-                    $user->$value = $request[$value];
-                    break;
-            }
-        }
-        $user->save();
-
-        return $user;
+    /**
+     * @return mixed
+     */
+    public static function getUsers()
+    {
+        return DB::table('users')
+            ->select(
+                'users.*',
+                'shops.*',
+                'employees.phone',
+                'employees.pinCode',
+                'positions.key as role',
+                'positions.name as position'
+            )
+            ->join('employees', 'users.id', '=', 'employees.user_id')
+            ->join('position_user', 'users.id', '=', 'position_user.user_id')
+            ->join('positions', 'positions.id', '=', 'position_user.position_id')
+            ->join('shops', 'users.id', '=', 'shops.user_id')
+            ->get();
     }
 }

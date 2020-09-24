@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
@@ -34,6 +35,12 @@ class LoginController extends Controller
     protected $server;
     protected $tokens;
     protected $jwt;
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     public function __construct(AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt)
     {
@@ -42,23 +49,6 @@ class LoginController extends Controller
         $this->jwt = $jwt;
         $this->tokens = $tokens;
     }
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    /*public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }*/
 
     /**
      * @param Request $request
@@ -76,15 +66,20 @@ class LoginController extends Controller
     /**
      * @param ServerRequestInterface $request
      * @return mixed
+     * @throws ValidationException
      */
     public function login(ServerRequestInterface $request)
     {
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
+
         $request = $request->withParsedBody($request->getParsedBody() + [
                 'grant_type' => 'password',
                 'client_id' => config('services.passport.client_id'),
                 'client_secret' => config('services.passport.client_secret')
             ]);
-        return with($controller->issueToken($request));
+        if ($controller->issueToken($request)) {
+            return with($controller->issueToken($request));
+        }
+        return $this->sendFailedLoginResponse($request);
     }
 }

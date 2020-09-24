@@ -23,11 +23,12 @@ const state = {
     password: ''
   },
   formRegister: {
-    firstName: '',
+    shopName: '',
     username: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    country: ''
   },
   formReset: {
     email: '',
@@ -96,7 +97,6 @@ const actions = {
         localStorage.saveToken(
           data.token_type + ' ' + data.access_token
         )
-        console.log(data)
         dispatch('getUserData')
       })
       .catch(({ response }) => {

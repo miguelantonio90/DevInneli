@@ -5,6 +5,8 @@ import VueAxios from 'vue-axios'
 import app from './modules/app'
 import auth from './modules/auth'
 import user from './modules/user'
+import role from './modules/role'
+import shop from './modules/shop'
 import statics from './modules/statics'
 import settings from './modules/settings'
 import VuexPersistence from 'vuex-persist'
@@ -29,6 +31,8 @@ const store = new Vuex.Store({
     auth,
     settings,
     user,
+    role,
+    shop,
     statics
   },
   plugins: [vuexLocal.plugin],
