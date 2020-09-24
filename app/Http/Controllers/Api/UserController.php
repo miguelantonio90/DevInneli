@@ -30,10 +30,14 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $users = User::latest()->get();
+            $users = User::latest()
+                ->with('employer')
+                ->with('shops')
+                ->with('positions')
+                ->get();
         } else {
             $users = User::findOrFail(auth()->id())->where('isAdmin', '=', '0')
-                ->with('employer')->with('shops')
+                ->with('employer')
                 ->with('shops')
                 ->with('positions')
                 ->get();

@@ -28,19 +28,8 @@ const state = {
     email: '',
     password: '',
     avatar: '',
-    employer: {
-      phone: '',
-      pinCode: '',
-      confirm_pinCode: ''
-    },
-    positions: [
-      {
-        key: '',
-        name: '',
-        accessPin: 1,
-        accessEmail: 1
-      }
-    ],
+    employer: {},
+    positions: [],
     shops: []
   },
   editUser: {
@@ -50,11 +39,7 @@ const state = {
     email: '',
     password: '',
     avatar: '',
-    employer: {
-      phone: '',
-      pinCode: '',
-      confirm_pinCode: ''
-    },
+    employer: {},
     positions: [],
     shops: []
   },
@@ -90,11 +75,7 @@ const mutations = {
       email: '',
       password: '',
       avatar: '',
-      employer: {
-        phone: '',
-        pinCode: '',
-        confirm_pinCode: ''
-      },
+      employer: {},
       positions: [],
       shops: []
     }
@@ -112,11 +93,7 @@ const mutations = {
       email: '',
       password: '',
       avatar: '',
-      employer: {
-        phone: '',
-        pinCode: '',
-        confirm_pinCode: ''
-      },
+      employer: {},
       positions: [],
       shops: []
     }

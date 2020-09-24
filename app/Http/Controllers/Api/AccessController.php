@@ -23,7 +23,7 @@ class AccessController extends Controller
      */
     public function index()
     {
-        $positions = Position::latest()->get();
+        $positions = Position::latest()->where('key', '<>', 'manager')->get();
 
         return ResponseHelper::sendResponse(
             $positions,

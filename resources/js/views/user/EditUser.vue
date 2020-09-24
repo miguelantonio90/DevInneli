@@ -60,6 +60,7 @@
                 v-model="editUser.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
+                :disabled="editUser.positions[0].key==='manager'"
                 autocomplete="off"
                 required
               />
@@ -127,12 +128,13 @@
               md="6"
             >
               <v-select
-                v-model="editUser.positions[0].key"
+                v-model="editUser.positions"
                 :items="roles"
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 item-text="name"
                 :loading="isAccessLoading"
-                :disabled="!!isAccessLoading"
+                :disabled="!!isAccessLoading || editUser.positions[0].key==='manager'"
+                multiple
                 return-object
               />
             </v-col>
@@ -148,7 +150,7 @@
                 return-object
                 multiple
                 :loading="isShopLoading"
-                :disabled="!!isShopLoading"
+                :disabled="!!isShopLoading || editUser.positions[0].key==='manager'"
               />
             </v-col>
           </v-row>
