@@ -110,19 +110,16 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'firstName' => 'Administrator',
+            'firstName' => 'Proprietario',
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'isAdmin' => 0,
+            'isManager' => 1,
+            'pinCode' => 1234,
         ]);
 
         $user->positions()
             ->attach(Position::where('key', 'manager')->first());
-
-        $employer = new Employee();
-        $employer->pinCode = 1234;
-
-        $user->employer()->save($employer);
 
         $shop = new Shop();
         $shop->name = $data['shopName'];
