@@ -20,6 +20,7 @@ class CreateCompaniesTable extends Migration
             $table->string('phone')->nullable();
             $table->string('country')->nullable();
             $table->string('address')->nullable();
+            $table->string('faker')->default(0);
             $table->timestamps();
         });
     }
