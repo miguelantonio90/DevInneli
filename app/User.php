@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'lastName', 'email', 'password', 'username', 'created_by'
+        'name', 'email', 'password', 'username'
     ];
 
     /**
@@ -52,9 +52,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function employer()
+    public function company()
     {
-        return $this->hasOne(Employee::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function positions()
@@ -62,10 +62,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Position::class);
     }
 
-
     public function shops()
     {
-        return $this->hasMany(Shop::class);
+        return $this->belongsToMany(Shop::class);
     }
 
 
