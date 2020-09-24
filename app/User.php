@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -17,6 +18,11 @@ use Laravel\Passport\HasApiTokens;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  * @property mixed email
+ * @property mixed firstName
+ * @property mixed employeeEmail
+ * @property mixed pinCode
+ * @property mixed isAdmin
+ * @property mixed isManager
  * @property mixed|string password
  * @property mixed avatar
  * @property mixed position
@@ -31,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username'
+        'firstName', 'email', 'employeeEmail', 'password', 'username'
     ];
 
     /**
@@ -57,9 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Company::class);
     }
 
-    public function positions()
+    public function position()
     {
-        return $this->belongsToMany(Position::class);
+        return $this->belongsTo(Position::class);
     }
 
     public function shops()
@@ -97,5 +103,22 @@ class User extends Authenticatable implements MustVerifyEmail
             ->join('positions', 'positions.id', '=', 'position_user.position_id')
             ->join('shops', 'users.id', '=', 'shops.user_id')
             ->get();
+    }
+
+    public static function createFirst($data, $company, $position): User
+    {
+        $user = new User();
+        $user->firstName = 'Proprietario';
+        $user->password = Hash::make($data['password']);
+        $user->email = $data['email'];
+        $user->employeeEmail = $data['email'];
+        $user->pinCode = 1234;
+        $user->isAdmin = 0;
+        $user->isManager = 1;
+        $user->company_id = $company->id;
+        $user->position_id = $position->id;
+        $user->save();
+
+        return $user;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Company;
 use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Position;
@@ -11,7 +12,6 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Laravel\Passport\TokenRepository;
@@ -109,27 +109,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'firstName' => 'Proprietario',
+        $company = Company::create([
+            'name' => $data['shopName'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'isAdmin' => 0,
-            'isManager' => 1,
-            'pinCode' => 1234,
+            'country' => $data['country'],
         ]);
+        if ($company) {
+            $position = Position::createFirst($company);
+            if ($position) {
+                $user = User::createFirst($data, $company, $position);
+                $shop = Shop::createFirst($data, $company);
+                $user->shops()->saveMany([$shop]);
+                $user->sendEmailVerificationNotification();
 
-        $user->positions()
-            ->attach(Position::where('key', 'manager')->first());
-
-        $shop = new Shop();
-        $shop->name = $data['shopName'];
-        $shop->email = $data['email'];
-        $shop->country = $data['country'];
-
-        $user->shops()->saveMany([$shop]);
-
-        $user->sendEmailVerificationNotification();
-
-        return $user;
+                return $user;
+            }
+        }
     }
 }
