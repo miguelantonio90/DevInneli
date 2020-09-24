@@ -23,12 +23,7 @@ class Shop extends Model
      */
     protected $fillable = ['name', 'email', 'country', 'user_id', 'address', 'description', 'phone'];
     //
-    public function user()
-    {
-        return $this->hasMany(User::class);
-    }
-
-    public function employees()
+    public function users()
     {
         return $this->belongsToMany(Employee::class);
     }
