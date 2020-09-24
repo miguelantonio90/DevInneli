@@ -23,10 +23,10 @@
               class="pa-0"
               cols="12"
             >
-              <base64-upload
+              <avatar-picker
                 :image-src="getAvatar"
                 :image-style="{ 'border-radius': '50%' }"
-                class="user mx-auto d-block"
+                class="profile mx-auto d-block"
                 @change="onChangeImage($event)"
               />
               <v-slide-x-transition>
@@ -103,8 +103,8 @@
         xs12
       >
         <material-card
-          :text="$vuetify.lang.t('$vuetify.user.sub_profile')"
-          :title="$vuetify.lang.t('$vuetify.user.edit_profile')"
+          :text="$vuetify.lang.t('$vuetify.profile.sub_profile')"
+          :title="$vuetify.lang.t('$vuetify.profile.edit_profile')"
           color="color"
         >
           <v-form
@@ -257,15 +257,6 @@
                     "
                   />
                 </v-flex>
-                <v-flex xs12>
-                  <v-textarea
-                    v-model="userData.aboutMe"
-                    :label="
-                      $vuetify.lang.t('$vuetify.about_me')
-                    "
-                    counter="250"
-                  />
-                </v-flex>
                 <v-flex
                   text-xs-right
                   xs12
@@ -279,7 +270,7 @@
                     <v-icon>mdi-account-edit</v-icon>
                     {{
                       $vuetify.lang.t(
-                        '$vuetify.user.btn_edit',
+                        '$vuetify.profile.btn_edit',
                       )
                     }}
                   </v-btn>
@@ -294,15 +285,10 @@
 </template>
 
 <script>
-import MaterialCard from '../../components/utils/MaterialCard'
 import { mapActions, mapState } from 'vuex'
-import Base64Upload from '../../components/core/Base64Upload'
 
 export default {
-  components: {
-    Base64Upload,
-    MaterialCard
-  },
+  name: 'Profile',
   data () {
     return {
       color: 'primary',
@@ -350,7 +336,7 @@ export default {
                 this.$vuetify.lang.t('$vuetify.email')
               ]),
           (v) =>
-            /.+@.+/.test(v) ||
+            /.+@.+\..+/.test(v) ||
               this.$vuetify.lang.t('$vuetify.rule.bad_email', [
                 this.$vuetify.lang.t('$vuetify.email')
               ])
@@ -450,7 +436,7 @@ export default {
 }
 </script>
 <style scoped>
-.user {
+.profile {
   width: 150px;
   height: 150px;
   border-radius: 50%;

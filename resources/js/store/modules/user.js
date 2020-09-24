@@ -7,7 +7,7 @@ const SWITCH_USER_SHOW_MODAL = 'SWITCH_USER_SHOW_MODAL'
 const USER_CREATED = 'USER_CREATED'
 const USER_EDIT = 'USER_EDIT'
 const USER_UPDATED = 'USER_UPDATED'
-const USER_DELETED = 'USER_DELETED'
+const USER_DELETE = 'USER_DELETE'
 const USER_TABLE_LOADING = 'USER_TABLE_LOADING'
 const FAILED_USER = 'FAILED_USER'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
@@ -26,32 +26,37 @@ const state = {
     firstName: '',
     lastName: '',
     email: '',
-    username: '',
     password: '',
-    address: '',
-    city: '',
-    phone: '',
-    country: '',
-    company: '',
-    postalCode: '',
-    aboutMe: '',
-    avatar: ''
+    avatar: '',
+    employer: {
+      phone: '',
+      pinCode: '',
+      confirm_pinCode: ''
+    },
+    positions: [
+      {
+        key: '',
+        name: '',
+        accessPin: 1,
+        accessEmail: 1
+      }
+    ],
+    shops: []
   },
   editUser: {
     id: '',
     firstName: '',
     lastName: '',
     email: '',
-    username: '',
     password: '',
-    address: '',
-    city: '',
-    phone: '',
-    country: '',
-    company: '',
-    postalCode: '',
-    aboutMe: '',
-    avatar: ''
+    avatar: '',
+    employer: {
+      phone: '',
+      pinCode: '',
+      confirm_pinCode: ''
+    },
+    positions: [],
+    shops: []
   },
   isUserTableLoading: false,
   isActionInProgress: false,
@@ -69,7 +74,7 @@ const mutations = {
     state.showShowModal = showModal
   },
   [USER_TABLE_LOADING] (state, isLoading) {
-    state.isUserTableLoading = isLoading
+    state.isTableLoading = isLoading
   },
   [FETCHING_USERS] (state, users) {
     state.users = users
@@ -83,16 +88,15 @@ const mutations = {
       firstName: '',
       lastName: '',
       email: '',
-      username: '',
       password: '',
-      address: '',
-      city: '',
-      phone: '',
-      country: '',
-      company: '',
-      postalCode: '',
-      aboutMe: '',
-      avatar: ''
+      avatar: '',
+      employer: {
+        phone: '',
+        pinCode: '',
+        confirm_pinCode: ''
+      },
+      positions: [],
+      shops: []
     }
     state.saved = true
   },
@@ -106,23 +110,22 @@ const mutations = {
       firstName: '',
       lastName: '',
       email: '',
-      username: '',
       password: '',
-      address: '',
-      city: '',
-      phone: '',
-      country: '',
-      company: '',
-      postalCode: '',
-      aboutMe: '',
-      avatar: ''
+      avatar: '',
+      employer: {
+        phone: '',
+        pinCode: '',
+        confirm_pinCode: ''
+      },
+      positions: [],
+      shops: []
     }
     state.saved = true
   },
   [SET_EDIT_USER] (state, profile) {
     state.editUser.push(profile)
   },
-  [USER_DELETED] (state) {
+  [USER_DELETE] (state) {
     state.saved = true
   },
   [SET_USER_AVATAR] (state, avatar) {
@@ -159,9 +162,10 @@ const actions = {
     // noinspection JSUnresolvedVariable
     await user
       .fetchUsers()
-      .then(({ data }) => commit(FETCHING_USERS, data.data))
-      .then(() => commit(USER_TABLE_LOADING, false))
-      .catch((error) => commit(FAILED_USER, error))
+      .then(({ data }) => {
+        commit(FETCHING_USERS, data.data)
+        commit(USER_TABLE_LOADING, false)
+      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
   async createUser ({ commit, dispatch }, newUser) {
     commit(ENV_DATA_PROCESS, true)
@@ -185,7 +189,7 @@ const actions = {
       .then(() => {
         commit(USER_UPDATED)
         commit(ENV_DATA_PROCESS, false)
-        dispatch('auth/getUserData', null, { root: true })
+        dispatch('user/getUsers', null, { root: true })
       })
       .catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
@@ -195,7 +199,7 @@ const actions = {
     await user
       .sendDeleteRequest(userId)
       .then(() => {
-        commit(USER_DELETED)
+        commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
       })
       .catch((error) => commit('SET_ERRORS', error, { root: true }))

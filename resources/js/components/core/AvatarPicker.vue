@@ -14,6 +14,7 @@
 
 <script>
 export default {
+  name: 'AvatarPicker',
   props: {
     imageSrc: {
       type: String,
@@ -38,7 +39,7 @@ export default {
         reader.addEventListener('load', (e) => {
           this.src = e.target.result
           const [, base64] = this.src.split(',')
-          this.$emit('change', {
+          this.$emit('input', {
             size: file.size,
             type: file.type,
             name: file.name,

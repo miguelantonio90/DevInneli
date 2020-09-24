@@ -7,12 +7,11 @@
       >
         <new-user v-if="showNewModal" />
         <edit-user v-if="showEditModal" />
-        <show-user v-if="showShowModal" />
-        <v-card>
+        <!--<v-card>
           <v-card-title>
             {{
               $vuetify.lang.t('$vuetify.titles.list', [
-                $vuetify.lang.t('$vuetify.user.user'),
+                $vuetify.lang.t('$vuetify.menu.user'),
               ])
             }}
           </v-card-title>
@@ -41,7 +40,7 @@
                   color="primary"
                   @click="toogleNewModal(true)"
                 >
-                  <v-icon>mdi-account-plus</v-icon>
+                  <v-icon>mdi-plus</v-icon>
                   {{ $vuetify.lang.t('$vuetify.actions.new') }}
                 </v-btn>
               </v-toolbar>
@@ -69,7 +68,19 @@
               </v-icon>
             </template>
           </v-data-table>
-        </v-card>
+        </v-card>-->
+        <app-data-table
+          :title="$vuetify.lang.t('$vuetify.titles.list',
+                                  [$vuetify.lang.t('$vuetify.menu.user'),])"
+          :columns="getUserTableColumns"
+          :rows="users"
+          :is-loading="isTableLoading"
+          sort-options="firstName"
+          show-avatar
+          @create-row="toogleNewModal(true)"
+          @edit-row="openEditModal($event)"
+          @delete-row="deleteUserHandler($event)"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -77,13 +88,11 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewUser from '../../views/user/NewUser'
-import EditUser from '../../views/user/EditUser'
-import ShowUser from '../../views/user/ShowUser'
+import NewUser from './NewUser'
+import EditUser from './EditUser'
 
 export default {
   components: {
-    ShowUser,
     NewUser,
     EditUser
   },
@@ -111,16 +120,12 @@ export default {
           value: 'lastName'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.username'),
-          value: 'username'
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.email'),
           value: 'email'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country'
+          text: this.$vuetify.lang.t('$vuetify.position'),
+          value: 'positions[0].name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -145,7 +150,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.user.user')
+            this.$vuetify.lang.t('$vuetify.menu.user')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
