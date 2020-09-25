@@ -1,7 +1,7 @@
 <?php
 
 use App\Company;
-use App\User;
+use App\Position;
 use Illuminate\Database\Seeder;
 
 class CompanyTableSeeder extends Seeder
@@ -15,8 +15,8 @@ class CompanyTableSeeder extends Seeder
     {
         factory(Company::class, 1)->create()->each(function ($company) {
             // Seed the relation with one address
-            $user = factory(User::class)->make();
-            $company->users()->save($user);
+            $pos = factory(Position::class)->make();
+            $company->users()->save($pos);
         });
     }
 }

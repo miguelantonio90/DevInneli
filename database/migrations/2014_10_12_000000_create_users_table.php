@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('firstName');
             $table->string('lastName')->nullable();
             $table->string('email')->unique();
-            $table->string('employeeEmail')->unique();
+            $table->string('employeeEmail')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->nullable();
@@ -30,6 +30,9 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
+            $table->unsignedInteger('position_id');
+            $table->foreign('position_id')->references('id')->on('positions')
                 ->onDelete('cascade');
         });
     }

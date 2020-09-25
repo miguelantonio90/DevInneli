@@ -15,14 +15,16 @@ class CreateShopsTable extends Migration
     public function up()
     {
         Schema::create('shops', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->string('country')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
         });
     }
 
