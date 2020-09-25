@@ -19,13 +19,16 @@ use Laravel\Passport\HasApiTokens;
  * @method static select(string $string, $raw)
  * @property mixed email
  * @property mixed firstName
+ * @property mixed lastName
  * @property mixed employeeEmail
  * @property mixed pinCode
+ * @property mixed phone
  * @property mixed isAdmin
  * @property mixed isManager
+ * @property mixed company_id
  * @property mixed|string password
  * @property mixed avatar
- * @property mixed position
+ * @property mixed position_id
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -37,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'email', 'employeeEmail', 'password', 'username'
+        'firstName', 'email', 'employeeEmail'
     ];
 
     /**
@@ -108,7 +111,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function createFirst($data, $company, $position): User
     {
         $user = new User();
-        $user->firstName = 'Proprietario';
+        $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
         $user->employeeEmail = $data['email'];

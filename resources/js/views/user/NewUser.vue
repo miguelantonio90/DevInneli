@@ -69,7 +69,7 @@
               md="7"
             >
               <vue-tel-input-vuetify
-                v-model="newUser.employer.phone"
+                v-model="newUser.phone"
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
@@ -93,7 +93,7 @@
               md="6"
             >
               <v-text-field
-                v-model="newUser.employer.pinCode"
+                v-model="newUser.pinCode"
                 :append-icon=" hidePinCode1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.pinCode')"
                 :rules="formRule.pinCode"
@@ -110,7 +110,7 @@
               md="6"
             >
               <v-text-field
-                v-model="newUser.employer.confirm_pinCode"
+                v-model="newUser.confirm_pinCode"
                 :append-icon="hidePinCode2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.confirm_pinCode')"
                 :rules="formRule.confirm_pinCode"
@@ -224,7 +224,7 @@ export default {
                 this.$vuetify.lang.t('$vuetify.confirm_pinCode')
               ]),
           (v) =>
-            (!!v && v) === this.newUser.employer.pinCode ||
+            (!!v && v) === this.newUser.pinCode ||
               this.$vuetify.lang.t(
                 '$vuetify.rule.match',
                 [this.$vuetify.lang.t('$vuetify.pinCode')],
@@ -282,7 +282,7 @@ export default {
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.newUser.employer.phone = number
+        this.newUser.phone = number
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
