@@ -58,37 +58,31 @@ class UserController extends Controller
     {
         $data = $request->all();
         $data['company_id'] = (int)$this->getCompanyByAdmin();
-//        $this->validator($data)->validate();
-//        $positions = $request->get('positions');
-//        $shops = $request->get('shops');
+        $this->validator($data)->validate();
+        $positions = $request->get('positions');
+        $shops = $request->get('shops');
         $user = User::create([
             'company_id' => $data['company_id'],
+            'position_id'=>Position::where('key', $positions['key'])->first()->id,
             'firstName' => $request->get('firstName'),
             'lastName' => $request->get('lastName'),
             'avatar' => $request->get('avatar'),
             'email' => $request->get('email'),
-            'created_by' => auth()->id(),
-            'isAdmin' => 0,
+            'created_by' => auth()->id()
         ]);
-//        $user = new User();
-//        $user->company_id = (int)$this->getCompanyByAdmin();
-//        $user->firstName = $request->get('firstName');
-//        $user->lastName = $request->get('lastName');
-//        $user->avatar = $request->get('avatar');
-//        $user->email = $request->get('email');
-//        $user->password = $request->get('email');
-//        $user->pinCode = $request->get('pinCode');
-//        $user->phone = $request->get('phone');
-//        $user->isAdmin = 0;
-//        $user->isManager = 0;
-//        $user->position_id = Position::where('key', $positions['key'])->first();
-//        $idShops = [];
-//        foreach ($shops as $key => $value) {
-//            $idShops[$key] = $value['id'];
-//        }
-//        $employShop = Shop::find($idShops);
-//        $user->shops()->attach($employShop);
-//        $user->save();
+        $user->pinCode = $request->get('pinCode');
+        $user->lastName = $request->get('lastName');
+        $user->avatar = $request->get('avatar');
+        $user->phone = $request->get('phone');
+        $user->isAdmin = 0;
+        $user->isManager = 0;
+        $idShops = [];
+        foreach ($shops as $key => $value) {
+            $idShops[$key] = $value['id'];
+        }
+        $employShop = Shop::find($idShops);
+        $user->shops()->attach($employShop);
+        $user->save();
 
         return ResponseHelper::sendResponse(
             $user,
