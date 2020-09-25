@@ -96,12 +96,9 @@ class User extends Authenticatable implements MustVerifyEmail
             ->select(
                 'users.*',
                 'shops.*',
-                'employees.phone',
-                'employees.pinCode',
                 'positions.key as role',
                 'positions.name as position'
             )
-            ->join('employees', 'users.id', '=', 'employees.user_id')
             ->join('position_user', 'users.id', '=', 'position_user.user_id')
             ->join('positions', 'positions.id', '=', 'position_user.position_id')
             ->join('shops', 'users.id', '=', 'shops.user_id')

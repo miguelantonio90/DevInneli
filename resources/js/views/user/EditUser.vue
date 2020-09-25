@@ -60,7 +60,7 @@
                 v-model="editUser.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
-                :disabled="editUser.positions[0].key==='manager'"
+                :disabled="editUser.position.key==='manager'"
                 autocomplete="off"
                 required
               />
@@ -70,7 +70,7 @@
               md="7"
             >
               <vue-tel-input-vuetify
-                v-model="editUser.employer.phone"
+                v-model="editUser.phone"
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
@@ -94,7 +94,7 @@
               md="6"
             >
               <v-text-field
-                v-model="editUser.employer.pinCode"
+                v-model="editUser.pinCode"
                 :append-icon=" hidePinCode1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.pinCode')"
                 :rules="formRule.pinCode"
@@ -111,7 +111,7 @@
               md="6"
             >
               <v-text-field
-                v-model="editUser.employer.confirm_pinCode"
+                v-model="editUser.confirm_pinCode"
                 :append-icon="hidePinCode2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.confirm_pinCode')"
                 :rules="formRule.confirm_pinCode"
@@ -128,12 +128,12 @@
               md="6"
             >
               <v-select
-                v-model="editUser.positions"
+                v-model="editUser.position"
                 :items="roles"
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 item-text="name"
                 :loading="isAccessLoading"
-                :disabled="!!isAccessLoading || editUser.positions[0].key==='manager'"
+                :disabled="!!isAccessLoading || editUser.position.key==='manager'"
                 multiple
                 return-object
               />
@@ -150,7 +150,7 @@
                 return-object
                 multiple
                 :loading="isShopLoading"
-                :disabled="!!isShopLoading || editUser.positions[0].key==='manager'"
+                :disabled="!!isShopLoading || editUser.position.key==='manager'"
               />
             </v-col>
           </v-row>
@@ -218,7 +218,7 @@ export default {
           (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
             this.$vuetify.lang.t('$vuetify.confirm_pinCode')
           ]),
-          (v) => (!!v && v) === this.editUser.employer.pinCode ||
+          (v) => (!!v && v) === this.editUser.pinCode ||
                         this.$vuetify.lang.t(
                           '$vuetify.rule.match',
                           [this.$vuetify.lang.t('$vuetify.pinCode')],

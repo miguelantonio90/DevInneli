@@ -59,30 +59,7 @@ class UserController extends Controller
         $data = $request->all();
         $data['company_id'] = (int)$this->getCompanyByAdmin();
         $this->validator($data)->validate();
-        $positions = $request->get('positions');
-        $shops = $request->get('shops');
-        $user = User::create([
-            'company_id' => $data['company_id'],
-            'position_id'=>Position::where('key', $positions['key'])->first()->id,
-            'firstName' => $request->get('firstName'),
-            'lastName' => $request->get('lastName'),
-            'avatar' => $request->get('avatar'),
-            'email' => $request->get('email'),
-            'created_by' => auth()->id()
-        ]);
-        $user->pinCode = $request->get('pinCode');
-        $user->lastName = $request->get('lastName');
-        $user->avatar = $request->get('avatar');
-        $user->phone = $request->get('phone');
-        $user->isAdmin = 0;
-        $user->isManager = 0;
-        $idShops = [];
-        foreach ($shops as $key => $value) {
-            $idShops[$key] = $value['id'];
-        }
-        $employShop = Shop::find($idShops);
-        $user->shops()->attach($employShop);
-        $user->save();
+        $user = $this->userManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
@@ -124,11 +101,8 @@ class UserController extends Controller
     public function update(Request $request, int $id)
     {
         $this->validator($request->all())->validate();
-
-        $edit = User::findOrFail($id)->update($request->all());
-
         return ResponseHelper::sendResponse(
-            $edit,
+            $this->userManager->edit($id, $request->all()),
             'User has updated successfully.'
         );
     }
@@ -160,10 +134,8 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-
-        $delete = User::findOrFail($id)->delete();
         return ResponseHelper::sendResponse(
-            $delete,
+            $this->userManager->delete($id),
             'Users has deleted successfully.'
         );
     }

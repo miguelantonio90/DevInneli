@@ -166,7 +166,7 @@ export default {
                             this.$vuetify.lang.t('$vuetify.actions.delete')
                         ]),
                         text: this.$vuetify.lang.t(
-                            '$vuetify.messages.error_delete'
+                            '$vuetify.messages.error_delete_shop'
                         ),
                         icon: 'warning',
                         showCancelButton: true,

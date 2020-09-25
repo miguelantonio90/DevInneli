@@ -45,6 +45,7 @@ export default {
         profile: 'Perfil',
         logout: 'Salir',
         user_list: 'Listado de Usuarios',
+        employer_list: 'Listado de Empleados',
         user: 'Empleados',
         access: 'Permiso de acceso',
         access_list: 'Lista de Permisos',
@@ -96,7 +97,9 @@ export default {
         refused: 'Fallido: Conexión rechazada.',
         success_avatar: 'La imagen se salvado satisfactoriamente.',
         warning_delete: 'No se podrá revertir esta acción!',
-        error_delete: 'Debe existir al menos una tienda',
+        error_delete_shop: 'Debe existir al menos una tienda',
+        error_delete_manager: 'Este usuario no puede ser eliminado',
+        error_edit_manager: "Este usuario no puede ser editado. Use el perfil para editarlo.",
         success_profile: 'Los datos han sido actualizados.',
         check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
