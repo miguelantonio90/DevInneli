@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Managers\ShopManager;
 use App\Shop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,9 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
-    public function __construct()
+    /**
+     * @var ShopManager
+     */
+    private $shopManager;
+
+    public function __construct(ShopManager $shopManager)
     {
         $this->middleware('auth');
+        $this->shopManager = $shopManager;
     }
 
     /**
@@ -22,16 +29,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $shops = $this->getAllShopByUserId();
-        return ResponseHelper::sendResponse($shops, 'Shops retrieved successfully.');
-
-    }
-
-    private function getAllShopByUserId()
-    {
-        return Shop::latest()
-            ->where('user_id', '=', auth()->id())
-            ->get();
+        return ResponseHelper::sendResponse($this->shopManager->findAllByCompany(), 'Shops retrieved successfully.');
     }
 
     /**
@@ -42,18 +40,8 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $managerEmail = DB::table('users')
-            ->select('email')
-            ->where('users.id', '=', auth()->id())
-            ->get();
-        $data['email'] = $managerEmail[0]->email;
-        $data['user_id'] = auth()->id();
-        $created = Shop::create($data);
         return ResponseHelper::sendResponse(
-            $created,
-            'Shop has created successfully.'
-        );
+            $this->shopManager->new($request), 'Shop has created successfully.');
     }
 
     /**
@@ -76,9 +64,8 @@ class ShopController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $edit = Shop::findOrFail($id)->update($request->all());
         return ResponseHelper::sendResponse(
-            $edit,
+            $this->shopManager->edit,
             'User has updated successfully.'
         );
     }
@@ -91,13 +78,7 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        if (count($this->getAllShopByUserId()) > 1) {
-            $delete = Shop::findOrFail($id)->delete();
-            return ResponseHelper::sendResponse(
-                $delete,
-                'Shop has deleted successfully.'
-            );
-        }
-        return ResponseHelper::sendResponse([], "Shop can't by deleted");
+        $dlt = $this->shopManager->delete();
+        return ResponseHelper::sendResponse($dlt[0], $dlt[1]);
     }
 }

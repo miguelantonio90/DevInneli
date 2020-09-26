@@ -45,6 +45,7 @@ export default {
     profile: 'Perfil',
     logout: 'Salir',
     user_list: 'Listado de Usuarios',
+    employer_list: 'Listado de Empleados',
     user: 'Empleados',
     access: 'Permiso de acceso',
     access_list: 'Lista de Permisos',
@@ -90,14 +91,21 @@ export default {
     user: 'Usuario',
     edit_profile: 'Editar Perfil',
     sub_profile: 'Complete su perfil',
-    btn_edit: 'Actualizar'
+    btn_edit: 'Actualizar',
+    company: 'Comapñia',
+    manager: 'Propietario'
   },
   messages: {
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
-    success_profile: 'Los datos han sido actualizados.',
     warning_delete: 'No se podrá revertir esta acción!',
-    error_delete: 'Debe existir al menos una tienda'
+    error_delete_shop: 'Debe existir al menos una tienda',
+    error_delete_manager: 'Este usuario no puede ser eliminado',
+    error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',
+    success_profile: 'Los datos han sido actualizados.',
+    check_mail:
+            'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
+    password_success: 'La contraseña se actualizo correctamente.'
   },
   // options
   actions: {
@@ -119,10 +127,7 @@ export default {
     edit: 'Editar {0}',
     show: 'Mostrar {0}',
     delete: 'Eliminar {0}',
-    success_profile: 'Los datos han sido actualizados.',
-    check_mail:
-            'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
-    password_success: 'La contraseña se actualizo correctamente.'
+    no_action: 'No puede {0}'
   },
   access: {
     key: 'Llave',
@@ -135,6 +140,9 @@ export default {
   component: {
     select: 'Selecciona columnas',
     others: 'otros'
+  },
+  tips: {
+    account_delete: 'Eliminar cuenta permanentemente.'
   },
   ...es
 }

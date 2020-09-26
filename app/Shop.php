@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed name
- * @property mixed email
  * @property mixed country
  * @method static create(array $array)
  * @method static latest()
@@ -21,7 +20,7 @@ class Shop extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'country', 'user_id', 'address', 'description', 'phone'];
+    protected $fillable = ['name', 'country', 'company_id', 'address', 'description', 'phone'];
 
     //
     public function users()
@@ -33,7 +32,7 @@ class Shop extends Model
     {
         $shop = new Shop();
         $shop->name = $data['shopName'];
-        $shop->email = $data['email'];
+        $shop->country = $data['country'];
         $shop->company_id = $company->id;
         $shop->save();
 

@@ -26,9 +26,9 @@ const state = {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
     avatar: '',
-    employer: {},
+    pinCode: '',
+    phone: '',
     positions: [],
     shops: []
   },
@@ -39,8 +39,8 @@ const state = {
     email: '',
     password: '',
     avatar: '',
-    employer: {},
-    positions: [],
+    position: [],
+    positions_id: '',
     shops: []
   },
   isUserTableLoading: false,
@@ -76,13 +76,15 @@ const mutations = {
       password: '',
       avatar: '',
       employer: {},
-      positions: [],
+      position: [],
+      position_id: '',
       shops: []
     }
     state.saved = true
   },
   [USER_EDIT] (state, userId) {
     state.editUser = state.users.filter((node) => node.id === userId)[0]
+    console.log(state.editUser)
   },
   [USER_UPDATED] (state) {
     state.showEditModal = false
@@ -93,8 +95,8 @@ const mutations = {
       email: '',
       password: '',
       avatar: '',
-      employer: {},
-      positions: [],
+      position: [],
+      positions_id: '',
       shops: []
     }
     state.saved = true

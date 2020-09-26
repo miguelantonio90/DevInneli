@@ -15,7 +15,7 @@ class CreatePositionsTable extends Migration
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key')->unique();
+            $table->string('key');
             $table->string('name');
             $table->boolean('accessPin')->default(0);
             $table->boolean('accessEmail')->default(0);

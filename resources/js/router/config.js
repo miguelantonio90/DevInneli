@@ -247,10 +247,10 @@ export const protectedRoute = [
         },
         children: [
           {
-            path: '/users/user.list',
-            name: 'user_list',
+            path: '/users/employer.list',
+            name: 'employer_list',
             meta: {
-              title: 'user_list',
+              title: 'employer_list',
               icon: 'mdi-database-plus'
             },
             component: () => import('../views/user/ListUser')

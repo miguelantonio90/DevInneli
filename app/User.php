@@ -19,13 +19,16 @@ use Laravel\Passport\HasApiTokens;
  * @method static select(string $string, $raw)
  * @property mixed email
  * @property mixed firstName
+ * @property mixed lastName
  * @property mixed employeeEmail
  * @property mixed pinCode
+ * @property mixed phone
  * @property mixed isAdmin
  * @property mixed isManager
+ * @property mixed company_id
  * @property mixed|string password
  * @property mixed avatar
- * @property mixed position
+ * @property mixed position_id
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -37,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'email', 'employeeEmail', 'password', 'username'
+        'firstName', 'email', 'employeeEmail', 'company_id', 'position_id'
     ];
 
     /**
@@ -93,12 +96,9 @@ class User extends Authenticatable implements MustVerifyEmail
             ->select(
                 'users.*',
                 'shops.*',
-                'employees.phone',
-                'employees.pinCode',
                 'positions.key as role',
                 'positions.name as position'
             )
-            ->join('employees', 'users.id', '=', 'employees.user_id')
             ->join('position_user', 'users.id', '=', 'position_user.user_id')
             ->join('positions', 'positions.id', '=', 'position_user.position_id')
             ->join('shops', 'users.id', '=', 'shops.user_id')
@@ -108,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function createFirst($data, $company, $position): User
     {
         $user = new User();
-        $user->firstName = 'Proprietario';
+        $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
         $user->employeeEmail = $data['email'];

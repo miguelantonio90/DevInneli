@@ -68,7 +68,6 @@
                 :rules="formRule.address"
                 :label="$vuetify.lang.t('$vuetify.address')"
                 required
-                @keypress="lettersNumbers"
               />
             </v-col>
             <v-col
@@ -82,7 +81,6 @@
                 :rules="formRule.description"
                 :label="$vuetify.lang.t('$vuetify.access.description')"
                 required
-                @keypress="lettersNumbers"
               />
             </v-col>
           </v-row>

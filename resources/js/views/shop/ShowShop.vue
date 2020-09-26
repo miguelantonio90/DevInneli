@@ -1,12 +1,12 @@
 <template>
   <v-dialog
-    v-model="toogleEditModal"
+    v-model="toogleShowModal"
     max-width="600px"
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
+          $vuetify.lang.t('$vuetify.titles.show', [
             $vuetify.lang.t('$vuetify.menu.shop'),
           ])
         }}</span>
@@ -26,34 +26,19 @@
               <v-text-field
                 v-model="editShop.name"
                 prepend-icon="mdi-home-variant"
-                :counter="10"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                :rules="formRule.shop"
-                required
-                @keypress="lettersNumbers"
+                readonly
               />
             </v-col>
             <v-col>
               <vue-tel-input-vuetify
                 v-model="editShop.phone"
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
-                :label="
-                  $vuetify.lang.t('$vuetify.phone')
-                "
+                :label=" $vuetify.lang.t('$vuetify.phone')"
                 :select-label="$vuetify.lang.t('$vuetify.country')"
                 v-bind="bindProps"
-                :error-messages="errorPhone"
-                @country-changed="onCountry"
-                @input="onInput"
-              >
-                <template #message="{ key, message }">
-                  <slot
-                    name="label"
-                    v-bind="{ key, message }"
-                  />
-                  {{ message }}
-                </template>
-              </vue-tel-input-vuetify>
+                readonly
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -64,10 +49,9 @@
               <v-text-field
                 v-model="editShop.address"
                 prepend-icon="mdi-home-map-marker"
-                :counter="120"
-                :rules="formRule.address"
                 :label="$vuetify.lang.t('$vuetify.address')"
                 required
+                readonly
               />
             </v-col>
             <v-col
@@ -77,10 +61,9 @@
               <v-text-field
                 v-model="editShop.description"
                 prepend-icon="mdi-file-document"
-                :counter="120"
-                :rules="formRule.description"
                 :label="$vuetify.lang.t('$vuetify.access.description')"
                 required
+                readonly
               />
             </v-col>
           </v-row>
@@ -91,19 +74,10 @@
         <v-btn
           class="mb-2"
           color="error"
-          @click="toogleEditModal(false)"
+          @click="toogleShowModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-        </v-btn>
-        <v-btn
-          :disabled="!formValid"
-          class="mb-2"
-          color="primary"
-          @click="editShopAction"
-        >
-          <v-icon>mdi-check</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -114,6 +88,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  name: 'ShowShop',
   data () {
     return {
       errorPhone: null,
@@ -139,59 +114,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['updateShop', 'toogleEditModal']),
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.editShop.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onCountry (event) {
-      console.log(event)
-      this.editShop.country = event.iso2
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async editShopAction () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateShop(this.editShop).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
-      }
-    }
+    ...mapActions('shop', ['updateShop', 'toogleShowModal'])
   }
 }
 </script>

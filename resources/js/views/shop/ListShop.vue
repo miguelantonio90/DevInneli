@@ -7,6 +7,7 @@
       >
         <new-shop v-if="showNewModal" />
         <edit-shop v-if="showEditModal" />
+        <show-shop v-if="showShowModal" />
         <v-card>
           <v-card-title>
             {{
@@ -82,9 +83,11 @@
 import { mapActions, mapState } from 'vuex'
 import NewShop from './NewShop'
 import EditShop from './EditShop'
+import ShowShop from './ShowShop'
 
 export default {
   components: {
+    ShowShop,
     NewShop,
     EditShop
   },
@@ -108,8 +111,8 @@ export default {
           value: 'name'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.address'),
-          value: 'address'
+          text: this.$vuetify.lang.t('$vuetify.country'),
+          value: 'country'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.phone'),
@@ -163,7 +166,7 @@ export default {
               this.$vuetify.lang.t('$vuetify.actions.delete')
             ]),
             text: this.$vuetify.lang.t(
-              '$vuetify.messages.error_delete'
+              '$vuetify.messages.error_delete_shop'
             ),
             icon: 'warning',
             showCancelButton: true,

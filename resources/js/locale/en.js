@@ -45,6 +45,7 @@ export default {
     profile: 'User Profile',
     logout: 'Logout',
     user_list: 'User List',
+    employer_list: 'Employer List',
     user: 'Users',
     access: 'Access permission',
     access_list: 'Permission List',
@@ -89,7 +90,9 @@ export default {
     refused: 'Failed: Connections refused.',
     success_avatar: 'The image was successfully saved.',
     warning_delete: 'You won\'t be able to revert this!',
-    error_delete: 'There must be at least one shop',
+    error_delete_shop: 'There must be at least one shop',
+    error_delete_manager: "You can't delete this user",
+    error_edit_manager: "You can't edit this user. Use profile to edit.",
     success_profile: 'The data has been updated.',
     check_mail:
             'An email has been sent with the details to change password.',
@@ -100,7 +103,9 @@ export default {
     user: 'User',
     edit_profile: 'Edit Profile',
     sub_profile: 'Complete your profile',
-    btn_edit: 'Update'
+    btn_edit: 'Update',
+    company: 'Company',
+    manager: 'CEO Manager'
   },
   // options
   actions: {
@@ -135,6 +140,9 @@ export default {
   component: {
     select: 'Select Columns',
     others: 'others'
+  },
+  tips: {
+    account_delete: 'Permanently delete account.'
   },
   ...en
 }

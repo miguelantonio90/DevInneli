@@ -28,6 +28,6 @@ class CreateShopUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_shop');
+        Schema::dropIfExists('shop_user');
     }
 }

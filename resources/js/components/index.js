@@ -2,12 +2,14 @@ import Vue from 'vue'
 import Notifications from '../plugins/notifications'
 import AppDataTable from '../components/core/AppDataTable'
 import AvatarPicker from '../components/core/AvatarPicker'
+import AppLoading from '../components/core/AppLoading'
 import MaterialCard from '../components/utils/MaterialCard'
 
 const components = [
   AppDataTable,
   AvatarPicker,
-  MaterialCard
+  MaterialCard,
+  AppLoading
 ]
 
 // Installation of the library as a plugin
