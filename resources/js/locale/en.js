@@ -1,24 +1,25 @@
 import en from 'vuetify/es5/locale/en'
 
 export default {
-    label: 'English',
-    // page login
-    login: 'login',
-    forgot: 'Forgot Password?',
-    reset_password: 'Reset Password',
-    forgot_btn: 'Send Reset Link',
-    username: 'Username',
-    name: 'Name',
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    email: 'Email',
-    password: 'Password',
-    pinCode: 'Pin',
-    confirm: 'Confirm',
-    register: 'Register',
-    noDefined: 'No defined',
-    aboutMe: 'About me',
-    activeAccount:
+  label: 'English',
+  // page login
+  login: 'login',
+  forgot: 'Forgot Password?',
+  reset_password: 'Reset Password',
+  find_password: 'Enter your password',
+  forgot_btn: 'Send Reset Link',
+  username: 'Username',
+  name: 'Name',
+  firstName: 'First Name',
+  lastName: 'Last Name',
+  email: 'Email',
+  password: 'Password',
+  pinCode: 'Pin',
+  confirm: 'Confirm',
+  register: 'Register',
+  noDefined: 'No defined',
+  aboutMe: 'About me',
+  activeAccount:
         'Hello, your account has been created, but it has not been activated yet. Please access the registered email, you have been sent a message for activation.',
     confirm_password: 'Confirm Password',
     confirm_pinCode: 'Confirm Pin Code',
@@ -98,39 +99,40 @@ export default {
         success_profile: 'The data has been updated.',
         check_mail:
             'An email has been sent with the details to change password.',
-        password_success: 'The password was updated successfully.'
-    },
-    // profile
-    profile: {
-        user: 'User',
-        edit_profile: 'Edit Profile',
-        sub_profile: 'Complete your profile',
-        btn_edit: 'Update',
-        company: 'Company',
-        manager: 'CEO Manager'
-    },
-    // options
-    actions: {
-        actions: 'Actions',
-        accept: 'Accept',
-        search: 'Search',
-        new: 'New',
-        edit: 'Edit',
-        delete: 'Delete',
-        list: 'List',
-        save: 'Save',
-        cancel: 'Cancel',
-        close: 'Close'
-    },
-    titles: {
-        list: '{0} List',
-        new: 'New {0}',
-        newF: 'New {0}',
-        edit: 'Edit {0}',
-        show: 'Show {0}',
-        delete: 'Delete {0}',
-        no_action: "Can't {0}"
-    },
+    password_success: 'The password was updated successfully.'
+  },
+  // profile
+  profile: {
+    user: 'User',
+    edit_profile: 'Edit Profile',
+    sub_profile: 'Complete your profile',
+    btn_edit: 'Update',
+    company: 'Company',
+    manager: 'CEO Manager'
+  },
+  // options
+  actions: {
+    actions: 'Actions',
+    accept: 'Accept',
+    search: 'Search',
+    new: 'New',
+    edit: 'Edit',
+    delete: 'Delete',
+    list: 'List',
+    save: 'Save',
+    cancel: 'Cancel',
+    close: 'Close',
+    change: 'Change'
+  },
+  titles: {
+    list: '{0} List',
+    new: 'New {0}',
+    newF: 'New {0}',
+    edit: 'Edit {0}',
+    show: 'Show {0}',
+    delete: 'Delete {0}',
+    no_action: "Can't {0}"
+  },
 
     access: {
         key: 'Key',

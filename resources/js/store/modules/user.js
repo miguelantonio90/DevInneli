@@ -38,11 +38,11 @@ const state = {
         firstName: '',
         lastName: '',
         email: '',
-        password: '',
         country: '',
         avatar: '',
-        position: [],
-        positions_id: '',
+        pinCode: '',
+        phone: '',
+        positions: [],
         shops: []
     },
     isUserTableLoading: false,
@@ -76,6 +76,7 @@ const mutations = {
             lastName: '',
             email: '',
             country: '',
+            phone:'',
             password: '',
             avatar: '',
             employer: {},
@@ -97,6 +98,7 @@ const mutations = {
             lastName: '',
             email: '',
             password: '',
+            phone:'',
             country: '',
             avatar: '',
             position: [],
@@ -123,88 +125,88 @@ const mutations = {
 const getters = {}
 
 const actions = {
-    toogleNewModal({commit}, showModal) {
-        commit(SWITCH_USER_NEW_MODAL, showModal)
-    },
-    toogleEditModal({commit}, showModal) {
-        commit(SWITCH_USER_EDIT_MODAL, showModal)
-    },
-    toogleShowModal({commit}, showModal) {
-        commit(SWITCH_USER_SHOW_MODAL, showModal)
-    },
-    openEditModal({commit}, userId) {
-        commit(SWITCH_USER_EDIT_MODAL, true)
-        commit(USER_EDIT, userId)
-    },
-    openShowModal({commit}, userId) {
-        commit(SWITCH_USER_SHOW_MODAL, true)
-        commit(USER_EDIT, userId)
-    },
-    async getUsers({commit}) {
-        commit(USER_TABLE_LOADING, true)
-        // noinspection JSUnresolvedVariable
-        await user
-            .fetchUsers()
-            .then(({data}) => {
-                commit(FETCHING_USERS, data.data)
-                commit(USER_TABLE_LOADING, false)
-            }).catch((error) => commit('SET_ERRORS', error, {root: true}))
-    },
-    async createUser({commit, dispatch}, newUser) {
-        commit(ENV_DATA_PROCESS, true)
-        commit('CLEAR_ERRORS', null, {root: true})
+  toogleNewModal ({ commit }, showModal) {
+    commit(SWITCH_USER_NEW_MODAL, showModal)
+  },
+  toogleEditModal ({ commit }, showModal) {
+    commit(SWITCH_USER_EDIT_MODAL, showModal)
+  },
+  toogleShowModal ({ commit }, showModal) {
+    commit(SWITCH_USER_SHOW_MODAL, showModal)
+  },
+  openEditModal ({ commit }, userId) {
+    commit(SWITCH_USER_EDIT_MODAL, true)
+    commit(USER_EDIT, userId)
+  },
+  openShowModal ({ commit }, userId) {
+    commit(SWITCH_USER_SHOW_MODAL, true)
+    commit(USER_EDIT, userId)
+  },
+  async getUsers ({ commit }) {
+    commit(USER_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await user
+      .fetchUsers()
+      .then(({ data }) => {
+        commit(FETCHING_USERS, data.data)
+        commit(USER_TABLE_LOADING, false)
+      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+  },
+  async createUser ({ commit, dispatch }, newUser) {
+    commit(ENV_DATA_PROCESS, true)
+    commit('CLEAR_ERRORS', null, { root: true })
 
-        await user
-            .sendCreateRequest(newUser)
-            .then(() => {
-                commit(USER_CREATED)
-                commit(ENV_DATA_PROCESS, false)
-                dispatch('user/getUsers', null, {root: true})
-            })
-            .catch((error) => commit('SET_ERRORS', error, {root: true}))
-    },
-    async updateUser({commit, dispatch}, profile) {
-        commit('CLEAR_ERRORS', null, {root: true})
-        const request = profile || state.editUser
+    await user
+      .sendCreateRequest(newUser)
+      .then(() => {
+        commit(USER_CREATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('user/getUsers', null, { root: true })
+      })
+      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+  },
+  async updateUser ({ commit, dispatch }, profile) {
+    commit('CLEAR_ERRORS', null, { root: true })
+    const request = profile || state.editUser
 
-        await user
-            .sendUpdateRequest(request)
-            .then(() => {
-                commit(USER_UPDATED)
-                commit(ENV_DATA_PROCESS, false)
-                dispatch('user/getUsers', null, {root: true})
-            })
-            .catch((error) => commit('SET_ERRORS', error, {root: true}))
-    },
-    async deleteUser({commit, dispatch}, userId) {
-        commit('CLEAR_ERRORS', null, {root: true})
+    await user
+      .sendUpdateRequest(request)
+      .then(() => {
+        commit(USER_UPDATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('user/getUsers', null, { root: true })
+      })
+      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+  },
+  async deleteUser ({ commit, dispatch }, userId) {
+    commit('CLEAR_ERRORS', null, { root: true })
 
-        await user
-            .sendDeleteRequest(userId)
-            .then(() => {
-                commit(USER_DELETE)
-                dispatch('user/getUsers', null, {root: true})
-            })
-            .catch((error) => commit('SET_ERRORS', error, {root: true}))
-    },
+    await user
+      .sendDeleteRequest(userId)
+      .then(() => {
+        commit(USER_DELETE)
+        dispatch('user/getUsers', null, { root: true })
+      })
+      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+  },
 
-    async updateAvatar({commit, dispatch}, file) {
-        const image = `data:${file.file.type};base64,${file.file.base64}`
-        const sendData = {
-            id: file.id,
-            image: image
-        }
-        await user.updateAvatar(sendData).then(() => {
-            commit(SET_USER_AVATAR, file.file.base64)
-            dispatch('auth/getUserData', null, {root: true})
-        })
+  async updateAvatar ({ commit, dispatch }, file) {
+    const image = `data:${file.file.type};base64,${file.file.base64}`
+    const sendData = {
+      id: file.id,
+      image: image
     }
+    await user.updateAvatar(sendData).then(() => {
+      commit(SET_USER_AVATAR, file.file.base64)
+      dispatch('auth/getUserData', null, { root: true })
+    })
+  }
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    mutations,
-    actions
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions
 }

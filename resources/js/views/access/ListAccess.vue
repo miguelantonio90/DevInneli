@@ -182,7 +182,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteUser(roleId)
+          if (result.value) this.deleteRole(roleId)
         })
     }
   }

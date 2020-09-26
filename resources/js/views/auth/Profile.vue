@@ -155,13 +155,18 @@
                   >
                     <v-text-field
                       v-model="userData.company.email"
-                      :append-outer-icon="'mdi-send'"
-                      disabled
+                      :disabled="!enableEmail"
                       :label="
                         $vuetify.lang.t('$vuetify.email')
                       "
                       :rules="formRule.email"
                     />
+                    <v-btn
+                      color="secondary"
+                      @click="openConfirm"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.change') }}
+                    </v-btn>
                   </v-flex>
 
                   <v-flex
@@ -280,6 +285,7 @@ export default {
     return {
       color: 'primary',
       formValid: false,
+      enableEmail: false,
       loading: false,
       saving: false,
       loadingData: false,
@@ -399,6 +405,28 @@ export default {
           lang.t('$vuetify.phone')
         ])
       }
+    },
+    openConfirm () {
+      const lang = this.$vuetify.lang
+      this.$Swal.fire({
+        title: lang.t('$vuetify.find_password'),
+        input: 'password',
+        inputAttributes: {
+          minlength: 10,
+          autocapitalize: 'off',
+          autocorrect: 'off'
+        },
+        confirmButtonText: lang.t('$vuetify.actions.accept'),
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+
+        },
+        allowOutsideClick: () => !this.$Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.enableEmail = true
+        }
+      })
     }
   }
 }

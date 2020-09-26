@@ -85,27 +85,7 @@ export default {
       'deleteUser'
     ]),
     editUserHandler ($event) {
-      (this.users.filter(c => c.id === $event)[0].position.key === 'manager') ? this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
-            this.$vuetify.lang.t('$vuetify.actions.edit')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.error_edit_manager'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-        })
-        : this.openEditModal($event)
+      this.openEditModal($event)
     },
     deleteUserHandler (userId) {
       (this.users.filter(c => c.id === userId)[0].position.key === 'manager') ? this.$Swal

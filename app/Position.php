@@ -14,18 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class Position extends Model
 {
     protected $fillable = [
-        'key', 'name', 'accessEmail', 'accessPin',
+        'key', 'name', 'accessEmail', 'accessPin', 'company_id',
     ];
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
 
     public static function createFirst($company): Position
     {
@@ -37,5 +27,27 @@ class Position extends Model
         $position->company_id = $company->id;
         $position->save();
         return $position;
+    }
+
+    public static function makePosition($company_id, $properties)
+    {
+        $position = new Position();
+        $position->key = $properties['name'];
+        $position->name = $properties['country'];
+        $position->accessEmail = $properties['address'];
+        $position->accessPin = $properties['phone'];
+        $position->description = $properties['description'];
+        $position->company_id = $company_id;
+        return $position;
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }

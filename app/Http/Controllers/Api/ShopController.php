@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ShopManager;
-use App\Shop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as Response;
-use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
@@ -65,7 +63,7 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         return ResponseHelper::sendResponse(
-            $this->shopManager->edit,
+            $this->shopManager->edit($id, $request),
             'User has updated successfully.'
         );
     }
@@ -78,7 +76,7 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        $dlt = $this->shopManager->delete();
+        $dlt = $this->shopManager->delete($id);
         return ResponseHelper::sendResponse($dlt[0], $dlt[1]);
     }
 }
