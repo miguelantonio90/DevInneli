@@ -103,7 +103,9 @@ export default {
     user: 'User',
     edit_profile: 'Edit Profile',
     sub_profile: 'Complete your profile',
-    btn_edit: 'Update'
+    btn_edit: 'Update',
+    company: 'Company',
+    manager: 'CEO Manager'
   },
   // options
   actions: {
@@ -138,6 +140,9 @@ export default {
   component: {
     select: 'Select Columns',
     others: 'others'
+  },
+  tips: {
+    account_delete: 'Permanently delete account.'
   },
   ...en
 }

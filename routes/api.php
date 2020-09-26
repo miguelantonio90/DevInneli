@@ -41,12 +41,11 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
 
         Route::resource('access', 'AccessController');
+
         Route::resource('shop', 'ShopController');
-        Route::get('shop', 'ShopController@index')->name('shops.list');
-        Route::post('shop', 'ShopController@store')->name('shops.create');
-        Route::post('shop/{id}', 'ShopController@update')->name('shops.update');
-        Route::delete('shop/{id}', 'ShopController@destroy')->name('shops.destroy');
-        Route::resource('employee', 'EmployeeController');
+
+        Route::resource('company', 'CompanyController');
+        Route::post('company/logo/{id}', 'CompanyController@updateLogo')->name('company.updateLogo');
 
     });
 

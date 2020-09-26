@@ -16,7 +16,7 @@ class CompanyTableSeeder extends Seeder
         factory(Company::class, 1)->create()->each(function ($company) {
             // Seed the relation with one address
             $pos = factory(Position::class)->make();
-            $company->users()->save($pos);
+            $company->positions()->save($pos);
         });
     }
 }

@@ -16,14 +16,14 @@ class UserManager
     {
         if (auth()->user()['isAdmin'] === 1) {
             $users = User::latest()
-                ->with('shops')
-                ->with('positions')
+                ->with('company')
                 ->get();
         } else {
             $company_id = $this->getCompanyByAdmin();
             $users = User::findOrFail(auth()->id())
                 ->where('isAdmin', '=', '0')
                 ->where('company_id', '=', $company_id)
+                ->with('company')
                 ->with('position')
                 ->with('shops')
                 ->get();
@@ -36,7 +36,7 @@ class UserManager
      * Find Company Id using admin authenticate
      * @return string
      */
-    private function getCompanyByAdmin(): string
+    public static function getCompanyByAdmin(): string
     {
         return DB::table('users')
             ->select('company_id')
@@ -74,7 +74,7 @@ class UserManager
         $user->phone = $data['phone'];
         $user->isAdmin = 0;
         $user->isManager = 0;
-        $positions?$user->position_id = Position::where('key', $positions['key'])->first()->id:'';
+        $positions ? $user->position_id = Position::where('key', $positions['key'])->first()->id : '';
         $idShops = [];
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['id'];

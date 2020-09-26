@@ -63,7 +63,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.position'),
-          value: 'positions[0].name'
+          value: 'position.name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

@@ -91,7 +91,9 @@ export default {
     user: 'Usuario',
     edit_profile: 'Editar Perfil',
     sub_profile: 'Complete su perfil',
-    btn_edit: 'Actualizar'
+    btn_edit: 'Actualizar',
+    company: 'Comapñia',
+    manager: 'Propietario'
   },
   messages: {
     refused: 'Fallido: Conexión rechazada.',
@@ -138,6 +140,9 @@ export default {
   component: {
     select: 'Selecciona columnas',
     others: 'otros'
+  },
+  tips: {
+    account_delete: 'Eliminar cuenta permanentemente.'
   },
   ...es
 }

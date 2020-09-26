@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Managers\UserManager;
 use App\User;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\JsonResponse;
 
 /**
  * @group Auth endpoints
@@ -13,13 +12,29 @@ use Illuminate\Http\JsonResponse;
  */
 class AuthenticationController extends Controller
 {
+    protected $userManager;
+
+    public function __construct(UserManager $userManager)
+    {
+        $this->userManager = $userManager;
+    }
 
     /**
      * @return mixed
      */
     public function user()
     {
-        return User::findOrFail(auth()->id())->with('company')->get();
-
+        if (auth()->user()['isAdmin'] === 0) {
+            $company_id = UserManager::getCompanyByAdmin();
+            return User::findOrFail(auth()->id())
+                ->where('isAdmin', '=', '0')
+                ->where('company_id', '=', $company_id)
+                ->with('company')
+                ->with('position')
+                ->with('shops')
+                ->first();
+        } else {
+            return auth()->user();
+        }
     }
 }
