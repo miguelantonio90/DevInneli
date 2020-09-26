@@ -23,10 +23,6 @@ class Shop extends Model
     protected $fillable = ['name', 'country', 'company_id', 'address', 'description', 'phone'];
 
     //
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
 
     public static function createFirst($data, $company)
     {
@@ -38,5 +34,22 @@ class Shop extends Model
 
         return $shop;
 
+    }
+
+    public static function makeShop($properties)
+    {
+        $shop = new Shop();
+        $shop->name = $properties['name'];
+        $shop->country = $properties['country'];
+        $shop->address = $properties['address'];
+        $shop->phone = $properties['phone'];
+        $shop->description = $properties['description'];
+        $shop->company_id = $properties['company_id'];
+        return $shop;
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

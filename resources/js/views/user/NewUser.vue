@@ -109,23 +109,6 @@
               cols="12"
               md="6"
             >
-              <v-text-field
-                v-model="newUser.confirm_pinCode"
-                :append-icon="hidePinCode2 ? 'mdi-eye' : 'mdi-eye-off'"
-                :label="$vuetify.lang.t('$vuetify.confirm_pinCode')"
-                :rules="formRule.confirm_pinCode"
-                :type="hidePinCode2 ? 'password' : 'number'"
-                autocomplete="off"
-                name="confirm_pinCode"
-                required
-                @keypress="numbers"
-                @click:append="hidePinCode2 = !hidePinCode2"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
               <v-select
                 v-model="newUser.positions"
                 :items="roles"
@@ -138,7 +121,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="6"
+              md="12"
             >
               <v-select
                 v-model="newUser.shops"

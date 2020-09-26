@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Managers\AccessManager;
 use App\Position;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,9 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AccessController extends Controller
 {
-    public function __construct()
+    protected $accessManager;
+
+    public function __construct(AccessManager $accessManager)
     {
         $this->middleware('auth');
+        $this->accessManager = $accessManager;
     }
 
     /**
@@ -23,7 +27,7 @@ class AccessController extends Controller
      */
     public function index()
     {
-        $positions = Position::latest()->where('key', '<>', 'manager')->get();
+        $positions = Position::latest()->where('key', '<>', 'admin')->get();
 
         return ResponseHelper::sendResponse(
             $positions,
@@ -39,28 +43,8 @@ class AccessController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all())->validate();
-
-        $created = (new Position())->create($request->all());
-
         return ResponseHelper::sendResponse(
-            $created,
-            'Role has created successfully.'
-        );
-    }
-
-    /**
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'key' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'accessPin' => ['required', 'boolean'],
-            'accessEmail' => ['required', 'boolean'],
-        ]);
+            $this->accessManager->new($request), 'Position has created successfully.');
     }
 
     /**
@@ -91,6 +75,20 @@ class AccessController extends Controller
             $edit,
             'Role has updated successfully.'
         );
+    }
+
+    /**
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'key' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'accessPin' => ['boolean'],
+            'accessEmail' => ['boolean'],
+        ]);
     }
 
     /**

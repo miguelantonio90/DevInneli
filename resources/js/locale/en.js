@@ -6,6 +6,7 @@ export default {
   login: 'login',
   forgot: 'Forgot Password?',
   reset_password: 'Reset Password',
+  find_password: 'Enter your password',
   forgot_btn: 'Send Reset Link',
   username: 'Username',
   name: 'Name',
@@ -118,7 +119,8 @@ export default {
     list: 'List',
     save: 'Save',
     cancel: 'Cancel',
-    close: 'Close'
+    close: 'Close',
+    change: 'Change'
   },
   titles: {
     list: '{0} List',

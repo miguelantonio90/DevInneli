@@ -20,12 +20,12 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
-  keys: ['manager', 'supervisor', 'atm', 'waiter', 'saller'],
+  keys: ['supervisor', 'atm', 'waiter', 'seller'],
   newAccess: {
     key: '',
     name: '',
-    accessPin: '',
-    accessEmail: '',
+    accessPin: false,
+    accessEmail: false,
     description: ''
 
   },
@@ -33,8 +33,8 @@ const state = {
     id: '',
     key: '',
     name: '',
-    accessPin: '',
-    accessEmail: '',
+    accessPin: false,
+    accessEmail: false,
     description: ''
   },
   isAccessLoading: false,
@@ -67,13 +67,14 @@ const mutations = {
     state.newAccess = {
       key: '',
       name: '',
-      accessPin: '',
-      accessEmail: ''
+      accessPin: false,
+      accessEmail: false,
+      description: ''
     }
     state.saved = true
   },
-  [ACCESS_EDIT] (state, userId) {
-    state.editAccess = state.roles.filter((node) => node.id === userId)[0]
+  [ACCESS_EDIT] (state, roleId) {
+    state.editAccess = state.roles.filter((node) => node.id === roleId)[0]
   },
   [ACCESS_UPDATED] (state) {
     state.showEditModal = false
@@ -81,8 +82,9 @@ const mutations = {
       id: '',
       key: '',
       name: '',
-      accessPin: '',
-      accessEmail: ''
+      accessPin: false,
+      accessEmail: false,
+      description: ''
     }
     state.saved = true
   },
@@ -106,13 +108,13 @@ const actions = {
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_ACCESS_SHOW_MODAL, showModal)
   },
-  openEditModal ({ commit }, userId) {
+  openEditModal ({ commit }, roleId) {
     commit(SWITCH_ACCESS_EDIT_MODAL, true)
-    commit(ACCESS_EDIT, userId)
+    commit(ACCESS_EDIT, roleId)
   },
-  openShowModal ({ commit }, userId) {
+  openShowModal ({ commit }, roleId) {
     commit(SWITCH_ACCESS_SHOW_MODAL, true)
-    commit(ACCESS_EDIT, userId)
+    commit(ACCESS_EDIT, roleId)
   },
   async getRoles ({ commit }) {
     commit(ACCESS_TABLE_LOADING, true)
@@ -150,11 +152,11 @@ const actions = {
       })
       .catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
-  async deleteRole ({ commit, dispatch }, userId) {
+  async deleteRole ({ commit, dispatch }, roleId) {
     commit('CLEAR_ERRORS', null, { root: true })
 
     await role
-      .sendDeleteRequest(userId)
+      .sendDeleteRequest(roleId)
       .then(() => {
         commit(ACCESS_DELETE)
         dispatch('role/getRoles', null, { root: true })

@@ -5,6 +5,7 @@ export default {
   // page login
   login: 'login',
   reset_password: 'Cambiar contraseña',
+  find_password: 'Enviar su contraseña',
   forgot: 'Olvidó su contraseña?',
   forgot_btn: 'Enviar link de cambio',
   username: 'Usuario',
@@ -118,7 +119,8 @@ export default {
     list: 'Listar',
     save: 'Guardar',
     cancel: 'Cancelar',
-    close: 'Cerrar'
+    close: 'Cerrar',
+    change: 'Cambiar'
   },
   titles: {
     list: 'Lista de {0}',

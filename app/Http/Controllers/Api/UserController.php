@@ -6,14 +6,11 @@ use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
-use App\Position;
-use App\Shop;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -65,6 +62,18 @@ class UserController extends Controller
             $user,
             'User has created successfully.'
         );
+    }
+
+    /**
+     * Find Company Id using admin authenticate
+     * @return string
+     */
+    private function getCompanyByAdmin(): string
+    {
+        return DB::table('users')
+            ->select('company_id')
+            ->where('users.id', '=', auth()->id())
+            ->get()[0]->company_id;
     }
 
     /**
@@ -138,18 +147,5 @@ class UserController extends Controller
             $this->userManager->delete($id),
             'Users has deleted successfully.'
         );
-    }
-
-
-    /**
-     * Find Company Id using admin authenticate
-     * @return string
-     */
-    private function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
     }
 }

@@ -69,17 +69,44 @@
                 required
                 @click:append="hidePassword2 = !hidePassword2"
               />
-              <v-select
+              <v-autocomplete
                 v-model="formRegister.country"
+                :items="arrayCountry"
+                :label="
+                  $vuetify.lang.t('$vuetify.country')
+                "
+                :rules="formRule.country"
+                clearable
                 item-text="name"
                 item-value="id"
-                color="pink"
-                :items="arrayCountry"
-                :label="$vuetify.lang.t(
-                  '$vuetify.country')"
                 required
-                :rules="formRule.country"
-              />
+              >
+                <template
+                  slot="item"
+                  slot-scope="data"
+                >
+                  <template
+                    v-if="
+                      typeof data.item !==
+                        'object'
+                    "
+                  >
+                    <v-list-item-content
+                      v-text="data.item"
+                    />
+                  </template>
+                  <template v-else>
+                    <v-list-item-avatar>
+                      {{
+                        data.item.emoji
+                      }}
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
             </v-form>
           </v-card-text>
           <v-card-actions>

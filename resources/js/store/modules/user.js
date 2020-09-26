@@ -39,6 +39,7 @@ const state = {
     email: '',
     password: '',
     avatar: '',
+    phone: '',
     position: [],
     positions_id: '',
     shops: []
@@ -75,6 +76,7 @@ const mutations = {
       email: '',
       password: '',
       avatar: '',
+      phone: '',
       employer: {},
       position: [],
       position_id: '',
@@ -95,6 +97,7 @@ const mutations = {
       email: '',
       password: '',
       avatar: '',
+      phone: '',
       position: [],
       positions_id: '',
       shops: []

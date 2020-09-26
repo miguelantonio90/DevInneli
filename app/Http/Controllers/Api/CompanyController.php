@@ -69,6 +69,17 @@ class CompanyController extends Controller
         );
     }
 
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string'],
+            'address' => ['string'],
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -97,16 +108,5 @@ class CompanyController extends Controller
                 'Company logo has not updated.'
             );
         }
-    }
-
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'country' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string'],
-            'address' => ['string'],
-        ]);
     }
 }

@@ -60,7 +60,7 @@
                 v-model="editUser.email"
                 :label="$vuetify.lang.t('$vuetify.email')"
                 :rules="formRule.email"
-                :disabled="editUser.position.key==='manager'"
+                :disabled="editUser.isManager===1"
                 autocomplete="off"
                 required
               />
@@ -110,23 +110,6 @@
               cols="12"
               md="6"
             >
-              <v-text-field
-                v-model="editUser.confirm_pinCode"
-                :append-icon="hidePinCode2 ? 'mdi-eye' : 'mdi-eye-off'"
-                :label="$vuetify.lang.t('$vuetify.confirm_pinCode')"
-                :rules="formRule.confirm_pinCode"
-                :type="hidePinCode2 ? 'password' : 'number'"
-                autocomplete="off"
-                name="confirm_pinCode"
-                required
-                @keypress="numbers"
-                @click:append="hidePinCode2 = !hidePinCode2"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
               <v-select
                 v-model="editUser.position"
                 :items="roles"
@@ -134,13 +117,12 @@
                 item-text="name"
                 :loading="isAccessLoading"
                 :disabled="!!isAccessLoading || editUser.position.key==='manager'"
-                multiple
                 return-object
               />
             </v-col>
             <v-col
               cols="12"
-              md="6"
+              md="12"
             >
               <v-select
                 v-model="editUser.shops"
@@ -213,17 +195,6 @@ export default {
           ]),
           (v) => (v && v.length >= 4) || this.$vuetify.lang.t('$vuetify.rule.pin.min', ['4']),
           (v) => (v && v.length <= 6) || this.$vuetify.lang.t('$vuetify.rule.pin.max', ['6'])
-        ],
-        confirm_pinCode: [
-          (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
-            this.$vuetify.lang.t('$vuetify.confirm_pinCode')
-          ]),
-          (v) => (!!v && v) === this.editUser.pinCode ||
-                        this.$vuetify.lang.t(
-                          '$vuetify.rule.match',
-                          [this.$vuetify.lang.t('$vuetify.pinCode')],
-                          [this.$vuetify.lang.t('$vuetify.confirm_pinCode')]
-                        )
         ]
       }
     }
@@ -270,12 +241,12 @@ export default {
       }
     },
     onChangeImage (file) {
-      this.editUser.avatar = `data:${file.file.type};base64,${file.file.base64}`
+      this.editUser.avatar = `data:${file.type};base64,${file.base64}`
     },
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.editUser.employer.phone = number
+        this.editUser.phone = number
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
