@@ -16,7 +16,7 @@ class PositionTableSeeder extends Seeder
         factory(Position::class, 1)->create()(function ($position) {
             // Seed the relation with one address
             $user = factory(User::class)->make();
-            $position->position()->save($user);
+            $position->users()->save($user);
         });
     }
 }

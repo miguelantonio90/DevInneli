@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $array)
+ * @method static findOrFail(int $id)
+ * @method find($id)
  */
 class Company extends Model
 {
     protected $fillable = [
-        'name', 'email', 'phone', 'country'
+        'name', 'email', 'phone', 'country', 'address'
     ];
 
     //
