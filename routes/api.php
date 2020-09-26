@@ -47,6 +47,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('company', 'CompanyController');
         Route::post('company/logo/{id}', 'CompanyController@updateLogo')->name('company.updateLogo');
 
+        Route::resource('client', 'ClientController');
+
     });
 
 });

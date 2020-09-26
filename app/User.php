@@ -25,6 +25,7 @@ use Laravel\Passport\HasApiTokens;
  * @property mixed employeeEmail
  * @property mixed pinCode
  * @property mixed phone
+ * @property mixed country
  * @property mixed isAdmin
  * @property mixed isManager
  * @property mixed company_id
@@ -115,6 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $user->email = $data['email'];
         $user->employeeEmail = $data['email'];
         $user->pinCode = 1234;
+        $user->country = $data['country'];
         $user->isAdmin = 0;
         $user->isManager = 1;
         $user->company_id = $company->id;

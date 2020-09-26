@@ -1,4 +1,4 @@
-import client from '../../api/'
+import client from '../../api/client'
 
 const FETCHING_CLIENTS = 'FETCHING_CLIENTS'
 const SWITCH_CLIENT_NEW_MODAL = 'SWITCH_CLIENT_NEW_MODAL'
@@ -22,28 +22,32 @@ const state = {
     avatar: '',
     loading: false,
     saved: false,
-    newUser: {
+    newClient: {
         firstName: '',
         lastName: '',
         email: '',
+        city: '',
+        phone: '',
         avatar: '',
-        pinCode: '',
-        phone:'',
-        positions: [],
-        shops: []
+        country: '',
+        province: '',
+        barCode: '',
+        description: ''
     },
-    editUser: {
+    editClient: {
         id: '',
         firstName: '',
         lastName: '',
         email: '',
-        password: '',
+        city: '',
+        phone: '',
         avatar: '',
-        position: [],
-        positions_id:'',
-        shops: []
+        country: '',
+        province: '',
+        barCode: '',
+        description: ''
     },
-    isUserTableLoading: false,
+    isClientTableLoading: false,
     isActionInProgress: false,
     isTableLoading: false
 }
@@ -69,40 +73,42 @@ const mutations = {
     },
     [CLIENT_CREATED](state) {
         state.showNewModal = false
-        state.newUser = {
+        state.newClient = {
             firstName: '',
             lastName: '',
             email: '',
-            password: '',
+            city: '',
+            phone: '',
             avatar: '',
-            employer: {},
-            position: [],
-            position_id:'',
-            shops: []
+            country: '',
+            province: '',
+            barCode: '',
+            description: ''
         }
         state.saved = true
     },
     [CLIENT_EDIT](state, clientId) {
-        state.editUser = state.clients.filter((node) => node.id === clientId)[0]
-        console.log(state.editUser);
+        state.editClient = state.clients.filter(cl => cl.id === clientId)[0]
     },
     [CLIENT_UPDATED](state) {
         state.showEditModal = false
-        state.editUser = {
+        state.editClient = {
             id: '',
             firstName: '',
             lastName: '',
             email: '',
-            password: '',
+            city: '',
+            phone: '',
             avatar: '',
-            position: [],
-            positions_id:'',
-            shops: []
+            country: '',
+            province: '',
+            barCode: '',
+            description: ''
         }
         state.saved = true
     },
     [SET_EDIT_CLIENT](state, profile) {
-        state.editUser.push(profile)
+        state.editClient.push(profile)
     },
     [CLIENT_DELETE](state) {
         state.saved = true
@@ -136,50 +142,50 @@ const actions = {
         commit(SWITCH_CLIENT_SHOW_MODAL, true)
         commit(CLIENT_EDIT, clientId)
     },
-    async getUsers({commit}) {
+    async getClients({commit}) {
         commit(CLIENT_TABLE_LOADING, true)
         // noinspection JSUnresolvedVariable
         await client
-            .fetchUsers()
+            .fetchClients()
             .then(({data}) => {
                 commit(FETCHING_CLIENTS, data.data)
                 commit(CLIENT_TABLE_LOADING, false)
             }).catch((error) => commit('SET_ERRORS', error, {root: true}))
     },
-    async createUser({commit, dispatch}, newUser) {
+    async createClient({commit, dispatch}, newClient) {
         commit(ENV_DATA_PROCESS, true)
         commit('CLEAR_ERRORS', null, {root: true})
 
         await client
-            .sendCreateRequest(newUser)
+            .sendCreateRequest(newClient)
             .then(() => {
                 commit(CLIENT_CREATED)
                 commit(ENV_DATA_PROCESS, false)
-                dispatch('client/getUsers', null, {root: true})
+                dispatch('client/getClients', null, {root: true})
             })
             .catch((error) => commit('SET_ERRORS', error, {root: true}))
     },
-    async updateUser({commit, dispatch}, profile) {
+    async updateClient({commit, dispatch}, editClient) {
+        console.log(editClient)
         commit('CLEAR_ERRORS', null, {root: true})
-        const request = profile || state.editUser
 
         await client
-            .sendUpdateRequest(request)
+            .sendUpdateRequest(editClient)
             .then(() => {
                 commit(CLIENT_UPDATED)
                 commit(ENV_DATA_PROCESS, false)
-                dispatch('client/getUsers', null, {root: true})
+                dispatch('client/getClients', null, {root: true})
             })
             .catch((error) => commit('SET_ERRORS', error, {root: true}))
     },
-    async deleteUser({commit, dispatch}, clientId) {
+    async deleteClient({commit, dispatch}, clientId) {
         commit('CLEAR_ERRORS', null, {root: true})
 
         await client
             .sendDeleteRequest(clientId)
             .then(() => {
                 commit(CLIENT_DELETE)
-                dispatch('client/getUsers', null, {root: true})
+                dispatch('client/getClients', null, {root: true})
             })
             .catch((error) => commit('SET_ERRORS', error, {root: true}))
     },
@@ -192,7 +198,7 @@ const actions = {
         }
         await client.updateAvatar(sendData).then(() => {
             commit(SET_CLIENT_AVATAR, file.file.base64)
-            dispatch('auth/getUserData', null, {root: true})
+            dispatch('auth/getClientData', null, {root: true})
         })
     }
 }

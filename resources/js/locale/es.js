@@ -28,6 +28,8 @@ export default {
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
+  province: 'Provincia',
+  barCode: 'Código de Barras',
   position: 'Cargo',
   postal_code: 'Código Postal',
   about_me: 'Acerca de mi',

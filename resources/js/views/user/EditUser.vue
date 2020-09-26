@@ -77,6 +77,7 @@
                 :select-label="$vuetify.lang.t('$vuetify.country')"
                 v-bind="bindProps"
                 :error-messages="errorPhone"
+                @country-changed="onCountry"
                 @keypress="numbers"
                 @input="onInput"
               >
@@ -259,6 +260,9 @@ export default {
     ...mapActions('user', ['updateUser', 'toogleEditModal']),
     ...mapActions('role', ['getRoles']),
     ...mapActions('shop', ['getShops']),
+      onCountry (event) {
+          this.editShop.country = event.iso2
+      },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(
@@ -275,7 +279,7 @@ export default {
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.editUser.employer.phone = number
+        this.editUser.phone = number
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [

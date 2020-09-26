@@ -68,10 +68,11 @@ class UserManager
     private function updateData($user, $data, $shops, $positions)
     {
         var_dump($user->id);
-        $user->pinCode = $data['pinCode'];
-        $user->lastName = $data['lastName'];
-        $user->avatar = $data['avatar'];
-        $user->phone = $data['phone'];
+        if(isset($data['pinCode']))$user->pinCode = $data['pinCode'];
+        if(isset($data['lastName']))$user->lastName = $data['lastName'];
+        if(isset($data['avatar']))$user->avatar = $data['avatar'];
+        if(isset($data['country']))$user->country = $data['country'];
+        if(isset($data['phone']))$user->phone = $data['phone'];
         $user->isAdmin = 0;
         $user->isManager = 0;
         $positions ? $user->position_id = Position::where('key', $positions['key'])->first()->id : '';

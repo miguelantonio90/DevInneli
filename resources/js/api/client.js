@@ -1,14 +1,14 @@
 import api from '../config/api'
 
 export default {
-  fetchUsers () {
+  fetchClients () {
     return api.get('client')
   },
   sendCreateRequest (client) {
     return api.post('client', client)
   },
   sendUpdateRequest (client) {
-    return api.post('client/' + client.id, client)
+    return api.put('client/' + client.id, client)
   },
   sendDeleteRequest (clientId) {
     return api.remove('client/' + clientId)
