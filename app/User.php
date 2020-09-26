@@ -5,6 +5,8 @@ namespace App;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -61,17 +63,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function position()
+    public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
 
-    public function shops()
+    public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
     }
