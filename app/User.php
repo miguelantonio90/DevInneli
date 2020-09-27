@@ -22,7 +22,6 @@ use Laravel\Passport\HasApiTokens;
  * @property mixed email
  * @property mixed firstName
  * @property mixed lastName
- * @property mixed employeeEmail
  * @property mixed pinCode
  * @property mixed phone
  * @property mixed country
@@ -43,7 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'email', 'employeeEmail', 'company_id', 'position_id'
+        'firstName', 'email', 'company_id', 'position_id'
     ];
 
     /**
@@ -63,32 +62,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function position(): BelongsTo
-    {
-        return $this->belongsTo(Position::class);
-    }
-
-    public function shops(): BelongsToMany
-    {
-        return $this->belongsToMany(Shop::class);
-    }
-
-
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new VerifyEmail());
-    }
-
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new MailResetPasswordNotification($token));
-    }
 
     /**
      * @return mixed
@@ -114,7 +87,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
-        $user->employeeEmail = $data['email'];
         $user->pinCode = 1234;
         $user->country = $data['country'];
         $user->isAdmin = 0;
@@ -126,17 +98,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $user;
     }
 
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function position()
+    public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
 
-    public function shops()
+    public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
     }

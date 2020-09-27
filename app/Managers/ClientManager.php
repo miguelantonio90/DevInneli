@@ -49,14 +49,6 @@ class ClientManager
         return $this->updateData($client, $data);
     }
 
-    public function edit($id, $data)
-    {
-        $client = Client::findOrFail($id);
-        if(isset($data['firstName'])) $client->firstName = $data['firstName'];
-        if(isset($data['email'])) $client->email = $data['email'];
-        return $this->updateData($client, $data);
-    }
-
     private function updateData($client, $data)
     {
         if (isset($data['phone'])) $client->phone = $data['phone'];
@@ -71,6 +63,14 @@ class ClientManager
         if (isset($data['barCode'])) $client->barCode = $data['barCode'];
         $client->save();
         return $client;
+    }
+
+    public function edit($id, $data)
+    {
+        $client = Client::findOrFail($id);
+        if (isset($data['firstName'])) $client->firstName = $data['firstName'];
+        if (isset($data['email'])) $client->email = $data['email'];
+        return $this->updateData($client, $data);
     }
 
     public function delete($id)

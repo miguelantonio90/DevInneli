@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('phone')->nullable();
             $table->integer('pinCode')->nullable();
-            $table->integer('country')->nullable();
+            $table->string('country')->nullable();
             $table->boolean('isAdmin')->default(0);
             $table->boolean('isManager')->default(0);
             $table->longText('avatar')->nullable();

@@ -15,111 +15,110 @@ const SET_EDIT_USER = 'SET_EDIT_USER'
 const SET_USER_AVATAR = 'SET_USER_AVATAR'
 
 const state = {
-    showNewModal: false,
-    showEditModal: false,
-    showShowModal: false,
-    users: [],
+  showNewModal: false,
+  showEditModal: false,
+  showShowModal: false,
+  users: [],
+  avatar: '',
+  loading: false,
+  saved: false,
+  newUser: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    country: '',
     avatar: '',
-    loading: false,
-    saved: false,
-    newUser: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        country: '',
-        avatar: '',
-        pinCode: '',
-        phone: '',
-        positions: [],
-        shops: []
-    },
-    editUser: {
-        id: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        country: '',
-        avatar: '',
-        pinCode: '',
-        phone: '',
-        positions: [],
-        shops: []
-    },
-    isUserTableLoading: false,
-    isActionInProgress: false,
-    isTableLoading: false
+    pinCode: '',
+    phone: '',
+    positions: [],
+    shops: []
+  },
+  editUser: {
+    id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    country: '',
+    avatar: '',
+    pinCode: '',
+    phone: '',
+    positions: [],
+    shops: []
+  },
+  isUserTableLoading: false,
+  isActionInProgress: false,
+  isTableLoading: false
 }
 
 const mutations = {
-    [SWITCH_USER_NEW_MODAL](state, showModal) {
-        state.showNewModal = showModal
-    },
-    [SWITCH_USER_EDIT_MODAL](state, showModal) {
-        state.showEditModal = showModal
-    },
-    [SWITCH_USER_SHOW_MODAL](state, showModal) {
-        state.showShowModal = showModal
-    },
-    [USER_TABLE_LOADING](state, isLoading) {
-        state.isTableLoading = isLoading
-    },
-    [FETCHING_USERS](state, users) {
-        state.users = users
-    },
-    [ENV_DATA_PROCESS](state, isActionInProgress) {
-        state.isActionInProgress = isActionInProgress
-    },
-    [USER_CREATED](state) {
-        state.showNewModal = false
-        state.newUser = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            country: '',
-            phone:'',
-            password: '',
-            avatar: '',
-            employer: {},
-            position: [],
-            position_id: '',
-            shops: []
-        }
-        state.saved = true
-    },
-    [USER_EDIT](state, userId) {
-        state.editUser = state.users.filter((node) => node.id === userId)[0]
-        console.log(state.editUser)
-    },
-    [USER_UPDATED](state) {
-        state.showEditModal = false
-        state.editUser = {
-            id: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            phone:'',
-            country: '',
-            avatar: '',
-            position: [],
-            positions_id: '',
-            shops: []
-        }
-        state.saved = true
-    },
-    [SET_EDIT_USER](state, profile) {
-        state.editUser.push(profile)
-    },
-    [USER_DELETE](state) {
-        state.saved = true
-    },
-    [SET_USER_AVATAR](state, avatar) {
-        state.avatar = avatar
-        state.saved = true
-    },
-    [FAILED_USER](state) {
-        state.saved = false
+  [SWITCH_USER_NEW_MODAL] (state, showModal) {
+    state.showNewModal = showModal
+  },
+  [SWITCH_USER_EDIT_MODAL] (state, showModal) {
+    state.showEditModal = showModal
+  },
+  [SWITCH_USER_SHOW_MODAL] (state, showModal) {
+    state.showShowModal = showModal
+  },
+  [USER_TABLE_LOADING] (state, isLoading) {
+    state.isTableLoading = isLoading
+  },
+  [FETCHING_USERS] (state, users) {
+    state.users = users
+  },
+  [ENV_DATA_PROCESS] (state, isActionInProgress) {
+    state.isActionInProgress = isActionInProgress
+  },
+  [USER_CREATED] (state) {
+    state.showNewModal = false
+    state.newUser = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      country: '',
+      phone: '',
+      password: '',
+      avatar: '',
+      employer: {},
+      position: [],
+      position_id: '',
+      shops: []
     }
+    state.saved = true
+  },
+  [USER_EDIT] (state, userId) {
+    state.editUser = state.users.filter((node) => node.id === userId)[0]
+  },
+  [USER_UPDATED] (state) {
+    state.showEditModal = false
+    state.editUser = {
+      id: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      phone: '',
+      country: '',
+      avatar: '',
+      position: [],
+      positions_id: '',
+      shops: []
+    }
+    state.saved = true
+  },
+  [SET_EDIT_USER] (state, profile) {
+    state.editUser.push(profile)
+  },
+  [USER_DELETE] (state) {
+    state.saved = true
+  },
+  [SET_USER_AVATAR] (state, avatar) {
+    state.avatar = avatar
+    state.saved = true
+  },
+  [FAILED_USER] (state) {
+    state.saved = false
+  }
 }
 
 const getters = {}

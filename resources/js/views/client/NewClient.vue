@@ -89,33 +89,51 @@
                 </template>
               </vue-tel-input-vuetify>
             </v-col>
-              <v-col cols="12" md="4">
-                  <v-text-field v-model="newClient.province" :label="$vuetify.lang.t('$vuetify.province')"/>
-              </v-col>
-              <v-col cols="12" md="4">
-                  <v-text-field v-model="newClient.city" :label="$vuetify.lang.t('$vuetify.city')"/>
-              </v-col>
-              <v-col cols="12" md="4">
-                  <v-text-field v-model="newClient.barCode" :label="$vuetify.lang.t('$vuetify.barCode')"/>
-              </v-col>
-              <v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
               <v-text-field
-                  v-model="newClient.address"
-                  :counter="120"
-                  :rules="formRule.address"
-                  :label="$vuetify.lang.t('$vuetify.address')"
-                  required
+                v-model="newClient.province"
+                :label="$vuetify.lang.t('$vuetify.province')"
               />
-              </v-col>
-              <v-col>
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
               <v-text-field
-                  v-model="newClient.description"
-                  :counter="120"
-                  :rules="formRule.description"
-                  :label="$vuetify.lang.t('$vuetify.access.description')"
-                  required
+                v-model="newClient.city"
+                :label="$vuetify.lang.t('$vuetify.city')"
               />
-              </v-col>
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-text-field
+                v-model="newClient.barCode"
+                :label="$vuetify.lang.t('$vuetify.barCode')"
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="newClient.address"
+                :counter="120"
+                :rules="formRule.address"
+                :label="$vuetify.lang.t('$vuetify.address')"
+                required
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="newClient.description"
+                :counter="120"
+                :rules="formRule.description"
+                :label="$vuetify.lang.t('$vuetify.access.description')"
+                required
+              />
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -131,6 +149,7 @@
         </v-btn>
         <v-btn
           :disabled="!formValid"
+          :loading="isActionInProgress"
           class="mb-2"
           color="primary"
           @click="createNewClient"
@@ -174,38 +193,37 @@ export default {
                 this.$vuetify.lang.t('$vuetify.email')
               ])
         ],
-          city: [
-              (v) =>
-                  !!v ||
+        city: [
+          (v) =>
+            !!v ||
                   this.$vuetify.lang.t('$vuetify.rule.required', [
-                      this.$vuetify.lang.t('$vuetify.city')
+                    this.$vuetify.lang.t('$vuetify.city')
                   ])
-          ],
-          province: [
-              (v) =>
-                  !!v ||
+        ],
+        province: [
+          (v) =>
+            !!v ||
                   this.$vuetify.lang.t('$vuetify.rule.required', [
-                      this.$vuetify.lang.t('$vuetify.province')
+                    this.$vuetify.lang.t('$vuetify.province')
                   ])
-          ],
-          barCode: [
-              (v) =>
-                  !!v ||
+        ],
+        barCode: [
+          (v) =>
+            !!v ||
                   this.$vuetify.lang.t('$vuetify.rule.required', [
-                      this.$vuetify.lang.t('$vuetify.barCode')
+                    this.$vuetify.lang.t('$vuetify.barCode')
                   ])
-          ],
+        ]
       }
     }
   },
   computed: {
-    ...mapState('client', ['saved', 'newClient']),
+    ...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
     getAvatar () {
       return `${this.newClient.avatar ||
           '/assets/avatar/avatar-undefined.jpg'}`
     },
     bindProps () {
-        this.newClient.country = 'US'
       return {
         mode: 'international',
         defaultCountry: 'US',
@@ -225,9 +243,9 @@ export default {
   },
   methods: {
     ...mapActions('client', ['createClient', 'toogleNewModal']),
-      onCountry (event) {
-          this.newClient.country = event.iso2
-      },
+    onCountry (event) {
+      this.newClient.country = event.iso2
+    },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(

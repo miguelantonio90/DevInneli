@@ -153,7 +153,6 @@ export default {
   computed: {
     ...mapState('shop', ['saved', 'newShop', 'isActionInProgress']),
     bindProps () {
-        this.newShop.country = 'US';
       return {
         mode: 'international',
         defaultCountry: 'US',
@@ -173,9 +172,6 @@ export default {
   },
   methods: {
     ...mapActions('shop', ['createShop', 'toogleNewModal']),
-      onCountry (event) {
-          this.newShop.country = event.iso2
-      },
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
@@ -196,6 +192,9 @@ export default {
         event.preventDefault()
         return false
       }
+    },
+    onCountry (event) {
+      this.newShop.country = event.iso2
     },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')

@@ -57,33 +57,32 @@ class UserManager
         return $this->updateData($user, $data, $shops, $positions);
     }
 
-    public function edit($id, $data)
-    {
-        $positions = $data['position'];
-        $shops = $data['shops'];
-        $user = User::findOrFail($id);
-        return $this->updateData($user, $data, $shops, $positions);
-    }
-
     private function updateData($user, $data, $shops, $positions)
     {
-        var_dump($user->id);
-        if(isset($data['pinCode']))$user->pinCode = $data['pinCode'];
-        if(isset($data['lastName']))$user->lastName = $data['lastName'];
-        if(isset($data['avatar']))$user->avatar = $data['avatar'];
-        if(isset($data['country']))$user->country = $data['country'];
-        if(isset($data['phone']))$user->phone = $data['phone'];
+        $user->pinCode = $data['pinCode'];
+        $user->firstName = $data['firstName'];
+        $user->lastName = $data['lastName'];
+        $user->avatar = $data['avatar'];
+        $user->phone = $data['phone'];
         $user->isAdmin = 0;
-        $user->isManager = 0;
+        $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : 0;
         $positions ? $user->position_id = Position::where('key', $positions['key'])->first()->id : '';
         $idShops = [];
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['id'];
         }
         $employShop = Shop::find($idShops);
-        $user->shops()->attach($employShop);
+        $user->shops()->sync($employShop);
         $user->save();
         return $user;
+    }
+
+    public function edit($id, $data)
+    {
+        $positions = $data['position'];
+        $shops = $data['shops'];
+        $user = User::findOrFail($id);
+        return $this->updateData($user, $data, $shops, $positions);
     }
 
     public function delete($id)

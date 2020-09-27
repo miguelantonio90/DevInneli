@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed email
  * @property mixed firstName
  * @property mixed lastName
- * @property mixed employeeEmail
  * @property mixed address
  * @property mixed city
  * @property mixed province

@@ -34,7 +34,7 @@ class AuthenticationController extends Controller
                 ->with('shops')
                 ->first();
         } else {
-            return auth()->user();
+            return User::findOrFail(auth()->id())->with('company')->first();
         }
     }
 }
