@@ -5,6 +5,8 @@ namespace App;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +22,9 @@ use Laravel\Passport\HasApiTokens;
  * @property mixed email
  * @property mixed firstName
  * @property mixed lastName
- * @property mixed employeeEmail
  * @property mixed pinCode
  * @property mixed phone
+ * @property mixed country
  * @property mixed isAdmin
  * @property mixed isManager
  * @property mixed company_id
@@ -40,7 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'firstName', 'email', 'employeeEmail', 'company_id', 'position_id'
+        'firstName', 'email', 'company_id', 'position_id'
     ];
 
     /**
@@ -85,8 +87,8 @@ class User extends Authenticatable implements MustVerifyEmail
         $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
-        $user->employeeEmail = $data['email'];
         $user->pinCode = 1234;
+        $user->country = $data['country'];
         $user->isAdmin = 0;
         $user->isManager = 1;
         $user->company_id = $company->id;
@@ -96,17 +98,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $user;
     }
 
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function position()
+    public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
 
-    public function shops()
+    public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
     }

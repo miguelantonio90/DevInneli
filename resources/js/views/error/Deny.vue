@@ -35,9 +35,6 @@
 
 <script>
 export default {
-  created () {
-    console.log('here')
-  },
   methods: {
     goHome () {
       this.$router.push({ path: '/' })

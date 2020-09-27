@@ -17,12 +17,12 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('firstName');
             $table->string('lastName')->nullable();
-            $table->string('email')->unique();
-            $table->string('employeeEmail')->unique()->nullable();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('phone')->nullable();
             $table->integer('pinCode')->nullable();
+            $table->string('country')->nullable();
             $table->boolean('isAdmin')->default(0);
             $table->boolean('isManager')->default(0);
             $table->longText('avatar')->nullable();

@@ -358,7 +358,6 @@ export default {
     ...mapActions('auth', ['getUserData']),
     ...mapActions('company', ['updateCompany', 'updateLogo']),
     onCountry (event) {
-      console.log(event)
       this.userData.company.country = event.iso2
     },
     async updateProfile () {
@@ -377,7 +376,6 @@ export default {
       })
     },
     async onChangeImage (file) {
-      console.log(file)
       this.saving = true
       const id = this.userData.company.id
       await this.updateLogo({

@@ -10,6 +10,7 @@ $factory->define(Company::class, function (Faker $faker) {
         'name' => $faker->company,
         'phone' => $faker->phoneNumber,
         'email' => 'admin@admin.com',
+        'logo'=>'',
         'country' => $faker->countryCode,
         'address' => $faker->address,
         'faker' => 1,

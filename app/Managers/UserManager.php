@@ -52,8 +52,7 @@ class UserManager
             'company_id' => $data['company_id'],
             'position_id' => Position::where('key', $positions['key'])->first()->id,
             'firstName' => $data['firstName'],
-            'email' => $data['email'],
-            'employeeEmail' => $data['email']
+            'email' => $data['email']
         ]);
         return $this->updateData($user, $data, $shops, $positions);
     }
@@ -65,7 +64,6 @@ class UserManager
         $user->lastName = $data['lastName'];
         $user->avatar = $data['avatar'];
         $user->phone = $data['phone'];
-        $user->employeeEmail = $data['email'];
         $user->isAdmin = 0;
         $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : 0;
         $positions ? $user->position_id = Position::where('key', $positions['key'])->first()->id : '';

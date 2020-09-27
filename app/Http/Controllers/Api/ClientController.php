@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\UserManager;
-use App\User;
+use App\Managers\ClientManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,21 +13,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class ClientController extends Controller
 {
     /**
-     * @var UserManager
+     * @var ClientManager
      */
-    private $userManager;
+    private $clientManager;
 
     /**
-     * UserController constructor.
-     * @param UserManager $userManager
+     * ClientController constructor.
+     * @param ClientManager $clientManager
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(ClientManager $clientManager)
     {
         $this->middleware('auth');
-        $this->userManager = $userManager;
+        $this->clientManager = $clientManager;
     }
 
     /**
@@ -38,8 +38,8 @@ class UserController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->findAllByCompany(),
-            'Users retrieved successfully.'
+            $this->clientManager->findAllByCompany(),
+            'Clients retrieved successfully.'
         );
     }
 
@@ -55,11 +55,11 @@ class UserController extends Controller
         $data = $request->all();
         $data['company_id'] = (int)$this->getCompanyByAdmin();
         $this->validator($data)->validate();
-        $user = $this->userManager->new($data);
+        $user = $this->clientManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
-            'User has created successfully.'
+            'Client has created successfully.'
         );
     }
 
@@ -83,7 +83,6 @@ class UserController extends Controller
     {
         return Validator::make($data, [
             'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
         ]);
     }
@@ -96,7 +95,7 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        return User::latest()->where('isAdmin', '=', 0)->get($id);
+//        return Client::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -110,26 +109,26 @@ class UserController extends Controller
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->userManager->edit($id, $request->all()),
-            'User has updated successfully.'
+            $this->clientManager->edit($id, $request->all()),
+            'Client has updated successfully.'
         );
     }
 
     public function updateAvatar(Request $request, $id)
     {
         if (!empty($request)) {
-            $app = (new User())->find($id);
+            $app = (new Client())->find($id);
             $app->find($id);
             $app->avatar = $request->get('image');
             $app->save();
             return ResponseHelper::sendResponse(
                 $app,
-                'User avatar has updated successfully.'
+                'Client avatar has updated successfully.'
             );
         } else {
             return ResponseHelper::sendError(
                 401,
-                'User avatar has not updated.'
+                'Client avatar has not updated.'
             );
         }
     }
@@ -143,8 +142,8 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->delete($id),
-            'Users has deleted successfully.'
+            $this->clientManager->delete($id),
+            'Clients has deleted successfully.'
         );
     }
 }

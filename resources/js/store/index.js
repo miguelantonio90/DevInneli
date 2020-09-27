@@ -7,6 +7,7 @@ import auth from './modules/auth'
 import user from './modules/user'
 import role from './modules/role'
 import shop from './modules/shop'
+import client from './modules/client'
 import company from './modules/company'
 import statics from './modules/statics'
 import settings from './modules/settings'
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
     user,
     role,
     shop,
+    client,
     company,
     statics
   },

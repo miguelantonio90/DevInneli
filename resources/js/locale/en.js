@@ -29,6 +29,8 @@ export default {
   address: 'Address',
   city: 'City',
   country: 'Country',
+  province: 'Province',
+  barCode: 'Bar Code',
   position: 'Position',
   postal_code: 'Postal Code',
   about_me: 'About Me',

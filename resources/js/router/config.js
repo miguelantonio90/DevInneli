@@ -283,7 +283,7 @@ export const protectedRoute = [
               title: 'client_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/client/ListClient')
           }
         ]
       },

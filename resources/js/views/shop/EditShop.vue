@@ -162,7 +162,6 @@ export default {
       }
     },
     onCountry (event) {
-      console.log(event)
       this.editShop.country = event.iso2
     },
     numbers (event) {
