@@ -143,7 +143,7 @@
         <v-btn
           class="mb-2"
           color="error"
-          @click="colse()"
+          @click="close"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
