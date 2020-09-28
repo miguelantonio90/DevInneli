@@ -53,9 +53,40 @@ const state = {
 const mutations = {
   [SWITCH_USER_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
+    if (!showModal) {
+      if (!showModal) {
+        state.newUser = {
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          phone: '',
+          country: '',
+          avatar: '',
+          position: [],
+          positions_id: '',
+          shops: []
+        }
+      }
+    }
   },
   [SWITCH_USER_EDIT_MODAL] (state, showModal) {
     state.showEditModal = showModal
+    if (!showModal) {
+      state.editUser = {
+        id: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        phone: '',
+        country: '',
+        avatar: '',
+        position: [],
+        positions_id: '',
+        shops: []
+      }
+    }
   },
   [SWITCH_USER_SHOW_MODAL] (state, showModal) {
     state.showShowModal = showModal
