@@ -143,7 +143,7 @@
         <v-btn
           class="mb-2"
           color="error"
-          @click="toogleEditModal(false)"
+          @click="colse()"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -254,6 +254,10 @@ export default {
           lang.t('$vuetify.phone')
         ])
       }
+    },
+    close () {
+      this.$refs.form.reset()
+      this.toogleEditModal(false)
     },
     async updateUserHandler () {
       if (this.$refs.form.validate()) {

@@ -142,7 +142,7 @@
         <v-btn
           class="mb-2"
           color="error"
-          @click="toogleNewModal(false)"
+          @click="close"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -283,6 +283,10 @@ export default {
         event.preventDefault()
         return false
       }
+    },
+    close () {
+      this.$refs.form.reset()
+      this.toogleNewModal(false)
     },
     async createNewUser () {
       if (this.$refs.form.validate()) {
