@@ -152,6 +152,7 @@
           :disabled="!formValid"
           class="mb-2"
           color="primary"
+          :loading="isActionInProgress"
           @click="updateUserHandler"
         >
           <v-icon>mdi-check</v-icon>
@@ -200,7 +201,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['saved', 'editUser']),
+    ...mapState('user', ['saved', 'editUser', 'isActionInProgress']),
     ...mapState('role', ['roles', 'isAccessLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     getAvatar () {

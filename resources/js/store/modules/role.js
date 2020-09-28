@@ -139,12 +139,12 @@ const actions = {
       })
       .catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
-  async updateRole ({ commit, dispatch }, role) {
+  async updateRole ({ commit, dispatch }, editAccess) {
     commit('CLEAR_ERRORS', null, { root: true })
     commit(ENV_DATA_PROCESS, true)
 
     await role
-      .sendUpdateRequest(role)
+      .sendUpdateRequest(editAccess)
       .then(() => {
         commit(ACCESS_UPDATED)
         commit(ENV_DATA_PROCESS, false)

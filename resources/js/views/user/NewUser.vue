@@ -151,6 +151,7 @@
           :disabled="!formValid"
           class="mb-2"
           color="primary"
+          :loading="isActionInProgress"
           @click="createNewUser"
         >
           <v-icon>mdi-check</v-icon>
@@ -218,7 +219,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['saved', 'newUser']),
+    ...mapState('user', ['saved', 'newUser', 'isActionInProgress']),
     ...mapState('role', ['roles', 'isAccessLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     getAvatar () {

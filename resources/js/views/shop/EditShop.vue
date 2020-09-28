@@ -100,6 +100,7 @@
           :disabled="!formValid"
           class="mb-2"
           color="primary"
+          :loading="isActionInProgress"
           @click="editShopAction"
         >
           <v-icon>mdi-check</v-icon>
