@@ -149,7 +149,10 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_USERS, data.data)
         commit(USER_TABLE_LOADING, false)
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      }).catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit('SET_ERRORS', error, { root: true })
+      })
   },
   async createUser ({ commit, dispatch }, newUser) {
     commit(ENV_DATA_PROCESS, true)
@@ -162,7 +165,10 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit('SET_ERRORS', error, { root: true })
+      })
   },
   async updateUser ({ commit, dispatch }, profile) {
     commit('CLEAR_ERRORS', null, { root: true })
@@ -175,7 +181,10 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit('SET_ERRORS', error, { root: true })
+      })
   },
   async deleteUser ({ commit, dispatch }, userId) {
     commit('CLEAR_ERRORS', null, { root: true })
@@ -186,7 +195,10 @@ const actions = {
         commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit('SET_ERRORS', error, { root: true })
+      })
   },
 
   async updateAvatar ({ commit, dispatch }, file) {
