@@ -4,7 +4,6 @@
 namespace App\Managers;
 
 
-use App\Position;
 use App\Shop;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +74,7 @@ class UserManager
         $user->phone = $data['phone'];
         $user->isAdmin = 0;
         $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : 0;
-        $positions ? $user->position_id = Position::where('key', $positions['key'])->first()->id : '';
+        $positions ? $user->position_id = $positions['id'] : '';
         $idShops = [];
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['id'];
