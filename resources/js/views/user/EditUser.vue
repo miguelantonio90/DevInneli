@@ -116,7 +116,7 @@
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 item-text="name"
                 :loading="isAccessLoading"
-                :disabled="!!isAccessLoading || editUser.position.key==='manager'"
+                :disabled="!!isAccessLoading"
                 return-object
               />
             </v-col>
@@ -132,7 +132,7 @@
                 return-object
                 multiple
                 :loading="isShopLoading"
-                :disabled="!!isShopLoading || editUser.position.key==='manager'"
+                :disabled="!!isShopLoading"
               />
             </v-col>
           </v-row>
