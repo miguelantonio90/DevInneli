@@ -72,7 +72,11 @@ class UserManager
             $idShops[$key] = $value['id'];
         }
         $employShop = Shop::find($idShops);
-        $user->shops()->sync($employShop);
+        if (isset($user['id'])) {
+            $user->shops()->sync($employShop);
+        } else {
+            $user->shops()->attach($employShop);
+        }
         $user->save();
         return $user;
     }
