@@ -36,5 +36,6 @@
     <app></app>
 </div>
 <script src="{{mix('js/main.js')}}"></script>
+<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="bba57f57-ec20-4ec3-843d-d0863c14bf15";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </body>
 </html>
