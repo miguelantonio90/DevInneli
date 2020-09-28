@@ -27,10 +27,8 @@ class AccessController extends Controller
      */
     public function index()
     {
-        $positions = Position::latest()->where('key', '<>', 'admin')->get();
-
         return ResponseHelper::sendResponse(
-            $positions,
+            $this->accessManager->getByCompany(),
             'Positions retrieved successfully.'
         );
     }
