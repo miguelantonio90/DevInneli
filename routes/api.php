@@ -37,7 +37,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('logout', 'LoginController@logout')->name('logout');
 
         Route::resource('user', 'UserController');
-        Route::post('user/{id}', 'UserController@update')->name('users.update');
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
 
         Route::resource('access', 'AccessController');

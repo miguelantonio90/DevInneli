@@ -8,7 +8,7 @@ export default {
     return api.post('user', user)
   },
   sendUpdateRequest (user) {
-    return api.post('user/' + user.id, user)
+    return api.put('user/' + user.id, user)
   },
   sendDeleteRequest (userId) {
     return api.remove('user/' + userId)
