@@ -24,7 +24,9 @@ class UserManager
                 ->where('isAdmin', '=', '0')
                 ->where('company_id', '=', $company_id)
                 ->with('company')
-                ->with('position')
+                ->with(['position' => function ($q) use ($company_id) {
+                    $q->where('positions.company_id', '=', $company_id);
+                }])
                 ->with('shops')
                 ->get();
         }
