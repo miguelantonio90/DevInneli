@@ -239,7 +239,7 @@ export const protectedRoute = [
       {
         path: '/users',
         component: RouteWrapper,
-        redirect: 'dashboard/users',
+        redirect: '/users/employer.list',
         meta: {
           title: 'user',
           icon: 'mdi-account-star',
@@ -268,7 +268,7 @@ export const protectedRoute = [
       {
         path: '/clients',
         component: RouteWrapper,
-        redirect: 'dashboard/clients',
+        redirect: '/clients/client.list',
         meta: {
           title: 'client',
           icon: 'mdi-account-multiple',
