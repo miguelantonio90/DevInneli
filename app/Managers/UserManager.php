@@ -52,7 +52,7 @@ class UserManager
         $shops = $data['shops'];
         $user = User::create([
             'company_id' => $data['company_id'],
-            'position_id' => Position::where('key', $positions['key'])->first()->id,
+            'position_id' => $positions['id'],
             'firstName' => $data['firstName'],
             'email' => $data['email']
         ]);
