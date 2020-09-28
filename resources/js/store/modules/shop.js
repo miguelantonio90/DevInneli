@@ -69,7 +69,10 @@ const mutations = {
     state.saved = true
   },
   [SHOP_EDIT] (state, shopId) {
-    state.editShop = state.shops.filter((node) => node.id === shopId)[0]
+    state.editShop = Object.assign({}, state.shops
+      .filter(node => node.id === shopId)
+      .shift()
+    )
   },
   [SHOP_UPDATED] (state) {
     state.showEditModal = false

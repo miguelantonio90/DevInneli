@@ -74,7 +74,10 @@ const mutations = {
     state.saved = true
   },
   [ACCESS_EDIT] (state, roleId) {
-    state.editAccess = state.roles.filter((node) => node.id === roleId)[0]
+    state.editAccess = Object.assign({}, state.roles
+      .filter(node => node.id === roleId)
+      .shift()
+    )
   },
   [ACCESS_UPDATED] (state) {
     state.showEditModal = false

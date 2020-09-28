@@ -87,7 +87,10 @@ const mutations = {
     state.saved = true
   },
   [USER_EDIT] (state, userId) {
-    state.editUser = state.users.filter((node) => node.id === userId)[0]
+    state.editUser = Object.assign({}, state.users
+      .filter(node => node.id === userId)
+      .shift()
+    )
   },
   [USER_UPDATED] (state) {
     state.showEditModal = false
