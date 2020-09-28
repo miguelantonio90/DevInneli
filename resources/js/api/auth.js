@@ -15,7 +15,7 @@ const loginRequest = ({ email, password }) => {
 }
 
 const registerRequest = (user) => {
-  return api.put('register/', user)
+  return api.post('register', user)
 }
 
 const logoutRequest = () => {

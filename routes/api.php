@@ -22,7 +22,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
     Route::post('login', 'LoginController@login')->name('login');
 
-    Route::put('register', 'RegisterController@register')->name('register');
+    Route::post('register', 'RegisterController@register')->name('register');
 
     Route::post('password/email/reset', 'ForgotPasswordController@sendPasswordResetLink')->name('password.reset');
     Route::post('password/reset/new/{hash}', 'ResetPasswordController@doReset')->name('password.reset.verify');
