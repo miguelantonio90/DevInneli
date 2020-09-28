@@ -53,40 +53,9 @@ const state = {
 const mutations = {
   [SWITCH_USER_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
-    if (!showModal) {
-      if (!showModal) {
-        state.newUser = {
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          phone: '',
-          country: '',
-          avatar: '',
-          position: [],
-          positions_id: '',
-          shops: []
-        }
-      }
-    }
   },
   [SWITCH_USER_EDIT_MODAL] (state, showModal) {
     state.showEditModal = showModal
-    if (!showModal) {
-      state.editUser = {
-        id: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        phone: '',
-        country: '',
-        avatar: '',
-        position: [],
-        positions_id: '',
-        shops: []
-      }
-    }
   },
   [SWITCH_USER_SHOW_MODAL] (state, showModal) {
     state.showShowModal = showModal
@@ -226,10 +195,7 @@ const actions = {
         commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
       })
-      .catch((error) => {
-        commit(ENV_DATA_PROCESS, false)
-        commit('SET_ERRORS', error, { root: true })
-      })
+      .catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
 
   async updateAvatar ({ commit, dispatch }, file) {
