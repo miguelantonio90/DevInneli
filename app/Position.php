@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Position extends Model
 {
     protected $fillable = [
-        'key', 'name', 'accessEmail', 'accessPin', 'company_id',
+        'key', 'name', 'accessEmail', 'accessPin', 'description', 'company_id',
     ];
 
     public static function createFirst($company): Position
