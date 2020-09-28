@@ -56,18 +56,17 @@ class UserManager
             'firstName' => $data['firstName'],
             'email' => $data['email']
         ]);
-        return $this->updateData('add', $user, $data, $shops, $positions);
+        return $this->updateData($user, $data, $shops, $positions);
     }
 
     /**
-     * @param string $action
      * @param $user
      * @param $data
      * @param $shops
      * @param $positions
      * @return mixed
      */
-    private function updateData($action, $user, $data, $shops, $positions)
+    private function updateData($user, $data, $shops, $positions)
     {
         $user->pinCode = $data['pinCode'];
         $user->firstName = $data['firstName'];
@@ -82,11 +81,9 @@ class UserManager
             $idShops[$key] = $value['id'];
         }
         $employShop = Shop::find($idShops);
-        if ($action === 'add') {
-            $user->shops()->attach($employShop);
-        } else if ($action === 'edit') {
-            $user->shops()->sync($employShop);
-        }
+
+        $user->shops()->sync($employShop);
+
         $user->save();
         return $user;
     }
@@ -96,7 +93,7 @@ class UserManager
         $positions = $data['position'];
         $shops = $data['shops'];
         $user = User::findOrFail($id);
-        return $this->updateData('edit', $user, $data, $shops, $positions);
+        return $this->updateData($user, $data, $shops, $positions);
     }
 
     public function delete($id)
