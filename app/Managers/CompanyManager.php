@@ -26,4 +26,13 @@ class CompanyManager
             ->where('users.id', '=', auth()->id())
             ->first();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        return Company::findOrFail($id)->delete();
+    }
 }

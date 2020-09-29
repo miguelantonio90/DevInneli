@@ -113,7 +113,10 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return ResponseHelper::sendResponse(
+            $this->userManager->delete($id),
+            'Company has deleted successfully.'
+        );
     }
 
     public function updateLogo(Request $request, $id)
