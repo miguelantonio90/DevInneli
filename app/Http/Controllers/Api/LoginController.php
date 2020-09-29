@@ -9,6 +9,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -16,7 +17,6 @@ use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
 use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group Auth endpoints
@@ -89,7 +89,7 @@ class LoginController extends Controller
 
     /**
      * @param ServerRequestInterface $request
-     * @return JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse|Response
      * @throws ValidationException
      */
     public function loginPincode(ServerRequestInterface $request)

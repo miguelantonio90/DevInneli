@@ -98,13 +98,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    protected function validEmail(array $data)
-    {
-        return Validator::make($data, [
-            'email' => ['required', 'string', 'email', 'max:255']
-        ]);
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -136,5 +129,12 @@ class CompanyController extends Controller
                 'Company logo has not updated.'
             );
         }
+    }
+
+    protected function validEmail(array $data)
+    {
+        return Validator::make($data, [
+            'email' => ['required', 'string', 'email', 'max:255']
+        ]);
     }
 }
