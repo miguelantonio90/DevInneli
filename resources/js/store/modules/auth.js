@@ -10,9 +10,11 @@ const LOGIN = 'LOGIN'
 const FORGOT_PASSWORD = 'FORGOT_PASSWORD'
 const SET_RESET = 'SET_RESET'
 const IN_PROCESS_RESET = 'IN_PROCESS_RESET'
+const IS_MANAGER = 'IS_MANAGER'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
+  isManager: false,
   userData: [],
   pending: false,
   loadingReset: false,
@@ -54,7 +56,8 @@ const state = {
 // getters
 const getters = {
   user: (state) => state.userData,
-  isLoggedIn: (state) => state.isLoggedIn
+  isLoggedIn: (state) => state.isLoggedIn,
+  isManagerIn: (state) => state.isManager
 }
 
 // actions
@@ -66,6 +69,7 @@ const actions = {
       .getUserData()
       .then(({ data }) => {
         commit(SET_USER_DATA, data)
+        data.isManager === 1 ? commit(IS_MANAGER, true) : commit(IS_MANAGER, false)
       })
       .catch(({ response }) => {
         commit('SET_ERRORS', response, { root: true })
@@ -78,6 +82,21 @@ const actions = {
 
     return await auth
       .loginRequest(login)
+      .then(({ data }) => {
+        commit(LOGIN_SUCCESS)
+        localStorage.saveToken(
+          data.token_type + ' ' + data.access_token
+        )
+      })
+      .catch(({ response }) => {
+        commit('SET_ERRORS', response, { root: true })
+      })
+  },
+  async sendLoginPincode ({ commit }, login) {
+    commit('CLEAR_ERRORS', null, { root: true })
+    commit(LOGIN)
+    return await auth
+      .loginPincodeRequest(login)
       .then(({ data }) => {
         commit(LOGIN_SUCCESS)
         localStorage.saveToken(
@@ -154,6 +173,9 @@ const actions = {
 
 // mutations
 const mutations = {
+  [IS_MANAGER] (state, isManager) {
+    state.isManager = isManager
+  },
   [SET_USER_DATA] (state, user) {
     state.userData = user
   },

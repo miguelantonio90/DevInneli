@@ -5,6 +5,8 @@ export default {
   // page login
   login: 'login',
   forgot: 'Forgot Password?',
+  have_pin: 'I have access pin',
+  pinTile: 'Pin Code',
   reset_password: 'Reset Password',
   find_password: 'Enter your password',
   forgot_btn: 'Send Reset Link',
@@ -13,6 +15,7 @@ export default {
   firstName: 'First Name',
   lastName: 'Last Name',
   email: 'Email',
+  holder_email: 'Enter company email address',
   password: 'Password',
   pinCode: 'Pin',
   confirm: 'Confirm',

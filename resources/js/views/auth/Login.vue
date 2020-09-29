@@ -61,6 +61,20 @@
           </v-card-text>
           <v-card-actions>
             <v-tooltip
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-bind="attrs"
+                  class="mr-3"
+                  v-on="on"
+                  @click="loginPin"
+                  v-text="'mdi-lock'"
+                />
+              </template>
+              <span>{{ $vuetify.lang.t('$vuetify.have_pin') }}</span>
+            </v-tooltip>
+            <!--<v-tooltip
               v-for="item in socialIcons"
               :key="item.text"
               bottom
@@ -75,7 +89,7 @@
                 />
               </template>
               <span>{{ item.text }}</span>
-            </v-tooltip>
+            </v-tooltip>-->
             <v-spacer />
             <v-btn
               :disabled="!formValid"
@@ -142,6 +156,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['sendLoginRequest']),
+    ...mapActions('company', ['getCompaniesByEmail']),
     login () {
       if (this.$refs.form.validate()) {
         this.loading = true
@@ -154,6 +169,22 @@ export default {
           }
         })
       }
+    },
+    loginPin () {
+      const lang = this.$vuetify.lang
+      this.$Swal.fire({
+        title: lang.t('$vuetify.email'),
+        input: 'email',
+        inputPlaceholder: lang.t('$vuetify.holder_email'),
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          this.getCompaniesByEmail(login)
+        },
+        allowOutsideClick: () => !this.$Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+        }
+      })
     },
     handleSocialLogin () {
     }

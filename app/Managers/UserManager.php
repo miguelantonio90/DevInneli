@@ -32,6 +32,23 @@ class UserManager
         return $users;
     }
 
+    public static function loginByPincode($login)
+    {
+
+        $company = CompanyManager::getCompanyByEmail($login['username']);
+
+        return User::where('pinCode', '=', $login['password'])
+            ->where('isAdmin', '=', '0')
+            ->where('company_id', '=', $company->id)
+            ->with('company')
+            ->with(['position' => function ($q) use ($company) {
+                $q->where('positions.company_id', '=', $company->id)
+                    ->where('positions.accessPin', '=', 1);
+            }])
+            ->with('shops')
+            ->get();
+    }
+
 
     /**
      * Find Company Id using admin authenticate

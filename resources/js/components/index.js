@@ -4,12 +4,14 @@ import AppDataTable from '../components/core/AppDataTable'
 import AvatarPicker from '../components/core/AvatarPicker'
 import AppLoading from '../components/core/AppLoading'
 import MaterialCard from '../components/utils/MaterialCard'
+import VuePincode from '../components/core/VuePincode'
 
 const components = [
   AppDataTable,
   AvatarPicker,
   MaterialCard,
-  AppLoading
+  AppLoading,
+  VuePincode
 ]
 
 // Installation of the library as a plugin

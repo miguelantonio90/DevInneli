@@ -4,6 +4,9 @@ export default {
   fetchCompanies () {
     return api.get('company')
   },
+  fetchCompaniesByEmail (email) {
+    return api.get('company/email/' + email)
+  },
   sendCreateRequest (company) {
     return api.post('company', company)
   },

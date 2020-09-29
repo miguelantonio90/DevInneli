@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Managers\CompanyManager;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +16,23 @@ class CompanyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth')->except('companyByEmail');
+        $this->middleware('guest')->except(['index, store, show, update, updateLogo']);
+    }
+
+    /**
+     * @param $email
+     * @return JsonResponse|Response
+     */
+    public function companyByEmail($email)
+    {
+        //$this->validEmail($request->all())->validate();
+
+        return ResponseHelper::sendResponse(
+            CompanyManager::getCompanyByEmail($email),
+            'Company retrieved successfully.'
+        );
+
     }
 
     /**
@@ -77,6 +95,13 @@ class CompanyController extends Controller
             'country' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string'],
             'address' => ['string'],
+        ]);
+    }
+
+    protected function validEmail(array $data)
+    {
+        return Validator::make($data, [
+            'email' => ['required', 'string', 'email', 'max:255']
         ]);
     }
 

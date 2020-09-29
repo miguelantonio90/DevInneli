@@ -1,4 +1,5 @@
 import api from '../../api/company'
+import router from '../../router'
 
 const FETCHING_COMPS = 'FETCHING_COMPS'
 const COMP_UPDATED = 'COMP_UPDATED'
@@ -69,6 +70,18 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_COMPS, data.data)
         commit(COMP_TABLE_LOADING, false)
+      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+  },
+  async getCompaniesByEmail ({ commit }, email) {
+    commit('CLEAR_ERRORS', null, { root: true })
+    commit(ENV_DATA_PROCESS, true)
+    await api
+      .fetchCompaniesByEmail(email)
+      .then(({ data }) => {
+        commit(FETCHING_COMPS, data.data)
+        if (data.success) {
+          router.push({ name: 'pincode', params: { email: email } })
+        }
       }).catch((error) => commit('SET_ERRORS', error, { root: true }))
   },
   async updateCompany ({ commit, dispatch }, company) {

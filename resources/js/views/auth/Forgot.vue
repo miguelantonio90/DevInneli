@@ -39,7 +39,7 @@
               :to="{ name: 'login' }"
               color="secondary"
             >
-              <v-icon>mdi-account</v-icon>
+              <v-icon>mdi-arrow-left</v-icon>
               {{ $vuetify.lang.t('$vuetify.login') }}
             </v-btn>
             <v-spacer />
