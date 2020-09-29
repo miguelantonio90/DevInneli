@@ -21,11 +21,14 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
     //End Testing routes
 
     Route::post('login', 'LoginController@login')->name('login');
+    Route::post('login/pincode', 'LoginController@loginPincode')->name('login.pincode');
 
     Route::post('register', 'RegisterController@register')->name('register');
 
     Route::post('password/email/reset', 'ForgotPasswordController@sendPasswordResetLink')->name('password.reset');
     Route::post('password/reset/new/{hash}', 'ResetPasswordController@doReset')->name('password.reset.verify');
+
+    Route::get('company/email/{email}', 'CompanyController@companyByEmail');
 
     Route::group(['middleware' => ['auth:api', 'respond.json']], function () {
 

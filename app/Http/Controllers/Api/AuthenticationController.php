@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Company;
 use App\Http\Controllers\Controller;
 use App\Managers\UserManager;
-use App\User;
+use App\Position;
 
 /**
  * @group Auth endpoints
@@ -24,17 +25,12 @@ class AuthenticationController extends Controller
      */
     public function user()
     {
-        if (auth()->user()['isAdmin'] === 0) {
-            $company_id = UserManager::getCompanyByAdmin();
-            return User::findOrFail(auth()->id())
-                ->where('isAdmin', '=', '0')
-                ->where('company_id', '=', $company_id)
-                ->with('company')
-                ->with('position')
-                ->with('shops')
-                ->first();
-        } else {
-            return User::findOrFail(auth()->id())->with('company')->first();
-        }
+        $user = auth()->user();
+        $company = Company::findOrFail($user['company_id']);
+        $position = Position::findOrFail($user['position_id']);
+        $user['company'] = $company;
+        $user['position'] = $position;
+
+        return $user;
     }
 }

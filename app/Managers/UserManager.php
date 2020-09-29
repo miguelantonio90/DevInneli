@@ -11,6 +11,23 @@ use Illuminate\Support\Facades\DB;
 class UserManager
 {
 
+    public static function loginByPincode($login)
+    {
+
+        $company = CompanyManager::getCompanyByEmail($login['username']);
+
+        return User::where('pinCode', '=', $login['password'])
+            ->where('isAdmin', '=', '0')
+            ->where('company_id', '=', $company->id)
+            ->with('company')
+            ->with(['position' => function ($q) use ($company) {
+                $q->where('positions.company_id', '=', $company->id)
+                    ->where('positions.accessPin', '=', 1);
+            }])
+            ->with('shops')
+            ->get();
+    }
+
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
@@ -31,7 +48,6 @@ class UserManager
         }
         return $users;
     }
-
 
     /**
      * Find Company Id using admin authenticate

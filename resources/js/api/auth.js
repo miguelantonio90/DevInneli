@@ -14,6 +14,14 @@ const loginRequest = ({ email, password }) => {
   return api.post('login', user)
 }
 
+const loginPincodeRequest = ({ email, pincode }) => {
+  const user = {
+    username: email,
+    password: pincode
+  }
+  return api.post('login/pincode', user)
+}
+
 const registerRequest = (user) => {
   return api.post('register', user)
 }
@@ -40,6 +48,7 @@ const resetPassword = (hash, newData) => {
 export default {
   getUserData,
   loginRequest,
+  loginPincodeRequest,
   logoutRequest,
   registerRequest,
   verifyRequest,

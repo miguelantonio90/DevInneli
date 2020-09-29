@@ -8,10 +8,11 @@ import '@mdi/font/css/materialdesignicons.css'
 import './registerServiceWorker'
 import VueTelInputVuetify from 'vue-tel-input-vuetify'
 
+Vue.config.productionTip = false
+
 Vue.use(VueTelInputVuetify, {
   vuetify
 })
-Vue.config.productionTip = false
 Vue.use({ install: AppComponents.install })
 
 new Vue({

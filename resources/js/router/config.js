@@ -64,6 +64,26 @@ export const publicRoute = [
     ]
   },
   {
+    path: '/auth',
+    component: LayoutAuth,
+    meta: {
+      title: 'PinCode'
+    },
+    redirect: '/auth/pincode',
+    hidden: true,
+    props: true,
+    children: [
+      {
+        path: 'pincode',
+        name: 'pincode',
+        meta: {
+          title: 'Pin Code'
+        },
+        component: () => import('../views/auth/PinCode')
+      }
+    ]
+  },
+  {
     path: '/404',
     name: '404',
     meta: {
@@ -145,7 +165,6 @@ export const protectedRoute = [
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
-          requiresAuth: true,
           group: 'resume'
         },
         children: [
@@ -154,7 +173,8 @@ export const protectedRoute = [
             name: 'sell_product',
             meta: {
               title: 'sell_product',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -163,7 +183,8 @@ export const protectedRoute = [
             name: 'sell_category',
             meta: {
               title: 'sell_category',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -172,7 +193,8 @@ export const protectedRoute = [
             name: 'sell_user',
             meta: {
               title: 'sell_user',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -181,7 +203,8 @@ export const protectedRoute = [
             name: 'sell_types_payment',
             meta: {
               title: 'sell_types_payment',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           }
@@ -203,7 +226,8 @@ export const protectedRoute = [
             name: 'product_list',
             meta: {
               title: 'product_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -212,7 +236,8 @@ export const protectedRoute = [
             name: 'category_list',
             meta: {
               title: 'category_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -221,7 +246,8 @@ export const protectedRoute = [
             name: 'modifiers_list',
             meta: {
               title: 'modifiers_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           },
@@ -230,7 +256,8 @@ export const protectedRoute = [
             name: 'discounts_list',
             meta: {
               title: 'discounts_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/error/Deny')
           }
@@ -251,15 +278,18 @@ export const protectedRoute = [
             name: 'employer_list',
             meta: {
               title: 'employer_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/user/ListUser')
-          }, {
+          },
+          {
             path: '/users/access.list',
             name: 'access',
             meta: {
               title: 'access',
-              icon: 'mdi-account-key'
+              icon: 'mdi-account-key',
+              requiresAuth: true
             },
             component: () => import('../views/access/ListAccess')
           }
@@ -281,7 +311,8 @@ export const protectedRoute = [
             name: 'clients_list',
             meta: {
               title: 'client_list',
-              icon: 'mdi-database-plus'
+              icon: 'mdi-database-plus',
+              requiresAuth: true
             },
             component: () => import('../views/client/ListClient')
           }

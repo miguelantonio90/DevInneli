@@ -19,6 +19,7 @@ use Laravel\Passport\HasApiTokens;
  * @method find($id)
  * @method static create(array $array)
  * @method static select(string $string, $raw)
+ * @method static where(string $string, string $string1, string $string2)
  * @property mixed email
  * @property mixed firstName
  * @property mixed lastName
