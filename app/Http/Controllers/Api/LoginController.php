@@ -72,7 +72,7 @@ class LoginController extends Controller
      * @return mixed
      * @throws ValidationException
      */
-    public function login(ServerRequestInterface $request)
+    /*public function login(ServerRequestInterface $request)
     {
         $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
 
@@ -85,8 +85,45 @@ class LoginController extends Controller
             return with($controller->issueToken($request));
         }
         return $this->sendFailedLoginResponse($request);
+    }*/
+    public function login(Request $request)
+    {
+        $this->validateLogin($request)->validate();
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
     }
 
+    protected function sendLoginResponse(Request $request)
+    {
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return response()->json([
+            'token' => $request->user()->createToken(config('services.passport.client_secret'))->accessToken,
+        ]);
+    }
     /**
      * @param ServerRequestInterface $request
      * @return JsonResponse|Response
@@ -103,7 +140,7 @@ class LoginController extends Controller
 
             return response()->json([
                 'token_type' => 'Bearer',
-                'access_token' => $user[0]->createToken(config('services.passport.client_secret'))->accessToken
+                'access_token' => $user[0]->createToken(config('services.passport.client_secret'))->accessToken,
             ]);
         } else {
             return ResponseHelper::sendError('No login.', 404);
