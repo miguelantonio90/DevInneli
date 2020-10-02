@@ -67,27 +67,13 @@ class LoginController extends Controller
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @return mixed
+     * @param Request $request
+     * @return JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response|void
      * @throws ValidationException
      */
-    /*public function login(ServerRequestInterface $request)
-    {
-        $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
-
-        $request = $request->withParsedBody($request->getParsedBody() + [
-                'grant_type' => 'password',
-                'client_id' => config('services.passport.client_id'),
-                'client_secret' => config('services.passport.client_secret')
-            ]);
-        if ($controller->issueToken($request)) {
-            return with($controller->issueToken($request));
-        }
-        return $this->sendFailedLoginResponse($request);
-    }*/
     public function login(Request $request)
     {
-        $this->validateLogin($request)->validate();
+        $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
