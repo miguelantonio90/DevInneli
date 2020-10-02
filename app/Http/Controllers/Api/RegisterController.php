@@ -68,7 +68,6 @@ class RegisterController extends Controller
     /**
      * @param Request $request
      * @return Application|JsonResponse|RedirectResponse|Response|Redirector
-     * @throws ValidationException
      */
     public function register(Request $request)
     {
