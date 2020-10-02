@@ -23,9 +23,6 @@ use Illuminate\Validation\ValidationException;
  */
 class RegisterController extends Controller
 {
-    protected $server;
-    protected $tokens;
-    protected $jwt;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
