@@ -8,15 +8,19 @@ use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
 use App\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
 use League\OAuth2\Server\AuthorizationServer;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @group Auth endpoints
@@ -61,27 +65,26 @@ class RegisterController extends Controller
     }
 
 
-    public function register(ServerRequestInterface $request)
+    /**
+     * @param Request $request
+     * @return Application|JsonResponse|RedirectResponse|Response|Redirector
+     * @throws ValidationException
+     */
+    public function register(Request $request)
     {
-        $this->validator($request->getParsedBody());
+        $this->validator($request->all())->validate();
 
-        $user = $this->create($request->getParsedBody());
+        event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
 
-        $data = $request->getParsedBody();
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
 
-        $controller = new AccessTokenController($this->server, $this->tokens, $this->jwt);
-        $request = $request->withParsedBody([
-                'username' => $data['email'],
-                'password' => $data['password'],
-                'password_confirmation' => $data['password_confirmation']
-            ] + [
-                'grant_type' => 'password',
-                'client_id' => config('services.passport.client_id'),
-                'client_secret' => config('services.passport.client_secret')
-            ]);
-        return with($controller->issueToken($request));
+        return $request->wantsJson()
+            ? new Response('', 201)
+            : redirect($this->redirectPath());
     }
 
     /**
@@ -119,10 +122,22 @@ class RegisterController extends Controller
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
-                $user->sendEmailVerificationNotification();
 
                 return $user;
             }
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param $user
+     * @return JsonResponse
+     */
+    protected function registered(Request $request, $user)
+    {
+        return response()->json([
+            'token_type' => 'Bearer',
+            'access_token' => $user->createToken(config('services.passport.client_secret'))->accessToken
+        ]);
     }
 }
