@@ -8,7 +8,7 @@ const getUserData = () => {
 
 const loginRequest = ({ email, password }) => {
   const user = {
-    username: email,
+    email: email,
     password: password
   }
   return api.post('login', user)
