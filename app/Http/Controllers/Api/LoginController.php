@@ -12,10 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\TokenRepository;
-use Lcobucci\JWT\Parser as JwtParser;
-use League\OAuth2\Server\AuthorizationServer;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @group Auth endpoints
@@ -45,12 +41,12 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    public function __construct(AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt)
+    public function __construct(/*AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt*/)
     {
         $this->middleware('guest')->except('logout');
-        $this->server = $server;
+        /*$this->server = $server;
         $this->jwt = $jwt;
-        $this->tokens = $tokens;
+        $this->tokens = $tokens;*/
     }
 
     /**
@@ -73,7 +69,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $this->validateLogin($request);
+        $this->validateLogin($request)->validate();
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -113,15 +109,15 @@ class LoginController extends Controller
     }
 
     /**
-     * @param ServerRequestInterface $request
+     * @param Request $request
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function loginPincode(ServerRequestInterface $request)
+    public function loginPincode(Request $request)
     {
-        $this->validateLogin($request->getParsedBody());
+        $this->validateLogin($request->all())->validate();
 
-        $user = UserManager::loginByPincode($request->getParsedBody());
+        $user = UserManager::loginByPincode($request->all());
 
         if (isset($user[0])) {
             $this->guard()->login($user[0]);
