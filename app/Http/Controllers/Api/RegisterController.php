@@ -8,6 +8,7 @@ use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;

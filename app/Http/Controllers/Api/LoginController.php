@@ -41,12 +41,9 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    public function __construct(/*AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt*/)
+    public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        /*$this->server = $server;
-        $this->jwt = $jwt;
-        $this->tokens = $tokens;*/
     }
 
     /**
@@ -105,9 +102,9 @@ class LoginController extends Controller
             'token_type' => 'Bearer',
             'access_token' => $request->user()->createToken(config('services.passport.client_secret'))->accessToken,
             'user' => [
-                'firstName'=>$request->user()['firstName'],
-                'lastName'=>$request->user()['lastName'],
-                'email_verified_at'=>$request->user()['email_verified_at'],
+                'firstName' => $request->user()['firstName'],
+                'lastName' => $request->user()['lastName'],
+                'email_verified_at' => $request->user()['email_verified_at'],
             ]
         ]);
     }
