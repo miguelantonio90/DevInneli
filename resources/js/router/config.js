@@ -380,5 +380,26 @@ export const protectedRoute = [
         component: () => import('../views/AppLock')
       }
     ]
+  },
+  {
+    path: '/sales',
+    component: LayoutLock,
+    meta: {
+      title: 'sales'
+    },
+    redirect: '/employee/sales',
+    hidden: true,
+    children: [
+      {
+        path: 'sales',
+        name: 'sales',
+        meta: {
+          title: 'sales',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/sales/Sales')
+      }
+    ]
   }
 ]
