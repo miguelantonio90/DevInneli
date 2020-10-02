@@ -8,7 +8,6 @@ use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
 use App\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +15,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
@@ -80,7 +78,7 @@ class RegisterController extends Controller
             'country' => 'required|string',
         ]);
 
-        $user = $this->create($request->all());
+        event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
 
@@ -91,23 +89,6 @@ class RegisterController extends Controller
         return $request->wantsJson()
             ? new Response('', 201)
             : redirect($this->redirectPath());
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'shopName' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'password_confirmation' => 'required|string|same:password',
-            'country' => 'required|string',
-        ]);
     }
 
     /**
@@ -129,7 +110,6 @@ class RegisterController extends Controller
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
-                $user->sendEmailVerificationNotification();
 
                 return $user;
             }
