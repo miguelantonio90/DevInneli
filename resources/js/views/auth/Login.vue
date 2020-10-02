@@ -163,7 +163,8 @@ export default {
         this.sendLoginRequest(this.fromModel).then(() => {
           if (this.isLoggedIn) {
             this.loading = false
-            this.$router.push('/dashboard')
+            // this.$router.push('/dashboard')
+            this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
           } else {
             this.loading = false
           }

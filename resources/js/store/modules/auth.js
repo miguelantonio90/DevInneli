@@ -69,7 +69,6 @@ const actions = {
       .getUserData()
       .then(({ data }) => {
         commit(SET_USER_DATA, data)
-        data.isManager === 1 ? commit(IS_MANAGER, true) : commit(IS_MANAGER, false)
       })
       .catch(({ response }) => {
         commit('SET_ERRORS', response, { root: true })
@@ -89,21 +88,22 @@ const actions = {
         )
       })
       .catch(({ response }) => {
+        commit(LOGIN_FAILED)
         commit('SET_ERRORS', response, { root: true })
       })
   },
-  async sendLoginPincode ({ commit }, login) {
+  async sendLoginPincode ({ commit, dispatch }, login) {
     commit('CLEAR_ERRORS', null, { root: true })
     commit(LOGIN)
     return await auth
       .loginPincodeRequest(login)
       .then(({ data }) => {
-        commit(LOGIN_SUCCESS)
-        localStorage.saveToken(
-          data.token_type + ' ' + data.access_token
-        )
+        if (data.success) {
+          data.data.isManager === 1 ? commit(IS_MANAGER, true) : commit(IS_MANAGER, false)
+        }
       })
       .catch(({ response }) => {
+        commit(LOGIN_FAILED)
         commit('SET_ERRORS', response, { root: true })
       })
   },
@@ -192,15 +192,14 @@ const mutations = {
   },
   [LOGOUT] (state) {
     state.isLoggedIn = false
+    state.isManagerIn = false
   },
   [FORGOT_PASSWORD] (state, status) {
     state.successForgot = status
   },
   [LOGIN_FAILED] (state, error) {
-    console.log({
-      state,
-      error
-    })
+    state.isLoggedIn = false
+    state.isManager = false
   },
   [ENV_DATA_PROCESS] (state, pending) {
     state.pending = pending

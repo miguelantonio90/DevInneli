@@ -10,6 +10,21 @@
     />
     <v-spacer />
     <v-toolbar-items>
+      <v-tooltip
+        v-if="showLockIcon"
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            class="mr-3"
+            v-on="on"
+            @click="handlePinLogin"
+            v-text="'mdi-lock'"
+          />
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.have_pin') }}</span>
+      </v-tooltip>
       <v-btn
         icon
         @click="handleFullScreen()"
@@ -106,6 +121,10 @@ export default {
       type: Boolean,
       default: true
     },
+    showLockIcon: {
+      type: Boolean,
+      default: true
+    },
     showMenuLang: {
       type: Boolean,
       default: true
@@ -119,7 +138,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'user']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },
@@ -197,6 +216,9 @@ export default {
     },
     handleProfile () {
       this.$router.push({ name: 'Profile' })
+    },
+    handlePinLogin () {
+      this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
     }
   }
 }

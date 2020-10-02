@@ -7,7 +7,7 @@ export default {
   reset_password: 'Cambiar contraseña',
   find_password: 'Enviar su contraseña',
   forgot: 'Olvidó su contraseña?',
-  have_pin: 'Tengo pin de acceso',
+  have_pin: 'Bloquer Pantalla',
   pinTile: 'Pin Code',
   forgot_btn: 'Enviar link de cambio',
   username: 'Usuario',
@@ -67,7 +67,8 @@ export default {
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
     sell_user: 'Venta por Empleado',
-    sell_types_payment: 'Venta por tipos de pago'
+    sell_types_payment: 'Venta por tipos de pago',
+    pinlogin: 'Pin Code'
   },
   // settings
   settings: {

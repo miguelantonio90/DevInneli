@@ -1,5 +1,4 @@
-import { LayoutAuth, LayoutDefault, RouteWrapper } from '../components/layouts'
-import LayoutVerify from '../components/layouts/LayoutVerify'
+import { LayoutAuth, LayoutDefault, RouteWrapper, LayoutVerify, LayoutLock } from '../components/layouts'
 
 export const publicRoute = [
   {
@@ -358,6 +357,27 @@ export const protectedRoute = [
           requiresAuth: true
         },
         component: () => import('../views/auth/Verify')
+      }
+    ]
+  },
+  {
+    path: '/lock',
+    component: LayoutLock,
+    meta: {
+      title: 'pinlogin'
+    },
+    redirect: '/lock/pin',
+    hidden: true,
+    children: [
+      {
+        path: 'pin',
+        name: 'pinlogin',
+        meta: {
+          title: 'pinlogin',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/AppLock')
       }
     ]
   }
