@@ -72,7 +72,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        //$this->validator($request->all())->validate();
         $this->validate($request, [
             'shopName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -81,7 +80,7 @@ class RegisterController extends Controller
             'country' => 'required|string',
         ]);
 
-        event(new Registered($user = $this->create($request->all())));
+        $user = $this->create($request->all());
 
         $this->guard()->login($user);
 
@@ -130,6 +129,7 @@ class RegisterController extends Controller
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
+                $user->sendEmailVerificationNotification();
 
                 return $user;
             }
