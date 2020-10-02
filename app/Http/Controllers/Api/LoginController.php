@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
 use League\OAuth2\Server\AuthorizationServer;
@@ -121,9 +120,12 @@ class LoginController extends Controller
         }
 
         return response()->json([
-            'token' => $request->user()->createToken(config('services.passport.client_secret'))->accessToken,
+            'token_type' => 'Bearer',
+            'access_token' => $request->user()->createToken(config('services.passport.client_secret'))->accessToken,
+            'user' => $request->user()
         ]);
     }
+
     /**
      * @param ServerRequestInterface $request
      * @return JsonResponse|Response
