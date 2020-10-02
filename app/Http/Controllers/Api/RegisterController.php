@@ -68,10 +68,18 @@ class RegisterController extends Controller
     /**
      * @param Request $request
      * @return Application|JsonResponse|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function register(Request $request)
     {
         //$this->validator($request->all())->validate();
+        $this->validate($request, [
+            'shopName' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|same:password',
+            'country' => 'required|string',
+        ]);
 
         event(new Registered($user = $this->create($request->all())));
 
@@ -95,10 +103,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'shopName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'country' => ['required','string'],
+            'shopName' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|same:password',
+            'country' => 'required|string',
         ]);
     }
 
