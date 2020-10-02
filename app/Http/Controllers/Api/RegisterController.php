@@ -17,9 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\TokenRepository;
-use Lcobucci\JWT\Parser as JwtParser;
-use League\OAuth2\Server\AuthorizationServer;
 
 /**
  * @group Auth endpoints
@@ -51,16 +48,10 @@ class RegisterController extends Controller
 
     /**
      * RegisterController constructor.
-     * @param AuthorizationServer $server
-     * @param TokenRepository $tokens
-     * @param JwtParser $jwt
      */
-    public function __construct(AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt)
+    public function __construct()
     {
         $this->middleware('guest');
-        $this->server = $server;
-        $this->jwt = $jwt;
-        $this->tokens = $tokens;
     }
 
 
