@@ -7,11 +7,7 @@ const getUserData = () => {
 }
 
 const loginRequest = ({ email, password }) => {
-  const user = {
-    email: email,
-    password: password
-  }
-  return api.post('login', user)
+  return api.post('login', { email, password })
 }
 
 const loginPincodeRequest = ({ email, pincode }) => {
