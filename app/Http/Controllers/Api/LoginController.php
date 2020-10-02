@@ -104,7 +104,11 @@ class LoginController extends Controller
         return response()->json([
             'token_type' => 'Bearer',
             'access_token' => $request->user()->createToken(config('services.passport.client_secret'))->accessToken,
-            'user' => $request->user()
+            'user' => [
+                'firstName'=>$request->user()['firstName'],
+                'lastName'=>$request->user()['lastName'],
+                'email_verified_at'=>$request->user()['email_verified_at'],
+            ]
         ]);
     }
 
