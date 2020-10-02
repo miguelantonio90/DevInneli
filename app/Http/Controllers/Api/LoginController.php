@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -31,9 +34,6 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    protected $server;
-    protected $tokens;
-    protected $jwt;
     /**
      * Where to redirect users after login.
      *
@@ -51,15 +51,15 @@ class LoginController extends Controller
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function logout(Request $request)
     {
-        auth()->user()->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
+        $request->user()->token()->revoke();
 
-        return response()->json('Logged out successfully', 200);
+        return $request->wantsJson()
+            ? new Response('', 204)
+            : redirect('/');
     }
 
     /**
@@ -69,7 +69,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $this->validateLogin($request)->validate();
+        $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -115,7 +115,7 @@ class LoginController extends Controller
      */
     public function loginPincode(Request $request)
     {
-        $this->validateLogin($request->all())->validate();
+        $this->validatePin($request->all())->validate();
 
         $user = UserManager::loginByPincode($request->all());
 
@@ -132,7 +132,7 @@ class LoginController extends Controller
 
     }
 
-    protected function validateLogin(array $data)
+    protected function validatePin(array $data)
     {
         return Validator::make($data, [
             'username' => 'email|required|string',
