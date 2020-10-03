@@ -123,10 +123,6 @@ class LoginController extends Controller
         if (isset($user[0])) {
             $this->guard()->login($user[0]);
 
-            /*return response()->json([
-                'token_type' => 'Bearer',
-                'access_token' => $user[0]->createToken(config('services.passport.client_secret'))->accessToken,
-            ]);*/
             return ResponseHelper::sendResponse($user[0],'Success login.');
         } else {
             return ResponseHelper::sendError('Unauthenticated', 404);
