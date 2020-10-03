@@ -19,7 +19,7 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title v-html="item.title" />
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
               <v-list-item-subtitle>
                 Quantity: {{ item.quantity }} &nbsp; - &nbsp;
                 {{ item.price | money }}

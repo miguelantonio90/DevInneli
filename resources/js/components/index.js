@@ -5,12 +5,12 @@ import AvatarPicker from '../components/core/AvatarPicker'
 import AppLoading from '../components/core/AppLoading'
 import MaterialCard from '../components/utils/MaterialCard'
 import VuePincode from '../components/core/VuePincode'
-import CheckOutDialog from '../components/shop/CheckOutDialog'
-import ProductCard from '../components/shop/ProductCard'
-import ProductList from '../components/shop/ProductList'
-import ShoppingCartTotals from '../components/shop/ShoppingCartTotals'
-import ShoppingCart from '../components/shop/ShoppingCart'
-import Coupons from '../components/shop/Coupons'
+import CheckOutDialog from '../components/sales/CheckOutDialog'
+import ProductCard from '../components/sales/ProductCard'
+import ProductList from '../components/sales/ProductList'
+import ShoppingCartTotals from '../components/sales/ShoppingCartTotals'
+import ShoppingCart from '../components/sales/ShoppingCart'
+import Coupons from '../components/sales/Coupons'
 
 const components = [
   AppDataTable,
