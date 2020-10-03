@@ -119,7 +119,7 @@
                     >
                       <v-btn
                         v-if="hover"
-                        href="/product"
+                        href="#"
                         class=""
                         outlined
                       >
@@ -131,7 +131,7 @@
                 <v-card-text class="text--primary">
                   <div>
                     <a
-                      href="/product"
+                      href="#"
                       style="text-decoration: none"
                     >{{ pro.name }}</a>
                   </div>
