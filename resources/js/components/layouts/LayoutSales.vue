@@ -3,14 +3,13 @@
     id="inspire"
     class="app dashboard"
   >
-    <app-drawer
-      :show-drawer="false"
+    <sales-drawer
+      :show-drawer="showDrawer"
       class="app--drawer"
     />
     <app-toolbar
-      :show-nav-icon="false"
-      :show-menu-user="false"
       class="app--toolbar"
+      @side-icon-click="handleDrawerVisiable"
     />
     <v-main>
       <!-- Page Header -->
@@ -33,16 +32,26 @@
 </template>
 
 <script>
+import SalesDrawer from '../SalesDrawer'
 import AppFab from '../AppFab'
-import AppDrawer from '../AppDrawer'
 import AppToolbar from '../AppToolbar'
 
 export default {
-  name: 'LayoutVerify',
+  name: 'LayoutLock',
   components: {
+    SalesDrawer,
     AppToolbar,
-    AppDrawer,
     AppFab
+  },
+  data () {
+    return {
+      showDrawer: true
+    }
+  },
+  methods: {
+    handleDrawerVisiable () {
+      this.showDrawer = !this.showDrawer
+    }
   }
 }
 </script>

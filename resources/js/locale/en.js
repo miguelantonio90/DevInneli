@@ -5,7 +5,7 @@ export default {
   // page login
   login: 'login',
   forgot: 'Forgot Password?',
-  have_pin: 'I have access pin',
+  have_pin: 'Lock Screen',
   pinTile: 'Pin Code',
   reset_password: 'Reset Password',
   find_password: 'Enter your password',
@@ -67,7 +67,10 @@ export default {
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
     sell_user: 'Sale by Employees',
-    sell_types_payment: 'Sale by types of payment'
+    sell_types_payment: 'Sale by types of payment',
+    pinlogin: 'Pin Code',
+    vending: 'Sales',
+    turnOn: 'Register Shift'
   },
   // settings
   settings: {

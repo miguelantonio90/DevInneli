@@ -60,20 +60,6 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-tooltip
-              bottom
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-bind="attrs"
-                  class="mr-3"
-                  v-on="on"
-                  @click="loginPin"
-                  v-text="'mdi-lock'"
-                />
-              </template>
-              <span>{{ $vuetify.lang.t('$vuetify.have_pin') }}</span>
-            </v-tooltip>
             <!--<v-tooltip
               v-for="item in socialIcons"
               :key="item.text"
@@ -163,28 +149,13 @@ export default {
         this.sendLoginRequest(this.fromModel).then(() => {
           if (this.isLoggedIn) {
             this.loading = false
-            this.$router.push('/dashboard')
+            // this.$router.push('/dashboard')
+            this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
           } else {
             this.loading = false
           }
         })
       }
-    },
-    loginPin () {
-      const lang = this.$vuetify.lang
-      this.$Swal.fire({
-        title: lang.t('$vuetify.email'),
-        input: 'email',
-        inputPlaceholder: lang.t('$vuetify.holder_email'),
-        showLoaderOnConfirm: true,
-        preConfirm: (login) => {
-          this.getCompaniesByEmail(login)
-        },
-        allowOutsideClick: () => !this.$Swal.isLoading()
-      }).then((result) => {
-        if (result.isConfirmed) {
-        }
-      })
     },
     handleSocialLogin () {
     }

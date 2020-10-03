@@ -322,7 +322,7 @@ export default {
     ...mapState('auth', ['userData', 'pending']),
     ...mapState('company', ['saved', 'companies']),
     ...mapState('statics', ['arrayCountry']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user', 'isManagerIn', 'isLoggedIn']),
     getFullName () {
       return `${this.user.firstName} ${this.user.lastName || ''}`
     },

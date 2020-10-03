@@ -11,6 +11,8 @@ import client from './modules/client'
 import company from './modules/company'
 import statics from './modules/statics'
 import settings from './modules/settings'
+import products from './modules/products'
+import shoppingCart from './modules/shoppingCart'
 import VuexPersistence from 'vuex-persist'
 import router from '../router'
 
@@ -37,6 +39,8 @@ const store = new Vuex.Store({
     shop,
     client,
     company,
+    products,
+    shoppingCart,
     statics
   },
   plugins: [vuexLocal.plugin],

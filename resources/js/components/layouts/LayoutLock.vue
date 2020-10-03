@@ -3,13 +3,10 @@
     id="inspire"
     class="app dashboard"
   >
-    <app-drawer
-      :show-drawer="false"
-      class="app--drawer"
-    />
     <app-toolbar
       :show-nav-icon="false"
       :show-menu-user="false"
+      :show-lock-icon="false"
       class="app--toolbar"
     />
     <v-main>
@@ -34,14 +31,12 @@
 
 <script>
 import AppFab from '../AppFab'
-import AppDrawer from '../AppDrawer'
 import AppToolbar from '../AppToolbar'
 
 export default {
-  name: 'LayoutVerify',
+  name: 'LayoutLock',
   components: {
     AppToolbar,
-    AppDrawer,
     AppFab
   }
 }
