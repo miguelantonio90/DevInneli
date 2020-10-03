@@ -68,7 +68,9 @@ export default {
     sell_category: 'Venta por Categorías',
     sell_user: 'Venta por Empleado',
     sell_types_payment: 'Venta por tipos de pago',
-    pinlogin: 'Pin Code'
+    pinlogin: 'Pin Code',
+    vending: 'Ventas',
+    turnOn: 'Registrar Turno'
   },
   // settings
   settings: {

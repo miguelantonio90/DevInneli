@@ -68,7 +68,9 @@ export default {
     sell_category: 'Sale by Categories',
     sell_user: 'Sale by Employees',
     sell_types_payment: 'Sale by types of payment',
-    pinlogin: 'Pin Code'
+    pinlogin: 'Pin Code',
+    vending: 'Sales',
+    turnOn: 'Register Shift'
   },
   // settings
   settings: {

@@ -50,7 +50,7 @@ export default {
             this.$refs.pincodeInput.triggerSuccess()
           } else if (this.isLoggedIn && !this.isManagerIn) {
             this.loading = false
-            this.$router.push({ name: 'sales' })
+            this.$router.push({ name: 'vending' })
             this.$refs.pincodeInput.triggerSuccess()
           } else {
             this.loading = false

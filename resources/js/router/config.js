@@ -1,4 +1,4 @@
-import { LayoutAuth, LayoutDefault, RouteWrapper, LayoutVerify, LayoutLock } from '../components/layouts'
+import { LayoutAuth, LayoutDefault, RouteWrapper, LayoutVerify, LayoutLock, LayoutSales } from '../components/layouts'
 
 export const publicRoute = [
   {
@@ -382,19 +382,19 @@ export const protectedRoute = [
     ]
   },
   {
-    path: '/sales',
-    component: LayoutLock,
+    path: '/employee',
+    component: LayoutSales,
     meta: {
-      title: 'sales'
+      title: 'vending'
     },
-    redirect: '/employee/sales',
+    redirect: '/employee/vending',
     hidden: true,
     children: [
       {
-        path: 'sales',
-        name: 'sales',
+        path: 'vending',
+        name: 'vending',
         meta: {
-          title: 'sales',
+          title: 'vending',
           hiddenInMenu: true,
           requiresAuth: true
         },

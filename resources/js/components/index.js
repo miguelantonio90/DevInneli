@@ -5,13 +5,25 @@ import AvatarPicker from '../components/core/AvatarPicker'
 import AppLoading from '../components/core/AppLoading'
 import MaterialCard from '../components/utils/MaterialCard'
 import VuePincode from '../components/core/VuePincode'
+import CheckOutDialog from '../components/shop/CheckOutDialog'
+import ProductCard from '../components/shop/ProductCard'
+import ProductList from '../components/shop/ProductList'
+import ShoppingCartTotals from '../components/shop/ShoppingCartTotals'
+import ShoppingCart from '../components/shop/ShoppingCart'
+import Coupons from '../components/shop/Coupons'
 
 const components = [
   AppDataTable,
   AvatarPicker,
   MaterialCard,
   AppLoading,
-  VuePincode
+  VuePincode,
+  CheckOutDialog,
+  ProductCard,
+  ProductList,
+  ShoppingCartTotals,
+  ShoppingCart,
+  Coupons
 ]
 
 // Installation of the library as a plugin

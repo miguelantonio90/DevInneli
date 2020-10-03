@@ -68,9 +68,39 @@
             </v-avatar>
           </v-btn>
         </template>
-        <v-list class="pa-0">
+        <v-list
+          v-if="isManagerIn"
+          class="pa-0"
+        >
           <v-list-item
             v-for="(item, index) in profileMenus"
+            :key="index"
+            :disabled="item.disabled"
+            :href="item.href"
+            :target="item.target"
+            :to="!item.href ? { name: item.name } : null"
+            rel="noopener"
+            ripple="ripple"
+            @click="item.click"
+          >
+            <v-list-item-action v-if="item.icon">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{
+                  item.title
+                }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list
+          v-else
+          class="pa-0"
+        >
+          <v-list-item
+            v-for="(item, index) in employeeMenus"
             :key="index"
             :disabled="item.disabled"
             :href="item.href"
@@ -138,7 +168,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user']),
+    ...mapGetters('auth', ['isLoggedIn', 'user', 'isManagerIn']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },
@@ -190,6 +220,21 @@ export default {
           click: this.handleLogout
         }
       ]
+    },
+    employeeMenus () {
+      return [
+        {
+          icon: 'mdi-face',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.profile'),
+          click: this.handleProfileEmployee
+        }, {
+          icon: 'mdi-timer',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.turnOn'),
+          click: this.handleProfileEmployee
+        }
+      ]
     }
   },
   created () {
@@ -212,7 +257,8 @@ export default {
       this.$vuetify.lang.current = value
       localStorage.setLanguage(value)
     },
-    handleSetting () {
+    handleProfileEmployee () {
+      alert('Profile employee')
     },
     handleProfile () {
       this.$router.push({ name: 'Profile' })
