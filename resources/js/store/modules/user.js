@@ -175,10 +175,9 @@ const actions = {
   },
   async updateUser ({ commit, dispatch }, profile) {
     commit('CLEAR_ERRORS', null, { root: true })
-    const request = profile || state.editUser
-
+    // const request = profile || state.editUser
     await user
-      .sendUpdateRequest(request)
+      .sendUpdateRequest(profile)
       .then(() => {
         commit(USER_UPDATED)
         commit(ENV_DATA_PROCESS, false)

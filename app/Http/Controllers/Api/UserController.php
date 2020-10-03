@@ -101,13 +101,13 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Request $request
+     * 
      * @param int $id
+     * @param Request $request
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function update(Request $request, int $id)
+    public function update(int $id, Request $request)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(

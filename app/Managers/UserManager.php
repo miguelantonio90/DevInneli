@@ -86,6 +86,7 @@ class UserManager
         $user->pinCode = $data['pinCode'];
         $user->firstName = $data['firstName'];
         $user->lastName = $data['lastName'];
+        $user->email = $data['email'];
         $user->avatar = $data['avatar'];
         $user->phone = $data['phone'];
         $user->isAdmin = 0;
