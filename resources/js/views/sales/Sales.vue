@@ -86,7 +86,6 @@
               class="pa-0"
               :items="options"
               style="margin-bottom: -20px;"
-              outlined
               dense
             />
           </v-col>
