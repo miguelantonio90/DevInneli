@@ -69,7 +69,7 @@
           </v-btn>
         </template>
         <v-list
-          v-if="isManagerIn"
+          v-show="isManagerIn"
           class="pa-0"
         >
           <v-list-item
@@ -96,7 +96,7 @@
           </v-list-item>
         </v-list>
         <v-list
-          v-else
+          v-show="!isManagerIn"
           class="pa-0"
         >
           <v-list-item
