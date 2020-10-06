@@ -235,7 +235,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-              component: () => import('../views/article/ListArticle.vue')
+            component: () => import('../views/article/ListArticle.vue')
           },
           {
             path: '/articles/category.list',
@@ -245,7 +245,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-              component: () => import('../views/category/ListCategory')
+            component: () => import('../views/category/ListCategory')
           },
           {
             path: '/articles/modifiers.list',
