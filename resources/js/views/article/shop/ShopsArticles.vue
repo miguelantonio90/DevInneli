@@ -114,11 +114,9 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
 
 export default {
   name: 'ShopsArticles',
-  props: ['shopData', 'variantsData'],
   data () {
     return {
       snack: false,
@@ -126,7 +124,9 @@ export default {
       snackText: '',
       max25chars: v => v.length <= 25 || 'Input too long!',
       pagination: {},
-      headers: []
+      headers: [],
+      shopData: [],
+      variantsData: []
     }
   },
   computed: {},

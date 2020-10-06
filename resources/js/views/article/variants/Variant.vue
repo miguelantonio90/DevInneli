@@ -9,6 +9,7 @@
       <v-toolbar flat>
         <v-chip
           v-for="tag in variants"
+          :key="tag.name"
           close
           close-icon="mdi-delete"
           color="success"
@@ -67,7 +68,6 @@
                       v-model="select"
                       multiple
                       :label="$vuetify.lang.t('$vuetify.variants.options')"
-                      append-icon
                       chips
                       deletable-chips
                       class="tag-input"
@@ -281,7 +281,7 @@ export default {
       let localResult = []
       data.forEach((value, index) => {
         if (index === 0) {
-          value.values.forEach((localValue, localIndex) => {
+          value.values.forEach((localValue) => {
             if (localValue) {
               result.push({
                 name: localValue.toString(),
@@ -293,8 +293,8 @@ export default {
             }
           })
         } else {
-          value.values.forEach((localValue, localIndex) => {
-            localResult.forEach((v, i) => {
+          value.values.forEach((localValue) => {
+            localResult.forEach((v) => {
               if (localValue) {
                 result.push({
                   name: localValue.toString() + '/' + v.name.toString(),
@@ -308,6 +308,7 @@ export default {
           })
         }
         localResult = result
+        // eslint-disable-next-line no-unused-expressions
         index + 1 !== data.length ? result = [] : ''
       })
       this.variantsValues = result
@@ -336,7 +337,7 @@ export default {
 
 .tag-input span.v-chip::before {
     content: "label";
-    font-family: 'Material Icons';
+    font-family: 'Material Icons',serif;
     font-weight: normal;
     font-style: normal;
     font-size: 20px;

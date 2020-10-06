@@ -7,10 +7,13 @@ export default {
   reset_password: 'Cambiar contraseña',
   find_password: 'Enviar su contraseña',
   forgot: 'Olvidó su contraseña?',
+  have_pin: 'Bloquer Pantalla',
+  pinTile: 'Pin Code',
   forgot_btn: 'Enviar link de cambio',
   username: 'Usuario',
   name: 'Nombre',
   email: 'Correo',
+  holder_email: 'Dirección de correo de la compañía',
   firstName: 'Nombre',
   lastName: 'Apellidos',
   password: 'Contraseña',
@@ -66,7 +69,10 @@ export default {
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
     sell_user: 'Venta por Empleado',
-    sell_types_payment: 'Venta por tipos de pago'
+    sell_types_payment: 'Venta por tipos de pago',
+    pinlogin: 'Pin Code',
+    vending: 'Ventas',
+    turnOn: 'Registrar Turno'
   },
   // settings
   settings: {

@@ -19,20 +19,20 @@
           v-if="validShow"
           ref="form"
           v-model="formValid"
-          style="padding: 0px"
+          style="padding: 0"
           lazy-validation
         >
           <v-expansion-panels
             v-model="panel"
-            style="margin: 0px"
+            style="margin: 0"
             multiple
           >
             <v-row>
               <v-col
                 cols="12"
-                md="6"
+                md="8"
               >
-                <v-expansion-panel style="margin: 0px">
+                <v-expansion-panel style="margin: 0">
                   <v-expansion-panel-header>{{ $vuetify.lang.t('$vuetify.panel.basic') }}</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-row>
@@ -114,7 +114,7 @@
               </v-col>
               <v-col
                 cols="12"
-                md="6"
+                md="4"
               >
                 <v-expansion-panel>
                   <v-expansion-panel-header>{{ $vuetify.lang.t('$vuetify.panel.inventory') }}</v-expansion-panel-header>
@@ -278,9 +278,6 @@ export default {
     validShow () {
       return (this.shops.length > 0)
     },
-    changeComposite () {
-      if (this.newArticle.composite) { this.variantData = [] }
-    },
     getVariantsTableColumns () {
       return [
         {
@@ -313,8 +310,8 @@ export default {
   },
   mounted () {
     this.getCategories()
-    this.getShops().then((response) => {
-      this.shops.forEach((shop, index) => {
+    this.getShops().then(() => {
+      this.shops.forEach((shop) => {
         this.shopData.push({
           shop_id: shop.id,
           name: shop.name,
@@ -336,15 +333,17 @@ export default {
     ...mapActions('article', ['createArticle', 'toogleNewModal']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
-    validateShow () {
+
+    changeComposite () {
+      if (this.newArticle.composite) { this.variantData = [] }
     },
     updateVariant (variants, dataUpdated) {
       this.variantData = dataUpdated
       this.variants = variants
       this.shopData = []
       if (variants.length > 0) {
-        this.shops.forEach((shop, index) => {
-          this.variantData.forEach((v, i) => {
+        this.shops.forEach((shop) => {
+          this.variantData.forEach((v) => {
             this.shopData.push({
               shop_id: shop.id,
               name: shop.name,
