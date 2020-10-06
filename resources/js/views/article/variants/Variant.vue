@@ -274,7 +274,6 @@ export default {
       }
       this.myComb()
       this.close()
-      this.updateVariants()
     },
     myComb () {
       const data = this.variants.reverse()
@@ -312,6 +311,7 @@ export default {
         index + 1 !== data.length ? result = [] : ''
       })
       this.variantsValues = result
+      this.updateVariants()
     },
     updateVariants () {
       this.$emit('updateVariants', this.variants, this.variantsValues)

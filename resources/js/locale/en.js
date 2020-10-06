@@ -5,8 +5,6 @@ export default {
   // page login
   login: 'login',
   forgot: 'Forgot Password?',
-  have_pin: 'Lock Screen',
-  pinTile: 'Pin Code',
   reset_password: 'Reset Password',
   find_password: 'Enter your password',
   forgot_btn: 'Send Reset Link',
@@ -15,7 +13,6 @@ export default {
   firstName: 'First Name',
   lastName: 'Last Name',
   email: 'Email',
-  holder_email: 'Enter company email address',
   password: 'Password',
   pinCode: 'Pin',
   confirm: 'Confirm',
@@ -59,6 +56,7 @@ export default {
     client: 'Client',
     client_list: 'Client List',
     articles: 'Articles',
+    category: 'Category',
     category_list: 'Category List',
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
@@ -68,10 +66,7 @@ export default {
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
     sell_user: 'Sale by Employees',
-    sell_types_payment: 'Sale by types of payment',
-    pinlogin: 'Pin Code',
-    vending: 'Sales',
-    turnOn: 'Register Shift'
+    sell_types_payment: 'Sale by types of payment'
   },
   // settings
   settings: {

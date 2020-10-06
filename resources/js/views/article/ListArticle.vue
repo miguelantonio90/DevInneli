@@ -13,7 +13,7 @@
           :columns="geArticleTableColumns"
           :rows="articles"
           :is-loading="isTableLoading"
-          sort-options="firstName"
+          sort-options="name"
           show-avatar
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
