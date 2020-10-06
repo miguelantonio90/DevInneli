@@ -205,7 +205,7 @@ export const protectedRoute = [
               title: 'product_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/error/Deny')
+              component: () => import('../views/article/ListArticle.vue')
           },
           {
             path: '/articles/category.list',
@@ -214,7 +214,7 @@ export const protectedRoute = [
               title: 'category_list',
               icon: 'mdi-database-plus'
             },
-            component: () => import('../views/error/Deny')
+              component: () => import('../views/category/ListCategory')
           },
           {
             path: '/articles/modifiers.list',
