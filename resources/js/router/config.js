@@ -1,4 +1,11 @@
-import { LayoutAuth, LayoutDefault, RouteWrapper, LayoutVerify, LayoutLock, LayoutSales } from '../components/layouts'
+import {
+  LayoutAuth,
+  LayoutDefault,
+  RouteWrapper,
+  LayoutVerify,
+  LayoutLock,
+  LayoutSales
+} from '../components/layouts'
 
 export const publicRoute = [
   {
@@ -160,7 +167,7 @@ export const protectedRoute = [
       {
         path: '/resume',
         component: RouteWrapper,
-        redirect: '/dashboard/resume',
+        redirect: '/resume',
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
@@ -212,7 +219,7 @@ export const protectedRoute = [
       {
         path: '/articles',
         component: RouteWrapper,
-        redirect: '/dashboard/articles',
+        redirect: '/articles/product.list',
         meta: {
           title: 'articles',
           icon: 'mdi-shopping',

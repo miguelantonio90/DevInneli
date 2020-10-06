@@ -61,7 +61,10 @@ const mutations = {
     state.saved = true
   },
   [CATEGORY_EDIT] (state, categoryId) {
-    state.editCategory = state.categories.filter(cl => cl.id === categoryId)[0]
+    state.editCategory = Object.assign({}, state.categories
+      .filter(node => node.id === categoryId)
+      .shift()
+    )
   },
   [CATEGORY_UPDATED] (state) {
     state.showEditModal = false
