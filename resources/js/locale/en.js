@@ -40,6 +40,7 @@ export default {
   phone: 'Phone',
   wait: 'Please a wait...',
   phone_holder: 'Enter a phone number',
+  price: 'Price',
   // menu
   menu: {
     setting: 'Setting',
@@ -105,7 +106,8 @@ export default {
     success_profile: 'The data has been updated.',
     check_mail:
             'An email has been sent with the details to change password.',
-    password_success: 'The password was updated successfully.'
+    password_success: 'The password was updated successfully.',
+    warning_create: "You can't create this element. You should create {0}"
   },
   // profile
   profile: {
@@ -122,6 +124,7 @@ export default {
     accept: 'Accept',
     search: 'Search',
     new: 'New',
+    newF: 'New',
     edit: 'Edit',
     delete: 'Delete',
     list: 'List',
@@ -153,6 +156,42 @@ export default {
   },
   tips: {
     account_delete: 'Permanently delete account.'
+  },
+  articles: {
+    name: 'Article',
+    names: 'Articles',
+    price: 'Price',
+    cost: 'Cost',
+    sell_by: 'Sell by',
+    unit: 'Unit',
+    p_v: 'P/Vol',
+    ref: 'REF',
+    inventory: 'Inventory',
+    composite: 'Composite article',
+    track_inventory: 'Track inventory',
+    itbis: 'ITBIS(18%)',
+    tax: 'Tax',
+    lay: 'Propina de ley(10%)'
+  },
+  panel: {
+    basic: 'Basic',
+    inventory: 'Inventory',
+    variant: 'Variant',
+    shop: 'Shop'
+  },
+  variants: {
+    variant: 'Variant',
+    name: 'Name',
+    price: 'Price',
+    cost: 'Cost',
+    ref: 'REF',
+    barCode: 'Bar Code',
+    options: 'Options'
+  },
+  shop_article: {
+    under_inventory: 'Inventario Bajo',
+    stock: 'Stock',
+    enabled: 'Enabled'
   },
   ...en
 }

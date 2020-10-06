@@ -51,6 +51,10 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('client', 'ClientController');
 
+        Route::resource('category', 'CategoryController');
+
+        Route::resource('article', 'ArticleController');
+
     });
 
 });
