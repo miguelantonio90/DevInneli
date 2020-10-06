@@ -62,7 +62,6 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditCategory',
   data () {
     return {
       formValid: false,

@@ -12,7 +12,7 @@
           :columns="getUserTableColumns"
           :rows="categories"
           :is-loading="isTableLoading"
-          sort-options="firstName"
+          sort-options="name"
           show-avatar
           @create-row="toogleNewModal(true)"
           @edit-row="editCategoryHandler($event)"
@@ -29,7 +29,7 @@ import NewCategory from './NewCategory'
 import EditCategory from './EditCategory'
 
 export default {
-  name: 'LisCategory',
+  name: 'ListCategory',
   components: {
     NewCategory,
     EditCategory
