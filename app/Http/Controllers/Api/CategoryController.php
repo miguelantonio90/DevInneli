@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CategoryManager;
-use App\Managers\ClientManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

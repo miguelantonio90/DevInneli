@@ -101,7 +101,7 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
+     *
      * @param int $id
      * @param Request $request
      * @return JsonResponse|Response

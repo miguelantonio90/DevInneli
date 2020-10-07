@@ -45,8 +45,8 @@ class CategoryManager
             'company_id' => $data['company_id'],
             'name' => $data['name'],
         ]);
-        if (isset($data['color'])){
-            $category->color =$data['color'];
+        if (isset($data['color'])) {
+            $category->color = $data['color'];
             $category->save();
         }
         return $category;

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
-use App\Managers\UserManager;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
