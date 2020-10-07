@@ -73,7 +73,8 @@ export default {
     sell_types_payment: 'Venta por tipos de pago',
     pinlogin: 'Pin Code',
     vending: 'Ventas',
-    turnOn: 'Registrar Turno'
+    turnOn: 'Registrar Turno',
+    product_add: 'Nuevo Artículo'
   },
   // settings
   settings: {

@@ -86,7 +86,8 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
     createArticleHandler () {
-      this.toogleNewModal(true)
+      // this.toogleNewModal(true)
+      this.$router.push({ name: 'product_add' })
     },
     editArticleHandler ($event) {
       this.openEditModal($event)

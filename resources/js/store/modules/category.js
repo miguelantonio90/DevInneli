@@ -137,7 +137,7 @@ const actions = {
   },
   async updateCategory ({ commit, dispatch }, editCategory) {
     commit('CLEAR_ERRORS', null, { root: true })
-
+    commit(ENV_DATA_PROCESS, true)
     await category
       .sendUpdateRequest(editCategory)
       .then(() => {

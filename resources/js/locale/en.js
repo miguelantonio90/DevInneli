@@ -73,7 +73,8 @@ export default {
     sell_types_payment: 'Sale by types of payment',
     pinlogin: 'Pin Code',
     vending: 'Sales',
-    turnOn: 'Register Shift'
+    turnOn: 'Register Shift',
+    product_add: 'New Article'
   },
   // settings
   settings: {
