@@ -13,7 +13,7 @@
           :rows="categories"
           :is-loading="isTableLoading"
           sort-options="name"
-          show-avatar
+          show-color
           @create-row="toogleNewModal(true)"
           @edit-row="editCategoryHandler($event)"
           @delete-row="deleteCategoryHandler($event)"
@@ -52,6 +52,10 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
           value: 'name'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.color'),
+          value: 'color'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

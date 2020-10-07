@@ -30,6 +30,15 @@
                 required
               />
             </v-col>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <app-color-picker
+                :value="editCategory.color"
+                @input="inputColor"
+              />
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -78,10 +87,11 @@ export default {
   computed: {
     ...mapState('category', ['saved', 'editCategory', 'isActionInProgress'])
   },
-  created () {
-  },
   methods: {
     ...mapActions('category', ['updateCategory', 'toogleEditModal']),
+    inputColor (color) {
+      this.editCategory.color = color
+    },
     async updateCategoryHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true

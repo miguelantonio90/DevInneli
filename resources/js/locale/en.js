@@ -41,6 +41,7 @@ export default {
   wait: 'Please a wait...',
   phone_holder: 'Enter a phone number',
   price: 'Price',
+  color: 'Color',
   // menu
   menu: {
     setting: 'Setting',
@@ -153,7 +154,8 @@ export default {
   },
   component: {
     select: 'Select Columns',
-    others: 'others'
+    others: 'others',
+    fieldColor: 'Please choose a color'
   },
   tips: {
     account_delete: 'Permanently delete account.'

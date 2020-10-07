@@ -23,11 +23,13 @@ const state = {
   loading: false,
   saved: false,
   newCategory: {
-    name: ''
+    name: '',
+    color: ''
   },
   editCategory: {
     id: '',
-    name: ''
+    name: '',
+    color: ''
   },
   isCategoryTableLoading: false,
   isActionInProgress: false,

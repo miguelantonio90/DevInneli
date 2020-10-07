@@ -48,6 +48,7 @@
         "vue-persian-datetime-picker": "^2.0.1",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.0.6",
+        "vue-swatches": "^2.1.0",
         "vue-tel-input-vuetify": "^1.2.13",
         "vue-template-compiler": "^2.6.10",
         "vuetify": "^2.3.9",

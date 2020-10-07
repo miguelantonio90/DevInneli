@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleNewModal"
-    max-width="600px"
+    max-width="450"
   >
     <v-card>
       <v-card-title>
@@ -28,6 +28,15 @@
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
                 required
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <app-color-picker
+                :value="newCategory.color"
+                @input="inputColor"
               />
             </v-col>
           </v-row>
@@ -62,6 +71,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+
   data () {
     return {
       formValid: false,
@@ -75,39 +85,6 @@ export default {
               this.$vuetify.lang.t('$vuetify.rule.required', [
                 this.$vuetify.lang.t('$vuetify.name')
               ])
-        ],
-        email: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
-        ],
-        city: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.city')
-                  ])
-        ],
-        province: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.province')
-                  ])
-        ],
-        barCode: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.barCode')
-                  ])
         ]
       }
     }
@@ -120,6 +97,9 @@ export default {
   },
   methods: {
     ...mapActions('category', ['createCategory', 'toogleNewModal']),
+    inputColor (color) {
+      this.newCategory.color = color
+    },
     lettersNumbers (event) {
       const regex = new RegExp('^[a-zA-Z0-9 ]+$')
       const key = String.fromCharCode(
