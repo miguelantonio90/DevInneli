@@ -42,6 +42,17 @@
         </v-avatar>
         {{ item.firstName }}
       </template>
+      <template
+        v-if="showColor"
+        v-slot:item.color="{ item }"
+      >
+        <v-chip
+          :color="item.color"
+          dark
+        >
+          {{ item.color }}
+        </v-chip>
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
           v-if="viewShowButton"
@@ -81,6 +92,11 @@ export default {
       required: false
     },
     showAvatar: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    showColor: {
       type: Boolean,
       default: false,
       required: false

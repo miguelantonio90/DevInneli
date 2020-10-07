@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\UserManager;
-use App\User;
+use App\Managers\CategoryManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,21 +12,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     /**
-     * @var UserManager
+     * @var CategoryManager
      */
-    private $userManager;
+    private $categoryManager;
 
     /**
-     * UserController constructor.
-     * @param UserManager $userManager
+     * ClientController constructor.
+     * @param CategoryManager $categoryManager
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(CategoryManager $categoryManager)
     {
         $this->middleware('auth');
-        $this->userManager = $userManager;
+        $this->categoryManager = $categoryManager;
     }
 
     /**
@@ -38,8 +37,8 @@ class UserController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->findAllByCompany(),
-            'Users retrieved successfully.'
+            $this->categoryManager->findAllByCompany(),
+            'Categories retrieved successfully.'
         );
     }
 
@@ -55,11 +54,11 @@ class UserController extends Controller
         $data = $request->all();
         $data['company_id'] = (int)$this->getCompanyByAdmin();
         $this->validator($data)->validate();
-        $user = $this->userManager->new($data);
+        $user = $this->categoryManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
-            'User has created successfully.'
+            'Category has created successfully.'
         );
     }
 
@@ -82,9 +81,7 @@ class UserController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -96,43 +93,23 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        return User::latest()->where('isAdmin', '=', 0)->get($id);
+//        return Category::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
      * @param Request $request
+     * @param int $id
      * @return JsonResponse|Response
-     * @throws ValidationException
      */
-    public function update(int $id, Request $request)
+    public function update(Request $request, int $id)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->userManager->edit($id, $request->all()),
-            'User has updated successfully.'
+            $this->categoryManager->edit($id, $request->all()),
+            'Category has updated successfully.'
         );
-    }
-
-    public function updateAvatar(Request $request, $id)
-    {
-        if (!empty($request)) {
-            $app = (new User())->find($id);
-            $app->find($id);
-            $app->avatar = $request->get('image');
-            $app->save();
-            return ResponseHelper::sendResponse(
-                $app,
-                'User avatar has updated successfully.'
-            );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'User avatar has not updated.'
-            );
-        }
     }
 
     /**
@@ -144,8 +121,8 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->delete($id),
-            'Users has deleted successfully.'
+            $this->categoryManager->delete($id),
+            'Categories has deleted successfully.'
         );
     }
 }

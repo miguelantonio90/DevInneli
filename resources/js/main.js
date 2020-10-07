@@ -7,6 +7,8 @@ import * as AppComponents from './components'
 import '@mdi/font/css/materialdesignicons.css'
 import './registerServiceWorker'
 import VueTelInputVuetify from 'vue-tel-input-vuetify'
+// Import the styles too, typically in App.vue or main.js
+import 'vue-swatches/dist/vue-swatches.css'
 
 Vue.config.productionTip = false
 

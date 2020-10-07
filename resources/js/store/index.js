@@ -9,6 +9,8 @@ import role from './modules/role'
 import shop from './modules/shop'
 import client from './modules/client'
 import company from './modules/company'
+import category from './modules/category'
+import article from './modules/article'
 import statics from './modules/statics'
 import settings from './modules/settings'
 import products from './modules/products'
@@ -37,7 +39,9 @@ const store = new Vuex.Store({
     user,
     role,
     shop,
+    category,
     client,
+    article,
     company,
     products,
     shoppingCart,

@@ -1,4 +1,11 @@
-import { LayoutAuth, LayoutDefault, RouteWrapper, LayoutVerify, LayoutLock, LayoutSales } from '../components/layouts'
+import {
+  LayoutAuth,
+  LayoutDefault,
+  RouteWrapper,
+  LayoutVerify,
+  LayoutLock,
+  LayoutSales
+} from '../components/layouts'
 
 export const publicRoute = [
   {
@@ -160,7 +167,7 @@ export const protectedRoute = [
       {
         path: '/resume',
         component: RouteWrapper,
-        redirect: '/dashboard/resume',
+        redirect: '/resume',
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
@@ -212,7 +219,7 @@ export const protectedRoute = [
       {
         path: '/articles',
         component: RouteWrapper,
-        redirect: '/dashboard/articles',
+        redirect: '/articles/product.list',
         meta: {
           title: 'articles',
           icon: 'mdi-shopping',
@@ -228,7 +235,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/article/ListArticle.vue')
           },
           {
             path: '/articles/category.list',
@@ -238,7 +245,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/category/ListCategory')
           },
           {
             path: '/articles/modifiers.list',
@@ -259,6 +266,17 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/articles/product.add',
+            name: 'product_add',
+            meta: {
+              title: 'product_add',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/NewArticlePage')
           }
         ]
       },

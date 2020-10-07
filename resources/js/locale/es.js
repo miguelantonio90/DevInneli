@@ -40,6 +40,8 @@ export default {
   phone: 'Teléfono',
   wait: 'Espere por favor...',
   phone_holder: 'Entre su número de teléfono',
+  price: 'Precio',
+  color: 'Color',
   // menu
   menu: {
     setting: 'Configuración',
@@ -58,6 +60,7 @@ export default {
     client: 'Cliente',
     client_list: 'Listado de Clientes',
     articles: 'Artículos',
+    category: 'Categoría',
     category_list: 'Listado de Categorías',
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
@@ -70,7 +73,8 @@ export default {
     sell_types_payment: 'Venta por tipos de pago',
     pinlogin: 'Pin Code',
     vending: 'Ventas',
-    turnOn: 'Registrar Turno'
+    turnOn: 'Registrar Turno',
+    product_add: 'Nuevo Artículo'
   },
   // settings
   settings: {
@@ -114,7 +118,8 @@ export default {
     success_profile: 'Los datos han sido actualizados.',
     check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
-    password_success: 'La contraseña se actualizo correctamente.'
+    password_success: 'La contraseña se actualizo correctamente.',
+    warning_create: 'No se puede crear este elemento. Primero debe de crear {0}'
   },
   // options
   actions: {
@@ -122,6 +127,7 @@ export default {
     accept: 'Aceptar',
     search: 'Buscar',
     new: 'Nuevo',
+    newF: 'Nueva',
     edit: 'Editar',
     delete: 'Eliminar',
     list: 'Listar',
@@ -149,10 +155,47 @@ export default {
 
   component: {
     select: 'Selecciona columnas',
-    others: 'otros'
+    others: 'otros',
+    fieldColor: 'Elige un color'
   },
   tips: {
     account_delete: 'Eliminar cuenta permanentemente.'
+  },
+  articles: {
+    name: 'Artículo',
+    names: 'Artículos',
+    price: 'Precio',
+    cost: 'Coste',
+    sell_by: 'Vendido por',
+    unit: 'Unidad',
+    p_v: 'P/Vol',
+    ref: 'REF',
+    inventory: 'Inventario',
+    composite: 'Artículo compuesto',
+    track_inventory: 'Seguir  inventario',
+    itbis: 'ITBIS(18%)',
+    tax: 'Impuesto',
+    lay: 'Propina de ley(10%)'
+  },
+  panel: {
+    basic: 'Básico',
+    inventory: 'Inventario',
+    variant: 'Variante',
+    shop: 'Tienda'
+  },
+  variants: {
+    variant: 'Variante',
+    name: 'Nombre',
+    price: 'Precio',
+    cost: 'Coste',
+    ref: 'REF',
+    barCode: 'Código de Barras',
+    options: 'Opciones'
+  },
+  shop_article: {
+    under_inventory: 'Inventory Under',
+    stock: 'En Stock',
+    enabled: 'Disponible'
   },
   ...es
 }

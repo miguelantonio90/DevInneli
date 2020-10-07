@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\UserManager;
+use App\Managers\ArticleManager;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,21 +13,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class ArticleController extends Controller
 {
     /**
-     * @var UserManager
+     * @var ArticleManager
      */
-    private $userManager;
+    private $articleManager;
 
     /**
      * UserController constructor.
-     * @param UserManager $userManager
+     * @param ArticleManager $articleManager
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(ArticleManager $articleManager)
     {
         $this->middleware('auth');
-        $this->userManager = $userManager;
+        $this->articleManager = $articleManager;
     }
 
     /**
@@ -38,8 +38,8 @@ class UserController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->findAllByCompany(),
-            'Users retrieved successfully.'
+            $this->articleManager->findAllByCompany(),
+            'Articles retrieved successfully.'
         );
     }
 
@@ -55,7 +55,7 @@ class UserController extends Controller
         $data = $request->all();
         $data['company_id'] = (int)$this->getCompanyByAdmin();
         $this->validator($data)->validate();
-        $user = $this->userManager->new($data);
+        $user = $this->articleManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
@@ -82,9 +82,8 @@ class UserController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'barCode' => ['required', 'string', 'max:255']
         ]);
     }
 
@@ -102,16 +101,15 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
      * @param Request $request
+     * @param int $id
      * @return JsonResponse|Response
-     * @throws ValidationException
      */
-    public function update(int $id, Request $request)
+    public function update(Request $request, int $id)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->userManager->edit($id, $request->all()),
+            $this->articleManager->edit($id, $request->all()),
             'User has updated successfully.'
         );
     }
@@ -144,7 +142,7 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         return ResponseHelper::sendResponse(
-            $this->userManager->delete($id),
+            $this->articleManager->delete($id),
             'Users has deleted successfully.'
         );
     }
