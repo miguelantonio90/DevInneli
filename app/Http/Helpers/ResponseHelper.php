@@ -2,9 +2,14 @@
 
 namespace App\Http\Helpers;
 
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/**
+ * @method static jsonResponse($null, int $HTTP_BAD_REQUEST, Repository|Application $config)
+ */
 class ResponseHelper
 {
 
@@ -32,8 +37,8 @@ class ResponseHelper
      * return error response.
      *
      * @param $error
-     * @param array $errorMessages
-     * @param int $code
+     * @param  array  $errorMessages
+     * @param  int  $code
      * @return JsonResponse|Response
      */
     public static function sendError($error, $errorMessages = [], $code = 404)

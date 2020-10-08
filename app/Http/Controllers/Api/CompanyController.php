@@ -16,8 +16,7 @@ class CompanyController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth')->except('companyByEmail');
-        $this->middleware('guest')->except(['index, store, show, update, updateLogo']);
+        $this->middleware('auth');
     }
 
     /**
@@ -36,9 +35,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
      *
-     * @return Response
      */
     public function index()
     {
@@ -46,10 +43,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @param  Request  $request
      */
     public function store(Request $request)
     {
@@ -57,10 +51,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @param $id
      */
     public function show($id)
     {
@@ -70,8 +61,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
+     * @param  Request  $request
+     * @param  int  $id
      * @return Response
      * @throws ValidationException
      */
@@ -101,7 +92,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)
@@ -131,6 +122,10 @@ class CompanyController extends Controller
         }
     }
 
+    /**
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     protected function validEmail(array $data)
     {
         return Validator::make($data, [

@@ -53,7 +53,7 @@ class RegisterController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Application|JsonResponse|RedirectResponse|Response|Redirector
      * @throws ValidationException
      */
@@ -83,7 +83,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param array $data
+     * @param  array  $data
      * @return User|JsonResponse|Response
      */
     protected function create(array $data)
@@ -106,7 +106,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @param $user
      * @return JsonResponse
      */

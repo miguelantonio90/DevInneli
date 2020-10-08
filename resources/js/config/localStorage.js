@@ -29,6 +29,17 @@ const getTheme = () => {
   return Vue.localStorage.get('theme')
 }
 
+const saveTokenManager = (item) => {
+  return Vue.localStorage.set('managerToken', item)
+}
+const removeTokenManager = () => {
+  return Vue.localStorage.remove('managerToken')
+}
+
+const getTokenManager = () => {
+  return Vue.localStorage.get('managerToken')
+}
+
 export default {
   getToken,
   saveToken,
@@ -36,5 +47,8 @@ export default {
   getLanguage,
   setTheme,
   getTheme,
-  removeToken
+  removeToken,
+  saveTokenManager,
+  removeTokenManager,
+  getTokenManager
 }

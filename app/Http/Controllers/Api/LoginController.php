@@ -47,7 +47,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function logout(Request $request)
@@ -60,7 +60,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response|void
      * @throws ValidationException
      */
@@ -110,7 +110,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
      */
@@ -122,10 +122,11 @@ class LoginController extends Controller
 
         if (isset($user[0])) {
             $this->guard()->login($user[0]);
-
+            $token = $user[0]->createToken(config('services.passport.client_secret'))->accessToken;
+            $user[0]['access_token'] = $token;
             return ResponseHelper::sendResponse($user[0], 'Success login.');
         } else {
-            return ResponseHelper::sendError('Unauthenticated', 404);
+            return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);
         }
 
     }
@@ -133,8 +134,8 @@ class LoginController extends Controller
     protected function validatePin(array $data)
     {
         return Validator::make($data, [
-            'username' => 'email|required|string',
-            'password' => 'required|integer',
+            'email' => 'email|required|string',
+            'pincode' => 'required|string',
         ]);
     }
 }
