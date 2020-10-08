@@ -6,28 +6,36 @@ namespace App\Managers;
 
 use App\Shop;
 use App\User;
-use Illuminate\Support\Facades\DB;
 
 class UserManager
 {
 
+    /**
+     * @param $login
+     * @return mixed
+     */
     public static function loginByPincode($login)
     {
 
-        $company = CompanyManager::getCompanyByEmail($login['username']);
+        $company = CompanyManager::getCompanyByEmail($login['email']);
 
-        return User::where('pinCode', '=', $login['password'])
+        return User::where('pinCode', '=', $login['pincode'])
             ->where('isAdmin', '=', '0')
             ->where('company_id', '=', $company->id)
             ->with('company')
-            ->with(['position' => function ($q) use ($company) {
-                $q->where('positions.company_id', '=', $company->id)
-                    ->where('positions.accessPin', '=', 1);
-            }])
+            ->with([
+                'position' => function ($q) use ($company) {
+                    $q->where('positions.company_id', '=', $company->id)
+                        ->where('positions.accessPin', '=', 1);
+                }
+            ])
             ->with('shops')
             ->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
@@ -35,14 +43,16 @@ class UserManager
                 ->with('company')
                 ->get();
         } else {
-            $company_id = $this->getCompanyByAdmin();
+            $company = CompanyManager::getCompanyByAdmin();
             $users = User::findOrFail(auth()->id())
                 ->where('isAdmin', '=', '0')
-                ->where('company_id', '=', $company_id)
+                ->where('company_id', '=', $company->id)
                 ->with('company')
-                ->with(['position' => function ($q) use ($company_id) {
-                    $q->where('positions.company_id', '=', $company_id);
-                }])
+                ->with([
+                    'position' => function ($q) use ($company) {
+                        $q->where('positions.company_id', '=', $company->id);
+                    }
+                ])
                 ->with('shops')
                 ->get();
         }
@@ -50,17 +60,9 @@ class UserManager
     }
 
     /**
-     * Find Company Id using admin authenticate
-     * @return string
+     * @param $data
+     * @return mixed
      */
-    public static function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
-    }
-
     public function new($data)
     {
         $positions = $data['positions'];
@@ -104,6 +106,11 @@ class UserManager
         return $user;
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
     public function edit($id, $data)
     {
         $positions = $data['position'];
@@ -112,6 +119,10 @@ class UserManager
         return $this->updateData($user, $data, $shops, $positions);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function delete($id)
     {
         return User::findOrFail($id)->delete();

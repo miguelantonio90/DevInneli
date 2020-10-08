@@ -1,31 +1,25 @@
 <?php
 
-
 namespace App\Managers;
 
-
 use App\Position;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class AccessManager
 {
 
+    /**
+     * @return Collection
+     */
     public function getByCompany()
     {
-        $company_id = $this->getCompanyByAdmin();
+        $company = CompanyManager::getCompanyByAdmin();
         return DB::table('positions')
             ->where('key', '<>', 'admin')
-            ->where('company_id', '=', (integer)$company_id)
-            ->latest()
+            ->where('company_id', '=', $company->id)
+            ->orderBy('key', 'ASC')
             ->get();
-    }
-
-    private function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
     }
 
     /**
@@ -35,8 +29,9 @@ class AccessManager
     public function new($request)
     {
         $data = $request->all();
-        $company_id = $this->getCompanyByAdmin();
-        $data['company_id'] = (integer)$company_id;
+        $company = CompanyManager::getCompanyByAdmin();
+        $data['company_id'] = $company->id;
+
         return Position::create($data);
     }
 

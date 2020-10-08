@@ -31,10 +31,11 @@ class Client extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
-        'firstName', 'email', 'company_id'
+        'firstName', 'lastName', 'email', 'phone', 'address', 'city', 'province', 'postalCode', 'country', 'barCode',
+        'avatar', 'description', 'company_id'
     ];
 
 

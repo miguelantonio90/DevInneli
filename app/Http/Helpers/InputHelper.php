@@ -5,7 +5,6 @@ namespace App\Http\Helpers;
 
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class InputHelper
@@ -14,7 +13,6 @@ class InputHelper
      * @param $request
      * @param $items
      * @param $function
-     * @return JsonResponse
      */
     public static function inputChecker($request, $items, $function)
     {

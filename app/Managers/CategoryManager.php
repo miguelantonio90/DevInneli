@@ -1,44 +1,34 @@
 <?php
 
-
 namespace App\Managers;
 
-
 use App\Category;
-use Illuminate\Support\Facades\DB;
 
 class CategoryManager
 {
 
+    /**
+     * @return mixed
+     */
     public function findAllByCompany()
     {
-        $categories = [];
         if (auth()->user()['isAdmin'] === 1) {
             $categories = Category::latest()
                 ->with('company')
                 ->get();
         } else {
-            $company_id = self::getCompanyByAdmin();
+            $company = CompanyManager::getCompanyByAdmin();
             $categories = Category::latest()
-                ->where('company_id', '=', $company_id)
+                ->where('company_id', '=', $company->id)
                 ->get();
         }
         return $categories;
     }
 
-
     /**
-     * Find Company Id using admin authenticate
-     * @return string
+     * @param $data
+     * @return mixed
      */
-    public static function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
-    }
-
     public function new($data)
     {
         $category = Category::create([
@@ -52,15 +42,28 @@ class CategoryManager
         return $category;
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
     public function edit($id, $data)
     {
         $category = Category::findOrFail($id);
-        if (isset($data['name'])) $category->name = $data['name'];
-        if (isset($data['color'])) $category->color = $data['color'];
+        if (isset($data['name'])) {
+            $category->name = $data['name'];
+        }
+        if (isset($data['color'])) {
+            $category->color = $data['color'];
+        }
         $category->save();
         return $category;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function delete($id)
     {
         return Category::findOrFail($id)->delete();

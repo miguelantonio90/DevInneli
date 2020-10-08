@@ -16,7 +16,6 @@ import settings from './modules/settings'
 import products from './modules/products'
 import shoppingCart from './modules/shoppingCart'
 import VuexPersistence from 'vuex-persist'
-import router from '../router'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -66,13 +65,6 @@ const store = new Vuex.Store({
           icon: 'error',
           title: state.errors.message
         })
-        if (response.data) {
-          if (response.data.message === 'Unauthenticated') {
-            router.push({ name: 'Forbidden' })
-          }
-        } else if (response.message === 'Unauthenticated') {
-          router.push({ name: 'Forbidden' })
-        }
       } else {
         state.errors = {
           status: 'failed',

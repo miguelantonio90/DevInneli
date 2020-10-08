@@ -69,7 +69,7 @@
           </v-btn>
         </template>
         <v-list
-          v-show="isManagerIn"
+          v-if="isManagerIn && isLoggedIn"
           class="pa-0"
         >
           <v-list-item
@@ -96,7 +96,7 @@
           </v-list-item>
         </v-list>
         <v-list
-          v-show="!isManagerIn"
+          v-if="!isManagerIn && isLoggedIn"
           class="pa-0"
         >
           <v-list-item
@@ -264,6 +264,7 @@ export default {
       this.$router.push({ name: 'Profile' })
     },
     handlePinLogin () {
+      localStorage.removeTokenManager()
       this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
     }
   }
