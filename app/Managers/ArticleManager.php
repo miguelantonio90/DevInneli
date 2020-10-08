@@ -30,7 +30,6 @@ class ArticleManager
                 ->join('categories', 'categories.id', '=', 'articles.category_id')
                 ->join('articles_shop', 'articles.id', '=', 'articles_shop.articles_id')
                 ->join('shops', 'shops.id', '=', 'articles_shop.shop_id')
-                ->where('shops.company_id', '=', $company_id)
                 ->get();
         }
         return $articles;
