@@ -1,74 +1,128 @@
-import vuetify from '../plugins/vuetify'
+import Vuetify from '../plugins/vuetify'
+const language = Vuetify.framework.lang
 
-// const country = [
-//   (v) =>
-//     !!v ||
-//     this.$vuetify.lang.t('$vuetify.rule.required', [
-//       this.$vuetify.lang.t('$vuetify.country')
-//     ])
-// ]
-const firstName = [(v) => !!v || vuetify.lang.t('firstName')]
-// const username = [
-//   (v) =>
-//     !!v ||
-//     this.$vuetify.lang.t('$vuetify.rule.required', [
-//       this.$vuetify.lang.t('$vuetify.username')
-//     ])
-// ]
-// const lastName = [
-//   (v) =>
-//     !!v ||
-//     this.$vuetify.lang.t('$vuetify.rule.required', [
-//       this.$vuetify.lang.t('$vuetify.lastName')
-//     ])
-// ]
-// const email = [
-//   (v) =>
-//     !!v ||
-//     this.$vuetify.lang.t('$vuetify.rule.required', [
-//       this.$vuetify.lang.t('$vuetify.email')
-//     ]),
-//   (v) =>
-//     /.+@.+\..+/.test(v) ||
-//     this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-//       this.$vuetify.lang.t('$vuetify.email')
-//     ])
-// ]
-// const company = [
-//   (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [this.$vuetify.lang.t('$vuetify.company')])
-// ]
-// const password = [
-//   (v) =>
-//     !!v ||
-//     this.$vuetify.lang.t('$vuetify.rule.required', [
-//       this.$vuetify.lang.t('$vuetify.password')
-//     ]),
-//   (v) =>
-//     (v || '').length >= 8 ||
-//     this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
-// ]
-const password_confirmation = [
+const firstName = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.name')
+  ])
+]
+const lastName = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.name')
+  ])
+]
+const email = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.email')
+  ]),
+  (v) => /.+@.+\..+/.test(v) ||
+    language.t('$vuetify.rule.bad_email', [
+      language.t('$vuetify.email')
+    ])
+]
+const password = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.password')
+  ]),
+  (v) => (v || '').length >= 8 || language.t('$vuetify.rule.min', ['8'])
+]
+const passwordConfirmation = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.confirm_password')
+  ]),
+  (v) => (!!v && v) === this.formRegister.password ||
+    language.t(
+      '$vuetify.rule.match',
+      [language.t('$vuetify.password')],
+      [language.t('$vuetify.confirm_password')]
+    )
+]
+const country = [
+  v => !!v || language.t('$vuetify.rule.select')
+]
+const pinCode = [
+  (v) =>
+    !!v || language.t('$vuetify.rule.required', [
+      language.t('$vuetify.pinCode')
+    ]),
+  (v) => (v && v.length >= 4) || language.t('$vuetify.rule.pin.min', ['4']),
+  (v) => (v && v.length <= 6) || language.t('$vuetify.rule.pin.max', ['6'])
+]
+const access = [
+  (v) =>
+    !!v || language.t('$vuetify.rule.required', [
+      language.t('$vuetify.menu.access')
+    ])
+]
+const shops = [
+  (v) =>
+    !!v || language.t('$vuetify.rule.required', [
+      language.t('$vuetify.menu.shop')
+    ])
+]
+const city = [
   (v) =>
     !!v ||
-    this.$vuetify.lang.t('$vuetify.rule.required', [
-      this.$vuetify.lang.t('$vuetify.confirm_password')
-    ]),
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.city')
+    ])
+]
+const province = [
   (v) =>
-    (!!v && v) === this.formRegister.password ||
-    this.$vuetify.lang.t(
-      '$vuetify.rule.match',
-      [this.$vuetify.lang.t('$vuetify.password')],
-      [this.$vuetify.lang.t('$vuetify.confirm_password')]
-    )
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.province')
+    ])
+]
+const barCode = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.barCode')
+    ])
+]
+const description = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.access.description')
+    ])
+]
+const phone = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.phone')
+    ])
+]
+const address = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.address')
+    ])
+]
+const key = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.access.key')
+  ])
 ]
 
 export default {
-  // company: company,
-  // country: country,
-  firstName: firstName
-  // username: username,
-  // lastName: lastName,
-  // email: email,
-  // password: password,
-  // password_confirmation: password_confirmation
+  firstName,
+  lastName,
+  email,
+  password,
+  passwordConfirmation,
+  country,
+  pinCode,
+  access,
+  shops,
+  city,
+  province,
+  barCode,
+  description,
+  phone,
+  address,
+  key
 }

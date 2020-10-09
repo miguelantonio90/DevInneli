@@ -67,6 +67,12 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.shop')]
+      )
+    })
   },
   [SHOP_EDIT] (state, shopId) {
     state.editShop = Object.assign({}, state.shops
@@ -83,12 +89,31 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.shop')]
+      )
+    })
   },
   [SHOP_DELETE] (state) {
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.shop')]
+      )
+    })
   },
-  [FAILED_SHOP] (state) {
+  [FAILED_SHOP] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.shop')]
+      )
+    })
   }
 }
 
@@ -120,11 +145,10 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SHOPS, data.data)
         commit(SHOP_TABLE_LOADING, false)
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      }).catch((error) => commit(FAILED_SHOP, error))
   },
   async createShop ({ commit, dispatch }, newShop) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await shop
       .sendCreateRequest(newShop)
@@ -133,10 +157,9 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_SHOP, error))
   },
   async updateShop ({ commit, dispatch }, shopEdited) {
-    commit('CLEAR_ERRORS', null, { root: true })
     commit(ENV_DATA_PROCESS, true)
 
     await shop
@@ -146,18 +169,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_SHOP, error))
   },
   async deleteShop ({ commit, dispatch }, shopId) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await shop
       .sendDeleteRequest(shopId)
       .then(() => {
         commit(SHOP_DELETE)
         dispatch('shop/getShops', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_SHOP, error))
   }
 }
 

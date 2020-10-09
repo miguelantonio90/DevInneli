@@ -30,8 +30,8 @@ const state = {
     avatar: '',
     pinCode: '',
     phone: '',
-    positions: [],
-    shops: []
+    positions: null,
+    shops: null
   },
   editUser: {
     id: '',
@@ -42,8 +42,8 @@ const state = {
     avatar: '',
     pinCode: '',
     phone: '',
-    positions: [],
-    shops: []
+    positions: null,
+    shops: null
   },
   isUserTableLoading: false,
   isActionInProgress: false,
@@ -85,6 +85,12 @@ const mutations = {
       shops: []
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.user')]
+      )
+    })
   },
   [USER_EDIT] (state, userId) {
     state.editUser = Object.assign({}, state.users
@@ -108,19 +114,38 @@ const mutations = {
       shops: []
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.user')]
+      )
+    })
   },
   [SET_EDIT_USER] (state, profile) {
     state.editUser.push(profile)
   },
   [USER_DELETE] (state) {
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.user')]
+      )
+    })
   },
   [SET_USER_AVATAR] (state, avatar) {
     state.avatar = avatar
     state.saved = true
   },
-  [FAILED_USER] (state) {
+  [FAILED_USER] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.user')]
+      )
+    })
   }
 }
 
@@ -154,12 +179,11 @@ const actions = {
         commit(USER_TABLE_LOADING, false)
       }).catch((error) => {
         commit(ENV_DATA_PROCESS, false)
-        commit('SET_ERRORS', error, { root: true })
+        commit(FAILED_USER, error)
       })
   },
   async createUser ({ commit, dispatch }, newUser) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await user
       .sendCreateRequest(newUser)
@@ -170,12 +194,12 @@ const actions = {
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
-        commit('SET_ERRORS', error, { root: true })
+        commit(FAILED_USER, error)
       })
   },
   async updateUser ({ commit, dispatch }, profile) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
+
     // const request = profile || state.editUser
     await user
       .sendUpdateRequest(profile)
@@ -186,19 +210,17 @@ const actions = {
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
-        commit('SET_ERRORS', error, { root: true })
+        commit(FAILED_USER, error)
       })
   },
   async deleteUser ({ commit, dispatch }, userId) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await user
       .sendDeleteRequest(userId)
       .then(() => {
         commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_USER, error))
   },
 
   async updateAvatar ({ commit, dispatch }, file) {

@@ -173,48 +173,7 @@ export default {
       hidePinCode1: true,
       hidePinCode2: true,
       errorPhone: null,
-      formRule: {
-        firstName: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.name')
-              ])
-        ],
-        email: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
-        ],
-        city: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.city')
-                  ])
-        ],
-        province: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.province')
-                  ])
-        ],
-        barCode: [
-          (v) =>
-            !!v ||
-                  this.$vuetify.lang.t('$vuetify.rule.required', [
-                    this.$vuetify.lang.t('$vuetify.barCode')
-                  ])
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -283,18 +242,7 @@ export default {
     async createNewClient () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createClient(this.newClient).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.createClient(this.newClient)
       }
     }
   }

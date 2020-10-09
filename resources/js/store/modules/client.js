@@ -86,6 +86,12 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.client')]
+      )
+    })
   },
   [CLIENT_EDIT] (state, clientId) {
     state.editClient = Object.assign({}, state.clients
@@ -109,19 +115,38 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.client')]
+      )
+    })
   },
   [SET_EDIT_CLIENT] (state, profile) {
     state.editClient.push(profile)
   },
   [CLIENT_DELETE] (state) {
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.client')]
+      )
+    })
   },
   [SET_CLIENT_AVATAR] (state, avatar) {
     state.avatar = avatar
     state.saved = true
   },
-  [FAILED_CLIENT] (state) {
+  [FAILED_CLIENT] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.client')]
+      )
+    })
   }
 }
 
@@ -153,11 +178,10 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CLIENTS, data.data)
         commit(CLIENT_TABLE_LOADING, false)
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      }).catch((error) => commit(FAILED_CLIENT, error))
   },
   async createClient ({ commit, dispatch }, newClient) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await client
       .sendCreateRequest(newClient)
@@ -166,11 +190,9 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('client/getClients', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CLIENT, error))
   },
   async updateClient ({ commit, dispatch }, editClient) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await client
       .sendUpdateRequest(editClient)
       .then(() => {
@@ -178,18 +200,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('client/getClients', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CLIENT, error))
   },
   async deleteClient ({ commit, dispatch }, clientId) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await client
       .sendDeleteRequest(clientId)
       .then(() => {
         commit(CLIENT_DELETE)
         dispatch('client/getClients', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CLIENT, error))
   },
 
   async updateAvatar ({ commit, dispatch }, file) {

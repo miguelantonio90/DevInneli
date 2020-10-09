@@ -105,7 +105,7 @@ export default {
     edit_profile: 'Editar Perfil',
     sub_profile: 'Complete su perfil',
     btn_edit: 'Actualizar',
-    company: 'Comapñia',
+    company: 'Compañia',
     manager: 'Propietario'
   },
   messages: {
@@ -116,10 +116,16 @@ export default {
     error_delete_manager: 'Este usuario no puede ser eliminado',
     error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',
     success_profile: 'Los datos han sido actualizados.',
+    success_add: 'El {0} ha sido creado satisfactoriamente.',
+    success_up: 'El {0} ha sido actualizado satisfactoriamente.',
+    success_del: 'El {0} ha sido eliminado satisfactoriamente.',
+    failed_catch: 'Ocurrió error al procesar datos de {0}',
     check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
     password_success: 'La contraseña se actualizo correctamente.',
-    warning_create: 'No se puede crear este elemento. Primero debe de crear {0}'
+    warning_create: 'No se puede crear este elemento. Primero debe de crear {0}',
+    pin_failed: 'Usted no tiene acceso. Pin Code no es válido',
+    login_failed: 'Email o contraseña no válido.'
   },
   // options
   actions: {

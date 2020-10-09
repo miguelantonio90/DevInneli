@@ -37,9 +37,9 @@
             >
               <v-text-field
                 v-model="editAccess.name"
-
                 :label="$vuetify.lang.t('$vuetify.access.name')"
                 required
+                :rules="formRule.firstName"
               />
             </v-col>
             <v-checkbox
@@ -58,7 +58,6 @@
             >
               <v-text-field
                 v-model="editAccess.description"
-
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>

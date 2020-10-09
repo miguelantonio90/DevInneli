@@ -116,6 +116,8 @@
                 item-text="name"
                 :loading="isAccessLoading"
                 :disabled="!!isAccessLoading"
+                :rules="formRule.access"
+                required
                 return-object
               />
             </v-col>
@@ -131,6 +133,8 @@
                 :loading="isShopLoading"
                 :disabled="!!isShopLoading"
                 multiple
+                :rules="formRule.shops"
+                required
                 return-object
               />
             </v-col>
@@ -173,49 +177,7 @@ export default {
       hidePinCode1: true,
       hidePinCode2: true,
       errorPhone: null,
-      formRule: {
-        firstName: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.name')
-              ])
-        ],
-        email: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
-        ],
-        pinCode: [
-          (v) =>
-            !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
-              this.$vuetify.lang.t('$vuetify.pinCode')
-            ]),
-          (v) => (v && v.length >= 4) || this.$vuetify.lang.t('$vuetify.rule.pin.min', ['4']),
-          (v) => (v && v.length <= 6) || this.$vuetify.lang.t('$vuetify.rule.pin.max', ['6'])
-        ],
-        confirm_pinCode: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.confirm_pinCode')
-              ]),
-          (v) =>
-            (!!v && v) === this.newUser.pinCode ||
-              this.$vuetify.lang.t(
-                '$vuetify.rule.match',
-                [this.$vuetify.lang.t('$vuetify.pinCode')],
-                [this.$vuetify.lang.t('$vuetify.confirm_pinCode')]
-              )
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -287,18 +249,7 @@ export default {
     async createNewUser () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createUser(this.newUser).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.createUser(this.newUser)
       }
     }
   }

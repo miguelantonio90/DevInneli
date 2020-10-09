@@ -27,6 +27,8 @@
                 v-model="newAccess.key"
                 :items="keys"
                 :label="$vuetify.lang.t('$vuetify.access.key')"
+                requiered
+                :rules="formRule.key"
               />
             </v-col>
             <v-col
@@ -35,9 +37,9 @@
             >
               <v-text-field
                 v-model="newAccess.name"
-
                 :label="$vuetify.lang.t('$vuetify.access.name')"
                 required
+                :rules="formRule.firstName"
               />
             </v-col>
             <v-checkbox
@@ -56,7 +58,6 @@
             >
               <v-text-field
                 v-model="newAccess.description"
-
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
@@ -95,8 +96,7 @@ export default {
   data () {
     return {
       formValid: false,
-      formRule: {
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -110,19 +110,7 @@ export default {
 
     async createNewRole () {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createRole(this.newAccess).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.createRole(this.newAccess)
       }
     }
   }

@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import rules from '../config/rules'
+import Vuetify from '../plugins/vuetify'
 import Notifications from '../plugins/notifications'
 import AppDataTable from '../components/core/AppDataTable'
 import AvatarPicker from '../components/core/AvatarPicker'
@@ -36,6 +38,8 @@ export function install (Vue, opts = {}) {
 
   Vue.prototype.$Toast = Notifications.Toast
   Vue.prototype.$Swal = Notifications.Swal
+  Vue.prototype.$rules = rules
+  Vue.prototype.$language = Vuetify.framework.lang
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

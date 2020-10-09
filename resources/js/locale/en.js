@@ -107,10 +107,16 @@ export default {
     error_delete_manager: "You can't delete this user",
     error_edit_manager: "You can't edit this user. Use profile to edit.",
     success_profile: 'The data has been updated.',
+    success_add: 'The {0} has been created successfully.',
+    success_up: 'The {0} has been updated successfully.',
+    success_del: 'The {0} has been removed successfully.',
+    failed_catch: 'An error occurred while processing data from {0}',
     check_mail:
             'An email has been sent with the details to change password.',
     password_success: 'The password was updated successfully.',
-    warning_create: "You can't create this element. You should create {0}"
+    warning_create: "You can't create this element. You should create {0}",
+    pin_failed: 'You do not have access. Pin Code is not valid',
+    login_failed: 'Invalid email or password.'
   },
   // profile
   profile: {

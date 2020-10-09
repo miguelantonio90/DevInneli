@@ -61,6 +61,12 @@ const mutations = {
       name: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.category')]
+      )
+    })
   },
   [CATEGORY_EDIT] (state, categoryId) {
     state.editCategory = Object.assign({}, state.categories
@@ -75,19 +81,39 @@ const mutations = {
       name: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.category')]
+      )
+    })
   },
   [SET_EDIT_CATEGORY] (state, profile) {
     state.editCategory.push(profile)
   },
-  [CATEGORY_DELETE] (state) {
+  [CATEGORY_DELETE] (state, error) {
     state.saved = true
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.category')]
+      )
+    })
   },
   [SET_CATEGORY_AVATAR] (state, avatar) {
     state.avatar = avatar
     state.saved = true
   },
-  [FAILED_CATEGORY] (state) {
+  [FAILED_CATEGORY] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.category')]
+      )
+    })
   }
 }
 
@@ -120,11 +146,10 @@ const actions = {
         commit(FETCHING_CATEGORIES, data.data)
         commit(CATEGORY_TABLE_LOADING, false)
         return data
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      }).catch((error) => commit(FAILED_CATEGORY, error))
   },
   async createCategory ({ commit, dispatch }, newCategory) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await category
       .sendCreateRequest(newCategory)
@@ -133,10 +158,9 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CATEGORY, error))
   },
   async updateCategory ({ commit, dispatch }, editCategory) {
-    commit('CLEAR_ERRORS', null, { root: true })
     commit(ENV_DATA_PROCESS, true)
     await category
       .sendUpdateRequest(editCategory)
@@ -145,18 +169,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CATEGORY, error))
   },
   async deleteCategory ({ commit, dispatch }, categoryId) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await category
       .sendDeleteRequest(categoryId)
       .then(() => {
         commit(CATEGORY_DELETE)
         dispatch('category/getCategories', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_CATEGORY, error))
   }
 }
 

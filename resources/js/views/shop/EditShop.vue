@@ -119,7 +119,7 @@ export default {
     return {
       errorPhone: null,
       formValid: false,
-      formRule: {}
+      formRule: this.$rules
     }
   },
   computed: {
@@ -178,18 +178,7 @@ export default {
     async editShopAction () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.updateShop(this.editShop).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.updateShop(this.editShop)
       }
     }
   }
