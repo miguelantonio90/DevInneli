@@ -96,44 +96,7 @@ export default {
       formValid: false,
       hidePassword1: true,
       hidePassword2: true,
-      formRule: {
-        email: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.email')
-                        ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-                        this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                          this.$vuetify.lang.t('$vuetify.email')
-                        ])
-        ],
-        password: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.password')
-                        ]),
-          (v) =>
-            (v || '').length >= 8 ||
-                        this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
-        ],
-        password_confirmation: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.confirm_password')
-                        ]),
-          (v) =>
-            (!!v && v) === this.formReset.password ||
-                        this.$vuetify.lang.t(
-                          '$vuetify.rule.match',
-                          [this.$vuetify.lang.t('$vuetify.password')],
-                          [this.$vuetify.lang.t('$vuetify.confirm_password')]
-                        )
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -141,30 +104,14 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['sendResetPassword']),
-    changePassword () {
+    async changePassword () {
       const data = {
         token: this.$route.params.hash,
         email: this.formReset.email,
         password: this.formReset.password,
         password_confirmation: this.formReset.password_confirmation
       }
-      this.sendResetPassword(data).then(() => {
-        if (this.successReset) {
-          const msg = this.$vuetify.lang.t(
-            '$vuetify.messages.password_success'
-          )
-          this.$Toast.fire({
-            icon: 'success',
-            title: msg
-          })
-        } else {
-          this.$Toast.fire({
-            icon: 'error',
-            title: 'Invalid Token.'
-          })
-        }
-        this.$router.push({ name: 'login' })
-      })
+      await this.sendResetPassword(data)
     }
   }
 }

@@ -78,15 +78,7 @@ export default {
       hidePinCode1: true,
       hidePinCode2: true,
       errorPhone: null,
-      formRule: {
-        firstName: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.name')
-              ])
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -113,18 +105,7 @@ export default {
     async createNewCategory () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createCategory(this.newCategory).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.createCategory(this.newCategory)
       }
     }
   }

@@ -39,10 +39,13 @@ class AccessController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
+        $this->validator($request->all())->validate();
+
         return ResponseHelper::sendResponse(
             $this->accessManager->new($request), 'Position has created successfully.');
     }

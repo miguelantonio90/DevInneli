@@ -28,7 +28,7 @@
                 prepend-icon="mdi-home-variant"
                 :counter="10"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                :rules="formRule.shop"
+                :rules="formRule.firstName"
                 required
                 @keypress="lettersNumbers"
               />
@@ -119,36 +119,7 @@ export default {
     return {
       formValid: false,
       errorPhone: null,
-      formRule: {
-        shop: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.menu.shop')
-                        ])
-        ],
-        phone: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.phone')
-                        ])
-        ],
-        address: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.address')
-                        ])
-        ],
-        description: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.access.description')
-                        ])
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -210,18 +181,7 @@ export default {
     async createNewShopAction () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createShop(this.newShop).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.createShop(this.newShop)
       }
     }
   }

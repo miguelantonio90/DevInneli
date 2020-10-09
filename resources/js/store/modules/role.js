@@ -72,6 +72,12 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.access')]
+      )
+    })
   },
   [ACCESS_EDIT] (state, roleId) {
     state.editAccess = Object.assign({}, state.roles
@@ -90,12 +96,31 @@ const mutations = {
       description: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.access')]
+      )
+    })
   },
   [ACCESS_DELETE] (state) {
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.access')]
+      )
+    })
   },
-  [FAILED_ACCESS] (state) {
+  [FAILED_ACCESS] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.access')]
+      )
+    })
   }
 }
 
@@ -127,11 +152,11 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ACCESS, data.data)
         commit(ACCESS_TABLE_LOADING, false)
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      })
+      .catch(error => commit(FAILED_ACCESS, error))
   },
   async createRole ({ commit, dispatch }, newAccess) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await role
       .sendCreateRequest(newAccess)
@@ -140,10 +165,9 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('role/getRoles', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch(error => commit(FAILED_ACCESS, error))
   },
   async updateRole ({ commit, dispatch }, editAccess) {
-    commit('CLEAR_ERRORS', null, { root: true })
     commit(ENV_DATA_PROCESS, true)
 
     await role
@@ -153,18 +177,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('role/getRoles', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch(error => commit(FAILED_ACCESS, error))
   },
   async deleteRole ({ commit, dispatch }, roleId) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await role
       .sendDeleteRequest(roleId)
       .then(() => {
         commit(ACCESS_DELETE)
         dispatch('role/getRoles', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch(error => commit(FAILED_ACCESS, error))
   }
 }
 

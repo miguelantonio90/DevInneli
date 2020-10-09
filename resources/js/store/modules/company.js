@@ -46,12 +46,21 @@ const mutations = {
       logo: ''
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.lang.t('$vuetify.messages.success_profile')
+    })
   },
   [COMP_DELETE] (state) {
     state.saved = true
   },
-  [FAILED_COMP] (state) {
+  [FAILED_COMP] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.lang.t('$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.company')])
+    })
   },
   [SET_COMP_LOGO] (state, avatar) {
     state.avatar = avatar

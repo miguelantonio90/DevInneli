@@ -110,30 +110,7 @@ export default {
       formValid: false,
       loading: false,
       hidePassword: true,
-      formRule: {
-        email: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
-        ],
-        password: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.password')
-              ]),
-          (v) =>
-            (v || '').length >= 8 ||
-              this.$vuetify.lang.t('$vuetify.rule.min', ['8'])
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -149,7 +126,6 @@ export default {
         this.sendLoginRequest(this.fromModel).then(() => {
           if (this.isLoggedIn) {
             this.loading = false
-            // this.$router.push('/dashboard')
             this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
           } else {
             this.loading = false

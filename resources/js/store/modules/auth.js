@@ -1,5 +1,6 @@
 import auth from '../../api/auth'
 import localStorage from '../../config/localStorage'
+import router from '../../router'
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -13,6 +14,7 @@ const FORGOT_PASSWORD = 'FORGOT_PASSWORD'
 const SET_RESET = 'SET_RESET'
 const IN_PROCESS_RESET = 'IN_PROCESS_RESET'
 const IS_MANAGER = 'IS_MANAGER'
+const FAILED_CATCH = 'FAILED_CATCH'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
@@ -67,20 +69,17 @@ const getters = {
 // actions
 const actions = {
   async getUserData ({ commit }) {
-    commit('CLEAR_ERRORS', null, { root: true })
-
     await auth
       .getUserData()
       .then(({ data }) => {
         commit(SET_USER_DATA, data)
       })
       .catch(({ response }) => {
-        commit('SET_ERRORS', response, { root: true })
+        commit(FAILED_CATCH, response)
         localStorage.removeToken()
       })
   },
   async sendLoginRequest ({ commit }, login) {
-    commit('CLEAR_ERRORS', null, { root: true })
     commit(LOGIN)
 
     return await auth
@@ -93,11 +92,10 @@ const actions = {
       })
       .catch(({ response }) => {
         commit(LOGIN_FAILED)
-        commit('SET_ERRORS', response, { root: true })
+        commit(FAILED_CATCH, response)
       })
   },
   async sendLoginPincode ({ commit, dispatch }, login) {
-    commit('CLEAR_ERRORS', null, { root: true })
     commit(LOGIN)
     return await auth
       .loginPincodeRequest(login)
@@ -111,12 +109,11 @@ const actions = {
       .catch(({ response }) => {
         commit(PIN_FAILED)
         commit(IS_MANAGER, false)
-        commit('SET_ERRORS', response, { root: true })
+        // commit(FAILED_CATCH, response)
         localStorage.removeTokenManager()
       })
   },
   async sendRegisterRequest ({ commit, dispatch }, register) {
-    commit('CLEAR_ERRORS', null, { root: true })
     return await auth
       .registerRequest(register)
       .then(({ data }) => {
@@ -125,9 +122,10 @@ const actions = {
           data.token_type + ' ' + data.access_token
         )
         dispatch('getUserData')
+        router.push('/hi')
       })
       .catch(({ response }) => {
-        commit('SET_ERRORS', response, { root: true })
+        commit(FAILED_CATCH, response)
       })
   },
   async sendLogoutRequest ({ commit }) {
@@ -142,7 +140,7 @@ const actions = {
   },
   async sendVerifyResendRequest ({ commit }) {
     return await auth.verifyResendRequest().catch(({ response }) => {
-      commit('SET_ERRORS', response, { root: true })
+      commit(FAILED_CATCH, response)
     })
   },
   async sendVerifyRequest ({ dispatch }, hash) {
@@ -151,7 +149,6 @@ const actions = {
       .then(() => dispatch('getUserData'))
   },
   async sendEmailForgot ({ commit }, email) {
-    commit('CLEAR_ERRORS', null, { root: true })
     return await auth
       .verifyMailForgot(email)
       .then((response) => {
@@ -162,12 +159,12 @@ const actions = {
         }
       })
       .catch((response) => {
-        commit('SET_ERRORS', response, { root: true })
+        commit(FAILED_CATCH, response)
       })
   },
   async sendResetPassword ({ commit }, newData) {
     commit(IN_PROCESS_RESET, true)
-    commit('CLEAR_ERRORS', null, { root: true })
+
     return await auth
       .resetPassword(newData.token, newData)
       .then((response) => {
@@ -211,13 +208,29 @@ const mutations = {
   },
   [FORGOT_PASSWORD] (state, status) {
     state.successForgot = status
+    if (status) {
+      this._vm.$Toast.fire({
+        icon: 'success',
+        title: this._vm.$language.t('$vuetify.messages.check_mail'),
+        timer: 5000
+      })
+      router.push({ name: 'login' })
+    }
   },
   [LOGIN_FAILED] (state) {
     state.isLoggedIn = false
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.login_failed')
+    })
   },
   [PIN_FAILED] (state) {
     state.pinSuccess = false
     state.isManager = false
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.pin_failed')
+    })
   },
   [ENV_DATA_PROCESS] (state, pending) {
     state.pending = pending
@@ -230,6 +243,26 @@ const mutations = {
       password_confirmation: ''
     }
     state.successReset = reset
+    if (reset) {
+      this._vm.$Toast.fire({
+        icon: 'success',
+        title: this._vm.$language.t('$vuetify.messages.password_success')
+      })
+    } else {
+      this._vm.$Toast.fire({
+        icon: 'error',
+        title: 'Invalid Token.'
+      })
+    }
+    router.push({ name: 'login' })
+  },
+  [FAILED_CATCH] (state, error) {
+    state.pending = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.login_failed')
+    })
   }
 }
 

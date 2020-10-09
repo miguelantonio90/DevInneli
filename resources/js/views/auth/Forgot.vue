@@ -69,20 +69,7 @@ export default {
       email: '',
       loading: false,
       formValid: false,
-      formRule: {
-        email: [
-          (v) =>
-            !!v ||
-              this.$vuetify.lang.t('$vuetify.rule.required', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-              this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                this.$vuetify.lang.t('$vuetify.email')
-              ])
-        ]
-      }
+      formRule: this.$rules
     }
   },
   computed: {
@@ -94,22 +81,9 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['sendEmailForgot']),
-    sendNotify () {
+    async sendNotify () {
       this.loading = true
-      this.sendEmailForgot(this.email).then(() => {
-        if (this.successForgot) {
-          this.loading = false
-          const msg = this.$vuetify.lang.t(
-            '$vuetify.messages.check_mail'
-          )
-          this.$Toast.fire({
-            icon: 'success',
-            title: msg,
-            timer: 5000
-          })
-          this.$router.push({ name: 'login' })
-        }
-      })
+      await this.sendEmailForgot(this.email)
     }
   }
 }
