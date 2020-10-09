@@ -3,25 +3,14 @@
 namespace App\Managers;
 
 use App\Articles;
+use App\Variant;
 use App\Shop;
 use App\User;
+use App\VariantsShops;
+use App\VariantsValues;
 
-class ArticleManager
+class VariantManager
 {
-
-    /**
-     * @var VariantManager
-     */
-    private $variantManager;
-
-    /**
-     * ArticleManager constructor.
-     * @param VariantManager $variantManager
-     */
-    public function __construct(VariantManager $variantManager)
-    {
-        $this->variantManager = $variantManager;
-    }
 
 
     /**
@@ -47,8 +36,6 @@ class ArticleManager
                 ->with('variants')
                 ->with('composites')
                 ->with('shops')
-                ->with('variants_values')
-                ->with('variants_shops')
                 ->get();
         }
         return $articles;
@@ -66,15 +53,53 @@ class ArticleManager
             ->get()[0]->company_id;
     }
 
-    public function new($data)
+    /**
+     * @param $data
+     * @param $idArticle
+     * @return mixed
+     */
+    public function new($data, $articleId)
     {
-        $category = $data['category'];
-        $shops = $data['shops'];
-        $article = Articles::create([
-            'company_id' => $data['company_id'],
+        $variant = Variant::create([
+            'articles_id' => $articleId,
             'name' => $data['name'],
+            'value'=> json_encode($data['values'])
         ]);
-        return $this->updateData($article, $data, $shops);
+        return $variant;
+    }
+
+    /**
+     * @param $data
+     * @param $articleId
+     * @return VariantsValues
+     */
+    public function newVariantValue($data, $articleId):VariantsValues{
+        $variantValue = VariantsValues::create([
+            'articles_id' => $articleId,
+            'variant' => $data['variant'],
+            'cost' => $data['cost'],
+            'price' => $data['price'],
+            'ref' => $data['ref'],
+            'baraCode' => $data['barCode']
+        ]);
+        return $variantValue;
+    }
+
+    /**
+     * @param $data
+     * @param $variantId
+     * @return VariantsShops
+     */
+    public function newVariantShop($data, $variant):VariantsShops{
+        $variantValue = VariantsShops::create([
+            'articles_id'=>$variant->articles_id,
+            'vv_id' => $variant->id,
+            'shop_id' => $data['shop_id'],
+            'stock' => $data['stock'],
+            'price' => $data['price'],
+            'under_inventory' => $data['under_inventory']
+        ]);
+        return $variantValue;
     }
 
     /**
@@ -94,40 +119,18 @@ class ArticleManager
         if (isset($data['price'])) $article->price = $data['price'];
         if (isset($data['ref'])) $article->ref = $data['ref'];
         if (isset($data['track_inventory'])) $article->track_inventory = $data['track_inventory'];
-        if (isset($data['unit'])) $article->unit = $data['unit'] === 'unit';
+        if (isset($data['unit'])) $article->unit = $data['unit']==='unit';
         $idShops = [];
         foreach ($shops as $key => $value) {
-            $idShops[$key] = $value['shop_id'];
+            $idShops[$key] = $value['id'];
+        }
+        foreach ($data['variants'] as $key=>$value){
+
         }
         $employShop = Shop::find($idShops);
-        foreach ($data['variants'] as $key => $value) {
-            $this->variantManager->new($value, $article->id);
-        }
         $article->shops()->sync($employShop);
-        foreach ($data['variantsValues'] as $key => $value) {
-            $variantValue = $this->variantManager->newVariantValue($value, $article->id);
-            $arrayShops = $this->getVariants($shops, $variantValue);
-            foreach ($arrayShops as $k=>$v){
-                $this->variantManager->newVariantShop($v, $variantValue);
-            }
-        }
         $article->save();
         return $article;
-    }
-
-    /**
-     * @param $data
-     * @param $variantValue
-     * @return array
-     */
-    private function getVariants($data, $variantValue):array
-    {
-        $result = [];
-        foreach ($data as $key=>$value){
-            if($value['variant'] = $variantValue->variant)
-                $result[] = $value;
-        }
-        return $result;
     }
 
     /**
@@ -149,7 +152,7 @@ class ArticleManager
      */
     public function delete($id)
     {
-        return Articles::findOrFail($id)->delete();
+        return User::findOrFail($id)->delete();
     }
 
 }

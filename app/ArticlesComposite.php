@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ArticleComposite extends Model
+class ArticlesComposite extends Model
 {
     /**
      * The attributes that are mass assignable.

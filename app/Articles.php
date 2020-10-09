@@ -25,8 +25,7 @@ class Articles extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'category_id', 'unit', 'price', 'cost', 'ref', 'barCode', 'composite', 'inventory', 'track_inventory',
-        'itbis', 'lay'
+        'name','company_id', 'category_id',
     ];
 
     public function company(): BelongsTo
@@ -41,12 +40,22 @@ class Articles extends Model
 
     public function variants(): HasMany
     {
-        return $this->hasMany(ArticleVariant::class);
+        return $this->hasMany(Variant::class);
+    }
+
+    public function variants_values(): HasMany
+    {
+        return $this->hasMany(VariantsValues::class);
+    }
+
+    public function variants_shops(): HasMany
+    {
+        return $this->hasMany(VariantsShops::class);
     }
 
     public function composites(): HasMany
     {
-        return $this->hasMany(ArticleComposite::class);
+        return $this->hasMany(ArticlesComposite::class);
     }
 
     public function shops(): BelongsToMany

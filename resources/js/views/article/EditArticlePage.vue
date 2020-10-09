@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-title>
           <span class="headline">{{
-                  $vuetify.lang.t('$vuetify.titles.new', [
+                  $vuetify.lang.t('$vuetify.titles.edit', [
                       $vuetify.lang.t('$vuetify.articles.name'),
                   ])
               }}</span>
@@ -26,7 +26,7 @@
                                             md="4"
                                         >
                                             <v-text-field
-                                                v-model="newArticle.name"
+                                                v-model="editArticle.name"
                                                 :label="$vuetify.lang.t('$vuetify.firstName')"
                                                 :rules="formRule.firstName"
                                                 required
@@ -37,7 +37,7 @@
                                             md="4"
                                         >
                                             <v-text-field
-                                                v-model="newArticle.barCode"
+                                                v-model="editArticle.barCode"
                                                 :label="$vuetify.lang.t('$vuetify.barCode')"
                                                 required
                                             />
@@ -47,7 +47,7 @@
                                             md="4"
                                         >
                                             <v-text-field
-                                                v-model="newArticle.price"
+                                                v-model="editArticle.price"
                                                 :label="$vuetify.lang.t('$vuetify.price')"
                                                 autocomplete="off"
                                                 required
@@ -58,7 +58,7 @@
                                             md="4"
                                         >
                                             <v-text-field
-                                                v-model="newArticle.cost"
+                                                v-model="editArticle.cost"
                                                 :label="$vuetify.lang.t('$vuetify.articles.cost')"
                                                 autocomplete="off"
                                                 required
@@ -69,7 +69,7 @@
                                             md="4"
                                         >
                                             <v-select
-                                                v-model="newArticle.category"
+                                                v-model="editArticle.category"
                                                 :items="categories"
                                                 :label="$vuetify.lang.t('$vuetify.menu.category')"
                                                 item-text="name"
@@ -82,7 +82,7 @@
                                             cols="12"
                                             md="4">
                                             <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
-                                            <v-radio-group v-model="newArticle.unit" row>
+                                            <v-radio-group v-model="editArticle.unit" row>
                                                 <v-radio
                                                     :label="$vuetify.lang.t('$vuetify.articles.unit')"
                                                     value="unit"
@@ -103,7 +103,7 @@
                                 <v-expansion-panel-content>
                                     <v-row>
                                         <v-col cols="12" md="3">
-                                            <v-checkbox v-model="newArticle.composite" :disabled="articles.length===0"
+                                            <v-checkbox v-model="editArticle.composite" :disabled="articles.length===0"
                                                         :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
                                                         :label="$vuetify.lang.t('$vuetify.articles.composite')"
                                                         @change="changeComposite"></v-checkbox>
@@ -121,12 +121,12 @@
                                             </v-tooltip>
                                         </v-col>
                                         <v-col cols="12" md="3">
-                                            <v-checkbox v-model="newArticle.track_inventory" class="md-6"
+                                            <v-checkbox v-model="editArticle.track_inventory" class="md-6"
                                                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
                                             />
                                         </v-col>
                                     </v-row>
-                                    <v-row v-show="newArticle.composite">
+                                    <v-row v-show="editArticle.composite">
                                         <v-col cols="12" md="12">
                                             <v-select
                                                 :items="articles"
@@ -140,20 +140,19 @@
                                     </v-row>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
-                            <v-expansion-panel v-show="!newArticle.composite">
+                            <v-expansion-panel v-show="!editArticle.composite">
                                 <v-expansion-panel-header><h3>{{
                                         $vuetify.lang.t('$vuetify.panel.variant')
                                     }}</h3>
                                 </v-expansion-panel-header>
                                 <v-expansion-panel-content>
                                     <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="12"
-                                        >
+                                        <v-col cols="12" md="12">
                                             <v-row>
                                                 <v-col cols="12" md="12">
-                                                    <variant @updateVariants="updateVariant" :updated="updated" :variants="newArticle.variants" :variants-values="variantData"/>
+                                                    <variant @updateVariants="updateVariant" :updated="updated"
+                                                             :variants="editArticle.variants"
+                                                             :variants-values="editArticle.variants_values"/>
                                                 </v-col>
                                             </v-row>
                                         </v-col>
@@ -173,7 +172,8 @@
                                         >
                                             <v-row>
                                                 <v-col cols="12" md="12">
-                                                    <shops-articles :shop-data="shopData" :variants-data="variantData"
+                                                    <shops-articles :shop-data="editArticle.variants_shops"
+                                                                    :variants-data="editArticle.variants_values"
                                                                     @updateShopsData="updateShopData"/>
                                                 </v-col>
                                             </v-row>
@@ -223,7 +223,7 @@ import Variant from "./variants/Variant";
 import {mapActions, mapState} from "vuex";
 
 export default {
-    name: 'NewArticlePage',
+    name: 'EditArticlePage',
     components: {ShopsArticles, Variant},
     data() {
         return {
@@ -245,7 +245,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('article', ['saved', 'newArticle', 'articles']),
+        ...mapState('article', ['saved', 'editArticle', 'articles']),
         ...mapState('category', ['categories', 'isActionInProgress']),
         ...mapState('shop', ['shops', 'isShopLoading']),
         validShow() {
@@ -268,6 +268,7 @@ export default {
             })
         })
         this.getArticles()
+        console.log(this.editArticle)
 
     },
     created() {
@@ -280,7 +281,7 @@ export default {
         ...mapActions('category', ['getCategories']),
         ...mapActions('shop', ['getShops']),
         changeComposite() {
-            if (this.newArticle.composite) {
+            if (this.editArticle.composite) {
                 this.variantData = []
             } else {
                 this.updated = false
@@ -288,7 +289,7 @@ export default {
         },
         updateVariant(variants, dataUpdated) {
             this.variantData = dataUpdated
-            this.newArticle.variants = variants
+            this.editArticle.variants = variants
             this.shopData = []
             this.shops.forEach((shop) => {
                 console.log(variants.length)
@@ -298,7 +299,7 @@ export default {
                             shop_id: shop.id,
                             name: shop.name,
                             checked: true,
-                            variant: v.variant,
+                            variant: v.name,
                             price: v.price,
                             stock: '0',
                             under_inventory: '0'
@@ -318,7 +319,7 @@ export default {
             })
             this.updated = true
         },
-        updateShopData(shopsDataUpdated){
+        updateShopData(shopsDataUpdated) {
             this.shopData = shopsDataUpdated
         },
         numbers(event) {
@@ -345,14 +346,14 @@ export default {
             if (this.validShow) {
                 if (this.$refs.form.validate()) {
                     this.loading = true
-                    this.newArticle.shops = []
-                    this.shopData.forEach((value, index)=>{
-                        if(value.checked){
-                            this.newArticle.shops.push(value)
+                    this.editArticle.shops = []
+                    this.shopData.forEach((value, index) => {
+                        if (value.checked) {
+                            this.editArticle.shops.push(value)
                         }
                     })
-                    this.newArticle.variantsValues = this.variantData
-                    await this.createArticle(this.newArticle).then(() => {
+                    this.editArticle.variantsValues = this.variantData
+                    await this.createArticle(this.editArticle).then(() => {
                         if (this.saved) {
                             this.loading = false
                             const msg = this.$vuetify.lang.t(
@@ -362,7 +363,7 @@ export default {
                                 icon: 'success',
                                 title: msg
                             })
-                            this.$router.push({name:'product_list'})
+                            this.$router.push({name: 'product_list'})
                         }
                     })
                 }

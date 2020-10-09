@@ -30,7 +30,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onDelete('cascade');
         });

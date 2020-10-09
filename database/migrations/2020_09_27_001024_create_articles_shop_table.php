@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticleCompositesTable extends Migration
+class CreateArticlesShopTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateArticleCompositesTable extends Migration
      */
     public function up()
     {
-        Schema::create('article_composites', function (Blueprint $table) {
+        Schema::create('articles_shop', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cant');
-            $table->decimal('price');
-            $table->unsignedInteger('article_id');
-            $table->foreign('article_id')->references('id')->on('articles')
+            $table->integer('shop_id')->unsigned();
+            $table->foreign('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
-            $table->unsignedInteger('composite_id');
-            $table->foreign('composite_id')->references('id')->on('articles')
+            $table->integer('articles_id')->unsigned();
+            $table->foreign('articles_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -34,6 +32,6 @@ class CreateArticleCompositesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('article_composites');
+        Schema::dropIfExists('articles_shop');
     }
 }

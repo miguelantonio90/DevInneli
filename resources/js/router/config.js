@@ -257,6 +257,17 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/article/NewArticlePage')
+          },
+          {
+            path: '/articles/product.edit',
+            name: 'product_edit',
+            meta: {
+              title: 'product_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/EditArticlePage')
           }
         ]
       },
