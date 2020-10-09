@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class User
+ * Class Variant
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */
-class ArticlesVariant extends Model
+class Variant extends Model
 {
 
     /**
@@ -23,11 +23,11 @@ class ArticlesVariant extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'articles_id',
+        'name', 'value', 'articles_id',
     ];
 
-    public function shops(): BelongsToMany
+    public function article(): BelongsTo
     {
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsTo(Articles::class);
     }
 }

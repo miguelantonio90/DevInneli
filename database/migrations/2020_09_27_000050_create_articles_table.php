@@ -26,10 +26,13 @@ class CreateArticlesTable extends Migration
             $table->boolean('track_inventory')->default(false);
             $table->boolean('itbis')->default(false);
             $table->boolean('lay')->default(true);
-            $table->unsignedInteger('category_id');
+            $table->timestamps();
+            $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
+            $table->unsignedInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

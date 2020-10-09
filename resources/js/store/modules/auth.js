@@ -3,7 +3,9 @@ import localStorage from '../../config/localStorage'
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+const PIN_SUCCESS = 'PIN_SUCCESS'
 const LOGIN_FAILED = 'LOGIN_FAILED'
+const PIN_FAILED = 'PIN_FAILED'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
 const LOGOUT = 'LOGOUT'
 const LOGIN = 'LOGIN'
@@ -14,9 +16,10 @@ const IS_MANAGER = 'IS_MANAGER'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
-  isManager: false,
+  isManager: !!localStorage.getTokenManager(),
   userData: [],
   pending: false,
+  pinSuccess: false,
   loadingReset: false,
   successForgot: false,
   successReset: false,
@@ -57,7 +60,8 @@ const state = {
 const getters = {
   user: (state) => state.userData,
   isLoggedIn: (state) => state.isLoggedIn,
-  isManagerIn: (state) => state.isManager
+  isManagerIn: (state) => state.isManager,
+  pinSuccess: (state) => state.pinSuccess
 }
 
 // actions
@@ -98,13 +102,17 @@ const actions = {
     return await auth
       .loginPincodeRequest(login)
       .then(({ data }) => {
-        if (data.success) {
-          data.data.isManager === 1 ? commit(IS_MANAGER, true) : commit(IS_MANAGER, false)
+        commit(PIN_SUCCESS)
+        if (data.success && data.data.isManager) {
+          commit(IS_MANAGER, true)
+          localStorage.saveTokenManager(data.data.access_token)
         }
       })
       .catch(({ response }) => {
-        commit(LOGIN_FAILED)
+        commit(PIN_FAILED)
+        commit(IS_MANAGER, false)
         commit('SET_ERRORS', response, { root: true })
+        localStorage.removeTokenManager()
       })
   },
   async sendRegisterRequest ({ commit, dispatch }, register) {
@@ -127,7 +135,10 @@ const actions = {
     await auth
       .logoutRequest()
       .then(() => commit(SET_USER_DATA, null))
-      .then(localStorage.removeToken())
+      .then(() => {
+        localStorage.removeToken()
+        localStorage.removeTokenManager()
+      })
   },
   async sendVerifyResendRequest ({ commit }) {
     return await auth.verifyResendRequest().catch(({ response }) => {
@@ -190,6 +201,10 @@ const mutations = {
     state.isLoggedIn = true
     state.pending = false
   },
+  [PIN_SUCCESS] (state) {
+    state.pinSuccess = true
+    state.pending = false
+  },
   [LOGOUT] (state) {
     state.isLoggedIn = false
     state.isManagerIn = false
@@ -197,8 +212,11 @@ const mutations = {
   [FORGOT_PASSWORD] (state, status) {
     state.successForgot = status
   },
-  [LOGIN_FAILED] (state, error) {
+  [LOGIN_FAILED] (state) {
     state.isLoggedIn = false
+  },
+  [PIN_FAILED] (state) {
+    state.pinSuccess = false
     state.isManager = false
   },
   [ENV_DATA_PROCESS] (state, pending) {

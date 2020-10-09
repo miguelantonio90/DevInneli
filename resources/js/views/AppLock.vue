@@ -30,7 +30,7 @@ export default {
   computed: {
     ...mapState('auth', ['isLoggedIn', 'userData']),
     ...mapGetters(['errors']),
-    ...mapGetters('auth', ['isManagerIn', 'user'])
+    ...mapGetters('auth', ['isManagerIn', 'pinSuccess', 'user'])
   },
   created () {
     this.getUserData()
@@ -38,26 +38,21 @@ export default {
   methods: {
     ...mapActions('auth', ['getUserData', 'sendLoginPincode']),
     async login (pincode) {
-      try {
-        const email = this.user.email
-        this.sendLoginPincode({
-          email,
-          pincode
-        }).then(() => {
-          if (this.isLoggedIn && this.isManagerIn) {
-            this.loading = false
-            this.$router.push('/dashboard')
-            this.$refs.pincodeInput.triggerSuccess()
-          } else if (this.isLoggedIn && !this.isManagerIn) {
-            this.loading = false
-            this.$router.push({ name: 'vending' })
-            this.$refs.pincodeInput.triggerSuccess()
-          } else {
-            this.loading = false
-            this.$refs.pincodeInput.triggerMiss()
-          }
-        })
-      } catch (e) {
+      const email = this.user.email
+      await this.sendLoginPincode({ email, pincode })
+
+      if (this.pinSuccess) {
+        if (this.isLoggedIn && this.isManagerIn) {
+          this.loading = false
+          this.$refs.pincodeInput.triggerSuccess()
+          await this.$router.push('/dashboard')
+        } else if (this.isLoggedIn && !this.isManagerIn) {
+          this.loading = false
+          this.$refs.pincodeInput.triggerSuccess()
+          await this.$router.push({ name: 'vending' })
+        }
+      } else {
+        this.loading = false
         this.$refs.pincodeInput.triggerMiss()
       }
     }

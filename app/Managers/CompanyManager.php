@@ -1,14 +1,18 @@
 <?php
 
-
 namespace App\Managers;
 
-
 use App\Company;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class CompanyManager
 {
+    /**
+     * @param  string  $email
+     * @return mixed
+     */
     public static function getCompanyByEmail(string $email)
     {
         return Company::where('email', '=', $email)
@@ -17,12 +21,12 @@ class CompanyManager
     }
 
     /**
-     * @return string
+     * @return Model|Builder|int|object
      */
-    public static function getCompanyByAdmin(): string
+    public static function getCompanyByAdmin()
     {
         return DB::table('users')
-            ->select('company_id')
+            ->select('company_id as id')
             ->where('users.id', '=', auth()->id())
             ->first();
     }

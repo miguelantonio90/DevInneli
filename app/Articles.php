@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Class User
+ * Class Articles
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -23,8 +25,38 @@ class Articles extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'category_id',
+        'name','company_id', 'category_id',
     ];
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(Variant::class);
+    }
+
+    public function variants_values(): HasMany
+    {
+        return $this->hasMany(VariantsValues::class);
+    }
+
+    public function variants_shops(): HasMany
+    {
+        return $this->hasMany(VariantsShops::class);
+    }
+
+    public function composites(): HasMany
+    {
+        return $this->hasMany(ArticlesComposite::class);
+    }
 
     public function shops(): BelongsToMany
     {

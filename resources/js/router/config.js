@@ -70,26 +70,6 @@ export const publicRoute = [
     ]
   },
   {
-    path: '/auth',
-    component: LayoutAuth,
-    meta: {
-      title: 'PinCode'
-    },
-    redirect: '/auth/pincode',
-    hidden: true,
-    props: true,
-    children: [
-      {
-        path: 'pincode',
-        name: 'pincode',
-        meta: {
-          title: 'Pin Code'
-        },
-        component: () => import('../views/auth/PinCode')
-      }
-    ]
-  },
-  {
     path: '/404',
     name: '404',
     meta: {
@@ -277,6 +257,17 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/article/NewArticlePage')
+          },
+          {
+            path: '/articles/product.edit',
+            name: 'product_edit',
+            meta: {
+              title: 'product_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/EditArticlePage')
           }
         ]
       },

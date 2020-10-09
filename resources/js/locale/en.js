@@ -74,7 +74,8 @@ export default {
         pinlogin: 'Pin Code',
         vending: 'Sales',
         turnOn: 'Register Shift',
-        product_add: 'New Article'
+        product_add: 'New Article',
+        product_edit:'Edit Article'
     },
     // settings
     settings: {

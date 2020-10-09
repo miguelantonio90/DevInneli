@@ -12,8 +12,8 @@ const loginRequest = ({ email, password }) => {
 
 const loginPincodeRequest = ({ email, pincode }) => {
   const user = {
-    username: email,
-    password: pincode
+    email: email,
+    pincode: pincode
   }
   return api.post('login/pincode', user)
 }

@@ -5,20 +5,17 @@
                 <v-simple-checkbox v-model="item.checked"/>
             </template>
             <template v-slot:item.price="props">
-                <v-edit-dialog :return-value.sync="props.item.price"
-                               large persistent @save="save" @cancel="cancel"
-                               @open="open" @close="close">
+                <v-edit-dialog :return-value.sync="props.item.price" large persistent @save="updateShopsData"
+                               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                               :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
                     <div>{{ props.item.price }}</div>
                     <template v-slot:input>
-                        <div class="mt-4 title">
-                            Update Iron
-                        </div>
+                        <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
                     </template>
                     <template v-slot:input>
                         <v-text-field
                             v-model="props.item.price"
-                            :rules="[max25chars]"
-                            label="Edit"
+                            :label="$vuetify.lang.t('$vuetify.actions.edit')"
                             single-line
                             counter
                             autofocus
@@ -27,20 +24,12 @@
                 </v-edit-dialog>
             </template>
             <template v-slot:item.stock="props">
-                <v-edit-dialog
-                    :return-value.sync="props.item.stock"
-                    large
-                    persistent
-                    @save="save"
-                    @cancel="cancel"
-                    @open="open"
-                    @close="close"
-                >
+                <v-edit-dialog :return-value.sync="props.item.stock" large persistent @save="updateShopsData"
+                               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                               :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
                     <div>{{ props.item.stock }}</div>
                     <template v-slot:input>
-                        <div class="mt-4 title">
-                            Update Iron
-                        </div>
+                        <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
                     </template>
                     <template v-slot:input>
                         <v-text-field
@@ -55,20 +44,12 @@
                 </v-edit-dialog>
             </template>
             <template v-slot:item.under_inventory="props">
-                <v-edit-dialog
-                    :return-value.sync="props.item.under_inventory"
-                    large
-                    persistent
-                    @save="save"
-                    @cancel="cancel"
-                    @open="open"
-                    @close="close"
-                >
+                <v-edit-dialog :return-value.sync="props.item.under_inventory" large persistent @save="updateShopsData"
+                               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                               :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
                     <div>{{ props.item.under_inventory }}</div>
                     <template v-slot:input>
-                        <div class="mt-4 title">
-                            Update Iron
-                        </div>
+                        <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
                     </template>
                     <template v-slot:input>
                         <v-text-field
@@ -130,6 +111,8 @@ export default {
     },
     methods: {
         initialize() {
+            console.log(this.variantsData)
+            console.log(this.shopData)
             this.headers = []
             this.headers = [
                 {
@@ -162,23 +145,8 @@ export default {
                 })
             }
         },
-        save() {
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = 'Data saved'
-        },
-        cancel() {
-            this.snack = true
-            this.snackColor = 'error'
-            this.snackText = 'Canceled'
-        },
-        open() {
-            this.snack = true
-            this.snackColor = 'info'
-            this.snackText = 'Dialog opened'
-        },
-        close() {
-            console.log('Dialog closed')
+        updateShopsData(){
+            this.$emit('updateShopData', this.shopData)
         }
     }
 }

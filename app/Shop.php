@@ -53,7 +53,7 @@ class Shop extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function article()
+    public function articles()
     {
         return $this->belongsToMany(Articles::class);
     }

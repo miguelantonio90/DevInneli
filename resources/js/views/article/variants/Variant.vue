@@ -126,6 +126,56 @@
                 </v-dialog>
             </v-toolbar>
         </template>
+        <template v-slot:item.price="props">
+            <v-edit-dialog :return-value.sync="props.item.price" large persistent @save="saveModalEdit"
+                           @cancel="cancelModalEdit" @open="openModalEdit" @close="closeModalEdit"
+                           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                           :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
+                <div>{{ props.item.price }}</div>
+                <template v-slot:input>
+                    <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
+                </template>
+                <template v-slot:input>
+                    <v-text-field
+                        v-model="props.item.price"
+                        :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                        single-line
+                        counter
+                        autofocus
+                    />
+                </template>
+            </v-edit-dialog>
+        </template>
+        <template v-slot:item.cost="props">
+            <v-edit-dialog :return-value.sync="props.item.cost" large persistent @save="saveModalEdit"
+                           @cancel="cancelModalEdit" @open="openModalEdit" @close="closeModalEdit"
+                           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                           :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
+                <div>{{ props.item.cost }}</div>
+                <template v-slot:input>
+                    <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
+                </template>
+                <template v-slot:input>
+                    <v-text-field v-model="props.item.cost" :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                                  single-line counter autofocus/>
+                </template>
+            </v-edit-dialog>
+        </template>
+        <template v-slot:item.barCode="props">
+            <v-edit-dialog :return-value.sync="props.item.barCode" large persistent @save="saveModalEdit"
+                           @cancel="cancelModalEdit" @open="openModalEdit" @close="closeModalEdit"
+                           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                           :save-text="$vuetify.lang.t('$vuetify.actions.edit')">
+                <div>{{ props.item.cost }}</div>
+                <template v-slot:input>
+                    <div class="mt-4 title">{{ $vuetify.lang.t('$vuetify.actions.edit') }}</div>
+                </template>
+                <template v-slot:input>
+                    <v-text-field v-model="props.item.barCode" :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                                  single-line counter autofocus/>
+                </template>
+            </v-edit-dialog>
+        </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small @click="deleteItem(item)">
                 mdi-delete
@@ -137,13 +187,11 @@
 <script>
 export default {
     name: 'Variant',
-    props: ["updated"],
+    props: ["updated", "variants", "variantsValues"],
     data: () => ({
         dialog: false,
         dialogDelete: false,
         headers: [],
-        variants: [],
-        variantsValues: [],
         editedIndex: -1,
         editedItem: {
             name: '',
@@ -185,11 +233,10 @@ export default {
     },
     methods: {
         initialize() {
-            this.variantsValues = []
             this.headers = [
                 {
                     text: this.$vuetify.lang.t('$vuetify.variants.name'),
-                    value: 'name'
+                    value: 'variant'
                 },
                 {
                     text: this.$vuetify.lang.t('$vuetify.variants.price'),
@@ -261,6 +308,22 @@ export default {
                 this.editedIndex = -1
             })
         },
+        saveModalEdit() {
+            this.updateVariants()
+        },
+        openModalEdit() {
+            this.snack = true
+            this.snackColor = 'info'
+            this.snackText = 'Dialog opened'
+        },
+        cancelModalEdit() {
+            this.snack = true
+            this.snackColor = 'error'
+            this.snackText = 'Canceled'
+        },
+        closeModalEdit() {
+            console.log('Dialog closed')
+        },
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.variants[this.editedIndex], {
@@ -287,9 +350,9 @@ export default {
                     value.values.forEach((localValue) => {
                         if (localValue) {
                             result.push({
-                                name: localValue.toString(),
-                                price: '',
-                                cost: '',
+                                variant: localValue.toString(),
+                                price: '0.00',
+                                cost: '0.00',
                                 ref: '',
                                 barCode: ''
                             })
@@ -300,7 +363,7 @@ export default {
                         localResult.forEach((v) => {
                             if (localValue) {
                                 result.push({
-                                    name: localValue.toString() + '/' + v.name.toString(),
+                                    variant: localValue.toString() + '/' + v.variant.toString(),
                                     price: '',
                                     cost: '',
                                     ref: '',

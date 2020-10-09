@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\AccessManager;
 use App\Position;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AccessController extends Controller
 {
@@ -36,7 +38,7 @@ class AccessController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
@@ -48,7 +50,7 @@ class AccessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -57,11 +59,12 @@ class AccessController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *  Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param  Request  $request
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -76,7 +79,7 @@ class AccessController extends Controller
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -92,7 +95,7 @@ class AccessController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)

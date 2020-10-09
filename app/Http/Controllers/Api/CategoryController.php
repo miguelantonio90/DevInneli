@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CategoryManager;
+use App\Managers\CompanyManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -21,7 +21,7 @@ class CategoryController extends Controller
 
     /**
      * ClientController constructor.
-     * @param CategoryManager $categoryManager
+     * @param  CategoryManager  $categoryManager
      */
     public function __construct(CategoryManager $categoryManager)
     {
@@ -45,14 +45,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      * @throws ValidationException
      */
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['company_id'] = (int)$this->getCompanyByAdmin();
+        $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $user = $this->categoryManager->new($data);
 
@@ -63,19 +63,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Find Company Id using admin authenticate
-     * @return string
-     */
-    private function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
-    }
-
-    /**
-     * @param array $data
+     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -88,7 +76,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return void
      */
     public function show(int $id)
@@ -99,9 +87,10 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
+     * @param  Request  $request
+     * @param  int  $id
      * @return JsonResponse|Response
+     * @throws ValidationException
      */
     public function update(Request $request, int $id)
     {
@@ -115,7 +104,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return JsonResponse|Response|void
      */
     public function destroy(int $id)

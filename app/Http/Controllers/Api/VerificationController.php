@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Crypt;
 
 /**
@@ -61,8 +64,8 @@ class VerificationController extends Controller
      *     "message": "Unauthenticated."
      * }
      *
-     * @param Request $request
-     * @return Response
+     * @param  Request  $request
+     * @return Application|RedirectResponse|Response|Redirector
      *
      */
     public function verify(Request $request)
@@ -101,8 +104,8 @@ class VerificationController extends Controller
      *     "message": "Unauthenticated."
      * }
      *
-     * @param Request $request
-     * @return Response
+     * @param  Request  $request
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function resend(Request $request)
     {

@@ -24,13 +24,18 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'company_id'
+        'name', 'color', 'company_id'
     ];
 
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function articles()
+    {
+        return $this->hasMany(Articles::class);
     }
 
 }
