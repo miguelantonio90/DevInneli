@@ -51,6 +51,20 @@ class AccessController extends Controller
     }
 
     /**
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'key' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'accessPin' => ['boolean'],
+            'accessEmail' => ['boolean'],
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -79,20 +93,6 @@ class AccessController extends Controller
             $edit,
             'Role has updated successfully.'
         );
-    }
-
-    /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'key' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'accessPin' => ['boolean'],
-            'accessEmail' => ['boolean'],
-        ]);
     }
 
     /**

@@ -62,7 +62,7 @@
                 :label="
                   $vuetify.lang.t('$vuetify.confirm_password')
                 "
-                :rules="formRule.passwordConfirmation"
+                :rules="passwordConfirmation"
                 :type="hidePassword2 ? 'password' : 'text'"
                 autocomplete="off"
                 name="password_confirmation"
@@ -145,7 +145,18 @@ export default {
       formValid: false,
       hidePassword1: true,
       hidePassword2: true,
-      formRule: this.$rules
+      formRule: this.$rules,
+      passwordConfirmation: [
+        (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+          this.$vuetify.lang.t('$vuetify.confirm_password')
+        ]),
+        (v) => (!!v && v) === this.formRegister.password ||
+            this.$vuetify.lang.t(
+              '$vuetify.rule.match',
+              [this.$vuetify.lang.t('$vuetify.password')],
+              [this.$vuetify.lang.t('$vuetify.confirm_password')]
+            )
+      ]
     }
   },
   computed: {

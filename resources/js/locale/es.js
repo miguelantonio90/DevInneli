@@ -75,7 +75,7 @@ export default {
     vending: 'Ventas',
     turnOn: 'Registrar Turno',
     product_add: 'Nuevo Artículo',
-      product_edit:'Editar Artículo'
+    product_edit: 'Editar Artículo'
   },
   // settings
   settings: {
@@ -117,10 +117,10 @@ export default {
     error_delete_manager: 'Este usuario no puede ser eliminado',
     error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',
     success_profile: 'Los datos han sido actualizados.',
-      success_add: 'El {0} ha sido creado satisfactoriamente.',
-      success_up: 'El {0} ha sido actualizado satisfactoriamente.',
-      success_del: 'El {0} ha sido eliminado satisfactoriamente.',
-      failed_catch: 'Ocurrió error al procesar datos de {0}',
+    success_add: 'El {0} ha sido creado satisfactoriamente.',
+    success_up: 'El {0} ha sido actualizado satisfactoriamente.',
+    success_del: 'El {0} ha sido eliminado satisfactoriamente.',
+    failed_catch: 'Ocurrió error al procesar datos de {0}',
     check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
     password_success: 'La contraseña se actualizo correctamente.',
@@ -181,7 +181,7 @@ export default {
     itbis: 'ITBIS(18%)',
     tax: 'Impuesto',
     lay: 'Propina de ley(10%)',
-      composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos'
+    composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos'
   },
   panel: {
     basic: 'Básico',

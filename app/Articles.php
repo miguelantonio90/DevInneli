@@ -25,7 +25,7 @@ class Articles extends Model
      * @var array
      */
     protected $fillable = [
-        'name','company_id', 'category_id',
+        'name', 'company_id', 'category_id',
     ];
 
     public function company(): BelongsTo

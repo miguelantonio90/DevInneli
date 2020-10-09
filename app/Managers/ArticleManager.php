@@ -16,13 +16,12 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
         $this->variantManager = $variantManager;
     }
-
 
     /**
      * @return mixed
@@ -54,21 +53,8 @@ class ArticleManager
         return $articles;
     }
 
-    /**
-     * @param $data
-     * @return mixed
-     */
-    public static function getCompanyByAdmin(): string
-    {
-        return DB::table('users')
-            ->select('company_id')
-            ->where('users.id', '=', auth()->id())
-            ->get()[0]->company_id;
-    }
-
     public function new($data)
     {
-        $category = $data['category'];
         $shops = $data['shops'];
         $article = Articles::create([
             'company_id' => $data['company_id'],
@@ -85,16 +71,39 @@ class ArticleManager
      */
     private function updateData($article, $data, $shops)
     {
-        if (isset($data['barCode'])) $article->barCode = $data['barCode'];
-        if (isset($data['composite'])) $article->composite = $data['composite'];
-        if (isset($data['cost'])) $article->cost = $data['cost'];
-        if (isset($data['inventory'])) $article->inventory = $data['inventory'];
-        if (isset($data['itbis'])) $article->itbis = $data['inventory'];
-        if (isset($data['lay'])) $article->lay = $data['lay'];
-        if (isset($data['price'])) $article->price = $data['price'];
-        if (isset($data['ref'])) $article->ref = $data['ref'];
-        if (isset($data['track_inventory'])) $article->track_inventory = $data['track_inventory'];
-        if (isset($data['unit'])) $article->unit = $data['unit'] === 'unit';
+        if (isset($data['barCode'])) {
+            $article->barCode = $data['barCode'];
+        }
+        if (isset($data['composite'])) {
+            $article->composite = $data['composite'];
+        }
+        if (isset($data['cost'])) {
+            $article->cost = $data['cost'];
+        }
+        if (isset($data['inventory'])) {
+            $article->inventory = $data['inventory'];
+        }
+        if (isset($data['itbis'])) {
+            $article->itbis = $data['inventory'];
+        }
+        if (isset($data['lay'])) {
+            $article->lay = $data['lay'];
+        }
+        if (isset($data['price'])) {
+            $article->price = $data['price'];
+        }
+        if (isset($data['ref'])) {
+            $article->ref = $data['ref'];
+        }
+        if (isset($data['track_inventory'])) {
+            $article->track_inventory = $data['track_inventory'];
+        }
+        if (isset($data['unit'])) {
+            $article->unit = $data['unit'] === 'unit';
+        }
+        if (isset($data['category']['id'])) {
+            $article->category_id = $data['category']['id'];
+        }
         $idShops = [];
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['shop_id'];
@@ -107,7 +116,7 @@ class ArticleManager
         foreach ($data['variantsValues'] as $key => $value) {
             $variantValue = $this->variantManager->newVariantValue($value, $article->id);
             $arrayShops = $this->getVariants($shops, $variantValue);
-            foreach ($arrayShops as $k=>$v){
+            foreach ($arrayShops as $k => $v) {
                 $this->variantManager->newVariantShop($v, $variantValue);
             }
         }
@@ -120,12 +129,13 @@ class ArticleManager
      * @param $variantValue
      * @return array
      */
-    private function getVariants($data, $variantValue):array
+    private function getVariants($data, $variantValue): array
     {
         $result = [];
-        foreach ($data as $key=>$value){
-            if($value['variant'] = $variantValue->variant)
+        foreach ($data as $key => $value) {
+            if ($value['variant'] = $variantValue->variant) {
                 $result[] = $value;
+            }
         }
         return $result;
     }

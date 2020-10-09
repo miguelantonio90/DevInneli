@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 
 /**
  * Class VariantsValues
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 class VariantsValues extends Model
 {
 
-    protected $fillable = ['variant', 'articles_id','price', 'cost', 'ref', 'barCode'];
+    protected $fillable = ['variant', 'articles_id', 'price', 'cost', 'ref', 'barCode'];
 
     public function article(): BelongsTo
     {

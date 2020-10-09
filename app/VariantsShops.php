@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 
 /**
  * Class VariantsShops
@@ -18,16 +17,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 class VariantsShops extends Model
 {
 
-    protected $fillable = ['vv_id','price', 'stock', 'under_inventory', 'shop_id','articles_id'];
+    protected $fillable = ['vv_id', 'price', 'stock', 'under_inventory', 'shop_id', 'articles_id'];
 
     public function variants(): BelongsTo
     {
         return $this->belongsTo(VariantsValues::class);
     }
+
     public function shops(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
     }
+
     public function article(): BelongsTo
     {
         return $this->belongsTo(Articles::class);
