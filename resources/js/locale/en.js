@@ -55,6 +55,7 @@ export default {
     user_list: 'User List',
     employer_list: 'Employer List',
     user: 'Users',
+    employee: 'Employee',
     access: 'Access permission',
     access_list: 'Permission List',
     client: 'Client',
@@ -75,7 +76,8 @@ export default {
     vending: 'Sales',
     turnOn: 'Register Shift',
     product_add: 'New Article',
-    product_edit: 'Edit Article'
+    product_edit: 'Edit Article',
+    assistance: 'Assistance card'
   },
   // settings
   settings: {
@@ -160,6 +162,13 @@ export default {
     accessEmail: 'Access with Email',
     description: 'Description'
   },
+  assistance: {
+    entry: 'Entry',
+    exit: 'Exit',
+    entry_hour: 'Entry Hour',
+    exit_hour: 'Exit Hour',
+    total_hours: 'Total Hours'
+  },
   component: {
     select: 'Select Columns',
     others: 'others',
@@ -201,7 +210,7 @@ export default {
     options: 'Options'
   },
   shop_article: {
-    under_inventory: 'Inventario Bajo',
+    under_inventory: 'Low Inventory',
     stock: 'Stock',
     enabled: 'Enabled'
   },

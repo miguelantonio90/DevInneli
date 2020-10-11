@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Variant
- * @package App
- * @method static findOrFail($id)
  * @method static latest()
- * @method find($id)
+ * @method static where(string $string, string $string1, $id)
  * @method static create(array $array)
- * @method static select(string $string, $raw)
+ * @method static findOrFail($id)
  */
-class Variant extends Model
+class Assistance extends Model
 {
     use Uuid;
 
@@ -28,12 +25,15 @@ class Variant extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'value', 'articles_id',
-    ];
+    protected $fillable = ['datetimeEntry', 'datetimeExit', 'totalHours', 'user_id', 'shop_id'];
 
-    public function article(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Articles::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(Shop::class);
     }
 }

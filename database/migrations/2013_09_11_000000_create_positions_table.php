@@ -14,15 +14,15 @@ class CreatePositionsTable extends Migration
     public function up()
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('key');
             $table->string('name');
             $table->boolean('accessPin')->default(0);
             $table->boolean('accessEmail')->default(0);
             $table->string('description')->nullable();
             $table->timestamps();
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')
+
+            $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
         });
     }

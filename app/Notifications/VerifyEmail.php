@@ -2,20 +2,55 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Crypt;
 
 class VerifyEmail extends \Illuminate\Auth\Notifications\VerifyEmail
 {
+    use Queueable;
+
     /**
-     * Get the verification URL for the given notifiable.
+     * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return string
+     * @return array
      */
-    protected function verificationUrl($notifiable)
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return MailMessage
+     */
+    public function toMail($notifiable)
     {
         $hash = Crypt::encrypt($notifiable->getKey());
+        $link = config('frontend.email_verify_url').$hash;
+        return (new MailMessage)
+            ->subject('Verify Email Address')
+            ->line('Please click the button below to verify your email address.')
+            ->action('Verify Email Address', $link)
+            ->line('If you did not create an account, no further action is required.')
+            ->line("This verify your email address link will expire in ".config('auth.passwords.users.expire')." minutes")
+            ->line("If you did not verify your email address, no further action is required.");
+    }
 
-        return config('frontend.email_verify_url').$hash;
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
     }
 }
