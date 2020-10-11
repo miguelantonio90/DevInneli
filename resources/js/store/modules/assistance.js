@@ -75,9 +75,9 @@ const mutations = {
       )
     })
   },
-  [ASSIST_EDIT] (state, roleId) {
+  [ASSIST_EDIT] (state, assistanceId) {
     state.editAssistance = Object.assign({}, state.assistances
-      .filter(node => node.id === roleId)
+      .filter(node => node.id === assistanceId)
       .shift()
     )
   },
@@ -132,13 +132,13 @@ const actions = {
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_ASSIST_SHOW_MODAL, showModal)
   },
-  openEditModal ({ commit }, roleId) {
+  openEditModal ({ commit }, assistanceId) {
     commit(SWITCH_ASSIST_EDIT_MODAL, true)
-    commit(ASSIST_EDIT, roleId)
+    commit(ASSIST_EDIT, assistanceId)
   },
-  openShowModal ({ commit }, roleId) {
+  openShowModal ({ commit }, assistanceId) {
     commit(SWITCH_ASSIST_SHOW_MODAL, true)
-    commit(ASSIST_EDIT, roleId)
+    commit(ASSIST_EDIT, assistanceId)
   },
   async getAssistances ({ commit }) {
     commit(TABLE_LOADING, true)
@@ -175,9 +175,9 @@ const actions = {
       })
       .catch(error => commit(FAILED_ASSIST, error))
   },
-  async deleteAssistance ({ commit, dispatch }, roleId) {
+  async deleteAssistance ({ commit, dispatch }, assistanceId) {
     await assistance
-      .sendDeleteRequest(roleId)
+      .sendDeleteRequest(assistanceId)
       .then(() => {
         commit(ASSIST_DELETE)
         dispatch('assistance/getAssistances', null, { root: true })

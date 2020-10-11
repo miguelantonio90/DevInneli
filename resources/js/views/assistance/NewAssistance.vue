@@ -89,6 +89,7 @@
                 v-model="newAssistance.datetimeEntry"
                 :min-date="new Date()"
                 :label="$vuetify.lang.t('$vuetify.assistance.entry')"
+                date-format="dd/MM/yyyy"
               />
             </v-col>
             <v-col
@@ -99,6 +100,7 @@
                 v-model="newAssistance.datetimeExit"
                 :min-date="newAssistance.datetimeEntry"
                 :label="$vuetify.lang.t('$vuetify.assistance.exit')"
+                date-format="dd/MM/yyyy"
               />
             </v-col>
           </v-row>

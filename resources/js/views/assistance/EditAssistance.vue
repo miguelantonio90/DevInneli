@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="toogleNewModal"
+    v-model="toogleEditModal"
     max-width="600px"
   >
     <v-card>
@@ -86,9 +86,10 @@
               md="6"
             >
               <app-datetime-picker
-                v-model="editAssistance.datetimeEntry"
-                :min-date="new Date(editAssistance.datetimeEntry)"
+                v-model="datetimeEntry"
+                :min-date="datetimeEntry"
                 :label="$vuetify.lang.t('$vuetify.assistance.entry')"
+                date-format="dd/MM/yyyy"
               />
             </v-col>
             <v-col
@@ -96,9 +97,10 @@
               md="6"
             >
               <app-datetime-picker
-                v-model="editAssistance.datetimeExit"
-                :min-date="editAssistance.datetimeEntry"
+                v-model="datetimeExit"
+                :min-date="datetimeEntry"
                 :label="$vuetify.lang.t('$vuetify.assistance.exit')"
+                date-format="dd/MM/yyyy"
               />
             </v-col>
           </v-row>
@@ -117,7 +119,7 @@
         <v-btn
           class="mb-2"
           color="error"
-          @click="toogleNewModal(false)"
+          @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -152,6 +154,22 @@ export default {
     ...mapState('assistance', ['saved', 'editAssistance', 'isActionInProgress']),
     ...mapState('user', ['users', 'isUserTableLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
+    datetimeEntry: {
+      get () {
+        return new Date(this.editAssistance.datetimeEntry)
+      },
+      set (val) {
+        this.editAssistance.datetimeEntry = val
+      }
+    },
+    datetimeExit: {
+      get () {
+        return new Date(this.editAssistance.datetimeExit)
+      },
+      set (val) {
+        this.editAssistance.datetimeExit = val
+      }
+    },
     getTotalHours () {
       return `${this.editAssistance.datetimeEntry === '' ||
       this.editAssistance.datetimeExit === ''
@@ -169,7 +187,7 @@ export default {
     this.formValid = false
   },
   methods: {
-    ...mapActions('assistance', ['updateAssistance', 'toogleNewModal']),
+    ...mapActions('assistance', ['updateAssistance', 'toogleEditModal']),
     ...mapActions('shop', ['getShops']),
     ...mapActions('user', ['getUsers']),
 

@@ -72,8 +72,8 @@ class AssistanceManager
         if ($assistance) {
             $assistance->datetimeEntry = new \DateTime($data['datetimeEntry']);
             $assistance->datetimeExit = new \DateTime($data['datetimeExit']);
-            $assistance->shop_id = $data['shop'];
-            $assistance->user_id = $data['user'];
+            $assistance->shop_id = $data['shop']['id'];
+            $assistance->user_id = $data['user']['id'];
             $assistance->save();
 
             return $assistance;
