@@ -15,7 +15,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * @group Auth endpoints
+ * @group Auth endpos
  */
 class VerificationController extends Controller
 {

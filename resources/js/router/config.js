@@ -300,6 +300,16 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/access/ListAccess')
+          },
+          {
+            path: '/users/assistance.list',
+            name: 'assistance',
+            meta: {
+              title: 'assistance',
+              icon: 'mdi-clock',
+              requiresAuth: true
+            },
+            component: () => import('../views/assistance/ListAssistance')
           }
         ]
       },

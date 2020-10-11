@@ -5,6 +5,7 @@ import VueAxios from 'vue-axios'
 import app from './modules/app'
 import auth from './modules/auth'
 import user from './modules/user'
+import assistance from './modules/assistance'
 import role from './modules/role'
 import shop from './modules/shop'
 import client from './modules/client'
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
     auth,
     settings,
     user,
+    assistance,
     role,
     shop,
     category,

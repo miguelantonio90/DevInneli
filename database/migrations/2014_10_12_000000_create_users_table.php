@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('firstName');
             $table->string('lastName')->nullable();
             $table->string('email');
@@ -28,11 +28,11 @@ class CreateUsersTable extends Migration
             $table->longText('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')
+
+            $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->unsignedInteger('position_id');
-            $table->foreign('position_id')->references('id')->on('positions')
+
+            $table->foreignUuid('position_id')->references('id')->on('positions')
                 ->onDelete('cascade');
         });
     }

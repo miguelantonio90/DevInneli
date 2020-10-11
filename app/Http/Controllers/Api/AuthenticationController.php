@@ -8,7 +8,7 @@ use App\Managers\UserManager;
 use App\Position;
 
 /**
- * @group Auth endpoints
+ * @group Auth endpos
  * @method redirectPath()
  */
 class AuthenticationController extends Controller

@@ -76,10 +76,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param    $id
      * @return void
      */
-    public function show(int $id)
+    public function show( $id)
     {
 //        return Category::latest()->where('isAdmin', '=', 0)->get($id);
     }
@@ -88,11 +88,11 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  int  $id
+     * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request,  $id)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
@@ -104,10 +104,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param    $id
      * @return JsonResponse|Response|void
      */
-    public function destroy(int $id)
+    public function destroy( $id)
     {
         return ResponseHelper::sendResponse(
             $this->categoryManager->delete($id),

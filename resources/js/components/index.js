@@ -14,6 +14,7 @@ import ShoppingCartTotals from '../components/sales/ShoppingCartTotals'
 import ShoppingCart from '../components/sales/ShoppingCart'
 import Coupons from '../components/sales/Coupons'
 import AppColorPicker from '../components/core/AppColorPicker'
+import AppDateTimePicker from '../components/core/AppDateTimePicker'
 
 const components = [
   AppDataTable,
@@ -27,7 +28,8 @@ const components = [
   ShoppingCartTotals,
   ShoppingCart,
   Coupons,
-  AppColorPicker
+  AppColorPicker,
+  AppDateTimePicker
 ]
 
 // Installation of the library as a plugin

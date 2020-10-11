@@ -19,7 +19,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @group Auth endpoints
+ * @group Auth endpos
  */
 class RegisterController extends Controller
 {

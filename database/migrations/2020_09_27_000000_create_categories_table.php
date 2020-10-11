@@ -14,12 +14,12 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('color')->nullable();
             $table->timestamps();
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')
+
+            $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
         });
     }

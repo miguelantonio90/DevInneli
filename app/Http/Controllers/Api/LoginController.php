@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @group Auth endpoints
+ * @group Auth endpos
  */
 class LoginController extends Controller
 {
@@ -70,7 +70,7 @@ class LoginController extends Controller
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
+        // the IP address of the client making these requests o this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);

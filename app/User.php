@@ -4,6 +4,7 @@ namespace App;
 
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
@@ -35,7 +36,11 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable, HasApiTokens, Uuid;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $guarded = [];
 
     /**
      * The attributes that are mass assignable.
@@ -112,6 +117,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
+    }
+
+    public function assistances()
+    {
+        return $this->hasMany(Assistance::class);
     }
 
     public function sendEmailVerificationNotification()

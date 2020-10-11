@@ -78,10 +78,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param    $id
      * @return void
      */
-    public function show(int $id)
+    public function show($id)
     {
         return User::latest()->where('isAdmin', '=', 0)->get($id);
     }
@@ -89,12 +89,12 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param    $id
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function update(int $id, Request $request)
+    public function update($id, Request $request)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
@@ -125,10 +125,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param    $id
      * @return JsonResponse|Response|void
      */
-    public function destroy(int $id)
+    public function destroy($id)
     {
         return ResponseHelper::sendResponse(
             $this->userManager->delete($id),

@@ -93,11 +93,10 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditUser',
   data () {
     return {
       formValid: false,
-      formRule: {}
+      formRule: this.$rules
     }
   },
   computed: {
@@ -108,19 +107,7 @@ export default {
 
     async updateRoleHandler () {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateRole(this.editAccess).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-          }
-        })
+        await this.updateRole(this.editAccess)
       }
     }
   }

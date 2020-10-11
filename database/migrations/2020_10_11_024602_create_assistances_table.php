@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariantsValuesTable extends Migration
+class CreateAssistancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateVariantsValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('variants_values', function (Blueprint $table) {
+        Schema::create('assistances', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('variant');
-            $table->decimal('cost');
-            $table->decimal('price');
-            $table->integer('ref')->nullable();
-            $table->bigInteger('barCode')->nullable();
+            $table->dateTime('datetimeEntry');
+            $table->dateTime('datetimeExit');
+            $table->integer('totalHours');
             $table->timestamps();
 
-            $table->foreignUuid('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+            $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
         });
     }
@@ -34,6 +34,6 @@ class CreateVariantsValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variants_values');
+        Schema::dropIfExists('assistances');
     }
 }

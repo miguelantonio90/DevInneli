@@ -2,6 +2,7 @@
 
 namespace App;
 
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -17,6 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Category extends Model
 {
+    use Uuid;
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $guarded = [];
 
     /**
      * The attributes that are mass assignable.

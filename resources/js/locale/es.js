@@ -55,6 +55,7 @@ export default {
     user_list: 'Listado de Usuarios',
     employer_list: 'Listado de Empleados',
     user: 'Empleados',
+    employee: 'Empleado',
     access: 'Permiso de acceso',
     access_list: 'Lista de Permisos',
     client: 'Cliente',
@@ -75,7 +76,8 @@ export default {
     vending: 'Ventas',
     turnOn: 'Registrar Turno',
     product_add: 'Nuevo Artículo',
-    product_edit: 'Editar Artículo'
+    product_edit: 'Editar Artículo',
+    assistance: 'Tarjeta de asistencia'
   },
   // settings
   settings: {
@@ -124,7 +126,9 @@ export default {
     check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
     password_success: 'La contraseña se actualizo correctamente.',
-    warning_create: 'No se puede crear este elemento. Primero debe de crear {0}'
+    warning_create: 'No se puede crear este elemento. Primero debe de crear {0}',
+    pin_failed: 'No tienes acceso. El código PIN no es válido',
+    login_failed: 'Correo electrónico o contraseña no válidos.'
   },
   // options
   actions: {
@@ -156,6 +160,13 @@ export default {
     accessPin: 'Acceso con Pin',
     accessEmail: 'Acceso con Correo',
     description: 'Descripción'
+  },
+  assistance: {
+    entry: 'Entrada',
+    exit: 'Salida',
+    entry_hour: 'Hora de Entrada',
+    exit_hour: 'Hora de Salida',
+    total_hours: 'Total de Horas'
   },
 
   component: {

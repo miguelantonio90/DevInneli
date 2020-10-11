@@ -2,6 +2,7 @@
 
 namespace App;
 
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,6 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Shop extends Model
 {
+    use Uuid;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $guarded = [];
 
     /**
      * The attributes that are mass assignable.
@@ -56,6 +62,11 @@ class Shop extends Model
     public function articles()
     {
         return $this->belongsToMany(Articles::class);
+    }
+
+    public function assistances()
+    {
+        return $this->hasMany(Assistance::class);
     }
 
 }

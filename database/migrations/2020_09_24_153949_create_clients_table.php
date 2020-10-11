@@ -14,7 +14,7 @@ class CreateClientsTable extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('firstName');
             $table->string('lastName')->nullable();
             $table->string('email');
@@ -28,8 +28,8 @@ class CreateClientsTable extends Migration
             $table->longText('avatar')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies');
+
+            $table->foreignUuid('company_id')->references('id')->on('companies');
         });
     }
 

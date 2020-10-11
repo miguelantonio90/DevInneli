@@ -55,6 +55,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('article', 'ArticleController');
 
+        Route::resource('assistance', 'AssistanceController');
+
     });
 
 });
