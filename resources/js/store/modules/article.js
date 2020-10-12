@@ -25,7 +25,7 @@ const state = {
   newArticle: {
     name: '',
     price: '',
-    unit: '',
+    unit: true,
     cost: '',
     ref: '',
     barCode: '',

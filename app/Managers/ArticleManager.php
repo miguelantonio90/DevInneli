@@ -43,11 +43,11 @@ class ArticleManager
                         $q->where('categories.company_id', '=', $company->id);
                     }
                 ])
-                ->with('variants')
                 ->with('composites')
                 ->with('shops')
                 ->with('variants_values')
                 ->with('variants_shops')
+                ->with('variants')
                 ->get();
         }
         return $articles;
@@ -82,12 +82,6 @@ class ArticleManager
         }
         if (isset($data['inventory'])) {
             $article->inventory = $data['inventory'];
-        }
-        if (isset($data['itbis'])) {
-            $article->itbis = $data['inventory'];
-        }
-        if (isset($data['lay'])) {
-            $article->lay = $data['lay'];
         }
         if (isset($data['price'])) {
             $article->price = $data['price'];
@@ -133,7 +127,7 @@ class ArticleManager
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if ($value['variant'] = $variantValue->variant) {
+            if ($value['variant'] === $variantValue->variant) {
                 $result[] = $value;
             }
         }

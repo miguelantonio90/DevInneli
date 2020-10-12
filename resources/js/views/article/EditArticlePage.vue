@@ -198,12 +198,8 @@
                           cols="12"
                           md="12"
                         >
-                          <variant
-                            :updated="updated"
-                            :variants="editArticle.variants"
-                            :variants-values="editArticle.variants_values"
-                            @updateVariants="updateVariant"
-                          />
+                          <variant :updated="updated" :variants-parent="editArticle.variants"
+                            :variants-values-parent="editArticle.variants_values" @updateVariants="updateVariant"/>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -229,7 +225,7 @@
                           cols="12"
                           md="12"
                         >
-                          <shops-articles
+                          <shops-articles :folow_inventory="editArticle.track_inventory"
                             :shop-data="editArticle.variants_shops"
                             :variants-data="editArticle.variants_values"
                             @updateShopsData="updateShopData"

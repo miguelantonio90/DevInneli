@@ -25,8 +25,8 @@ class CreateVariantsShopsTable extends Migration
             $table->foreign('vv_id')->references('id')->on('variants_values')
                 ->onDelete('cascade');
             $table->decimal('price');
-            $table->integer('stock');
-            $table->integer('under_inventory');
+            $table->integer('stock')->nullable();
+            $table->integer('under_inventory')->nullable();
 
             $table->timestamps();
         });
