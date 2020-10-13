@@ -166,6 +166,7 @@ export default {
     changeLocale (lang) {
       this.$vuetify.lang.current = lang
       localStorage.setLanguage(lang)
+      window.location.reload()
     }
   }
 }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import rules from '../config/rules'
 import Vuetify from '../plugins/vuetify'
 import Notifications from '../plugins/notifications'
-import AppDataTable from '../components/core/AppDataTable'
+import AppDataTable from './core/app-data-table/AppDataTable'
 import AvatarPicker from '../components/core/AvatarPicker'
 import AppLoading from '../components/core/AppLoading'
 import MaterialCard from '../components/utils/MaterialCard'
@@ -15,6 +15,7 @@ import ShoppingCart from '../components/sales/ShoppingCart'
 import Coupons from '../components/sales/Coupons'
 import AppColorPicker from '../components/core/AppColorPicker'
 import AppDateTimePicker from '../components/core/AppDateTimePicker'
+import AppMultiSelect from '../components/core/AppMultiSelect'
 
 const components = [
   AppDataTable,
@@ -29,7 +30,8 @@ const components = [
   ShoppingCart,
   Coupons,
   AppColorPicker,
-  AppDateTimePicker
+  AppDateTimePicker,
+  AppMultiSelect
 ]
 
 // Installation of the library as a plugin

@@ -39,7 +39,7 @@
                 v-model="newAccess.name"
                 :label="$vuetify.lang.t('$vuetify.access.name')"
                 required
-                :rules="formRule.firstName"
+                :rules="formRule.position"
               />
             </v-col>
             <v-checkbox

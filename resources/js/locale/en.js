@@ -157,7 +157,7 @@ export default {
 
   access: {
     key: 'Key',
-    name: 'Name',
+    name: 'Position or specialty',
     accessPin: 'Access with Pin Code',
     accessEmail: 'Access with Email',
     description: 'Description'
@@ -172,7 +172,21 @@ export default {
   component: {
     select: 'Select Columns',
     others: 'others',
-    fieldColor: 'Please choose a color'
+    fieldColor: 'Please choose a color',
+    select_all: 'Select All',
+    select_one: 'Select',
+    active_select_filter: 'Active Select Filters',
+    active_many_filter: 'Active Select (From Many) Filters',
+    many_filter: 'Select (From Many)',
+    active_switch_filter: 'Active Switch Filters',
+    download_csv: 'Download as CSV file',
+    choose_columns: 'Choose Columns',
+    reset_columns: 'Reset Columns',
+    no_filters: 'No filters enabled',
+    clear_filters: 'Clear Filters',
+    filter_data: 'Filter Data',
+    filter_disabled: 'Filter Disabled',
+    loading: 'Loading'
   },
   tips: {
     account_delete: 'Permanently delete account.'

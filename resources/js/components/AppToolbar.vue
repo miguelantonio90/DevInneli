@@ -256,6 +256,7 @@ export default {
     handleChangeLocale (value) {
       this.$vuetify.lang.current = value
       localStorage.setLanguage(value)
+      window.location.reload()
     },
     handleProfileEmployee () {
       alert('Profile employee')

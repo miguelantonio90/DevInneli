@@ -56,6 +56,14 @@ class UserManager
                 ->with('shops')
                 ->get();
         }
+        $shopNames = [];
+        foreach ($users as $k => $val) {
+            foreach ($val['shops'] as $sh => $shop) {
+                $shopNames[] = $shop['name'];
+            }
+
+            $users[$k]['shopsNames'] = $shopNames;
+        }
         return $users;
     }
 

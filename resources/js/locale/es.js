@@ -156,7 +156,7 @@ export default {
   },
   access: {
     key: 'Llave',
-    name: 'Nombre',
+    name: 'Cargo o Especialidad',
     accessPin: 'Acceso con Pin',
     accessEmail: 'Acceso con Correo',
     description: 'Descripción'
@@ -172,7 +172,21 @@ export default {
   component: {
     select: 'Selecciona columnas',
     others: 'otros',
-    fieldColor: 'Elige un color'
+    fieldColor: 'Elige un color',
+    select_all: 'Seleccionar Todos',
+    select_one: 'Seleccionar',
+    active_select_filter: 'Filtros de selección activos',
+    active_many_filter: 'Seleccionar filtros activos (de muchos)',
+    many_filter: 'Seleccionar (de muchos)',
+    active_switch_filter: 'Filtros de conmutador activo',
+    download_csv: 'Descargar como archivo CSV',
+    choose_columns: 'Elija columnas',
+    reset_columns: 'Restablecer columnas',
+    no_filters: 'No hay filtros habilitados',
+    clear_filters: 'Borrar filtros',
+    filter_data: 'Filtrar datos',
+    filter_disabled: 'Filtro deshabilitado',
+    loading: 'Cargando'
   },
   tips: {
     account_delete: 'Eliminar cuenta permanentemente.'

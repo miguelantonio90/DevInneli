@@ -13,11 +13,21 @@
           :rows="categories"
           :is-loading="isTableLoading"
           sort-options="name"
-          show-color
           @create-row="toogleNewModal(true)"
           @edit-row="editCategoryHandler($event)"
           @delete-row="deleteCategoryHandler($event)"
-        />
+        >
+          <template
+            v-slot:item.color="{ item }"
+          >
+            <v-chip
+              :color="item.color"
+              dark
+            >
+              {{ item.color }}
+            </v-chip>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>

@@ -54,7 +54,7 @@
                   </template>
                   <template v-else>
                     <v-list-item-avatar>
-                      <img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'">
+                      <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title>

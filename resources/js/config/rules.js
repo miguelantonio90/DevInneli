@@ -6,6 +6,12 @@ const firstName = [
     language.t('$vuetify.name')
   ])
 ]
+const position = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.access.name')
+  ])
+]
+
 const lastName = [
   (v) => !!v || language.t('$vuetify.rule.required', [
     language.t('$vuetify.name')
@@ -124,5 +130,6 @@ export default {
   description,
   phone,
   address,
-  key
+  key,
+  position
 }
