@@ -5,6 +5,8 @@ namespace App\Managers;
 
 
 use App\Assistance;
+use DateTime;
+use Exception;
 
 class AssistanceManager
 {
@@ -47,13 +49,13 @@ class AssistanceManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
         return Assistance::create([
-            'datetimeEntry' => new \DateTime($data['datetimeEntry']),
-            'datetimeExit' => new \DateTime($data['datetimeExit']),
+            'datetimeEntry' => new DateTime($data['datetimeEntry']),
+            'datetimeExit' => new DateTime($data['datetimeExit']),
             'totalHours' => $data['totalHours'],
             'shop_id' => $data['shop'],
             'user_id' => $data['user'],
@@ -64,14 +66,14 @@ class AssistanceManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
         $assistance = Assistance::findOrFail($id);
         if ($assistance) {
-            $assistance->datetimeEntry = new \DateTime($data['datetimeEntry']);
-            $assistance->datetimeExit = new \DateTime($data['datetimeExit']);
+            $assistance->datetimeEntry = new DateTime($data['datetimeEntry']);
+            $assistance->datetimeExit = new DateTime($data['datetimeExit']);
             $assistance->shop_id = $data['shop']['id'];
             $assistance->user_id = $data['user']['id'];
             $assistance->save();

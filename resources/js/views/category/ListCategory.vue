@@ -11,7 +11,8 @@
           :title="$vuetify.lang.t('$vuetify.menu.category_list')"
           csv-filename="Categories"
           :headers="getTableColumns"
-          :items="assistances"
+          :is-loading="isTableLoading"
+          :items="categories"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort

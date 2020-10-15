@@ -108,10 +108,11 @@
   </div>
 </template>
 <script>
+/* eslint-disable vue/require-prop-types */
 
 export default {
   name: 'ShopsArticles',
-  props: ['variantsData', 'shopData','track_inventory'],
+  props: ['variantsData', 'shopData', 'trackInventory'],
   data () {
     return {
       snack: false,
@@ -127,9 +128,9 @@ export default {
     variantsData: function () {
       this.initialize()
     },
-      track_inventory:function (){
-          this.initialize()
-      }
+    trackInventory: function () {
+      this.initialize()
+    }
   },
   created () {
     this.initialize()
@@ -138,8 +139,6 @@ export default {
   },
   methods: {
     initialize () {
-      console.log(this.variantsData)
-      console.log(this.shopData)
       this.headers = []
       this.headers = [
         {

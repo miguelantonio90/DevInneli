@@ -24,6 +24,7 @@ const state = {
     phone: '',
     description: '',
     address: '',
+    primary: '',
     country: ''
 
   },
@@ -33,6 +34,7 @@ const state = {
     phone: '',
     description: '',
     address: '',
+    primary: '',
     country: ''
   },
   isActionInProgress: false,
@@ -76,6 +78,7 @@ const mutations = {
       phone: '',
       description: '',
       address: '',
+      primary: '',
       country: ''
     }
     state.saved = true
@@ -100,6 +103,7 @@ const mutations = {
       phone: '',
       description: '',
       address: '',
+      primary: '',
       country: ''
     }
     state.saved = true

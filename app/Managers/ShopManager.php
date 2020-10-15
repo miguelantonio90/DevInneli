@@ -55,9 +55,9 @@ class ShopManager
             ->get();
         if (count($shops) > 1) {
             $delete = Shop::findOrFail($id)->delete();
-            return [$delete, 'Shop has deleted successfully.'];
+            return [true, $delete, 'Shop has deleted successfully.'];
         }
-        return [false, "Shop can't by deleted"];
+        return [false, null, "Shop can't by deleted"];
 
     }
 }

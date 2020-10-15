@@ -76,6 +76,11 @@ class ShopController extends Controller
     public function destroy($id)
     {
         $dlt = $this->shopManager->delete($id);
-        return ResponseHelper::sendResponse($dlt[0], $dlt[1]);
+
+        if ($dlt[0]) {
+            return ResponseHelper::sendResponse($dlt[0], $dlt[1], $dlt[2]);
+        } else {
+            return ResponseHelper::sendError($dlt[1], $dlt[2],402);
+        }
     }
 }

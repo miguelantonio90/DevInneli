@@ -17,8 +17,8 @@ class Shop extends Model
 {
     use Uuid;
 
-    protected $keyType = 'string';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $guarded = [];
 
     /**

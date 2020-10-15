@@ -18,8 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ArticlesComposite extends Model
 {
     use Uuid;
-    protected $keyType = 'string';
+
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $guarded = [];
     /**
      * The attributes that are mass assignable.

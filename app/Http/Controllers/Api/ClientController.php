@@ -81,7 +81,7 @@ class ClientController extends Controller
      * @param    $id
      * @return void
      */
-    public function show( $id)
+    public function show($id)
     {
 //        return Client::latest()->where('isAdmin', '=', 0)->get($id);
     }
@@ -94,7 +94,7 @@ class ClientController extends Controller
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
@@ -133,7 +133,7 @@ class ClientController extends Controller
      * @param    $id
      * @return JsonResponse|Response|void
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         return ResponseHelper::sendResponse(
             $this->clientManager->delete($id),

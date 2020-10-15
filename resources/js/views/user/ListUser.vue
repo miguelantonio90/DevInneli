@@ -143,10 +143,6 @@ export default {
             '$vuetify.messages.warning_delete'
           ),
           icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
           confirmButtonText: this.$vuetify.lang.t(
             '$vuetify.actions.delete'
           ),

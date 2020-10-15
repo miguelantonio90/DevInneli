@@ -79,7 +79,7 @@
             multi-sort
             @create-row="toogleNewModal(true)"
             @edit-row="openEditModal($event)"
-            @delete-row="deleteShop($event)"
+            @delete-row="deleteShopHandler($event)"
           >
             <template v-slot:item.name="{ item }">
               <v-icon>mdi-shopping</v-icon>
@@ -169,8 +169,21 @@ export default {
       'deleteShop'
     ]),
     deleteShopHandler (shopId) {
-      this.shops.length > 1
+      this.shops.length === 1
         ? this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
+              this.$vuetify.lang.t('$vuetify.actions.delete')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.error_delete_shop'
+            ),
+            icon: 'warning',
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          }) : this.$Swal
           .fire({
             title: this.$vuetify.lang.t('$vuetify.titles.delete', [
               this.$vuetify.lang.t('$vuetify.menu.shop')
@@ -190,24 +203,6 @@ export default {
           })
           .then((result) => {
             if (result.value) this.deleteShop(shopId)
-          })
-        : this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
-              this.$vuetify.lang.t('$vuetify.actions.delete')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.error_delete_shop'
-            ),
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.cancel'
-            ),
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
           })
     }
   }

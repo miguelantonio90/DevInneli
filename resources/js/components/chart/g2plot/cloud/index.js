@@ -50,9 +50,6 @@ export default mixins(BaseMixin).extend({
         },
         shape: 'circle',
         backgroundColor: '#fff',
-        // onWordCloudHover: (e) => {
-        //   console.log(e)
-        // },
         tooltip: {
           visible: true
         },

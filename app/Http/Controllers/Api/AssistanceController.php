@@ -58,6 +58,19 @@ class AssistanceController extends Controller
     }
 
     /**
+     * @param  array  $data
+     * @return ValidatorAlias
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'datetimeEntry' => ['required'],
+            'datetimeExit' => ['required'],
+            'totalHours' => ['required', 'integer'],
+        ]);
+    }
+
+    /**
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
@@ -83,18 +96,5 @@ class AssistanceController extends Controller
             $this->manager->delete($id),
             'Assistance has deleted successfully.'
         );
-    }
-
-    /**
-     * @param  array  $data
-     * @return ValidatorAlias
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'datetimeEntry' => ['required'],
-            'datetimeExit' => ['required'],
-            'totalHours' => ['required', 'integer'],
-        ]);
     }
 }

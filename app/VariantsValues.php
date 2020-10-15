@@ -18,8 +18,8 @@ class VariantsValues extends Model
 {
     use Uuid;
 
-    protected $keyType = 'string';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $guarded = [];
 
     protected $fillable = ['variant', 'articles_id', 'price', 'cost', 'ref', 'barCode'];

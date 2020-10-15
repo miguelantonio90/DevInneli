@@ -38,8 +38,8 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens, Uuid;
 
-    protected $keyType = 'string';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $guarded = [];
 
     /**

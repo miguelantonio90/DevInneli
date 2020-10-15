@@ -57,12 +57,13 @@ class UserManager
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
-        $shopNames = [];
         foreach ($users as $k => $val) {
+            $shopNames = [];
             foreach ($val['shops'] as $sh => $shop) {
                 $shopNames[$sh] = $shop['name'];
             }
-            $users[$k]['shopsNames'] = $shopNames;
+
+            $users[$k]['shopsNames'] = array_unique($shopNames);
         }
 
         return $users;

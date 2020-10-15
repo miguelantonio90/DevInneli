@@ -18,7 +18,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -67,102 +67,6 @@ class ArticleManager
         }
         $this->updateVariant($article, $data, $shops);
         return $article;
-    }
-
-    /**
-     * @param $id
-     * @param $data
-     * @return mixed
-     */
-    public function edit($id, $data)
-    {
-        $shops = $data['shops'];
-        $article = Articles::findOrFail($id);
-        $article->name = $data['name'];
-        $article->save();
-        if ($data['composite']) {
-            $this->removeComposite($article, $data['composites']);
-            $this->updateComposite($article, $data);
-        } else {
-            $this->removeVariants($article, $data['variants']);
-            if (count($data['variants']) === 0) {
-                $this->variantManager->removeAll('vv', $article->id);
-            }
-            else {
-                $this->removeVariantsValues($article, $data['variants_values']);
-            }
-            $this->updateVariant($article, $data, $shops);
-        }
-        return $article;
-    }
-
-    /**
-     * @param $article
-     * @param $composites
-     */
-    public function removeComposite($article, $composites): void
-    {
-        $articleComposite = ArticlesComposite::latest()
-            ->where('articles_id', '=', $article->id)
-            ->get();
-        foreach ($articleComposite as $key => $value) {
-            $exist = false;
-            foreach ($composites as $k => $v) {
-                if (isset($v['id']))
-                    if($v['id'] === $value->id) {
-                    $exist = true;
-                }
-            }
-            if (!$exist) {
-                $value->delete();
-            }
-
-        }
-    }
-
-    /**
-     * @param $article
-     * @param $variants
-     */
-    public function removeVariants($article, $variants): void
-    {
-        $variant = Variant::latest()
-            ->where('articles_id', '=', $article->id)
-            ->get();
-        foreach ($variant as $key => $value) {
-            $exist = false;
-            foreach ($variants as $k => $v) {
-                if (isset($v['id']) && $v['id'] === $value['id']) {
-                    $exist = true;
-                }
-            }
-            if (!$exist) {
-                $this->variantManager->deleteVariant($value->id);
-            }
-        }
-    }
-
-    /**
-     * @param $article
-     * @param $variantValues
-     */
-    public function removeVariantsValues($article, $variantValues): void
-    {
-        $variantsValue = VariantsValues::latest()
-            ->where('articles_id', '=', $article->id)
-            ->get();
-        foreach ($variantsValue as $key => $value) {
-            $exist = false;
-            foreach ($variantValues as $k => $v) {
-                if ($v['id'] === $value['id']) {
-                    $exist = true;
-                }
-            }
-            if (!$exist) {
-                $this->variantManager->deleteVariantValue($value['id']);
-
-            }
-        }
     }
 
     /**
@@ -261,8 +165,7 @@ class ArticleManager
         foreach ($data['variants'] as $key => $value) {
             if (isset($value['id'])) {
                 $this->variantManager->editVariant($value);
-            }
-            else {
+            } else {
                 $this->variantManager->newVariant($value, $article->id);
             }
         }
@@ -270,8 +173,7 @@ class ArticleManager
         foreach ($data['variantsValues'] as $key => $value) {
             if (isset($value['id'])) {
                 $variantValue = $this->variantManager->editVariantValue($value['id'], $article->id);
-            }
-            else {
+            } else {
                 $variantValue = $this->variantManager->newVariantValue($value, $article->id);
             }
             $arrayShops = $this->getVariants($shops, $variantValue);
@@ -297,6 +199,102 @@ class ArticleManager
             }
         }
         return $result;
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function edit($id, $data)
+    {
+        $shops = $data['shops'];
+        $article = Articles::findOrFail($id);
+        $article->name = $data['name'];
+        $article->save();
+        if ($data['composite']) {
+            $this->removeComposite($article, $data['composites']);
+            $this->updateComposite($article, $data);
+        } else {
+            $this->removeVariants($article, $data['variants']);
+            if (count($data['variants']) === 0) {
+                $this->variantManager->removeAll('vv', $article->id);
+            } else {
+                $this->removeVariantsValues($article, $data['variants_values']);
+            }
+            $this->updateVariant($article, $data, $shops);
+        }
+        return $article;
+    }
+
+    /**
+     * @param $article
+     * @param $composites
+     */
+    public function removeComposite($article, $composites): void
+    {
+        $articleComposite = ArticlesComposite::latest()
+            ->where('articles_id', '=', $article->id)
+            ->get();
+        foreach ($articleComposite as $key => $value) {
+            $exist = false;
+            foreach ($composites as $k => $v) {
+                if (isset($v['id'])) {
+                    if ($v['id'] === $value->id) {
+                        $exist = true;
+                    }
+                }
+            }
+            if (!$exist) {
+                $value->delete();
+            }
+
+        }
+    }
+
+    /**
+     * @param $article
+     * @param $variants
+     */
+    public function removeVariants($article, $variants): void
+    {
+        $variant = Variant::latest()
+            ->where('articles_id', '=', $article->id)
+            ->get();
+        foreach ($variant as $key => $value) {
+            $exist = false;
+            foreach ($variants as $k => $v) {
+                if (isset($v['id']) && $v['id'] === $value['id']) {
+                    $exist = true;
+                }
+            }
+            if (!$exist) {
+                $this->variantManager->deleteVariant($value->id);
+            }
+        }
+    }
+
+    /**
+     * @param $article
+     * @param $variantValues
+     */
+    public function removeVariantsValues($article, $variantValues): void
+    {
+        $variantsValue = VariantsValues::latest()
+            ->where('articles_id', '=', $article->id)
+            ->get();
+        foreach ($variantsValue as $key => $value) {
+            $exist = false;
+            foreach ($variantValues as $k => $v) {
+                if ($v['id'] === $value['id']) {
+                    $exist = true;
+                }
+            }
+            if (!$exist) {
+                $this->variantManager->deleteVariantValue($value['id']);
+
+            }
+        }
     }
 
     /**

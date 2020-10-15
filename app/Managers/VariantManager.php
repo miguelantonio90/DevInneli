@@ -3,8 +3,6 @@
 namespace App\Managers;
 
 use App\Articles;
-use App\Shop;
-use App\User;
 use App\Variant;
 use App\VariantsShops;
 use App\VariantsValues;
@@ -110,16 +108,21 @@ class VariantManager
     public function editVariantValue($id, $data)
     {
         $variant = VariantsValues::findOrFail($id);
-        if (isset($data['variant']))
+        if (isset($data['variant'])) {
             $variant->variant = $data['variant'];
-        if (isset($data['cost']))
+        }
+        if (isset($data['cost'])) {
             $variant->cost = $data['cost'];
-        if (isset($data['price']))
+        }
+        if (isset($data['price'])) {
             $variant->price = $data['price'];
-        if (isset($data['ref']))
+        }
+        if (isset($data['ref'])) {
             $variant->ref = $data['ref'];
-        if (isset($data['barCode']))
+        }
+        if (isset($data['barCode'])) {
             $variant->ref = $data['barCode'];
+        }
         $variant->save();
         return $variant;
 
@@ -129,7 +132,7 @@ class VariantManager
      * @param $id
      * @return bool
      */
-    public function deleteVariant($id):bool
+    public function deleteVariant($id): bool
     {
         return Variant::findOrFail($id)->delete();
     }
@@ -138,7 +141,7 @@ class VariantManager
      * @param $id
      * @return bool
      */
-    public function deleteVariantValue($id):bool
+    public function deleteVariantValue($id): bool
     {
         return VariantsValues::findOrFail($id)->delete();
     }
@@ -147,7 +150,7 @@ class VariantManager
      * @param $el
      * @param $articleId
      */
-    public function removeAll($el, $articleId):void
+    public function removeAll($el, $articleId): void
     {
         $variant = $el === 'vv' ? VariantsValues::latest()
             ->where('articles_id', '=', $articleId)

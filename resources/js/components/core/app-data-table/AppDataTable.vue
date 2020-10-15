@@ -212,7 +212,6 @@ export default {
     }
   },
   mounted () {
-    // console.log({$attrs: this.$attrs, this: this})
     combineLatest([this.o$items, this.o$headers])
       .pipe(
         filter(
@@ -278,7 +277,6 @@ export default {
     },
     _setFiltersToHandler () {
       this.allFilters.map((f) => {
-        // console.log('updateFilterValue: ', f.name, { ...f })
         this.filterHandler.updateFilterValue(f.name, f.model)
       })
     },

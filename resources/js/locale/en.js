@@ -136,6 +136,7 @@ export default {
     accept: 'Accept',
     search: 'Search',
     new: 'New',
+    created: 'Create',
     newF: 'New',
     edit: 'Edit',
     delete: 'Delete',

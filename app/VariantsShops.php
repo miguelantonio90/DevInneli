@@ -19,8 +19,8 @@ class VariantsShops extends Model
 {
     use Uuid;
 
-    protected $keyType = 'string';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $guarded = [];
 
     protected $fillable = ['vv_id', 'price', 'stock', 'under_inventory', 'shop_id', 'articles_id'];

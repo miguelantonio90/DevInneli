@@ -19,6 +19,7 @@ class CreateArticlesTable extends Migration
             $table->boolean('unit')->default(false);
             $table->decimal('price')->nullable();
             $table->string('cost')->nullable();
+            $table->string('color')->nullable();
             $table->string('ref')->nullable();
             $table->string('barCode')->nullable();
             $table->boolean('composite')->default(false);
@@ -28,8 +29,7 @@ class CreateArticlesTable extends Migration
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->foreignUuid('category_id')->nullable()
-                ->references('id')->on('categories')
+            $table->foreignUuid('category_id')->nullable()->references('id')->on('categories')
                 ->onDelete('cascade');
         });
     }

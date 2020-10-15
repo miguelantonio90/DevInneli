@@ -8,11 +8,13 @@
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
-          :columns="geArticleTableColumns"
-          :rows="articles"
+          csv-filename="Articles"
+          :headers="getTableColumns"
           :is-loading="isTableLoading"
-          sort-options="name"
-          show-avatar
+          :items="articles"
+          :sort-by="['name']"
+          :sort-desc="[false, true]"
+          multi-sort
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
@@ -42,19 +44,22 @@ export default {
     ]),
     ...mapState('category', ['categories', 'isActionInProgress']),
     ...mapState('shop', ['shops', 'isShopLoading']),
-    geArticleTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name'
+          value: 'name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.price'),
-          value: 'price'
+          value: 'price',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.category'),
-          value: 'category.name'
+          value: 'category.name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

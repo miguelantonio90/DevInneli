@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Article;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
-use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -59,7 +59,7 @@ class ArticleController extends Controller
 
         return ResponseHelper::sendResponse(
             $user,
-            'User has created successfully.'
+            'Article has created successfully.'
         );
     }
 
@@ -76,17 +76,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
-     */
-    public function show( $id)
-    {
-        return User::latest()->where('isAdmin', '=', 0)->get($id);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
@@ -94,38 +83,15 @@ class ArticleController extends Controller
      * @return JsonResponse|Response
      * @throws ValidationException
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
             $this->articleManager->edit($id, $request->all()),
-            'User has updated successfully.'
+            'Article has updated successfully.'
         );
     }
 
-    /**
-     * @param  Request  $request
-     * @param $id
-     * @return JsonResponse|Response
-     */
-    public function updateAvatar(Request $request, $id)
-    {
-        if (!empty($request)) {
-            $app = (new User())->find($id);
-            $app->find($id);
-            $app->avatar = $request->get('image');
-            $app->save();
-            return ResponseHelper::sendResponse(
-                $app,
-                'User avatar has updated successfully.'
-            );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'User avatar has not updated.'
-            );
-        }
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -133,11 +99,11 @@ class ArticleController extends Controller
      * @param    $id
      * @return JsonResponse|Response|void
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         return ResponseHelper::sendResponse(
             $this->articleManager->delete($id),
-            'Users has deleted successfully.'
+            'Article has deleted successfully.'
         );
     }
 }
