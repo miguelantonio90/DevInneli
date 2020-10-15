@@ -20,7 +20,7 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
-  keys: ['supervisor', 'atm', 'waiter', 'seller'],
+  keys: ['manager', 'supervisor', 'atm', 'waiter', 'seller'],
   newAccess: {
     key: '',
     name: '',
