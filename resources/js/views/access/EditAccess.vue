@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleEditModal"
     max-width="450px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -28,6 +29,8 @@
                 v-model="editAccess.key"
                 disabled
                 :items="keys"
+                item-text="name"
+                item-value="value"
                 :label="$vuetify.lang.t('$vuetify.access.key')"
               />
             </v-col>
@@ -39,7 +42,7 @@
                 v-model="editAccess.name"
                 :label="$vuetify.lang.t('$vuetify.access.name')"
                 required
-                :rules="formRule.firstName"
+                :rules="formRule.position"
               />
             </v-col>
             <v-checkbox

@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleNewModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -54,7 +55,7 @@
                   </template>
                   <template v-else>
                     <v-list-item-avatar>
-                      <img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'">
+                      <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title>

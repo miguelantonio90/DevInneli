@@ -1,4 +1,5 @@
 import client from '../../api/client'
+import data from '../../data'
 
 const FETCHING_CLIENTS = 'FETCHING_CLIENTS'
 const SWITCH_CLIENT_NEW_MODAL = 'SWITCH_CLIENT_NEW_MODAL'
@@ -66,6 +67,15 @@ const mutations = {
     state.isTableLoading = isLoading
   },
   [FETCHING_CLIENTS] (state, clients) {
+    clients.map((value) => {
+      Object.keys(data.countries).map((key) => {
+        if (key === value.country) {
+          value.nameCountry = data.countries[key].name + '(' + data.countries[key].native + ')'
+          value.countryFlag = data.countries[key].emoji
+        }
+      })
+    })
+
     state.clients = clients
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {

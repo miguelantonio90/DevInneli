@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleEditModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -183,6 +184,7 @@ export default {
     bindProps () {
       return {
         mode: 'international',
+        clearable: true,
         defaultCountry: this.editClient.country ? this.editClient.country : 'US',
         disabledFetchingCountry: false,
         autocomplete: 'off',

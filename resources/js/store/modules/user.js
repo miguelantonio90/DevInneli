@@ -30,8 +30,8 @@ const state = {
     avatar: '',
     pinCode: '',
     phone: '',
-    positions: null,
-    shops: null
+    position: [],
+    shops: []
   },
   editUser: {
     id: '',
@@ -42,8 +42,8 @@ const state = {
     avatar: '',
     pinCode: '',
     phone: '',
-    positions: null,
-    shops: null
+    position: [],
+    shops: []
   },
   isUserTableLoading: false,
   isActionInProgress: false,
@@ -79,7 +79,6 @@ const mutations = {
       phone: '',
       password: '',
       avatar: '',
-      employer: {},
       position: [],
       position_id: '',
       shops: []

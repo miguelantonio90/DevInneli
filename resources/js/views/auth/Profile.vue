@@ -336,8 +336,9 @@ export default {
     bindProps () {
       return {
         mode: 'international',
+        clearable: true,
         defaultCountry: this.user.company.country || 'US',
-        disabledFetchingCountry: false,
+        disabledFetchingCountry: true,
         autocomplete: 'off',
         dropdownOptions: {
           disabledDialCode: false

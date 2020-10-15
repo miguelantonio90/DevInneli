@@ -22,6 +22,7 @@ class CategoryManager
                 ->where('company_id', '=', $company->id)
                 ->get();
         }
+
         return $categories;
     }
 

@@ -10,11 +10,12 @@
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.assistance'),])"
-          :columns="getUserTableColumns"
-          :rows="assistances"
-          :is-loading="isTableLoading"
-          sort-options="firstName"
-          show-avatar
+          csv-filename="Assistance"
+          :headers="getTableColumns"
+          :items="assistances"
+          :sort-by="['datetimeEntry']"
+          :sort-desc="[false, true]"
+          multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editAssistanceHandler($event)"
           @delete-row="deleteAssistanceHandler($event)"
@@ -47,7 +48,7 @@ export default {
       'assistances',
       'isTableLoading'
     ]),
-    getUserTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.assistance.entry'),
@@ -59,11 +60,13 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.employee'),
-          value: 'user.firstName'
+          value: 'user.firstName',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name'
+          value: 'shop.name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.assistance.total_hours'),

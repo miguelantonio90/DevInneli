@@ -9,15 +9,27 @@
         <edit-category v-if="showEditModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.menu.category_list')"
-          :columns="getUserTableColumns"
-          :rows="categories"
-          :is-loading="isTableLoading"
-          sort-options="name"
-          show-color
+          csv-filename="Categories"
+          :headers="getTableColumns"
+          :items="assistances"
+          :sort-by="['name']"
+          :sort-desc="[false, true]"
+          multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editCategoryHandler($event)"
           @delete-row="deleteCategoryHandler($event)"
-        />
+        >
+          <template
+            v-slot:item.color="{ item }"
+          >
+            <v-chip
+              :color="item.color"
+              dark
+            >
+              {{ item.color }}
+            </v-chip>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -47,11 +59,12 @@ export default {
       'categories',
       'isTableLoading'
     ]),
-    getUserTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name'
+          value: 'name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.color'),

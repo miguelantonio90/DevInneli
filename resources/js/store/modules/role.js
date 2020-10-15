@@ -17,10 +17,18 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   roles: [],
+  rolesToSelect: [],
   avatar: '',
   loading: false,
   saved: false,
-  keys: ['supervisor', 'atm', 'waiter', 'seller'],
+  keys: [
+    { name: 'CEO Manager', value: 'super_manager', disabled: true },
+    { name: 'Manager', value: 'manager' },
+    { name: 'Supervisor (Supervisor)', value: 'supervisor' },
+    { name: 'Atm (Cajero)', value: 'atm' },
+    { name: 'Waiter (Camarero)', value: 'waiter' },
+    { name: 'Seller (Vendedor)', value: 'seller' }
+  ],
   newAccess: {
     key: '',
     name: '',

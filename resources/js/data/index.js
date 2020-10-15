@@ -2765,7 +2765,7 @@ const getCountryToSelect = () => {
   Object.keys(countries).map((key) => {
     result.push({
       id: key,
-      name: countries[key].name,
+      name: countries[key].name + '(' + countries[key].native + ')',
       emoji: countries[key].emoji,
       code: '+' + countries[key].code
     })

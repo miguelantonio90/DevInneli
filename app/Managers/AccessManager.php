@@ -15,11 +15,17 @@ class AccessManager
     public function getByCompany()
     {
         $company = CompanyManager::getCompanyByAdmin();
-        return DB::table('positions')
+        $positions = DB::table('positions')
             ->where('key', '<>', 'admin')
             ->where('company_id', '=', $company->id)
-            ->orderBy('key', 'ASC')
             ->get();
+        foreach ($positions as $k => $v) {
+            $positions[$k]->accessPin = $v->accessPin === 1;
+            $positions[$k]->accessEmail = $v->accessEmail === 1;
+            $positions[$k]->disabled = $v->key === 'super_manager';
+        }
+
+        return $positions;
     }
 
     /**

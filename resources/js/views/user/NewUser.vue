@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleNewModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -191,14 +192,14 @@ export default {
     bindProps () {
       return {
         mode: 'international',
-        defaultCountry: 'US',
+        clearable: true,
         disabledFetchingCountry: false,
         autocomplete: 'off',
         dropdownOptions: {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: false
+          showDialCode: true
         }
       }
     }

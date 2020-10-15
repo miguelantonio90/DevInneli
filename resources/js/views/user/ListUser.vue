@@ -10,15 +10,35 @@
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.user'),])"
-          :columns="getUserTableColumns"
-          :rows="users"
+
           :is-loading="isTableLoading"
-          sort-options="firstName"
-          show-avatar
+          csv-filename="Employees"
+          :headers="getTableColumns"
+          :items="users"
+          :sort-by="['firstName']"
+          :sort-desc="[false, true]"
+          multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editUserHandler($event)"
           @delete-row="deleteUserHandler($event)"
-        />
+        >
+          <template
+            v-slot:item.firstName="{ item }"
+          >
+            <v-avatar>
+              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+            </v-avatar>
+            {{ item.firstName }}
+          </template>
+          <template v-slot:item.shopsNames="{ item }">
+            <v-chip
+              v-for="(shop, i) of item.shopsNames"
+              :key="i"
+            >
+              {{ shop }}
+            </v-chip>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -47,11 +67,12 @@ export default {
       'users',
       'isTableLoading'
     ]),
-    getUserTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName'
+          value: 'firstName',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.lastName'),
@@ -63,7 +84,13 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.position'),
-          value: 'position.name'
+          value: 'position.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'shopsNames',
+          select_filter_many: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -88,7 +115,7 @@ export default {
       this.openEditModal($event)
     },
     deleteUserHandler (userId) {
-      (this.users.filter(c => c.id === userId)[0].position.key === 'manager') ? this.$Swal
+      (this.users.filter(c => c.id === userId)[0].position.key === 'super_manager') ? this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
             this.$vuetify.lang.t('$vuetify.actions.delete')

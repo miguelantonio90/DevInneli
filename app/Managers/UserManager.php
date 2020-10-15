@@ -54,8 +54,17 @@ class UserManager
                     }
                 ])
                 ->with('shops')
+                ->orderBy('created_at', 'ASC')
                 ->get();
         }
+        $shopNames = [];
+        foreach ($users as $k => $val) {
+            foreach ($val['shops'] as $sh => $shop) {
+                $shopNames[$sh] = $shop['name'];
+            }
+            $users[$k]['shopsNames'] = $shopNames;
+        }
+
         return $users;
     }
 
