@@ -26,6 +26,8 @@
               <v-select
                 v-model="newAccess.key"
                 :items="keys"
+                item-text="name"
+                item-value="value"
                 :label="$vuetify.lang.t('$vuetify.access.key')"
                 requiered
                 :rules="formRule.key"

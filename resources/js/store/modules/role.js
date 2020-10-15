@@ -20,7 +20,15 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
-  keys: ['manager', 'supervisor', 'atm', 'waiter', 'seller'],
+  /* keys: ['manager', 'supervisor', 'atm', 'seller', 'waiter'], */
+  keys: [
+    { name: 'CEO Manager', value: 'super_manager', disabled: true },
+    { name: 'Manager', value: 'manager' },
+    { name: 'Supervisor (Supervisor)', value: 'supervisor' },
+    { name: 'Atm (Cajero)', value: 'atm' },
+    { name: 'Waiter (Camarero)', value: 'waiter' },
+    { name: 'Seller (Vendedor)', value: 'seller' }
+  ],
   newAccess: {
     key: '',
     name: '',

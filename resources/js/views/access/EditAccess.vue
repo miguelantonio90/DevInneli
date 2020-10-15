@@ -28,6 +28,8 @@
                 v-model="editAccess.key"
                 disabled
                 :items="keys"
+                item-text="name"
+                item-value="value"
                 :label="$vuetify.lang.t('$vuetify.access.key')"
               />
             </v-col>

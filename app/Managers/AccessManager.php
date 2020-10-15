@@ -17,9 +17,7 @@ class AccessManager
         $company = CompanyManager::getCompanyByAdmin();
         $positions = DB::table('positions')
             ->where('key', '<>', 'admin')
-            ->where('key', '<>', 'super_manager')
             ->where('company_id', '=', $company->id)
-            ->orderBy('key', 'ASC')
             ->get();
         foreach ($positions as $k => $v) {
             $positions[$k]->accessPin = $v->accessPin === 1;
