@@ -22,6 +22,7 @@ class AccessManager
         foreach ($positions as $k => $v) {
             $positions[$k]->accessPin = $v->accessPin === 1;
             $positions[$k]->accessEmail = $v->accessEmail === 1;
+            $positions[$k]->disabled = $v->key === 'super_manager';
         }
 
         return $positions;

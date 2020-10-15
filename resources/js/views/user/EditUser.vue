@@ -189,6 +189,7 @@ export default {
     bindProps () {
       return {
         mode: 'international',
+        clearable: true,
         defaultCountry: this.editUser.country ? this.editUser.country : 'US',
         disabledFetchingCountry: false,
         autocomplete: 'off',

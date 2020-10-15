@@ -128,14 +128,14 @@ export default {
     bindProps () {
       return {
         mode: 'international',
-        defaultCountry: 'US',
+        clearable: true,
         disabledFetchingCountry: false,
         autocomplete: 'off',
         dropdownOptions: {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: false
+          showDialCode: true
         }
       }
     }

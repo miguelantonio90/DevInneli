@@ -17,10 +17,10 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   roles: [],
+  rolesToSelect: [],
   avatar: '',
   loading: false,
   saved: false,
-  /* keys: ['manager', 'supervisor', 'atm', 'seller', 'waiter'], */
   keys: [
     { name: 'CEO Manager', value: 'super_manager', disabled: true },
     { name: 'Manager', value: 'manager' },

@@ -108,7 +108,7 @@ export default {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: false
+          showDialCode: true
         }
       }
     }
