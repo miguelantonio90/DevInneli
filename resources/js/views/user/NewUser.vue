@@ -125,7 +125,7 @@
               cols="12"
               md="12"
             >
-              <!--<v-select
+              <v-select
                 v-model="newUser.shops"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
@@ -136,17 +136,6 @@
                 :rules="formRule.shops"
                 required
                 return-object
-              />-->
-              <app-multi-select
-                v-model="newUser.shops"
-                :items="shops"
-                :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                :item-text="`name`"
-                :loading="isShopLoading"
-                :disabled="!!isShopLoading"
-                :rules="formRule.shops"
-                :required="true"
-                :return-object="true"
               />
             </v-col>
           </v-row>

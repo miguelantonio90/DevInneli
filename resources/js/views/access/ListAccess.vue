@@ -8,7 +8,7 @@
         <new-access v-if="showNewModal" />
         <edit-access v-if="showEditModal" />
         <v-card>
-          <v-card-title>
+          <!--<v-card-title>
             {{
               $vuetify.lang.t('$vuetify.titles.list', [
                 $vuetify.lang.t('$vuetify.menu.access'),
@@ -99,7 +99,55 @@
                 mdi-cancel
               </v-icon>
             </template>
-          </v-data-table>
+          </v-data-table>-->
+          <app-data-table
+            :title="$vuetify.lang.t('$vuetify.titles.list',
+                                    [$vuetify.lang.t('$vuetify.menu.access'),])"
+
+            :is-loading="isTableLoading"
+            csv-filename="Access"
+            :headers="getTableColumns"
+            :items="roles"
+            :sort-by="['name']"
+            :sort-desc="[false, true]"
+            multi-sort
+            @create-row="toogleNewModal(true)"
+            @edit-row="openEditModal($event)"
+            @delete-row="deleteRole($event)"
+          >
+            <template v-slot:item.name="{ item }">
+              <v-icon>mdi-account-key</v-icon>
+              {{ item.name }}
+            </template>
+            <template v-slot:item.accessEmail="{ item }">
+              <v-icon
+                v-if="item.accessEmail"
+                small
+              >
+                mdi-check
+              </v-icon>
+              <v-icon
+                v-else
+                small
+              >
+                mdi-cancel
+              </v-icon>
+            </template>
+            <template v-slot:item.accessPin="{ item }">
+              <v-icon
+                v-if="item.accessPin"
+                small
+              >
+                mdi-check
+              </v-icon>
+              <v-icon
+                v-else
+                small
+              >
+                mdi-cancel
+              </v-icon>
+            </template>
+          </app-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -133,7 +181,8 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.access.name'),
-          value: 'name'
+          value: 'name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.access.accessPin'),

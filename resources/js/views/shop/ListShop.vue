@@ -9,14 +9,7 @@
         <edit-shop v-if="showEditModal" />
         <show-shop v-if="showShowModal" />
         <v-card>
-          <v-card-title>
-            {{
-              $vuetify.lang.t('$vuetify.titles.list', [
-                $vuetify.lang.t('$vuetify.menu.shop'),
-              ])
-            }}
-          </v-card-title>
-          <v-data-table
+          <!--<v-data-table
             :headers="getTableColumns"
             :items="shops"
             :loading="isTableLoading"
@@ -72,7 +65,22 @@
               <v-icon>mdi-shopping</v-icon>
               {{ item.name }}
             </template>
-          </v-data-table>
+          </v-data-table>-->
+          <app-data-table
+            :title="$vuetify.lang.t('$vuetify.titles.list',
+                                    [$vuetify.lang.t('$vuetify.menu.shop'),])"
+
+            :is-loading="isTableLoading"
+            csv-filename="Shops"
+            :headers="getTableColumns"
+            :items="shops"
+            :sort-by="['name']"
+            :sort-desc="[false, true]"
+            multi-sort
+            @create-row="toogleNewModal(true)"
+            @edit-row="openEditModal($event)"
+            @delete-row="deleteShop($event)"
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -108,11 +116,13 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.name'),
-          value: 'name'
+          value: 'name',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country'
+          value: 'country',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.phone'),

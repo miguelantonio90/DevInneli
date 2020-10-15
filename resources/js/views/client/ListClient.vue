@@ -10,11 +10,12 @@
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.client'),])"
-          :columns="getUserTableColumns"
-          :rows="clients"
-          :is-loading="isTableLoading"
-          sort-options="firstName"
-          show-avatar
+          csv-filename="Categories"
+          :headers="getTableColumns"
+          :items="clients"
+          :sort-by="['firstName','lastName']"
+          :sort-desc="[false, true]"
+          multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editClientHandler($event)"
           @delete-row="deleteClientHandler($event)"
@@ -47,15 +48,17 @@ export default {
       'clients',
       'isTableLoading'
     ]),
-    getUserTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName'
+          value: 'firstName',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.lastName'),
-          value: 'lastName'
+          value: 'lastName',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.email'),
@@ -63,7 +66,8 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country'
+          value: 'country',
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

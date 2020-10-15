@@ -13,7 +13,7 @@
 
           :is-loading="isTableLoading"
           csv-filename="Employees"
-          :headers="getUserTableColumns"
+          :headers="getTableColumns"
           :items="users"
           :sort-by="['firstName']"
           :sort-desc="[false, true]"
@@ -30,7 +30,7 @@
             </v-avatar>
             {{ item.firstName }}
           </template>
-          <template v-slot:item.shops="{ item }">
+          <template v-slot:item.shopsNames="{ item }">
             <v-chip
               v-for="(shop, i) of item.shopsNames"
               :key="i"
@@ -67,7 +67,7 @@ export default {
       'users',
       'isTableLoading'
     ]),
-    getUserTableColumns () {
+    getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
