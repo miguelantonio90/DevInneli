@@ -54,6 +54,7 @@ class UserManager
                     }
                 ])
                 ->with('shops')
+                ->orderBy('created_at', 'ASC')
                 ->get();
         }
         $shopNames = [];
