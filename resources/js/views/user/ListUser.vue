@@ -115,7 +115,7 @@ export default {
       this.openEditModal($event)
     },
     deleteUserHandler (userId) {
-      (this.users.filter(c => c.id === userId)[0].position.key === 'manager') ? this.$Swal
+      (this.users.filter(c => c.id === userId)[0].position.key === 'super_manager') ? this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
             this.$vuetify.lang.t('$vuetify.actions.delete')

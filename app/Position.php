@@ -28,8 +28,8 @@ class Position extends Model
     public static function createFirst($company): Position
     {
         $position = new Position();
-        $position->key = 'manager';
-        $position->name = 'Manager';
+        $position->key = 'super_manager';
+        $position->name = 'CEO Manager';
         $position->accessEmail = 1;
         $position->accessPin = 1;
         $position->company_id = $company->id;
