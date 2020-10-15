@@ -80,7 +80,7 @@ class ShopController extends Controller
         if ($dlt[0]) {
             return ResponseHelper::sendResponse($dlt[0], $dlt[1], $dlt[2]);
         } else {
-            return ResponseHelper::sendError($dlt[1], $dlt[2],402);
+            return ResponseHelper::sendError($dlt[1], $dlt[2], 402);
         }
     }
 }
