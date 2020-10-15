@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleNewModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -192,7 +193,7 @@ export default {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: false
+          showDialCode: true
         }
       }
     }

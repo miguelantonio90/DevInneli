@@ -1,4 +1,5 @@
 import shop from '../../api/shop'
+import data from '../../data'
 
 const FETCHING_SHOPS = 'FETCHING_SHOPS'
 const SWITCH_SHOP_NEW_MODAL = 'SWITCH_SHOP_NEW_MODAL'
@@ -54,6 +55,15 @@ const mutations = {
     state.isShopLoading = isLoading
   },
   [FETCHING_SHOPS] (state, shops) {
+    shops.map((value) => {
+      Object.keys(data.countries).map((key) => {
+        if (key === value.country) {
+          value.nameCountry = data.countries[key].name + '(' + data.countries[key].native + ')'
+          value.countryFlag = data.countries[key].emoji
+        }
+      })
+    })
+
     state.shops = shops
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
@@ -64,7 +74,9 @@ const mutations = {
     state.newShop = {
       name: '',
       phone: '',
-      description: ''
+      description: '',
+      address: '',
+      country: ''
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -86,7 +98,9 @@ const mutations = {
       id: '',
       name: '',
       phone: '',
-      description: ''
+      description: '',
+      address: '',
+      country: ''
     }
     state.saved = true
     this._vm.$Toast.fire({

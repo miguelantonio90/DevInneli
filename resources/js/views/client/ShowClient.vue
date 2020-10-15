@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleShowModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>

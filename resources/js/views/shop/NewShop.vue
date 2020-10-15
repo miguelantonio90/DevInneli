@@ -2,6 +2,7 @@
   <v-dialog
     v-model="toogleNewModal"
     max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -137,6 +138,11 @@ export default {
           showDialCode: false
         }
       }
+    }
+  },
+  watch: {
+    toogleNewModal () {
+      this.$refs.form.reset()
     }
   },
   mounted () {

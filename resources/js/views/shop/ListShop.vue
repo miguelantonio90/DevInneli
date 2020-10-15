@@ -80,7 +80,28 @@
             @create-row="toogleNewModal(true)"
             @edit-row="openEditModal($event)"
             @delete-row="deleteShop($event)"
-          />
+          >
+            <template v-slot:item.name="{ item }">
+              <v-icon>mdi-shopping</v-icon>
+              {{ item.name }}
+            </template>
+            <template v-slot:item.nameCountry="{ item }">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-avatar left>
+                      {{ item.countryFlag }}
+                    </v-avatar>
+                    {{ item.country }}
+                  </v-chip>
+                </template>
+                <span>{{ item.nameCountry }}</span>
+              </v-tooltip>
+            </template>
+          </app-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -121,7 +142,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country',
+          value: 'nameCountry',
           select_filter: true
         },
         {

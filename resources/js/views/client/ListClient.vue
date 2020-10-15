@@ -13,13 +13,38 @@
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="clients"
-          :sort-by="['firstName','lastName']"
+          :sort-by="['firstName']"
           :sort-desc="[false, true]"
           multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editClientHandler($event)"
           @delete-row="deleteClientHandler($event)"
-        />
+        >
+          <template
+            v-slot:item.firstName="{ item }"
+          >
+            <v-avatar>
+              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+            </v-avatar>
+            {{ item.firstName }}
+          </template>
+          <template v-slot:item.nameCountry="{ item }">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-avatar left>
+                    {{ item.countryFlag }}
+                  </v-avatar>
+                  {{ item.country }}
+                </v-chip>
+              </template>
+              <span>{{ item.nameCountry }}</span>
+            </v-tooltip>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -66,7 +91,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country',
+          value: 'nameCountry',
           select_filter: true
         },
         {
