@@ -6,6 +6,10 @@ const firstName = [
     language.t('$vuetify.name')
   ])
 ]
+const required = [
+  (v) => !!v || language.t('$vuetify.rule.general_required')
+]
+
 const position = [
   (v) => !!v || language.t('$vuetify.rule.required', [
     language.t('$vuetify.access.name')
@@ -131,5 +135,7 @@ export default {
   phone,
   address,
   key,
-  position
+  position,
+  required
 }
+

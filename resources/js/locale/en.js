@@ -205,7 +205,7 @@ export default {
     track_inventory: 'Track inventory',
     itbis: 'ITBIS(18%)',
     tax: 'Tax',
-    lay: 'Propina de ley(10%)',
+    lay: 'Law tip (10%)',
     composite_text: 'Compound articles contain a certain number of other articles'
   },
   panel: {
@@ -221,7 +221,9 @@ export default {
     cost: 'Cost',
     ref: 'REF',
     barCode: 'Bar Code',
-    options: 'Options'
+    options: 'Options',
+    cant: 'Quantify',
+    total_cost: 'Total Cost: '
   },
   shop_article: {
     under_inventory: 'Low Inventory',

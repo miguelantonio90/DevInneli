@@ -111,8 +111,7 @@
 
 export default {
   name: 'ShopsArticles',
-  // eslint-disable-next-line vue/require-prop-types
-  props: ['variantsData', 'shopData'],
+  props: ['variantsData', 'shopData','track_inventory'],
   data () {
     return {
       snack: false,
@@ -127,7 +126,10 @@ export default {
   watch: {
     variantsData: function () {
       this.initialize()
-    }
+    },
+      track_inventory:function (){
+          this.initialize()
+      }
   },
   created () {
     this.initialize()
@@ -159,7 +161,7 @@ export default {
         text: this.$vuetify.lang.t('$vuetify.variants.price'),
         value: 'price'
       })
-      if (this.variantsData.length > 0) {
+      if (this.track_inventory0) {
         this.headers.push({
           text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
           value: 'stock'

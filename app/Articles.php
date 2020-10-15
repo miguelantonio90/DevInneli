@@ -55,12 +55,20 @@ class Articles extends Model
 
     public function variants_shops(): HasMany
     {
-        return $this->hasMany(VariantsShops::class);
+        return $this->hasMany(VariantsShops::class)->addSelect(['name' => Shop::select('name')
+            ->whereColumn('shops.id', 'variants_shops.shop_id')
+        ])->addSelect(['variant' => VariantsValues::select('variant')
+            ->whereColumn('variants_values.id', 'variants_shops.vv_id')
+        ]);
     }
 
     public function composites(): HasMany
     {
-        return $this->hasMany(ArticlesComposite::class);
+        return $this->hasMany(ArticlesComposite::class)->addSelect(['articles_name' => self::select('name')
+            ->whereColumn('articles_composites.articles_id', 'articles.id')
+        ])->addSelect(['composite_name' => self::select('name')
+            ->whereColumn('articles_composites.composite_id', 'articles.id')
+        ]);
     }
 
     public function shops(): BelongsToMany

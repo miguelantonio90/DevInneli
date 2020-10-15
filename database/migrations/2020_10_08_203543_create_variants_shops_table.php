@@ -16,8 +16,8 @@ class CreateVariantsShopsTable extends Migration
         Schema::create('variants_shops', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->decimal('price');
-            $table->integer('stock');
-            $table->integer('under_inventory');
+            $table->integer('stock')->nullable();
+            $table->integer('under_inventory')->nullable();
             $table->timestamps();
 
             $table->foreignUuid('articles_id')->references('id')->on('articles')

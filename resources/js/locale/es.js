@@ -77,7 +77,7 @@ export default {
     turnOn: 'Registrar Turno',
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
-    assistance: 'Tarjeta de asistencia'
+      assistance: 'Tarjeta de asistencia'
   },
   // settings
   settings: {
@@ -100,7 +100,8 @@ export default {
     pin: {
       min: 'La cantidad mínima es de {0} digítos',
       max: 'La cantidad máxima es de {0} digítos'
-    }
+    },
+      general_required:'Este campo es requerido'
   },
   // profile
   profile: {
@@ -127,8 +128,11 @@ export default {
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
     password_success: 'La contraseña se actualizo correctamente.',
     warning_create: 'No se puede crear este elemento. Primero debe de crear {0}',
-    pin_failed: 'No tienes acceso. El código PIN no es válido',
-    login_failed: 'Correo electrónico o contraseña no válidos.'
+      sure_delete: 'Está seguro de eliminar este elemento?',
+      dont_add:'Ya este elemento se encuentra adicinado.',
+      pin_failed: 'No tienes acceso. El código PIN no es válido',
+      login_failed: 'Correo electrónico o contraseña no válidos.',
+      warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
   },
   // options
   actions: {
@@ -161,13 +165,13 @@ export default {
     accessEmail: 'Acceso con Correo',
     description: 'Descripción'
   },
-  assistance: {
-    entry: 'Entrada',
-    exit: 'Salida',
-    entry_hour: 'Hora de Entrada',
-    exit_hour: 'Hora de Salida',
-    total_hours: 'Total de Horas'
-  },
+    assistance: {
+        entry: 'Entrada',
+        exit: 'Salida',
+        entry_hour: 'Hora de Entrada',
+        exit_hour: 'Hora de Salida',
+        total_hours: 'Total de Horas'
+    },
 
   component: {
     select: 'Selecciona columnas',
@@ -221,7 +225,9 @@ export default {
     cost: 'Coste',
     ref: 'REF',
     barCode: 'Código de Barras',
-    options: 'Opciones'
+    options: 'Opciones',
+      cant: 'Cantidad',
+      total_cost:'Costo Total: '
   },
   shop_article: {
     under_inventory: 'Inventory Under',

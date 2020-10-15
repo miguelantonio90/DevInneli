@@ -24,13 +24,12 @@ class CreateArticlesTable extends Migration
             $table->boolean('composite')->default(false);
             $table->boolean('inventory')->default(false);
             $table->boolean('track_inventory')->default(false);
-            $table->boolean('itbis')->default(false);
-            $table->boolean('lay')->default(true);
             $table->timestamps();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->foreignUuid('category_id')->references('id')->on('categories')
+            $table->foreignUuid('category_id')->nullable()
+                ->references('id')->on('categories')
                 ->onDelete('cascade');
         });
     }
