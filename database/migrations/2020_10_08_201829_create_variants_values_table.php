@@ -14,16 +14,16 @@ class CreateVariantsValuesTable extends Migration
     public function up()
     {
         Schema::create('variants_values', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('articles_id');
-            $table->foreign('articles_id')->references('id')->on('articles')
-                ->onDelete('cascade');
+            $table->uuid('id')->primary();
             $table->string('variant');
             $table->decimal('cost');
             $table->decimal('price');
             $table->integer('ref')->nullable();
             $table->bigInteger('barCode')->nullable();
             $table->timestamps();
+
+            $table->foreignUuid('articles_id')->references('id')->on('articles')
+                ->onDelete('cascade');
         });
     }
 

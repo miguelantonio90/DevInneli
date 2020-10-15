@@ -39,29 +39,29 @@
                                             <v-text-field
                                                 v-model="newArticle.name"
                                                 :label="$vuetify.lang.t('$vuetify.firstName')"
-                                                :rules="formRule.firstName"
-                                                required
+                                                :rules="formRule.required"
+                                                required @keypress="lnSpace"
                                             />
                                         </v-col>
                                         <v-col
                                             cols="12"
                                             md="4"
                                         >
-                                            <v-text-field
+                                            <v-text-field :rules="formRule.required"
                                                 v-model="newArticle.barCode"
                                                 :label="$vuetify.lang.t('$vuetify.barCode')"
-                                                required
+                                                required @keypress="lettersNumbers"
                                             />
                                         </v-col>
                                         <v-col
                                             cols="12"
                                             md="4"
                                         >
-                                            <v-text-field
+                                            <v-text-field default="0.00"
                                                 v-model="newArticle.price"
                                                 :label="$vuetify.lang.t('$vuetify.price')"
-                                                autocomplete="off" steep="0.1"
-                                                required type="number"
+                                                autocomplete="off"
+                                                required
                                             />
                                         </v-col>
                                         <v-col cols="12" md="4">
@@ -139,31 +139,26 @@
                                                 v-model="newArticle.composite"
                                                 :disabled="articles.length===0"
                                                 :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
-                                                :label="$vuetify.lang.t('$vuetify.articles.composite')"
                                                 @change="changeComposite"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="3"
-                                            style=" padding-top: 0px;padding-left: 0px;padding-bottom: 0px;margin-top: 25px;"
-                                        >
-                                            <v-tooltip
-                                                right
-                                                class="md-6"
                                             >
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-icon
-                                                        color="primary"
-                                                        dark
-                                                        v-bind="attrs"
-                                                        v-on="on"
-                                                    >
-                                                        mdi-information-outline
-                                                    </v-icon>
-                                                </template>
-                                                <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
-                                            </v-tooltip>
+                                            <template v-slot:label>
+                                                <div>{{$vuetify.lang.t('$vuetify.articles.composite')}}
+                                                    <v-tooltip right class="md-6">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-icon
+                                                                color="primary"
+                                                                dark
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                mdi-information-outline
+                                                            </v-icon>
+                                                        </template>
+                                                        <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
+                                                    </v-tooltip>
+                                                </div>
+                                            </template>
+                                            </v-checkbox>
                                         </v-col>
                                         <v-col v-show="newArticle.composite"
                                             cols="12"
@@ -217,8 +212,8 @@
                                                 >
                                                     <variant
                                                         :updated="updated"
-                                                        :variants="newArticle.variants"
-                                                        :variants-values="variantData"
+                                                        :variants-parent="newArticle.variants"
+                                                        :variants-values-parent="variantData"
                                                         @updateVariants="updateVariant"
                                                     />
                                                 </v-col>
@@ -313,10 +308,10 @@ export default {
             row: null,
             panel: [0, 1, 2],
             formValid: false,
-            formRule: this.$rules,
             shopData: [],
             variantData: [],
-            updated: true
+            updated: true,
+            formRule: this.$rules
         }
     },
     computed: {
@@ -360,7 +355,7 @@ export default {
                     price: item.price,
                     cost: item.price,
                     cant: '1',
-                    id: item.id
+                    composite_id: item.id
                 })
                 let totalCost = 0.00
                 this.composite.forEach((comp, index)=>{
@@ -424,7 +419,7 @@ export default {
             this.shopData = shopsDataUpdated
         },
         numbers(event) {
-            const regex = new RegExp('^[0-9]+$')
+            const regex = new RegExp('^[0-9]+(\.[0-9])?$')
             const key = String.fromCharCode(
                 !event.charCode ? event.which : event.charCode
             )
@@ -433,7 +428,7 @@ export default {
                 return false
             }
         },
-        lettersNumbers(event) {
+        lnSpace(event) {
             const regex = new RegExp('^[a-zA-Z0-9 ]+$')
             const key = String.fromCharCode(
                 !event.charCode ? event.which : event.charCode
@@ -443,7 +438,44 @@ export default {
                 return false
             }
         },
-        async createNewArticle() {
+        lettersNumbers(event) {
+            const regex = new RegExp('^[a-zA-Z0-9]+$')
+            const key = String.fromCharCode(
+                !event.charCode ? event.which : event.charCode
+            )
+            if (!regex.test(key)) {
+                event.preventDefault()
+                return false
+            }
+        },
+        createNewArticle() {
+            if(this.newArticle.composite)
+            {
+                if(this.composite.length === 0)
+                    this.$Swal
+                        .fire({
+                            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                                this.$vuetify.lang.t('$vuetify.menu.articles')
+                            ]),
+                            text: this.$vuetify.lang.t(
+                                '$vuetify.messages.warning_composite'
+                            ),
+                            icon: 'warning',
+                            showCancelButton: false,
+                            confirmButtonText: this.$vuetify.lang.t(
+                                '$vuetify.actions.accept'
+                            ),
+                            confirmButtonColor: 'red'
+                        })
+                else{
+                    this.validCreate()
+                }
+            }
+            else{
+                this.validCreate()
+            }
+        },
+        async validCreate(){
             if (this.validShow) {
                 if (this.$refs.form.validate()) {
                     this.loading = true
@@ -454,6 +486,7 @@ export default {
                         }
                     })
                     this.newArticle.variantsValues = this.variantData
+                    this.newArticle.composites = this.composite
                     await this.createArticle(this.newArticle).then(() => {
                         if (this.saved) {
                             this.loading = false

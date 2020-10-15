@@ -55,6 +55,7 @@ export default {
         user_list: 'User List',
         employer_list: 'Employer List',
         user: 'Users',
+        employee: 'Employee',
         access: 'Access permission',
         access_list: 'Permission List',
         client: 'Client',
@@ -75,7 +76,8 @@ export default {
         vending: 'Sales',
         turnOn: 'Register Shift',
         product_add: 'New Article',
-        product_edit: 'Edit Article'
+        product_edit: 'Edit Article',
+        assistance: 'Assistance card'
     },
     // settings
     settings: {
@@ -97,7 +99,8 @@ export default {
         pin: {
             min: 'Just a minimum of {0} digits is allowed',
             max: 'Just a maximum of {0} digits is allowed'
-        }
+        },
+        general_required: 'This field is required'
     },
     // error
     messages: {
@@ -119,7 +122,8 @@ export default {
         pin_failed: 'You do not have access. Pin Code is not valid',
         login_failed: 'Invalid email or password.',
         sure_delete: 'Are you sure yo remove this element?',
-        dont_add:'This element is added.'
+        dont_add: 'This element is added.',
+        warning_composite: 'This article is composite, please select the element that compose it ',
     },
     // profile
     profile: {
@@ -162,6 +166,13 @@ export default {
         accessEmail: 'Access with Email',
         description: 'Description'
     },
+    assistance: {
+        entry: 'Entry',
+        exit: 'Exit',
+        entry_hour: 'Entry Hour',
+        exit_hour: 'Exit Hour',
+        total_hours: 'Total Hours'
+    },
     component: {
         select: 'Select Columns',
         others: 'others',
@@ -202,10 +213,10 @@ export default {
         barCode: 'Bar Code',
         options: 'Options',
         cant: 'Quantify',
-        total_cost:'Total Cost: '
+        total_cost: 'Total Cost: '
     },
     shop_article: {
-        under_inventory: 'Inventario Bajo',
+        under_inventory: 'Low Inventory',
         stock: 'Stock',
         enabled: 'Enabled'
     },

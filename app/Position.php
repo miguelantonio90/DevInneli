@@ -2,6 +2,7 @@
 
 namespace App;
 
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,6 +14,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Position extends Model
 {
+
+    use Uuid;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $guarded = [];
+
     protected $fillable = [
         'key', 'name', 'accessEmail', 'accessPin', 'description', 'company_id',
     ];

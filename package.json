@@ -23,6 +23,7 @@
         "axios": "^0.19",
         "core-js": "^3.3.2",
         "cross-env": "^5.1",
+        "date-fns": "^2.16.1",
         "jquery": "^3.5.1",
         "laravel-mix": "^5.0.5",
         "lodash": "^4.17.20",

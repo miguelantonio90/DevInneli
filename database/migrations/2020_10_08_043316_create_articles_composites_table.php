@@ -14,14 +14,12 @@ class CreateArticlesCompositesTable extends Migration
     public function up()
     {
         Schema::create('articles_composites', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('cant');
             $table->decimal('price');
-            $table->unsignedInteger('articles_id');
-            $table->foreign('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('articles_id')->references('id')->on('articles')
                 ->onDelete('cascade');
-            $table->unsignedInteger('composite_id');
-            $table->foreign('composite_id')->references('id')->on('articles')
+            $table->foreignUuid('composite_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->timestamps();
         });

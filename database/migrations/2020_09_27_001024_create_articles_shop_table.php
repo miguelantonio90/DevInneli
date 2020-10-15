@@ -15,11 +15,9 @@ class CreateArticlesShopTable extends Migration
     {
         Schema::create('articles_shop', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('shop_id')->unsigned();
-            $table->foreign('shop_id')->references('id')->on('shops')
+            $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
-            $table->integer('articles_id')->unsigned();
-            $table->foreign('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('articles_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->timestamps();
         });

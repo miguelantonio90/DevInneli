@@ -62,7 +62,7 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  int  $id
+     * @param    $id
      * @return Response
      * @throws ValidationException
      */
@@ -92,7 +92,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param    $id
      * @return Response
      */
     public function destroy($id)

@@ -45,13 +45,27 @@ class VariantManager
      * @param $articleId
      * @return mixed
      */
-    public function new($data, $articleId)
+    public function newVariant($data, $articleId)
     {
         return Variant::create([
             'articles_id' => $articleId,
             'name' => $data['name'],
-            'value' => json_encode($data['values'])
+            'value' => json_encode($data['value'])
         ]);
+    }
+
+    /**
+     * @param $data
+     * @param $articleId
+     * @return Variant
+     */
+    public function editVariant($data): Variant
+    {
+        $variant = Variant::findOrFail($data['id']);
+        $variant['name'] = $data['name'];
+        $variant['value'] = json_encode($data['value']);
+        $variant->save();
+        return $variant;
     }
 
     /**
@@ -93,68 +107,56 @@ class VariantManager
      * @param $data
      * @return mixed
      */
-    public function edit($id, $data)
+    public function editVariantValue($id, $data)
     {
-        $shops = $data['shops'];
-        $article = User::findOrFail($id);
-        return $this->updateData($article, $data, $shops);
-    }
+        $variant = VariantsValues::findOrFail($id);
+        if (isset($data['variant']))
+            $variant->variant = $data['variant'];
+        if (isset($data['cost']))
+            $variant->cost = $data['cost'];
+        if (isset($data['price']))
+            $variant->price = $data['price'];
+        if (isset($data['ref']))
+            $variant->ref = $data['ref'];
+        if (isset($data['barCode']))
+            $variant->ref = $data['barCode'];
+        $variant->save();
+        return $variant;
 
-    /**
-     * @param $article
-     * @param $data
-     * @param $shops
-     * @return mixed
-     */
-    private function updateData($article, $data, $shops)
-    {
-        if (isset($data['barCode'])) {
-            $article->barCode = $data['barCode'];
-        }
-        if (isset($data['composite'])) {
-            $article->composite = $data['composite'];
-        }
-        if (isset($data['cost'])) {
-            $article->cost = $data['cost'];
-        }
-        if (isset($data['inventory'])) {
-            $article->inventory = $data['inventory'];
-        }
-        if (isset($data['itbis'])) {
-            $article->itbis = $data['inventory'];
-        }
-        if (isset($data['lay'])) {
-            $article->lay = $data['lay'];
-        }
-        if (isset($data['price'])) {
-            $article->price = $data['price'];
-        }
-        if (isset($data['ref'])) {
-            $article->ref = $data['ref'];
-        }
-        if (isset($data['track_inventory'])) {
-            $article->track_inventory = $data['track_inventory'];
-        }
-        if (isset($data['unit'])) {
-            $article->unit = $data['unit'] === 'unit';
-        }
-        $idShops = [];
-        foreach ($shops as $key => $value) {
-            $idShops[$key] = $value['id'];
-        }
-        $employShop = Shop::find($idShops);
-        $article->shops()->sync($employShop);
-        $article->save();
-        return $article;
     }
 
     /**
      * @param $id
-     * @return mixed
+     * @return bool
      */
-    public function delete($id)
+    public function deleteVariant($id):bool
     {
-        return User::findOrFail($id)->delete();
+        return Variant::findOrFail($id)->delete();
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function deleteVariantValue($id):bool
+    {
+        return VariantsValues::findOrFail($id)->delete();
+    }
+
+    /**
+     * @param $el
+     * @param $articleId
+     */
+    public function removeAll($el, $articleId):void
+    {
+        $variant = $el === 'vv' ? VariantsValues::latest()
+            ->where('articles_id', '=', $articleId)
+            ->get() : Variant::latest()
+            ->where('articles_id', '=', $articleId)
+            ->get();
+        foreach ($variant as $key => $value) {
+            $value->delete();
+        }
     }
 
 }

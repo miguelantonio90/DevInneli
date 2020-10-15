@@ -272,13 +272,11 @@ export default {
                 this.$emit('updateVariants', this.variants, this.variantsValues)
             }
         },
-        variantsValuesParent: function (val)
-        {
-          this.variantsValues = val
+        variantsValuesParent: function (val) {
+            this.variantsValues = this.variantsValuesParent
         },
-        variantsParent: function (val)
-        {
-          this.variants = val
+        variantsParent: function (val) {
+            this.variants = this.variantsParent
         },
         dialog(val) {
             val || this.close()
@@ -300,6 +298,10 @@ export default {
     },
     created() {
         this.initialize()
+    },
+    mounted() {
+        this.variantsValues = this.variantsValuesParent
+        this.variants = this.variantsParent
     },
     methods: {
         initialize() {
@@ -332,9 +334,10 @@ export default {
             ]
         },
         editChips(tag) {
+            this.editedIndex.id = tag.id ? tag.id : ''
             this.editedItem.name = tag.name
             this.editedIndex = this.variants.indexOf(tag)
-            this.select = tag.values
+            this.select = tag.value
             this.dialog = true
         },
         removeChips(tag) {
@@ -355,12 +358,12 @@ export default {
             this.dialogDelete = true
         },
         deleteItemConfirm() {
-            if (this.variants.length === 1 && this.variants[0].values.length === 1) {
+            console.log(this.variants)
+            if (this.variants.length === 1 && this.variants[0].value.length === 1) {
                 this.removeChips(this.variants[0])
             } else {
                 this.variantsValues.splice(this.editedIndex, 1)
             }
-            console.log(this.variants.length)
             this.closeDelete()
             this.updateVariants()
         },
@@ -397,15 +400,16 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.variants[this.editedIndex], {
+                    id : this.editedItem ? this.editedItem.id : '',
                     name: this.editedItem.name,
-                    values: this.select
+                    value: this.select
                 })
                 this.select = []
             } else {
-                console.log(this.variants)
                 this.variants.push({
+                    id : this.editedItem ? this.editedItem.id : '',
                     name: this.editedItem.name,
-                    values: this.select
+                    value: this.select
                 })
                 this.select = []
             }
@@ -418,7 +422,7 @@ export default {
             let localResult = []
             data.forEach((value, index) => {
                 if (index === 0) {
-                    value.values.forEach((localValue) => {
+                    value.value.forEach((localValue) => {
                         if (localValue) {
                             result.push({
                                 variant: localValue.toString(),
@@ -430,7 +434,7 @@ export default {
                         }
                     })
                 } else {
-                    value.values.forEach((localValue) => {
+                    value.value.forEach((localValue) => {
                         localResult.forEach((v) => {
                             if (localValue) {
                                 result.push({

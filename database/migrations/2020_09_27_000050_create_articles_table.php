@@ -14,7 +14,7 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('unit')->default(false);
             $table->decimal('price')->nullable();
@@ -24,14 +24,12 @@ class CreateArticlesTable extends Migration
             $table->boolean('composite')->default(false);
             $table->boolean('inventory')->default(false);
             $table->boolean('track_inventory')->default(false);
-            $table->boolean('itbis')->default(false);
-            $table->boolean('lay')->default(true);
             $table->timestamps();
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')
+
+            $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->unsignedInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')
+            $table->foreignUuid('category_id')->nullable()
+                ->references('id')->on('categories')
                 ->onDelete('cascade');
         });
     }

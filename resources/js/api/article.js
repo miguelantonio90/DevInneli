@@ -7,9 +7,9 @@ export default {
   sendCreateRequest (article) {
     return api.post('article', article)
   },
-  sendUpdateRequest (article) {
-    return api.post('article/' + article.id, article)
-  },
+    sendUpdateRequest (article) {
+        return api.put('article/' + article.id, article)
+    },
   sendDeleteRequest (articleId) {
     return api.remove('article/' + articleId)
   }

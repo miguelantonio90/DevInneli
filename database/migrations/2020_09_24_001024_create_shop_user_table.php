@@ -16,11 +16,9 @@ class CreateShopUserTable extends Migration
         Schema::create('shop_user', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('shop_id')->unsigned();
-            $table->foreign('shop_id')->references('id')->on('shops')
+            $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->foreignUuid('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
         });
     }
