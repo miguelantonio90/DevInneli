@@ -34,7 +34,7 @@ const state = {
     composite: false,
     track_inventory: false,
     category: [],
-      color:'',
+    color: '',
     shops: [],
     composites: []
   },
@@ -52,7 +52,7 @@ const state = {
     composites: [],
     track_inventory: false,
     category: [],
-    color:'',
+    color: '',
     shops: [],
     variants_shops: []
   },
@@ -96,7 +96,7 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
-     color:'/assets/avatar/avatar-undefined.jpg',
+      color: '/assets/avatar/avatar-undefined.jpg',
       variants_shops: []
     }
     state.saved = true
@@ -123,7 +123,7 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
-        color:'',
+      color: '',
       variants_shops: []
     }
     state.saved = true

@@ -120,8 +120,8 @@ export default {
     warning_create: "You can't create this element. You should create {0}",
     pin_failed: 'You do not have access. Pin Code is not valid',
     login_failed: 'Invalid email or password.',
-      warning_composite: 'This article is composite, please select the element that compose it ',
-      warning_price:"You can't create this article.The cost can't be higher than price"
+    warning_composite: 'This article is composite, please select the element that compose it ',
+    warning_price: "You can't create this article.The cost can't be higher than price"
   },
   // profile
   profile: {
@@ -233,10 +233,10 @@ export default {
     stock: 'Stock',
     enabled: 'Enabled'
   },
-    representation:{
-      representation:'Representation',
-        color_shape:'Color',
-        image:'Image'
-    },
+  representation: {
+    representation: 'Representation',
+    color_shape: 'Color',
+    image: 'Image'
+  },
   ...en
 }
