@@ -38,7 +38,7 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      md="4"
+                      md="3"
                     >
                       <v-text-field
                         v-model="newArticle.name"
@@ -50,7 +50,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="4"
+                      md="3"
                     >
                       <v-text-field
                         v-model="newArticle.barCode"
@@ -62,7 +62,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="4"
+                      md="3"
                     >
                       <v-text-field
                         v-model="newArticle.price"
@@ -74,19 +74,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="newArticle.cost"
-                        :disabled="newArticle.composite"
-                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                        autocomplete="off"
-                        required
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
+                      md="3"
                     >
                       <v-select
                         v-model="newArticle.category"
@@ -119,6 +107,29 @@
                           </v-card-actions>
                         </v-card>
                       </v-dialog>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="3"
+                    >
+                      <v-text-field
+                        v-model="newArticle.cost"
+                        :disabled="newArticle.composite"
+                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                        autocomplete="off"
+                        required
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="3"
+                    >
+                      <v-text-field
+                        v-model="newArticle.ref"
+                        :label="$vuetify.lang.t('$vuetify.variants.ref')"
+                        autocomplete="off"
+                        required
+                      />
                     </v-col>
                     <v-col
                       cols="12"
@@ -175,7 +186,9 @@
                                   mdi-information-outline
                                 </v-icon>
                               </template>
-                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.articles.composite_text')
+                              }}</span>
                             </v-tooltip>
                           </div>
                         </template>
@@ -245,6 +258,7 @@
                           md="12"
                         >
                           <variant
+                            :ref-parent="ref"
                             :updated="updated"
                             :variants-parent="newArticle.variants"
                             :variants-values-parent="variantData"
@@ -287,6 +301,63 @@
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.representation.representation')
+                    }}
+                  </h3>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="12"
+                    >
+                      <v-radio-group
+                        v-model="representation"
+                        row
+                      >
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="8"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
+                              value="color"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
+                            <v-radio
+                              :disabled="true"
+                              cols="12"
+                              md="4"
+                              :label="$vuetify.lang.t('$vuetify.representation.image')"
+                              value="image"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-radio-group>
+                    </v-col>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        md="8"
+                      >
+                        <app-color-picker
+                          :value="newArticle.color"
+                          @input="inputColor"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-expansion-panels>
           </v-form>
         </v-card-text>
@@ -319,12 +390,16 @@ import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import { mapActions, mapState } from 'vuex'
 import CompositeList from './composite/CompositeList'
+import AppColorPicker from '../../components/core/AppColorPicker'
+import AvatarPicker from '../../components/core/AvatarPicker'
 
 export default {
   name: 'NewArticlePage',
-  components: { CompositeList, ShopsArticles, Variant },
+  components: { AvatarPicker, AppColorPicker, CompositeList, ShopsArticles, Variant },
   data () {
     return {
+      ref: '10285',
+      representation: 'color',
       showInfoAdd: false,
       composite: [],
       row: null,
@@ -361,11 +436,18 @@ export default {
     await this.getCategories()
     await this.getArticles()
     this.loadingData = false
+    this.ref = '10285'
+  },
+  mounted () {
+    this.ref = '10285'
   },
   methods: {
     ...mapActions('article', ['createArticle', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
+    inputColor (color) {
+      this.newArticle.color = color
+    },
     selectArticle (item) {
       if (this.composite.filter(art => art.id === item.id).length === 0) {
         this.composite.push({
@@ -465,28 +547,46 @@ export default {
       }
     },
     createNewArticle () {
-      if (this.newArticle.composite) {
-        if (this.composite.length === 0) {
-          this.$Swal
-            .fire({
-              title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                this.$vuetify.lang.t('$vuetify.menu.articles')
-              ]),
-              text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_composite'
-              ),
-              icon: 'warning',
-              showCancelButton: false,
-              confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.accept'
-              ),
-              confirmButtonColor: 'red'
-            })
+      if (parseFloat(this.newArticle.cost) >= parseFloat(this.newArticle.price)) {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_price'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+      } else {
+        if (this.newArticle.composite) {
+          if (this.composite.length === 0) {
+            this.$Swal
+              .fire({
+                title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                  this.$vuetify.lang.t('$vuetify.menu.articles')
+                ]),
+                text: this.$vuetify.lang.t(
+                  '$vuetify.messages.warning_composite'
+                ),
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonText: this.$vuetify.lang.t(
+                  '$vuetify.actions.accept'
+                ),
+                confirmButtonColor: 'red'
+              })
+          } else {
+            this.validCreate()
+          }
         } else {
           this.validCreate()
         }
-      } else {
-        this.validCreate()
       }
     },
     async validCreate () {

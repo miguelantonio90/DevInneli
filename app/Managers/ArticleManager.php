@@ -96,8 +96,8 @@ class ArticleManager
         if (isset($data['track_inventory'])) {
             $article->track_inventory = $data['track_inventory'];
         }
-        if (isset($data['unit'])) {
-            $article->unit = $data['unit'] === 'unit';
+        if (isset($data['color'])) {
+            $article->color = $data['color'];
         }
         if (isset($data['category']['id'])) {
             $article->category_id = $data['category']['id'];
@@ -156,6 +156,9 @@ class ArticleManager
         }
         if (isset($data['category']['id'])) {
             $article->category_id = $data['category']['id'];
+        }
+        if (isset($data['color'])) {
+            $article->color = $data['color'];
         }
         $idShops = [];
         foreach ($shops as $key => $value) {

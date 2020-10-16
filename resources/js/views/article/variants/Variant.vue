@@ -200,7 +200,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ props.item.cost }}</div>
+        <div>{{ props.item.barCode }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -208,7 +208,7 @@
         </template>
         <template v-slot:input>
           <v-text-field
-            v-model="props.item.cost"
+            v-model="props.item.barCode"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
             single-line
             counter
@@ -242,10 +242,14 @@ export default {
     },
     variantsValuesParent: {
       type: Array
+    },
+    refParent: {
+      type: String
     }
   },
   data () {
     return {
+      ref: '10285',
       updated: true,
       variants: [],
       variantsValues: [],
@@ -278,16 +282,19 @@ export default {
     }
   },
   watch: {
-    isUpdated: (val) => {
+    isUpdated: val => {
       this.updated = val
       if (this.updated === false) {
         this.$emit('updateVariants', this.variants, this.variantsValues)
       }
     },
-    variantsValuesParent: () => {
+    variantsValuesParent (val) {
       this.variantsValues = this.variantsValuesParent
     },
-    variantsParent: () => {
+    refParent (val) {
+      this.ref = this.refParent
+    },
+    variantsParent (val) {
       this.variants = this.variantsParent
     },
     dialog (val) {
@@ -422,26 +429,30 @@ export default {
       let localResult = []
       data.forEach((value, index) => {
         if (index === 0) {
-          value.value.forEach((localValue) => {
+          value.value.forEach(localValue => {
             if (localValue) {
+              console.log(this.ref)
+              this.ref = parseInt(this.ref) + 1
               result.push({
                 variant: localValue.toString(),
                 price: '0.00',
                 cost: '0.00',
-                ref: '',
+                ref: this.ref,
                 barCode: ''
               })
             }
           })
         } else {
-          value.value.forEach((localValue) => {
-            localResult.forEach((v) => {
+          value.value.forEach(localValue => {
+            localResult.forEach(v => {
+              console.log(this.ref)
               if (localValue) {
+                this.ref = parseInt(this.ref) + 1
                 result.push({
                   variant: localValue.toString() + '/' + v.variant.toString(),
                   price: '0.00',
                   cost: '0.00',
-                  ref: '',
+                  ref: this.ref,
                   barCode: ''
                 })
               }
@@ -450,7 +461,7 @@ export default {
         }
         localResult = result
         // eslint-disable-next-line no-unused-expressions
-        index + 1 !== data.length ? result = [] : ''
+        index + 1 !== data.length ? (result = []) : ''
       })
       this.variantsValues = result
       this.updateVariants()
@@ -464,32 +475,32 @@ export default {
 
 <style scoped>
 .tag-input span.chip {
-    background-color: #1976d2;
-    color: #fff;
-    font-size: 1em;
+  background-color: #1976d2;
+  color: #fff;
+  font-size: 1em;
 }
 
 .tag-input span.v-chip {
-    background-color: #1976d2;
-    color: #fff;
-    font-size: 1em;
-    padding-left: 7px;
+  background-color: #1976d2;
+  color: #fff;
+  font-size: 1em;
+  padding-left: 7px;
 }
 
 .tag-input span.v-chip::before {
-    content: "label";
-    font-family: 'Material Icons', serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 20px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
+  content: "label";
+  font-family: "Material Icons", serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
 }
 </style>

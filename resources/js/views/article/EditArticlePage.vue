@@ -1,5 +1,5 @@
 <template>
-  <div class="page-add-product">
+  <div class="page-edit-product">
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
@@ -9,7 +9,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.edit', [
+            $vuetify.lang.t('$vuetify.titles.new', [
               $vuetify.lang.t('$vuetify.articles.name'),
             ])
           }}</span>
@@ -175,9 +175,7 @@
                                   mdi-information-outline
                                 </v-icon>
                               </template>
-                              <span>{{
-                                $vuetify.lang.t('$vuetify.articles.composite_text')
-                              }}</span>
+                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
                             </v-tooltip>
                           </div>
                         </template>
@@ -248,7 +246,7 @@
                         >
                           <variant
                             :updated="updated"
-                            :variants-parent="variants"
+                            :variants-parent="editArticle.variants"
                             :variants-values-parent="variantData"
                             @updateVariants="updateVariant"
                           />
@@ -289,6 +287,63 @@
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.representation.representation')
+                    }}
+                  </h3>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="12"
+                    >
+                      <v-radio-group
+                        v-model="representation"
+                        row
+                      >
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="8"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
+                              value="color"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
+                            <v-radio
+                              :disabled="true"
+                              cols="12"
+                              md="4"
+                              :label="$vuetify.lang.t('$vuetify.representation.image')"
+                              value="image"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-radio-group>
+                    </v-col>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        md="8"
+                      >
+                        <app-color-picker
+                          :value="editArticle.color"
+                          @input="inputColor"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-expansion-panels>
           </v-form>
         </v-card-text>
@@ -321,12 +376,15 @@ import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import { mapActions, mapState } from 'vuex'
 import CompositeList from './composite/CompositeList'
+import AppLoading from '../../components/core/AppLoading'
+import AppColorPicker from '../../components/core/AppColorPicker'
 
 export default {
   name: 'EditArticlePage',
-  components: { CompositeList, ShopsArticles, Variant },
+  components: { AppColorPicker, AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
+      representation: 'color',
       variants: [],
       showInfoAdd: false,
       composite: [],
@@ -413,11 +471,15 @@ export default {
     if (this.editArticle.unit === 1) {
       this.editArticle.unit = 'unit'
     }
+    this.loadingData = false
   },
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
+    inputColor (color) {
+      this.newArticle.color = color
+    },
     selectArticle (item) {
       if (this.composite.filter(art => art.id === item.id).length === 0) {
         this.composite.push({
@@ -522,7 +584,7 @@ export default {
           this.$Swal
             .fire({
               title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                this.$vuetify.lang.t('$vuetify.menu.articles')
+                this.$vuetify.lang.t('$vuetify.articles.name')
               ]),
               text: this.$vuetify.lang.t(
                 '$vuetify.messages.warning_composite'

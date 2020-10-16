@@ -27,13 +27,14 @@ const state = {
     price: 0.00,
     unit: 'unit',
     cost: 0.00,
-    ref: '',
+    ref: '10285',
     barCode: '',
     variants: [],
     variantsValues: [],
     composite: false,
     track_inventory: false,
     category: [],
+    color: '',
     shops: [],
     composites: []
   },
@@ -51,6 +52,7 @@ const state = {
     composites: [],
     track_inventory: false,
     category: [],
+    color: '',
     shops: [],
     variants_shops: []
   },
@@ -94,6 +96,7 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
+      color: '/assets/avatar/avatar-undefined.jpg',
       variants_shops: []
     }
     state.saved = true
@@ -120,6 +123,7 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
+      color: '',
       variants_shops: []
     }
     state.saved = true

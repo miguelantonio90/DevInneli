@@ -132,7 +132,8 @@ export default {
     dont_add: 'Ya este elemento se encuentra adicinado.',
     pin_failed: 'No tienes acceso. El código PIN no es válido',
     login_failed: 'Correo electrónico o contraseña no válidos.',
-    warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen'
+    warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
+    warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios'
   },
   // options
   actions: {
@@ -231,9 +232,14 @@ export default {
     total_cost: 'Costo Total: '
   },
   shop_article: {
-    under_inventory: 'Inventory Under',
+    under_inventory: 'Bajo Inventario',
     stock: 'En Stock',
     enabled: 'Disponible'
+  },
+  representation: {
+    representation: 'Representación',
+    color_shape: 'Color',
+    image: 'Imagen'
   },
   ...es
 }
