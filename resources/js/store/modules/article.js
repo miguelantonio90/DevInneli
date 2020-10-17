@@ -27,7 +27,7 @@ const state = {
     price: 0.00,
     unit: 'unit',
     cost: 0.00,
-    ref: '10285',
+    ref: '10001',
     barCode: '',
     variants: [],
     variantsValues: [],
@@ -36,7 +36,8 @@ const state = {
     category: [],
     color: '',
     shops: [],
-    composites: []
+    composites: [],
+    images: []
   },
   editArticle: {
     id: '',
@@ -54,7 +55,8 @@ const state = {
     category: [],
     color: '',
     shops: [],
-    variants_shops: []
+    variants_shops: [],
+    images: []
   },
   isArticleTableLoading: false,
   isActionInProgress: false,
@@ -96,10 +98,17 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
-      color: '/assets/avatar/avatar-undefined.jpg',
-      variants_shops: []
+      color: '',
+      variants_shops: [],
+      images: []
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.articles.name')]
+      )
+    })
   },
   [ARTICLE_EDIT] (state, articleId) {
     state.editArticle = Object.assign({}, state.articles
@@ -124,22 +133,42 @@ const mutations = {
       category: [],
       shops: [],
       color: '',
-      variants_shops: []
+      variants_shops: [],
+      images: []
     }
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.articles.name')]
+      )
+    })
   },
   [SET_EDIT_ARTICLE] (state, profile) {
     state.editArticle.push(profile)
   },
   [ARTICLE_DELETE] (state) {
     state.saved = true
+    this._vm.$Toast.fire({
+      icon: 'success',
+      title: this._vm.$language.t(
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.articles.name')]
+      )
+    })
   },
   [SET_ARTICLE_AVATAR] (state, avatar) {
     state.avatar = avatar
     state.saved = true
   },
-  [FAILED_ARTICLE] (state) {
+  [FAILED_ARTICLE] (state, error) {
     state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t(
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.articles.name')]
+      )
+    })
   }
 }
 
@@ -170,11 +199,10 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
-      }).catch((error) => commit('SET_ERRORS', error, { root: true }))
+      }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async createArticle ({ commit, dispatch }, newArticle) {
     commit(ENV_DATA_PROCESS, true)
-    commit('CLEAR_ERRORS', null, { root: true })
 
     await article
       .sendCreateRequest(newArticle)
@@ -183,10 +211,10 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/getArticles', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_ARTICLE, error))
   },
   async updateArticle ({ commit, dispatch }, articleE) {
-    commit('CLEAR_ERRORS', null, { root: true })
+    commit(ENV_DATA_PROCESS, true)
     const request = articleE || state.editArticle
 
     // const request = profile || state.editUser
@@ -203,14 +231,15 @@ const actions = {
       })
   },
   async deleteArticle ({ commit, dispatch }, articleId) {
-    commit('CLEAR_ERRORS', null, { root: true })
+    commit(ENV_DATA_PROCESS, true)
     await article
       .sendDeleteRequest(articleId)
       .then(() => {
+        commit(ENV_DATA_PROCESS, false)
         commit(ARTICLE_DELETE)
         dispatch('article/getArticles', null, { root: true })
       })
-      .catch((error) => commit('SET_ERRORS', error, { root: true }))
+      .catch((error) => commit(FAILED_ARTICLE, error))
   }
 }
 

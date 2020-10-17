@@ -18,7 +18,35 @@
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
-        />
+        >
+          <template
+            v-slot:item.name="{ item }"
+          >
+            <v-avatar
+              v-if="item.images.length > 0"
+            >
+              <v-img :src="item.path" />
+            </v-avatar>
+            <v-avatar
+              v-else
+              :color="item.color"
+            />
+            {{ item.name }}
+          </template>
+          <template
+            v-slot:item.percent="{ item }"
+          >
+            {{ item.percent }} %
+          </template>
+          <template v-slot:item.shopsNames="{ item }">
+            <v-chip
+              v-for="(shop, i) of item.shopsNames"
+              :key="i"
+            >
+              {{ shop }}
+            </v-chip>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -52,14 +80,28 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.price'),
+          text: this.$vuetify.lang.t('$vuetify.menu.category'),
+          value: 'category.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.articles.price'),
           value: 'price',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.menu.category'),
-          value: 'category.name',
+          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+          value: 'cost',
           select_filter: true
+        }, {
+          text: this.$vuetify.lang.t('$vuetify.articles.percent'),
+          value: 'percent',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'shopsNames',
+          select_filter_many: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -110,7 +152,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteArticle(articleId)
+          if (result.isConfirmed) this.deleteArticle(articleId)
         })
     }
   }

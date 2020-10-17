@@ -31,7 +31,7 @@ const state = {
     name: '',
     color: ''
   },
-  isCategoryTableLoading: false,
+  isCategoryLoading: false,
   isActionInProgress: false,
   isTableLoading: false
 }
@@ -48,6 +48,7 @@ const mutations = {
   },
   [CATEGORY_TABLE_LOADING] (state, isLoading) {
     state.isTableLoading = isLoading
+    state.isCategoryLoading = isLoading
   },
   [FETCHING_CATEGORIES] (state, categories) {
     state.categories = categories

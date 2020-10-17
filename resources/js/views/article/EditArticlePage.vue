@@ -9,7 +9,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.new', [
+            $vuetify.lang.t('$vuetify.titles.edit', [
               $vuetify.lang.t('$vuetify.articles.name'),
             ])
           }}</span>
@@ -52,36 +52,63 @@
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-simplemask
                         v-model="editArticle.barCode"
-                        :rules="formRule.required"
                         :label="$vuetify.lang.t('$vuetify.barCode')"
-                        required
-                        @keypress="lettersNumbers"
+                        :properties="{
+                          clearable: true,
+                          required:true,
+                          rules:formRule.required
+                        }"
+                        :options="{
+                          inputMask: '##-####-####-###',
+                          outputMask: '##-####-####-###',
+                          empty: null,
+                          alphanumeric: true,
+                        }"
+                        :focus="focus"
+                        @focus="focus = false"
                       />
                     </v-col>
                     <v-col
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-money
                         v-model="editArticle.price"
-                        default="0.00"
                         :label="$vuetify.lang.t('$vuetify.price')"
-                        autocomplete="off"
                         required
+                        :properties="{
+                          prefix: '$',
+                          clearable: true
+                        }"
+                        :options="{
+                          locale: 'en',
+                          length: 11,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
                       />
                     </v-col>
                     <v-col
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-money
                         v-model="editArticle.cost"
                         :disabled="editArticle.composite"
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                        autocomplete="off"
                         required
+                        :properties="{
+                          prefix: '$',
+                          clearable: true
+                        }"
+                        :options="{
+                          locale: 'en',
+                          length: 11,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
                       />
                     </v-col>
                     <v-col
@@ -93,8 +120,8 @@
                         :items="categories"
                         :label="$vuetify.lang.t('$vuetify.menu.category')"
                         item-text="name"
-                        :loading="isShopLoading"
-                        :disabled="!!isShopLoading"
+                        :loading="isCategoryLoading"
+                        :disabled="!!isCategoryLoading"
                         return-object
                       />
                       <v-dialog
@@ -152,7 +179,7 @@
                       cols="12"
                       md="3"
                     >
-                      <v-checkbox
+                      <v-switch
                         v-model="editArticle.composite"
                         :disabled="articles.length===0"
                         :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
@@ -179,7 +206,7 @@
                             </v-tooltip>
                           </div>
                         </template>
-                      </v-checkbox>
+                      </v-switch>
                     </v-col>
                     <v-col
                       v-show="editArticle.composite"
@@ -204,7 +231,7 @@
                       cols="12"
                       md="3"
                     >
-                      <v-checkbox
+                      <v-switch
                         v-model="editArticle.track_inventory"
                         class="md-6"
                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
@@ -308,6 +335,15 @@
                         <v-row>
                           <v-col
                             cols="12"
+                            md="4"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.image')"
+                              value="image"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
                             md="8"
                           >
                             <v-radio
@@ -315,28 +351,32 @@
                               value="color"
                             />
                           </v-col>
-                          <v-col
-                            cols="12"
-                            md="4"
-                          >
-                            <v-radio
-                              :disabled="true"
-                              cols="12"
-                              md="4"
-                              :label="$vuetify.lang.t('$vuetify.representation.image')"
-                              value="image"
-                            />
-                          </v-col>
                         </v-row>
                       </v-radio-group>
                     </v-col>
                     <v-row>
                       <v-col
+                        v-show="representation===`image`"
                         cols="12"
-                        md="8"
+                        md="12"
+                      >
+                        <div
+                          id="multiple-image"
+                          style="display: flex; justify-content: center;"
+                        >
+                          <app-upload-multiple-image
+                            :data-images="editArticle.images"
+                            :upload-success="uploadImage"
+                          />
+                        </div>
+                      </v-col>
+                      <v-col
+                        v-show="representation===`color`"
+                        cols="12"
+                        md="9"
                       >
                         <app-color-picker
-                          :value="editArticle.color"
+                          :value="editArticle.color || ``"
                           @input="inputColor"
                         />
                       </v-col>
@@ -360,6 +400,8 @@
           <v-btn
             class="mb-2"
             color="primary"
+            :disabled="!formValid"
+            :loading="isActionInProgress"
             @click="editArticleHandler"
           >
             <v-icon>mdi-check</v-icon>
@@ -372,20 +414,20 @@
 </template>
 
 <script>
+
+import { mapActions, mapState } from 'vuex'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
-import { mapActions, mapState } from 'vuex'
 import CompositeList from './composite/CompositeList'
 import AppLoading from '../../components/core/AppLoading'
-import AppColorPicker from '../../components/core/AppColorPicker'
 
 export default {
   name: 'EditArticlePage',
-  components: { AppColorPicker, AppLoading, CompositeList, ShopsArticles, Variant },
+  components: { AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
-      representation: 'color',
       variants: [],
+      representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
@@ -395,12 +437,13 @@ export default {
       variantData: [],
       updated: true,
       formRule: this.$rules,
-      loadingData: false
+      loadingData: false,
+      focus: false
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'editArticle', 'articles']),
-    ...mapState('category', ['categories', 'isActionInProgress']),
+    ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
+    ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading'])
   },
   created: async function () {
@@ -471,6 +514,7 @@ export default {
     if (this.editArticle.unit === 1) {
       this.editArticle.unit = 'unit'
     }
+    this.representation = this.articles.color ? 'color' : 'image'
     this.loadingData = false
   },
   methods: {
@@ -478,7 +522,7 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
     inputColor (color) {
-      this.newArticle.color = color
+      this.editArticle.color = color
     },
     selectArticle (item) {
       if (this.composite.filter(art => art.id === item.id).length === 0) {
@@ -603,32 +647,22 @@ export default {
         this.validCreate()
       }
     },
+    uploadImage (formData, index, fileList) {
+      this.newArticle.images = fileList
+    },
     async validCreate () {
-      if (this.validShow) {
-        if (this.$refs.form.validate()) {
-          this.loading = true
-          this.editArticle.shops = []
-          this.shopData.forEach((value) => {
-            if (value.checked) {
-              this.editArticle.shops.push(value)
-            }
-          })
-          this.editArticle.variantsValues = this.variantData
-          this.editArticle.composites = this.composite
-          await this.updateArticle(this.editArticle).then(() => {
-            if (this.saved) {
-              this.loading = false
-              const msg = this.$vuetify.lang.t(
-                '$vuetify.messages.success_profile'
-              )
-              this.$Toast.fire({
-                icon: 'success',
-                title: msg
-              })
-              this.$router.push({ name: 'product_list' })
-            }
-          })
-        }
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        this.editArticle.shops = []
+        this.shopData.forEach((value) => {
+          if (value.checked) {
+            this.editArticle.shops.push(value)
+          }
+        })
+        this.editArticle.variantsValues = this.variantData
+        this.editArticle.composites = this.composite
+        await this.updateArticle(this.editArticle)
+        await this.$router.push({ name: 'product_list' })
       }
     },
     closeInfoAdd () {

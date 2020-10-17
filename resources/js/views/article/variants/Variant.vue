@@ -122,7 +122,7 @@
                 @click="deleteItemConfirm"
               >
                 <v-icon>mdi-check</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                {{ $vuetify.lang.t('$vuetify.actions.accept') }}
               </v-btn>
               <v-spacer />
             </v-card-actions>
@@ -149,12 +149,20 @@
           </div>
         </template>
         <template v-slot:input>
-          <v-text-field
+          <v-text-field-money
             v-model="props.item.price"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            single-line
-            counter
-            autofocus
+            required
+            :properties="{
+              prefix: '$',
+              clearable: true
+            }"
+            :options="{
+              locale: 'en',
+              length: 11,
+              precision: 2,
+              empty: 0.00,
+            }"
           />
         </template>
       </v-edit-dialog>
@@ -178,12 +186,20 @@
           </div>
         </template>
         <template v-slot:input>
-          <v-text-field
+          <v-text-field-money
             v-model="props.item.cost"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            single-line
-            counter
-            autofocus
+            required
+            :properties="{
+              prefix: '$',
+              clearable: true
+            }"
+            :options="{
+              locale: 'en',
+              length: 11,
+              precision: 2,
+              empty: 0.00,
+            }"
           />
         </template>
       </v-edit-dialog>
@@ -207,12 +223,21 @@
           </div>
         </template>
         <template v-slot:input>
-          <v-text-field
+          <v-text-field-simplemask
             v-model="props.item.barCode"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            single-line
-            counter
-            autofocus
+            :properties="{
+              clearable: true,
+              singleLine:true,
+              counter:true,
+              autofocus:true,
+            }"
+            :options="{
+              inputMask: '##-####-####-###',
+              outputMask: '##-####-####-###',
+              empty: null,
+              alphanumeric: true,
+            }"
           />
         </template>
       </v-edit-dialog>
@@ -288,13 +313,13 @@ export default {
         this.$emit('updateVariants', this.variants, this.variantsValues)
       }
     },
-    variantsValuesParent (val) {
+    variantsValuesParent () {
       this.variantsValues = this.variantsValuesParent
     },
-    refParent (val) {
+    refParent () {
       this.ref = this.refParent
     },
-    variantsParent (val) {
+    variantsParent () {
       this.variants = this.variantsParent
     },
     dialog (val) {

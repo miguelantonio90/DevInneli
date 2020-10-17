@@ -49,6 +49,11 @@ class Articles extends Model
         return $this->hasMany(Variant::class);
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(ArticleImage::class, 'article_id');
+    }
+
     public function variants_values(): HasMany
     {
         return $this->hasMany(VariantsValues::class);

@@ -189,7 +189,16 @@ export default {
     clear_filters: 'Clear Filters',
     filter_data: 'Filter Data',
     filter_disabled: 'Filter Disabled',
-    loading: 'Loading'
+    loading: 'Loading',
+    images: {
+      dragText: 'Drag the image (multiple)',
+      browseText: '(or) Select',
+      primaryText: 'Default',
+      markIsPrimaryText: 'Set as default',
+      popupText: 'This image will be displayed as default',
+      dropText: 'Drop your file here ...'
+    },
+    image: 'Picture'
   },
   tips: {
     account_delete: 'Permanently delete account.'
@@ -199,6 +208,7 @@ export default {
     names: 'Articles',
     price: 'Price',
     cost: 'Cost',
+    percent: 'Margin',
     sell_by: 'Sell by',
     unit: 'Unit',
     p_v: 'P/Vol',
