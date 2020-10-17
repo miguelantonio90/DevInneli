@@ -52,36 +52,63 @@
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-simplemask
                         v-model="editArticle.barCode"
-                        :rules="formRule.required"
                         :label="$vuetify.lang.t('$vuetify.barCode')"
-                        required
-                        @keypress="lettersNumbers"
+                        :properties="{
+                          clearable: true,
+                          required:true,
+                          rules:formRule.required
+                        }"
+                        :options="{
+                          inputMask: '##-####-####-###',
+                          outputMask: '##-####-####-###',
+                          empty: null,
+                          alphanumeric: true,
+                        }"
+                        :focus="focus"
+                        @focus="focus = false"
                       />
                     </v-col>
                     <v-col
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-money
                         v-model="editArticle.price"
-                        default="0.00"
                         :label="$vuetify.lang.t('$vuetify.price')"
-                        autocomplete="off"
                         required
+                        :properties="{
+                          prefix: '$',
+                          clearable: true
+                        }"
+                        :options="{
+                          locale: 'en',
+                          length: 11,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
                       />
                     </v-col>
                     <v-col
                       cols="12"
                       md="4"
                     >
-                      <v-text-field
+                      <v-text-field-money
                         v-model="editArticle.cost"
                         :disabled="editArticle.composite"
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                        autocomplete="off"
                         required
+                        :properties="{
+                          prefix: '$',
+                          clearable: true
+                        }"
+                        :options="{
+                          locale: 'en',
+                          length: 11,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
                       />
                     </v-col>
                     <v-col
@@ -400,6 +427,7 @@ export default {
   data () {
     return {
       variants: [],
+      representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
@@ -410,7 +438,7 @@ export default {
       updated: true,
       formRule: this.$rules,
       loadingData: false,
-      representation: 'image'
+      focus: false
     }
   },
   computed: {
@@ -633,19 +661,8 @@ export default {
         })
         this.editArticle.variantsValues = this.variantData
         this.editArticle.composites = this.composite
-        await this.updateArticle(this.editArticle).then(() => {
-          if (this.saved) {
-            this.loading = false
-            const msg = this.$vuetify.lang.t(
-              '$vuetify.messages.success_profile'
-            )
-            this.$Toast.fire({
-              icon: 'success',
-              title: msg
-            })
-            this.$router.push({ name: 'product_list' })
-          }
-        })
+        await this.updateArticle(this.editArticle)
+        await this.$router.push({ name: 'product_list' })
       }
     },
     closeInfoAdd () {

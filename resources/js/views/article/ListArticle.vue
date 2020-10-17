@@ -152,7 +152,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteArticle(articleId)
+          if (result.isConfirmed) this.deleteArticle(articleId)
         })
     }
   }

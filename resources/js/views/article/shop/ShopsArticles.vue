@@ -23,12 +23,20 @@
             </div>
           </template>
           <template v-slot:input>
-            <v-text-field
+            <v-text-field-money
               v-model="props.item.price"
               :label="$vuetify.lang.t('$vuetify.actions.edit')"
-              single-line
-              counter
-              autofocus
+              required
+              :properties="{
+                prefix: '$',
+                clearable: true
+              }"
+              :options="{
+                locale: 'en',
+                length: 11,
+                precision: 2,
+                empty: 0.00,
+              }"
             />
           </template>
         </v-edit-dialog>
