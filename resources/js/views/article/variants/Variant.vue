@@ -274,7 +274,7 @@ export default {
   },
   data () {
     return {
-      ref: '10285',
+      ref: '10001',
       updated: true,
       variants: [],
       variantsValues: [],
