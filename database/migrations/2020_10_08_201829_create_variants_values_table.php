@@ -19,7 +19,7 @@ class CreateVariantsValuesTable extends Migration
             $table->decimal('cost');
             $table->decimal('price');
             $table->integer('ref')->nullable();
-            $table->bigInteger('barCode')->nullable();
+            $table->string('barCode')->nullable();
             $table->timestamps();
 
             $table->foreignUuid('articles_id')->references('id')->on('articles')
