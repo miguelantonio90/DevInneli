@@ -192,7 +192,16 @@ export default {
     clear_filters: 'Borrar filtros',
     filter_data: 'Filtrar datos',
     filter_disabled: 'Filtro deshabilitado',
-    loading: 'Cargando'
+    loading: 'Cargando',
+    images: {
+      dragText: 'Arrastra la imagen (múltiple)',
+      browseText: '(o) Seleccione ',
+      primaryText: 'Defecto',
+      markIsPrimaryText: 'Establecer como predeterminado ',
+      popupText: 'Esta imagen se mostrará como predeterminada ',
+      dropText: 'Suelta tu archivo aquí ...'
+    },
+    image: 'Imagen'
   },
   tips: {
     account_delete: 'Eliminar cuenta permanentemente.'
@@ -201,7 +210,8 @@ export default {
     name: 'Artículo',
     names: 'Artículos',
     price: 'Precio',
-    cost: 'Coste',
+    cost: 'Costo',
+    percent: 'Margen',
     sell_by: 'Vendido por',
     unit: 'Unidad',
     p_v: 'P/Vol',

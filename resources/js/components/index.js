@@ -15,6 +15,7 @@ import ShoppingCart from '../components/sales/ShoppingCart'
 import Coupons from '../components/sales/Coupons'
 import AppColorPicker from '../components/core/AppColorPicker'
 import AppDateTimePicker from '../components/core/AppDateTimePicker'
+import AppUploadMultipleImage from '../components/core/AppUploadMultipleImage'
 
 const components = [
   AppDataTable,
@@ -29,7 +30,8 @@ const components = [
   ShoppingCart,
   Coupons,
   AppColorPicker,
-  AppDateTimePicker
+  AppDateTimePicker,
+  AppUploadMultipleImage
 ]
 
 // Installation of the library as a plugin

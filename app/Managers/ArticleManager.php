@@ -50,11 +50,36 @@ class ArticleManager
                 ->with('variants_values')
                 ->with('variants_shops')
                 ->with('variants')
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('article_images.default', 'desc');
+                    }
+                ])
                 ->get();
+        }
+        foreach ($articles as $k => $article) {
+            foreach ($article['images'] as $im => $image) {
+                if ($image['default'] === 1) {
+                    $articles[$k]['path'] = $image['path'];
+                    $articles[$k]['nameImage'] = $image['name'];
+                }
+            }
+            $shopNames = [];
+            foreach ($article['shops'] as $sh => $shop) {
+                $shopNames[$sh] = $shop['name'];
+            }
+            $articles[$k]['shopsNames'] = array_unique($shopNames);
+
+            $percent = (100 * $article['cost']) / $article['price'];
+            $articles[$k]['percent'] = $percent;
         }
         return $articles;
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
     public function new($data)
     {
         $shops = $data['shops'];
@@ -66,6 +91,11 @@ class ArticleManager
             $this->updateComposite($article, $data);
         }
         $this->updateVariant($article, $data, $shops);
+
+        if (count($data['images']) > 0) {
+            ArticleImageManager::new($article->id, $data['images']);
+        }
+
         return $article;
     }
 

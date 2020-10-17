@@ -15,7 +15,9 @@ class CreateArticleImagesTable extends Migration
     {
         Schema::create('article_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->longText('image')->nullable();
+            $table->string('name')->nullable();
+            $table->longText('path')->nullable();
+            $table->boolean('default')->nullable();
             $table->timestamps();
 
             $table->foreignUuid('article_id')->references('id')->on('articles')

@@ -81,8 +81,8 @@
                         :items="categories"
                         :label="$vuetify.lang.t('$vuetify.menu.category')"
                         item-text="name"
-                        :loading="isShopLoading"
-                        :disabled="!!isShopLoading"
+                        :loading="isCategoryLoading"
+                        :disabled="!!isCategoryLoading"
                         return-object
                       />
                       <v-dialog
@@ -163,7 +163,7 @@
                       cols="12"
                       md="3"
                     >
-                      <v-checkbox
+                      <v-switch
                         v-model="newArticle.composite"
                         :disabled="articles.length===0"
                         :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
@@ -192,7 +192,7 @@
                             </v-tooltip>
                           </div>
                         </template>
-                      </v-checkbox>
+                      </v-switch>
                     </v-col>
                     <v-col
                       v-show="newArticle.composite"
@@ -217,7 +217,7 @@
                       cols="12"
                       md="3"
                     >
-                      <v-checkbox
+                      <v-switch
                         v-model="newArticle.track_inventory"
                         class="md-6"
                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
@@ -322,6 +322,15 @@
                         <v-row>
                           <v-col
                             cols="12"
+                            md="4"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.image')"
+                              value="image"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
                             md="8"
                           >
                             <v-radio
@@ -329,25 +338,29 @@
                               value="color"
                             />
                           </v-col>
-                          <v-col
-                            cols="12"
-                            md="4"
-                          >
-                            <v-radio
-                              :disabled="true"
-                              cols="12"
-                              md="4"
-                              :label="$vuetify.lang.t('$vuetify.representation.image')"
-                              value="image"
-                            />
-                          </v-col>
                         </v-row>
                       </v-radio-group>
                     </v-col>
                     <v-row>
                       <v-col
+                        v-show="representation===`image`"
                         cols="12"
-                        md="8"
+                        md="12"
+                      >
+                        <div
+                          id="multiple-image"
+                          style="display: flex; justify-content: center;"
+                        >
+                          <app-upload-multiple-image
+                            :data-images="newArticle.images"
+                            :upload-success="uploadImage"
+                          />
+                        </div>
+                      </v-col>
+                      <v-col
+                        v-show="representation===`color`"
+                        cols="12"
+                        md="12"
                       >
                         <app-color-picker
                           :value="newArticle.color"
@@ -374,6 +387,8 @@
           <v-btn
             class="mb-2"
             color="primary"
+            :disabled="!formValid"
+            :loading="isActionInProgress"
             @click="createNewArticle"
           >
             <v-icon>mdi-check</v-icon>
@@ -386,20 +401,19 @@
 </template>
 
 <script>
+
+import { mapActions, mapState } from 'vuex'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
-import { mapActions, mapState } from 'vuex'
 import CompositeList from './composite/CompositeList'
-import AppColorPicker from '../../components/core/AppColorPicker'
-import AvatarPicker from '../../components/core/AvatarPicker'
 
 export default {
   name: 'NewArticlePage',
-  components: { AvatarPicker, AppColorPicker, CompositeList, ShopsArticles, Variant },
+  components: { CompositeList, ShopsArticles, Variant },
   data () {
     return {
-      ref: '10285',
-      representation: 'color',
+      ref: '10001',
+      representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
@@ -413,8 +427,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'newArticle', 'articles']),
-    ...mapState('category', ['categories', 'isActionInProgress']),
+    ...mapState('article', ['saved', 'newArticle', 'articles', 'isActionInProgress']),
+    ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading'])
   },
   created: async function () {
@@ -436,10 +450,10 @@ export default {
     await this.getCategories()
     await this.getArticles()
     this.loadingData = false
-    this.ref = '10285'
+    this.ref = '10001'
   },
   mounted () {
-    this.ref = '10285'
+    this.ref = '10001'
   },
   methods: {
     ...mapActions('article', ['createArticle', 'toogleNewModal', 'getArticles']),
@@ -589,6 +603,12 @@ export default {
         }
       }
     },
+    closeInfoAdd () {
+      this.showInfoAdd = false
+    },
+    uploadImage (formData, index, fileList) {
+      this.newArticle.images = fileList
+    },
     async validCreate () {
       if (this.$refs.form.validate()) {
         this.loading = true
@@ -614,9 +634,6 @@ export default {
           }
         })
       }
-    },
-    closeInfoAdd () {
-      this.showInfoAdd = false
     }
   }
 }

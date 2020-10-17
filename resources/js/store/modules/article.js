@@ -36,7 +36,8 @@ const state = {
     category: [],
     color: '',
     shops: [],
-    composites: []
+    composites: [],
+    images: []
   },
   editArticle: {
     id: '',
@@ -54,7 +55,8 @@ const state = {
     category: [],
     color: '',
     shops: [],
-    variants_shops: []
+    variants_shops: [],
+    images: []
   },
   isArticleTableLoading: false,
   isActionInProgress: false,
@@ -96,8 +98,9 @@ const mutations = {
       track_inventory: false,
       category: [],
       shops: [],
-      color: '/assets/avatar/avatar-undefined.jpg',
-      variants_shops: []
+      color: '',
+      variants_shops: [],
+      images: []
     }
     state.saved = true
   },
@@ -124,7 +127,8 @@ const mutations = {
       category: [],
       shops: [],
       color: '',
-      variants_shops: []
+      variants_shops: [],
+      images: []
     }
     state.saved = true
   },

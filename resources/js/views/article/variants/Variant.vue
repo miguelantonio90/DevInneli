@@ -288,13 +288,13 @@ export default {
         this.$emit('updateVariants', this.variants, this.variantsValues)
       }
     },
-    variantsValuesParent (val) {
+    variantsValuesParent () {
       this.variantsValues = this.variantsValuesParent
     },
-    refParent (val) {
+    refParent () {
       this.ref = this.refParent
     },
-    variantsParent (val) {
+    variantsParent () {
       this.variants = this.variantsParent
     },
     dialog (val) {
