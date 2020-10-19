@@ -75,11 +75,14 @@
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
+                :rules="formRule.phone"
                 :select-label="$vuetify.lang.t('$vuetify.country')"
                 v-bind="bindProps"
                 :error-messages="errorPhone"
+                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
                 @keypress="numbers"
                 @input="onInput"
+                @country-changed="onCountry"
               >
                 <template #message="{ key, message }">
                   <slot
@@ -94,17 +97,20 @@
               cols="12"
               md="6"
             >
-              <v-text-field
+              <v-text-field-simplemask
                 v-model="editUser.pinCode"
-                :append-icon=" hidePinCode1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$vuetify.lang.t('$vuetify.pinCode')"
-                :rules="formRule.pinCode"
-                :type="hidePinCode1 ? 'password' : 'number'"
-                autocomplete="off"
-                name="pinCode"
-                required
-                @keypress="numbers"
-                @click:append="hidePinCode1 = !hidePinCode1"
+                :properties="{
+                  clearable: true,
+                  required:true,
+                  rules:formRule.pinCode
+                }"
+                :options="{
+                  inputMask: '#-#-#-#',
+                  outputMask: '####',
+                  empty: null,
+                  alphanumeric: false,
+                }"
               />
             </v-col>
             <v-col
@@ -143,7 +149,6 @@
         <v-spacer />
         <v-btn
           class="mb-2"
-          color="error"
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
@@ -175,7 +180,8 @@ export default {
       hidePinCode1: true,
       hidePinCode2: true,
       errorPhone: null,
-      formRule: this.$rules
+      formRule: this.$rules,
+      countrySelect: null
     }
   },
   computed: {
@@ -188,7 +194,7 @@ export default {
     },
     bindProps () {
       return {
-        mode: 'international',
+        mode: 'national',
         clearable: true,
         defaultCountry: this.editUser.country ? this.editUser.country : 'US',
         disabledFetchingCountry: false,
@@ -210,6 +216,10 @@ export default {
     ...mapActions('user', ['updateUser', 'toogleEditModal']),
     ...mapActions('role', ['getRoles']),
     ...mapActions('shop', ['getShops']),
+    onCountry (event) {
+      this.editUser.country = event.iso2
+      this.countrySelect = event
+    },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(

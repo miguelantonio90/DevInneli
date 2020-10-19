@@ -12,14 +12,15 @@
           <v-card-title>
             <img
               alt="Inneli APP"
-              src="/assets/m.png"
-              width="55"
+              src="/assets/logo-new.png"
             >
-            <h1 class="primary--text display-1">
-              INNELI
-            </h1>
           </v-card-title>
           <v-card-text>
+            <div class="sm12 text-center">
+              <h3 class="primary--text">
+                {{ $vuetify.lang.t('$vuetify.welcome_login') }}
+              </h3>
+            </div>
             <v-form
               ref="form"
               v-model="formValid"
@@ -49,14 +50,21 @@
                 required
                 @click:append="hidePassword = !hidePassword"
               />
-              <v-btn
+              <router-link
+                v-slot="{ href, route, navigate }"
                 :to="{ name: 'forgot' }"
-                color="primary"
-                small
-                text
               >
-                {{ $vuetify.lang.t('$vuetify.forgot') }}
-              </v-btn>
+                <div class="sm12">
+                  <div>
+                    <a
+                      :href="href"
+                      class="text-info m-l-5"
+                      style="text-decoration: none"
+                      @click="navigate"
+                    >{{ $vuetify.lang.t('$vuetify.forgot') }}</a>
+                  </div>
+                </div>
+              </router-link>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -76,24 +84,32 @@
               </template>
               <span>{{ item.text }}</span>
             </v-tooltip>-->
-            <v-spacer />
             <v-btn
               :disabled="!formValid"
               :loading="loading"
+              block
               color="primary"
               @click="login"
             >
-              <v-icon>mdi-account</v-icon>
+              <v-icon>mdi-login</v-icon>
               {{ $vuetify.lang.t('$vuetify.login') }}
             </v-btn>
-            <v-btn
-              :to="{ name: 'register' }"
-              color="secondary"
-            >
-              <v-icon>mdi-account-plus</v-icon>
-              {{ $vuetify.lang.t('$vuetify.register') }}
-            </v-btn>
           </v-card-actions>
+          <router-link
+            v-slot="{ href, route, navigate }"
+            :to="{ name: 'register' }"
+          >
+            <div class="sm12 text-center">
+              <div>
+                {{ $vuetify.lang.t('$vuetify.no_account') }} <a
+                  :href="href"
+                  class="text-info m-l-5"
+                  style="text-decoration: none"
+                  @click="navigate"
+                ><b>{{ $vuetify.lang.t('$vuetify.register') }}</b></a>
+              </div>
+            </div>
+          </router-link>
         </v-card>
       </v-col>
     </v-row>
@@ -142,6 +158,7 @@ export default {
 <style lang="sass" scoped>
 .page-login
   &__card
-    max-width: 600px
+    max-width: 450px
     margin: 0 auto
+    border-radius: 6px !important
 </style>

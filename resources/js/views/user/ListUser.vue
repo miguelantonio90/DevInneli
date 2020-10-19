@@ -124,10 +124,6 @@ export default {
             '$vuetify.messages.error_delete_manager'
           ),
           icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
           confirmButtonText: this.$vuetify.lang.t(
             '$vuetify.actions.accept'
           ),
@@ -141,6 +137,10 @@ export default {
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
+          ),
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
           ),
           icon: 'warning',
           confirmButtonText: this.$vuetify.lang.t(

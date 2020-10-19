@@ -1,45 +1,36 @@
 <template>
   <v-app
-    id="inspire"
-    class="app dashboard"
+    class="layout-lock"
   >
-    <app-toolbar
-      :show-nav-icon="false"
-      :show-menu-user="false"
-      :show-lock-icon="false"
-      class="app--toolbar"
-    />
     <v-main>
-      <!-- Page Header -->
-      <div class="page-wrapper">
-        <v-slide-x-transition>
-          <router-view />
-        </v-slide-x-transition>
-      </div>
-      <!-- App Footer -->
-      <v-footer
-        class="pa-3 app--footer"
-        height="auto"
-      >
-        <span>INNELI &copy; {{ new Date().getFullYear() }}</span>
-      </v-footer>
+      <router-view :key="$route.path" />
     </v-main>
-    <!-- Go to top -->
-    <app-fab />
+    <v-footer
+      height="auto"
+      style="background-color: transparent"
+    >
+      <span style="color: white">&copy; {{ new Date().getFullYear() }} INNELI Team</span>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import AppFab from '../AppFab'
-import AppToolbar from '../AppToolbar'
 
 export default {
-  name: 'LayoutLock',
-  components: {
-    AppToolbar,
-    AppFab
-  }
+  name: 'LayoutLock'
 }
 </script>
 
-<style scoped></style>
+<style lang="sass" scoped>
+.layout-lock
+  width: 100%
+  position: absolute
+  top: 0
+  left: 0
+  content: ""
+  z-index: 0
+  background-size: cover
+  background-repeat: no-repeat
+  background-position: center top
+  background-image: url('/assets/background/lock.jpg')
+</style>

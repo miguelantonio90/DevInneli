@@ -30,7 +30,7 @@
               >
                 {{ this.$vuetify.lang.t('$vuetify.wait') }}
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12">
                 <v-progress-linear
                   color="deep-purple accent-4"
                   height="6"

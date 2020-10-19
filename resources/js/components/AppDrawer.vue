@@ -13,11 +13,11 @@
     >
       <img
         :src="computeLogo"
-        alt="Vue Material Admin Template"
-        height="36"
+        alt="INNELI LOGO"
+        width="36"
       >
       <v-toolbar-title class="ml-0 pl-3">
-        <span class="hidden-sm-and-down">INNELI APP</span>
+        <span class="hidden-sm-and-down">INNELI</span>
       </v-toolbar-title>
     </v-toolbar>
     <v-list class="pa-0">
@@ -164,7 +164,7 @@ export default {
 
   computed: {
     computeLogo () {
-      return '/assets/m.png'
+      return '/assets/logo_bar.ico'
     },
     computeMenu () {
       return routes[0].children

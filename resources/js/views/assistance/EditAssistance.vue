@@ -119,7 +119,6 @@
         <v-spacer />
         <v-btn
           class="mb-2"
-          color="error"
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>

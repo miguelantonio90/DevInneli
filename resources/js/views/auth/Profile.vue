@@ -182,6 +182,9 @@
                       :select-label="$vuetify.lang.t('$vuetify.country')"
                       v-bind="bindProps"
                       :error-messages="errorPhone"
+                      :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                      required
+                      :rules="formRule.phone"
                       @country-changed="onCountry"
                       @input="onInput"
                     >
@@ -290,32 +293,8 @@ export default {
       saving: false,
       loadingData: false,
       errorPhone: null,
-      formRule: {
-        company: [
-          (v) =>
-            !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
-              this.$vuetify.lang.t('$vuetify.company')
-            ])
-        ],
-        country: [
-          (v) =>
-            !!v || this.$vuetify.lang.t('$vuetify.rule.required' [
-              this.$vuetify.lang.t('$vuetify.country')
-            ])
-        ],
-        email: [
-          (v) =>
-            !!v ||
-                        this.$vuetify.lang.t('$vuetify.rule.required', [
-                          this.$vuetify.lang.t('$vuetify.email')
-                        ]),
-          (v) =>
-            /.+@.+\..+/.test(v) ||
-                        this.$vuetify.lang.t('$vuetify.rule.bad_email', [
-                          this.$vuetify.lang.t('$vuetify.email')
-                        ])
-        ]
-      }
+      formRule: this.$rules,
+      countrySelect: null
     }
   },
   computed: {
@@ -335,10 +314,10 @@ export default {
     },
     bindProps () {
       return {
-        mode: 'international',
+        mode: 'national',
         clearable: true,
         defaultCountry: this.user.company.country || 'US',
-        disabledFetchingCountry: true,
+        disabledFetchingCountry: false,
         autocomplete: 'off',
         dropdownOptions: {
           disabledDialCode: false
@@ -360,6 +339,7 @@ export default {
     ...mapActions('company', ['updateCompany', 'updateLogo']),
     onCountry (event) {
       this.userData.company.country = event.iso2
+      this.countrySelect = event
     },
     async updateProfile () {
       this.loading = true

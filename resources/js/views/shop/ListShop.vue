@@ -9,63 +9,6 @@
         <edit-shop v-if="showEditModal" />
         <show-shop v-if="showShowModal" />
         <v-card>
-          <!--<v-data-table
-            :headers="getTableColumns"
-            :items="shops"
-            :loading="isTableLoading"
-            :search="search"
-            class="elevation-1"
-            sort-by="name"
-          >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-text-field
-                  v-model="search"
-                  :label="
-                    $vuetify.lang.t('$vuetify.actions.search')
-                  "
-                  append-icon="mdi-magnify"
-                  hide-details
-                  single-line
-                />
-                <v-spacer />
-                <v-btn
-                  class="mb-2"
-                  color="primary"
-                  @click="toogleNewModal(true)"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.new') }}
-                </v-btn>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-icon
-                class="mr-2"
-                small
-                @click="openShowModal(item.id)"
-              >
-                mdi-eye
-              </v-icon>
-              <v-icon
-                class="mr-2"
-                small
-                @click="openEditModal(item.id)"
-              >
-                mdi-pencil
-              </v-icon>
-              <v-icon
-                small
-                @click="deleteShopHandler(item.id)"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
-            <template v-slot:item.name="{ item }">
-              <v-icon>mdi-shopping</v-icon>
-              {{ item.name }}
-            </template>
-          </v-data-table>-->
           <app-data-table
             :title="$vuetify.lang.t('$vuetify.titles.list',
                                     [$vuetify.lang.t('$vuetify.menu.shop'),])"

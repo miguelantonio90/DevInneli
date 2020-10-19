@@ -43,6 +43,9 @@
                 "
                 :select-label="$vuetify.lang.t('$vuetify.country')"
                 v-bind="bindProps"
+                required
+                :rules="formRule.phone"
+                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
                 :error-messages="errorPhone"
                 @country-changed="onCountry"
                 @input="onInput"
@@ -91,7 +94,6 @@
         <v-spacer />
         <v-btn
           class="mb-2"
-          color="error"
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
@@ -120,14 +122,15 @@ export default {
     return {
       errorPhone: null,
       formValid: false,
-      formRule: this.$rules
+      formRule: this.$rules,
+      countrySelect: null
     }
   },
   computed: {
     ...mapState('shop', ['saved', 'editShop', 'isActionInProgress']),
     bindProps () {
       return {
-        mode: 'international',
+        mode: 'national',
         clearable: true,
         defaultCountry: this.editShop.country ? this.editShop.country : 'US',
         disabledFetchingCountry: false,
@@ -166,6 +169,7 @@ export default {
     },
     onCountry (event) {
       this.editShop.country = event.iso2
+      this.countrySelect = event
     },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')

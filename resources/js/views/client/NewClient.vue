@@ -74,9 +74,11 @@
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
+                :rules="formRule.phone"
                 :select-label="$vuetify.lang.t('$vuetify.country')"
                 v-bind="bindProps"
                 :error-messages="errorPhone"
+                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
                 @country-changed="onCountry"
                 @keypress="numbers"
                 @input="onInput"
@@ -142,7 +144,6 @@
         <v-spacer />
         <v-btn
           class="mb-2"
-          color="error"
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
@@ -174,7 +175,8 @@ export default {
       hidePinCode1: true,
       hidePinCode2: true,
       errorPhone: null,
-      formRule: this.$rules
+      formRule: this.$rules,
+      countrySelect: null
     }
   },
   computed: {
@@ -185,7 +187,7 @@ export default {
     },
     bindProps () {
       return {
-        mode: 'international',
+        mode: 'national',
         clearable: true,
         disabledFetchingCountry: false,
         autocomplete: 'off',
@@ -193,7 +195,7 @@ export default {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: true
+          showDialCode: false
         }
       }
     }
@@ -205,6 +207,7 @@ export default {
     ...mapActions('client', ['createClient', 'toogleNewModal']),
     onCountry (event) {
       this.newClient.country = event.iso2
+      this.countrySelect = event
     },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')

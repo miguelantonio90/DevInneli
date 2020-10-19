@@ -62,7 +62,7 @@
                         }"
                         :options="{
                           inputMask: '##-####-####-###',
-                          outputMask: '##-####-####-###',
+                          outputMask: '#############',
                           empty: null,
                           alphanumeric: true,
                         }"
@@ -387,10 +387,11 @@
                       <v-col
                         v-show="representation===`color`"
                         cols="12"
-                        md="12"
+                        md="9"
                       >
                         <app-color-picker
                           :value="newArticle.color"
+                          style="margin-left: 10px"
                           @input="inputColor"
                         />
                       </v-col>
@@ -405,7 +406,6 @@
           <v-spacer />
           <v-btn
             class="mb-2"
-            color="error"
             @click="$router.push({name:'product_list'})"
           >
             <v-icon>mdi-close</v-icon>

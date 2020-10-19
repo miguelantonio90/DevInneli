@@ -73,7 +73,6 @@
         <v-spacer />
         <v-btn
           class="mb-2"
-          color="error"
           @click="toogleShowModal(false)"
         >
           <v-icon>mdi-close</v-icon>
@@ -108,7 +107,7 @@ export default {
           disabledDialCode: false
         },
         inputOptions: {
-          showDialCode: true
+          showDialCode: false
         }
       }
     }

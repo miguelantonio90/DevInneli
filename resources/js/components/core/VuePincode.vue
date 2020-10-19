@@ -13,31 +13,39 @@
       <span :class="pincode.length >= 4 ? 'active' : ''" />
     </div>
     <div class="vue-pincode__numbers">
-      <button
+      <v-btn
         v-for="(number, idx) in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
         :key="idx"
-        class="shadow"
+        ref="btnPin"
+        dark
+        class="primary"
+        fab
         :disabled="buttonDisabled"
         @click="clickPinButton(number)"
       >
         <span>{{ number }}</span>
-      </button>
+      </v-btn>
       <div />
-      <button
+      <v-btn
+        dark
+        class="primary"
+        fab
         :disabled="buttonDisabled"
         @click="clickPinButton(0)"
       >
         <span>0</span>
-      </button>
-      <button
-        class="vue-pincode__undo"
+      </v-btn>
+      <v-btn
+        dark
+        class="vue-pincode__undo error"
+        fab
         :disabled="buttonDisabled"
         @click="resetPincode"
       >
         <span>
           <undo-icon />
         </span>
-      </button>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -69,6 +77,28 @@ export default {
         this.$emit('pincode', this.pincode)
       }
     }
+  },
+  created () {
+    window.focus()
+    window.addEventListener('keypress', e => {
+      if (!isNaN(e.key)) {
+        this.$refs.btnPin.map((btn) => {
+          if (btn.$el.innerText === e.key.toString()) {
+            btn.$el.click()
+          }
+        })
+      }
+      if (e.key === 'Delete') {
+        this.resetPincode()
+      }
+    })
+    window.addEventListener('keyup', e => {
+      if (this.pincodeLength > 0) {
+        if (e.key === 'Backspace') {
+          this.resetPincode()
+        }
+      }
+    })
   },
   destroyed () {
     this.resetPincode()
@@ -123,6 +153,7 @@ export default {
       position: relative;
       display: inline-block;
       text-align: center;
+      text-decoration-color:white;
       transition: box-shadow 0.2s linear;
 
       &.active {
@@ -137,49 +168,11 @@ export default {
     justify-items: center;
     align-items: center;
     row-gap: 20px;
-
-    button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      color: #36485e;
-      background: #e8e8e8;
-      user-select: none;
-      font-size: 24px;
-      outline: none;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: all 0.2s linear;
-      box-shadow: 7px 7px 15px #36485e36, -4px -4px 13px #ffffff,
-        inset 4px 4px 8px rgba(209, 217, 230, 0.35),
-        inset -8px -8px 8px rgba(255, 255, 255, 0.3);
-
-      &:hover {
-        box-shadow: 4px 2px 18px #36485e36, -4px -4px 13px #ffffff,
-          inset 6px 6px 16px rgba(209, 217, 230, 0.8),
-          inset -8px -8px 8px rgba(255, 255, 255, 0.2);
-      }
-
-      &:active {
-        box-shadow: 4px 2px 18px #36485e36, -4px -4px 13px #ffffff,
-          inset 6px 6px 16px rgba(209, 217, 230, 0.8),
-          inset -8px -8px 8px rgba(255, 255, 255, 0.2);
-        transform: translateY(2px);
-      }
-
-      span {
-        opacity: 1;
-        transition: all 0.2s linear;
-      }
-    }
   }
 
   &--success {
     .vue-pincode__numbers {
-      button {
+      v-btn {
         box-shadow: 0 0 0 #bbcfda, 0 0 0 #ffffff,
           inset 0 0 0 rgba(209, 217, 230, 0.35),
           inset 0 0 0 rgba(255, 255, 255, 0.3);
@@ -200,7 +193,7 @@ export default {
 
     .vue-pincode__undo {
       svg {
-        fill: #36485e52;
+        fill: snow;
       }
     }
   }
@@ -215,7 +208,7 @@ export default {
       height: 32px;
       transform: rotate(45deg);
       transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
-      fill: #36485e;
+      fill: snow;
     }
 
     &:hover {

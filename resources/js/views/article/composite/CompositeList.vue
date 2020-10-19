@@ -20,7 +20,6 @@
               <v-spacer />
               <v-btn
                 class="mb-2"
-                color="error"
                 @click="closeDelete"
               >
                 <v-icon>mdi-close</v-icon>

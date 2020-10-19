@@ -21,7 +21,7 @@
         class="pa-3 app--footer"
         height="auto"
       >
-        <span>INNELI &copy; {{ new Date().getFullYear() }}</span>
+        <span>&copy; {{ new Date().getFullYear() }} INNELI Team</span>
       </v-footer>
     </v-main>
     <!-- Go to top -->

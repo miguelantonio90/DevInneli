@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
-
+    <link  rel="icon"   href="/assets/favicon.ico" type="image/x-icon" />
 
     <!-- Styles -->
     {{--        <style type="text/css">--}}

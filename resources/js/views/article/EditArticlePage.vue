@@ -62,7 +62,7 @@
                         }"
                         :options="{
                           inputMask: '##-####-####-###',
-                          outputMask: '##-####-####-###',
+                          outputMask: '#############',
                           empty: null,
                           alphanumeric: true,
                         }"
@@ -391,7 +391,6 @@
           <v-spacer />
           <v-btn
             class="mb-2"
-            color="error"
             @click="$router.push({name:'product_list'})"
           >
             <v-icon>mdi-close</v-icon>

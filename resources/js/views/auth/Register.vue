@@ -1,12 +1,12 @@
 <template>
   <v-container
-    class="page-login"
+    class="page-register"
     fill-height
   >
     <v-row>
       <v-col>
         <v-card
-          class="pa-3 page-login__card"
+          class="pa-3 page-register__card"
           tile
         >
           <v-card-title>
@@ -110,13 +110,21 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn
-              :to="{ name: 'login' }"
-              color="secondary"
+            <v-tooltip
+              bottom
             >
-              <v-icon>mdi-arrow-left</v-icon>
-              {{ $vuetify.lang.t('$vuetify.login') }}
-            </v-btn>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-bind="attrs"
+                  class="mr-3"
+                  v-on="on"
+                  @click="$router.push({name:'login'})"
+                >
+                  mdi-chevron-left
+                </v-icon>
+              </template>
+              <span>{{ $vuetify.lang.t('$vuetify.login') }}</span>
+            </v-tooltip>
             <v-spacer />
             <v-btn
               :disabled="!formValid"
@@ -182,8 +190,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.page-login
+.page-register
     &__card
-        max-width: 600px
+        max-width: 450px
         margin: 0 auto
+        border-radius: 6px !important
 </style>

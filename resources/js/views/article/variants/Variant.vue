@@ -81,7 +81,6 @@
               <v-spacer />
               <v-btn
                 class="mb-2"
-                color="error"
                 @click="close"
               >
                 <v-icon>mdi-close</v-icon>
@@ -110,7 +109,6 @@
               <v-spacer />
               <v-btn
                 class="mb-2"
-                color="error"
                 @click="closeDelete"
               >
                 <v-icon>mdi-close</v-icon>
@@ -234,7 +232,7 @@
             }"
             :options="{
               inputMask: '##-####-####-###',
-              outputMask: '##-####-####-###',
+              outputMask: '#############',
               empty: null,
               alphanumeric: true,
             }"

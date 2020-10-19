@@ -1,6 +1,13 @@
 import Vuetify from '../plugins/vuetify'
 const language = Vuetify.framework.lang
 
+const company = [
+  (v) =>
+    !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+      this.$vuetify.lang.t('$vuetify.company')
+    ])
+]
+
 const firstName = [
   (v) => !!v || language.t('$vuetify.rule.required', [
     language.t('$vuetify.name')
@@ -36,17 +43,6 @@ const password = [
   ]),
   (v) => (v || '').length >= 8 || language.t('$vuetify.rule.min', ['8'])
 ]
-const passwordConfirmation = [
-  (v) => !!v || language.t('$vuetify.rule.required', [
-    language.t('$vuetify.confirm_password')
-  ]),
-  (v) => (!!v && v) === this.formRegister.password ||
-    language.t(
-      '$vuetify.rule.match',
-      [language.t('$vuetify.password')],
-      [language.t('$vuetify.confirm_password')]
-    )
-]
 const country = [
   v => !!v || language.t('$vuetify.rule.select')
 ]
@@ -55,8 +51,7 @@ const pinCode = [
     !!v || language.t('$vuetify.rule.required', [
       language.t('$vuetify.pinCode')
     ]),
-  (v) => (v && v.length >= 4) || language.t('$vuetify.rule.pin.min', ['4']),
-  (v) => (v && v.length <= 6) || language.t('$vuetify.rule.pin.max', ['6'])
+  (v) => (v && v.length >= 7) || language.t('$vuetify.rule.pin.min', ['4'])
 ]
 const access = [
   (v) =>
@@ -119,11 +114,11 @@ const key = [
 ]
 
 export default {
+  company,
   firstName,
   lastName,
   email,
   password,
-  passwordConfirmation,
   country,
   pinCode,
   access,

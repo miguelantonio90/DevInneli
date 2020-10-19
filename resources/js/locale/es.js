@@ -3,13 +3,15 @@ import es from 'vuetify/es5/locale/es'
 export default {
   label: 'Español',
   // page login
-  login: 'login',
+  login: 'Iniciar sección',
+  welcome_login: 'Ingrese a su cuenta de Inneli',
   reset_password: 'Cambiar contraseña',
   find_password: 'Enviar su contraseña',
-  forgot: 'Olvidó su contraseña?',
+  forgot: '¿Olvidó su contraseña?',
   have_pin: 'Bloquer Pantalla',
   pinTile: 'Pin Code',
-  forgot_btn: 'Enviar link de cambio',
+  forgot_btn: 'Enviar',
+  hint_forgot: 'Ingrese su correo electrónico y se le enviarán las instrucciones',
   username: 'Usuario',
   name: 'Nombre',
   email: 'Correo',
@@ -19,7 +21,8 @@ export default {
   password: 'Contraseña',
   pinCode: 'Pin',
   confirm: 'Confirmación',
-  register: 'Registrar',
+  register: 'Regístrate',
+  no_account: '¿No tienes una cuenta?',
   noDefined: 'No definido',
   aboutMe: 'Acerca de mi',
   activeAccount:
