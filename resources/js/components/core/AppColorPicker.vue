@@ -28,7 +28,7 @@ export default {
   },
   data () {
     return {
-      color: this.value
+      color: this.value || '#1FBC9C'
     }
   },
   methods: {

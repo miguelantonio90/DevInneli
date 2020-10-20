@@ -3,9 +3,8 @@
     <v-card>
       <v-tabs
         v-model="tab"
-        background-color="primary"
-        dark
-        vertical
+        fixed-tabs
+        color="deep-purple accent-4"
       >
         <v-tab
           v-for="item in tabName"
@@ -32,21 +31,25 @@
 
 <script>
 import ShopList from '../shop/ListShop'
+import ExpenseCategory from '../expense_category/List'
+
 export default {
   name: 'General',
-  components: { ShopList },
+  components: { ShopList, ExpenseCategory },
   data () {
     return {
       tab: null,
       itemsTabs: [
-        { key: 'shop-list', content: 'shop-list' }
+        { key: 'shop-list', content: 'shop-list' },
+        { key: 'expense-category', content: 'expense-category' }
       ]
     }
   },
   computed: {
     tabName () {
       return [
-        { name: this.$vuetify.lang.t('$vuetify.menu.shop') }
+        { name: this.$vuetify.lang.t('$vuetify.menu.shop') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.expense_category') }
       ]
     }
   }

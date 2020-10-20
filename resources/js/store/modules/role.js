@@ -123,6 +123,9 @@ const mutations = {
   [FAILED_ACCESS] (state, error) {
     state.saved = false
     state.error = error
+    state.isAccessLoading = false
+    state.isActionInProgress = false
+    state.isTableLoading = false
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(
