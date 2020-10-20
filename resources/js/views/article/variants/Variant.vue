@@ -233,7 +233,7 @@
             :options="{
               inputMask: '##-####-####-###',
               outputMask: '#############',
-              empty: null,
+              empty: 0,
               alphanumeric: true,
             }"
           />
