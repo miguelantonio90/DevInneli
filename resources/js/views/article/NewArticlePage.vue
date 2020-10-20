@@ -28,7 +28,12 @@
             >
               <v-expansion-panel style="margin: 0">
                 <v-expansion-panel-header>
-                  <div><v-icon>mdi-database-edit</v-icon><span>{{ $vuetify.lang.t('$vuetify.panel.basic') }}</span></div>
+                  <div>
+                    <v-icon>mdi-database-edit</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
+                      {{ $vuetify.lang.t('$vuetify.panel.basic') }}
+                    </span>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
