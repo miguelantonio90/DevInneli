@@ -65,6 +65,8 @@ export default {
     client_list: 'Listado de Clientes',
     articles: 'Artículos',
     category: 'Categoría',
+    expense_category: 'Categoría de Gasto',
+    expense_category_list: 'Listado de Categoría de Gastos',
     category_list: 'Listado de Categorías',
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',

@@ -66,6 +66,94 @@ const getters = {
   pinSuccess: (state) => state.pinSuccess
 }
 
+// mutations
+const mutations = {
+  [IS_MANAGER] (state, isManager) {
+    state.isManager = isManager
+  },
+  [SET_USER_DATA] (state, user) {
+    state.userData = user
+  },
+  [IN_PROCESS_RESET] (state, process) {
+    state.loadingReset = process
+  },
+
+  [LOGIN] (state) {
+    state.pending = true
+  },
+  [LOGIN_SUCCESS] (state) {
+    state.isLoggedIn = true
+    state.pending = false
+  },
+  [PIN_SUCCESS] (state) {
+    state.pinSuccess = true
+    state.pending = false
+  },
+  [LOGOUT] (state) {
+    state.isLoggedIn = false
+    state.isManagerIn = false
+  },
+  [FORGOT_PASSWORD] (state, status) {
+    state.successForgot = status
+    if (status) {
+      this._vm.$Toast.fire({
+        icon: 'success',
+        title: this._vm.$language.t('$vuetify.messages.check_mail'),
+        timer: 5000
+      })
+      router.push({ name: 'login' })
+    }
+  },
+  [LOGIN_FAILED] (state) {
+    state.isLoggedIn = false
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.login_failed')
+    })
+  },
+  [PIN_FAILED] (state) {
+    state.pinSuccess = false
+    state.isManager = false
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.pin_failed')
+    })
+  },
+  [ENV_DATA_PROCESS] (state, pending) {
+    state.pending = pending
+  },
+  [SET_RESET] (state, reset) {
+    state.formReset = {
+      username: '',
+      email: '',
+      password: '',
+      password_confirmation: ''
+    }
+    state.successReset = reset
+    if (reset) {
+      this._vm.$Toast.fire({
+        icon: 'success',
+        title: this._vm.$language.t('$vuetify.messages.password_success')
+      })
+    } else {
+      this._vm.$Toast.fire({
+        icon: 'error',
+        title: 'Invalid Token.'
+      })
+    }
+    router.push({ name: 'login' })
+  },
+  [FAILED_CATCH] (state, error) {
+    state.pending = false
+    state.error = error
+    state.isLoggedIn = false
+    this._vm.$Toast.fire({
+      icon: 'error',
+      title: this._vm.$language.t('$vuetify.messages.login_failed')
+    })
+  }
+}
+
 // actions
 const actions = {
   async getUserData ({ commit }) {
@@ -176,93 +264,6 @@ const actions = {
           commit(SET_RESET, false)
         }
       })
-  }
-}
-
-// mutations
-const mutations = {
-  [IS_MANAGER] (state, isManager) {
-    state.isManager = isManager
-  },
-  [SET_USER_DATA] (state, user) {
-    state.userData = user
-  },
-  [IN_PROCESS_RESET] (state, process) {
-    state.loadingReset = process
-  },
-
-  [LOGIN] (state) {
-    state.pending = true
-  },
-  [LOGIN_SUCCESS] (state) {
-    state.isLoggedIn = true
-    state.pending = false
-  },
-  [PIN_SUCCESS] (state) {
-    state.pinSuccess = true
-    state.pending = false
-  },
-  [LOGOUT] (state) {
-    state.isLoggedIn = false
-    state.isManagerIn = false
-  },
-  [FORGOT_PASSWORD] (state, status) {
-    state.successForgot = status
-    if (status) {
-      this._vm.$Toast.fire({
-        icon: 'success',
-        title: this._vm.$language.t('$vuetify.messages.check_mail'),
-        timer: 5000
-      })
-      router.push({ name: 'login' })
-    }
-  },
-  [LOGIN_FAILED] (state) {
-    state.isLoggedIn = false
-    this._vm.$Toast.fire({
-      icon: 'error',
-      title: this._vm.$language.t('$vuetify.messages.login_failed')
-    })
-  },
-  [PIN_FAILED] (state) {
-    state.pinSuccess = false
-    state.isManager = false
-    this._vm.$Toast.fire({
-      icon: 'error',
-      title: this._vm.$language.t('$vuetify.messages.pin_failed')
-    })
-  },
-  [ENV_DATA_PROCESS] (state, pending) {
-    state.pending = pending
-  },
-  [SET_RESET] (state, reset) {
-    state.formReset = {
-      username: '',
-      email: '',
-      password: '',
-      password_confirmation: ''
-    }
-    state.successReset = reset
-    if (reset) {
-      this._vm.$Toast.fire({
-        icon: 'success',
-        title: this._vm.$language.t('$vuetify.messages.password_success')
-      })
-    } else {
-      this._vm.$Toast.fire({
-        icon: 'error',
-        title: 'Invalid Token.'
-      })
-    }
-    router.push({ name: 'login' })
-  },
-  [FAILED_CATCH] (state, error) {
-    state.pending = false
-    state.error = error
-    this._vm.$Toast.fire({
-      icon: 'error',
-      title: this._vm.$language.t('$vuetify.messages.login_failed')
-    })
   }
 }
 

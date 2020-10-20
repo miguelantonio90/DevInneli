@@ -59,7 +59,8 @@ const mutations = {
   [CATEGORY_CREATED] (state) {
     state.showNewModal = false
     state.newCategory = {
-      name: ''
+      name: '',
+      color: ''
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -79,7 +80,8 @@ const mutations = {
     state.showEditModal = false
     state.editCategory = {
       id: '',
-      name: ''
+      name: '',
+      color: ''
     }
     state.saved = true
     this._vm.$Toast.fire({
