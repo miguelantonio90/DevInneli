@@ -160,7 +160,8 @@ export default {
     edit: 'Edit {0}',
     show: 'Show {0}',
     delete: 'Delete {0}',
-    no_action: "Can't {0}"
+    no_action: "Can't {0}",
+    newAction: 'Create new'
   },
 
   access: {

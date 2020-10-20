@@ -123,7 +123,22 @@
                         :loading="isCategoryLoading"
                         :disabled="!!isCategoryLoading"
                         return-object
-                      />
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('category/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
                       <v-dialog
                         v-model="showInfoAdd"
                         max-width="500px"
@@ -407,6 +422,7 @@
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
           </v-btn>
         </v-card-actions>
+        <new-category v-if="$store.state.category.showNewModal" />
       </v-card>
     </v-container>
   </div>
@@ -415,6 +431,7 @@
 <script>
 
 import { mapActions, mapState } from 'vuex'
+import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
@@ -422,7 +439,7 @@ import AppLoading from '../../components/core/AppLoading'
 
 export default {
   name: 'EditArticlePage',
-  components: { AppLoading, CompositeList, ShopsArticles, Variant },
+  components: { NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
       variants: [],

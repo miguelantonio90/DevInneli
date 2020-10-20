@@ -163,7 +163,8 @@ export default {
     edit: 'Editar {0}',
     show: 'Mostrar {0}',
     delete: 'Eliminar {0}',
-    no_action: 'No puede {0}'
+    no_action: 'No puede {0}',
+    newAction: 'Crear nuevo'
   },
   access: {
     key: 'Llave',
