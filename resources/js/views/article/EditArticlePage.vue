@@ -263,7 +263,7 @@
                       md="12"
                     >
                       <composite-list
-                        :composite_list="composite"
+                        :composite-list="composite"
                         style="margin-top: 0"
                         @updateComposite="updateComposite"
                       />
