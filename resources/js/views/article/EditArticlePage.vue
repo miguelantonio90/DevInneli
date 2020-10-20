@@ -454,7 +454,7 @@ export default {
       showInfoAdd: false,
       composite: [],
       row: null,
-      panel: [0, 1],
+      panel: [0],
       formValid: false,
       shopData: [],
       variantData: [],
