@@ -56,7 +56,7 @@ const mutations = {
   },
   [FAILED_COMP] (state, error) {
     state.saved = false
-    state.isActionInProgress = false,
+    state.isActionInProgress = false
     state.error = error
     this._vm.$Toast.fire({
       icon: 'error',
