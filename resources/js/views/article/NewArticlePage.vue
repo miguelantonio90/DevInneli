@@ -3,7 +3,6 @@
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
-      fill-height
     >
       <v-card>
         <v-card-title>
@@ -469,7 +468,7 @@ export default {
       showInfoAdd: false,
       composite: [],
       row: null,
-      panel: [0, 1, 2],
+      panel: [0, 1],
       formValid: false,
       shopData: [],
       variantData: [],
