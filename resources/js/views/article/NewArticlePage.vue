@@ -198,7 +198,12 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <v-icon>mdi-book-open-variant</v-icon><h3>{{ $vuetify.lang.t('$vuetify.articles.inventory') }}</h3>
+                  <div>
+                    <v-icon>mdi-book-open-variant</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
+                      {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
+                    </span>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -283,7 +288,12 @@
               </v-expansion-panel>
               <v-expansion-panel v-show="!newArticle.composite">
                 <v-expansion-panel-header>
-                  <v-icon>mdi-order-bool-descending-variant</v-icon><h3>{{ $vuetify.lang.t('$vuetify.panel.variant') }}</h3>
+                  <div>
+                    <v-icon>mdi-order-bool-descending-variant</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
+                      {{ $vuetify.lang.t('$vuetify.panel.variant') }}
+                    </span>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -311,7 +321,12 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <v-icon>mdi-shopping</v-icon><h3>{{ $vuetify.lang.t('$vuetify.menu.shop') }}</h3>
+                  <div>
+                    <v-icon>mdi-shopping</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
+                      {{ $vuetify.lang.t('$vuetify.menu.shop') }}
+                    </span>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -338,7 +353,12 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <v-icon>mdi-palette</v-icon><h3>{{ $vuetify.lang.t('$vuetify.representation.representation') }}</h3>
+                  <div>
+                    <v-icon>mdi-palette</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
+                      {{ $vuetify.lang.t('$vuetify.representation.representation') }}
+                    </span>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
