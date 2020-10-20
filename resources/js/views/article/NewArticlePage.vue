@@ -1,7 +1,7 @@
 <template>
   <div class="page-add-product">
     <app-loading v-show="loadingData" />
-    <v-container
+    <v-main
       v-if="!loadingData"
       fill-height
       fluid
@@ -448,7 +448,7 @@
         </v-card-actions>
         <new-category v-if="$store.state.category.showNewModal" />
       </v-card>
-    </v-container>
+    </v-main>
   </div>
 </template>
 
