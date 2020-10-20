@@ -208,7 +208,7 @@
                 <v-expansion-panel-content>
                   <v-row>
                     <v-col
-                      cols="12"
+                      cols="6"
                       md="3"
                     >
                       <v-switch
@@ -244,7 +244,7 @@
                     </v-col>
                     <v-col
                       v-show="newArticle.composite"
-                      cols="12"
+                      cols="6"
                       md="3"
                     >
                       <v-select
