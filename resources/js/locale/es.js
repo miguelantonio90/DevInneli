@@ -69,7 +69,9 @@ export default {
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
     discounts_list: ' Listado de Descuentos',
-    shop: 'Tienda',
+    shop: 'Tiendas',
+    pay: 'Métodos de Pago',
+      supplier:'Proveedor',
     resume: 'Resumen',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
@@ -80,7 +82,8 @@ export default {
     turnOn: 'Registrar Turno',
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
-    assistance: 'Tarjeta de asistencia'
+    assistance: 'Tarjeta de asistencia',
+      supply_product:'Abastecer'
   },
   // settings
   settings: {
@@ -254,5 +257,15 @@ export default {
     color_shape: 'Color',
     image: 'Imagen'
   },
+    supply_product:{
+        supply:'Supply'
+    },
+    payment:{
+      name:'Método de Pago',
+      cach:'Efectivo',
+      card:'Targeta',
+      check:'Cheque',
+      other:'Otro'
+    },
   ...es
 }

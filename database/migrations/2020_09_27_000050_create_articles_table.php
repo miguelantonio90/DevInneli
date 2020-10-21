@@ -23,7 +23,6 @@ class CreateArticlesTable extends Migration
             $table->string('ref')->nullable();
             $table->string('barCode')->nullable();
             $table->boolean('composite')->default(false);
-            $table->boolean('inventory')->default(false);
             $table->boolean('track_inventory')->default(false);
             $table->timestamps();
 

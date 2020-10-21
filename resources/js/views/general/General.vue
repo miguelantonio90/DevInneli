@@ -5,7 +5,7 @@
         v-model="tab"
         background-color="primary"
         dark
-        vertical
+        horizontal
       >
         <v-tab
           v-for="item in tabName"
@@ -32,21 +32,27 @@
 
 <script>
 import ShopList from '../shop/ListShop'
+import ListPayment from '../payment/ListPayment'
+import ListSupplier from "../supplier/ListSupplier";
 export default {
   name: 'General',
-  components: { ShopList },
+  components: { ShopList, ListPayment, ListSupplier},
   data () {
     return {
       tab: null,
       itemsTabs: [
-        { key: 'shop-list', content: 'shop-list' }
+        { key: 'shop-list', content: 'shop-list' },
+        { key: 'list-payment', content: 'list-payment' },
+        { key: 'list-supplier', content: 'list-supplier' },
       ]
     }
   },
   computed: {
     tabName () {
       return [
-        { name: this.$vuetify.lang.t('$vuetify.menu.shop') }
+        { name: this.$vuetify.lang.t('$vuetify.menu.shop') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.pay') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.supplier') },
       ]
     }
   }

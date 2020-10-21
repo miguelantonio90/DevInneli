@@ -120,7 +120,7 @@
 
 export default {
   name: 'ShopsArticles',
-  props: ['variantsData', 'shopData', 'trackInventory'],
+  props: ['variantsData', 'shopData', 'trackInventoryParent'],
   data () {
     return {
       snack: false,
@@ -128,7 +128,8 @@ export default {
       snackText: '',
       max25chars: v => v.length <= 25 || 'Input too long!',
       pagination: {},
-      headers: []
+      headers: [],
+        track_inventory:false
     }
   },
   computed: {},
@@ -136,7 +137,8 @@ export default {
     variantsData: function () {
       this.initialize()
     },
-    trackInventory: function () {
+      trackInventoryParent: function (val) {
+      this.track_inventory = this.trackInventoryParent
       this.initialize()
     }
   },
@@ -168,7 +170,7 @@ export default {
         text: this.$vuetify.lang.t('$vuetify.variants.price'),
         value: 'price'
       })
-      if (this.track_inventory0) {
+      if (this.track_inventory) {
         this.headers.push({
           text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
           value: 'stock'

@@ -1,5 +1,5 @@
 <template>
-    <div class="page-add-product">
+    <div class="page-edit-product">
         <app-loading v-show="loadingData"/>
         <v-container
             v-if="!loadingData"
@@ -9,7 +9,7 @@
             <v-card>
                 <v-card-title>
           <span class="headline">{{
-                  $vuetify.lang.t('$vuetify.titles.new', [
+                  $vuetify.lang.t('$vuetify.titles.edit', [
                       $vuetify.lang.t('$vuetify.articles.name'),
                   ])
               }}</span>
@@ -38,10 +38,10 @@
                                     <v-row>
                                         <v-col
                                             cols="12"
-                                            md="3"
+                                            md="4"
                                         >
                                             <v-text-field
-                                                v-model="newArticle.name"
+                                                v-model="editArticle.name"
                                                 :label="$vuetify.lang.t('$vuetify.firstName')"
                                                 :rules="formRule.required"
                                                 required
@@ -50,10 +50,10 @@
                                         </v-col>
                                         <v-col
                                             cols="12"
-                                            md="3"
+                                            md="4"
                                         >
                                             <v-text-field-simplemask
-                                                v-model="newArticle.barCode"
+                                                v-model="editArticle.barCode"
                                                 :label="$vuetify.lang.t('$vuetify.barCode')"
                                                 :properties="{
                           clearable: true,
@@ -72,15 +72,15 @@
                                         </v-col>
                                         <v-col
                                             cols="12"
-                                            md="3"
+                                            md="4"
                                         >
                                             <v-text-field-money
-                                                v-model="newArticle.price"
+                                                v-model="editArticle.price"
                                                 :label="$vuetify.lang.t('$vuetify.price')"
+                                                required
                                                 :properties="{
                           prefix: '$',
-                          clearable: true,
-                          required:true
+                          clearable: true
                         }"
                                                 :options="{
                           locale: 'en',
@@ -92,10 +92,31 @@
                                         </v-col>
                                         <v-col
                                             cols="12"
-                                            md="3"
+                                            md="4"
+                                        >
+                                            <v-text-field-money
+                                                v-model="editArticle.cost"
+                                                :disabled="editArticle.composite"
+                                                :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                                                required
+                                                :properties="{
+                          prefix: '$',
+                          clearable: true
+                        }"
+                                                :options="{
+                          locale: 'en',
+                          length: 11,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
+                                            />
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            md="4"
                                         >
                                             <v-select
-                                                v-model="newArticle.category"
+                                                v-model="editArticle.category"
                                                 :items="categories"
                                                 :label="$vuetify.lang.t('$vuetify.menu.category')"
                                                 item-text="name"
@@ -128,43 +149,11 @@
                                         </v-col>
                                         <v-col
                                             cols="12"
-                                            md="3"
-                                        >
-                                            <v-text-field-money
-                                                v-model="newArticle.cost"
-                                                :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                                                :properties="{
-                          prefix: '$',
-                          clearable: true,
-                          required:true,
-                          disabled:newArticle.composite
-                        }"
-                                                :options="{
-                          locale: 'en',
-                          length: 11,
-                          precision: 2,
-                          empty: 0.00,
-                        }"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="3"
-                                        >
-                                            <v-text-field
-                                                v-model="newArticle.ref"
-                                                :label="$vuetify.lang.t('$vuetify.variants.ref')"
-                                                autocomplete="off"
-                                                required
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
                                             md="4"
                                         >
                                             <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
                                             <v-radio-group
-                                                v-model="newArticle.unit"
+                                                v-model="editArticle.unit"
                                                 row
                                             >
                                                 <v-radio
@@ -191,7 +180,7 @@
                                             md="3"
                                         >
                                             <v-switch
-                                                v-model="newArticle.composite"
+                                                v-model="editArticle.composite"
                                                 :disabled="articles.length===0"
                                                 :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
                                                 @change="changeComposite"
@@ -222,7 +211,7 @@
                                             </v-switch>
                                         </v-col>
                                         <v-col
-                                            v-show="newArticle.composite"
+                                            v-show="editArticle.composite"
                                             cols="12"
                                             md="3"
                                         >
@@ -240,18 +229,18 @@
                                     </v-row>
                                     <v-row>
                                         <v-col
-                                            v-show="!newArticle.composite"
+                                            v-show="!editArticle.composite"
                                             cols="12"
                                             md="3"
                                         >
                                             <v-switch @change="changeInventory"
-                                                      v-model="newArticle.track_inventory"
+                                                      v-model="editArticle.track_inventory"
                                                       class="md-6"
                                                       :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
                                             />
                                         </v-col>
                                     </v-row>
-                                    <v-row v-show="newArticle.composite">
+                                    <v-row v-show="editArticle.composite">
                                         <v-col
                                             cols="12"
                                             md="12"
@@ -265,7 +254,7 @@
                                     </v-row>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
-                            <v-expansion-panel v-show="!newArticle.composite">
+                            <v-expansion-panel v-show="!editArticle.composite">
                                 <v-expansion-panel-header>
                                     <h3>
                                         {{
@@ -285,9 +274,8 @@
                                                     md="12"
                                                 >
                                                     <variant
-                                                        :ref-parent="ref"
                                                         :updated="updated"
-                                                        :variants-parent="newArticle.variants"
+                                                        :variants-parent="editArticle.variants"
                                                         :variants-values-parent="variantData"
                                                         @updateVariants="updateVariant"
                                                     />
@@ -379,7 +367,7 @@
                                                     style="display: flex; justify-content: center;"
                                                 >
                                                     <app-upload-multiple-image
-                                                        :data-images="newArticle.images"
+                                                        :data-images="editArticle.images"
                                                         :upload-success="uploadImage"
                                                     />
                                                 </div>
@@ -390,8 +378,7 @@
                                                 md="9"
                                             >
                                                 <app-color-picker
-                                                    :value="newArticle.color"
-                                                    style="margin-left: 10px"
+                                                    :value="editArticle.color || ``"
                                                     @input="inputColor"
                                                 />
                                             </v-col>
@@ -416,7 +403,7 @@
                         color="primary"
                         :disabled="!formValid"
                         :loading="isActionInProgress"
-                        @click="createNewArticle"
+                        @click="editArticleHandler"
                     >
                         <v-icon>mdi-check</v-icon>
                         {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -433,14 +420,15 @@ import {mapActions, mapState} from 'vuex'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
+import AppLoading from '../../components/core/AppLoading'
 
 export default {
-    name: 'NewArticlePage',
-    components: {CompositeList, ShopsArticles, Variant},
+    name: 'EditInventory',
+    components: {AppLoading, CompositeList, ShopsArticles, Variant},
     data() {
         return {
             track_inventory: false,
-            ref: '10001',
+            variants: [],
             representation: 'image',
             showInfoAdd: false,
             composite: [],
@@ -456,40 +444,91 @@ export default {
         }
     },
     computed: {
-        ...mapState('article', ['saved', 'newArticle', 'articles', 'isActionInProgress']),
+        ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
         ...mapState('category', ['categories', 'isCategoryLoading']),
         ...mapState('shop', ['shops', 'isShopLoading'])
     },
     created: async function () {
         this.loadingData = true
         this.formValid = false
-        await this.getShops().then(() => {
-            this.shops.forEach((shop) => {
-                this.shopData.push({
-                    shop_id: shop.id,
-                    name: shop.name,
-                    checked: true,
-                    variant: '',
-                    price: '0.00',
-                    stock: '',
-                    under_inventory: ''
-                })
+        await this.getCategories()
+        this.variants = []
+        this.composite = []
+        this.editArticle.variants.forEach((vtn) => {
+            this.variants.push({
+                id: vtn.id,
+                name: vtn.name,
+                articles_id: vtn.articles_id,
+                created_at: vtn.created_at,
+                updated_at: vtn.updated_at,
+                value: JSON.parse(vtn.value)
             })
         })
-        await this.getCategories()
+        this.variantData = this.editArticle.variants_values
+        await this.getShops().then(() => {
+            this.shops.forEach((shop) => {
+                if (this.variants.length > 0) {
+                    this.variantData.forEach((v) => {
+                        this.shopData.push({
+                            shop_id: shop.id,
+                            name: shop.name,
+                            checked: this.editArticle.variants_shops.filter(sh => sh.variant === v.variant).length > 0,
+                            variant: v.variant,
+                            price: v.price,
+                            stock: '0',
+                            under_inventory: '0'
+                        })
+                    })
+                } else {
+                    this.shopData.push({
+                        shop_id: shop.id,
+                        name: shop.name,
+                        checked: true,
+                        variant: '',
+                        price: '0.00',
+                        stock: '',
+                        under_inventory: ''
+                    })
+                }
+            })
+        })
         await this.getArticles()
+        if (this.editArticle.composite === 0) {
+            this.editArticle.composite = false
+        } else if (this.editArticle.composite === 1) {
+            this.editArticle.composite = true
+            this.editArticle.composites.forEach((cmp) => {
+                this.composite.push({
+                    composite_id: cmp.composite_id,
+                    name: cmp.composite_name,
+                    price: cmp.price,
+                    cost: cmp.price * cmp.cant,
+                    cant: cmp.cant,
+                    id: cmp.id
+                })
+            })
+        }
+        if (this.editArticle.track_inventory === 0) {
+            this.editArticle.track_inventory = false
+        } else if (this.editArticle.track_inventory === 1) {
+            this.editArticle.track_inventory = true
+        }
+        this.track_inventory = this.editArticle.track_inventory
+        if (this.editArticle.unit === 1) {
+            this.editArticle.unit = 'unit'
+        }
+        this.representation = this.articles.color ? 'color' : 'image'
         this.loadingData = false
-        this.ref = '10001'
     },
     mounted() {
-        this.ref = '10001'
+        this.changeInventory()
     },
     methods: {
-        ...mapActions('article', ['createArticle', 'toogleNewModal', 'getArticles']),
+        ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
         ...mapActions('category', ['getCategories']),
         ...mapActions('shop', ['getShops']),
         inputColor(color) {
-            this.newArticle.color = color
+            this.editArticle.color = color
         },
         selectArticle(item) {
             if (this.composite.filter(art => art.id === item.id).length === 0) {
@@ -504,21 +543,21 @@ export default {
                 this.composite.forEach((comp) => {
                     totalCost += comp.cant * comp.price
                 })
-                this.newArticle.cost = totalCost
+                this.editArticle.cost = totalCost
             } else {
                 this.showInfoAdd = true
             }
             this.selected = null
         },
         changeComposite() {
-            if (this.newArticle.composite) {
+            if (this.editArticle.composite) {
                 this.variantData = []
             } else {
                 this.updated = false
             }
         },
         changeInventory() {
-            this.track_inventory = this.newArticle.track_inventory
+            this.track_inventory = this.editArticle.track_inventory
         },
         updateComposite(composite) {
             this.composite = composite
@@ -526,11 +565,11 @@ export default {
             this.composite.forEach((comp) => {
                 cost += comp.cant * comp.price
             })
-            this.newArticle.cost = cost
+            this.editArticle.cost = cost
         },
         updateVariant(variants, dataUpdated) {
             this.variantData = dataUpdated
-            this.newArticle.variants = variants
+            this.editArticle.variants = variants
             this.shopData = []
             this.shops.forEach((shop) => {
                 if (variants.length > 0) {
@@ -538,7 +577,7 @@ export default {
                         this.shopData.push({
                             shop_id: shop.id,
                             name: shop.name,
-                            checked: true,
+                            checked: this.editArticle.variants_shops.filter(sh => sh.variant === v.variant).length > 0,
                             variant: v.variant,
                             price: v.price,
                             stock: '0',
@@ -592,51 +631,30 @@ export default {
                 return false
             }
         },
-        createNewArticle() {
-            if (parseFloat(this.newArticle.cost) >= parseFloat(this.newArticle.price)) {
-                this.$Swal
-                    .fire({
-                        title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                            this.$vuetify.lang.t('$vuetify.menu.articles')
-                        ]),
-                        text: this.$vuetify.lang.t(
-                            '$vuetify.messages.warning_price'
-                        ),
-                        icon: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: this.$vuetify.lang.t(
-                            '$vuetify.actions.accept'
-                        ),
-                        confirmButtonColor: 'red'
-                    })
-            } else {
-                if (this.newArticle.composite) {
-                    if (this.composite.length === 0) {
-                        this.$Swal
-                            .fire({
-                                title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                                    this.$vuetify.lang.t('$vuetify.menu.articles')
-                                ]),
-                                text: this.$vuetify.lang.t(
-                                    '$vuetify.messages.warning_composite'
-                                ),
-                                icon: 'warning',
-                                showCancelButton: false,
-                                confirmButtonText: this.$vuetify.lang.t(
-                                    '$vuetify.actions.accept'
-                                ),
-                                confirmButtonColor: 'red'
-                            })
-                    } else {
-                        this.validCreate()
-                    }
+        editArticleHandler() {
+            if (this.editArticle.composite) {
+                if (this.composite.length === 0) {
+                    this.$Swal
+                        .fire({
+                            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                                this.$vuetify.lang.t('$vuetify.articles.name')
+                            ]),
+                            text: this.$vuetify.lang.t(
+                                '$vuetify.messages.warning_composite'
+                            ),
+                            icon: 'warning',
+                            showCancelButton: false,
+                            confirmButtonText: this.$vuetify.lang.t(
+                                '$vuetify.actions.accept'
+                            ),
+                            confirmButtonColor: 'red'
+                        })
                 } else {
                     this.validCreate()
                 }
+            } else {
+                this.validCreate()
             }
-        },
-        closeInfoAdd() {
-            this.showInfoAdd = false
         },
         uploadImage(formData, index, fileList) {
             this.newArticle.images = fileList
@@ -644,17 +662,20 @@ export default {
         async validCreate() {
             if (this.$refs.form.validate()) {
                 this.loading = true
-                this.newArticle.shops = []
+                this.editArticle.shops = []
                 this.shopData.forEach((value) => {
                     if (value.checked) {
-                        this.newArticle.shops.push(value)
+                        this.editArticle.shops.push(value)
                     }
                 })
-                this.newArticle.variantsValues = this.variantData
-                this.newArticle.composites = this.composite
-                await this.createArticle(this.newArticle)
+                this.editArticle.variantsValues = this.variantData
+                this.editArticle.composites = this.composite
+                await this.updateArticle(this.editArticle)
                 await this.$router.push({name: 'product_list'})
             }
+        },
+        closeInfoAdd() {
+            this.showInfoAdd = false
         }
     }
 }

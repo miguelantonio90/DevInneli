@@ -69,7 +69,9 @@ export default {
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
     discounts_list: 'Discounts List',
-    shop: 'Shop',
+    shop: 'Shops',
+      pay: 'Payment Method',
+      supplier:'Supplier',
     resume: 'Resume',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
@@ -80,7 +82,8 @@ export default {
     turnOn: 'Register Shift',
     product_add: 'New Article',
     product_edit: 'Edit Article',
-    assistance: 'Assistance card'
+    assistance: 'Assistance card',
+      supply_product:'Supply'
   },
   // settings
   settings: {
@@ -251,5 +254,15 @@ export default {
     color_shape: 'Color',
     image: 'Image'
   },
+    product_inventory:{
+        supply:'Supply'
+    },
+    payment:{
+        name:'Payment Method',
+        cach:'Cash',
+        card:'Card',
+        check:'Check',
+        other:'Other'
+    },
   ...en
 }
