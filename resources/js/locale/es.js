@@ -101,7 +101,7 @@ export default {
     bad_email: '{0} debe ser válido',
     required_element: 'Este campo es requerido',
     bad_phone: '{0} debe ser válido',
-    select: 'Seleccione un valor',
+    select: 'Seleccione',
     pin: {
       min: 'La cantidad mínima es de {0} digítos',
       max: 'La cantidad máxima es de {0} digítos'

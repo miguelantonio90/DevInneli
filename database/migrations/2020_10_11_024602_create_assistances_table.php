@@ -20,6 +20,8 @@ class CreateAssistancesTable extends Migration
             $table->integer('totalHours');
             $table->timestamps();
 
+            $table->foreignUuid('company_id')->references('id')->on('company')
+                ->onDelete('cascade');
             $table->foreignUuid('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
             $table->foreignUuid('shop_id')->references('id')->on('shops')

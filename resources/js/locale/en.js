@@ -100,7 +100,7 @@ export default {
     bad_email: '{0}  must be valid',
     required_element: 'This element is required',
     bad_phone: '{0}  must be valid',
-    select: 'Select value',
+    select: 'Select',
     pin: {
       min: 'Just a minimum of {0} digits is allowed',
       max: 'Just a maximum of {0} digits is allowed'

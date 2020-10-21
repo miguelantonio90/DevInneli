@@ -15,8 +15,8 @@ class CreateArticlesCompositesTable extends Migration
     {
         Schema::create('articles_composites', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('cant');
-            $table->decimal('price');
+            $table->integer('cant');
+            $table->decimal('price',15,2);
             $table->foreignUuid('articles_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->foreignUuid('composite_id')->references('id')->on('articles')

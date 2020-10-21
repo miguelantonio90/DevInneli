@@ -8,47 +8,38 @@
     <template v-slot:top>
       <v-toolbar flat>
         <h4> {{ $vuetify.lang.t('$vuetify.variants.total_cost') }} ${{ totalCost }}</h4>
-        <v-dialog
-          v-model="dialogDelete"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-title class="headline">
-              {{ $vuetify.lang.t('$vuetify.messages.sure_delete') }}
-            </v-card-title>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                class="mb-2"
-                @click="closeDelete"
-              >
-                <v-icon>mdi-close</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-              </v-btn>
-              <v-btn
-                class="mb-2"
-                color="primary"
-                @click="deleteItemConfirm"
-              >
-                <v-icon>mdi-check</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.save') }}
-              </v-btn>
-              <v-spacer />
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.cant="props">
+    <template v-slot:item.name="{ item }">
+      <v-chip
+        :key="JSON.stringify(item)"
+      >
+        <v-avatar
+          v-if="item.color"
+          class="white--text"
+          :color="item.color"
+          left
+          v-text="item.name.slice(0, 1).toUpperCase()"
+        />
+        <v-avatar
+          v-else
+          left
+        >
+          <v-img :src="item.path" />
+        </v-avatar>
+        {{ item.name }}
+      </v-chip>
+    </template>
+    <template v-slot:item.cant="{ item }">
       <v-edit-dialog
-        :return-value.sync="props.item.cant"
+        :return-value.sync="item.cant"
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
         :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
-        @save="updateData(props.item)"
+        @save="updateData(item)"
       >
-        <div>{{ props.item.cant }}</div>
+        <div>{{ item.cant }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -56,7 +47,7 @@
         </template>
         <template v-slot:input>
           <v-text-field
-            v-model="props.item.cant"
+            v-model="item.cant"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
             single-line
             counter
@@ -88,7 +79,6 @@ export default {
   data: () => ({
     totalCost: 0.00,
     dialog: false,
-    dialogDelete: false,
     headers: [],
     composite: [],
     editedIndex: -1,
@@ -115,9 +105,6 @@ export default {
   watch: {
     dialog (val) {
       val || this.close()
-    },
-    dialogDelete (val) {
-      val || this.closeDelete()
     },
     compositeList: function (val) {
       this.composite = val
@@ -170,22 +157,34 @@ export default {
     deleteItem (item) {
       this.editedIndex = this.composite.indexOf(item)
       this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.articles.name')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.sure_delete'),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then((result) => {
+          if (result.value) {
+            this.deleteItemConfirm()
+          }
+        })
     },
     deleteItemConfirm () {
       this.composite.splice(this.editedIndex, 1)
-      this.closeDelete()
       this.updateComposite()
     },
     close () {
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-    closeDelete () {
-      this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1

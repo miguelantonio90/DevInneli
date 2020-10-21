@@ -83,7 +83,7 @@
                         }"
                         :options="{
                           locale: 'en',
-                          length: 11,
+                          length: 15,
                           precision: 2,
                           empty: 0.00,
                         }"
@@ -104,7 +104,7 @@
                         }"
                         :options="{
                           locale: 'en',
-                          length: 11,
+                          length: 15,
                           precision: 2,
                           empty: 0.00,
                         }"
@@ -237,11 +237,37 @@
                         :items="articles"
                         :label="$vuetify.lang.t('$vuetify.rule.select')"
                         item-text="name"
+                        chips
                         :loading="isShopLoading"
                         :disabled="!!isShopLoading"
                         return-object
                         @input="selectArticle"
-                      />
+                      >
+                        <template v-slot:selection="data">
+                          <v-chip
+                            :key="JSON.stringify(data.item)"
+                            v-bind="data.attrs"
+                            :input-value="data.selected"
+                            :disabled="data.disabled"
+                            @click:close="data.parent.selectItem(data.item)"
+                          >
+                            <v-avatar
+                              v-if="data.item.color"
+                              class="white--text"
+                              :color="data.item.color"
+                              left
+                              v-text="data.item.name.slice(0, 1).toUpperCase()"
+                            />
+                            <v-avatar
+                              v-else
+                              left
+                            >
+                              <v-img :src="data.item.path" />
+                            </v-avatar>
+                            {{ data.item.name }}
+                          </v-chip>
+                        </template>
+                      </v-select>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -553,6 +579,9 @@ export default {
           name: item.name,
           price: item.price,
           cost: item.price,
+          color: item.color,
+          path: item.path,
+          images: item.images,
           cant: '1',
           composite_id: item.id
         })
@@ -560,7 +589,7 @@ export default {
         this.composite.forEach((comp) => {
           totalCost += comp.cant * comp.price
         })
-        this.editArticle.cost = totalCost
+        this.newArticle.cost = totalCost
       } else {
         this.showInfoAdd = true
       }
@@ -580,6 +609,7 @@ export default {
         cost += comp.cant * comp.price
       })
       this.editArticle.cost = cost
+      this.editArticle.price = cost
     },
     updateVariant (variants, dataUpdated) {
       this.variantData = dataUpdated
@@ -646,28 +676,46 @@ export default {
       }
     },
     editArticleHandler () {
-      if (this.editArticle.composite) {
-        if (this.composite.length === 0) {
-          this.$Swal
-            .fire({
-              title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                this.$vuetify.lang.t('$vuetify.articles.name')
-              ]),
-              text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_composite'
-              ),
-              icon: 'warning',
-              showCancelButton: false,
-              confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.accept'
-              ),
-              confirmButtonColor: 'red'
-            })
+      if (parseFloat(this.editArticle.cost) > parseFloat(this.editArticle.price)) {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+              this.$vuetify.lang.t('$vuetify.articles.name')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_price'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+      } else {
+        if (this.editArticle.composite) {
+          if (this.composite.length === 0) {
+            this.$Swal
+              .fire({
+                title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                  this.$vuetify.lang.t('$vuetify.articles.name')
+                ]),
+                text: this.$vuetify.lang.t(
+                  '$vuetify.messages.warning_composite'
+                ),
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonText: this.$vuetify.lang.t(
+                  '$vuetify.actions.accept'
+                ),
+                confirmButtonColor: 'red'
+              })
+          } else {
+            this.validCreate()
+          }
         } else {
           this.validCreate()
         }
-      } else {
-        this.validCreate()
       }
     },
     uploadImage (formData, index, fileList) {

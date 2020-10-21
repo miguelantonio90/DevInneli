@@ -16,8 +16,8 @@ class CreateVariantsValuesTable extends Migration
         Schema::create('variants_values', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('variant');
-            $table->decimal('cost');
-            $table->decimal('price');
+            $table->decimal('cost',15,2);
+            $table->decimal('price',15,2);
             $table->integer('ref')->nullable();
             $table->string('barCode')->nullable();
             $table->timestamps();
