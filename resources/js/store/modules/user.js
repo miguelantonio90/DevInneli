@@ -139,6 +139,9 @@ const mutations = {
   [FAILED_USER] (state, error) {
     state.saved = false
     state.error = error
+    state.isUserTableLoading = false
+    state.isActionInProgress = false
+    state.isTableLoading = false
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(

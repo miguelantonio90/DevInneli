@@ -118,14 +118,31 @@
               md="6"
             >
               <v-select
-                v-model="editUser.position"
+                v-model="editUser.positions"
                 :items="roles"
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 item-text="name"
                 :loading="isAccessLoading"
                 :disabled="!!isAccessLoading"
+                :rules="formRule.access"
+                required
                 return-object
-              />
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('role/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
             <v-col
               cols="12"
@@ -136,11 +153,28 @@
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
-                return-object
-                multiple
                 :loading="isShopLoading"
                 :disabled="!!isShopLoading"
-              />
+                multiple
+                :rules="formRule.shops"
+                required
+                return-object
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('shop/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
           </v-row>
         </v-form>
@@ -165,15 +199,20 @@
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
+      <new-access v-if="$store.state.role.showNewModal" />
+      <new-shop v-if="$store.state.shop.showNewModal" />
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import NewAccess from '../access/NewAccess'
+import NewShop from '../shop/NewShop'
 
 export default {
   name: 'EditUser',
+  components: { NewAccess, NewShop },
   data () {
     return {
       formValid: false,

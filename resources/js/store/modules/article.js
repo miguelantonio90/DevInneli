@@ -161,6 +161,9 @@ const mutations = {
     state.saved = true
   },
   [FAILED_ARTICLE] (state, error) {
+    state.isActionInProgress = false
+    state.isArticleTableLoading = false
+    state.isTableLoading = false
     state.saved = false
     state.error = error
     this._vm.$Toast.fire({

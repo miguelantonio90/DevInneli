@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VuexPersistence from 'vuex-persist'
 import app from './modules/app'
 import auth from './modules/auth'
 import user from './modules/user'
@@ -18,7 +19,7 @@ import statics from './modules/statics'
 import settings from './modules/settings'
 import products from './modules/products'
 import shoppingCart from './modules/shoppingCart'
-import VuexPersistence from 'vuex-persist'
+import expenseCategory from './modules/expense_category'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -49,6 +50,7 @@ const store = new Vuex.Store({
     company,
     products,
     shoppingCart,
+    expenseCategory,
     statics,
       payment,
   },

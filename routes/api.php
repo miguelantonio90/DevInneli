@@ -61,6 +61,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('assistance', 'AssistanceController');
 
+        Route::resource('expense/category', 'ExpenseCategoryController');
+
     });
 
 });

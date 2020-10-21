@@ -126,6 +126,9 @@ const mutations = {
   [FAILED_SHOP] (state, error) {
     state.saved = false
     state.error = error
+    state.isActionInProgress = false
+    state.isTableLoading = false
+    state.isShopLoading = false
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(

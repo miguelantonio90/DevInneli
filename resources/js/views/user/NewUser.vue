@@ -126,7 +126,22 @@
                 :rules="formRule.access"
                 required
                 return-object
-              />
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('role/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
             <v-col
               cols="12"
@@ -143,7 +158,22 @@
                 :rules="formRule.shops"
                 required
                 return-object
-              />
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('shop/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
           </v-row>
         </v-form>
@@ -168,15 +198,20 @@
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
+      <new-access v-if="$store.state.role.showNewModal" />
+      <new-shop v-if="$store.state.shop.showNewModal" />
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import NewAccess from '../access/NewAccess'
+import NewShop from '../shop/NewShop'
 
 export default {
   name: 'NewUser',
+  components: { NewAccess, NewShop },
   data () {
     return {
       formValid: false,
@@ -217,7 +252,7 @@ export default {
   },
   methods: {
     ...mapActions('user', ['createUser', 'toogleNewModal']),
-    ...mapActions('role', ['getRoles']),
+    ...mapActions('role', ['createRole', 'getRoles']),
     ...mapActions('shop', ['getShops']),
     onCountry (event) {
       this.newUser.country = event.iso2

@@ -214,7 +214,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ props.item.barCode }}</div>
+        <div>{{ props.item.barCode || 0 }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -233,7 +233,7 @@
             :options="{
               inputMask: '##-####-####-###',
               outputMask: '#############',
-              empty: null,
+              empty: 0,
               alphanumeric: true,
             }"
           />
