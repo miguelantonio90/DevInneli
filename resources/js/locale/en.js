@@ -89,7 +89,8 @@ export default {
     title: 'Theme Settings',
     color: 'Color Options',
     lang: 'Language',
-    sidebar: 'Sidebar Option'
+    sidebar: 'Sidebar Option',
+    currency: 'Currency'
   },
   rule: {
     required: '{0} is required',
