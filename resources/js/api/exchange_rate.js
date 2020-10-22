@@ -1,7 +1,7 @@
 import api from '../config/api'
 
 export default {
-  fetchCategories () {
+  fetchExchangeRate () {
     return api.get('exchange/rate')
   },
   sendCreateRequest (exchange) {

@@ -564,7 +564,7 @@ const countries = {
     code: '53',
     continent: 'NA',
     capital: 'Havana',
-    currency: 'CUC,CUP',
+    currency: 'CUP,CUC',
     languages: ['es'],
     emoji: '🇨🇺',
     emojiU: 'U+1F1E8 U+1F1FA'
@@ -2833,7 +2833,6 @@ const getPaymentToSelect = () => {
   })
   return result
 }
-
 const getCurrencyToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {

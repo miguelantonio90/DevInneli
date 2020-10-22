@@ -82,7 +82,7 @@ export default {
       'getChanges',
       'deleteChange'
     ]),
-    deleteHandler (categoryId) {
+    deleteHandler (id) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -102,7 +102,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteCategory(categoryId)
+          if (result.value) this.deleteChange(id)
         })
     }
   }

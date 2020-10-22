@@ -272,6 +272,29 @@ export const protectedRoute = [
         ]
       },
       {
+        path: '/finance',
+        component: RouteWrapper,
+        redirect: '/finance/finance.list',
+        meta: {
+          title: 'finance',
+          icon: 'mdi-podium',
+          requiresAuth: true,
+          group: 'finance'
+        },
+        children: [
+          {
+            path: '/finance/supplier.list',
+            name: 'supplier_list',
+            meta: {
+              title: 'supplier_list',
+              icon: 'mdi-car',
+              requiresAuth: true
+            },
+            component: () => import('../views/supplier/ListSupplier')
+          }
+        ]
+      },
+      {
         path: '/users',
         component: RouteWrapper,
         redirect: '/users/employer.list',

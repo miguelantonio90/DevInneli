@@ -17,7 +17,6 @@ class CreateExchangeRatesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('country')->nullable();
             $table->string('currency')->nullable();
-            $table->float('change')->nullable();
             $table->timestamps();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')

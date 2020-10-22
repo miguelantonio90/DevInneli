@@ -1,4 +1,5 @@
 import exchangeRate from '../../api/exchange_rate'
+import currency from '../../api/currency'
 
 const FETCHING_CHANGE = 'FETCHING_CHANGE'
 const SWITCH_CHANGE_NEW_MODAL = 'SWITCH_CHANGE_NEW_MODAL'
@@ -20,13 +21,11 @@ const state = {
   changes: [],
   saved: false,
   newChange: {
-    country: [],
-    change: 0
+    country: null
   },
   editChange: {
     id: '',
-    country: [],
-    change: 0
+    country: null
   },
   isChangeLoading: false,
   isActionInProgress: false,
@@ -56,7 +55,7 @@ const mutations = {
   [CHANGE_CREATED] (state) {
     state.showNewModal = false
     state.newChange = {
-      country: [],
+      country: null,
       change: 0
     }
     state.saved = true
@@ -77,7 +76,7 @@ const mutations = {
     state.showEditModal = false
     state.editChange = {
       id: '',
-      country: [],
+      country: null,
       change: 0
     }
     state.saved = true
@@ -136,12 +135,20 @@ const actions = {
     commit(SWITCH_CHANGE_SHOW_MODAL, true)
     commit(CHANGE_EDIT, categoryId)
   },
-  async getChanges ({ commit }) {
+  async getChanges ({ commit, rootState }) {
+    const current = rootState.auth.userData.company.currency
     commit(CHANGE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
     await exchangeRate
-      .fetchCategories()
+      .fetchExchangeRate()
       .then(({ data }) => {
+        const changes = data.data
+        changes.map((value, key) => {
+          currency.getCurrencyRate(1, current, value.currency,
+            function (e, amount) {
+              data.data[key].change = amount
+            })
+        })
         commit(FETCHING_CHANGE, data.data)
         commit(CHANGE_TABLE_LOADING, false)
         return data

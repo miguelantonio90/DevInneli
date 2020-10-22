@@ -36,7 +36,7 @@ export default {
   city: 'Ciudad',
   country: 'País',
   currency: 'Moneda',
-  change: 'Cambio',
+  change: 'Tasa de Cambio',
   province: 'Provincia',
   barCode: 'Código de Barras',
   position: 'Cargo',
@@ -69,8 +69,8 @@ export default {
     category: 'Categoría',
     expense_category: 'Categoría de Gasto',
     expense_category_list: 'Listado de Categoría de Gastos',
-    exchange_rate: 'Tasa de Cambio',
-    exchange_rate_list: 'Listado de Tasa de Cambio',
+    exchange_rate: 'Moneda extranjera',
+    exchange_rate_list: 'Listado de Moneda extranjera',
     category_list: 'Listado de Categorías',
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
@@ -78,6 +78,7 @@ export default {
     shop: 'Tiendas',
     pay: 'Métodos de Pago',
     supplier: 'Proveedor',
+    supplier_list: 'Listado de Proveedores',
     resume: 'Resumen',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
@@ -89,7 +90,8 @@ export default {
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
-    supply_product: 'Abastecer'
+    supply_product: 'Abastecer',
+    finance: 'Finanzas'
   },
   // settings
   settings: {

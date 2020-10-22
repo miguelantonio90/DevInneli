@@ -36,7 +36,7 @@ export default {
   city: 'City',
   country: 'Country',
   currency: 'Currency',
-  change: 'Change',
+  change: 'Exchange Rate',
   province: 'Province',
   barCode: 'Bar Code',
   position: 'Position',
@@ -69,8 +69,8 @@ export default {
     category: 'Category',
     expense_category: 'Expense Category',
     expense_category_list: 'Expense Categories',
-    exchange_rate: 'Exchange Rate',
-    exchange_rate_list: 'Exchange Rate List',
+    exchange_rate: 'Foreign currency',
+    exchange_rate_list: 'Foreign currency List',
     category_list: 'Category List',
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
@@ -78,6 +78,7 @@ export default {
     shop: 'Shops',
     pay: 'Payment Method',
     supplier: 'Supplier',
+    supplier_list: 'Supplier List',
     resume: 'Resume',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
@@ -89,7 +90,8 @@ export default {
     product_add: 'New Article',
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
-    supply_product: 'Supply'
+    supply_product: 'Supply',
+    finance: 'Finance'
   },
   // settings
   settings: {

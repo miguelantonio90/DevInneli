@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleNewModal"
-    max-width="450"
+    max-width="600"
     persistent
   >
     <v-card>
@@ -22,63 +22,22 @@
           <v-row>
             <v-col
               cols="12"
-              md="6"
+              md="12"
             >
-              <v-autocomplete
+              <v-combobox
                 v-model="newChange.country"
-                :items="arrayCountry"
+                :items="arrayCurrency"
                 :label="
                   $vuetify.lang.t('$vuetify.country')
                 "
                 :rules="formRule.country"
-                clearable
+                :loading="isCountryLoading"
+                :disabled="!!isCountryLoading"
                 item-text="name"
+                multiple
+                clearable
                 required
                 return-object
-              >
-                <template
-                  slot="item"
-                  slot-scope="data"
-                >
-                  <template
-                    v-if="
-                      typeof data.item !==
-                        'object'
-                    "
-                  >
-                    <v-list-item-content
-                      v-text="data.item"
-                    />
-                  </template>
-                  <template v-else>
-                    <v-list-item-avatar>
-                      {{
-                        data.item.emoji
-                      }}
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field-money
-                v-model="newChange.change"
-                :label="$vuetify.lang.t('$vuetify.menu.exchange_rate')"
-                :properties="{
-                  clearable: true,
-                  required:true
-                }"
-                :options="{
-                  length: 15,
-                  precision: 2,
-                  empty: 0.00,
-                }"
               />
             </v-col>
           </v-row>
@@ -98,7 +57,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="handleCategory"
+          @click="handleSubmit"
         >
           <v-icon>mdi-check</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -122,16 +81,18 @@ export default {
   },
   computed: {
     ...mapState('exchangeRate', ['newChange', 'isActionInProgress']),
-    ...mapState('statics', ['arrayCountry'])
+    ...mapState('statics', ['arrayCurrency', 'isCountryLoading'])
   },
   created () {
     this.formValid = false
+    this.getArrayCurrency()
   },
   methods: {
     ...mapActions('exchangeRate', ['createChange', 'toogleNewModal']),
-    async handleCategory () {
+    ...mapActions('statics', ['getArrayCurrency']),
+    async handleSubmit () {
       if (this.$refs.form.validate()) {
-        await this.createCategory(this.newChange)
+        await this.createChange(this.newChange)
       }
     }
   }

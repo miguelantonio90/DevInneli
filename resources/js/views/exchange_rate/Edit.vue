@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleEditModal"
-    max-width="450"
+    max-width="600"
     persistent
   >
     <v-card>
@@ -24,20 +24,19 @@
               cols="12"
               md="12"
             >
-              <v-text-field
-                v-model="editChange.name"
-                :label="$vuetify.lang.t('$vuetify.firstName')"
-                :rules="formRule.firstName"
+              <v-combobox
+                v-model="editChange.country"
+                :items="arrayCurrency"
+                :label="
+                  $vuetify.lang.t('$vuetify.country')
+                "
+                :rules="formRule.country"
+                :loading="isCountryLoading"
+                :disabled="!!isCountryLoading"
+                item-text="name"
+                clearable
                 required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="editChange.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
+                return-object
               />
             </v-col>
           </v-row>
@@ -57,7 +56,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="handleCategory"
+          @click="handleSubmit"
         >
           <v-icon>mdi-check</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -80,17 +79,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('exchangeRate', ['editChange', 'isActionInProgress'])
+    ...mapState('exchangeRate', ['editChange', 'isActionInProgress']),
+    ...mapState('statics', ['arrayCurrency', 'isCountryLoading'])
   },
   created () {
     this.formValid = false
+    this.getArrayCurrency()
   },
   methods: {
     ...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
-    ...mapState('statics', ['arrayCountry']),
-    async handleCategory () {
+    ...mapActions('statics', ['getArrayCurrency']),
+    async handleSubmit () {
       if (this.$refs.form.validate()) {
-        await this.updateCategory(this.editChange)
+        await this.updateChange(this.editChange)
       }
     }
   }

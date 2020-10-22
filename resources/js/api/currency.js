@@ -3,7 +3,12 @@ const baseUrl = process.env.MIX_API_RATE
 const apiKey = process.env.MIX_KEY_RATE
 
 const getCountries = () => {
-  return axios.get(baseUrl + 'countries?apiKey=' + apiKey)
+  // return axios.get(baseUrl + 'countries?apiKey=' + apiKey)
+  return axios.get(baseUrl + 'countries', {
+    params: {
+      apiKey: apiKey
+    }
+  })
 }
 
 const getCurrencies = () => {
@@ -16,17 +21,18 @@ const getCurrencyRate = (amount, from, to, cb) => {
   const query = fromCurrency + '_' + toCurrency
   const url = baseUrl + 'convert?q=' + query + '&compact=ultra&apiKey=' + apiKey
 
-  axios.get(url).then((result) => {
+  axios.get(url).then(({ status, data }) => {
     try {
-      const jsonObj = JSON.parse(result)
+      if (status === 200) {
+        const val = data[query]
+        if (val) {
+          const total = val * amount
 
-      const val = jsonObj[query]
-      if (val) {
-        const total = val * amount
-        cb(null, Math.round(total * 100) / 100)
-      } else {
-        const err = new Error('Value not found for ' + query)
-        cb(err)
+          cb(null, Math.round(total * 100) / 100)
+        } else {
+          const err = new Error('Value not found for ' + query)
+          cb(err)
+        }
       }
     } catch (e) {
       cb(e)
