@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.edit', [
+            $vuetify.lang.t('$vuetify.titles.new', [
               $vuetify.lang.t('$vuetify.articles.name'),
             ])
           }}</span>
