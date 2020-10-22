@@ -70,7 +70,7 @@ export default {
   mounted () {
     this.sendVerifyRequest(this.hash)
       .then(() => {
-        this.$router.push({ name: 'Profile' })
+        this.$router.push({ name: 'pinlogin' })
       })
       .catch(() => {
         this.error = 'Error verifying email'
