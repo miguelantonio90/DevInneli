@@ -118,7 +118,7 @@
               md="6"
             >
               <v-select
-                v-model="editUser.positions"
+                v-model="editUser.position"
                 :items="roles"
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 item-text="name"

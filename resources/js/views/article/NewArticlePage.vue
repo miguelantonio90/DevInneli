@@ -77,12 +77,11 @@
                         v-model="newArticle.price"
                         :label="$vuetify.lang.t('$vuetify.price')"
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true,
                           required:true
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,
@@ -148,13 +147,12 @@
                         v-model="newArticle.cost"
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true,
                           required:true,
                           disabled:newArticle.composite
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,
@@ -478,7 +476,7 @@
 
 <script>
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
@@ -507,7 +505,8 @@ export default {
   computed: {
     ...mapState('article', ['saved', 'newArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
+    ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapGetters('auth', ['user'])
   },
   created: async function () {
     this.loadingData = true
@@ -541,9 +540,6 @@ export default {
       this.newArticle.color = color
     },
     selectArticle (item) {
-      /* items.forEach((item) => {
-
-      }) */
       if (this.composite.filter(art => art.id === item.id).length === 0) {
         this.composite.push({
           name: item.name,

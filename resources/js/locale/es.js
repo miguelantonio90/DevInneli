@@ -35,6 +35,8 @@ export default {
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
+  currency: 'Moneda',
+  change: 'Cambio',
   province: 'Provincia',
   barCode: 'Código de Barras',
   position: 'Cargo',
@@ -67,6 +69,8 @@ export default {
     category: 'Categoría',
     expense_category: 'Categoría de Gasto',
     expense_category_list: 'Listado de Categoría de Gastos',
+    exchange_rate: 'Tasa de Cambio',
+    exchange_rate_list: 'Listado de Tasa de Cambio',
     category_list: 'Listado de Categorías',
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
@@ -89,8 +93,7 @@ export default {
     title: 'Ajuste de Tema',
     color: 'Opciones de color',
     lang: 'Idioma',
-    sidebar: 'Opción de barra lateral',
-    currency: 'Moneda'
+    sidebar: 'Opción de barra lateral'
   },
   // rules
   rule: {
@@ -241,7 +244,7 @@ export default {
     variant: 'Variante',
     name: 'Nombre',
     price: 'Precio',
-    cost: 'Coste',
+    cost: 'Costo',
     ref: 'REF',
     barCode: 'Código de Barras',
     options: 'Opciones',

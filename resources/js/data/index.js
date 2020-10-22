@@ -2763,11 +2763,19 @@ const countries = {
 const getCountryToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {
+    const split = countries[key].currency.split(',')
+    let currency = ''
+    if (split.length > 0) {
+      currency = split[0]
+    } else {
+      currency = countries[key].currency
+    }
     result.push({
       id: key,
       name: countries[key].name + '(' + countries[key].native + ')',
       emoji: countries[key].emoji,
-      code: '+' + countries[key].code
+      code: '+' + countries[key].code,
+      currency: currency
     })
   })
   return result

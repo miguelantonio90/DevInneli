@@ -8,7 +8,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.category'),
+            $vuetify.lang.t('$vuetify.menu.exchange_rate'),
           ])
         }}</span>
       </v-card-title>
@@ -25,7 +25,7 @@
               md="12"
             >
               <v-text-field
-                v-model="editCategory.name"
+                v-model="editChange.name"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
                 required
@@ -36,7 +36,7 @@
               md="12"
             >
               <v-text-field
-                v-model="editCategory.description"
+                v-model="editChange.description"
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
@@ -80,16 +80,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('expenseCategory', ['editCategory', 'isActionInProgress'])
+    ...mapState('exchangeRate', ['editChange', 'isActionInProgress'])
   },
   created () {
     this.formValid = false
   },
   methods: {
-    ...mapActions('expenseCategory', ['updateCategory', 'toogleEditModal']),
+    ...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
+    ...mapState('statics', ['arrayCountry']),
     async handleCategory () {
       if (this.$refs.form.validate()) {
-        await this.updateCategory(this.editCategory)
+        await this.updateCategory(this.editChange)
       }
     }
   }

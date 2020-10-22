@@ -33,6 +33,7 @@ class CompanyTableSeeder extends Seeder
             'email' => 'admin@admin.com',
             'logo' => '',
             'country' => $this->faker->countryCode,
+            'currency' => $this->faker->currencyCode,
             'address' => $this->faker->address,
             'faker' => 1,
         ]);

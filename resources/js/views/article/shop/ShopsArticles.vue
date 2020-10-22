@@ -7,16 +7,16 @@
       <template v-slot:item.checked="{ item }">
         <v-simple-checkbox v-model="item.checked" />
       </template>
-      <template v-slot:item.price="props">
+      <template v-slot:item.price="{ item }">
         <v-edit-dialog
-          :return-value.sync="props.item.price"
+          :return-value.sync="item.price"
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
           @save="updateShopsData"
         >
-          <div>{{ props.item.price }}</div>
+          <div>{{ `${user.company.currency +' '+item.price}` }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -24,15 +24,14 @@
           </template>
           <template v-slot:input>
             <v-text-field-money
-              v-model="props.item.price"
+              v-model="item.price"
               :label="$vuetify.lang.t('$vuetify.actions.edit')"
               required
               :properties="{
-                prefix: '$',
+                prefix: user.company.currency,
                 clearable: true
               }"
               :options="{
-                locale: 'en',
                 length: 15,
                 precision: 2,
                 empty: 0.00,
@@ -41,16 +40,16 @@
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:item.stock="props">
+      <template v-slot:item.stock="{ item }">
         <v-edit-dialog
-          :return-value.sync="props.item.stock"
+          :return-value.sync="item.stock"
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
           @save="updateShopsData"
         >
-          <div>{{ props.item.stock }}</div>
+          <div>{{ item.stock }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -58,7 +57,7 @@
           </template>
           <template v-slot:input>
             <v-text-field
-              v-model="props.item.stock"
+              v-model="item.stock"
               :rules="[max25chars]"
               label="Edit"
               single-line
@@ -68,16 +67,16 @@
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:item.under_inventory="props">
+      <template v-slot:item.under_inventory="{ item }">
         <v-edit-dialog
-          :return-value.sync="props.item.under_inventory"
+          :return-value.sync="item.under_inventory"
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
           @save="updateShopsData"
         >
-          <div>{{ props.item.under_inventory }}</div>
+          <div>{{ item.under_inventory }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -85,7 +84,7 @@
           </template>
           <template v-slot:input>
             <v-text-field
-              v-model="props.item.under_inventory"
+              v-model="item.under_inventory"
               :rules="[max25chars]"
               label="Edit"
               single-line
@@ -118,6 +117,8 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'ShopsArticles',
   props: ['variantsData', 'shopData', 'trackInventory'],
@@ -131,7 +132,9 @@ export default {
       headers: []
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters('auth', ['user'])
+  },
   watch: {
     variantsData: function () {
       this.initialize()

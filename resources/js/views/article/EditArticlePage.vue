@@ -78,11 +78,10 @@
                         :label="$vuetify.lang.t('$vuetify.price')"
                         required
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,
@@ -99,11 +98,10 @@
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
                         required
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,

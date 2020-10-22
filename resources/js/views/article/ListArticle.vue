@@ -39,10 +39,14 @@
               {{ item.name }}
             </v-chip>
           </template>
-          <template
-            v-slot:item.percent="{ item }"
-          >
+          <template v-slot:item.percent="{ item }">
             {{ item.percent }} %
+          </template>
+          <template v-slot:item.price="{ item }">
+            {{ `${user.company.currency +' '+item.price}` }}
+          </template>
+          <template v-slot:item.cost="{ item }">
+            {{ `${user.company.currency +' '+item.cost}` }}
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
@@ -59,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ListArticle',
@@ -78,6 +82,7 @@ export default {
     ]),
     ...mapState('category', ['categories', 'isActionInProgress']),
     ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
         {

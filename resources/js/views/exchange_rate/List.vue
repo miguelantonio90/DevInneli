@@ -1,0 +1,112 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col
+        class="py-0"
+        cols="12"
+      >
+        <new-exchange-rate v-if="showNewModal" />
+        <edit-exchange-rate v-if="showEditModal" />
+        <app-data-table
+          :title="$vuetify.lang.t('$vuetify.menu.exchange_rate_list')"
+          csv-filename="ExchangeRate"
+          :headers="getTableColumns"
+          :is-loading="isTableLoading"
+          :items="changes"
+          :sort-by="['country']"
+          :sort-desc="[false, true]"
+          multi-sort
+          @create-row="toogleNewModal(true)"
+          @edit-row="openEditModal($event)"
+          @delete-row="deleteHandler($event)"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import { mapActions, mapState } from 'vuex'
+import NewExchangeRate from './New'
+import EditExchangeRate from './Edit'
+
+export default {
+  components: {
+    NewExchangeRate,
+    EditExchangeRate
+  },
+  data () {
+    return {
+      search: ''
+    }
+  },
+  computed: {
+    ...mapState('exchangeRate', [
+      'showNewModal',
+      'showEditModal',
+      'showShowModal',
+      'changes',
+      'isTableLoading'
+    ]),
+    getTableColumns () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.country'),
+          value: 'country',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.currency'),
+          value: 'currency'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.change'),
+          value: 'change'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+          value: 'actions',
+          sortable: false
+        }
+      ]
+    }
+  },
+  created () {
+    this.getChanges()
+  },
+  methods: {
+    ...mapActions('exchangeRate', [
+      'toogleNewModal',
+      'openEditModal',
+      'openShowModal',
+      'getChanges',
+      'deleteChange'
+    ]),
+    deleteHandler (categoryId) {
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.menu.exchange_rate')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_delete'
+          ),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then((result) => {
+          if (result.value) this.deleteCategory(categoryId)
+        })
+    }
+  }
+}
+</script>
+
+<style scoped></style>

@@ -64,7 +64,7 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'password_confirmation' => 'required|string|same:password',
-            'country' => 'required|string',
+            'country' => 'required',
         ]);
 
         event(new Registered($user = $this->create($request->all())));
@@ -91,7 +91,8 @@ class RegisterController extends Controller
         $company = Company::create([
             'name' => $data['shopName'],
             'email' => $data['email'],
-            'country' => $data['country'],
+            'country' => $data['country']['id'],
+            'currency' => $data['country']['currency']
         ]);
         if ($company) {
             $position = Position::createFirst($company);

@@ -35,6 +35,8 @@ export default {
   address: 'Address',
   city: 'City',
   country: 'Country',
+  currency: 'Currency',
+  change: 'Change',
   province: 'Province',
   barCode: 'Bar Code',
   position: 'Position',
@@ -56,7 +58,7 @@ export default {
     profile: 'User Profile',
     logout: 'Logout',
     user_list: 'User List',
-    employer_list: 'Employer List',
+    employer_list: 'Employees List',
     user: 'Users',
     employee: 'Employee',
     access: 'Access permission',
@@ -67,6 +69,8 @@ export default {
     category: 'Category',
     expense_category: 'Expense Category',
     expense_category_list: 'Expense Categories',
+    exchange_rate: 'Exchange Rate',
+    exchange_rate_list: 'Exchange Rate List',
     category_list: 'Category List',
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
@@ -89,8 +93,7 @@ export default {
     title: 'Theme Settings',
     color: 'Color Options',
     lang: 'Language',
-    sidebar: 'Sidebar Option',
-    currency: 'Currency'
+    sidebar: 'Sidebar Option'
   },
   rule: {
     required: '{0} is required',

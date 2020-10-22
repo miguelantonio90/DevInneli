@@ -18,6 +18,7 @@ import settings from './modules/settings'
 import products from './modules/products'
 import shoppingCart from './modules/shoppingCart'
 import expenseCategory from './modules/expense_category'
+import exchangeRate from './modules/exchange_rate'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -48,6 +49,7 @@ const store = new Vuex.Store({
     products,
     shoppingCart,
     expenseCategory,
+    exchangeRate,
     statics
   },
   plugins: [vuexLocal.plugin],

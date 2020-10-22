@@ -99,9 +99,9 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.price="props">
+    <template v-slot:item.price="{ item }">
       <v-edit-dialog
-        :return-value.sync="props.item.price"
+        :return-value.sync="item.price"
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
@@ -111,7 +111,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ props.item.price }}</div>
+        <div>{{ `${user.company.currency +' '+item.price}` }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -119,15 +119,14 @@
         </template>
         <template v-slot:input>
           <v-text-field-money
-            v-model="props.item.price"
+            v-model="item.price"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
             required
             :properties="{
-              prefix: '$',
+              prefix: user.company.currency,
               clearable: true
             }"
             :options="{
-              locale: 'en',
               length: 15,
               precision: 2,
               empty: 0.00,
@@ -136,9 +135,9 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.cost="props">
+    <template v-slot:item.cost="{ item }">
       <v-edit-dialog
-        :return-value.sync="props.item.cost"
+        :return-value.sync="item.cost"
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
@@ -148,7 +147,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ props.item.cost }}</div>
+        <div>{{ `${user.company.currency +' '+item.cost}` }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -156,15 +155,14 @@
         </template>
         <template v-slot:input>
           <v-text-field-money
-            v-model="props.item.cost"
+            v-model="item.cost"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
             required
             :properties="{
-              prefix: '$',
+              prefix: user.company.currency,
               clearable: true
             }"
             :options="{
-              locale: 'en',
               length: 15,
               precision: 2,
               empty: 0.00,
@@ -173,9 +171,9 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.barCode="props">
+    <template v-slot:item.barCode="item">
       <v-edit-dialog
-        :return-value.sync="props.item.barCode"
+        :return-value.sync="item.barCode"
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
@@ -185,7 +183,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ props.item.barCode || 0 }}</div>
+        <div>{{ item.barCode || 0 }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -193,7 +191,7 @@
         </template>
         <template v-slot:input>
           <v-text-field-simplemask
-            v-model="props.item.barCode"
+            v-model="item.barCode"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
             :properties="{
               clearable: true,
@@ -203,7 +201,7 @@
             }"
             :options="{
               inputMask: '##-####-####-###',
-              outputMask: '#############',
+              outputMask: '##-####-####-###',
               empty: 0,
               alphanumeric: true,
             }"
@@ -224,6 +222,8 @@
 
 <script>
 /* eslint-disable vue/require-default-prop */
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Variant',
   props: {
@@ -264,6 +264,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('auth', ['user']),
     formTitle () {
       return this.editedIndex === -1
         ? this.$vuetify.lang.t('$vuetify.titles.newF', [
