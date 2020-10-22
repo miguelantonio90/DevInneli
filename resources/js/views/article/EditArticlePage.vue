@@ -3,6 +3,8 @@
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
+      fill-height
+      fluid
     >
       <v-card>
         <v-card-title>
@@ -26,12 +28,12 @@
             >
               <v-expansion-panel style="margin: 0">
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-database-edit</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
+                    <div>
+                        <v-icon>mdi-database-edit</v-icon>
+                        <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.panel.basic') }}
                     </span>
-                  </div>
+                    </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -472,15 +474,16 @@ import AppLoading from '../../components/core/AppLoading'
 
 export default {
   name: 'EditArticlePage',
-  components: { NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
+  components: {NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
+        track_inventory: false,
       variants: [],
       representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
-      panel: [0],
+      panel: [0, 1, 2],
       formValid: false,
       shopData: [],
       variantData: [],
@@ -556,16 +559,21 @@ export default {
       })
     }
     if (this.editArticle.inventory === 0) {
-      this.editArticle.inventory = false
+        this.editArticle.track_inventory = false
     } else if (this.editArticle.inventory === 1) {
-      this.editArticle.inventory = true
+        this.editArticle.track_inventory = true
     }
-    if (this.editArticle.unit === 1) {
+      this.track_inventory = this.editArticle.track_inventory
+
+      if (this.editArticle.unit === 1) {
       this.editArticle.unit = 'unit'
     }
     this.representation = this.articles.color ? 'color' : 'image'
     this.loadingData = false
-  },
+  },,
+mounted() {
+    this.changeInventory()
+},
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
@@ -602,6 +610,9 @@ export default {
         this.updated = false
       }
     },
+      changeInventory() {
+          this.track_inventory = this.editArticle.track_inventory
+      },
     updateComposite (composite) {
       this.composite = composite
       let cost = 0.00

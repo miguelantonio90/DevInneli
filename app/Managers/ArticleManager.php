@@ -169,9 +169,6 @@ class ArticleManager
         if (isset($data['cost'])) {
             $article->cost = $data['cost'];
         }
-        if (isset($data['inventory'])) {
-            $article->inventory = $data['inventory'];
-        }
         if (isset($data['price'])) {
             $article->price = $data['price'];
         }

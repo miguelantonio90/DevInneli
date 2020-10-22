@@ -107,6 +107,20 @@ const address = [
       language.t('$vuetify.address')
     ])
 ]
+const contract = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.supplier.contract')
+    ])
+]
+const identity = [
+  (v) =>
+    !!v ||
+    language.t('$vuetify.rule.required', [
+      language.t('$vuetify.supplier.identity')
+    ])
+]
 const key = [
   (v) => !!v || language.t('$vuetify.rule.required', [
     language.t('$vuetify.access.key')
@@ -116,6 +130,8 @@ const key = [
 export default {
   company,
   firstName,
+    identity,
+    contract,
   lastName,
   email,
   password,

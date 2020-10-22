@@ -9,7 +9,9 @@ import user from './modules/user'
 import assistance from './modules/assistance'
 import role from './modules/role'
 import shop from './modules/shop'
+import payment from './modules/payment'
 import client from './modules/client'
+import supplier from './modules/supplier'
 import company from './modules/company'
 import category from './modules/category'
 import article from './modules/article'
@@ -43,12 +45,14 @@ const store = new Vuex.Store({
     shop,
     category,
     client,
+      supplier,
     article,
     company,
     products,
     shoppingCart,
     expenseCategory,
-    statics
+    statics,
+      payment,
   },
   plugins: [vuexLocal.plugin],
   getters: {
