@@ -25,12 +25,12 @@ const state = {
   saved: false,
   newPayment: {
     name: '',
-    method:''
+    method: ''
   },
   editPayment: {
     id: '',
     name: '',
-    method:''
+    method: ''
   },
   isPaymentLoading: false,
   isActionInProgress: false,
@@ -52,15 +52,15 @@ const mutations = {
     state.isPaymentLoading = isLoading
   },
   [FETCHING_PAYMENTS] (state, paymentsData) {
-      paymentsData.map((value) => {
-          Object.keys(data.payments).map((key) => {
-              if (key === value.method) {
-                  value.enEs = data.payments[key].en + '(' + data.payments[key].es + ')'
-                  value.method = data.payments[key]
-              }
-          })
+    paymentsData.map((value) => {
+      Object.keys(data.payments).map((key) => {
+        if (key === value.method) {
+          value.enEs = data.payments[key].en + '(' + data.payments[key].es + ')'
+          value.method = data.payments[key]
+        }
       })
-      console.log(paymentsData)
+    })
+    console.log(paymentsData)
     state.payments = paymentsData
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
@@ -70,7 +70,7 @@ const mutations = {
     state.showNewModal = false
     state.newPayment = {
       name: '',
-        method:''
+      method: ''
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -91,7 +91,7 @@ const mutations = {
     state.editPayment = {
       id: '',
       name: '',
-      method:''
+      method: ''
     }
     state.saved = true
     this._vm.$Toast.fire({

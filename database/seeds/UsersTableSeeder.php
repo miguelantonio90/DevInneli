@@ -1,6 +1,5 @@
 <?php
 
-use App\Position;
 use App\User;
 use Illuminate\Database\Seeder;
 

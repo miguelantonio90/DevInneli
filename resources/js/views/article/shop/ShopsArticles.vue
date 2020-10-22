@@ -129,7 +129,7 @@ export default {
       max25chars: v => v.length <= 25 || 'Input too long!',
       pagination: {},
       headers: [],
-        track_inventory:false
+      track_inventory: false
     }
   },
   computed: {},
@@ -137,7 +137,7 @@ export default {
     variantsData: function () {
       this.initialize()
     },
-      trackInventoryParent: function (val) {
+    trackInventoryParent: function (val) {
       this.track_inventory = this.trackInventoryParent
       this.initialize()
     }

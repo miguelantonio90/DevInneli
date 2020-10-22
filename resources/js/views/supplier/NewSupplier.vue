@@ -19,7 +19,7 @@
           class="my-10"
           lazy-validation
         >
-            <v-row>
+          <v-row>
             <v-col
               cols="12"
               md="6"
@@ -82,8 +82,9 @@
               </vue-tel-input-vuetify>
             </v-col>
             <v-col
-                cols="12"
-                md="6">
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="newSupplier.contract"
                 :counter="120"
@@ -92,16 +93,23 @@
                 required
               />
             </v-col>
-                <v-col
-                    cols="12"
-                    md="6">
-                    <v-select v-model="newSupplier.expanse" :items="categories" clearable
-                              item-text="name" item-value="id"
-                              :label="$vuetify.lang.t('$vuetify.supplier.expense')"/>
-                </v-col>
             <v-col
-                cols="12"
-                md="12">
+              cols="12"
+              md="6"
+            >
+              <v-select
+                v-model="newSupplier.expanse"
+                :items="categories"
+                clearable
+                item-text="name"
+                item-value="id"
+                :label="$vuetify.lang.t('$vuetify.supplier.expense')"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="12"
+            >
               <v-text-field
                 v-model="newSupplier.address"
                 :counter="120"
@@ -111,8 +119,9 @@
               />
             </v-col>
             <v-col
-                cols="12"
-                md="12">
+              cols="12"
+              md="12"
+            >
               <v-text-field
                 v-model="newSupplier.note"
                 :counter="120"
@@ -181,7 +190,7 @@ export default {
   },
   created () {
     this.formValid = false
-      this.getExpenseCategories()
+    this.getExpenseCategories()
   },
   methods: {
     ...mapActions('supplier', ['createSupplier', 'toogleNewModal']),

@@ -130,8 +130,8 @@ const key = [
 export default {
   company,
   firstName,
-    identity,
-    contract,
+  identity,
+  contract,
   lastName,
   email,
   password,

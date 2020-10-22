@@ -25,26 +25,26 @@ const state = {
   saved: false,
   newSupplier: {
     name: '',
-      identity: '',
+    identity: '',
     email: '',
-      contract: '',
+    contract: '',
     phone: '',
     country: '',
     address: '',
-      note: '',
-      expanse:''
+    note: '',
+    expanse: ''
   },
   editSupplier: {
     id: '',
-      name: '',
-      identity: '',
-      email: '',
-      contract: '',
-      phone: '',
-      country: '',
-      address: '',
-      note: '',
-      expanse:''
+    name: '',
+    identity: '',
+    email: '',
+    contract: '',
+    phone: '',
+    country: '',
+    address: '',
+    note: '',
+    expanse: ''
   },
   isSupplierTableLoading: false,
   isActionInProgress: false,
@@ -82,15 +82,15 @@ const mutations = {
   [SUPPLIER_CREATED] (state) {
     state.showNewModal = false
     state.newSupplier = {
-        name: '',
-        identity: '',
-        email: '',
-        contract: '',
-        phone: '',
-        country: '',
-        address: '',
-        note: '',
-        expanse:''
+      name: '',
+      identity: '',
+      email: '',
+      contract: '',
+      phone: '',
+      country: '',
+      address: '',
+      note: '',
+      expanse: ''
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -110,15 +110,15 @@ const mutations = {
     state.showEditModal = false
     state.editSupplier = {
       id: '',
-        name: '',
-        identity: '',
-        email: '',
-        contract: '',
-        phone: '',
-        country: '',
-        address: '',
-        note: '',
-        expanse:''
+      name: '',
+      identity: '',
+      email: '',
+      contract: '',
+      phone: '',
+      country: '',
+      address: '',
+      note: '',
+      expanse: ''
     }
     state.saved = true
     this._vm.$Toast.fire({

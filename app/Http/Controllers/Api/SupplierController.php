@@ -22,7 +22,7 @@ class SupplierController extends Controller
 
     /**
      * SupplierController constructor.
-     * @param SupplierManager $supplierManager
+     * @param  SupplierManager  $supplierManager
      */
     public function __construct(SupplierManager $supplierManager)
     {

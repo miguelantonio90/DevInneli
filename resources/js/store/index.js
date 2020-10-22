@@ -45,14 +45,14 @@ const store = new Vuex.Store({
     shop,
     category,
     client,
-      supplier,
+    supplier,
     article,
     company,
     products,
     shoppingCart,
     expenseCategory,
     statics,
-      payment,
+    payment
   },
   plugins: [vuexLocal.plugin],
   getters: {

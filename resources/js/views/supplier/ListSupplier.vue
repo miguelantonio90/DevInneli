@@ -52,14 +52,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewSupplier from "./NewSupplier";
-import EditSupplier from "./EditSupplier";
+import NewSupplier from './NewSupplier'
+import EditSupplier from './EditSupplier'
 
 export default {
-    name:"ListSupplier",
+  name: 'ListSupplier',
   components: {
-      EditSupplier,
-      NewSupplier,
+    EditSupplier,
+    NewSupplier
   },
   data () {
     return {
@@ -112,7 +112,7 @@ export default {
     editSupplierHandler ($event) {
       this.openEditModal($event)
     },
-    deleteSupplierHandler (clientId) {
+    deleteSupplierHandler (id) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -132,7 +132,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteSupplier(clientId)
+          if (result.value) this.deleteSupplier(id)
         })
     }
   }

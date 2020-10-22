@@ -1,7 +1,7 @@
 <?php
 
-use App\Payment;
 use App\Company;
+use App\Payment;
 use Illuminate\Database\Seeder;
 
 class PaymentTableSeeder extends Seeder

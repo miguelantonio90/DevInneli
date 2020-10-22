@@ -21,7 +21,7 @@ class PaymentController extends Controller
 
     /**
      * PaymentController constructor.
-     * @param PaymentManager $paymentManager
+     * @param  PaymentManager  $paymentManager
      */
     public function __construct(PaymentManager $paymentManager)
     {

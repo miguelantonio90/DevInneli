@@ -35,13 +35,14 @@ class SupplierManager
     {
         $supplier = Supplier::create([
             'company_id' => $data['company_id'],
-            'exprense_id'=>$data['expanse'],
-            'name'=>$data['name']
+            'exprense_id' => $data['expanse'],
+            'name' => $data['name']
         ]);
         return $this->updateData($supplier, $data);
     }
 
-    public function updateData($supplier, $data){
+    public function updateData($supplier, $data)
+    {
         if (isset($data['name'])) {
             $supplier->name = $data['name'];
         }

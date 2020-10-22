@@ -35,12 +35,15 @@
               cols="12"
               md="12"
             >
-                <v-select v-model="editPayment.method" :items="payments"
+              <v-select
+                v-model="editPayment.method"
+                :items="payments"
                 clearable
                 :label="$vuetify.lang.t('$vuetify.menu.pay')"
                 item-text="name"
                 item-value="key"
-                required></v-select>
+                required
+              />
             </v-col>
           </v-row>
         </v-form>
@@ -73,7 +76,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-    name:'EditPayment',
+  name: 'EditPayment',
   data () {
     return {
       formValid: false,
@@ -83,7 +86,7 @@ export default {
   },
   computed: {
     ...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
-      ...mapState('statics', ['payments']),
+    ...mapState('statics', ['payments'])
   },
   methods: {
     ...mapActions('payment', ['updatePayment', 'toogleEditModal']),

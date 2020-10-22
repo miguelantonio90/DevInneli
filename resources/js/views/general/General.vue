@@ -34,10 +34,10 @@ import ShopList from '../shop/ListShop'
 import ExpenseCategory from '../expense_category/List'
 
 import ListPayment from '../payment/ListPayment'
-import ListSupplier from "../supplier/ListSupplier";
+import ListSupplier from '../supplier/ListSupplier'
 export default {
   name: 'General',
-  components: { ShopList, ListPayment,ExpenseCategory, ListSupplier},
+  components: { ShopList, ListPayment, ExpenseCategory, ListSupplier },
   data () {
     return {
       tab: null,
