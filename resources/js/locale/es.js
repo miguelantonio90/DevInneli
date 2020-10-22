@@ -92,7 +92,8 @@ export default {
     title: 'Ajuste de Tema',
     color: 'Opciones de color',
     lang: 'Idioma',
-    sidebar: 'Opción de barra lateral'
+    sidebar: 'Opción de barra lateral',
+    currency: 'Moneda'
   },
   // rules
   rule: {
@@ -104,7 +105,7 @@ export default {
     bad_email: '{0} debe ser válido',
     required_element: 'Este campo es requerido',
     bad_phone: '{0} debe ser válido',
-    select: 'Seleccione un valor',
+    select: 'Seleccione',
     pin: {
       min: 'La cantidad mínima es de {0} digítos',
       max: 'La cantidad máxima es de {0} digítos'

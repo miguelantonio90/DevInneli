@@ -97,35 +97,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog
-          v-model="dialogDelete"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-title class="headline">
-              {{ $vuetify.lang.t('$vuetify.messages.sure_delete') }}
-            </v-card-title>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                class="mb-2"
-                @click="closeDelete"
-              >
-                <v-icon>mdi-close</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-              </v-btn>
-              <v-btn
-                class="mb-2"
-                color="primary"
-                @click="deleteItemConfirm"
-              >
-                <v-icon>mdi-check</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.accept') }}
-              </v-btn>
-              <v-spacer />
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-toolbar>
     </template>
     <template v-slot:item.price="props">
@@ -157,7 +128,7 @@
             }"
             :options="{
               locale: 'en',
-              length: 11,
+              length: 15,
               precision: 2,
               empty: 0.00,
             }"
@@ -194,7 +165,7 @@
             }"
             :options="{
               locale: 'en',
-              length: 11,
+              length: 15,
               precision: 2,
               empty: 0.00,
             }"
@@ -277,7 +248,6 @@ export default {
       variants: [],
       variantsValues: [],
       dialog: false,
-      dialogDelete: false,
       headers: [],
       editedIndex: -1,
       editedItem: {
@@ -322,9 +292,6 @@ export default {
     },
     dialog (val) {
       val || this.close()
-    },
-    dialogDelete (val) {
-      val || this.closeDelete()
     }
   },
   created () {
@@ -365,7 +332,6 @@ export default {
       ]
     },
     editChips (tag) {
-      this.editedIndex.id = tag.id ? tag.id : ''
       this.editedItem.name = tag.name
       this.editedIndex = this.variants.indexOf(tag)
       this.select = tag.value
@@ -386,7 +352,27 @@ export default {
     deleteItem (item) {
       this.editedIndex = this.variantsValues.indexOf(item)
       this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.variants.variant')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.sure_delete'),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then((result) => {
+          if (result.value) {
+            this.deleteItemConfirm()
+          }
+        })
     },
     deleteItemConfirm () {
       if (this.variants.length === 1 && this.variants[0].value.length === 1) {
@@ -394,18 +380,10 @@ export default {
       } else {
         this.variantsValues.splice(this.editedIndex, 1)
       }
-      this.closeDelete()
       this.updateVariants()
     },
     close () {
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-    closeDelete () {
-      this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1

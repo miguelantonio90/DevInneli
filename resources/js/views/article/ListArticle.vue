@@ -19,19 +19,25 @@
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
         >
-          <template
-            v-slot:item.name="{ item }"
-          >
-            <v-avatar
-              v-if="item.images.length > 0"
+          <template v-slot:item.name="{ item }">
+            <v-chip
+              :key="JSON.stringify(item)"
             >
-              <v-img :src="item.path" />
-            </v-avatar>
-            <v-avatar
-              v-else
-              :color="item.color"
-            />
-            {{ item.name }}
+              <v-avatar
+                v-if="item.color"
+                class="white--text"
+                :color="item.color"
+                left
+                v-text="item.name.slice(0, 1).toUpperCase()"
+              />
+              <v-avatar
+                v-else
+                left
+              >
+                <v-img :src="item.path" />
+              </v-avatar>
+              {{ item.name }}
+            </v-chip>
           </template>
           <template
             v-slot:item.percent="{ item }"

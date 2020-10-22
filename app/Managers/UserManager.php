@@ -57,12 +57,15 @@ class UserManager
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
-        foreach ($users as $k => $val) {
+        foreach ($users as $k => $user) {
             $shopNames = [];
-            foreach ($val['shops'] as $sh => $shop) {
+            foreach ($user['shops'] as $sh => $shop) {
                 $shopNames[$sh] = $shop['name'];
             }
 
+            $users[$k]['position']->accessPin = $user['position']['accessPin'] === 1;
+            $users[$k]['position']->accessEmail = $user['position']['accessEmail'] === 1;
+            $users[$k]['position']->disabled = $user['position']['key'] === 'super_manager';
             $users[$k]['shopsNames'] = array_unique($shopNames);
         }
 

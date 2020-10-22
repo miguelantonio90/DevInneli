@@ -92,7 +92,8 @@ export default {
     title: 'Theme Settings',
     color: 'Color Options',
     lang: 'Language',
-    sidebar: 'Sidebar Option'
+    sidebar: 'Sidebar Option',
+    currency: 'Currency'
   },
   rule: {
     required: '{0} is required',
@@ -103,7 +104,7 @@ export default {
     bad_email: '{0}  must be valid',
     required_element: 'This element is required',
     bad_phone: '{0}  must be valid',
-    select: 'Select value',
+    select: 'Select',
     pin: {
       min: 'Just a minimum of {0} digits is allowed',
       max: 'Just a maximum of {0} digits is allowed'

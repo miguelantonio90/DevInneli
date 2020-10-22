@@ -2833,10 +2833,25 @@ const getPaymentToSelect = () => {
   return result
 }
 
+const getCurrencyToSelect = () => {
+  const result = []
+  Object.keys(countries).map((key) => {
+    result.push({
+      id: key,
+      name: countries[key].name + '(' + countries[key].native + ')',
+      emoji: countries[key].emoji,
+      currency: countries[key].currency
+    })
+  })
+  return result
+}
+
 export default {
   continents: continents,
   countries: countries,
     payments:payments,
   getCountryToSelect: getCountryToSelect,
-  getPaymentToSelect: getPaymentToSelect
+  getPaymentToSelect: getPaymentToSelect,
+    getCurrencyToSelect: getCurrencyToSelect
+  getCurrencyToSelect: getCurrencyToSelect
 }

@@ -33,7 +33,7 @@
               }"
               :options="{
                 locale: 'en',
-                length: 11,
+                length: 15,
                 precision: 2,
                 empty: 0.00,
               }"
