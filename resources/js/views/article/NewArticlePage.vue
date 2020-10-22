@@ -447,7 +447,7 @@
             color="primary"
             :disabled="!formValid"
             :loading="isActionInProgress"
-            @click="editArticleHandler"
+            @click="createNewArticle"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
