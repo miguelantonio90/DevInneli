@@ -100,9 +100,9 @@ class RegisterController extends Controller
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
-
                 return $user;
             }
+
         }
     }
 

@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.new', [
+            $vuetify.lang.t('$vuetify.titles.edit', [
               $vuetify.lang.t('$vuetify.articles.name'),
             ])
           }}</span>
@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      md="3"
+                      md="4"
                     >
                       <v-text-field
                         v-model="newArticle.name"
@@ -49,7 +49,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="3"
+                      md="4"
                     >
                       <v-text-field-simplemask
                         v-model="newArticle.barCode"
@@ -71,15 +71,15 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="3"
+                      md="4"
                     >
                       <v-text-field-money
                         v-model="newArticle.price"
                         :label="$vuetify.lang.t('$vuetify.price')"
+                        required
                         :properties="{
                           prefix: user.company.currency,
-                          clearable: true,
-                          required:true
+                          clearable: true
                         }"
                         :options="{
                           length: 15,
@@ -90,7 +90,27 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="3"
+                      md="4"
+                    >
+                      <v-text-field-money
+                        v-model="newArticle.cost"
+                        :disabled="newArticle.composite"
+                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                        required
+                        :properties="{
+                          prefix: user.company.currency,
+                          clearable: true
+                        }"
+                        :options="{
+                          length: 15,
+                          precision: 2,
+                          empty: 0.00,
+                        }"
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
                     >
                       <v-select
                         v-model="newArticle.category"
@@ -138,37 +158,6 @@
                           </v-card-actions>
                         </v-card>
                       </v-dialog>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="3"
-                    >
-                      <v-text-field-money
-                        v-model="newArticle.cost"
-                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                        :properties="{
-                          prefix: user.company.currency,
-                          clearable: true,
-                          required:true,
-                          disabled:newArticle.composite
-                        }"
-                        :options="{
-                          length: 15,
-                          precision: 2,
-                          empty: 0.00,
-                        }"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="3"
-                    >
-                      <v-text-field
-                        v-model="newArticle.ref"
-                        :label="$vuetify.lang.t('$vuetify.variants.ref')"
-                        autocomplete="off"
-                        required
-                      />
                     </v-col>
                     <v-col
                       cols="12"
@@ -230,9 +219,7 @@
                                   mdi-information-outline
                                 </v-icon>
                               </template>
-                              <span>{{
-                                $vuetify.lang.t('$vuetify.articles.composite_text')
-                              }}</span>
+                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
                             </v-tooltip>
                           </div>
                         </template>
@@ -252,7 +239,7 @@
                         :loading="isShopLoading"
                         :disabled="!!isShopLoading"
                         return-object
-                        @change="selectArticle"
+                        @input="selectArticle"
                       >
                         <template v-slot:selection="data">
                           <v-chip
@@ -329,7 +316,6 @@
                           md="12"
                         >
                           <variant
-                            :ref-parent="ref"
                             :updated="updated"
                             :variants-parent="newArticle.variants"
                             :variants-values-parent="variantData"
@@ -436,8 +422,7 @@
                         md="9"
                       >
                         <app-color-picker
-                          :value="newArticle.color"
-                          style="margin-left: 10px"
+                          :value="newArticle.color || ``"
                           @input="inputColor"
                         />
                       </v-col>
@@ -462,7 +447,7 @@
             color="primary"
             :disabled="!formValid"
             :loading="isActionInProgress"
-            @click="createNewArticle"
+            @click="editArticleHandler"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -487,6 +472,7 @@ export default {
   components: { NewCategory, CompositeList, ShopsArticles, Variant },
   data () {
     return {
+      track_inventory: false,
       ref: '10001',
       representation: 'image',
       showInfoAdd: false,
@@ -567,6 +553,9 @@ export default {
       } else {
         this.updated = false
       }
+    },
+    changeInventory () {
+      this.track_inventory = this.newArticle.track_inventory
     },
     updateComposite (composite) {
       this.composite = composite

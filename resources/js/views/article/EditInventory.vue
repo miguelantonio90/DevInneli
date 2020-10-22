@@ -3,6 +3,8 @@
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
+      fill-height
+      fluid
     >
       <v-card>
         <v-card-title>
@@ -26,12 +28,11 @@
             >
               <v-expansion-panel style="margin: 0">
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-database-edit</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.panel.basic') }}
-                    </span>
-                  </div>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.panel.basic')
+                    }}
+                  </h3>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -78,11 +79,12 @@
                         :label="$vuetify.lang.t('$vuetify.price')"
                         required
                         :properties="{
-                          prefix: user.company.currency,
+                          prefix: '$',
                           clearable: true
                         }"
                         :options="{
-                          length: 15,
+                          locale: 'en',
+                          length: 11,
                           precision: 2,
                           empty: 0.00,
                         }"
@@ -98,11 +100,12 @@
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
                         required
                         :properties="{
-                          prefix: user.company.currency,
+                          prefix: '$',
                           clearable: true
                         }"
                         :options="{
-                          length: 15,
+                          locale: 'en',
+                          length: 11,
                           precision: 2,
                           empty: 0.00,
                         }"
@@ -120,22 +123,7 @@
                         :loading="isCategoryLoading"
                         :disabled="!!isCategoryLoading"
                         return-object
-                      >
-                        <template v-slot:append-outer>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="$store.dispatch('category/toogleNewModal',true)"
-                              >
-                                mdi-plus
-                              </v-icon>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </v-select>
+                      />
                       <v-dialog
                         v-model="showInfoAdd"
                         max-width="500px"
@@ -183,12 +171,7 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-book-open-variant</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
-                    </span>
-                  </div>
+                  <h3>{{ $vuetify.lang.t('$vuetify.articles.inventory') }}</h3>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -219,7 +202,9 @@
                                   mdi-information-outline
                                 </v-icon>
                               </template>
-                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.articles.composite_text')
+                              }}</span>
                             </v-tooltip>
                           </div>
                         </template>
@@ -235,37 +220,11 @@
                         :items="articles"
                         :label="$vuetify.lang.t('$vuetify.rule.select')"
                         item-text="name"
-                        chips
                         :loading="isShopLoading"
                         :disabled="!!isShopLoading"
                         return-object
                         @input="selectArticle"
-                      >
-                        <template v-slot:selection="data">
-                          <v-chip
-                            :key="JSON.stringify(data.item)"
-                            v-bind="data.attrs"
-                            :input-value="data.selected"
-                            :disabled="data.disabled"
-                            @click:close="data.parent.selectItem(data.item)"
-                          >
-                            <v-avatar
-                              v-if="data.item.color"
-                              class="white--text"
-                              :color="data.item.color"
-                              left
-                              v-text="data.item.name.slice(0, 1).toUpperCase()"
-                            />
-                            <v-avatar
-                              v-else
-                              left
-                            >
-                              <v-img :src="data.item.path" />
-                            </v-avatar>
-                            {{ data.item.name }}
-                          </v-chip>
-                        </template>
-                      </v-select>
+                      />
                     </v-col>
                   </v-row>
                   <v-row>
@@ -278,6 +237,7 @@
                         v-model="editArticle.track_inventory"
                         class="md-6"
                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        @change="changeInventory"
                       />
                     </v-col>
                   </v-row>
@@ -287,7 +247,7 @@
                       md="12"
                     >
                       <composite-list
-                        :composite-list="composite"
+                        :composite_list="composite"
                         style="margin-top: 0"
                         @updateComposite="updateComposite"
                       />
@@ -297,12 +257,11 @@
               </v-expansion-panel>
               <v-expansion-panel v-show="!editArticle.composite">
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-order-bool-descending-variant</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.panel.variant') }}
-                    </span>
-                  </div>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.panel.variant')
+                    }}
+                  </h3>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -329,12 +288,11 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-shopping</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.menu.shop') }}
-                    </span>
-                  </div>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.menu.shop')
+                    }}
+                  </h3>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -348,7 +306,7 @@
                           md="12"
                         >
                           <shops-articles
-                            :track_inventory="editArticle.track_inventory"
+                            :track-inventory-parent="track_inventory"
                             :shop-data="shopData"
                             :variants-data="variantData"
                             @updateShopsData="updateShopData"
@@ -361,12 +319,11 @@
               </v-expansion-panel>
               <v-expansion-panel>
                 <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-palette</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.representation.representation') }}
-                    </span>
-                  </div>
+                  <h3>
+                    {{
+                      $vuetify.lang.t('$vuetify.representation.representation')
+                    }}
+                  </h3>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -453,7 +410,6 @@
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
           </v-btn>
         </v-card-actions>
-        <new-category v-if="$store.state.category.showNewModal" />
       </v-card>
     </v-container>
   </div>
@@ -461,16 +417,15 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from 'vuex'
-import NewCategory from '../../views/category/NewCategory'
+import { mapActions, mapState } from 'vuex'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
 import AppLoading from '../../components/core/AppLoading'
 
 export default {
-  name: 'EditArticlePage',
-  components: { NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
+  name: 'EditInventory',
+  components: { AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
       track_inventory: false,
@@ -492,8 +447,7 @@ export default {
   computed: {
     ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user'])
+    ...mapState('shop', ['shops', 'isShopLoading'])
   },
   created: async function () {
     this.loadingData = true
@@ -555,13 +509,12 @@ export default {
         })
       })
     }
-    if (this.editArticle.inventory === 0) {
+    if (this.editArticle.track_inventory === 0) {
       this.editArticle.track_inventory = false
-    } else if (this.editArticle.inventory === 1) {
+    } else if (this.editArticle.track_inventory === 1) {
       this.editArticle.track_inventory = true
     }
     this.track_inventory = this.editArticle.track_inventory
-
     if (this.editArticle.unit === 1) {
       this.editArticle.unit = 'unit'
     }
@@ -584,9 +537,6 @@ export default {
           name: item.name,
           price: item.price,
           cost: item.price,
-          color: item.color,
-          path: item.path,
-          images: item.images,
           cant: '1',
           composite_id: item.id
         })
@@ -594,7 +544,7 @@ export default {
         this.composite.forEach((comp) => {
           totalCost += comp.cant * comp.price
         })
-        this.newArticle.cost = totalCost
+        this.editArticle.cost = totalCost
       } else {
         this.showInfoAdd = true
       }
@@ -617,7 +567,6 @@ export default {
         cost += comp.cant * comp.price
       })
       this.editArticle.cost = cost
-      this.editArticle.price = cost
     },
     updateVariant (variants, dataUpdated) {
       this.variantData = dataUpdated
@@ -684,46 +633,28 @@ export default {
       }
     },
     editArticleHandler () {
-      if (parseFloat(this.editArticle.cost) > parseFloat(this.editArticle.price)) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.articles.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_price'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      } else {
-        if (this.editArticle.composite) {
-          if (this.composite.length === 0) {
-            this.$Swal
-              .fire({
-                title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                  this.$vuetify.lang.t('$vuetify.articles.name')
-                ]),
-                text: this.$vuetify.lang.t(
-                  '$vuetify.messages.warning_composite'
-                ),
-                icon: 'warning',
-                showCancelButton: false,
-                confirmButtonText: this.$vuetify.lang.t(
-                  '$vuetify.actions.accept'
-                ),
-                confirmButtonColor: 'red'
-              })
-          } else {
-            this.validCreate()
-          }
+      if (this.editArticle.composite) {
+        if (this.composite.length === 0) {
+          this.$Swal
+            .fire({
+              title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                this.$vuetify.lang.t('$vuetify.articles.name')
+              ]),
+              text: this.$vuetify.lang.t(
+                '$vuetify.messages.warning_composite'
+              ),
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: this.$vuetify.lang.t(
+                '$vuetify.actions.accept'
+              ),
+              confirmButtonColor: 'red'
+            })
         } else {
           this.validCreate()
         }
+      } else {
+        this.validCreate()
       }
     },
     uploadImage (formData, index, fileList) {

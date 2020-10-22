@@ -1,7 +1,8 @@
-import countries from '../../data'
+import data from '../../data'
 
 const state = {
-  arrayCountry: countries.getCountryToSelect()
+  arrayCountry: data.countries.getCountryToSelect(),
+  payments: data.payments.getPaymentToSelect()
 }
 
 const mutations = {}

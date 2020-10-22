@@ -34,14 +34,18 @@ import ShopList from '../shop/ListShop'
 import ExpenseCategory from '../expense_category/List'
 import ExchangeRate from '../exchange_rate/List'
 
+import ListPayment from '../payment/ListPayment'
+import ListSupplier from '../supplier/ListSupplier'
 export default {
   name: 'General',
-  components: { ShopList, ExpenseCategory, ExchangeRate },
+  components: { ShopList, ListPayment, ExpenseCategory, ListSupplier, ExchangeRate },
   data () {
     return {
       tab: null,
       itemsTabs: [
         { key: 'shop-list', content: 'shop-list' },
+        { key: 'list-payment', content: 'list-payment' },
+        { key: 'list-supplier', content: 'list-supplier' },
         { key: 'expense-category', content: 'expense-category' },
         { key: 'exchange-rate', content: 'exchange-rate' }
       ]
@@ -51,6 +55,8 @@ export default {
     tabName () {
       return [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.pay') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.supplier') },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category') },
         { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate') }
       ]
