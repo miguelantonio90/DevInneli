@@ -267,5 +267,16 @@ export default {
         check:'Check',
         other:'Other'
     },
+    supplier:{
+      name:'Supplier',
+        identity:'ID/Document',
+        phone:'Phone',
+        email:'Email',
+        country:'Country',
+        address:'Address',
+        contract:'Contract Number',
+        expense:'Expense Category',
+        note:'Note'
+    },
   ...en
 }

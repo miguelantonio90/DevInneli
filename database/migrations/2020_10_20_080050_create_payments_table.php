@@ -18,6 +18,8 @@ class CreatePaymentsTable extends Migration
             $table->string('name');
             $table->string('method')->default('cach');
             $table->timestamps();
+            $table->foreignUuid('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
         });
     }
 

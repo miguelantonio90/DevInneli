@@ -1,4 +1,5 @@
 import payment from '../../api/payment'
+import data from '../../data'
 
 const FETCHING_PAYMENTS = 'FETCHING_PAYMENTS'
 const SWITCH_PAYMENT_NEW_MODAL = 'SWITCH_PAYMENT_NEW_MODAL'
@@ -50,8 +51,17 @@ const mutations = {
     state.isTableLoading = isLoading
     state.isPaymentLoading = isLoading
   },
-  [FETCHING_PAYMENTS] (state, payments) {
-    state.payments = payments
+  [FETCHING_PAYMENTS] (state, paymentsData) {
+      paymentsData.map((value) => {
+          Object.keys(data.payments).map((key) => {
+              if (key === value.method) {
+                  value.enEs = data.payments[key].en + '(' + data.payments[key].es + ')'
+                  value.method = data.payments[key]
+              }
+          })
+      })
+      console.log(paymentsData)
+    state.payments = paymentsData
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -66,7 +76,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.payment')]
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.pay')]
       )
     })
   },
@@ -87,7 +97,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.payment')]
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.pay')]
       )
     })
   },
@@ -100,7 +110,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.payment')]
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.pay')]
       )
     })
   },
@@ -114,7 +124,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(
-        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.payment')]
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.pay')]
       )
     })
   }

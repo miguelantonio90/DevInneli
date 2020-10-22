@@ -2759,7 +2759,57 @@ const countries = {
     emojiU: 'U+1F1FF U+1F1FC'
   }
 }
+const payments = {
+    cach:{
+        name:'Cach',
+        value:'cach',
+        en:'Cach',
+        es:'Efectivo',
 
+    },
+    card:{
+        name:'Card',
+        value:'card',
+        en:'Card',
+        es:'Targeta',
+
+    },
+    check:{
+        name:'Check',
+        value:'check',
+        en:'Check',
+        es:'Cheque',
+
+    },
+    deposit:{
+        name:'Deposit',
+        value:'deposit',
+        en:'Deposit',
+        es:'Depósito',
+
+    },
+    wire_transfer:{
+        name:'Wire Transfer',
+        value:'wire_transfer',
+        en:'Wire Transfer',
+        es:'Transferencia Bancaria',
+
+    },
+    digital_transfer:{
+        name:'Digital Transfer',
+        value:'digital_transfer',
+        en:'Digital Transfer',
+        es:'Transferencia Digital',
+
+    },
+    other:{
+        name:'Other',
+        value:'other',
+        en:'Other',
+        es:'Oro',
+
+    },
+}
 const getCountryToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {
@@ -2772,9 +2822,21 @@ const getCountryToSelect = () => {
   })
   return result
 }
+const getPaymentToSelect = () => {
+  const result = []
+  Object.keys(payments).map((key) => {
+    result.push({
+      key: payments[key].value,
+      name: payments[key].en + '(' + payments[key].es + ')',
+    })
+  })
+  return result
+}
 
 export default {
   continents: continents,
   countries: countries,
-  getCountryToSelect: getCountryToSelect
+    payments:payments,
+  getCountryToSelect: getCountryToSelect,
+  getPaymentToSelect: getPaymentToSelect
 }

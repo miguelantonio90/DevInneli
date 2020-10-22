@@ -1,167 +1,149 @@
 <template>
-  <v-dialog
-    v-model="toogleEditModal"
-    max-width="600px"
-    persistent
-  >
-    <v-card>
-      <v-card-title>
+    <v-dialog
+        v-model="toogleEditModal"
+        max-width="600px"
+        persistent
+    >
+        <v-card>
+            <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.client'),
-          ])
-        }}</span>
-      </v-card-title>
-      <v-card-text>
-        <v-form
-          ref="form"
-          v-model="formValid"
-          class="my-10"
-          lazy-validation
-        >
-          <v-row>
-            <v-col
-              align-self="start"
-              class="pa-0"
-              cols="2"
-            >
-              <avatar-picker
-                :image-src="getAvatar"
-                :image-style="{ 'border-radius': '50%','height':'80px','width':'80px' }"
-                class="profile mx-auto d-block"
-                @input="onChangeImage($event)"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="5"
-            >
-              <v-text-field
-                v-model="editClient.firstName"
-                :label="$vuetify.lang.t('$vuetify.firstName')"
-                :rules="formRule.firstName"
-                required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="5"
-            >
-              <v-text-field
-                v-model="editClient.lastName"
-                :label="$vuetify.lang.t('$vuetify.lastName')"
-                required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="5"
-            >
-              <v-text-field
-                v-model="editClient.email"
-                :label="$vuetify.lang.t('$vuetify.email')"
-                :rules="formRule.email"
-                autocomplete="off"
-                required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="7"
-            >
-              <vue-tel-input-vuetify
-                v-model="editClient.phone"
-                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
-                :label="$vuetify.lang.t('$vuetify.phone')"
-                required
-                :rules="formRule.phone"
-                :select-label="$vuetify.lang.t('$vuetify.country')"
-                v-bind="bindProps"
-                :error-messages="errorPhone"
-                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
-                @country-changed="onCountry"
-                @keypress="numbers"
-                @input="onInput"
-              >
-                <template #message="{ key, message }">
-                  <slot
-                    name="label"
-                    v-bind="{ key, message }"
-                  />
-                  {{ message }}
-                </template>
-              </vue-tel-input-vuetify>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="editClient.province"
-                :label="$vuetify.lang.t('$vuetify.province')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="editClient.city"
-                :label="$vuetify.lang.t('$vuetify.city')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="editClient.barCode"
-                :label="$vuetify.lang.t('$vuetify.barCode')"
-              />
-            </v-col>
-            <v-col>
-              <v-text-field
-                v-model="editClient.address"
-                :counter="120"
-                :rules="formRule.address"
-                :label="$vuetify.lang.t('$vuetify.address')"
-                required
-              />
-            </v-col>
-            <v-col>
-              <v-text-field
-                v-model="editClient.description"
-                :counter="120"
-                :rules="formRule.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
-                required
-              />
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          class="mb-2"
-          @click="toogleEditModal(false)"
-        >
-          <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-        </v-btn>
-        <v-btn
-          :disabled="!formValid"
-          :loading="isActionInProgress"
-          class="mb-2"
-          color="primary"
-          @click="updateClientHandler"
-        >
-          <v-icon>mdi-check</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+                $vuetify.lang.t('$vuetify.titles.edit', [
+                    $vuetify.lang.t('$vuetify.menu.supplier'),
+                ])
+            }}</span>
+            </v-card-title>
+            <v-card-text>
+                <v-form
+                    ref="form"
+                    v-model="formValid"
+                    class="my-10"
+                    lazy-validation
+                >
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
+                            <v-text-field
+                                v-model="editSupplier.name"
+                                :label="$vuetify.lang.t('$vuetify.firstName')"
+                                :rules="formRule.firstName"
+                                required
+                            />
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
+                            <v-text-field
+                                v-model="editSupplier.identity"
+                                :label="$vuetify.lang.t('$vuetify.supplier.identity')"
+                                :rules="formRule.identity"
+                                required
+                            />
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="5"
+                        >
+                            <v-text-field
+                                v-model="editSupplier.email"
+                                :label="$vuetify.lang.t('$vuetify.supplier.email')"
+                                :rules="formRule.email"
+                                autocomplete="off"
+                                required
+                            />
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="7"
+                        >
+                            <vue-tel-input-vuetify
+                                v-model="editSupplier.phone"
+                                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
+                                :label="$vuetify.lang.t('$vuetify.supplier.phone')"
+                                required
+                                :rules="formRule.phone"
+                                :select-label="$vuetify.lang.t('$vuetify.supplier.country')"
+                                v-bind="bindProps"
+                                :error-messages="errorPhone"
+                                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                                @country-changed="onCountry"
+                                @keypress="numbers"
+                                @input="onInput"
+                            >
+                                <template #message="{ key, message }">
+                                    <slot
+                                        name="label"
+                                        v-bind="{ key, message }"
+                                    />
+                                    {{ message }}
+                                </template>
+                            </vue-tel-input-vuetify>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="6">
+                            <v-text-field
+                                v-model="editSupplier.contract"
+                                :counter="120"
+                                :rules="formRule.contract"
+                                :label="$vuetify.lang.t('$vuetify.supplier.contract')"
+                                required
+                            />
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="6">
+                            <v-select v-model="editSupplier.expanse" :items="categories" clearable
+                                      item-text="name" item-value="id"
+                                      :label="$vuetify.lang.t('$vuetify.supplier.expense')"/>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="12">
+                            <v-text-field
+                                v-model="editSupplier.address"
+                                :counter="120"
+                                :rules="formRule.address"
+                                :label="$vuetify.lang.t('$vuetify.supplier.address')"
+                                required
+                            />
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="12">
+                            <v-text-field
+                                v-model="editSupplier.note"
+                                :counter="120"
+                                :label="$vuetify.lang.t('$vuetify.supplier.note')"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer />
+                <v-btn
+                    class="mb-2"
+                    @click="toogleNewModal(false)"
+                >
+                    <v-icon>mdi-close</v-icon>
+                    {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                </v-btn>
+                <v-btn
+                    :disabled="!formValid"
+                    :loading="isActionInProgress"
+                    class="mb-2"
+                    color="primary"
+                    @click="updateSupplierHandler"
+                >
+                    <v-icon>mdi-check</v-icon>
+                    {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -178,16 +160,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('client', ['saved', 'editClient', 'isActionInProgress']),
-    getAvatar () {
-      return `${this.editClient.avatar ||
-            '/assets/avatar/avatar-undefined.jpg'}`
-    },
+    ...mapState('supplier', ['saved', 'editSupplier', 'isActionInProgress']),
+    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress']),
     bindProps () {
       return {
         mode: 'national',
         clearable: true,
-        defaultCountry: this.editClient.country ? this.editClient.country : 'US',
+        defaultCountry: this.editSupplier.country ? this.editSupplier.country : 'US',
         disabledFetchingCountry: false,
         autocomplete: 'off',
         dropdownOptions: {
@@ -199,12 +178,14 @@ export default {
       }
     }
   },
-  created () {
-  },
-  methods: {
-    ...mapActions('client', ['updateClient', 'toogleEditModal']),
+    created() {
+        this.getExpenseCategories()
+    },
+    methods: {
+    ...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
+    ...mapActions('expenseCategory', ['getExpenseCategories']),
     onCountry (event) {
-      this.editClient.country = event.iso2
+      this.editSupplier.country = event.iso2
       this.countrySelect = event
     },
     numbers (event) {
@@ -217,13 +198,10 @@ export default {
         return false
       }
     },
-    onChangeImage (file) {
-      this.editClient.avatar = `data:${file.type};base64,${file.base64}`
-    },
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.editClient.phone = number
+        this.editSupplier.phone = number
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
@@ -231,10 +209,10 @@ export default {
         ])
       }
     },
-    async updateClientHandler () {
+    async updateSupplierHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.updateClient(this.editClient)
+        await this.updateSupplier(this.editSupplier)
       }
     }
   }

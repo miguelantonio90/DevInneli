@@ -9,7 +9,7 @@
         <edit-supplier v-if="showEditModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.client'),])"
+                                  [$vuetify.lang.t('$vuetify.menu.supplier'),])"
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="suppliers"
@@ -78,12 +78,7 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.lastName'),
-          value: 'lastName',
+          value: 'name',
           select_filter: true
         },
         {

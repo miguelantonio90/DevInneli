@@ -20,6 +20,7 @@ class SupplierManager
             $company = CompanyManager::getCompanyByAdmin();
             $payments = Supplier::latest()
                 ->where('company_id', '=', $company->id)
+                ->with('expanse')
                 ->get();
         }
 
@@ -32,11 +33,45 @@ class SupplierManager
      */
     public function new($data)
     {
-        return Supplier::create([
+        $supplier = Supplier::create([
             'company_id' => $data['company_id'],
-            'name' => $data['name'],
-            'address' => $data['address'],
+            'exprense_id'=>$data['expanse'],
+            'name'=>$data['name']
         ]);
+        return $this->updateData($supplier, $data);
+    }
+
+    public function updateData($supplier, $data){
+        if (isset($data['name'])) {
+            $supplier->name = $data['name'];
+        }
+        if (isset($data['address'])) {
+            $supplier->address = $data['address'];
+        }
+        if (isset($data['address'])) {
+            $supplier->address = $data['address'];
+        }
+        if (isset($data['identity'])) {
+            $supplier->identity = $data['identity'];
+        }
+        if (isset($data['phone'])) {
+            $supplier->phone = $data['phone'];
+        }
+        if (isset($data['email'])) {
+            $supplier->email = $data['email'];
+        }
+        if (isset($data['country'])) {
+            $supplier->country = $data['country'];
+        }
+        if (isset($data['contract'])) {
+            $supplier->contract = $data['contract'];
+        }
+        if (isset($data['note'])) {
+            $supplier->note = $data['note'];
+        }
+        $supplier->save();
+        return $supplier;
+
     }
 
     /**

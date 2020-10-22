@@ -270,5 +270,16 @@ export default {
       check:'Cheque',
       other:'Otro'
     },
+    supplier:{
+        name:'Proveedor',
+        identity:'ID/Documento',
+        phone:'Teléfono',
+        email:'Correo',
+        country: 'País',
+        address:'Dirección',
+        contract:'Número de Contrato',
+        expense:'Categoría de Gasto',
+        note:'Nota'
+    },
   ...es
 }

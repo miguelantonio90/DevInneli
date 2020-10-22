@@ -58,7 +58,7 @@ export default {
                 },
                 {
                     text: this.$vuetify.lang.t('$vuetify.menu.pay'),
-                    value:'method'
+                    value:'enEs'
                 },
                 {
                     text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -86,7 +86,7 @@ export default {
             this.$Swal
                 .fire({
                     title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-                        this.$vuetify.lang.t('$vuetify.menu.payment')
+                        this.$vuetify.lang.t('$vuetify.menu.pay')
                     ]),
                     text: this.$vuetify.lang.t(
                         '$vuetify.messages.warning_delete'

@@ -16,15 +16,17 @@ class CreateSupplierTable extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('identity');
-            $table->string('email');
-            $table->string('email');
+            $table->string('identity')->nullable();
             $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->string('country')->nullable();
+            $table->string('address')->nullable();
             $table->string('contract')->nullable();
-            $table->string('address')->default(false);
+            $table->string('note')->nullable();
             $table->timestamps();
             $table->foreignUuid('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
+            $table->foreignUuid('exprense_id')->references('id')->on('expense_categories')
                 ->onDelete('cascade');
         });
     }

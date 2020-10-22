@@ -8,7 +8,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.client'),
+            $vuetify.lang.t('$vuetify.menu.supplier'),
           ])
         }}</span>
       </v-card-title>
@@ -19,25 +19,13 @@
           class="my-10"
           lazy-validation
         >
-          <v-row>
-            <v-col
-              align-self="start"
-              class="pa-0"
-              cols="2"
-            >
-              <avatar-picker
-                :image-src="getAvatar"
-                :image-style="{ 'border-radius': '50%','height':'80px','width':'80px' }"
-                class="profile mx-auto d-block"
-                @input="onChangeImage($event)"
-              />
-            </v-col>
+            <v-row>
             <v-col
               cols="12"
-              md="5"
+              md="6"
             >
               <v-text-field
-                v-model="newSupplier.firstName"
+                v-model="newSupplier.name"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
                 required
@@ -45,11 +33,12 @@
             </v-col>
             <v-col
               cols="12"
-              md="5"
+              md="6"
             >
               <v-text-field
-                v-model="newSupplier.lastName"
-                :label="$vuetify.lang.t('$vuetify.lastName')"
+                v-model="newSupplier.identity"
+                :label="$vuetify.lang.t('$vuetify.supplier.identity')"
+                :rules="formRule.identity"
                 required
               />
             </v-col>
@@ -59,7 +48,7 @@
             >
               <v-text-field
                 v-model="newSupplier.email"
-                :label="$vuetify.lang.t('$vuetify.email')"
+                :label="$vuetify.lang.t('$vuetify.supplier.email')"
                 :rules="formRule.email"
                 autocomplete="off"
                 required
@@ -72,10 +61,10 @@
               <vue-tel-input-vuetify
                 v-model="newSupplier.phone"
                 :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
-                :label="$vuetify.lang.t('$vuetify.phone')"
+                :label="$vuetify.lang.t('$vuetify.supplier.phone')"
                 required
                 :rules="formRule.phone"
-                :select-label="$vuetify.lang.t('$vuetify.country')"
+                :select-label="$vuetify.lang.t('$vuetify.supplier.country')"
                 v-bind="bindProps"
                 :error-messages="errorPhone"
                 :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
@@ -93,48 +82,41 @@
               </vue-tel-input-vuetify>
             </v-col>
             <v-col
-              cols="12"
-              md="4"
-            >
+                cols="12"
+                md="6">
               <v-text-field
-                v-model="newSupplier.province"
-                :label="$vuetify.lang.t('$vuetify.province')"
+                v-model="newSupplier.contract"
+                :counter="120"
+                :rules="formRule.contract"
+                :label="$vuetify.lang.t('$vuetify.supplier.contract')"
+                required
               />
             </v-col>
+                <v-col
+                    cols="12"
+                    md="6">
+                    <v-select v-model="newSupplier.expanse" :items="categories" clearable
+                              item-text="name" item-value="id"
+                              :label="$vuetify.lang.t('$vuetify.supplier.expense')"/>
+                </v-col>
             <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="newSupplier.city"
-                :label="$vuetify.lang.t('$vuetify.city')"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="newSupplier.barCode"
-                :label="$vuetify.lang.t('$vuetify.barCode')"
-              />
-            </v-col>
-            <v-col>
+                cols="12"
+                md="12">
               <v-text-field
                 v-model="newSupplier.address"
                 :counter="120"
                 :rules="formRule.address"
-                :label="$vuetify.lang.t('$vuetify.address')"
+                :label="$vuetify.lang.t('$vuetify.supplier.address')"
                 required
               />
             </v-col>
-            <v-col>
+            <v-col
+                cols="12"
+                md="12">
               <v-text-field
-                v-model="newSupplier.description"
+                v-model="newSupplier.note"
                 :counter="120"
-                :rules="formRule.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
-                required
+                :label="$vuetify.lang.t('$vuetify.supplier.note')"
               />
             </v-col>
           </v-row>
@@ -181,10 +163,7 @@ export default {
   },
   computed: {
     ...mapState('supplier', ['saved', 'newSupplier', 'isActionInProgress']),
-    getAvatar () {
-      return `${this.newSupplier.avatar ||
-          '/assets/avatar/avatar-undefined.jpg'}`
-    },
+    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress']),
     bindProps () {
       return {
         mode: 'national',
@@ -202,9 +181,11 @@ export default {
   },
   created () {
     this.formValid = false
+      this.getExpenseCategories()
   },
   methods: {
     ...mapActions('supplier', ['createSupplier', 'toogleNewModal']),
+    ...mapActions('expenseCategory', ['getExpenseCategories']),
     onCountry (event) {
       this.newSupplier.country = event.iso2
       this.countrySelect = event
@@ -218,9 +199,6 @@ export default {
         event.preventDefault()
         return false
       }
-    },
-    onChangeImage (file) {
-      this.newSupplier.avatar = `data:${file.type};base64,${file.base64}`
     },
     onInput (number, object) {
       const lang = this.$vuetify.lang
@@ -246,7 +224,7 @@ export default {
     async createNewClient () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createClient(this.newSupplier)
+        await this.createSupplier(this.newSupplier)
       }
     }
   }

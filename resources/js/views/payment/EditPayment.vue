@@ -25,7 +25,7 @@
               md="12"
             >
               <v-text-field
-                v-model="editCategory.name"
+                v-model="editPayment.name"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
                 :rules="formRule.firstName"
                 required
@@ -35,12 +35,12 @@
               cols="12"
               md="12"
             >
-                <v-select v-model="editPayment.method" :items="getPaymentMethod"
-                          clearable
-                          :label="$vuetify.lang.t('$vuetify.menu.pay')"
-                          item-text="name"
-                          item-value="value"
-                          required></v-select>
+                <v-select v-model="editPayment.method" :items="payments"
+                clearable
+                :label="$vuetify.lang.t('$vuetify.menu.pay')"
+                item-text="name"
+                item-value="key"
+                required></v-select>
             </v-col>
           </v-row>
         </v-form>
@@ -83,29 +83,14 @@ export default {
   },
   computed: {
     ...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
-      getPaymentMethod(){
-          return [
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.card'),
-                  value: 'card'
-              },
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.check'),
-                  value: 'check'
-              },
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.other'),
-                  value: 'other'
-              },
-          ]
-      }
+      ...mapState('statics', ['payments']),
   },
   methods: {
     ...mapActions('payment', ['updatePayment', 'toogleEditModal']),
     async updatePaymentHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.updatePayment(this.editCategory)
+        await this.updatePayment(this.editPayment)
       }
     }
   }

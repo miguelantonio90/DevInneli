@@ -29,13 +29,15 @@ class Supplier extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'company_id'
-    ];
+    protected $fillable = ['name', 'company_id', 'exprense_id'];
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    public function expanse(): BelongsTo
+    {
+        return $this->belongsTo(ExpenseCategory::class,'exprense_id');
+    }
 }

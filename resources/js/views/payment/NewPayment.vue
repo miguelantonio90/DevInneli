@@ -35,11 +35,11 @@
               cols="12"
               md="12"
             >
-                <v-select v-model="newPayment.method" :items="getPaymentMethod"
+                <v-select v-model="newPayment.method" :items="payments"
                         clearable
                         :label="$vuetify.lang.t('$vuetify.menu.pay')"
                         item-text="name"
-                        item-value="value"
+                        item-value="key"
                         required></v-select>
             </v-col>
           </v-row>
@@ -85,22 +85,7 @@ name:"NewPayment",
   },
   computed: {
     ...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
-      getPaymentMethod(){
-          return [
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.card'),
-                  value: 'card'
-              },
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.check'),
-                  value: 'check'
-              },
-              {
-                  name: this.$vuetify.lang.t('$vuetify.payment.other'),
-                  value: 'other'
-              },
-          ]
-      }
+      ...mapState('statics', ['payments']),
   },
   created () {
     this.formValid = false
