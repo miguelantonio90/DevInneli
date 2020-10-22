@@ -16,7 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('method')->default('cach');
+            $table->string('method')->default('cash');
             $table->timestamps();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

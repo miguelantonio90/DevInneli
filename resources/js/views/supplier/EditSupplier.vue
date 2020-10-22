@@ -101,10 +101,27 @@
                 v-model="editSupplier.expanse"
                 :items="categories"
                 clearable
+                :loading="isCategoryLoading"
+                :disabled="!!isCategoryLoading"
                 item-text="name"
                 item-value="id"
                 :label="$vuetify.lang.t('$vuetify.supplier.expense')"
-              />
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('expenseCategory/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
             <v-col
               cols="12"
@@ -151,15 +168,17 @@
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
+      <new-expense-category v-if="$store.state.expenseCategory.showNewModal" />
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import NewExpenseCategory from '../expense_category/New'
 
 export default {
-  name: 'EditSupplier',
+  components: { NewExpenseCategory },
   data () {
     return {
       formValid: false,
@@ -170,7 +189,7 @@ export default {
   },
   computed: {
     ...mapState('supplier', ['saved', 'editSupplier', 'isActionInProgress']),
-    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress']),
+    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress', 'isCategoryLoading']),
     bindProps () {
       return {
         mode: 'national',

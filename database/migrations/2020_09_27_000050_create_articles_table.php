@@ -17,8 +17,8 @@ class CreateArticlesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('unit')->default(false);
-            $table->decimal('price',15,2)->nullable();
-            $table->decimal('cost',15,2)->nullable();
+            $table->decimal('price', 15, 2)->nullable();
+            $table->decimal('cost', 15, 2)->nullable();
             $table->string('color')->nullable();
             $table->string('ref')->nullable();
             $table->string('barCode')->nullable();

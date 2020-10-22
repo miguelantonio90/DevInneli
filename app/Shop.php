@@ -34,7 +34,7 @@ class Shop extends Model
     {
         $shop = new Shop();
         $shop->name = $data['shopName'];
-        $shop->country = $data['country'];
+        $shop->country = $data['country']['id'];
         $shop->company_id = $company->id;
         $shop->save();
 

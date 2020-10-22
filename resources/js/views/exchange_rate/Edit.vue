@@ -1,14 +1,14 @@
 <template>
   <v-dialog
     v-model="toogleEditModal"
-    max-width="450"
+    max-width="600"
     persistent
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.category'),
+            $vuetify.lang.t('$vuetify.menu.exchange_rate'),
           ])
         }}</span>
       </v-card-title>
@@ -24,20 +24,19 @@
               cols="12"
               md="12"
             >
-              <v-text-field
-                v-model="editCategory.name"
-                :label="$vuetify.lang.t('$vuetify.firstName')"
-                :rules="formRule.firstName"
+              <v-combobox
+                v-model="editChange.country"
+                :items="arrayCurrency"
+                :label="
+                  $vuetify.lang.t('$vuetify.country')
+                "
+                :rules="formRule.country"
+                :loading="isCountryLoading"
+                :disabled="!!isCountryLoading"
+                item-text="name"
+                clearable
                 required
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="editCategory.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
+                return-object
               />
             </v-col>
           </v-row>
@@ -57,7 +56,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="handleCategory"
+          @click="handleSubmit"
         >
           <v-icon>mdi-check</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -80,16 +79,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('expenseCategory', ['editCategory', 'isActionInProgress'])
+    ...mapState('exchangeRate', ['editChange', 'isActionInProgress']),
+    ...mapState('statics', ['arrayCurrency', 'isCountryLoading'])
   },
   created () {
     this.formValid = false
+    this.getArrayCurrency()
   },
   methods: {
-    ...mapActions('expenseCategory', ['updateCategory', 'toogleEditModal']),
-    async handleCategory () {
+    ...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
+    ...mapActions('statics', ['getArrayCurrency']),
+    async handleSubmit () {
       if (this.$refs.form.validate()) {
-        await this.updateCategory(this.editCategory)
+        await this.updateChange(this.editChange)
       }
     }
   }

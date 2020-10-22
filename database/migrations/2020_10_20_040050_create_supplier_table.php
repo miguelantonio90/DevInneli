@@ -26,7 +26,7 @@ class CreateSupplierTable extends Migration
             $table->timestamps();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->foreignUuid('exprense_id')->references('id')->on('expense_categories')
+            $table->foreignUuid('expense_id')->references('id')->on('expense_categories')
                 ->onDelete('cascade');
         });
     }

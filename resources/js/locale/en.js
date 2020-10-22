@@ -35,6 +35,8 @@ export default {
   address: 'Address',
   city: 'City',
   country: 'Country',
+  currency: 'Currency',
+  change: 'Exchange Rate',
   province: 'Province',
   barCode: 'Bar Code',
   position: 'Position',
@@ -56,7 +58,7 @@ export default {
     profile: 'User Profile',
     logout: 'Logout',
     user_list: 'User List',
-    employer_list: 'Employer List',
+    employer_list: 'Employees List',
     user: 'Users',
     employee: 'Employee',
     access: 'Access permission',
@@ -67,6 +69,8 @@ export default {
     category: 'Category',
     expense_category: 'Expense Category',
     expense_category_list: 'Expense Categories',
+    exchange_rate: 'Foreign currency',
+    exchange_rate_list: 'Foreign currency List',
     category_list: 'Category List',
     product_list: 'Product List',
     modifiers_list: 'Modifiers List',
@@ -74,6 +78,7 @@ export default {
     shop: 'Shops',
     pay: 'Payment Method',
     supplier: 'Supplier',
+    supplier_list: 'Supplier List',
     resume: 'Resume',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
@@ -85,15 +90,15 @@ export default {
     product_add: 'New Article',
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
-    supply_product: 'Supply'
+    supply_product: 'Supply',
+    finance: 'Finance'
   },
   // settings
   settings: {
     title: 'Theme Settings',
     color: 'Color Options',
     lang: 'Language',
-    sidebar: 'Sidebar Option',
-    currency: 'Currency'
+    sidebar: 'Sidebar Option'
   },
   rule: {
     required: '{0} is required',
@@ -263,7 +268,7 @@ export default {
   },
   payment: {
     name: 'Payment Method',
-    cach: 'Cash',
+    cash: 'Cash',
     card: 'Card',
     check: 'Check',
     other: 'Other'

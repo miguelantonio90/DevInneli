@@ -3,8 +3,6 @@
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
-      fill-height
-      fluid
     >
       <v-card>
         <v-card-title>
@@ -28,12 +26,12 @@
             >
               <v-expansion-panel style="margin: 0">
                 <v-expansion-panel-header>
-                    <div>
-                        <v-icon>mdi-database-edit</v-icon>
-                        <span style="text-transform: uppercase;font-weight: bold">
+                  <div>
+                    <v-icon>mdi-database-edit</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.panel.basic') }}
                     </span>
-                    </div>
+                  </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
@@ -80,11 +78,10 @@
                         :label="$vuetify.lang.t('$vuetify.price')"
                         required
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,
@@ -101,11 +98,10 @@
                         :label="$vuetify.lang.t('$vuetify.articles.cost')"
                         required
                         :properties="{
-                          prefix: '$',
+                          prefix: user.company.currency,
                           clearable: true
                         }"
                         :options="{
-                          locale: 'en',
                           length: 15,
                           precision: 2,
                           empty: 0.00,
@@ -465,7 +461,7 @@
 
 <script>
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
@@ -474,10 +470,10 @@ import AppLoading from '../../components/core/AppLoading'
 
 export default {
   name: 'EditArticlePage',
-  components: {NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
+  components: { NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
   data () {
     return {
-        track_inventory: false,
+      track_inventory: false,
       variants: [],
       representation: 'image',
       showInfoAdd: false,
@@ -496,7 +492,8 @@ export default {
   computed: {
     ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
+    ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapGetters('auth', ['user'])
   },
   created: async function () {
     this.loadingData = true
@@ -559,21 +556,21 @@ export default {
       })
     }
     if (this.editArticle.inventory === 0) {
-        this.editArticle.track_inventory = false
+      this.editArticle.track_inventory = false
     } else if (this.editArticle.inventory === 1) {
-        this.editArticle.track_inventory = true
+      this.editArticle.track_inventory = true
     }
-      this.track_inventory = this.editArticle.track_inventory
+    this.track_inventory = this.editArticle.track_inventory
 
-      if (this.editArticle.unit === 1) {
+    if (this.editArticle.unit === 1) {
       this.editArticle.unit = 'unit'
     }
     this.representation = this.articles.color ? 'color' : 'image'
     this.loadingData = false
-  },,
-mounted() {
+  },
+  mounted () {
     this.changeInventory()
-},
+  },
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
@@ -610,9 +607,9 @@ mounted() {
         this.updated = false
       }
     },
-      changeInventory() {
-          this.track_inventory = this.editArticle.track_inventory
-      },
+    changeInventory () {
+      this.track_inventory = this.editArticle.track_inventory
+    },
     updateComposite (composite) {
       this.composite = composite
       let cost = 0.00

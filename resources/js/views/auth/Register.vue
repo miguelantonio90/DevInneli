@@ -78,8 +78,8 @@
                 :rules="formRule.country"
                 clearable
                 item-text="name"
-                item-value="id"
                 required
+                return-object
               >
                 <template
                   slot="item"

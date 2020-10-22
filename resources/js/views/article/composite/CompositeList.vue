@@ -56,6 +56,9 @@
         </template>
       </v-edit-dialog>
     </template>
+    <template v-slot:item.cost="{ item }">
+      {{ `${user.company.currency +' '+item.cost}` }}
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -68,6 +71,8 @@
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CompositeList',
@@ -98,6 +103,7 @@ export default {
     }
   }),
   computed: {
+    ...mapGetters('auth', ['user']),
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     }

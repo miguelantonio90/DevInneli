@@ -35,6 +35,8 @@ export default {
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
+  currency: 'Moneda',
+  change: 'Tasa de Cambio',
   province: 'Provincia',
   barCode: 'Código de Barras',
   position: 'Cargo',
@@ -67,6 +69,8 @@ export default {
     category: 'Categoría',
     expense_category: 'Categoría de Gasto',
     expense_category_list: 'Listado de Categoría de Gastos',
+    exchange_rate: 'Moneda extranjera',
+    exchange_rate_list: 'Listado de Moneda extranjera',
     category_list: 'Listado de Categorías',
     product_list: 'Listado de Productos',
     modifiers_list: 'Listado de Modifiadores',
@@ -74,6 +78,7 @@ export default {
     shop: 'Tiendas',
     pay: 'Métodos de Pago',
     supplier: 'Proveedor',
+    supplier_list: 'Listado de Proveedores',
     resume: 'Resumen',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
@@ -85,15 +90,15 @@ export default {
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
-    supply_product: 'Abastecer'
+    supply_product: 'Abastecer',
+    finance: 'Finanzas'
   },
   // settings
   settings: {
     title: 'Ajuste de Tema',
     color: 'Opciones de color',
     lang: 'Idioma',
-    sidebar: 'Opción de barra lateral',
-    currency: 'Moneda'
+    sidebar: 'Opción de barra lateral'
   },
   // rules
   rule: {
@@ -244,7 +249,7 @@ export default {
     variant: 'Variante',
     name: 'Nombre',
     price: 'Precio',
-    cost: 'Coste',
+    cost: 'Costo',
     ref: 'REF',
     barCode: 'Código de Barras',
     options: 'Opciones',
@@ -266,7 +271,7 @@ export default {
   },
   payment: {
     name: 'Método de Pago',
-    cach: 'Efectivo',
+    cash: 'Efectivo',
     card: 'Targeta',
     check: 'Cheque',
     other: 'Otro'

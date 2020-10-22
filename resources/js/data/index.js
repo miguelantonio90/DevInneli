@@ -564,7 +564,7 @@ const countries = {
     code: '53',
     continent: 'NA',
     capital: 'Havana',
-    currency: 'CUC,CUP',
+    currency: 'CUP,CUC',
     languages: ['es'],
     emoji: '🇨🇺',
     emojiU: 'U+1F1E8 U+1F1FA'
@@ -2760,64 +2760,65 @@ const countries = {
   }
 }
 const payments = {
-    cach:{
-        name:'Cach',
-        value:'cach',
-        en:'Cach',
-        es:'Efectivo',
-
-    },
-    card:{
-        name:'Card',
-        value:'card',
-        en:'Card',
-        es:'Targeta',
-
-    },
-    check:{
-        name:'Check',
-        value:'check',
-        en:'Check',
-        es:'Cheque',
-
-    },
-    deposit:{
-        name:'Deposit',
-        value:'deposit',
-        en:'Deposit',
-        es:'Depósito',
-
-    },
-    wire_transfer:{
-        name:'Wire Transfer',
-        value:'wire_transfer',
-        en:'Wire Transfer',
-        es:'Transferencia Bancaria',
-
-    },
-    digital_transfer:{
-        name:'Digital Transfer',
-        value:'digital_transfer',
-        en:'Digital Transfer',
-        es:'Transferencia Digital',
-
-    },
-    other:{
-        name:'Other',
-        value:'other',
-        en:'Other',
-        es:'Oro',
-
-    },
+  cash: {
+    name: 'Cash',
+    value: 'cash',
+    en: 'Cash',
+    es: 'Efectivo'
+  },
+  card: {
+    name: 'Card',
+    value: 'card',
+    en: 'Card',
+    es: 'Targeta'
+  },
+  check: {
+    name: 'Check',
+    value: 'check',
+    en: 'Check',
+    es: 'Cheque'
+  },
+  deposit: {
+    name: 'Deposit',
+    value: 'deposit',
+    en: 'Deposit',
+    es: 'Depósito'
+  },
+  wire_transfer: {
+    name: 'Wire Transfer',
+    value: 'wire_transfer',
+    en: 'Wire Transfer',
+    es: 'Transferencia Bancaria'
+  },
+  digital_transfer: {
+    name: 'Digital Transfer',
+    value: 'digital_transfer',
+    en: 'Digital Transfer',
+    es: 'Transferencia Digital'
+  },
+  other: {
+    name: 'Other',
+    value: 'other',
+    en: 'Other',
+    es: 'Otro'
+  }
 }
 const getCountryToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {
+    const split = countries[key].currency.split(',')
+    let currency
+    if (split.length > 0) {
+      currency = split[0]
+    } else {
+      currency = countries[key].currency
+    }
     result.push({
       id: key,
       name: countries[key].name + '(' + countries[key].native + ')',
       emoji: countries[key].emoji,
-      code: '+' + countries[key].code
+      code: '+' + countries[key].code,
+      currency: currency
     })
   })
   return result
@@ -2827,12 +2828,11 @@ const getPaymentToSelect = () => {
   Object.keys(payments).map((key) => {
     result.push({
       key: payments[key].value,
-      name: payments[key].en + '(' + payments[key].es + ')',
+      name: payments[key].en + '(' + payments[key].es + ')'
     })
   })
   return result
 }
-
 const getCurrencyToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {
@@ -2849,9 +2849,8 @@ const getCurrencyToSelect = () => {
 export default {
   continents: continents,
   countries: countries,
-    payments:payments,
+  payments: payments,
   getCountryToSelect: getCountryToSelect,
   getPaymentToSelect: getPaymentToSelect,
-    getCurrencyToSelect: getCurrencyToSelect
   getCurrencyToSelect: getCurrencyToSelect
 }

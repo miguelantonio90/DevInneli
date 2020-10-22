@@ -63,6 +63,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('expense/category', 'ExpenseCategoryController');
 
+        Route::resource('exchange/rate', 'ExchangeRateController');
+
     });
 
 });
