@@ -348,7 +348,7 @@
                           md="12"
                         >
                           <shops-articles
-                            :track_inventory="editArticle.track_inventory"
+                            :track-inventory-parent="track_inventory"
                             :shop-data="shopData"
                             :variants-data="variantData"
                             @updateShopsData="updateShopData"
@@ -493,7 +493,7 @@ export default {
     ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
   },
   created: async function () {
     this.loadingData = true
@@ -569,7 +569,7 @@ export default {
     this.loadingData = false
   },
   mounted () {
-    this.changeInventory()
+      this.track_inventory = this.editArticle.track_inventory
   },
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
