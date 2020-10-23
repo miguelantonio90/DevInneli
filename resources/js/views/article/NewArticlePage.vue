@@ -275,9 +275,10 @@
                       md="3"
                     >
                       <v-switch
-                        v-model="newArticle.track_inventory" @change="changeInventory"
+                        v-model="newArticle.track_inventory"
                         class="md-6"
                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        @change="changeInventory"
                       />
                     </v-col>
                   </v-row>
@@ -492,7 +493,7 @@ export default {
     ...mapState('article', ['saved', 'newArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user'])
   },
   created: async function () {
     this.loadingData = true

@@ -493,7 +493,7 @@ export default {
     ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user'])
   },
   created: async function () {
     this.loadingData = true
@@ -569,7 +569,7 @@ export default {
     this.loadingData = false
   },
   mounted () {
-      this.track_inventory = this.editArticle.track_inventory
+    this.track_inventory = this.editArticle.track_inventory
   },
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
