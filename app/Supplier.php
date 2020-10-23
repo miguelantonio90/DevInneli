@@ -29,7 +29,7 @@ class Supplier extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'company_id', 'exprense_id'];
+    protected $fillable = ['name', 'company_id', 'expense_id'];
 
     public function company(): BelongsTo
     {

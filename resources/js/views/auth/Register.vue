@@ -170,10 +170,7 @@ export default {
   computed: {
     ...mapState('auth', ['isLoggedIn', 'formRegister']),
     ...mapGetters(['errors']),
-    ...mapState('statics', ['arrayCountry']),
-    prefix () {
-      return ''
-    }
+    ...mapState('statics', ['arrayCountry'])
   },
   methods: {
     ...mapActions('auth', ['sendRegisterRequest']),

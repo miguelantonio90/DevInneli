@@ -115,8 +115,6 @@
   </div>
 </template>
 <script>
-/* eslint-disable vue/require-prop-types */
-
 import { mapGetters } from 'vuex'
 
 export default {
@@ -134,7 +132,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
   },
   watch: {
     variantsData: function () {
@@ -146,9 +144,11 @@ export default {
     }
   },
   created () {
+    this.track_inventory = this.trackInventoryParent
     this.initialize()
   },
   mounted () {
+    this.track_inventory = this.trackInventoryParent
   },
   methods: {
     initialize () {
