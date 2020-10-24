@@ -147,12 +147,14 @@ const mutations = {
     state.pending = false
     state.error = error
     state.isLoggedIn = false
-    this._vm.$Toast.fire({
-      icon: 'error',
-      title: this._vm.$language.t('$vuetify.messages.login_failed')
-    })
-    if (error.unauthorized) {
-      this.$routes.push('login')
+    if (error.status === 401 && error.statusText === 'Unauthorized') {
+      localStorage.removeToken()
+      router.push({ name: 'login' })
+    } else {
+      this._vm.$Toast.fire({
+        icon: 'error',
+        title: this._vm.$language.t('$vuetify.messages.login_failed')
+      })
     }
   }
 }
@@ -166,7 +168,6 @@ const actions = {
         commit(SET_USER_DATA, data)
       })
       .catch(({ response }) => {
-        response.unauthorized = true
         commit(FAILED_CATCH, response)
         localStorage.removeToken()
       })
