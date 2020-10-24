@@ -166,7 +166,8 @@ const actions = {
         commit(SET_USER_DATA, data)
       })
       .catch(({ response }) => {
-        commit(FAILED_CATCH, response, 'unauthorized')
+        response.unauthorized = true
+        commit(FAILED_CATCH, response)
         localStorage.removeToken()
       })
   },
