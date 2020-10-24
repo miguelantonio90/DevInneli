@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Company;
 use App\Http\Controllers\Controller;
-use App\Notifications\VerifyEmail;
 use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
@@ -69,7 +68,6 @@ class RegisterController extends Controller
         ]);
 
         event(new Registered($user = $this->create($request->all())));
-        $user = $this->create($request->all());
 
         $this->guard()->login($user);
 
