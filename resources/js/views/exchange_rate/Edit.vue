@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleEditModal"
-    max-width="600"
+    max-width="450"
     persistent
   >
     <v-card>
@@ -24,19 +24,52 @@
               cols="12"
               md="12"
             >
-              <v-combobox
+              <v-autocomplete
                 v-model="editChange.country"
                 :items="arrayCurrency"
-                :label="
-                  $vuetify.lang.t('$vuetify.country')
-                "
+                :label="$vuetify.lang.t('$vuetify.country')"
                 :rules="formRule.country"
-                :loading="isCountryLoading"
-                :disabled="!!isCountryLoading"
-                item-text="name"
                 clearable
+                item-text="name"
                 required
                 return-object
+              >
+                <template
+                  slot="item"
+                  slot-scope="data"
+                >
+                  <template
+                    v-if="
+                      typeof data.item !==
+                        'object'
+                    "
+                  >
+                    <v-list-item-content
+                      v-text="data.item"
+                    />
+                  </template>
+                  <template v-else>
+                    <v-list-item-avatar>
+                      {{
+                        data.item.emoji
+                      }}
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-text-field
+                v-model="editChange.change"
+                :label="$vuetify.lang.t('$vuetify.change')"
+                :rules="formRule.change"
+                required
               />
             </v-col>
           </v-row>
@@ -58,7 +91,7 @@
           color="primary"
           @click="handleSubmit"
         >
-          <v-icon>mdi-check</v-icon>
+          <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
@@ -84,11 +117,9 @@ export default {
   },
   created () {
     this.formValid = false
-    this.getArrayCurrency()
   },
   methods: {
     ...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
-    ...mapActions('statics', ['getArrayCurrency']),
     async handleSubmit () {
       if (this.$refs.form.validate()) {
         await this.updateChange(this.editChange)

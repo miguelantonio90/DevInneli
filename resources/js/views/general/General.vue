@@ -5,6 +5,7 @@
         v-model="tab"
         fixed-tabs
         color="deep-purple accent-4"
+        show-arrows
       >
         <v-tab
           v-for="item in tabName"

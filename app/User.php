@@ -8,6 +8,7 @@ use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -70,30 +71,18 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * @return mixed
+     * @param $data
+     * @param $company
+     * @param $position
+     * @return User
      */
-    public static function getUsers()
-    {
-        return DB::table('users')
-            ->select(
-                'users.*',
-                'shops.*',
-                'positions.key as role',
-                'positions.name as position'
-            )
-            ->join('position_user', 'users.id', '=', 'position_user.user_id')
-            ->join('positions', 'positions.id', '=', 'position_user.position_id')
-            ->join('shops', 'users.id', '=', 'shops.user_id')
-            ->get();
-    }
-
     public static function createFirst($data, $company, $position): User
     {
         $user = new User();
         $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
-        $user->pinCode = 1234;
+        $user->pinCode = rand(1000, 9999);
         $user->country = $data['country']['id'];
         $user->isAdmin = 0;
         $user->isManager = 1;
@@ -104,31 +93,49 @@ class User extends Authenticatable implements MustVerifyEmail
         return $user;
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function assistances()
     {
         return $this->hasMany(Assistance::class);
     }
 
+    /**
+     *
+     */
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
     }
 
+    /**
+     * @param  string  $token
+     */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new MailResetPasswordNotification($token));

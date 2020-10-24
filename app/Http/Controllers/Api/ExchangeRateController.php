@@ -70,7 +70,8 @@ class ExchangeRateController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'country' => ['required']
+            'country' => ['required'],
+            'change' => 'required|numeric|regex:/^[\d]{0,15}(\.[\d]{1,2})?$/'
         ]);
     }
 

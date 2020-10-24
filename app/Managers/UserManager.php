@@ -104,8 +104,8 @@ class UserManager
         $user->email = $data['email'];
         $user->avatar = $data['avatar'];
         $user->phone = $data['phone'];
-        $user->isAdmin = 0;
-        $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : 0;
+        $user->isAdmin = false;
+        $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : false;
         $position ? $user->position_id = $position['id'] : '';
         $idShops = [];
         foreach ($shops as $key => $value) {

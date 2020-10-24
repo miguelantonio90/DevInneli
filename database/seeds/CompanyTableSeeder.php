@@ -35,7 +35,7 @@ class CompanyTableSeeder extends Seeder
             'country' => $this->faker->countryCode,
             'currency' => $this->faker->currencyCode,
             'address' => $this->faker->address,
-            'faker' => 1,
+            'faker' => true,
         ]);
 
         $position = Position::create([
@@ -47,7 +47,7 @@ class CompanyTableSeeder extends Seeder
         User::create([
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
-            'isAdmin' => 1,
+            'isAdmin' => true,
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

@@ -564,7 +564,7 @@ const countries = {
     code: '53',
     continent: 'NA',
     capital: 'Havana',
-    currency: 'CUP,CUC',
+    currency: 'CUC,CUP',
     languages: ['es'],
     emoji: '🇨🇺',
     emojiU: 'U+1F1E8 U+1F1FA'
@@ -2836,11 +2836,13 @@ const getPaymentToSelect = () => {
 const getCurrencyToSelect = () => {
   const result = []
   Object.keys(countries).map((key) => {
+    const split = countries[key].currency.split(',')
+    const currencyId = split.length > 0 ? split[0] : countries[key].currency
     result.push({
       id: key,
-      name: countries[key].name + '(' + countries[key].native + ')',
+      name: countries[key].name + '(' + currencyId + ')',
       emoji: countries[key].emoji,
-      currency: countries[key].currency
+      currencyId: currencyId
     })
   })
   return result

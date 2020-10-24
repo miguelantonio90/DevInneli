@@ -3,6 +3,9 @@
     <v-card-title>
       {{ title }}
     </v-card-title>
+    <v-card-subtitle>
+      <slot name="subtitle" />
+    </v-card-subtitle>
     <v-container fluid>
       <!-- SEARCH BAR -->
       <filter-header
@@ -107,6 +110,11 @@ export default {
   components: { FilterHeader },
   props: {
     title: {
+      type: String,
+      default: '',
+      required: false
+    },
+    subtitle: {
       type: String,
       default: '',
       required: false

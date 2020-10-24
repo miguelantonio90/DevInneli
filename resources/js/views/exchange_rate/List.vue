@@ -19,14 +19,22 @@
           @create-row="toogleNewModal(true)"
           @edit-row="openEditModal($event)"
           @delete-row="deleteHandler($event)"
-        />
+        >
+          <template slot="subtitle">
+            <span style="color: darkred">
+              {{
+                `${$vuetify.lang.t('$vuetify.messages.info_exchange_rate')} ${user.company.currency}`
+              }}
+            </span>
+          </template>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import NewExchangeRate from './New'
 import EditExchangeRate from './Edit'
 
@@ -48,6 +56,7 @@ export default {
       'changes',
       'isTableLoading'
     ]),
+    ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
         {

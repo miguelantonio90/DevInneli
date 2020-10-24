@@ -109,6 +109,7 @@ export default {
     bad_email: '{0}  must be valid',
     required_element: 'This element is required',
     bad_phone: '{0}  must be valid',
+    bad_numeric: '{0}  must be numeric valid',
     select: 'Select',
     pin: {
       min: 'Just a minimum of {0} digits is allowed',
@@ -124,9 +125,9 @@ export default {
     error_delete_manager: "You can't delete this user",
     error_edit_manager: "You can't edit this user. Use profile to edit.",
     success_profile: 'The data has been updated.',
-    success_add: 'The {0} has been created successfully.',
-    success_up: 'The {0} has been updated successfully.',
-    success_del: 'The {0} has been removed successfully.',
+    success_add: '{0} has been created successfully.',
+    success_up: '{0} has been updated successfully.',
+    success_del: '{0} has been removed successfully.',
     failed_catch: 'An error occurred while processing data from {0}',
     check_mail:
             'An email has been sent with the details to change password.',
@@ -135,7 +136,8 @@ export default {
     pin_failed: 'You do not have access. Pin Code is not valid',
     login_failed: 'Invalid email or password.',
     warning_composite: 'This article is composite, please select the element that compose it ',
-    warning_price: "You can't create this article.The cost can't be higher than price"
+    warning_price: "You can't create this article.The cost can't be higher than price",
+    info_exchange_rate: 'The rate of change is with respect to 1'
   },
   // profile
   profile: {
@@ -160,7 +162,8 @@ export default {
     save: 'Save',
     cancel: 'Cancel',
     close: 'Close',
-    change: 'Change'
+    change: 'Change',
+    apply: 'Apply'
   },
   titles: {
     list: '{0} List',

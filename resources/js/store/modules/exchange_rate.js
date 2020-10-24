@@ -1,5 +1,4 @@
 import exchangeRate from '../../api/exchange_rate'
-import currency from '../../api/currency'
 
 const FETCHING_CHANGE = 'FETCHING_CHANGE'
 const SWITCH_CHANGE_NEW_MODAL = 'SWITCH_CHANGE_NEW_MODAL'
@@ -12,7 +11,6 @@ const CHANGE_DELETE = 'CHANGE_DELETE'
 const CHANGE_TABLE_LOADING = 'CHANGE_TABLE_LOADING'
 const FAILED_CHANGE = 'FAILED_CHANGE'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
-const SET_EDIT_CHANGE = 'SET_EDIT_CHANGE'
 
 const state = {
   showNewModal: false,
@@ -21,11 +19,15 @@ const state = {
   changes: [],
   saved: false,
   newChange: {
-    country: null
+    country: null,
+    currency: null,
+    change: 1
   },
   editChange: {
     id: '',
-    country: null
+    country: null,
+    currency: null,
+    change: 1
   },
   isChangeLoading: false,
   isActionInProgress: false,
@@ -56,7 +58,8 @@ const mutations = {
     state.showNewModal = false
     state.newChange = {
       country: null,
-      change: 0
+      currency: null,
+      change: 1
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -66,9 +69,9 @@ const mutations = {
       )
     })
   },
-  [CHANGE_EDIT] (state, categoryId) {
+  [CHANGE_EDIT] (state, id) {
     state.editChange = Object.assign({}, state.changes
-      .filter(node => node.id === categoryId)
+      .filter(node => node.id === id)
       .shift()
     )
   },
@@ -77,7 +80,8 @@ const mutations = {
     state.editChange = {
       id: '',
       country: null,
-      change: 0
+      currency: null,
+      change: 1
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -86,9 +90,6 @@ const mutations = {
         '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.exchange_rate')]
       )
     })
-  },
-  [SET_EDIT_CHANGE] (state, profile) {
-    state.editChange.push(profile)
   },
   [CHANGE_DELETE] (state, error) {
     state.saved = true
@@ -127,28 +128,20 @@ const actions = {
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_CHANGE_SHOW_MODAL, showModal)
   },
-  openEditModal ({ commit }, categoryId) {
+  openEditModal ({ commit }, id) {
     commit(SWITCH_CHANGE_EDIT_MODAL, true)
-    commit(CHANGE_EDIT, categoryId)
+    commit(CHANGE_EDIT, id)
   },
-  openShowModal ({ commit }, categoryId) {
+  openShowModal ({ commit }, id) {
     commit(SWITCH_CHANGE_SHOW_MODAL, true)
-    commit(CHANGE_EDIT, categoryId)
+    commit(CHANGE_EDIT, id)
   },
   async getChanges ({ commit, rootState }) {
-    const current = rootState.auth.userData.company.currency
     commit(CHANGE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
     await exchangeRate
       .fetchExchangeRate()
       .then(({ data }) => {
-        const changes = data.data
-        changes.map((value, key) => {
-          currency.getCurrencyRate(1, current, value.currency,
-            function (e, amount) {
-              data.data[key].change = amount
-            })
-        })
         commit(FETCHING_CHANGE, data.data)
         commit(CHANGE_TABLE_LOADING, false)
         return data
@@ -168,6 +161,7 @@ const actions = {
   },
   async updateChange ({ commit, dispatch }, editChange) {
     commit(ENV_DATA_PROCESS, true)
+
     await exchangeRate
       .sendUpdateRequest(editChange)
       .then(() => {
@@ -177,11 +171,14 @@ const actions = {
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   },
-  deleteChange: async function ({ commit, dispatch }, categoryId) {
+  deleteChange: async function ({ commit, dispatch }, id) {
+    commit(ENV_DATA_PROCESS, true)
+
     await exchangeRate
-      .sendDeleteRequest(categoryId)
+      .sendDeleteRequest(id)
       .then(() => {
         commit(CHANGE_DELETE)
+        commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
       })
       .catch((error) => commit(FAILED_CHANGE, error))

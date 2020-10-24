@@ -83,6 +83,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.phone'),
+          value: 'phone',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
