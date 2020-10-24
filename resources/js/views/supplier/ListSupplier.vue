@@ -17,17 +17,9 @@
           :sort-desc="[false, true]"
           multi-sort
           @create-row="toogleNewModal(true)"
-          @edit-row="editSupplierHandler($event)"
+          @edit-row="openEditModal($event)"
           @delete-row="deleteSupplierHandler($event)"
         >
-          <template
-            v-slot:item.firstName="{ item }"
-          >
-            <v-avatar>
-              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
-            </v-avatar>
-            {{ item.firstName }}
-          </template>
           <template v-slot:item.nameCountry="{ item }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -109,9 +101,6 @@ export default {
       'getSuppliers',
       'deleteSupplier'
     ]),
-    editSupplierHandler ($event) {
-      this.openEditModal($event)
-    },
     deleteSupplierHandler (id) {
       this.$Swal
         .fire({

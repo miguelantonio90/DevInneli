@@ -20,7 +20,6 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   suppliers: [],
-  avatar: '',
   loading: false,
   saved: false,
   newSupplier: {
@@ -140,10 +139,6 @@ const mutations = {
       )
     })
   },
-  [SET_SUPPLIER_AVATAR] (state, avatar) {
-    state.avatar = avatar
-    state.saved = true
-  },
   [FAILED_SUPPLIER] (state, error) {
     state.saved = false
     state.error = error
@@ -199,6 +194,8 @@ const actions = {
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
   async updateSupplier ({ commit, dispatch }, editSupplier) {
+    commit(ENV_DATA_PROCESS, true)
+
     await supplier
       .sendUpdateRequest(editSupplier)
       .then(() => {
@@ -209,9 +206,12 @@ const actions = {
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
   async deleteSupplier ({ commit, dispatch }, supplierId) {
+    commit(ENV_DATA_PROCESS, true)
+
     await supplier
       .sendDeleteRequest(supplierId)
       .then(() => {
+        commit(ENV_DATA_PROCESS, false)
         commit(SUPPLIER_DELETE)
         dispatch('supplier/getSuppliers', null, { root: true })
       })

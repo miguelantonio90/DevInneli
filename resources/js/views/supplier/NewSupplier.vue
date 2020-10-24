@@ -191,7 +191,7 @@ export default {
   },
   computed: {
     ...mapState('supplier', ['saved', 'newSupplier', 'isActionInProgress']),
-    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress', 'isCategoryLoading']),
+    ...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
     bindProps () {
       return {
         mode: 'national',

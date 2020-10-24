@@ -78,25 +78,25 @@ class UserManager
      */
     public function new($data)
     {
-        $positions = $data['positions'];
+        $position = $data['position'];
         $shops = $data['shops'];
         $user = User::create([
             'company_id' => $data['company_id'],
-            'position_id' => $positions['id'],
+            'position_id' => $position['id'],
             'firstName' => $data['firstName'],
             'email' => $data['email']
         ]);
-        return $this->updateData($user, $data, $shops, $positions);
+        return $this->updateData($user, $data, $shops, $position);
     }
 
     /**
      * @param $user
      * @param $data
      * @param $shops
-     * @param $positions
+     * @param $position
      * @return mixed
      */
-    private function updateData($user, $data, $shops, $positions)
+    private function updateData($user, $data, $shops, $position)
     {
         $user->pinCode = $data['pinCode'];
         $user->firstName = $data['firstName'];
@@ -106,7 +106,7 @@ class UserManager
         $user->phone = $data['phone'];
         $user->isAdmin = 0;
         $user->isManager = $user['isManager'] === 1 ? $user['isManager'] : 0;
-        $positions ? $user->position_id = $positions['id'] : '';
+        $position ? $user->position_id = $position['id'] : '';
         $idShops = [];
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['id'];
@@ -126,10 +126,10 @@ class UserManager
      */
     public function edit($id, $data)
     {
-        $positions = $data['position'];
+        $position = $data['position'];
         $shops = $data['shops'];
         $user = User::findOrFail($id);
-        return $this->updateData($user, $data, $shops, $positions);
+        return $this->updateData($user, $data, $shops, $position);
     }
 
     /**
