@@ -25,17 +25,22 @@
       temporary
     >
       <theme-settings />
+      <modal-idle
+        v-if="isIdle"
+        :dialog="!!isIdle"
+      />
     </v-navigation-drawer>
   </v-app>
 </template>
 
 <script>
 import ThemeSettings from './components/ThemeSettings'
+import ModalIdle from './components/core/ModalIdle'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    ThemeSettings
+    ThemeSettings, ModalIdle
   },
   data () {
     return {
@@ -43,7 +48,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['errors'])
+    ...mapGetters(['errors']),
+    ...mapGetters('auth', ['isLoggedIn']),
+    isIdle () {
+      return this.isLoggedIn ? this.$store.state.idleVue.isIdle : null
+    }
   },
   created () {
     // add app events

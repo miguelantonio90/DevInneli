@@ -149,7 +149,10 @@ export default {
     login_failed: 'Correo electrónico o contraseña no válidos.',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
-    info_exchange_rate: 'La tasa de cambio es con respecto a 1'
+    info_exchange_rate: 'La tasa de cambio es con respecto a 1',
+    idle_title: 'Sesión expirada',
+    idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
+    idle_counter: 'La sesión se cierra en {0} segundos'
   },
   // options
   actions: {

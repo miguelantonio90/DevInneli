@@ -151,6 +151,9 @@ const mutations = {
       icon: 'error',
       title: this._vm.$language.t('$vuetify.messages.login_failed')
     })
+    if (error.unauthorized) {
+      this.$routes.push('login')
+    }
   }
 }
 
@@ -163,7 +166,7 @@ const actions = {
         commit(SET_USER_DATA, data)
       })
       .catch(({ response }) => {
-        commit(FAILED_CATCH, response)
+        commit(FAILED_CATCH, response, 'unauthorized')
         localStorage.removeToken()
       })
   },
@@ -247,6 +250,7 @@ const actions = {
         }
       })
       .catch((response) => {
+        response.unauthorized = true
         commit(FAILED_CATCH, response)
       })
   },

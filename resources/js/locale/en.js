@@ -137,7 +137,10 @@ export default {
     login_failed: 'Invalid email or password.',
     warning_composite: 'This article is composite, please select the element that compose it ',
     warning_price: "You can't create this article.The cost can't be higher than price",
-    info_exchange_rate: 'The rate of change is with respect to 1'
+    info_exchange_rate: 'The rate of change is with respect to 1',
+    idle_title: 'Session Expired',
+    idle_info: 'You have left this browser idle for 10 minutes.',
+    idle_counter: 'The session closes in {0} seconds'
   },
   // profile
   profile: {
