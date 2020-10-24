@@ -82,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
-        $user->pinCode = rand(1000, 9999);
+        $user->pinCode = 1234;
         $user->country = $data['country']['id'];
         $user->isAdmin = 0;
         $user->isManager = 1;
