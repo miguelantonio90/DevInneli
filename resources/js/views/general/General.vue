@@ -35,10 +35,11 @@ import ShopList from '../shop/ListShop'
 import ExpenseCategory from '../expense_category/List'
 import ExchangeRate from '../exchange_rate/List'
 import ListPayment from '../payment/ListPayment'
+import TypeOfOrder from '../type_order/List'
 
 export default {
   name: 'General',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate },
+  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder },
   data () {
     return {
       tab: null,
@@ -46,7 +47,8 @@ export default {
         { key: 'shop-list', content: 'shop-list' },
         { key: 'list-payment', content: 'list-payment' },
         { key: 'expense-category', content: 'expense-category' },
-        { key: 'exchange-rate', content: 'exchange-rate' }
+        { key: 'exchange-rate', content: 'exchange-rate' },
+        { key: 'type-of-order', content: 'type-of-order' }
       ]
     }
   },
@@ -56,7 +58,8 @@ export default {
         { name: this.$vuetify.lang.t('$vuetify.menu.shop') },
         { name: this.$vuetify.lang.t('$vuetify.menu.pay') },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category') },
-        { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate') }
+        { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate') },
+        { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order') }
       ]
     }
   }

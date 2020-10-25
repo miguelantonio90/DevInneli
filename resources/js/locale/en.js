@@ -16,6 +16,7 @@ export default {
   name: 'Name',
   firstName: 'First Name',
   lastName: 'Last Name',
+  description: 'Description',
   email: 'Email',
   holder_email: 'Enter company email address',
   password: 'Password',
@@ -47,6 +48,7 @@ export default {
   phone_holder: 'Enter a phone number',
   price: 'Price',
   color: 'Color',
+  principal: 'Principal',
   // menu
   menu: {
     setting: 'Setting',
@@ -91,7 +93,8 @@ export default {
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
     supply_product: 'Supply',
-    finance: 'Finance'
+    finance: 'Finance',
+    type_of_order: 'Type of Order'
   },
   // settings
   settings: {

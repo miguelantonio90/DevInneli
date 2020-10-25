@@ -32,6 +32,7 @@ export default {
   company: 'Compañía',
   first_name: 'Nombre(s)',
   last_name: 'Apellidos',
+  description: 'Descripción',
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
@@ -47,6 +48,7 @@ export default {
   phone_holder: 'Entre su número de teléfono',
   price: 'Precio',
   color: 'Color',
+  principal: 'Principal',
   // menu
   menu: {
     setting: 'Configuración',
@@ -91,7 +93,8 @@ export default {
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
     supply_product: 'Abastecer',
-    finance: 'Finanzas'
+    finance: 'Finanzas',
+    type_of_order: 'Tipo de Pedido'
   },
   // settings
   settings: {
