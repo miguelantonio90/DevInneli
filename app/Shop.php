@@ -4,6 +4,8 @@ namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property mixed name
@@ -54,17 +56,22 @@ class Shop extends Model
         return $shop;
     }
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
 
-    public function articles()
+    public function typeOfOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeOfOrder::class);
+    }
+
+    public function articles(): belongsToMany
     {
         return $this->belongsToMany(Articles::class);
     }
 
-    public function assistances()
+    public function assistances(): HasMany
     {
         return $this->hasMany(Assistance::class);
     }
