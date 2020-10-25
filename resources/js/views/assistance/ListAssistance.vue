@@ -11,6 +11,7 @@
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.assistance'),])"
           csv-filename="Assistance"
+          :is-loading="isTableLoading"
           :headers="getTableColumns"
           :items="assistances"
           :sort-by="['datetimeEntry']"

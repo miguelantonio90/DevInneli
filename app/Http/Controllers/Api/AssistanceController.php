@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\AssistanceManager;
+use App\Managers\CompanyManager;
 use Illuminate\Contracts\Validation\Validator as ValidatorAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class AssistanceController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function store(Request $request)
     {
@@ -75,6 +77,7 @@ class AssistanceController extends Controller
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function update(Request $request, $id)
     {

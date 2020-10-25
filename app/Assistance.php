@@ -25,7 +25,7 @@ class Assistance extends Model
      *
      * @var array
      */
-    protected $fillable = ['datetimeEntry', 'datetimeExit', 'totalHours', 'user_id', 'shop_id'];
+    protected $fillable = ['datetimeEntry', 'datetimeExit', 'totalHours', 'user_id', 'shop_id', 'company_id',];
 
     public function user(): BelongsTo
     {

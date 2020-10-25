@@ -5,7 +5,7 @@ namespace App\Managers;
 
 
 use App\Assistance;
-use DateTime;
+use Carbon\Carbon;
 use Exception;
 
 class AssistanceManager
@@ -53,12 +53,16 @@ class AssistanceManager
      */
     public function new($data)
     {
+        $entry = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeEntry']));
+        $exit = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeExit']));
+
         return Assistance::create([
-            'datetimeEntry' => new DateTime($data['datetimeEntry']),
-            'datetimeExit' => new DateTime($data['datetimeExit']),
+            'datetimeEntry' => Carbon::parse($entry),
+            'datetimeExit' => Carbon::parse($exit),
             'totalHours' => $data['totalHours'],
             'shop_id' => $data['shop'],
             'user_id' => $data['user'],
+            'company_id' => (CompanyManager::getCompanyByAdmin())->id
         ]);
     }
 
@@ -71,11 +75,15 @@ class AssistanceManager
     public function edit($id, $data)
     {
         $assistance = Assistance::findOrFail($id);
+        $entry = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeEntry']));
+        $exit = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeExit']));
+
         if ($assistance) {
-            $assistance->datetimeEntry = new DateTime($data['datetimeEntry']);
-            $assistance->datetimeExit = new DateTime($data['datetimeExit']);
+            $assistance->datetimeEntry = Carbon::parse($entry);
+            $assistance->datetimeExit = Carbon::parse($exit);
             $assistance->shop_id = $data['shop']['id'];
             $assistance->user_id = $data['user']['id'];
+            $assistance->company_id = (CompanyManager::getCompanyByAdmin())->id;
             $assistance->save();
 
             return $assistance;
