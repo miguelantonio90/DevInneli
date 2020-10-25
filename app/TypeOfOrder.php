@@ -1,0 +1,47 @@
+<?php
+
+namespace App;
+
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+/**
+ * @method static latest()
+ * @method static create(array $array)
+ * @method static findOrFail($id)
+ */
+class TypeOfOrder extends Model
+{
+    use Uuid;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $guarded = [];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'description', 'principal', 'company_id'
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function shops(): BelongsToMany
+    {
+        return $this->belongsToMany(Shop::class);
+    }
+}
