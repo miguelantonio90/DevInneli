@@ -48,14 +48,16 @@ class TypeOfOrderManager
         $result = [];
         if (count($shopTypeOfOrder) > 0) {
             foreach ($shopTypeOfOrder as $k => $value) {
-                $result[$k]['id'] = $value['typeOfOrder']['id'];
-                $result[$k]['idShopOrder'] = $value['id'];
-                $result[$k]['available'] = $value['available'] === 1;
-                $result[$k]['principal'] = $value['principal'] === 1;
-                $result[$k]['shopName'] = $value['shop']['name'];
-                $result[$k]['name'] = $value['typeOfOrder']['name'];
-                $result[$k]['description'] = $value['typeOfOrder']['description'];
-                $result[$k]['shops'] = $value['typeOfOrder']['shops'];
+                if(is_array($value['typeOfOrder'])){
+                    $result[$k]['id'] = $value['typeOfOrder']['id'];
+                    $result[$k]['name'] = $value['typeOfOrder']['name'];
+                    $result[$k]['description'] = $value['typeOfOrder']['description'];
+                    $result[$k]['shops'] = $value['typeOfOrder']['shops'];
+                    $result[$k]['idShopOrder'] = $value['id'];
+                    $result[$k]['available'] = $value['available'] === 1;
+                    $result[$k]['principal'] = $value['principal'] === 1;
+                    $result[$k]['shopName'] = $value['shop']['name'];
+                }
             }
         }
         return $result;
