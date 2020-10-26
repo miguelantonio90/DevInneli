@@ -45,7 +45,7 @@
               md="12"
             >
               <v-select
-                v-model="newOrder.shops"
+                v-model="shops"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
@@ -115,7 +115,9 @@ export default {
   },
   created () {
     this.formValid = false
-    this.getShops()
+    this.getShops().then(() => {
+      this.newOrder.shops = this.shops
+    })
   },
   methods: {
     ...mapActions('typeOrder', ['createTypeOrder', 'toogleNewModal']),

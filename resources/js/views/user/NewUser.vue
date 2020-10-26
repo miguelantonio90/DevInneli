@@ -148,7 +148,7 @@
               md="12"
             >
               <v-select
-                v-model="newUser.shops"
+                v-model="shops"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
@@ -248,7 +248,9 @@ export default {
   created () {
     this.formValid = false
     this.getRoles()
-    this.getShops()
+    this.getShops().then(() => {
+      this.newUser.shops = this.shops
+    })
   },
   methods: {
     ...mapActions('user', ['createUser', 'toogleNewModal']),

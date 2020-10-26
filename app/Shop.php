@@ -66,6 +66,11 @@ class Shop extends Model
         return $this->belongsToMany(TypeOfOrder::class);
     }
 
+    public function shopTypeOfOrders()
+    {
+        return $this->hasMany(ShopTypeOfOrder::class);
+    }
+
     public function articles(): belongsToMany
     {
         return $this->belongsToMany(Articles::class);

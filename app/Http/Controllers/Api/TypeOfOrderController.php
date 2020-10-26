@@ -53,6 +53,7 @@ class TypeOfOrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $this->validator($data)->validate();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $user = $this->typeOrderManager->new($data);
@@ -89,9 +90,11 @@ class TypeOfOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
+        $data = $request->all();
+        $this->validator($data)->validate();
+        $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         return ResponseHelper::sendResponse(
-            $this->typeOrderManager->edit($id, $request->all()),
+            $this->typeOrderManager->edit($id, $data),
             'Type of Order has updated successfully.'
         );
     }

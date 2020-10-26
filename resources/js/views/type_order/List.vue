@@ -15,25 +15,21 @@
           :items="typeOrders"
           :sort-by="['name']"
           :sort-desc="[false, true]"
+          :options="bindProps"
           multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="openEditModal($event)"
           @delete-row="deleteHandler($event)"
         >
-          <template v-slot:item.shopsNames="{ item }">
-            <v-chip
-              v-for="(shop, i) of item.shopsNames"
-              :key="i"
-            >
-              {{ shop }}
-            </v-chip>
-          </template>
-          <template v-slot:item.principal="{ item }">
-            <v-switch
-              v-model="item.principal"
-              inset
-              @change="setPrincipal(item)"
-            />
+          <template v-slot:group.header="{items, isOpen, toggle}">
+            <th colspan="100%">
+              <v-icon
+                @click="toggle"
+              >
+                {{ isOpen ? 'mdi-minus' : 'mdi-plus' }}
+              </v-icon>
+              {{ $vuetify.lang.t('$vuetify.panel.shop').toUpperCase()+': '+ items[0].shopName }}
+            </th>
           </template>
         </app-data-table>
       </v-col>
@@ -42,7 +38,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import NewTypeOrder from './New'
 import EditTypeOrder from './Edit'
 
@@ -65,21 +61,23 @@ export default {
       'isTableLoading'
     ]),
     ...mapGetters('auth', ['user']),
+    bindProps () {
+      return {
+        itemKey: Math.random().toString(),
+        groupBy: 'shopName'
+      }
+    },
     getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.name'),
           value: 'name',
-          select_filter: true
+          select_filter: true,
+          groupable: false
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
-          select_filter_many: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.principal'),
-          value: 'principal',
+          value: 'shopName',
           select_filter: true
         },
         {

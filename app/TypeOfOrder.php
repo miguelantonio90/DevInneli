@@ -6,11 +6,15 @@ use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static latest()
  * @method static create(array $array)
  * @method static findOrFail($id)
+ * @property mixed name
+ * @property mixed description
+ * @property mixed company_id
  */
 class TypeOfOrder extends Model
 {
@@ -37,11 +41,13 @@ class TypeOfOrder extends Model
         return $this->belongsTo(Company::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class);
+    }
+
+    public function shopTypeOfOrders(): HasMany
+    {
+        return $this->hasMany(ShopTypeOfOrder::class);
     }
 }

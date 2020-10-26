@@ -5,6 +5,7 @@ namespace App\Managers;
 
 
 use App\Shop;
+use App\ShopTypeOfOrder;
 use App\TypeOfOrder;
 
 class TypeOfOrderManager
@@ -14,30 +15,48 @@ class TypeOfOrderManager
      */
     public function findAllByCompany()
     {
+
+        $company = CompanyManager::getCompanyByAdmin();
         if (auth()->user()['isAdmin'] === 1) {
             $typeOrder = TypeOfOrder::latest()
                 ->with('company')
-                ->with('shops')
-                ->orderBy('principal', 'DESC')
+                ->with('shopTypeOfOrders')
                 ->get();
         } else {
-            $company = CompanyManager::getCompanyByAdmin();
-            $typeOrder = TypeOfOrder::latest()
-                ->where('company_id', '=', $company->id)
-                ->with('company')
-                ->with('shops')
-                ->orderBy('created_at', 'ASC')
-                ->get();
-        }
-        foreach ($typeOrder as $k => $value) {
-            $shopNames = [];
-            foreach ($value['shops'] as $sh => $shop) {
-                $shopNames[$sh] = $shop['name'];
-            }
-            $typeOrder[$k]['shopsNames'] = array_unique($shopNames);
+            $typeOrder = $this->getShopTypeOrder($company);
         }
 
         return $typeOrder;
+
+    }
+
+    /**
+     * @param $company
+     * @return array
+     */
+    public function getShopTypeOrder($company): array
+    {
+        $shopTypeOfOrder = ShopTypeOfOrder::latest()
+            ->with('shop')
+            ->with([
+                'typeOfOrder' => function ($q) use ($company) {
+                    $q->where('type_of_orders.company_id', '=', $company->id)
+                        ->with('shops');
+                }
+            ])
+            ->get();
+        $result = [];
+        foreach ($shopTypeOfOrder as $k => $value) {
+            $result[$k]['id'] = $value['typeOfOrder']['id'];
+            $result[$k]['idShopOrder'] = $value['id'];
+            $result[$k]['available'] = $value['available'] === 1;
+            $result[$k]['principal'] = $value['principal'] === 1;
+            $result[$k]['shopName'] = $value['shop']['name'];
+            $result[$k]['name'] = $value['typeOfOrder']['name'];
+            $result[$k]['description'] = $value['typeOfOrder']['description'];
+            $result[$k]['shops'] = $value['typeOfOrder']['shops'];
+        }
+        return $result;
     }
 
     /**
@@ -46,36 +65,27 @@ class TypeOfOrderManager
      */
     public function new($data)
     {
-        $shops = $data['shops'];
         $typeOrder = TypeOfOrder::create([
             'company_id' => $data['company_id'],
             'name' => $data['name'],
-            'description' => $data['description']
+            'description' => $data['description'],
         ]);
-        return $this->updateData($typeOrder, $data, $shops);
-    }
-
-    /**
-     * @param $typeOrder
-     * @param $data
-     * @param $shops
-     * @return mixed
-     */
-    private function updateData($typeOrder, $data, $shops)
-    {
-        $typeOrder->name = $data['name'];
-        $typeOrder->description = $data['description'];
 
         $idShops = [];
-        foreach ($shops as $key => $value) {
-            $idShops[$key] = $value['id'];
+        foreach ($data['shops'] as $sh => $shop) {
+            $idShops[$sh] = $shop['id'];
+            $shopType = new ShopTypeOfOrder();
+            $shopType->type_of_order_id = $typeOrder->id;
+            $shopType->shop_id = $shop['id'];
+            $shopType->available = $shop['id'] ? true : false;
+            $shopType->save();
+
+            $typeOrder->shopTypeOfOrders()->saveMany([$shopType]);
         }
-        $typeOrderShop = Shop::find($idShops);
+        $employShop = Shop::find($idShops);
+        $typeOrder->shops()->sync($employShop);
 
-        $typeOrder->shops()->sync($typeOrderShop);
         $typeOrder->save();
-
-        $this->setPrincipal($typeOrder->id, $data['principal']);
 
         return $typeOrder;
     }
@@ -87,10 +97,26 @@ class TypeOfOrderManager
      */
     public function edit($id, $data)
     {
-        $shops = $data['shops'];
         $typeOrder = TypeOfOrder::findOrFail($id);
+        $typeOrder->company_id = $data['company_id'];
+        $typeOrder->name = $data['name'];
+        $typeOrder->description = $data['description'];
+        $idShops = [];
+        $typeOrder->shopTypeOfOrders()->delete();
+        foreach ($data['shops'] as $sh => $shop) {
+            $idShops[$sh] = $shop['id'];
+            $shopType = new ShopTypeOfOrder();
+            $shopType->type_of_order_id = $typeOrder->id;
+            $shopType->shop_id = $shop['id'];
+            $shopType->save();
+            $typeOrder->shopTypeOfOrders()->saveMany([$shopType]);
+        }
+        $employShop = Shop::find($idShops);
+        $typeOrder->shops()->sync($employShop);
 
-        return $this->updateData($typeOrder, $data, $shops);
+        $typeOrder->save();
+
+        return $typeOrder;
     }
 
     /**
