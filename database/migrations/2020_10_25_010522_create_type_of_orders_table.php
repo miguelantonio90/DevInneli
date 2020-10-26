@@ -17,7 +17,6 @@ class CreateTypeOfOrdersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->boolean('principal')->default(false);
             $table->timestamps();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')

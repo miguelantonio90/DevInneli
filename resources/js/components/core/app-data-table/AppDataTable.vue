@@ -29,7 +29,7 @@
     </v-container>
     <v-data-table
       :class="getClassStyle"
-      v-bind="$attrs"
+      v-bind="options"
       :loading="isLoading"
       :items="itemsFiltered || []"
       :headers="headersChoosenObjs || []"
@@ -67,29 +67,53 @@
         />
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon
-          v-if="viewShowButton"
-          class="mr-2"
-          small
-          @click="showButtonClicked(item.id)"
-        >
-          mdi-eye
-        </v-icon>
-        <v-icon
-          v-if="viewEditButton"
-          class="mr-2"
-          small
-          @click="editButtonClicked(item.id)"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-icon
-          v-if="viewDeleteButton"
-          small
-          @click="deleteButtonClicked(item.id)"
-        >
-          mdi-delete
-        </v-icon>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="viewShowButton"
+              class="mr-2"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="showButtonClicked(item.id)"
+            >
+              mdi-eye
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.actions.show') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="viewEditButton"
+              class="mr-2"
+              color="warning"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="editButtonClicked(item.id)"
+            >
+              mdi-pencil
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.actions.edit') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="viewDeleteButton"
+              class="mr-2"
+              color="error"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="deleteButtonClicked(item.id)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.actions.delete') }}</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </v-card>
@@ -108,6 +132,7 @@ const DEFAULT_ARRAY = []
 export default {
   name: 'AppDataTable',
   components: { FilterHeader },
+  inheritAttrs: false,
   props: {
     title: {
       type: String,
@@ -118,6 +143,12 @@ export default {
       type: String,
       default: '',
       required: false
+    },
+    options: {
+      type: [Object, Array],
+      default: () => {
+        return []
+      }
     },
     isLoading: {
       type: Boolean,

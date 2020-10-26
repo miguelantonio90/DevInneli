@@ -166,6 +166,7 @@ export default {
     created: 'Crear',
     newF: 'Nueva',
     edit: 'Editar',
+    show: 'Mostrar',
     delete: 'Eliminar',
     list: 'Listar',
     save: 'Guardar',

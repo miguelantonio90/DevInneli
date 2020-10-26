@@ -162,6 +162,7 @@ export default {
     new: 'New',
     created: 'Create',
     newF: 'New',
+    show: 'Show',
     edit: 'Edit',
     delete: 'Delete',
     list: 'List',
