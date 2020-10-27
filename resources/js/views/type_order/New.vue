@@ -55,6 +55,7 @@
                 :rules="formRule.shops"
                 required
                 return-object
+                @change="setOrders($event)"
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
@@ -122,6 +123,9 @@ export default {
   methods: {
     ...mapActions('typeOrder', ['createTypeOrder', 'toogleNewModal']),
     ...mapActions('shop', ['getShops']),
+    setOrders (shops) {
+      this.newOrder.shops = shops
+    },
     async handleSubmit () {
       if (this.$refs.form.validate()) {
         await this.createTypeOrder(this.newOrder)
