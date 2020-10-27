@@ -132,6 +132,21 @@ export default {
             mainNav: 'indigo',
             sideMenu: 'white'
           }
+        },
+        {
+          key: 'cyan',
+          value: {
+            sideNav: 'cyan',
+            mainNav: 'cyan',
+            sideMenu: 'white'
+          }
+        }, {
+          key: 'orange',
+          value: {
+            sideNav: 'orange',
+            mainNav: 'orange',
+            sideMenu: 'white'
+          }
         }
       ]
     },

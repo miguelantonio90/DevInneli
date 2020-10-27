@@ -71,4 +71,21 @@ export default {
   top: 50% !important
   right: 0
   border-radius: 0
+/* custom scrollbar
+
+\::-webkit-scrollbar
+  width: 20px
+
+\::-webkit-scrollbar-track
+  background-color: transparent
+
+\::-webkit-scrollbar-thumb
+  background-color: #d6dee1
+  border-radius: 20px
+  border: 6px solid transparent
+  background-clip: content-box
+
+  &:hover
+    background-color: #a8bbbf
+
 </style>

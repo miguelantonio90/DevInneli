@@ -22,14 +22,20 @@
                     >
                   </v-avatar>
                   <h3>{{ getCompanyName }}</h3>
-                  <v-progress-circular
+                  <!-- <v-progress-circular
                     v-if="loading"
                     :width="3"
                     indeterminate
                     color="primary"
-                  />
+                  />-->
                 </div>
               </div>
+              <v-progress-linear
+                v-if="loading"
+                color="primary"
+                indeterminate
+                rounded
+              />
               <vue-pincode
                 ref="pincodeInput"
                 @pincode="login"
