@@ -158,6 +158,7 @@
                 :rules="formRule.shops"
                 required
                 return-object
+                @change="setOrders($event)"
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
@@ -293,6 +294,9 @@ export default {
         event.preventDefault()
         return false
       }
+    },
+    setOrders (shops) {
+      this.newUser.shops = shops
     },
     async createNewUser () {
       if (this.$refs.form.validate()) {
