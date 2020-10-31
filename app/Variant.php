@@ -5,6 +5,7 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Variant
@@ -29,11 +30,18 @@ class Variant extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'articles_id',
+        'name','value', 'articles_id',
     ];
 
     public function article(): BelongsTo
     {
         return $this->belongsTo(Articles::class);
+    }
+    public function variants(): HasMany
+    {
+        return $this->hasMany(Articles::class)->addSelect([
+            'variantsValues' => self::select('*')
+                ->whereColumn('articles.variant_id', 'variants.id')
+        ]);
     }
 }

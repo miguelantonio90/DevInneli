@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static findOrFail($id)
  * @method static find(array $idShops)
  */
-class Shop extends Model
+class Shops extends Model
 {
     use Uuid;
 
@@ -32,7 +32,7 @@ class Shop extends Model
 
     public static function createFirst($data, $company)
     {
-        $shop = new Shop();
+        $shop = new Shops();
         $shop->name = $data['shopName'];
         $shop->country = $data['country']['id'];
         $shop->company_id = $company->id;
@@ -44,7 +44,7 @@ class Shop extends Model
 
     public static function makeShop($properties)
     {
-        $shop = new Shop();
+        $shop = new Shops();
         $shop->name = $properties['name'];
         $shop->country = $properties['country'];
         $shop->address = $properties['address'];

@@ -147,7 +147,9 @@ export default {
     pin_failed: 'No tienes acceso. El código PIN no es válido',
     login_failed: 'Correo electrónico o contraseña no válidos.',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
-    warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios'
+    warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
+    warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.'
   },
   // options
   actions: {
@@ -254,7 +256,8 @@ export default {
     barCode: 'Código de Barras',
     options: 'Opciones',
     cant: 'Cantidad',
-    total_cost: 'Costo Total: '
+    total_cost: 'Costo Total: ',
+    total_price: 'Precio Total: '
   },
   shop_article: {
     under_inventory: 'Bajo Inventario',

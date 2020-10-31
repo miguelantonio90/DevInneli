@@ -2,7 +2,7 @@
 
 namespace App\Managers;
 
-use App\Shop;
+use App\Shops;
 use App\User;
 
 class ShopManager
@@ -12,7 +12,7 @@ class ShopManager
      */
     public function findAllByCompany()
     {
-        return Shop::latest()
+        return Shops::latest()
             ->where('company_id', '=', (CompanyManager::getCompanyByAdmin())->id)
             ->get();
     }
@@ -27,7 +27,7 @@ class ShopManager
         $company = CompanyManager::getCompanyByAdmin();
         $data['company_id'] = $company->id;
         $user = User::findOrFail(auth()->id());
-        $shop = Shop::create($data);
+        $shop = Shops::create($data);
         if (auth()->user()['isManager'] === 1 && auth()->user()['company_id'] === $company->id) {
             $user->shops()->attach($shop);
         }
@@ -41,7 +41,7 @@ class ShopManager
      */
     public function edit($id, $request)
     {
-        return Shop::findOrFail($id)->update($request->all());
+        return Shops::findOrFail($id)->update($request->all());
     }
 
     /**
@@ -50,14 +50,14 @@ class ShopManager
      */
     public function delete($id)
     {
-        $shops = Shop::latest()
+        $shops = Shops::latest()
             ->where('company_id', '=', (CompanyManager::getCompanyByAdmin())->id)
             ->get();
         if (count($shops) > 1) {
-            $delete = Shop::findOrFail($id)->delete();
-            return [true, $delete, 'Shop has deleted successfully.'];
+            $delete = Shops::findOrFail($id)->delete();
+            return [true, $delete, 'Shops has deleted successfully.'];
         }
-        return [false, null, "Shop can't by deleted"];
+        return [false, null, "Shops can't by deleted"];
 
     }
 }

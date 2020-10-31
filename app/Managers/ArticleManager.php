@@ -4,9 +4,11 @@ namespace App\Managers;
 
 use App\Articles;
 use App\ArticlesComposite;
-use App\Shop;
+use App\ArticlesShops;
+use App\Shops;
 use App\Variant;
 use App\VariantsValues;
+use Exception;
 
 class ArticleManager
 {
@@ -18,7 +20,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param  VariantManager  $variantManager
+     * @param VariantManager $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -47,9 +49,8 @@ class ArticleManager
                 ])
                 ->with('composites')
                 ->with('shops')
-                ->with('variants_values')
-                ->with('variants_shops')
                 ->with('variants')
+                ->with('variantValues')
                 ->with([
                     'images' => function ($q) {
                         $q->orderBy('article_images.default', 'desc');
@@ -69,9 +70,11 @@ class ArticleManager
                 $shopNames[$sh] = $shop['name'];
             }
             $articles[$k]['shopsNames'] = array_unique($shopNames);
-
-            $percent = (100 * $article['cost']) / $article['price'];
-            $articles[$k]['percent'] = $percent;
+            if (isset($article['price'])) {
+                $articles[$k]['percent'] = 0;
+            } else {
+                $articles[$k]['percent'] = $article['price'] !== '0.00' && $article['price'] !== '0' ? round((100 * $article['cost']) / $article['price'], 2) : 0;
+            }
         }
         return $articles;
     }
@@ -83,20 +86,90 @@ class ArticleManager
     public function new($data)
     {
         $shops = $data['shops'];
-        $article = Articles::create([
-            'company_id' => $data['company_id'],
-            'name' => $data['name'],
-        ]);
+        $article = $this->insertArticle($data);
         if ($data['composite'] === true) {
             $this->updateComposite($article, $data);
+        } else {
+            $this->updateData($article, $data);
+            if (count($data['variants']) !== 0) {
+                foreach ($data['variants'] as $key => $value) {
+                    $this->variantManager->newVariant($value, $article->id);
+                }
+                foreach ($data['variantsValues'] as $key => $value) {
+                    $value['company_id'] = $data['company_id'];
+                    $articleChildren = $this->insertArticle($value);
+                    $this->updateData($articleChildren, $value);
+                    $articleChildren->articles_id = $article->id;
+                    $articleChildren->save();
+                    $arrayShops = $this->getShopsByVariant($shops, $articleChildren);
+                    foreach ($arrayShops as $k => $v) {
+                        $this->variantManager->newArticleShop($v, $articleChildren);
+                    }
+                }
+            } else {
+                foreach ($shops as $key => $value) {
+                    $this->variantManager->newArticleShop($value, $article);
+                }
+            }
+            $article->save();
+            return $article;
         }
-        $this->updateVariant($article, $data, $shops);
 
         if (count($data['images']) > 0) {
             ArticleImageManager::new($article->id, $data['images']);
         }
 
         return $article;
+    }
+
+    /**
+     * @param $data
+     * @return Articles
+     */
+    public function insertArticle($data): Articles
+    {
+        return Articles::create([
+            'company_id' => $data['company_id'],
+            'name' => $data['name'],
+        ]);
+    }
+
+    /**
+     * @param $article
+     * @param $data
+     * @return mixed
+     */
+    private function updateData($article, $data)
+    {
+        if (isset($data['barCode'])) {
+            $article->barCode = $data['barCode'];
+        }
+        if (isset($data['composite'])) {
+            $article->composite = false;
+        }
+        if (isset($data['cost'])) {
+            $article->cost = $data['cost'];
+        }
+        if (isset($data['price'])) {
+            $article->price = $data['price'];
+        }
+        if (isset($data['ref'])) {
+            $article->ref = $data['ref'];
+        }
+        if (isset($data['track_inventory'])) {
+            $article->track_inventory = $data['track_inventory'];
+        }
+        if (isset($data['unit'])) {
+            $article->unit = $data['unit'] === 'unit';
+        }
+        if (isset($data['category']['id'])) {
+            $article->category_id = $data['category']['id'];
+        }
+        if (isset($data['color'])) {
+            $article->color = $data['color'];
+        }
+        $article->save();
+
     }
 
     /**
@@ -135,84 +208,21 @@ class ArticleManager
         $article->save();
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
-                $article = ArticlesComposite::create([
+                $newArt= ArticlesComposite::create([
                     'articles_id' => $article->id,
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
                     'price' => $value['price'],
                 ]);
             } else {
-                $article = ArticlesComposite::findOrFail($value['id']);
-                $article['composite_id'] = $value['composite_id'];
-                $article['cant'] = $value['cant'];
-                $article['price'] = $value['price'];
-                $article->save();
+                var_dump($value['id']);
+                $article_c = ArticlesComposite::findOrFail($value['id']);
+                $article_c['cant'] = $value['cant'];
+                $article_c['price'] = $value['price'];
+                $article_c->save();
             }
         }
 
-    }
-
-    /**
-     * @param $article
-     * @param $data
-     * @param $shops
-     * @return mixed
-     */
-    private function updateVariant($article, $data, $shops)
-    {
-        if (isset($data['barCode'])) {
-            $article->barCode = $data['barCode'];
-        }
-        if (isset($data['composite'])) {
-            $article->composite = $data['composite'];
-        }
-        if (isset($data['cost'])) {
-            $article->cost = $data['cost'];
-        }
-        if (isset($data['price'])) {
-            $article->price = $data['price'];
-        }
-        if (isset($data['ref'])) {
-            $article->ref = $data['ref'];
-        }
-        if (isset($data['track_inventory'])) {
-            $article->track_inventory = $data['track_inventory'];
-        }
-        if (isset($data['unit'])) {
-            $article->unit = $data['unit'] === 'unit';
-        }
-        if (isset($data['category']['id'])) {
-            $article->category_id = $data['category']['id'];
-        }
-        if (isset($data['color'])) {
-            $article->color = $data['color'];
-        }
-        $idShops = [];
-        foreach ($shops as $key => $value) {
-            $idShops[$key] = $value['shop_id'];
-        }
-        $employShop = Shop::find($idShops);
-        foreach ($data['variants'] as $key => $value) {
-            if (isset($value['id'])) {
-                $this->variantManager->editVariant($value);
-            } else {
-                $this->variantManager->newVariant($value, $article->id);
-            }
-        }
-        $article->shops()->sync($employShop);
-        foreach ($data['variantsValues'] as $key => $value) {
-            if (isset($value['id'])) {
-                $variantValue = $this->variantManager->editVariantValue($value['id'], $article->id);
-            } else {
-                $variantValue = $this->variantManager->newVariantValue($value, $article->id);
-            }
-            $arrayShops = $this->getVariants($shops, $variantValue);
-            foreach ($arrayShops as $k => $v) {
-                $this->variantManager->newVariantShop($v, $variantValue);
-            }
-        }
-        $article->save();
-        return $article;
     }
 
     /**
@@ -220,11 +230,11 @@ class ArticleManager
      * @param $variantValue
      * @return array
      */
-    private function getVariants($data, $variantValue): array
+    private function getShopsByVariant($data, $variantValue): array
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if ($value['variant'] === $variantValue->variant) {
+            if ($value['name'] === $variantValue->name) {
                 $result[] = $value;
             }
         }
@@ -246,13 +256,9 @@ class ArticleManager
             $this->removeComposite($article, $data['composites']);
             $this->updateComposite($article, $data);
         } else {
-            $this->removeVariants($article, $data['variants']);
-            if (count($data['variants']) === 0) {
-                $this->variantManager->removeAll('vv', $article->id);
-            } else {
-                $this->removeVariantsValues($article, $data['variants_values']);
-            }
-            $this->updateVariant($article, $data, $shops);
+            $this->updateVariants($article, $data['variants']);
+            $this->updateChidrensArticles($article, $data);
+
         }
         return $article;
     }
@@ -286,12 +292,12 @@ class ArticleManager
      * @param $article
      * @param $variants
      */
-    public function removeVariants($article, $variants): void
+    public function updateVariants($article, $variants): void
     {
-        $variant = Variant::latest()
+        $variantDB = Variant::latest()
             ->where('articles_id', '=', $article->id)
             ->get();
-        foreach ($variant as $key => $value) {
+        foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($variants as $k => $v) {
                 if (isset($v['id']) && $v['id'] === $value['id']) {
@@ -302,27 +308,82 @@ class ArticleManager
                 $this->variantManager->deleteVariant($value->id);
             }
         }
+        foreach ($variants as $k => $v) {
+            if ($value['id'] != "") {
+                $this->variantManager->editVariant($v);
+            } else {
+                $this->variantManager->newVariant($v, $article->id);
+            }
+        }
     }
 
     /**
      * @param $article
      * @param $variantValues
      */
-    public function removeVariantsValues($article, $variantValues): void
+    public function updateChidrensArticles($article, $data): void
     {
-        $variantsValue = VariantsValues::latest()
+        $shops = $data['shops'];
+        $variantValues = $data['variant_values'];
+        $variantsValue = Articles::latest()
             ->where('articles_id', '=', $article->id)
             ->get();
         foreach ($variantsValue as $key => $value) {
             $exist = false;
             foreach ($variantValues as $k => $v) {
-                if ($v['id'] === $value['id']) {
+                if (isset($v['id'])) {
+                    if ($v['id'] === $value['id']) {
+                        $exist = true;
+                    }
+                }
+            }
+            if (!$exist) {
+                $this->delete($value['id']);
+            }
+        }
+        foreach ($variantValues as $k => $v) {
+            if (!isset($v['id'])) {
+                $v['company_id'] = $data['company_id'];
+                $articleChildren = $this->insertArticle($v);
+                $articleChildren->articles_id = $article->id;
+                $articleChildren->save();
+            } else {
+                $articleChildren = Articles::findOrFail($v['id']);
+            }
+            $articleChildren->name = $v['name'];
+            $articleChildren->save();
+            $this->updateData($articleChildren, $v);
+            $this->updateShops($articleChildren, $data);
+            $arrayShops = $this->getShopsByVariant($shops, $articleChildren);
+            foreach ($arrayShops as $l => $m) {
+                if ($m['articles_shop_id'] == "") {
+                    $this->variantManager->newArticleShop($m, $articleChildren);
+                } else {
+                    $this->variantManager->updateArticleShop($m['articles_shop_id'], $m);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @param $article
+     * @param $shopsArticles
+     */
+    public function updateShops($article, $shopsArticles): void
+    {
+        $variantDB = ArticlesShops::latest()
+            ->where('articles_id', '=', $article->id)
+            ->get();
+        foreach ($variantDB as $key => $value) {
+            $exist = false;
+            foreach ($shopsArticles as $k => $v) {
+                if (isset($v['articles_shop_id']) && $v['id'] === $value['id']) {
                     $exist = true;
                 }
             }
             if (!$exist) {
-                $this->variantManager->deleteVariantValue($value['id']);
-
+                $this->variantManager->deleteShop($value->id);
             }
         }
     }
@@ -333,6 +394,12 @@ class ArticleManager
      */
     public function delete($id)
     {
+        $childrens = Articles::latest()
+            ->where('articles_id', '=', $id)
+            ->get();
+        if (count($childrens) > 0)
+            foreach ($childrens as $key => $value)
+                $value->delete();
         return Articles::findOrFail($id)->delete();
     }
 

@@ -39,7 +39,7 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         return ResponseHelper::sendResponse(
-            $this->shopManager->new($request), 'Shop has created successfully.');
+            $this->shopManager->new($request), 'Shops has created successfully.');
     }
 
     /**

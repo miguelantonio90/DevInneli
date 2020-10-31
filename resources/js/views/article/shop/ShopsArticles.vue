@@ -160,13 +160,13 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'name'
+          value: 'shop_name'
         }
       ]
       if (this.variantsData.length > 0) {
         this.headers.push({
           text: this.$vuetify.lang.t('$vuetify.variants.variant'),
-          value: 'variant'
+          value: 'name'
         })
       }
       this.headers.push({

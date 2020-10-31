@@ -6,7 +6,7 @@ use App\Company;
 use App\Http\Controllers\Controller;
 use App\Position;
 use App\Providers\RouteServiceProvider;
-use App\Shop;
+use App\Shops;
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
@@ -98,7 +98,7 @@ class RegisterController extends Controller
             $position = Position::createFirst($company);
             if ($position) {
                 $user = User::createFirst($data, $company, $position);
-                $shop = Shop::createFirst($data, $company);
+                $shop = Shops::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
                 return $user;
             }

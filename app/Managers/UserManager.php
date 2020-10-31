@@ -4,7 +4,7 @@
 namespace App\Managers;
 
 
-use App\Shop;
+use App\Shops;
 use App\User;
 
 class UserManager
@@ -111,7 +111,7 @@ class UserManager
         foreach ($shops as $key => $value) {
             $idShops[$key] = $value['id'];
         }
-        $employShop = Shop::find($idShops);
+        $employShop = Shops::find($idShops);
 
         $user->shops()->sync($employShop);
 

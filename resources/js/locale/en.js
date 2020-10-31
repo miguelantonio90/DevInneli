@@ -135,7 +135,9 @@ export default {
     pin_failed: 'You do not have access. Pin Code is not valid',
     login_failed: 'Invalid email or password.',
     warning_composite: 'This article is composite, please select the element that compose it ',
-    warning_price: "You can't create this article.The cost can't be higher than price"
+    warning_price: "You can't create this article.The cost can't be higher than price",
+    warning_ref: "You can't create this article. The Reference {0} exist.",
+    warning_barCode: "You can't create this article. The Bar Code {0} exist."
   },
   // profile
   profile: {
@@ -240,7 +242,7 @@ export default {
     basic: 'Basic',
     inventory: 'Inventory',
     variant: 'Variant',
-    shop: 'Shop'
+    shop: 'Shops'
   },
   variants: {
     variant: 'Variant',
@@ -251,7 +253,8 @@ export default {
     barCode: 'Bar Code',
     options: 'Options',
     cant: 'Quantify',
-    total_cost: 'Total Cost: '
+    total_cost: 'Total Cost: ',
+    total_price: 'Total Price: '
   },
   shop_article: {
     under_inventory: 'Low Inventory',

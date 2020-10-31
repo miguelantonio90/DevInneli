@@ -54,20 +54,12 @@ class Articles extends Model
         return $this->hasMany(ArticleImage::class, 'article_id');
     }
 
-    public function variants_values(): HasMany
-    {
-        return $this->hasMany(VariantsValues::class);
+    public function variantValues(){
+        return $this->hasMany(Articles::class)->with('articlesShop');
     }
 
-    public function variants_shops(): HasMany
-    {
-        return $this->hasMany(VariantsShops::class)->addSelect([
-            'name' => Shop::select('name')
-                ->whereColumn('shops.id', 'variants_shops.shop_id')
-        ])->addSelect([
-            'variant' => VariantsValues::select('variant')
-                ->whereColumn('variants_values.id', 'variants_shops.vv_id')
-        ]);
+    public function articlesShop(){
+        return $this->hasMany(ArticlesShops::class);
     }
 
     public function composites(): HasMany
@@ -83,6 +75,6 @@ class Articles extends Model
 
     public function shops(): BelongsToMany
     {
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsToMany(Shops::class);
     }
 }

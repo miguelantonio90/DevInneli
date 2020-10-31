@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariantsValuesTable extends Migration
+class CreateArticlesShopsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateVariantsValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('variants_values', function (Blueprint $table) {
+        Schema::create('articles_shops', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('variant');
-            $table->decimal('cost',15,2);
             $table->decimal('price',15,2);
-            $table->integer('ref')->nullable();
-            $table->string('barCode')->nullable();
+            $table->integer('stock')->nullable();
+            $table->integer('under_inventory')->nullable();
             $table->timestamps();
 
             $table->foreignUuid('articles_id')->references('id')->on('articles')
+                ->onDelete('cascade');
+            $table->foreignUuid('shops_id')->references('id')->on('shops')
                 ->onDelete('cascade');
         });
     }
@@ -34,6 +34,6 @@ class CreateVariantsValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variants_values');
+        Schema::dropIfExists('articles_shops');
     }
 }

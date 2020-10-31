@@ -11,7 +11,7 @@
           csv-filename="Articles"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
-          :items="articles"
+          :items="localArticles"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort
@@ -69,6 +69,7 @@ export default {
   name: 'ListArticle',
   data () {
     return {
+        localArticles:[],
       search: ''
     }
   },
@@ -123,7 +124,12 @@ export default {
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles().then(()=>{
+        this.articles.forEach((value,index)=>{
+            if(!value.articles_id)
+                this.localArticles.push(value)
+        });
+    })
   },
   methods: {
     ...mapActions('article', [
