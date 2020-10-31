@@ -83,7 +83,7 @@
           :loading="isActionInProgress"
           @click="createNewRole"
         >
-          <v-icon>mdi-check</v-icon>
+          <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>

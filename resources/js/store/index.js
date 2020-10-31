@@ -21,6 +21,7 @@ import products from './modules/products'
 import shoppingCart from './modules/shoppingCart'
 import expenseCategory from './modules/expense_category'
 import exchangeRate from './modules/exchange_rate'
+import typeOrder from './modules/type_order'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -54,7 +55,8 @@ const store = new Vuex.Store({
     expenseCategory,
     exchangeRate,
     statics,
-    payment
+    payment,
+    typeOrder
   },
   plugins: [vuexLocal.plugin],
   getters: {

@@ -148,7 +148,7 @@
               md="12"
             >
               <v-select
-                v-model="newUser.shops"
+                v-model="shops"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
@@ -158,6 +158,7 @@
                 :rules="formRule.shops"
                 required
                 return-object
+                @change="setOrders($event)"
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
@@ -194,7 +195,7 @@
           :loading="isActionInProgress"
           @click="createNewUser"
         >
-          <v-icon>mdi-check</v-icon>
+          <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
@@ -248,7 +249,9 @@ export default {
   created () {
     this.formValid = false
     this.getRoles()
-    this.getShops()
+    this.getShops().then(() => {
+      this.newUser.shops = this.shops
+    })
   },
   methods: {
     ...mapActions('user', ['createUser', 'toogleNewModal']),
@@ -291,6 +294,9 @@ export default {
         event.preventDefault()
         return false
       }
+    },
+    setOrders (shops) {
+      this.newUser.shops = shops
     },
     async createNewUser () {
       if (this.$refs.form.validate()) {

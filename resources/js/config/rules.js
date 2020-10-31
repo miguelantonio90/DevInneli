@@ -1,4 +1,5 @@
 import Vuetify from '../plugins/vuetify'
+import { isNumeric } from 'rxjs/internal-compatibility'
 const language = Vuetify.framework.lang
 
 const company = [
@@ -127,6 +128,15 @@ const key = [
   ])
 ]
 
+const change = [
+  (v) => !!v || language.t('$vuetify.rule.required', [
+    language.t('$vuetify.change')
+  ]),
+  (v) => !!isNumeric(v) || language.t('$vuetify.rule.bad_numeric', [
+    language.t('$vuetify.change')
+  ])
+]
+
 export default {
   company,
   firstName,
@@ -147,5 +157,6 @@ export default {
   address,
   key,
   position,
-  required
+  required,
+  change
 }

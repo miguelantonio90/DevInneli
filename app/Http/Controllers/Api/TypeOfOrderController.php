@@ -5,41 +5,41 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
-use App\Managers\ExchangeRateManger;
+use App\Managers\TypeOfOrderManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class ExchangeRateController extends Controller
+class TypeOfOrderController extends Controller
 {
     /**
-     * @var ExchangeRateManger
+     * @var TypeOfOrderManager
      */
-    private $exchangeManager;
+    protected $typeOrderManager;
 
     /**
-     * ExchangeRateController constructor.
+     * TypeOfOrderController constructor.
      *
-     * @param  ExchangeRateManger  $exchangeManager
+     * @param  TypeOfOrderManager  $typeOrderManager
      */
-    public function __construct(ExchangeRateManger $exchangeManager)
+    public function __construct(TypeOfOrderManager $typeOrderManager)
     {
         $this->middleware('auth');
-        $this->exchangeManager = $exchangeManager;
+        $this->typeOrderManager = $typeOrderManager;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse|Response
+     * @return Response
      */
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->exchangeManager->findAllByCompany(),
-            'Exchange Rates retrieved successfully.'
+            $this->typeOrderManager->findAllByCompany(),
+            'Type of Orders retrieved successfully.'
         );
     }
 
@@ -53,33 +53,27 @@ class ExchangeRateController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $this->validator($data)->validate();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
-        $user = $this->exchangeManager->new($data);
+        $user = $this->typeOrderManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
-            'Exchange Rate has created successfully.'
+            'Type of Order has created successfully.'
         );
     }
 
-    /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'country' => ['required'],
-            'change' => 'required|numeric|regex:/^[\d]{0,15}(\.[\d]{1,2})?$/'
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['string', 'max:500']
         ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return void
+     * @param $id
      */
     public function show($id)
     {
@@ -90,16 +84,18 @@ class ExchangeRateController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
      * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
+        $data = $request->all();
+        $this->validator($data)->validate();
+        $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         return ResponseHelper::sendResponse(
-            $this->exchangeManager->edit($id, $request->all()),
-            'Exchange Rate has updated successfully.'
+            $this->typeOrderManager->edit($id, $data),
+            'Type of Order has updated successfully.'
         );
     }
 
@@ -112,8 +108,21 @@ class ExchangeRateController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->exchangeManager->delete($id),
-            'Exchange Rate has deleted successfully.'
+            $this->typeOrderManager->delete($id),
+            'Users has deleted successfully.'
+        );
+    }
+
+    /**
+     * @param  Request  $request
+     * @param $id
+     * @return JsonResponse|Response
+     */
+    public function setPrincipal(Request $request, $id)
+    {
+        return ResponseHelper::sendResponse(
+            $this->typeOrderManager->setPrincipal($id, $request->all()),
+            'Field principal has updated successfully.'
         );
     }
 }

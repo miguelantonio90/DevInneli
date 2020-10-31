@@ -164,7 +164,7 @@
           color="primary"
           @click="createNewClient"
         >
-          <v-icon>mdi-check</v-icon>
+          <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
@@ -191,7 +191,7 @@ export default {
   },
   computed: {
     ...mapState('supplier', ['saved', 'newSupplier', 'isActionInProgress']),
-    ...mapState('expenseCategory', ['saved', 'categories', 'isActionInProgress', 'isCategoryLoading']),
+    ...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
     bindProps () {
       return {
         mode: 'national',

@@ -20,6 +20,6 @@ class ExchangeRate extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'country', 'currency', 'symbol', 'company_id',
+        'country', 'currency', 'change', 'company_id',
     ];
 }

@@ -10,6 +10,16 @@ import './registerServiceWorker'
 import VueTelInputVuetify from 'vue-tel-input-vuetify'
 // Import the styles too, typically in App.vue or main.js
 import 'vue-swatches/dist/vue-swatches.css'
+import IdleVue from 'idle-vue'
+
+const eventsHub = new Vue()
+
+Vue.use(IdleVue, {
+  eventEmitter: eventsHub,
+  store,
+  idleTime: 600000, // 10 min,
+  startAtIdle: false
+})
 
 Vue.config.productionTip = false
 

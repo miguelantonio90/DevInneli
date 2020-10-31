@@ -119,6 +119,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShopsArticles',
+  // eslint-disable-next-line vue/require-prop-types
   props: ['variantsData', 'shopData', 'trackInventoryParent'],
   data () {
     return {
@@ -132,7 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user'])
   },
   watch: {
     variantsData: function () {

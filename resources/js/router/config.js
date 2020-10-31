@@ -274,7 +274,7 @@ export const protectedRoute = [
       {
         path: '/finance',
         component: RouteWrapper,
-        redirect: '/finance/finance.list',
+        redirect: '/finance/supplier.list',
         meta: {
           title: 'finance',
           icon: 'mdi-podium',
@@ -363,7 +363,7 @@ export const protectedRoute = [
         path: '/setting',
         meta: {
           title: 'setting',
-          icon: 'mdi-wrench',
+          icon: 'mdi-cog',
           requiresAuth: true
         },
         component: () => import('../views/general/General')

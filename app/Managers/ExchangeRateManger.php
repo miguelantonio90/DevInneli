@@ -35,20 +35,18 @@ class ExchangeRateManger
     {
         $company = CompanyManager::getCompanyByAdmin();
         $response = [];
-        foreach ($data['country'] as $k => $value) {
-            $exist = ExchangeRate::where('currency', '=', $value['currencyId'])->first();
-            if ($exist === null) {
-                $response[$k] = ExchangeRate::create([
-                    'company_id' => $company->id,
-                    'country' => $value['name'],
-                    'currency' => $value['currencyId']
-                ]);
+        $exist = ExchangeRate::where('currency', '=', $data['country']['currencyId'])->first();
+        if ($exist === null) {
+            $response = ExchangeRate::create([
+                'company_id' => $company->id,
+                'country' => $data['country']['name'],
+                'currency' => $data['country']['currencyId'],
+                'change' => $data['change'],
+            ]);
 
-                return $response;
-            } else {
-                $response[$k] = ['success' => false, 'message' => 'exist'.$value['currencyId']];
-            }
-
+            return $response;
+        } else {
+            return ['success' => false, 'message' => 'exist'.$data['currencyId']];
         }
     }
 
@@ -65,6 +63,9 @@ class ExchangeRateManger
         }
         if (isset($data['country']['currencyId'])) {
             $exchangeRate->currency = $data['country']['currencyId'];
+        }
+        if (isset($data['change'])) {
+            $exchangeRate->change = $data['change'];
         }
         $exchangeRate->save();
 

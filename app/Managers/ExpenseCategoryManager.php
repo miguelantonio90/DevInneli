@@ -20,6 +20,7 @@ class ExpenseCategoryManager
             $company = CompanyManager::getCompanyByAdmin();
             $categories = ExpenseCategory::latest()
                 ->where('company_id', '=', $company->id)
+                ->with('company')
                 ->get();
         }
 

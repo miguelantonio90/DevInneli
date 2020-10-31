@@ -1,19 +1,22 @@
 <template>
-  <v-container>
+  <v-container
+    fluid
+  >
     <v-card>
       <v-tabs
-        v-model="tab"
-        fixed-tabs
-        color="deep-purple accent-4"
+        vertical
       >
         <v-tab
           v-for="item in tabName"
           :key="item.name"
+          style="align-self: flex-start"
         >
-          {{ item.name }}
+          <v-icon left>
+            {{ item.icon }}
+          </v-icon>
+          <span style="text-transform: capitalize">{{ item.name }}</span>
         </v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="tab">
+
         <v-tab-item
           v-for="item in itemsTabs"
           :key="item.key"
@@ -24,7 +27,7 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
-      </v-tabs-items>
+      </v-tabs>
     </v-card>
   </v-container>
 </template>
@@ -34,10 +37,10 @@ import ShopList from '../shop/ListShop'
 import ExpenseCategory from '../expense_category/List'
 import ExchangeRate from '../exchange_rate/List'
 import ListPayment from '../payment/ListPayment'
-
+import TypeOfOrder from '../type_order/List'
 export default {
-  name: 'General',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate },
+  name: 'General2',
+  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder },
   data () {
     return {
       tab: null,
@@ -45,17 +48,19 @@ export default {
         { key: 'shop-list', content: 'shop-list' },
         { key: 'list-payment', content: 'list-payment' },
         { key: 'expense-category', content: 'expense-category' },
-        { key: 'exchange-rate', content: 'exchange-rate' }
+        { key: 'exchange-rate', content: 'exchange-rate' },
+        { key: 'type-of-order', content: 'type-of-order' }
       ]
     }
   },
   computed: {
     tabName () {
       return [
-        { name: this.$vuetify.lang.t('$vuetify.menu.shop') },
-        { name: this.$vuetify.lang.t('$vuetify.menu.pay') },
-        { name: this.$vuetify.lang.t('$vuetify.menu.expense_category') },
-        { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate') }
+        { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: ' mdi-cash-multiple' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate'), icon: 'mdi-bank' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order'), icon: 'mdi-food' }
       ]
     }
   }
@@ -63,5 +68,7 @@ export default {
 </script>
 
 <style scoped>
-
+.v-slide-group__content {
+  align-items: flex-start !important;
+}
 </style>

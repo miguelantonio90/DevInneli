@@ -32,6 +32,7 @@ export default {
   company: 'Compañía',
   first_name: 'Nombre(s)',
   last_name: 'Apellidos',
+  description: 'Descripción',
   address: 'Dirección',
   city: 'Ciudad',
   country: 'País',
@@ -47,6 +48,7 @@ export default {
   phone_holder: 'Entre su número de teléfono',
   price: 'Precio',
   color: 'Color',
+  principal: 'Principal',
   // menu
   menu: {
     setting: 'Configuración',
@@ -91,7 +93,8 @@ export default {
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
     supply_product: 'Abastecer',
-    finance: 'Finanzas'
+    finance: 'Finanzas',
+    type_of_order: 'Tipo de Pedido'
   },
   // settings
   settings: {
@@ -108,6 +111,7 @@ export default {
     length: 'Este campo necesita {0} caracteres',
     match: 'Los parámetros {0} y la {1} no son iguales',
     bad_email: '{0} debe ser válido',
+    bad_numeric: '{0} debe ser valor numérico',
     required_element: 'Este campo es requerido',
     bad_phone: '{0} debe ser válido',
     select: 'Seleccione',
@@ -134,9 +138,9 @@ export default {
     error_delete_manager: 'Este usuario no puede ser eliminado',
     error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',
     success_profile: 'Los datos han sido actualizados.',
-    success_add: 'El {0} ha sido creado satisfactoriamente.',
-    success_up: 'El {0} ha sido actualizado satisfactoriamente.',
-    success_del: 'El {0} ha sido eliminado satisfactoriamente.',
+    success_add: '{0} ha sido creado satisfactoriamente.',
+    success_up: '{0} ha sido actualizado satisfactoriamente.',
+    success_del: '{0} ha sido eliminado satisfactoriamente.',
     failed_catch: 'Ocurrió error al procesar datos de {0}',
     check_mail:
             'Se ha enviado un correo electrónico con los detalles para cambiar contraseña.',
@@ -149,7 +153,11 @@ export default {
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
-    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.'
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.',
+    info_exchange_rate: 'La tasa de cambio es con respecto a 1',
+    idle_title: 'Sesión expirada',
+    idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
+    idle_counter: 'La sesión se cierra en {0} segundos'
   },
   // options
   actions: {
@@ -160,12 +168,14 @@ export default {
     created: 'Crear',
     newF: 'Nueva',
     edit: 'Editar',
+    show: 'Mostrar',
     delete: 'Eliminar',
     list: 'Listar',
     save: 'Guardar',
     cancel: 'Cancelar',
     close: 'Cerrar',
-    change: 'Cambiar'
+    change: 'Cambiar',
+    apply: 'Aplicar'
   },
   titles: {
     list: 'Lista de {0}',
