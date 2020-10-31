@@ -1,21 +1,26 @@
 <template>
     <v-container>
         <v-row>
-
             <v-col
                 class="py-0"
                 cols="12"
             >
-                <app-data-table-expand
+                <app-data-table
                     :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
+                    csv-filename="Articles"
                     :headers="getTableColumns"
+                    :is-loading="isTableLoading"
                     :items="localArticles"
+                    :sort-by="['name']"
+                    :sort-desc="[false, true]"
+                    multi-sort
+                    :single-expand="singleExpand"
+                    :expanded.sync="expanded"
+                    show-expand
                     @create-row="createArticleHandler"
                     @edit-row="editArticleHandler($event)"
                     @delete-row="deleteArticleHandler($event)"
-                    item-key="name"
-                    class="elevation-1"
                 >
                     <template v-slot:item.name="{ item }">
                         <v-chip
@@ -59,17 +64,7 @@
                             More info about
                         </td>
                     </template>
-                    <template v-slot:expanded-item="{ headers, item }">
-                        <td :colspan="headers.length" >
-                            <v-data-table style="margin: 0px"
-                                :headers="getTableColumns"
-                                :items="item.variant_values"
-                                hide-default-header
-                                hide-default-footer
-                            ></v-data-table>
-                        </td>
-                    </template>
-                </app-data-table-expand>
+                </app-data-table>
             </v-col>
         </v-row>
     </v-container>
@@ -77,11 +72,9 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-import AppDataTableExpand from "../../components/core/app-data-table-expand/AppDataTableExpad";
 
 export default {
     name: 'ListArticle',
-    components: {AppDataTableExpand},
     data() {
         return {
             expanded: [],
@@ -146,7 +139,6 @@ export default {
                 if (!value.articles_id)
                     this.localArticles.push(value)
             });
-            console.log(this.localArticles)
         })
     },
     methods: {

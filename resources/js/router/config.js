@@ -256,7 +256,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/NewArticlePage')
+            component: () => import('../views/article/NewArticle')
           },
           {
             path: '/articles/product.edit',
@@ -267,7 +267,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/EditArticlePage')
+            component: () => import('../views/article/EditArticle')
           }
         ]
       },

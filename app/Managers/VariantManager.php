@@ -3,9 +3,8 @@
 namespace App\Managers;
 
 use App\Articles;
+use App\ArticlesShops;
 use App\Variant;
-use App\VariantsShops;
-use App\VariantsValues;
 
 class VariantManager
 {
@@ -41,9 +40,9 @@ class VariantManager
     /**
      * @param $data
      * @param $articleId
-     * @return mixed
+     * @return Variant
      */
-    public function newVariant($data, $articleId)
+    public function newVariant($data, $articleId):Variant
     {
         return Variant::create([
             'articles_id' => $articleId,
@@ -54,7 +53,6 @@ class VariantManager
 
     /**
      * @param $data
-     * @param $articleId
      * @return Variant
      */
     public function editVariant($data): Variant
@@ -68,32 +66,14 @@ class VariantManager
 
     /**
      * @param $data
-     * @param $articleId
-     * @return VariantsValues
+     * @param $article
+     * @return ArticlesShops
      */
-    public function newVariantValue($data, $articleId): VariantsValues
+    public function newArticleShop($data, $article): ArticlesShops
     {
-        return VariantsValues::create([
-            'articles_id' => $articleId,
-            'variant' => $data['variant'],
-            'cost' => $data['cost'],
-            'price' => $data['price'],
-            'ref' => $data['ref'],
-            'barCode' => $data['barCode']
-        ]);
-    }
-
-    /**
-     * @param $data
-     * @param $variant
-     * @return VariantsShops
-     */
-    public function newVariantShop($data, $variant): VariantsShops
-    {
-        return VariantsShops::create([
-            'articles_id' => $variant->articles_id,
-            'vv_id' => $variant->id,
-            'shop_id' => $data['shop_id'],
+        return ArticlesShops::create([
+            'articles_id' => $article->id,
+            'shops_id' => $data['shop_id'],
             'stock' => $data['stock'],
             'price' => $data['price'],
             'under_inventory' => $data['under_inventory']
@@ -103,28 +83,27 @@ class VariantManager
     /**
      * @param $id
      * @param $data
-     * @return mixed
+     * @return ArticlesShops
      */
-    public function editVariantValue($id, $data)
+    public function updateArticleShop($id, $data): ArticlesShops
     {
-        $variant = VariantsValues::findOrFail($id);
-        if (isset($data['variant'])) {
-            $variant->variant = $data['variant'];
-        }
-        if (isset($data['cost'])) {
-            $variant->cost = $data['cost'];
-        }
-        if (isset($data['price'])) {
-            $variant->price = $data['price'];
-        }
-        if (isset($data['ref'])) {
-            $variant->ref = $data['ref'];
-        }
-        if (isset($data['barCode'])) {
-            $variant->ref = $data['barCode'];
-        }
-        $variant->save();
-        return $variant;
+        $article_shop = ArticlesShops::findOrFail($id);
+        $article_shop['shops_id'] = $data['shop_id'];
+        $article_shop['stock'] = $data['stock'];
+        $article_shop['price'] = $data['price'];
+        $article_shop['under_inventory'] = $data['under_inventory'];
+        $article_shop->save();
+        return $article_shop;
+
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function deleteShop($id):bool
+    {
+        return ArticlesShops::findOrFail($id)->delete();
 
     }
 
@@ -135,31 +114,6 @@ class VariantManager
     public function deleteVariant($id): bool
     {
         return Variant::findOrFail($id)->delete();
-    }
-
-    /**
-     * @param $id
-     * @return bool
-     */
-    public function deleteVariantValue($id): bool
-    {
-        return VariantsValues::findOrFail($id)->delete();
-    }
-
-    /**
-     * @param $el
-     * @param $articleId
-     */
-    public function removeAll($el, $articleId): void
-    {
-        $variant = $el === 'vv' ? VariantsValues::latest()
-            ->where('articles_id', '=', $articleId)
-            ->get() : Variant::latest()
-            ->where('articles_id', '=', $articleId)
-            ->get();
-        foreach ($variant as $key => $value) {
-            $value->delete();
-        }
     }
 
 }
