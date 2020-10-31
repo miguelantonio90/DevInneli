@@ -93,7 +93,7 @@ import localStorage from '../config/localStorage'
 export default {
   data () {
     return {
-      themeColor: localStorage.getTheme() || 'blue',
+      themeColor: localStorage.getTheme() || 'indigo',
       sideBarOption: 'light',
       colors: colors
     }
@@ -126,6 +126,22 @@ export default {
           }
         },
         {
+          key: 'orange',
+          value: {
+            sideNav: 'orange',
+            mainNav: 'orange',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'purple',
+          value: {
+            sideNav: 'purple',
+            mainNav: 'purple',
+            sideMenu: 'white'
+          }
+        },
+        {
           key: 'indigo',
           value: {
             sideNav: 'indigo',
@@ -140,11 +156,20 @@ export default {
             mainNav: 'cyan',
             sideMenu: 'white'
           }
-        }, {
-          key: 'orange',
+        },
+        {
+          key: 'pink',
           value: {
-            sideNav: 'orange',
-            mainNav: 'orange',
+            sideNav: 'pink',
+            mainNav: 'pink',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'green',
+          value: {
+            sideNav: 'green',
+            mainNav: 'green',
             sideMenu: 'white'
           }
         }
