@@ -182,27 +182,11 @@
                 @open="openModalEdit"
                 @close="closeModalEdit"
             >
-                <div>{{ item.cost }}</div>
+                <div>{{ item.ref }}</div>
                 <template v-slot:input>
                     <div class="mt-4 title">
                         {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                     </div>
-                </template>
-                <template v-slot:input>
-                    <v-text-field-money
-                        v-model="item.ref"
-                        :label="$vuetify.lang.t('$vuetify.actions.edit')"
-                        required
-                        :properties="{
-              prefix: user.company.currency,
-              clearable: true
-            }"
-                        :options="{
-              length: 15,
-              precision: 2,
-              empty: 0.00,
-            }"
-                    />
                 </template>
             </v-edit-dialog>
         </template>
