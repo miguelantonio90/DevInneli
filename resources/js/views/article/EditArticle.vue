@@ -630,7 +630,7 @@ export default {
         if (variants.length > 0) {
           this.variantData.forEach((v) => {
             // eslint-disable-next-line camelcase
-            const articles_shop = v.articles_shop.filter(sh => sh.shop_id === shop.id)
+            const articles_shop = v.articles_shops.filter(sh => sh.shop_id === shop.id)
             this.shopData.push({
               articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
               shop_id: shop.id,

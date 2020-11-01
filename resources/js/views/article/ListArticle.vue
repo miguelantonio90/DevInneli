@@ -79,10 +79,10 @@
                 </template>
                 <template v-slot:value.shopsNames="{ value }">
                   <v-chip
-                    v-for="(shop, i) of value.articles_shops"
+                    v-for="(article_shop, i) of value.articles_shops"
                     :key="i"
                   >
-                    {{ shop.shops.name }}
+                    {{ article_shop.shops.name }}
                   </v-chip>
                 </template>
               </v-data-table>
@@ -96,11 +96,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import AppDataTableExpand from '../../components/core/app-data-table-expand/AppDataTableExpad'
 
 export default {
   name: 'ListArticle',
-  components: { AppDataTableExpand },
   data () {
     return {
       expanded: [],
