@@ -30,8 +30,6 @@ class ArticlesShops extends Model
 
     public function shops(): BelongsTo
     {
-        return $this->belongsTo(Shop::class)->addSelect([
-        'shopName' => self::select('name')
-            ->whereColumn('articles_shops.shop_id', 'shop.id')]);
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 }

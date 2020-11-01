@@ -60,7 +60,7 @@ class Articles extends Model
 
     public function articlesShops():HasMany
     {
-        return $this->hasMany(ArticlesShops::class,'article_id');
+        return $this->hasMany(ArticlesShops::class,'article_id')->with('shops');
     }
 
     public function composites(): HasMany

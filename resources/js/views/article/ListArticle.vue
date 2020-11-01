@@ -71,10 +71,10 @@
                 </template>
                 <template v-slot:value.shopsNames="{ value }">
                   <v-chip
-                    v-for="(shop, i) of value.shopsNames"
+                    v-for="(shop, i) of value.articles_shops"
                     :key="i"
                   >
-                    {{ shop }}
+                    {{ shop.shops.name }}
                   </v-chip>
                 </template>
               </v-data-table>

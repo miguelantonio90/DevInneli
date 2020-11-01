@@ -288,7 +288,7 @@
                           md="12"
                         >
                           <variant
-                            :ref-parent="ref"
+                            :ref-parent="this.ref"
                             :updated="updated"
                             :variants-parent="variants"
                             :variants-values-parent="variantData"
@@ -477,7 +477,7 @@ export default {
         this.variants.push({
           id: vtn.id,
           name: vtn.name,
-          parent_id: vtn.article_id,
+          articles_id: vtn.articles_id,
           created_at: vtn.created_at,
           updated_at: vtn.updated_at,
           value: JSON.parse(vtn.value)
@@ -490,12 +490,12 @@ export default {
     })
     this.composite = []
     await this.getArticles().then(() => {
-      this.articles.forEach((value) => {
+      this.articles.forEach((value, index) => {
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
         if (value.id !== this.editArticle.id) {
-          if (!value.article_id) {
+          if (!value.articles_id) {
             if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
+              value.variant_values.forEach((v, i) => {
                 this.localArticles.push({
                   name: value.name + '(' + v.name + ')',
                   price: v.price,
@@ -517,10 +517,10 @@ export default {
         }
       })
     })
-    this.editArticle.composites.forEach((value) => {
+    this.editArticle.composites.forEach((value, index) => {
       const comp = this.articles.filter(art => art.id === value.composite_id)[0]
       this.composite.push({
-        name: comp.article_id ? this.articles.filter(art => art.id === comp.article_id)[0].name + '(' +
+        name: comp.articles_id ? this.articles.filter(art => art.id === comp.articles_id)[0].name + '(' +
                     comp.name + ')' : comp.name,
         price: value.price,
         id: value.id,
@@ -629,16 +629,16 @@ export default {
       this.shops.forEach((shop) => {
         if (variants.length > 0) {
           this.variantData.forEach((v) => {
-            const articlesShop = v.articles_shop.filter(sh => sh.shops_id === shop.id)
+            const articles_shop = v.articles_shop.filter(sh => sh.shops_id === shop.id)
             this.shopData.push({
-              articles_shop_id: articlesShop.length > 0 ? articlesShop[0].id : '',
+              articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
               shop_id: shop.id,
               shop_name: shop.name,
-              checked: articlesShop.length > 0,
+              checked: articles_shop.length > 0,
               name: v.name,
-              price: articlesShop.length > 0 ? articlesShop[0].price : v.price,
-              under_inventory: articlesShop.length > 0 ? articlesShop[0].under_inventory : '0',
-              stock: articlesShop.length > 0 ? articlesShop[0].stock : '0'
+              price: articles_shop.length > 0 ? articles_shop[0].price : v.price,
+              under_inventory: articles_shop.length > 0 ? articles_shop[0].under_inventory : '0',
+              stock: articles_shop.length > 0 ? articles_shop[0].stock : '0'
             })
           })
         } else {
@@ -684,7 +684,7 @@ export default {
     },
     validateBarCode () {
       let valid = true
-      this.variantData.forEach((value) => {
+      this.variantData.forEach((value, index) => {
         if (valid) {
           const localArt = this.articles.filter(art => art.barCode === value.barCode)
           if (localArt.length > 0) {
@@ -750,7 +750,7 @@ export default {
     },
     validateRef () {
       let valid = true
-      this.variantData.forEach((value) => {
+      this.variantData.forEach((value, index) => {
         if (valid) {
           const localArt = this.articles.filter(art => art.ref === value.ref)
           if (localArt.length > 0) {
