@@ -37,13 +37,21 @@
             </v-chip>
           </template>
           <template v-slot:item.percent="{ item }">
-            {{ item.percent }} %
+            <template v-if="item.variant_values.length===0">
+              {{ item.percent }} %
+            </template>
           </template>
           <template v-slot:item.price="{ item }">
-            {{ `${user.company.currency + ' ' + item.price}` }}
+            <template v-if="item.variant_values.length===0">
+              {{ `${user.company.currency + ' ' + item.price}` }}
+            </template>
           </template>
-          <template v-slot:item.cost="{ item }">
-            {{ `${user.company.currency + ' ' + item.cost}` }}
+          <template
+            v-slot:item.cost="{ item }"
+          >
+            <template v-if="item.variant_values.length===0">
+              {{ `${user.company.currency + ' ' + item.cost}` }}
+            </template>
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
@@ -154,7 +162,9 @@ export default {
   created () {
     this.getArticles().then(() => {
       this.articles.forEach((value) => {
-        if (!value.parent_id) { this.localArticles.push(value) }
+        if (!value.parent_id) {
+          this.localArticles.push(value)
+        }
       })
       console.log(this.localArticles)
     })
