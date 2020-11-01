@@ -640,6 +640,7 @@ export default {
       this.shopData = shopsDataUpdated
     },
     updateVariant (variants, dataUpdated) {
+      console.log(variants)
       this.variantData = dataUpdated
       this.newArticle.variants = variants
       this.shopData = []

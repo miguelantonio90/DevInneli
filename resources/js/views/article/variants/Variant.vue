@@ -214,16 +214,15 @@
             :label="$vuetify.lang.t('$vuetify.barCode')"
             :properties="{
               clearable: true,
-              singleLine:true,
-              counter:true,
-              autofocus:true,
             }"
             :options="{
               inputMask: '##-####-####-###',
-              outputMask: '##-####-####-###',
+              outputMask: '#############',
               empty: 0,
               alphanumeric: true,
             }"
+            :focus="focus"
+            @focus="focus = false"
           />
         </template>
       </v-edit-dialog>
@@ -263,12 +262,15 @@ export default {
   data () {
     return {
       ref: '10001',
+      barCode: 0,
+      focus: false,
       updated: true,
       variants: [],
       variantsValues: [],
       dialog: false,
       headers: [],
       editedIndex: -1,
+      formRule: this.$rules,
       editedItem: {
         name: '',
         valueVariant: ''
