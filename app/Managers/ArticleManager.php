@@ -17,7 +17,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -64,14 +64,25 @@ class ArticleManager
             }
             $shopNames = [];
             foreach ($article['articlesShops'] as $sh => $shop) {
-                $shopNames[$sh] = $shop['shopName'];
+                $shopNames[$sh] = $shop['shops']['name'];
             }
             $articles[$k]['shopsNames'] = array_unique($shopNames);
-            if (isset($article['price'])) {
-                $articles[$k]['percent'] = 0;
-            } else {
-                $articles[$k]['percent'] = $article['price'] !== '0.00' && $article['price'] !== '0' ? round((100 * $article['cost']) / $article['price'], 2) : 0;
+
+            $shopVariant = [];
+            foreach ($article['variantValues'] as $sh => $shopV) {
+                foreach ($shopV['articlesShops'] as $i => $v) {
+                    $shopVariant[$sh] = $v['shops']['name'];
+                }
+                $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
+                $articles[$k]['variantValues'][$sh]['percent'] =
+                    round(
+                        (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                        2
+                    );
             }
+
+            $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],
+                2);
         }
         return $articles;
     }
@@ -205,7 +216,7 @@ class ArticleManager
         $article->save();
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
-                $newArt= ArticlesComposite::create([
+                $newArt = ArticlesComposite::create([
                     'article_id' => $article->id,
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
@@ -393,9 +404,11 @@ class ArticleManager
         $childrens = Articles::latest()
             ->where('parent_id', '=', $id)
             ->get();
-        if (count($childrens) > 0)
-            foreach ($childrens as $key => $value)
+        if (count($childrens) > 0) {
+            foreach ($childrens as $key => $value) {
                 $value->delete();
+            }
+        }
         return Articles::findOrFail($id)->delete();
     }
 

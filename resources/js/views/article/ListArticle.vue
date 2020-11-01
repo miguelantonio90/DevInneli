@@ -13,6 +13,7 @@
           item-key="name"
           class="elevation-1"
           :expand="expanded"
+          :is-loading="isTableLoading"
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
@@ -47,75 +48,80 @@
               {{ `${user.company.currency + ' ' + item.price}` }}
             </template>
           </template>
-          <template
-            v-slot:item.cost="{ item }"
-          >
+          <template v-slot:item.cost="{ item }">
             <template v-if="item.variant_values.length===0">
               {{ `${user.company.currency + ' ' + item.cost}` }}
             </template>
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
-              v-for="(shop, i) of item.articles_shops"
+              v-for="(shop, i) of item.shopsNames"
               :key="i"
             >
-              {{ shop.shops.name }}
+              {{ shop }}
             </v-chip>
           </template>
-          <template v-slot:group.header="{ group, headers, toggle, item, isOpen }">
-            <td
+          <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
+            <v-btn
               v-if="item.variant_values.length > 0"
-              :colspan="headers.length"
+              color="primary"
+              fab
+              x-small
+              dark
+              @click="expand(!isExpanded)"
             >
-              <v-btn
-                :ref="group"
-                small
-                icon
-                :data-open="isOpen"
-                @click="toggle"
-              >
-                <v-icon v-if="isOpen">
-                  mdi-chevron-up
-                </v-icon>
-                <v-icon v-else>
-                  mdi-chevron-down
-                </v-icon>
-              </v-btn>
-              {{ group }}
-            </td>
+              <v-icon v-if="isExpanded">
+                mdi-chevron-up
+              </v-icon>
+              <v-icon v-else>
+                mdi-chevron-down
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              fab
+              x-small
+              disabled
+            >
+              <v-icon>
+                mdi-check
+              </v-icon>
+            </v-btn>
           </template>
-          <template
-            v-slot:expanded-item="{ headers, item }"
-          >
+          <template v-slot:expanded-item="{ headers,item }">
             <td :colspan="headers.length">
-              <v-data-table
-                style="margin: 0"
-                item-key="name"
-                :headers="getTableColumns"
-                :items="item.variant_values"
-                hide-default-header
-                hide-default-footer
-              >
-                <template v-slot:value.price="{ value }">
-                  {{ `${user.company.currency + ' ' + value.price}` }}
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th>{{ $vuetify.lang.t('$vuetify.firstName') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.price') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.cost') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.percent') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.menu.shop') }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="dessert in item.variant_values"
+                      :key="dessert.name"
+                    >
+                      <td>{{ dessert.name }}</td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
+                      <td>{{ dessert.percent + ' %' }}</td>
+                      <td>
+                        <v-chip
+                          v-for="(shop, i) of dessert.shopsNames"
+                          :key="i+shop"
+                        >
+                          {{ shop }}
+                        </v-chip>
+                      </td>
+                    </tr>
+                  </tbody>
                 </template>
-                <template v-slot:value.cost="{ value }">
-                  {{ `${user.company.currency + ' ' + value.cost}` }}
-                </template>
-                <template v-slot:value.shopsNames="{ value }">
-                  <v-chip
-                    v-for="(shop, i) of value.articles_shops"
-                    :key="i"
-                  >
-                    {{ shop.shops.name }}
-                  </v-chip>
-                </template>
-                <template v-slot:value.percent="{ value }">
-                  <template v-if="parseInt(value.price)=== 0 || parseFloat(value.price) === 0.00">
-                    {{ 0 }} %
-                  </template>
-                </template>
-              </v-data-table>
+              </v-simple-table>
             </td>
           </template>
         </app-data-table-expand>
