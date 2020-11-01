@@ -8,8 +8,8 @@
     <template v-slot:top>
       <v-toolbar flat>
         <h4> {{ $vuetify.lang.t('$vuetify.variants.total_cost') }} ${{ totalCost }}</h4>
-          <v-spacer/>
-          <h4> {{ $vuetify.lang.t('$vuetify.variants.total_price') }} ${{ totalPrice }}</h4>
+        <v-spacer />
+        <h4> {{ $vuetify.lang.t('$vuetify.variants.total_price') }} ${{ totalPrice }}</h4>
       </v-toolbar>
     </template>
     <template v-slot:item.name="{ item }">
@@ -115,16 +115,15 @@ export default {
     dialog (val) {
       val || this.close()
     },
-    compositeList: function (val) {
+    compositeList: function () {
       this.composite = this.compositeList
       this.updateTotalCost()
     }
   },
   created () {
-      this.composite = this.compositeList
-      this.initialize()
-      this.updateTotalCost()
-
+    this.composite = this.compositeList
+    this.initialize()
+    this.updateTotalCost()
   },
 
   methods: {
@@ -158,7 +157,7 @@ export default {
       this.composite[this.composite.indexOf(item)].cant = item.cant
       this.composite[this.composite.indexOf(item)].cost = item.cant * item.cost
       this.composite[this.composite.indexOf(item)].price = item.cant * item.price
-        console.log(item);
+      console.log(item)
       this.updateTotalCost()
       this.updateComposite()
     },

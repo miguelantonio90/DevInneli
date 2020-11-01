@@ -139,7 +139,7 @@ export default {
     variantsData: function () {
       this.initialize()
     },
-    trackInventoryParent: function (val) {
+    trackInventoryParent: function () {
       this.track_inventory = this.trackInventoryParent
       this.initialize()
     }

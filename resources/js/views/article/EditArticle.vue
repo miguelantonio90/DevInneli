@@ -1,844 +1,841 @@
 <template>
-
-    <div class="page-add-product">
-        <app-loading v-show="loadingData"/>
-        <v-container
-            v-if="!loadingData"
-        >
-            <v-card>
-                <v-card-title>
+  <div class="page-add-product">
+    <app-loading v-show="loadingData" />
+    <v-container
+      v-if="!loadingData"
+    >
+      <v-card>
+        <v-card-title>
           <span class="headline">{{
-                  $vuetify.lang.t('$vuetify.titles.new', [
-                      $vuetify.lang.t('$vuetify.articles.name'),
-                  ])
-              }}</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-form
-                        ref="form"
-                        v-model="formValid"
-                        style="padding: 0"
-                        lazy-validation
-                    >
-                        <v-expansion-panels
-                            v-model="panel"
-                            style="margin: 0"
-                            multiple
-                        >
-                            <v-expansion-panel style="margin: 0">
-                                <v-expansion-panel-header>
-                                    <div>
-                                        <v-icon>mdi-database-edit</v-icon>
-                                        <span style="text-transform: uppercase;font-weight: bold">
+            $vuetify.lang.t('$vuetify.titles.new', [
+              $vuetify.lang.t('$vuetify.articles.name'),
+            ])
+          }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form
+            ref="form"
+            v-model="formValid"
+            style="padding: 0"
+            lazy-validation
+          >
+            <v-expansion-panels
+              v-model="panel"
+              style="margin: 0"
+              multiple
+            >
+              <v-expansion-panel style="margin: 0">
+                <v-expansion-panel-header>
+                  <div>
+                    <v-icon>mdi-database-edit</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.panel.basic') }}
                     </span>
-                                    </div>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editArticle.name"
-                                                :label="$vuetify.lang.t('$vuetify.firstName')"
-                                                :rules="formRule.required"
-                                                required
-                                                @keypress="lnSpace"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <v-text-field-simplemask
-                                                v-model="editArticle.barCode"
-                                                :label="$vuetify.lang.t('$vuetify.barCode')"
-                                                :properties="{
+                  </div>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="editArticle.name"
+                        :label="$vuetify.lang.t('$vuetify.firstName')"
+                        :rules="formRule.required"
+                        required
+                        @keypress="lnSpace"
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field-simplemask
+                        v-model="editArticle.barCode"
+                        :label="$vuetify.lang.t('$vuetify.barCode')"
+                        :properties="{
                           clearable: true,
                           required:true,
                           rules:formRule.required
                         }"
-                                                :options="{
+                        :options="{
                           inputMask: '##-####-####-###',
                           outputMask: '#############',
                           empty: null,
                           alphanumeric: true,
                         }"
-                                                :focus="focus"
-                                                @focus="focus = false"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <v-text-field-money
-                                                v-model="editArticle.price"
-                                                :label="$vuetify.lang.t('$vuetify.price')"
-                                                required
-                                                :properties="{
+                        :focus="focus"
+                        @focus="focus = false"
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field-money
+                        v-model="editArticle.price"
+                        :label="$vuetify.lang.t('$vuetify.price')"
+                        required
+                        :properties="{
                           prefix: user.company.currency,
                           clearable: true
                         }"
-                                                :options="{
+                        :options="{
                           length: 15,
                           precision: 2,
                           empty: 0.00,
                         }"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <v-text-field-money
-                                                v-model="editArticle.cost"
-                                                :disabled="editArticle.composite"
-                                                :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                                                required
-                                                :properties="{
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field-money
+                        v-model="editArticle.cost"
+                        :disabled="editArticle.composite"
+                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                        required
+                        :properties="{
                           prefix: user.company.currency,
                           clearable: true
                         }"
-                                                :options="{
+                        :options="{
                           length: 15,
                           precision: 2,
                           empty: 0.00,
                         }"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <v-select
-                                                v-model="editArticle.category"
-                                                :items="categories"
-                                                :label="$vuetify.lang.t('$vuetify.menu.category')"
-                                                item-text="name"
-                                                :loading="isCategoryLoading"
-                                                :disabled="!!isCategoryLoading"
-                                                return-object
-                                            >
-                                                <template v-slot:append-outer>
-                                                    <v-tooltip bottom>
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-icon
-                                                                v-bind="attrs"
-                                                                v-on="on"
-                                                                @click="$store.dispatch('category/toogleNewModal',true)"
-                                                            >
-                                                                mdi-plus
-                                                            </v-icon>
-                                                        </template>
-                                                        <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                                                    </v-tooltip>
-                                                </template>
-                                            </v-select>
-                                            <v-dialog
-                                                v-model="showInfoAdd"
-                                                max-width="500px"
-                                            >
-                                                <v-card>
-                                                    <v-card-title class="headline">
-                                                        {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
-                                                    </v-card-title>
-                                                    <v-card-actions>
-                                                        <v-spacer/>
-                                                        <v-btn
-                                                            class="mb-2"
-                                                            color="primary"
-                                                            @click="closeInfoAdd"
-                                                        >
-                                                            <v-icon>mdi-check</v-icon>
-                                                            {{ $vuetify.lang.t('$vuetify.actions.accept') }}
-                                                        </v-btn>
-                                                        <v-spacer/>
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </v-dialog>
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            md="4"
-                                        >
-                                            <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
-                                            <v-radio-group
-                                                v-model="editArticle.unit"
-                                                row
-                                            >
-                                                <v-radio
-                                                    :label="$vuetify.lang.t('$vuetify.articles.unit')"
-                                                    value="unit"
-                                                />
-                                                <v-radio
-                                                    :label="$vuetify.lang.t('$vuetify.articles.p_v')"
-                                                    value="vol"
-                                                />
-                                            </v-radio-group>
-                                        </v-col>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-header>
-                                    <div>
-                                        <v-icon>mdi-book-open-variant</v-icon>
-                                        <span style="text-transform: uppercase;font-weight: bold">
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-select
+                        v-model="editArticle.category"
+                        :items="categories"
+                        :label="$vuetify.lang.t('$vuetify.menu.category')"
+                        item-text="name"
+                        :loading="isCategoryLoading"
+                        :disabled="!!isCategoryLoading"
+                        return-object
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('category/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
+                      <v-dialog
+                        v-model="showInfoAdd"
+                        max-width="500px"
+                      >
+                        <v-card>
+                          <v-card-title class="headline">
+                            {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
+                          </v-card-title>
+                          <v-card-actions>
+                            <v-spacer />
+                            <v-btn
+                              class="mb-2"
+                              color="primary"
+                              @click="closeInfoAdd"
+                            >
+                              <v-icon>mdi-check</v-icon>
+                              {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+                            </v-btn>
+                            <v-spacer />
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
+                      <v-radio-group
+                        v-model="editArticle.unit"
+                        row
+                      >
+                        <v-radio
+                          :label="$vuetify.lang.t('$vuetify.articles.unit')"
+                          value="unit"
+                        />
+                        <v-radio
+                          :label="$vuetify.lang.t('$vuetify.articles.p_v')"
+                          value="vol"
+                        />
+                      </v-radio-group>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <div>
+                    <v-icon>mdi-book-open-variant</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
                     </span>
-                                    </div>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="3"
-                                        >
-                                        </v-col>
-                                        <v-col
-                                            v-show="editArticle.composite"
-                                            cols="12"
-                                            md="3"
-                                        >
-                                            <v-select
-                                                ref="selectArticle"
-                                                :items="localArticles"
-                                                :label="$vuetify.lang.t('$vuetify.rule.select')"
-                                                item-text="name"
-                                                chips
-                                                :loading="isShopLoading"
-                                                :disabled="!!isShopLoading"
-                                                return-object
-                                                @input="selectArticle"
-                                            >
-                                                <template v-slot:selection="data">
-                                                    <v-chip
-                                                        :key="JSON.stringify(data.item)"
-                                                        v-bind="data.attrs"
-                                                        :input-value="data.selected"
-                                                        :disabled="data.disabled"
-                                                        @click:close="data.parent.selectItem(data.item)"
-                                                    >
-                                                        <v-avatar
-                                                            v-if="data.item.color"
-                                                            class="white--text"
-                                                            :color="data.item.color"
-                                                            left
-                                                            v-text="data.item.name.slice(0, 1).toUpperCase()"
-                                                        />
-                                                        <v-avatar
-                                                            v-else
-                                                            left
-                                                        >
-                                                            <v-img :src="data.item.path"/>
-                                                        </v-avatar>
-                                                        {{ data.item.name }}
-                                                    </v-chip>
-                                                </template>
-                                            </v-select>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col
-                                            v-show="!editArticle.composite"
-                                            cols="12"
-                                            md="3"
-                                        >
-                                            <v-switch
-                                                v-model="editArticle.track_inventory" @change="changeInventory"
-                                                class="md-6"
-                                                :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
-                                            />
-                                        </v-col>
-                                    </v-row>
-                                    <v-row v-show="editArticle.composite">
-                                        <v-col
-                                            cols="12"
-                                            md="12"
-                                        >
-                                            <composite-list
-                                                :composite-list="composite"
-                                                style="margin-top: 0"
-                                                @updateComposite="updateComposite"
-                                            />
-                                        </v-col>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                            <v-expansion-panel v-show="!editArticle.composite">
-                                <v-expansion-panel-header>
-                                    <div>
-                                        <v-icon>mdi-order-bool-descending-variant</v-icon>
-                                        <span style="text-transform: uppercase;font-weight: bold">
+                  </div>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="3"
+                    />
+                    <v-col
+                      v-show="editArticle.composite"
+                      cols="12"
+                      md="3"
+                    >
+                      <v-select
+                        ref="selectArticle"
+                        :items="localArticles"
+                        :label="$vuetify.lang.t('$vuetify.rule.select')"
+                        item-text="name"
+                        chips
+                        :loading="isShopLoading"
+                        :disabled="!!isShopLoading"
+                        return-object
+                        @input="selectArticle"
+                      >
+                        <template v-slot:selection="data">
+                          <v-chip
+                            :key="JSON.stringify(data.item)"
+                            v-bind="data.attrs"
+                            :input-value="data.selected"
+                            :disabled="data.disabled"
+                            @click:close="data.parent.selectItem(data.item)"
+                          >
+                            <v-avatar
+                              v-if="data.item.color"
+                              class="white--text"
+                              :color="data.item.color"
+                              left
+                              v-text="data.item.name.slice(0, 1).toUpperCase()"
+                            />
+                            <v-avatar
+                              v-else
+                              left
+                            >
+                              <v-img :src="data.item.path" />
+                            </v-avatar>
+                            {{ data.item.name }}
+                          </v-chip>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col
+                      v-show="!editArticle.composite"
+                      cols="12"
+                      md="3"
+                    >
+                      <v-switch
+                        v-model="editArticle.track_inventory"
+                        class="md-6"
+                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        @change="changeInventory"
+                      />
+                    </v-col>
+                  </v-row>
+                  <v-row v-show="editArticle.composite">
+                    <v-col
+                      cols="12"
+                      md="12"
+                    >
+                      <composite-list
+                        :composite-list="composite"
+                        style="margin-top: 0"
+                        @updateComposite="updateComposite"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+              <v-expansion-panel v-show="!editArticle.composite">
+                <v-expansion-panel-header>
+                  <div>
+                    <v-icon>mdi-order-bool-descending-variant</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.panel.variant') }}
                     </span>
-                                    </div>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="12"
-                                        >
-                                            <v-row>
-                                                <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                >
-                                                    <variant
-                                                        :ref-parent="this.ref"
-                                                        :updated="updated"
-                                                        :variants-parent="variants"
-                                                        :variants-values-parent="variantData"
-                                                        @updateVariants="updateVariant"
-                                                    />
-                                                </v-col>
-                                            </v-row>
-                                        </v-col>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-header>
-                                    <div>
-                                        <v-icon>mdi-shopping</v-icon>
-                                        <span style="text-transform: uppercase;font-weight: bold">
+                  </div>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="12"
+                    >
+                      <v-row>
+                        <v-col
+                          cols="12"
+                          md="12"
+                        >
+                          <variant
+                            :ref-parent="ref"
+                            :updated="updated"
+                            :variants-parent="variants"
+                            :variants-values-parent="variantData"
+                            @updateVariants="updateVariant"
+                          />
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <div>
+                    <v-icon>mdi-shopping</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.menu.shop') }}
                     </span>
-                                    </div>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="12"
-                                        >
-                                            <v-row>
-                                                <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                >
-                                                    <shops-articles
-                                                        :track-inventory-parent="track_inventory"
-                                                        :shop-data="shopData"
-                                                        :variants-data="variantData"
-                                                        @updateShopsData="updateShopData"
-                                                    />
-                                                </v-col>
-                                            </v-row>
-                                        </v-col>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-header>
-                                    <div>
-                                        <v-icon>mdi-palette</v-icon>
-                                        <span style="text-transform: uppercase;font-weight: bold">
+                  </div>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="12"
+                    >
+                      <v-row>
+                        <v-col
+                          cols="12"
+                          md="12"
+                        >
+                          <shops-articles
+                            :track-inventory-parent="track_inventory"
+                            :shop-data="shopData"
+                            :variants-data="variantData"
+                            @updateShopsData="updateShopData"
+                          />
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <div>
+                    <v-icon>mdi-palette</v-icon>
+                    <span style="text-transform: uppercase;font-weight: bold">
                       {{ $vuetify.lang.t('$vuetify.representation.representation') }}
                     </span>
-                                    </div>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col
-                                            cols="12"
-                                            md="12"
-                                        >
-                                            <v-radio-group
-                                                v-model="representation"
-                                                row
-                                            >
-                                                <v-row>
-                                                    <v-col
-                                                        cols="12"
-                                                        md="4"
-                                                    >
-                                                        <v-radio
-                                                            :label="$vuetify.lang.t('$vuetify.representation.image')"
-                                                            value="image"
-                                                        />
-                                                    </v-col>
-                                                    <v-col
-                                                        cols="12"
-                                                        md="8"
-                                                    >
-                                                        <v-radio
-                                                            :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
-                                                            value="color"
-                                                        />
-                                                    </v-col>
-                                                </v-row>
-                                            </v-radio-group>
-                                        </v-col>
-                                        <v-row>
-                                            <v-col
-                                                v-show="representation===`image`"
-                                                cols="12"
-                                                md="12"
-                                            >
-                                                <div
-                                                    id="multiple-image"
-                                                    style="display: flex; justify-content: center;"
-                                                >
-                                                    <app-upload-multiple-image
-                                                        :data-images="editArticle.images"
-                                                        :upload-success="uploadImage"
-                                                    />
-                                                </div>
-                                            </v-col>
-                                            <v-col
-                                                v-show="representation===`color`"
-                                                cols="12"
-                                                md="9"
-                                            >
-                                                <app-color-picker
-                                                    :value="editArticle.color || ``"
-                                                    @input="inputColor"
-                                                />
-                                            </v-col>
-                                        </v-row>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
-                    </v-form>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer/>
-                    <v-btn
-                        class="mb-2"
-                        @click="$router.push({name:'product_list'})"
+                  </div>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="12"
                     >
-                        <v-icon>mdi-close</v-icon>
-                        {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-                    </v-btn>
-                    <v-btn
-                        class="mb-2"
-                        color="primary"
-                        :disabled="!formValid"
-                        :loading="isActionInProgress"
-                        @click="editArticleHandler"
-                    >
-                        <v-icon>mdi-check</v-icon>
-                        {{ $vuetify.lang.t('$vuetify.actions.save') }}
-                    </v-btn>
-                </v-card-actions>
-                <new-category v-if="$store.state.category.showNewModal"/>
-            </v-card>
-        </v-container>
-    </div>
+                      <v-radio-group
+                        v-model="representation"
+                        row
+                      >
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.image')"
+                              value="image"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            md="8"
+                          >
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
+                              value="color"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-radio-group>
+                    </v-col>
+                    <v-row>
+                      <v-col
+                        v-show="representation===`image`"
+                        cols="12"
+                        md="12"
+                      >
+                        <div
+                          id="multiple-image"
+                          style="display: flex; justify-content: center;"
+                        >
+                          <app-upload-multiple-image
+                            :data-images="editArticle.images"
+                            :upload-success="uploadImage"
+                          />
+                        </div>
+                      </v-col>
+                      <v-col
+                        v-show="representation===`color`"
+                        cols="12"
+                        md="9"
+                      >
+                        <app-color-picker
+                          :value="editArticle.color || ``"
+                          @input="inputColor"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            class="mb-2"
+            @click="$router.push({name:'product_list'})"
+          >
+            <v-icon>mdi-close</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          </v-btn>
+          <v-btn
+            class="mb-2"
+            color="primary"
+            :disabled="!formValid"
+            :loading="isActionInProgress"
+            @click="editArticleHandler"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          </v-btn>
+        </v-card-actions>
+        <new-category v-if="$store.state.category.showNewModal" />
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import {mapActions, mapState, mapGetters} from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
 
 export default {
-    name: "EditArticle",
-    components: {NewCategory, CompositeList, ShopsArticles, Variant},
-    data() {
-        return {
-            localArticles: [],
-            track_inventory: false,
-            ref: '10001',
-            representation: 'image',
-            showInfoAdd: false,
-            composite: [],
-            row: null,
-            panel: [0],
-            formValid: false,
-            shopData: [],
-            variantData: [],
-            updated: true,
-            formRule: this.$rules,
-            loadingData: false,
-            focus: false,
-        }
-    },
-    computed: {
-        ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
-        ...mapState('category', ['categories', 'isCategoryLoading']),
-        ...mapState('shop', ['shops', 'isShopLoading']),
-        ...mapGetters('auth', ['user']),
-    },
-    created: async function () {
-        this.loadingData = true
-        this.formValid = false
-        await this.getCategories()
-        this.variants = []
-        if (this.editArticle.variant_values.length > 0)
-            this.editArticle.variants.forEach((vtn) => {
-                this.variants.push({
-                    id: vtn.id,
-                    name: vtn.name,
-                    articles_id: vtn.articles_id,
-                    created_at: vtn.created_at,
-                    updated_at: vtn.updated_at,
-                    value: JSON.parse(vtn.value)
-                })
-            })
-        this.variantData = this.editArticle.variant_values
-        await this.getShops().then(() => {
-            this.updateVariant(this.variants, this.variantData)
-        })
-        this.composite = []
-        await this.getArticles().then(() => {
-            this.articles.forEach((value, index) => {
-                this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
-                if (value.id !== this.editArticle.id) {
-                    if (!value.articles_id) {
-                        if (value.variant_values.length > 0) {
-                            value.variant_values.forEach((v, i) => {
-                                this.localArticles.push({
-                                    name: value.name + '(' + v.name + ')',
-                                    price: v.price,
-                                    cost: v.cost,
-                                    cant: '1',
-                                    composite_id: v.id
-                                })
-                            })
-                        } else {
-                            this.localArticles.push({
-                                name: value.name,
-                                price: value.price,
-                                cost: value.cost,
-                                cant: '1',
-                                composite_id: value.id
-                            })
-                        }
-                    }
-                }
-            })
-        })
-        this.editArticle.composites.forEach((value, index) => {
-            let comp = this.articles.filter(art => art.id === value.composite_id)[0]
-            this.composite.push({
-                name: comp.articles_id ? this.articles.filter(art => art.id === comp.articles_id)[0].name + '(' +
-                    comp.name + ')' : comp.name,
-                price: value.price,
-                id: value.id,
-                cost: comp.cost,
-                cant: value.cant,
-                composite_id: value.composite_id
-            })
-        })
-        this.ref = parseFloat(this.ref) + 1
-        this.loadingData = false
-    },
-    mounted() {
-        this.track_inventory = this.editArticle.track_inventory
-    },
-    methods: {
-        ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
-        ...mapActions('category', ['getCategories']),
-        ...mapActions('shop', ['getShops']),
-        inputColor(color) {
-            this.editArticle.color = color
-        },
-        numbers(event) {
-            const regex = new RegExp('^\\d+(.\\d{1,2})?$')
-            const key = String.fromCharCode(
-                !event.charCode ? event.which : event.charCode
-            )
-            if (!regex.test(key)) {
-                event.preventDefault()
-                return false
-            }
-        },
-        lnSpace(event) {
-            const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-            const key = String.fromCharCode(
-                !event.charCode ? event.which : event.charCode
-            )
-            if (!regex.test(key)) {
-                event.preventDefault()
-                return false
-            }
-        },
-        lettersNumbers(event) {
-            const regex = new RegExp('^[a-zA-Z0-9]+$')
-            const key = String.fromCharCode(
-                !event.charCode ? event.which : event.charCode
-            )
-            if (!regex.test(key)) {
-                event.preventDefault()
-                return false
-            }
-        },
-        changeComposite() {
-            if (this.editArticle.composite) {
-                this.variantData = []
-            } else {
-                this.updated = false
-            }
-        },
-        changeInventory() {
-            this.track_inventory = this.editArticle.track_inventory
-        },
-        updateComposite(composite) {
-            console.log(composite)
-            this.composite = composite
-            console.log(this.composite)
-            let cost = 0.00
-            let price = 0.00
-            this.composite.forEach((comp) => {
-                cost += comp.cant * comp.cost
-                price += comp.cant * comp.price
-            })
-
-            this.editArticle.cost = cost
-            this.editArticle.price = price
-        },
-        selectArticle(item) {
-            if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
-                this.composite.push({
-                    name: item.name,
-                    price: item.price,
-                    cost: item.cost,
-                    cant: '1',
-                    composite_id: item.composite_id
-                })
-                console.log(this.composite)
-                let totalCost = 0.00
-                let totalPrice = 0.00
-                this.composite.forEach((comp) => {
-                    totalCost += comp.cant * comp.cost
-                    totalPrice += comp.cant * comp.price
-                })
-                this.editArticle.cost = totalCost
-                this.editArticle.price = totalPrice
-            } else {
-                this.showInfoAdd = true
-            }
-            this.selected = null
-        },
-        updateShopData(shopsDataUpdated) {
-            this.shopData = shopsDataUpdated
-        },
-        updateVariant(variants, dataUpdated) {
-            this.variantData = dataUpdated
-            this.editArticle.variants = variants
-            this.shopData = []
-            this.shops.forEach((shop) => {
-                if (variants.length > 0) {
-                    this.variantData.forEach((v) => {
-                        let articles_shop = v.articles_shop.filter(sh => sh.shops_id === shop.id)
-                        this.shopData.push({
-                            articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
-                            shop_id: shop.id,
-                            shop_name: shop.name,
-                            checked: articles_shop.length > 0,
-                            name: v.name,
-                            price: articles_shop.length > 0 ? articles_shop[0].price : v.price,
-                            under_inventory: articles_shop.length > 0 ? articles_shop[0].under_inventory : '0',
-                            stock: articles_shop.length > 0 ? articles_shop[0].stock : '0'
-                        })
-                    })
-                } else {
-                    this.shopData.push({
-                        shop_id: shop.id,
-                        shop_name: shop.name,
-                        checked: true,
-                        name: '',
-                        price: '0.00',
-                        stock: '0',
-                        under_inventory: '0'
-                    })
-                }
-            })
-            this.updated = true
-        },
-        editArticleHandler() {
-            let valid = true
-            if (!this.validateRef() || !this.validateBarCode())
-                valid = false
-            else if (this.editArticle.composite) {
-                if (this.composite.length === 0) {
-                    valid = false
-                    this.$Swal.fire({
-                        title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                            this.$vuetify.lang.t('$vuetify.menu.articles')
-                        ]),
-                        text: this.$vuetify.lang.t(
-                            '$vuetify.messages.warning_composite'
-                        ),
-                        icon: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: this.$vuetify.lang.t(
-                            '$vuetify.actions.accept'
-                        ),
-                        confirmButtonColor: 'red'
-                    })
-                } else {
-                    this.editArticle.composites = this.composite
-                }
-            } else {
-                this.editArticle.variantsValues = this.variantData
-            }
-            if (valid)
-                this.validCreate()
-        },
-        validateBarCode() {
-            let valid = true
-            this.variantData.forEach((value, index) => {
-                if (valid) {
-                    let localArt = this.articles.filter(art => art.barCode === value.barCode)
-                    if (localArt.length > 0) {
-                        if (localArt[0].id !== value.id) {
-                            valid = false
-                            if (!valid)
-                                this.$Swal.fire({
-                                    title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                                        this.$vuetify.lang.t('$vuetify.menu.articles')
-                                    ]),
-                                    text: this.$vuetify.lang.t(
-                                        '$vuetify.messages.warning_barCode', [value.barCode]
-                                    ),
-                                    icon: 'warning',
-                                    showCancelButton: false,
-                                    confirmButtonText: this.$vuetify.lang.t(
-                                        '$vuetify.actions.accept'
-                                    ),
-                                    confirmButtonColor: 'red'
-                                })
-
-                        }
-                    }
-                }
-            })
-            if (this.variantData.filter(vd => vd.barCode === this.editArticle.barCode).length > 0) {
-                valid = false
-                this.$Swal.fire({
-                    title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                        this.$vuetify.lang.t('$vuetify.menu.articles')
-                    ]),
-                    text: this.$vuetify.lang.t(
-                        '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
-                    ),
-                    icon: 'warning',
-                    showCancelButton: false,
-                    confirmButtonText: this.$vuetify.lang.t(
-                        '$vuetify.actions.accept'
-                    ),
-                    confirmButtonColor: 'red'
-                })
-            } else {
-                let localArt = this.articles.filter(art => art.barCode === this.editArticle.barCode)
-                if (localArt.length > 0) {
-                    valid = false
-                    this.$Swal.fire({
-                        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                            this.$vuetify.lang.t('$vuetify.menu.articles')
-                        ]),
-                        text: this.$vuetify.lang.t(
-                            '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
-                        ),
-                        icon: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: this.$vuetify.lang.t(
-                            '$vuetify.actions.accept'
-                        ),
-                        confirmButtonColor: 'red'
-                    })
-                }
-            }
-            return valid;
-        },
-        validateRef() {
-            let valid = true
-            this.variantData.forEach((value, index) => {
-                if (valid) {
-                    let localArt = this.articles.filter(art => art.ref === value.ref)
-                    if (localArt.length > 0) {
-                        if (localArt[0].id !== value.id) {
-                            valid = false
-                            if (!valid)
-                                this.$Swal.fire({
-                                    title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                                        this.$vuetify.lang.t('$vuetify.menu.articles')
-                                    ]),
-                                    text: this.$vuetify.lang.t(
-                                        '$vuetify.messages.warning_ref', [value.ref]
-                                    ),
-                                    icon: 'warning',
-                                    showCancelButton: false,
-                                    confirmButtonText: this.$vuetify.lang.t(
-                                        '$vuetify.actions.accept'
-                                    ),
-                                    confirmButtonColor: 'red'
-                                })
-
-                        }
-                    }
-                }
-            })
-            if (this.variantData.filter(vd => vd.ref === this.editArticle.ref).length > 0) {
-                valid = false
-                this.$Swal.fire({
-                    title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                        this.$vuetify.lang.t('$vuetify.menu.articles')
-                    ]),
-                    text: this.$vuetify.lang.t(
-                        '$vuetify.messages.warning_ref', [this.editArticle.ref]
-                    ),
-                    icon: 'warning',
-                    showCancelButton: false,
-                    confirmButtonText: this.$vuetify.lang.t(
-                        '$vuetify.actions.accept'
-                    ),
-                    confirmButtonColor: 'red'
-                })
-            } else {
-                let localArt = this.articles.filter(art => art.ref === this.editArticle.ref)
-                if (localArt.length > 0) {
-                    valid = false
-                    this.$Swal.fire({
-                        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-                            this.$vuetify.lang.t('$vuetify.menu.articles')
-                        ]),
-                        text: this.$vuetify.lang.t(
-                            '$vuetify.messages.warning_ref', [this.editArticle.ref]
-                        ),
-                        icon: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: this.$vuetify.lang.t(
-                            '$vuetify.actions.accept'
-                        ),
-                        confirmButtonColor: 'red'
-                    })
-                }
-            }
-            return valid;
-        },
-        closeInfoAdd() {
-            this.showInfoAdd = false
-        },
-        uploadImage(formData, index, fileList) {
-            this.editArticle.images = fileList
-        },
-        async validCreate() {
-            if (this.$refs.form.validate()) {
-                this.loading = true
-                this.editArticle.shops = []
-                this.shopData.forEach((value) => {
-                    if (value.checked) {
-                        this.editArticle.shops.push(value)
-                    }
-                })
-                this.editArticle.variant_values = this.variantData
-                this.editArticle.composites = this.composite
-                await this.updateArticle(this.editArticle)
-                await this.$router.push({name: 'product_list'})
-            }
-        }
+  name: 'EditArticle',
+  components: { NewCategory, CompositeList, ShopsArticles, Variant },
+  data () {
+    return {
+      localArticles: [],
+      track_inventory: false,
+      ref: '10001',
+      representation: 'image',
+      showInfoAdd: false,
+      composite: [],
+      row: null,
+      panel: [0],
+      formValid: false,
+      shopData: [],
+      variantData: [],
+      updated: true,
+      formRule: this.$rules,
+      loadingData: false,
+      focus: false
     }
+  },
+  computed: {
+    ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
+    ...mapState('category', ['categories', 'isCategoryLoading']),
+    ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapGetters('auth', ['user'])
+  },
+  created: async function () {
+    this.loadingData = true
+    this.formValid = false
+    await this.getCategories()
+    this.variants = []
+    if (this.editArticle.variant_values.length > 0) {
+      this.editArticle.variants.forEach((vtn) => {
+        this.variants.push({
+          id: vtn.id,
+          name: vtn.name,
+          articles_id: vtn.articles_id,
+          created_at: vtn.created_at,
+          updated_at: vtn.updated_at,
+          value: JSON.parse(vtn.value)
+        })
+      })
+    }
+    this.variantData = this.editArticle.variant_values
+    await this.getShops().then(() => {
+      this.updateVariant(this.variants, this.variantData)
+    })
+    this.composite = []
+    await this.getArticles().then(() => {
+      this.articles.forEach((value) => {
+        this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
+        if (value.id !== this.editArticle.id) {
+          if (!value.articles_id) {
+            if (value.variant_values.length > 0) {
+              value.variant_values.forEach((v) => {
+                this.localArticles.push({
+                  name: value.name + '(' + v.name + ')',
+                  price: v.price,
+                  cost: v.cost,
+                  cant: '1',
+                  composite_id: v.id
+                })
+              })
+            } else {
+              this.localArticles.push({
+                name: value.name,
+                price: value.price,
+                cost: value.cost,
+                cant: '1',
+                composite_id: value.id
+              })
+            }
+          }
+        }
+      })
+    })
+    this.editArticle.composites.forEach((value) => {
+      const comp = this.articles.filter(art => art.id === value.composite_id)[0]
+      this.composite.push({
+        name: comp.articles_id ? this.articles.filter(art => art.id === comp.articles_id)[0].name + '(' +
+                    comp.name + ')' : comp.name,
+        price: value.price,
+        id: value.id,
+        cost: comp.cost,
+        cant: value.cant,
+        composite_id: value.composite_id
+      })
+    })
+    this.ref = parseFloat(this.ref) + 1
+    this.loadingData = false
+  },
+  mounted () {
+    this.track_inventory = this.editArticle.track_inventory
+  },
+  methods: {
+    ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
+    ...mapActions('category', ['getCategories']),
+    ...mapActions('shop', ['getShops']),
+    inputColor (color) {
+      this.editArticle.color = color
+    },
+    numbers (event) {
+      const regex = new RegExp('^\\d+(.\\d{1,2})?$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    lnSpace (event) {
+      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    lettersNumbers (event) {
+      const regex = new RegExp('^[a-zA-Z0-9]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    changeComposite () {
+      if (this.editArticle.composite) {
+        this.variantData = []
+      } else {
+        this.updated = false
+      }
+    },
+    changeInventory () {
+      this.track_inventory = this.editArticle.track_inventory
+    },
+    updateComposite (composite) {
+      console.log(composite)
+      this.composite = composite
+      console.log(this.composite)
+      let cost = 0.00
+      let price = 0.00
+      this.composite.forEach((comp) => {
+        cost += comp.cant * comp.cost
+        price += comp.cant * comp.price
+      })
+
+      this.editArticle.cost = cost
+      this.editArticle.price = price
+    },
+    selectArticle (item) {
+      if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
+        this.composite.push({
+          name: item.name,
+          price: item.price,
+          cost: item.cost,
+          cant: '1',
+          composite_id: item.composite_id
+        })
+        console.log(this.composite)
+        let totalCost = 0.00
+        let totalPrice = 0.00
+        this.composite.forEach((comp) => {
+          totalCost += comp.cant * comp.cost
+          totalPrice += comp.cant * comp.price
+        })
+        this.editArticle.cost = totalCost
+        this.editArticle.price = totalPrice
+      } else {
+        this.showInfoAdd = true
+      }
+      this.selected = null
+    },
+    updateShopData (shopsDataUpdated) {
+      this.shopData = shopsDataUpdated
+    },
+    updateVariant (variants, dataUpdated) {
+      this.variantData = dataUpdated
+      this.editArticle.variants = variants
+      this.shopData = []
+      this.shops.forEach((shop) => {
+        if (variants.length > 0) {
+          this.variantData.forEach((v) => {
+            const articlesShop = v.articles_shop.filter(sh => sh.shops_id === shop.id)
+            this.shopData.push({
+              articles_shop_id: articlesShop.length > 0 ? articlesShop[0].id : '',
+              shop_id: shop.id,
+              shop_name: shop.name,
+              checked: articlesShop.length > 0,
+              name: v.name,
+              price: articlesShop.length > 0 ? articlesShop[0].price : v.price,
+              under_inventory: articlesShop.length > 0 ? articlesShop[0].under_inventory : '0',
+              stock: articlesShop.length > 0 ? articlesShop[0].stock : '0'
+            })
+          })
+        } else {
+          this.shopData.push({
+            shop_id: shop.id,
+            shop_name: shop.name,
+            checked: true,
+            name: '',
+            price: '0.00',
+            stock: '0',
+            under_inventory: '0'
+          })
+        }
+      })
+      this.updated = true
+    },
+    editArticleHandler () {
+      let valid = true
+      if (!this.validateRef() || !this.validateBarCode()) { valid = false } else if (this.editArticle.composite) {
+        if (this.composite.length === 0) {
+          valid = false
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_composite'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+        } else {
+          this.editArticle.composites = this.composite
+        }
+      } else {
+        this.editArticle.variantsValues = this.variantData
+      }
+      if (valid) { this.validCreate() }
+    },
+    validateBarCode () {
+      let valid = true
+      this.variantData.forEach((value) => {
+        if (valid) {
+          const localArt = this.articles.filter(art => art.barCode === value.barCode)
+          if (localArt.length > 0) {
+            if (localArt[0].id !== value.id) {
+              valid = false
+              if (!valid) {
+                this.$Swal.fire({
+                  title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+                    this.$vuetify.lang.t('$vuetify.menu.articles')
+                  ]),
+                  text: this.$vuetify.lang.t(
+                    '$vuetify.messages.warning_barCode', [value.barCode]
+                  ),
+                  icon: 'warning',
+                  showCancelButton: false,
+                  confirmButtonText: this.$vuetify.lang.t(
+                    '$vuetify.actions.accept'
+                  ),
+                  confirmButtonColor: 'red'
+                })
+              }
+            }
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.barCode === this.editArticle.barCode).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else {
+        const localArt = this.articles.filter(art => art.barCode === this.editArticle.barCode)
+        if (localArt.length > 0) {
+          valid = false
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+        }
+      }
+      return valid
+    },
+    validateRef () {
+      let valid = true
+      this.variantData.forEach((value) => {
+        if (valid) {
+          const localArt = this.articles.filter(art => art.ref === value.ref)
+          if (localArt.length > 0) {
+            if (localArt[0].id !== value.id) {
+              valid = false
+              if (!valid) {
+                this.$Swal.fire({
+                  title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+                    this.$vuetify.lang.t('$vuetify.menu.articles')
+                  ]),
+                  text: this.$vuetify.lang.t(
+                    '$vuetify.messages.warning_ref', [value.ref]
+                  ),
+                  icon: 'warning',
+                  showCancelButton: false,
+                  confirmButtonText: this.$vuetify.lang.t(
+                    '$vuetify.actions.accept'
+                  ),
+                  confirmButtonColor: 'red'
+                })
+              }
+            }
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.ref === this.editArticle.ref).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_ref', [this.editArticle.ref]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else {
+        const localArt = this.articles.filter(art => art.ref === this.editArticle.ref)
+        if (localArt.length > 0) {
+          valid = false
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_ref', [this.editArticle.ref]
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+        }
+      }
+      return valid
+    },
+    closeInfoAdd () {
+      this.showInfoAdd = false
+    },
+    uploadImage (formData, index, fileList) {
+      this.editArticle.images = fileList
+    },
+    async validCreate () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        this.editArticle.shops = []
+        this.shopData.forEach((value) => {
+          if (value.checked) {
+            this.editArticle.shops.push(value)
+          }
+        })
+        this.editArticle.variant_values = this.variantData
+        this.editArticle.composites = this.composite
+        await this.updateArticle(this.editArticle)
+        await this.$router.push({ name: 'product_list' })
+      }
+    }
+  }
 }
 </script>
 
