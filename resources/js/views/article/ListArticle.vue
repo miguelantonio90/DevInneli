@@ -183,7 +183,7 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
           value: 'shopsNames',
-          select_filter_many: true
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
