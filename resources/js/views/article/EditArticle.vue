@@ -477,7 +477,7 @@ export default {
         this.variants.push({
           id: vtn.id,
           name: vtn.name,
-          articles_id: vtn.articles_id,
+          parent_id: vtn.article_id,
           created_at: vtn.created_at,
           updated_at: vtn.updated_at,
           value: JSON.parse(vtn.value)
@@ -493,7 +493,7 @@ export default {
       this.articles.forEach((value) => {
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
         if (value.id !== this.editArticle.id) {
-          if (!value.articles_id) {
+          if (!value.article_id) {
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v) => {
                 this.localArticles.push({
@@ -520,7 +520,7 @@ export default {
     this.editArticle.composites.forEach((value) => {
       const comp = this.articles.filter(art => art.id === value.composite_id)[0]
       this.composite.push({
-        name: comp.articles_id ? this.articles.filter(art => art.id === comp.articles_id)[0].name + '(' +
+        name: comp.article_id ? this.articles.filter(art => art.id === comp.article_id)[0].name + '(' +
                     comp.name + ')' : comp.name,
         price: value.price,
         id: value.id,

@@ -530,7 +530,7 @@ export default {
     await this.getArticles().then(() => {
       this.articles.forEach((value) => {
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
-        if (!value.articles_id) {
+        if (!value.article_id) {
           if (value.variant_values.length > 0) {
             value.variant_values.forEach((v) => {
               this.localArticles.push({

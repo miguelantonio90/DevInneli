@@ -76,9 +76,9 @@ class Shop extends Model
         return $this->hasMany(Assistance::class);
     }
 
-    public function articlesShop():HasMany
+    public function articlesShops():HasMany
     {
-        return $this->hasMany(ArticlesShop::class);
+        return $this->hasMany(ArticlesShops::class);
     }
 
 }

@@ -29,7 +29,7 @@ class Variant extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'articles_id',
+        'name', 'value', 'article_id',
     ];
 
     public function article(): BelongsTo

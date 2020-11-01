@@ -459,7 +459,7 @@ export default {
       this.variants.push({
         id: vtn.id,
         name: vtn.name,
-        articles_id: vtn.articles_id,
+        article_id: vtn.article_id,
         created_at: vtn.created_at,
         updated_at: vtn.updated_at,
         value: JSON.parse(vtn.value)

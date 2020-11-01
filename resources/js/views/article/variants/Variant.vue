@@ -170,7 +170,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.cost="{ item }">
+    <template v-slot:item.ref="{ item }">
       <v-edit-dialog
         :return-value.sync="item.ref"
         large

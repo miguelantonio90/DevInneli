@@ -17,7 +17,7 @@ class CreateArticlesCompositesTable extends Migration
             $table->uuid('id')->primary();
             $table->integer('cant');
             $table->decimal('price',15,2);
-            $table->foreignUuid('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->foreignUuid('composite_id')->references('id')->on('articles')
                 ->onDelete('cascade');

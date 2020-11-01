@@ -20,7 +20,7 @@ class CreateInventoriesTable extends Migration
             $table->decimal('cant',15,2);
             $table->timestamps();
 
-            $table->foreignUuid('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
         });
     }

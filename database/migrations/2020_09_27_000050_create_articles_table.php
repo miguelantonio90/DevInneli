@@ -32,7 +32,7 @@ class CreateArticlesTable extends Migration
 
         });
         Schema::table('articles', function($table) {
-            $table->foreignUuid('articles_id')->nullable()->references('id')->on('articles');
+            $table->foreignUuid('parent_id')->nullable()->references('id')->on('articles');
         });
     }
 

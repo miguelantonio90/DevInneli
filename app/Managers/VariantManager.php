@@ -3,7 +3,7 @@
 namespace App\Managers;
 
 use App\Articles;
-use App\ArticlesShop;
+use App\ArticlesShops;
 use App\Variant;
 
 class VariantManager
@@ -45,7 +45,7 @@ class VariantManager
     public function newVariant($data, $articleId):Variant
     {
         return Variant::create([
-            'articles_id' => $articleId,
+            'article_id' => $articleId,
             'name' => $data['name'],
             'value' => json_encode($data['value'])
         ]);
@@ -67,13 +67,13 @@ class VariantManager
     /**
      * @param $data
      * @param $article
-     * @return ArticlesShop
+     * @return ArticlesShops
      */
-    public function newArticleShop($data, $article): ArticlesShop
+    public function newArticleShop($data, $article): ArticlesShops
     {
-        return ArticlesShop::create([
-            'articles_id' => $article->id,
-            'shops_id' => $data['shop_id'],
+        return ArticlesShops::create([
+            'article_id' => $article->id,
+            'shop_id' => $data['shop_id'],
             'stock' => $data['stock'],
             'price' => $data['price'],
             'under_inventory' => $data['under_inventory']
@@ -83,11 +83,11 @@ class VariantManager
     /**
      * @param $id
      * @param $data
-     * @return ArticlesShop
+     * @return ArticlesShops
      */
-    public function updateArticleShop($id, $data): ArticlesShop
+    public function updateArticleShop($id, $data): ArticlesShops
     {
-        $article_shop = ArticlesShop::findOrFail($id);
+        $article_shop = ArticlesShops::findOrFail($id);
         $article_shop['shops_id'] = $data['shop_id'];
         $article_shop['stock'] = $data['stock'];
         $article_shop['price'] = $data['price'];
@@ -103,7 +103,7 @@ class VariantManager
      */
     public function deleteShop($id):bool
     {
-        return ArticlesShop::findOrFail($id)->delete();
+        return ArticlesShops::findOrFail($id)->delete();
 
     }
 

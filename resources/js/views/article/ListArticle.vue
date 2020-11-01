@@ -57,11 +57,27 @@
             <td :colspan="headers.length">
               <v-data-table
                 style="margin: 0"
+                item-key="name"
                 :headers="getTableColumns"
                 :items="item.variant_values"
                 hide-default-header
                 hide-default-footer
-              />
+              >
+                <template v-slot:value.price="{ value }">
+                  {{ `${user.company.currency + ' ' + value.price}` }}
+                </template>
+                <template v-slot:value.cost="{ value }">
+                  {{ `${user.company.currency + ' ' + value.cost}` }}
+                </template>
+                <template v-slot:value.shopsNames="{ value }">
+                  <v-chip
+                    v-for="(shop, i) of value.shopsNames"
+                    :key="i"
+                  >
+                    {{ shop }}
+                  </v-chip>
+                </template>
+              </v-data-table>
             </td>
           </template>
         </app-data-table-expand>
@@ -138,7 +154,7 @@ export default {
   created () {
     this.getArticles().then(() => {
       this.articles.forEach((value) => {
-        if (!value.articles_id) { this.localArticles.push(value) }
+        if (!value.parent_id) { this.localArticles.push(value) }
       })
       console.log(this.localArticles)
     })

@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\ArticlesComposite;
-use App\ArticlesShop;
+use App\ArticlesShops;
 use App\Variant;
 
 class ArticleManager
@@ -31,7 +31,7 @@ class ArticleManager
     {
         if (auth()->user()['isAdmin'] === 1) {
             $articles = Articles::latest()
-                ->with('articlesShop')
+                ->with('articlesShops')
                 ->with('categories')
                 ->get();
         } else {
@@ -45,7 +45,7 @@ class ArticleManager
                     }
                 ])
                 ->with('composites')
-                ->with('articlesShop')
+                ->with('articlesShops')
                 ->with('variants')
                 ->with('variantValues')
                 ->with([
@@ -63,8 +63,8 @@ class ArticleManager
                 }
             }
             $shopNames = [];
-            foreach ($article['shops'] as $sh => $shop) {
-                $shopNames[$sh] = $shop['name'];
+            foreach ($article['articlesShops'] as $sh => $shop) {
+                $shopNames[$sh] = $shop['shopName'];
             }
             $articles[$k]['shopsNames'] = array_unique($shopNames);
             if (isset($article['price'])) {
@@ -96,7 +96,7 @@ class ArticleManager
                     $value['company_id'] = $data['company_id'];
                     $articleChildren = $this->insertArticle($value);
                     $this->updateData($articleChildren, $value);
-                    $articleChildren->articles_id = $article->id;
+                    $articleChildren->parent_id = $article->id;
                     $articleChildren->save();
                     $arrayShops = $this->getShopsByVariant($shops, $articleChildren);
                     foreach ($arrayShops as $k => $v) {
@@ -206,7 +206,7 @@ class ArticleManager
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
                 $newArt= ArticlesComposite::create([
-                    'articles_id' => $article->id,
+                    'parent_id' => $article->id,
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
                     'price' => $value['price'],
@@ -267,7 +267,7 @@ class ArticleManager
     public function removeComposite($article, $composites): void
     {
         $articleComposite = ArticlesComposite::latest()
-            ->where('articles_id', '=', $article->id)
+            ->where('parent_id', '=', $article->id)
             ->get();
         foreach ($articleComposite as $key => $value) {
             $exist = false;
@@ -292,7 +292,7 @@ class ArticleManager
     public function updateVariants($article, $variants): void
     {
         $variantDB = Variant::latest()
-            ->where('articles_id', '=', $article->id)
+            ->where('parent_id', '=', $article->id)
             ->get();
         foreach ($variantDB as $key => $value) {
             $exist = false;
@@ -323,7 +323,7 @@ class ArticleManager
         $shops = $data['shops'];
         $variantValues = $data['variant_values'];
         $variantsValue = Articles::latest()
-            ->where('articles_id', '=', $article->id)
+            ->where('parent_id', '=', $article->id)
             ->get();
         foreach ($variantsValue as $key => $value) {
             $exist = false;
@@ -342,7 +342,7 @@ class ArticleManager
             if (!isset($v['id'])) {
                 $v['company_id'] = $data['company_id'];
                 $articleChildren = $this->insertArticle($v);
-                $articleChildren->articles_id = $article->id;
+                $articleChildren->parent_id = $article->id;
                 $articleChildren->save();
             } else {
                 $articleChildren = Articles::findOrFail($v['id']);
@@ -369,8 +369,8 @@ class ArticleManager
      */
     public function updateShops($article, $shopsArticles): void
     {
-        $variantDB = ArticlesShop::latest()
-            ->where('articles_id', '=', $article->id)
+        $variantDB = ArticlesShops::latest()
+            ->where('article_id', '=', $article->id)
             ->get();
         foreach ($variantDB as $key => $value) {
             $exist = false;
@@ -392,7 +392,7 @@ class ArticleManager
     public function delete($id)
     {
         $childrens = Articles::latest()
-            ->where('articles_id', '=', $id)
+            ->where('parent_id', '=', $id)
             ->get();
         if (count($childrens) > 0)
             foreach ($childrens as $key => $value)

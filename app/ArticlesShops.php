@@ -6,9 +6,8 @@ use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 /**
- * Class ArticlesShop
+ * Class ArticlesShops
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -16,21 +15,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */
-class ArticlesShop extends Model
+class ArticlesShops extends Model
 {
     use Uuid;
 
     public $incrementing = false;
     protected $keyType = 'string';
     protected $guarded = [];
-    protected $fillable = ['price', 'stock', 'under_inventory', 'shops_id', 'articles_id'];
-    public function articles(): BelongsTo
+    protected $fillable = ['price', 'stock', 'under_inventory', 'shop_id', 'article_id'];
+    public function article(): BelongsTo
     {
         return $this->belongsTo(Articles::class);
     }
 
     public function shops(): BelongsTo
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class)->addSelect([
+        'shopName' => self::select('name')
+            ->whereColumn('articles_shops.shop_id', 'shop.id')]);
     }
 }

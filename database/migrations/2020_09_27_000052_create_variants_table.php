@@ -18,7 +18,7 @@ class CreateVariantsTable extends Migration
             $table->string('name');
             $table->json('value');
 
-            $table->foreignUuid('articles_id')->references('id')->on('articles')
+            $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->timestamps();
         });
