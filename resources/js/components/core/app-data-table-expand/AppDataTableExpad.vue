@@ -29,6 +29,7 @@
     </v-container>
     <v-data-table
       :single-expand="singleExpand"
+      :expanded="expand"
       show-expand
       :class="getClassStyle"
       v-bind="options"
@@ -184,8 +185,11 @@ export default {
     singleExpand: {
       type: Boolean,
       default: true
+    },
+    expand: {
+      type: Array,
+      default: DEFAULT_ARRAY
     }
-
   },
   data () {
     return {

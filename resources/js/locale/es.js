@@ -155,7 +155,9 @@ export default {
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
-    idle_counter: 'La sesión se cierra en {0} segundos'
+    idle_counter: 'La sesión se cierra en {0} segundos',
+    warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.'
   },
   // options
   actions: {

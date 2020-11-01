@@ -206,13 +206,12 @@ class ArticleManager
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
                 $newArt= ArticlesComposite::create([
-                    'parent_id' => $article->id,
+                    'article_id' => $article->id,
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
                     'price' => $value['price'],
                 ]);
             } else {
-                var_dump($value['id']);
                 $article_c = ArticlesComposite::findOrFail($value['id']);
                 $article_c['cant'] = $value['cant'];
                 $article_c['price'] = $value['price'];
@@ -267,7 +266,7 @@ class ArticleManager
     public function removeComposite($article, $composites): void
     {
         $articleComposite = ArticlesComposite::latest()
-            ->where('parent_id', '=', $article->id)
+            ->where('article_id', '=', $article->id)
             ->get();
         foreach ($articleComposite as $key => $value) {
             $exist = false;

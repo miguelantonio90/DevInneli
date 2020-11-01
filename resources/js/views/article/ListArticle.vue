@@ -12,6 +12,7 @@
           :items="localArticles"
           item-key="name"
           class="elevation-1"
+          :expand="expanded"
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
@@ -55,13 +56,37 @@
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
-              v-for="(shop, i) of item.shopsNames"
+              v-for="(shop, i) of item.articles_shops"
               :key="i"
             >
-              {{ shop }}
+              {{ shop.shops.name }}
             </v-chip>
           </template>
-          <template v-slot:expanded-item="{ headers, item }">
+          <template v-slot:group.header="{ group, headers, toggle, item, isOpen }">
+            <td
+              v-if="item.variant_values.length > 0"
+              :colspan="headers.length"
+            >
+              <v-btn
+                :ref="group"
+                small
+                icon
+                :data-open="isOpen"
+                @click="toggle"
+              >
+                <v-icon v-if="isOpen">
+                  mdi-chevron-up
+                </v-icon>
+                <v-icon v-else>
+                  mdi-chevron-down
+                </v-icon>
+              </v-btn>
+              {{ group }}
+            </td>
+          </template>
+          <template
+            v-slot:expanded-item="{ headers, item }"
+          >
             <td :colspan="headers.length">
               <v-data-table
                 style="margin: 0"
@@ -79,11 +104,16 @@
                 </template>
                 <template v-slot:value.shopsNames="{ value }">
                   <v-chip
-                    v-for="(article_shop, i) of value.articles_shops"
+                    v-for="(shop, i) of value.articles_shops"
                     :key="i"
                   >
-                    {{ article_shop.shops.name }}
+                    {{ shop.shops.name }}
                   </v-chip>
+                </template>
+                <template v-slot:value.percent="{ value }">
+                  <template v-if="parseInt(value.price)=== 0 || parseFloat(value.price) === 0.00">
+                    {{ 0 }} %
+                  </template>
                 </template>
               </v-data-table>
             </td>
@@ -164,8 +194,8 @@ export default {
           this.localArticles.push(value)
         }
       })
-      console.log(this.localArticles)
     })
+    console.log(this.localArticles)
   },
   methods: {
     ...mapActions('article', [

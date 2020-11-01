@@ -143,7 +143,9 @@ export default {
     info_exchange_rate: 'The rate of change is with respect to 1',
     idle_title: 'Session Expired',
     idle_info: 'You have left this browser idle for 10 minutes.',
-    idle_counter: 'The session closes in {0} seconds'
+    idle_counter: 'The session closes in {0} seconds',
+    warning_ref: "You can't create this article. The Reference {0} exist.",
+    warning_barCode: "You can't create this article. The Bar Code {0} exist."
   },
   // profile
   profile: {

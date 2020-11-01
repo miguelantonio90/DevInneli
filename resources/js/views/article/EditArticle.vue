@@ -597,6 +597,7 @@ export default {
       this.editArticle.price = price
     },
     selectArticle (item) {
+      console.log(item)
       if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
         this.composite.push({
           name: item.name,
@@ -728,7 +729,7 @@ export default {
           confirmButtonColor: 'red'
         })
       } else {
-        const localArt = this.articles.filter(art => art.barCode === this.editArticle.barCode)
+        const localArt = this.articles.filter(art => art.barCode === this.editArticle.barCode && art.id !== this.editArticle.id)
         if (localArt.length > 0) {
           valid = false
           this.$Swal.fire({
@@ -794,7 +795,7 @@ export default {
           confirmButtonColor: 'red'
         })
       } else {
-        const localArt = this.articles.filter(art => art.ref === this.editArticle.ref)
+        const localArt = this.articles.filter(art => art.ref === this.editArticle.ref && art.id !== this.editArticle.id)
         if (localArt.length > 0) {
           valid = false
           this.$Swal.fire({

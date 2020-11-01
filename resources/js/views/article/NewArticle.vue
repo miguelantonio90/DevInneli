@@ -529,6 +529,7 @@ export default {
     await this.getCategories()
     await this.getArticles().then(() => {
       this.articles.forEach((value) => {
+        console.log(value)
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
         if (!value.article_id) {
           if (value.variant_values.length > 0) {
@@ -616,13 +617,14 @@ export default {
       this.newArticle.price = price
     },
     selectArticle (item) {
-      if (this.composite.filter(art => art.composite_id === item.id).length === 0) {
+      console.log(item)
+      if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
         this.composite.push({
           name: item.name,
           price: item.price,
           cost: item.cost,
           cant: '1',
-          composite_id: item.id
+          composite_id: item.composite_id
         })
         let totalCost = 0.00
         this.composite.forEach((comp) => {
