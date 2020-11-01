@@ -261,7 +261,8 @@ export default {
     barCode: 'Bar Code',
     options: 'Options',
     cant: 'Quantify',
-    total_cost: 'Total Cost: '
+    total_cost: 'Total Cost: ',
+    total_price: 'Total Price: '
   },
   shop_article: {
     under_inventory: 'Low Inventory',

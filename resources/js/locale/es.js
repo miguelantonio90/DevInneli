@@ -264,7 +264,8 @@ export default {
     barCode: 'Código de Barras',
     options: 'Opciones',
     cant: 'Cantidad',
-    total_cost: 'Costo Total: '
+    total_cost: 'Costo Total: ',
+    total_price: 'Precio Total: '
   },
   shop_article: {
     under_inventory: 'Bajo Inventario',

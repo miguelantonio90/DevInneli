@@ -54,12 +54,13 @@ class Articles extends Model
         return $this->hasMany(ArticleImage::class, 'article_id');
     }
 
-    public function variantValues(){
+    public function variantValues():HasMany{
         return $this->hasMany(Articles::class)->with('articlesShop');
     }
 
-    public function articlesShop(){
-        return $this->hasMany(ArticlesShops::class);
+    public function articlesShop():HasMany
+    {
+        return $this->hasMany(ArticlesShop::class);
     }
 
     public function composites(): HasMany

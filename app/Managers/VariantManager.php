@@ -3,7 +3,7 @@
 namespace App\Managers;
 
 use App\Articles;
-use App\ArticlesShops;
+use App\ArticlesShop;
 use App\Variant;
 
 class VariantManager
@@ -67,11 +67,11 @@ class VariantManager
     /**
      * @param $data
      * @param $article
-     * @return ArticlesShops
+     * @return ArticlesShop
      */
-    public function newArticleShop($data, $article): ArticlesShops
+    public function newArticleShop($data, $article): ArticlesShop
     {
-        return ArticlesShops::create([
+        return ArticlesShop::create([
             'articles_id' => $article->id,
             'shops_id' => $data['shop_id'],
             'stock' => $data['stock'],
@@ -83,11 +83,11 @@ class VariantManager
     /**
      * @param $id
      * @param $data
-     * @return ArticlesShops
+     * @return ArticlesShop
      */
-    public function updateArticleShop($id, $data): ArticlesShops
+    public function updateArticleShop($id, $data): ArticlesShop
     {
-        $article_shop = ArticlesShops::findOrFail($id);
+        $article_shop = ArticlesShop::findOrFail($id);
         $article_shop['shops_id'] = $data['shop_id'];
         $article_shop['stock'] = $data['stock'];
         $article_shop['price'] = $data['price'];
@@ -103,7 +103,7 @@ class VariantManager
      */
     public function deleteShop($id):bool
     {
-        return ArticlesShops::findOrFail($id)->delete();
+        return ArticlesShop::findOrFail($id)->delete();
 
     }
 

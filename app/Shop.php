@@ -71,14 +71,14 @@ class Shop extends Model
         return $this->hasMany(ShopTypeOfOrder::class);
     }
 
-    public function articles(): belongsToMany
-    {
-        return $this->belongsToMany(Articles::class);
-    }
-
     public function assistances(): HasMany
     {
         return $this->hasMany(Assistance::class);
+    }
+
+    public function articlesShop():HasMany
+    {
+        return $this->hasMany(ArticlesShop::class);
     }
 
 }

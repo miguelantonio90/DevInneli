@@ -170,7 +170,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.ref="{ item }">
+    <template v-slot:item.cost="{ item }">
       <v-edit-dialog
         :return-value.sync="item.ref"
         large
@@ -256,8 +256,9 @@ export default {
     variantsValuesParent: {
       type: Array
     },
-    // eslint-disable-next-line vue/require-prop-types
-    refParent: {}
+    refParent: {
+      type: Number
+    }
   },
   data () {
     return {
@@ -480,7 +481,9 @@ export default {
           })
         }
         localResult = result
-        result = index + 1 !== data.length ? [] : ''
+        if (index + 1 !== data.length) {
+          result = []
+        }
       })
       this.variantsValues = result
       this.updateVariants()
@@ -493,20 +496,20 @@ export default {
 </script>
 
 <style scoped>
-.tag-input span.chip {
+.tag-input span {
     background-color: #1976d2;
     color: #fff;
     font-size: 1em;
 }
 
-.tag-input span.v-chip {
+.tag-input span {
     background-color: #1976d2;
     color: #fff;
     font-size: 1em;
     padding-left: 7px;
 }
 
-.tag-input span.v-chip::before {
+.tag-input span::before {
     content: "label";
     font-family: "Material Icons", serif;
     font-weight: normal;

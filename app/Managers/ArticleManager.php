@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\ArticlesComposite;
-use App\ArticlesShops;
+use App\ArticlesShop;
 use App\Variant;
 
 class ArticleManager
@@ -31,7 +31,7 @@ class ArticleManager
     {
         if (auth()->user()['isAdmin'] === 1) {
             $articles = Articles::latest()
-                ->with('shops')
+                ->with('articlesShop')
                 ->with('categories')
                 ->get();
         } else {
@@ -45,7 +45,7 @@ class ArticleManager
                     }
                 ])
                 ->with('composites')
-                ->with('shops')
+                ->with('articlesShop')
                 ->with('variants')
                 ->with('variantValues')
                 ->with([
@@ -369,7 +369,7 @@ class ArticleManager
      */
     public function updateShops($article, $shopsArticles): void
     {
-        $variantDB = ArticlesShops::latest()
+        $variantDB = ArticlesShop::latest()
             ->where('articles_id', '=', $article->id)
             ->get();
         foreach ($variantDB as $key => $value) {
