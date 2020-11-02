@@ -190,7 +190,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.barCode="item">
+    <template v-slot:item.barCode="{ item }">
       <v-edit-dialog
         :return-value.sync="item.barCode"
         large
@@ -455,7 +455,7 @@ export default {
             const localArticle = this.variantsValues.filter(sh => sh.name === localValue)
             if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
             result.push({
-              articles_shop: localArticle.length > 0 ? localArticle[0].articles_shop : [],
+              articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
               name: localValue.toString(),
               price: localArticle.length > 0 ? localArticle[0].price : '0.00',
               cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',
@@ -471,7 +471,7 @@ export default {
                                 sh.name === v.name.toString() + '/' + localValue.toString())
               if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
               result.push({
-                articles_shop: localArticle.length > 0 ? localArticle[0].articles_shop : [],
+                articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
                 name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
                 price: localArticle.length > 0 ? localArticle[0].price : '0.00',
                 cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',

@@ -490,10 +490,11 @@ export default {
     })
     this.composite = []
     await this.getArticles().then(() => {
+      this.localArticles = []
       this.articles.forEach((value, index) => {
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
         if (value.id !== this.editArticle.id) {
-          if (!value.articles_id) {
+          if (!value.parent_id) {
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v, i) => {
                 this.localArticles.push({
@@ -520,7 +521,7 @@ export default {
     this.editArticle.composites.forEach((value, index) => {
       const comp = this.articles.filter(art => art.id === value.composite_id)[0]
       this.composite.push({
-        name: comp.articles_id ? this.articles.filter(art => art.id === comp.articles_id)[0].name + '(' +
+        name: comp.parent_id ? this.articles.filter(art => art.id === comp.parent_id)[0].name + '(' +
                     comp.name + ')' : comp.name,
         price: value.price,
         id: value.id,

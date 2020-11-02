@@ -17,7 +17,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param  VariantManager  $variantManager
+     * @param VariantManager $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -74,15 +74,23 @@ class ArticleManager
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                $articles[$k]['variantValues'][$sh]['percent'] =
-                    round(
-                        (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
-                        2
-                    );
+                if (isset($articles[$k]['variantValues'][$sh]['price'])) {
+                    $articles[$k]['variantValues'][$sh]['percent'] = 0;
+                } else {
+                    $articles[$k]['variantValues'][$sh]['percent'] =
+                        round(
+                            (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                            2
+                        );
+                }
             }
 
-            $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],
-                2);
+            if (isset($article['price'])) {
+                $articles[$k]['percent'] = 0;
+            } else {
+                $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],
+                    2);
+            }
         }
         return $articles;
     }
@@ -109,7 +117,7 @@ class ArticleManager
                     $this->updateData($articleChildren, $value);
                     $articleChildren->parent_id = $article->id;
                     $articleChildren->save();
-                    $arrayShops = $this->getShopsByVariant($shops, $articleChildren);
+                    $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
                     foreach ($arrayShops as $k => $v) {
                         $this->variantManager->newArticleShop($v, $articleChildren);
                     }
@@ -237,7 +245,7 @@ class ArticleManager
      * @param $variantValue
      * @return array
      */
-    private function getShopsByVariant($data, $variantValue): array
+    private function getShopsByVariantValue($data, $variantValue): array
     {
         $result = [];
         foreach ($data as $key => $value) {
@@ -302,7 +310,7 @@ class ArticleManager
     public function updateVariants($article, $variants): void
     {
         $variantDB = Variant::latest()
-            ->where('parent_id', '=', $article->id)
+            ->where('article_id', '=', $article->id)
             ->get();
         foreach ($variantDB as $key => $value) {
             $exist = false;
@@ -360,8 +368,8 @@ class ArticleManager
             $articleChildren->name = $v['name'];
             $articleChildren->save();
             $this->updateData($articleChildren, $v);
-            $this->updateShops($articleChildren, $data);
-            $arrayShops = $this->getShopsByVariant($shops, $articleChildren);
+            $this->updateArticlesShops($articleChildren, $shops);
+            $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
             foreach ($arrayShops as $l => $m) {
                 if ($m['articles_shop_id'] == "") {
                     $this->variantManager->newArticleShop($m, $articleChildren);
@@ -377,7 +385,7 @@ class ArticleManager
      * @param $article
      * @param $shopsArticles
      */
-    public function updateShops($article, $shopsArticles): void
+    public function updateArticlesShops($article, $shopsArticles): void
     {
         $variantDB = ArticlesShops::latest()
             ->where('article_id', '=', $article->id)
@@ -385,12 +393,12 @@ class ArticleManager
         foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($shopsArticles as $k => $v) {
-                if (isset($v['articles_shop_id']) && $v['id'] === $value['id']) {
+                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id']) {
                     $exist = true;
                 }
             }
             if (!$exist) {
-                $this->variantManager->deleteShop($value->id);
+                $this->variantManager->deleteArticlesShops($value->id);
             }
         }
     }

@@ -88,7 +88,7 @@ class VariantManager
     public function updateArticleShop($id, $data): ArticlesShops
     {
         $article_shop = ArticlesShops::findOrFail($id);
-        $article_shop['shops_id'] = $data['shop_id'];
+        $article_shop['shop_id'] = $data['shop_id'];
         $article_shop['stock'] = $data['stock'];
         $article_shop['price'] = $data['price'];
         $article_shop['under_inventory'] = $data['under_inventory'];
@@ -101,7 +101,7 @@ class VariantManager
      * @param $id
      * @return bool
      */
-    public function deleteShop($id):bool
+    public function deleteArticlesShops($id):bool
     {
         return ArticlesShops::findOrFail($id)->delete();
 

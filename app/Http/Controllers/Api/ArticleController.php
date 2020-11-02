@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Article;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
