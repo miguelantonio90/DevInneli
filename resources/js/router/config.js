@@ -259,6 +259,17 @@ export const protectedRoute = [
             component: () => import('../views/article/NewArticle')
           },
           {
+            path: '/articles/supply_product',
+            name: 'supply_product',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/Inventory')
+          },
+          {
             path: '/articles/product.edit',
             name: 'product_edit',
             meta: {
