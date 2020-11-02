@@ -94,7 +94,8 @@ export default {
     assistance: 'Tarjeta de asistencia',
     supply_product: 'Abastecer',
     finance: 'Finanzas',
-    type_of_order: 'Tipo de Pedido'
+    type_of_order: 'Tipo de Pedido',
+    tax_list: 'Impuesto'
   },
   // settings
   settings: {
@@ -299,6 +300,13 @@ export default {
     contract: 'Número de Contrato',
     expense: 'Categoría de Gasto',
     note: 'Nota'
+  },
+  tax: {
+    name: 'Impuesto',
+    value: 'Valor',
+    rate: 'Tasa',
+    percent: 'Porciento',
+    permanent: 'Fijo'
   },
   ...es
 }

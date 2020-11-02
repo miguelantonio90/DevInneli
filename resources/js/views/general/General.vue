@@ -38,9 +38,10 @@ import ExpenseCategory from '../expense_category/List'
 import ExchangeRate from '../exchange_rate/List'
 import ListPayment from '../payment/ListPayment'
 import TypeOfOrder from '../type_order/List'
+import ListTax from '../tax/ListTax'
 export default {
   name: 'General2',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder },
+  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax },
   data () {
     return {
       tab: null,
@@ -49,7 +50,8 @@ export default {
         { key: 'list-payment', content: 'list-payment' },
         { key: 'expense-category', content: 'expense-category' },
         { key: 'exchange-rate', content: 'exchange-rate' },
-        { key: 'type-of-order', content: 'type-of-order' }
+        { key: 'type-of-order', content: 'type-of-order' },
+        { key: 'tax', content: 'list-tax' }
       ]
     }
   },
@@ -60,7 +62,8 @@ export default {
         { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: ' mdi-cash-multiple' },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check' },
         { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate'), icon: 'mdi-bank' },
-        { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order'), icon: 'mdi-food' }
+        { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order'), icon: 'mdi-food' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.tax_list'), icon: 'mdi-wallet' }
       ]
     }
   }

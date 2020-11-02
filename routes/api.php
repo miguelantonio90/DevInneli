@@ -55,6 +55,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('payment', 'PaymentController');
 
+        Route::resource('tax', 'TaxController');
+
         Route::resource('supplier', 'SupplierController');
 
         Route::resource('article', 'ArticleController');
@@ -66,6 +68,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('exchange/rate', 'ExchangeRateController');
 
         Route::resource('type/order', 'TypeOfOrderController');
+
         Route::put('type/order/edit/{order}', 'TypeOfOrderController@setPrincipal')->name('order.set.principal');
 
     });

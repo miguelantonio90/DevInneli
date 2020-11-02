@@ -94,7 +94,8 @@ export default {
     assistance: 'Assistance card',
     supply_product: 'Supply',
     finance: 'Finance',
-    type_of_order: 'Type of Order'
+    type_of_order: 'Type of Order',
+    tax_list: 'Tax'
   },
   // settings
   settings: {
@@ -296,6 +297,13 @@ export default {
     contract: 'Contract Number',
     expense: 'Expense Category',
     note: 'Note'
+  },
+  tax: {
+    name: 'Tax',
+    value: 'Value',
+    rate: 'Rate',
+    percent: 'Percent',
+    permanent: 'Permanent'
   },
   ...en
 }

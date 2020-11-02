@@ -79,6 +79,32 @@
                 </template>
               </v-edit-dialog>
             </template>
+            <template v-slot:item.supplier="{ item }">
+              <v-select
+                v-model="item.supplier"
+                :items="suppliers"
+                :label="$vuetify.lang.t('$vuetify.menu.supplier')"
+                item-text="name"
+                :loading="isSupplierTableLoading"
+                :disabled="!!isSupplierTableLoading"
+                return-object
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('supplier/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
+            </template>
             <template v-slot:item.actions="{ item }">
               <v-icon
                 small
@@ -88,6 +114,7 @@
               </v-icon>
             </template>
           </v-data-table>
+          <new-supplier v-if="$store.state.supplier.showNewModal" />
         </v-card-text>
       </v-col>
     </v-row>
@@ -95,8 +122,11 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import NewSupplier from '../supplier/NewSupplier'
+
 export default {
   name: 'Inventory',
+  components: { NewSupplier },
   data () {
     return {
       supply: [],
@@ -111,6 +141,7 @@ export default {
       'articles',
       'isTableLoading'
     ]),
+    ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
     getTableColumns () {
       return [
         {
@@ -125,7 +156,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
-          value: 'name',
+          value: 'inventory',
           select_filter: true
         },
         {
@@ -144,6 +175,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.supplier.name'),
+          value: 'supplier',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
@@ -155,25 +191,42 @@ export default {
     this.getArticles().then(() => {
       this.articles.forEach((value, index) => {
         if (!value.parent_id) {
+          let inventory = 0
           if (value.variant_values.length > 0) {
             value.variant_values.forEach((v, i) => {
+              if (v.articles_shops.length > 0) {
+                v.articles_shops.forEach((k, l) => {
+                  inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
+                })
+              }
               this.localArticles.push({
+                ref: value.ref,
                 name: value.name + '(' + v.name + ')',
                 price: v.price ? v.price : 0,
                 cost: v.cost ? v.cost : 0,
-                cant: '1',
+                inventory: inventory || 0,
+                cant: 1,
+                supplier: '',
                 totalCost: v.cost,
                 totalPrice: v.price,
                 article_id: v.id
               })
             })
           } else {
+            if (value.articles_shops.length > 0) {
+              value.articles_shops.forEach((k, l) => {
+                inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
+              })
+            }
             this.localArticles.push({
+              ref: value.ref,
               name: value.name,
               price: value.price ? value.price : 0,
               cost: value.cost ? value.cost : 0,
-              cant: '1',
+              cant: 1,
+              inventory: inventory || 0,
               totalCost: value.cost,
+              supplier: '',
               totalPrice: value.price,
               article_id: value.id
             })
@@ -183,6 +236,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions('article', ['getArticles']),
     ...mapActions('article', ['getArticles']),
     selectArticle (item) {
       console.log(item)
