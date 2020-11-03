@@ -57,6 +57,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('tax', 'TaxController');
 
+        Route::resource('discount', 'DiscountController');
+
         Route::resource('supplier', 'SupplierController');
 
         Route::resource('article', 'ArticleController');

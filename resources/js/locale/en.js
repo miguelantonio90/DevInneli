@@ -95,7 +95,8 @@ export default {
     supply_product: 'Supply',
     finance: 'Finance',
     type_of_order: 'Type of Order',
-    tax_list: 'Tax'
+    tax_list: 'Tax',
+    discount: 'Discount'
   },
   // settings
   settings: {
@@ -303,7 +304,13 @@ export default {
     value: 'Value',
     rate: 'Rate',
     percent: 'Percent',
-    permanent: 'Permanent'
+    permanent: 'Permanent',
+    noFacture: 'No. Facture'
+  },
+  pay: {
+    counted: 'Counted',
+    credit: 'Credit',
+    pay: 'Payment'
   },
   ...en
 }

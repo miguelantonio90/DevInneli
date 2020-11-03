@@ -95,7 +95,8 @@ export default {
     supply_product: 'Abastecer',
     finance: 'Finanzas',
     type_of_order: 'Tipo de Pedido',
-    tax_list: 'Impuesto'
+    tax_list: 'Impuesto',
+    discount: 'Descuento'
   },
   // settings
   settings: {
@@ -306,7 +307,13 @@ export default {
     value: 'Valor',
     rate: 'Tasa',
     percent: 'Porciento',
-    permanent: 'Fijo'
+    permanent: 'Fijo',
+    noFacture: 'No. Factura'
+  },
+  pay: {
+    counted: 'Contado',
+    credit: 'Crédito',
+    pay: 'Pago'
   },
   ...es
 }

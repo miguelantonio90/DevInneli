@@ -3,7 +3,7 @@
     <v-row>
       <v-col
         class="py-0"
-        cols="4"
+        cols="5"
       >
         <v-autocomplete
           chips
@@ -17,9 +17,7 @@
           @input="selectArticle"
         />
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="8">
+      <v-col cols="12">
         <v-card
           elevation="2"
           outlined
@@ -29,8 +27,7 @@
         <v-card-text>
           <v-data-table
             :headers="getTableColumns"
-            :items="supply"
-            class="elevation-1"
+            :items="supplies_product"
           >
             <template v-slot:item.cost="{ item }">
               <v-edit-dialog
@@ -77,33 +74,16 @@
                     {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                   </div>
                 </template>
-              </v-edit-dialog>
-            </template>
-            <template v-slot:item.supplier="{ item }">
-              <v-select
-                v-model="item.supplier"
-                :items="suppliers"
-                :label="$vuetify.lang.t('$vuetify.menu.supplier')"
-                item-text="name"
-                :loading="isSupplierTableLoading"
-                :disabled="!!isSupplierTableLoading"
-                return-object
-              >
-                <template v-slot:append-outer>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="$store.dispatch('supplier/toogleNewModal',true)"
-                      >
-                        mdi-plus
-                      </v-icon>
-                    </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                  </v-tooltip>
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="item.cant"
+                    label="Edit"
+                    single-line
+                    counter
+                    autofocus
+                  />
                 </template>
-              </v-select>
+              </v-edit-dialog>
             </template>
             <template v-slot:item.actions="{ item }">
               <v-icon
@@ -114,23 +94,38 @@
               </v-icon>
             </template>
           </v-data-table>
-          <new-supplier v-if="$store.state.supplier.showNewModal" />
         </v-card-text>
+      </v-col>
+      <v-col
+        v-show="supplies_product.length > 0"
+        cols="6"
+      >
+        <detail-supplier
+          :shop-supply="shopSupply"
+          :no-facture-supply="noFactureSupply"
+          :supplier-supply="supplier_supply"
+          :tax-supply="tax_supply"
+          @updateSupplyData="updateSupplyData"
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewSupplier from '../supplier/NewSupplier'
+import DetailSupplier from './DatailSupplier'
 
 export default {
   name: 'Inventory',
-  components: { NewSupplier },
+  components: { DetailSupplier },
   data () {
     return {
-      supply: [],
-      localArticles: []
+      supplies_product: [],
+      localArticles: [],
+      supplier_supply: null,
+      tax_supply: null,
+      noFactureSupply: '',
+      shopSupply: null
     }
   },
   computed: {
@@ -141,7 +136,6 @@ export default {
       'articles',
       'isTableLoading'
     ]),
-    ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
     getTableColumns () {
       return [
         {
@@ -175,11 +169,6 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.supplier.name'),
-          value: 'supplier',
-          select_filter: true
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
@@ -187,15 +176,17 @@ export default {
       ]
     }
   },
+  watch: {
+  },
   created () {
     this.getArticles().then(() => {
-      this.articles.forEach((value, index) => {
+      this.articles.forEach((value) => {
         if (!value.parent_id) {
           let inventory = 0
           if (value.variant_values.length > 0) {
-            value.variant_values.forEach((v, i) => {
+            value.variant_values.forEach((v) => {
               if (v.articles_shops.length > 0) {
-                v.articles_shops.forEach((k, l) => {
+                v.articles_shops.forEach((k) => {
                   inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
                 })
               }
@@ -205,8 +196,10 @@ export default {
                 price: v.price ? v.price : 0,
                 cost: v.cost ? v.cost : 0,
                 inventory: inventory || 0,
+                tax: 0,
                 cant: 1,
                 supplier: '',
+                noFacture: '',
                 totalCost: v.cost,
                 totalPrice: v.price,
                 article_id: v.id
@@ -214,7 +207,7 @@ export default {
             })
           } else {
             if (value.articles_shops.length > 0) {
-              value.articles_shops.forEach((k, l) => {
+              value.articles_shops.forEach((k) => {
                 inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
               })
             }
@@ -224,7 +217,9 @@ export default {
               price: value.price ? value.price : 0,
               cost: value.cost ? value.cost : 0,
               cant: 1,
+              tax: 0,
               inventory: inventory || 0,
+              noFacture: '',
               totalCost: value.cost,
               supplier: '',
               totalPrice: value.price,
@@ -237,14 +232,15 @@ export default {
   },
   methods: {
     ...mapActions('article', ['getArticles']),
-    ...mapActions('article', ['getArticles']),
     selectArticle (item) {
-      console.log(item)
-      this.supply.push(item)
+      this.supplies_product.push(item)
+      this.supply = item
     },
-
+    updateSupplyData () {
+      console.log('updateSupplyData')
+    },
     deleteItem (item) {
-      this.supply.splice(this.supply.indexOf(item), 1)
+      this.supplies_product.splice(this.supplies_product.indexOf(item), 1)
     }
   }
 }
