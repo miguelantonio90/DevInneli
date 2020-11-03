@@ -310,7 +310,10 @@ export default {
   pay: {
     counted: 'Counted',
     credit: 'Credit',
-    pay: 'Payment'
+    pay: 'Payment',
+    extra_data: 'Additional Data',
+    sub_total: 'Sub Total',
+    total: 'Total'
   },
   ...en
 }

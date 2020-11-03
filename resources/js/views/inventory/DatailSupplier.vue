@@ -1,5 +1,8 @@
 <template>
   <v-card>
+    <v-card-subtitle>
+      {{ $vuetify.lang.t('$vuetify.pay.extra_data') }}
+    </v-card-subtitle>
     <v-card-text>
       <v-row>
         <v-col cols="6">

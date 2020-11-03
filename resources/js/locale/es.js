@@ -313,7 +313,10 @@ export default {
   pay: {
     counted: 'Contado',
     credit: 'Crédito',
-    pay: 'Pago'
+    pay: 'Pago',
+    extra_data: 'Datos adicionales',
+    sub_total: 'Sub Total',
+    total: 'Total'
   },
   ...es
 }

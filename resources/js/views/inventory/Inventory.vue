@@ -18,83 +18,76 @@
         />
       </v-col>
       <v-col cols="12">
-        <v-card
-          elevation="2"
-          outlined
-          shaped
-          tile
-        />
-        <v-card-text>
-          <v-data-table
-            :headers="getTableColumns"
-            :items="supplies_product"
-          >
-            <template v-slot:item.cost="{ item }">
-              <v-edit-dialog
-                :return-value.sync="item.cost"
-                large
-                persistent
-                :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
-              >
-                <div>{{ item.cost }}</div>
-                <template v-slot:input>
-                  <div class="mt-4 title">
-                    {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-                  </div>
-                </template>
-                <template v-slot:input>
-                  <v-text-field-money
-                    v-model="item.cost"
-                    :label="$vuetify.lang.t('$vuetify.actions.edit')"
-                    required
-                    :properties="{
-                      clearable: true
-                    }"
-                    :options="{
-                      length: 15,
-                      precision: 2,
-                      empty: 0.00,
-                    }"
-                  />
-                </template>
-              </v-edit-dialog>
-            </template>
-            <template v-slot:item.cant="{ item }">
-              <v-edit-dialog
-                :return-value.sync="item.cant"
-                large
-                persistent
-                :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
-              >
-                <div>{{ item.cant }}</div>
-                <template v-slot:input>
-                  <div class="mt-4 title">
-                    {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-                  </div>
-                </template>
-                <template v-slot:input>
-                  <v-text-field
-                    v-model="item.cant"
-                    label="Edit"
-                    single-line
-                    counter
-                    autofocus
-                  />
-                </template>
-              </v-edit-dialog>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-icon
-                small
-                @click="deleteItem(item)"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
-          </v-data-table>
-        </v-card-text>
+        <v-data-table
+          :headers="getTableColumns"
+          :items="supplies_product"
+          @click:row="printSelectedValues"
+        >
+          <template v-slot:item.cost="{ item }">
+            <v-edit-dialog
+              :return-value.sync="item.cost"
+              large
+              persistent
+              :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+              :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+            >
+              <div>{{ item.cost }}</div>
+              <template v-slot:input>
+                <div class="mt-4 title">
+                  {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                </div>
+              </template>
+              <template v-slot:input>
+                <v-text-field-money
+                  v-model="item.cost"
+                  :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                  required
+                  :properties="{
+                    clearable: true
+                  }"
+                  :options="{
+                    length: 15,
+                    precision: 2,
+                    empty: 0.00,
+                  }"
+                />
+              </template>
+            </v-edit-dialog>
+          </template>
+          <template v-slot:item.cant="{ item }">
+            <v-edit-dialog
+              :return-value.sync="item.cant"
+              large
+              persistent
+              :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+              :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+            >
+              <div>{{ item.cant }}</div>
+              <template v-slot:input>
+                <div class="mt-4 title">
+                  {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                </div>
+              </template>
+              <template v-slot:input>
+                <v-text-field
+                  v-model="item.cant"
+                  label="Edit"
+                  single-line
+                  counter
+                  autofocus
+                />
+              </template>
+            </v-edit-dialog>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon
+              small
+              @click="deleteItem(item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+        </v-data-table>
       </v-col>
       <v-col
         v-show="supplies_product.length > 0"
@@ -108,12 +101,19 @@
           @updateSupplyData="updateSupplyData"
         />
       </v-col>
+      <!--      <v-col-->
+      <!--        v-show="supplies_product.length > 0"-->
+      <!--        cols="6"-->
+      <!--      >-->
+      <!--        <resume-supply />-->
+      <!--      </v-col>-->
     </v-row>
   </v-container>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import DetailSupplier from './DatailSupplier'
+import ResumeSupply from './ResumeSupply'
 
 export default {
   name: 'Inventory',
@@ -241,6 +241,9 @@ export default {
     },
     deleteItem (item) {
       this.supplies_product.splice(this.supplies_product.indexOf(item), 1)
+    },
+    printSelectedValues (item) {
+      console.log(item)
     }
   }
 }
