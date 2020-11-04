@@ -32,7 +32,7 @@
           v-if="tax.percent"
           cols="6"
         >
-          {{ tax.value }}%
+          {{ tax.value * supply.totalCost / 100 }}( {{ tax.value }}%)
         </v-col>
         <v-col
           v-else
@@ -106,11 +106,10 @@ export default {
   methods: {
     updateData () {
       this.totalTax = 0
-      console.log(this.supply.taxes)
       this.supplySelected.taxes.forEach((v) => {
         this.totalTax += v.percent ? this.supply.totalCost * v.value / 100 : v.value
       })
-      this.total = parseFloat(this.supply.totalCost) + parseFloat(this.totalTax)
+      this.total = parseFloat(parseFloat(this.supply.totalCost) + parseFloat(this.totalTax)).toFixed(2)
     }
   }
 }

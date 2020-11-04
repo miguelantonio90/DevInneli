@@ -426,7 +426,6 @@ export default {
       this.snackText = 'Canceled'
     },
     closeModalEdit () {
-      console.log('Dialog closed')
     },
     save () {
       if (this.editedIndex > -1) {

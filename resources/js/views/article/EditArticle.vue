@@ -584,9 +584,7 @@ export default {
       this.track_inventory = this.editArticle.track_inventory
     },
     updateComposite (composite) {
-      console.log(composite)
       this.composite = composite
-      console.log(this.composite)
       let cost = 0.00
       let price = 0.00
       this.composite.forEach((comp) => {
@@ -598,7 +596,6 @@ export default {
       this.editArticle.price = price
     },
     selectArticle (item) {
-      console.log(item)
       if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
         this.composite.push({
           name: item.name,
@@ -607,7 +604,6 @@ export default {
           cant: '1',
           composite_id: item.composite_id
         })
-        console.log(this.composite)
         let totalCost = 0.00
         let totalPrice = 0.00
         this.composite.forEach((comp) => {

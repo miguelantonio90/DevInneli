@@ -2,7 +2,6 @@
 
 namespace App\Managers;
 
-use App\Articles;
 use App\ArticlesShops;
 use App\Variant;
 
@@ -55,9 +54,10 @@ class VariantManager
         return ArticlesShops::create([
             'article_id' => $article->id,
             'shop_id' => $data['shop_id'],
-            $article_shop['stock'] = $data['stock'] ?: 0,
-            $article_shop['price'] = $data['price'],
-            $article_shop['under_inventory'] = $data['under_inventory'] ?: 0]);
+            'stock' => $data['stock'] ?: 0,
+            'price' => $data['price'],
+            'under_inventory' => $data['under_inventory'] ?: 0
+        ]);
     }
 
     /**

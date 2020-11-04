@@ -92,17 +92,15 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     },
     defaultItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     }
   }),
   computed: {
@@ -157,7 +155,6 @@ export default {
       this.composite[this.composite.indexOf(item)].cant = item.cant
       this.composite[this.composite.indexOf(item)].cost = item.cant * item.cost
       this.composite[this.composite.indexOf(item)].price = item.cant * item.price
-      console.log(item)
       this.updateTotalCost()
       this.updateComposite()
     },
@@ -219,7 +216,6 @@ export default {
       this.close()
     },
     updateComposite () {
-      console.log(this.composite)
       this.$emit('updateComposite', this.composite)
     }
   }

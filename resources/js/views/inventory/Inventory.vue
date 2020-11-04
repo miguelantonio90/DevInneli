@@ -276,9 +276,9 @@ export default {
       this.editedIndex = this.supplies_product.indexOf(item)
       this.supplySelected = item
     },
-    calcTotal () {
-      this.supplies_product[this.editedIndex].totalPrice = Math.round((this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant) * 100) / 100
-      this.supplies_product[this.editedIndex].totalCost = Math.round((this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant) * 100) / 100
+    calcTotal: function () {
+      this.supplies_product[this.editedIndex].totalPrice = parseFloat(this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant).toFixed(2)
+      this.supplies_product[this.editedIndex].totalCost = parseFloat(this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant).toFixed(2)
     }
   }
 }

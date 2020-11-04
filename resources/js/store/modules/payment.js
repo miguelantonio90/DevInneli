@@ -60,7 +60,6 @@ const mutations = {
         }
       })
     })
-    console.log(paymentsData)
     state.payments = paymentsData
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {

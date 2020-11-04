@@ -17,7 +17,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -74,7 +74,7 @@ class ArticleManager
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                if (isset($articles[$k]['variantValues'][$sh]['price'])) {
+                if ($articles[$k]['variantValues'][$sh]['price'] == 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
                 } else {
                     $articles[$k]['variantValues'][$sh]['percent'] =
@@ -85,7 +85,7 @@ class ArticleManager
                 }
             }
 
-            if (isset($article['price'])) {
+            if ($article['price'] == 0.00) {
                 $articles[$k]['percent'] = 0;
             } else {
                 $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],
@@ -153,44 +153,6 @@ class ArticleManager
     /**
      * @param $article
      * @param $data
-     * @return mixed
-     */
-    private function updateData($article, $data)
-    {
-        if (isset($data['barCode'])) {
-            $article->barCode = $data['barCode'];
-        }
-        if (isset($data['composite'])) {
-            $article->composite = false;
-        }
-        if (isset($data['cost'])) {
-            $article->cost = $data['cost'];
-        }
-        if (isset($data['price'])) {
-            $article->price = $data['price'];
-        }
-        if (isset($data['ref'])) {
-            $article->ref = $data['ref'];
-        }
-        if (isset($data['track_inventory'])) {
-            $article->track_inventory = $data['track_inventory'];
-        }
-        if (isset($data['unit'])) {
-            $article->unit = $data['unit'] === 'unit';
-        }
-        if (isset($data['category']['id'])) {
-            $article->category_id = $data['category']['id'];
-        }
-        if (isset($data['color'])) {
-            $article->color = $data['color'];
-        }
-        $article->save();
-
-    }
-
-    /**
-     * @param $article
-     * @param $data
      */
     public function updateComposite($article, $data): void
     {
@@ -224,7 +186,7 @@ class ArticleManager
         $article->save();
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
-                $newArt = ArticlesComposite::create([
+                ArticlesComposite::create([
                     'article_id' => $article->id,
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
@@ -238,6 +200,43 @@ class ArticleManager
             }
         }
 
+    }
+
+    /**
+     * @param $article
+     * @param $data
+     * @return mixed
+     */
+    private function updateData($article, $data): void
+    {
+        if (isset($data['barCode'])) {
+            $article->barCode = $data['barCode'];
+        }
+        if (isset($data['composite'])) {
+            $article->composite = false;
+        }
+        if (isset($data['cost'])) {
+            $article->cost = $data['cost'];
+        }
+        if (isset($data['price'])) {
+            $article->price = $data['price'];
+        }
+        if (isset($data['ref'])) {
+            $article->ref = $data['ref'];
+        }
+        if (isset($data['track_inventory'])) {
+            $article->track_inventory = $data['track_inventory'];
+        }
+        if (isset($data['unit'])) {
+            $article->unit = $data['unit'] === 'unit';
+        }
+        if (isset($data['category']['id'])) {
+            $article->category_id = $data['category']['id'];
+        }
+        if (isset($data['color'])) {
+            $article->color = $data['color'];
+        }
+        $article->save();
     }
 
     /**
@@ -263,7 +262,6 @@ class ArticleManager
      */
     public function edit($id, $data)
     {
-        $shops = $data['shops'];
         $article = Articles::findOrFail($id);
         $article->name = $data['name'];
         $article->save();
@@ -324,7 +322,7 @@ class ArticleManager
             }
         }
         foreach ($variants as $k => $v) {
-            if ($value['id'] != "") {
+            if ($v['id'] != "") {
                 $this->variantManager->editVariant($v);
             } else {
                 $this->variantManager->newVariant($v, $article->id);
@@ -334,7 +332,7 @@ class ArticleManager
 
     /**
      * @param $article
-     * @param $variantValues
+     * @param $data
      */
     public function updateChidrensArticles($article, $data): void
     {
@@ -382,6 +380,23 @@ class ArticleManager
     }
 
     /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        $childrens = Articles::latest()
+            ->where('parent_id', '=', $id)
+            ->get();
+        if (count($childrens) > 0) {
+            foreach ($childrens as $key => $value) {
+                $value->delete();
+            }
+        }
+        return Articles::findOrFail($id)->delete();
+    }
+
+    /**
      * @param $article
      * @param $shopsArticles
      */
@@ -401,23 +416,6 @@ class ArticleManager
                 $this->variantManager->deleteArticlesShops($value->id);
             }
         }
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function delete($id)
-    {
-        $childrens = Articles::latest()
-            ->where('parent_id', '=', $id)
-            ->get();
-        if (count($childrens) > 0) {
-            foreach ($childrens as $key => $value) {
-                $value->delete();
-            }
-        }
-        return Articles::findOrFail($id)->delete();
     }
 
 }

@@ -5,7 +5,6 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -46,7 +45,7 @@ class Articles extends Model
 
     public function variants(): HasMany
     {
-        return $this->hasMany(Variant::class,'article_id');
+        return $this->hasMany(Variant::class, 'article_id');
     }
 
     public function images(): HasMany
@@ -54,13 +53,14 @@ class Articles extends Model
         return $this->hasMany(ArticleImage::class, 'article_id');
     }
 
-    public function variantValues():HasMany{
+    public function variantValues(): HasMany
+    {
         return $this->hasMany(Articles::class, 'parent_id')->with('articlesShops');
     }
 
-    public function articlesShops():HasMany
+    public function articlesShops(): HasMany
     {
-        return $this->hasMany(ArticlesShops::class,'article_id')->with('shops');
+        return $this->hasMany(ArticlesShops::class, 'article_id')->with('shops');
     }
 
     public function composites(): HasMany

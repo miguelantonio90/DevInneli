@@ -529,7 +529,6 @@ export default {
     await this.getCategories()
     await this.getArticles().then(() => {
       this.articles.forEach((value) => {
-        console.log(value)
         this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
         if (!value.article_id) {
           if (value.variant_values.length > 0) {
@@ -617,7 +616,6 @@ export default {
       this.newArticle.price = price
     },
     selectArticle (item) {
-      console.log(item)
       if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
         this.composite.push({
           name: item.name,
@@ -640,7 +638,6 @@ export default {
       this.shopData = shopsDataUpdated
     },
     updateVariant (variants, dataUpdated) {
-      console.log(variants)
       this.variantData = dataUpdated
       this.newArticle.variants = variants
       this.shopData = []
