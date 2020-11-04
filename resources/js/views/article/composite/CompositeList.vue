@@ -92,17 +92,15 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     },
     defaultItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     }
   }),
   computed: {

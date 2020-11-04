@@ -77,7 +77,12 @@ const mutations = {
     state.isTableLoading = isLoading
   },
   [FETCHING_ARTICLES] (state, articles) {
-    state.articles = articles
+    state.articles = []
+    articles.forEach((value) => {
+      if (!value.parent_id) {
+        state.articles.push(value)
+      }
+    })
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -234,11 +239,9 @@ const actions = {
       })
   },
   async deleteArticle ({ commit, dispatch }, articleId) {
-    commit(ENV_DATA_PROCESS, true)
     await article
       .sendDeleteRequest(articleId)
       .then(() => {
-        commit(ENV_DATA_PROCESS, false)
         commit(ARTICLE_DELETE)
         dispatch('article/getArticles', null, { root: true })
       })

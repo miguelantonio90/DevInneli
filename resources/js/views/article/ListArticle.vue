@@ -5,14 +5,16 @@
         class="py-0"
         cols="12"
       >
-        <app-data-table-expand
+        <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
           :headers="getTableColumns"
-          :items="localArticles"
-          item-key="name"
-          class="elevation-1"
-          :expand="expanded"
+          csv-filename="Articles"
+          :items="articles"
+          :options="vBindOption"
+          :sort-by="['name']"
+          :sort-desc="[false, true]"
+          multi-sort
           :is-loading="isTableLoading"
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
@@ -89,7 +91,10 @@
             </v-btn>
           </template>
           <template v-slot:expanded-item="{ headers,item }">
-            <td :colspan="headers.length">
+            <td
+              :colspan="headers.length"
+              style="padding: 0 0 0 0"
+            >
               <v-simple-table>
                 <template v-slot:default>
                   <thead>
@@ -124,7 +129,7 @@
               </v-simple-table>
             </td>
           </template>
-        </app-data-table-expand>
+        </app-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -137,10 +142,13 @@ export default {
   name: 'ListArticle',
   data () {
     return {
-      expanded: [],
-      singleExpand: false,
       localArticles: [],
-      search: ''
+      search: '',
+      vBindOption: {
+        itemKey: 'name',
+        singleExpand: false,
+        showExpand: true
+      }
     }
   },
   computed: {
@@ -194,13 +202,13 @@ export default {
     }
   },
   created () {
-    this.getArticles().then(() => {
+    this.getArticles()/* .then(() => {
       this.articles.forEach((value) => {
         if (!value.parent_id) {
           this.localArticles.push(value)
         }
       })
-    })
+    }) */
     console.log(this.localArticles)
   },
   methods: {

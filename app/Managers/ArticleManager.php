@@ -17,7 +17,7 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -74,7 +74,7 @@ class ArticleManager
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                if (isset($articles[$k]['variantValues'][$sh]['price'])) {
+                if ($articles[$k]['variantValues'][$sh]['price'] == 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
                 } else {
                     $articles[$k]['variantValues'][$sh]['percent'] =
@@ -85,7 +85,7 @@ class ArticleManager
                 }
             }
 
-            if (isset($article['price'])) {
+            if ($article['price'] == 0.00) {
                 $articles[$k]['percent'] = 0;
             } else {
                 $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],

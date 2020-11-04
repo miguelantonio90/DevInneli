@@ -10,8 +10,13 @@
         </v-col>
         <v-col cols="6" />
       </v-row>
-      <v-row v-for="tax in supply.taxes">
-        <v-col cols="6">
+      <v-row
+        v-for="tax in supply.taxes"
+        :key="tax.name"
+      >
+        <v-col
+          cols="6"
+        >
           {{ tax.name }}
         </v-col>
         <v-col cols="6" />

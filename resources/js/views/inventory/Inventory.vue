@@ -113,7 +113,6 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DetailSupplier from './DatailSupplier'
-import ResumeSupply from './ResumeSupply'
 
 export default {
   name: 'Inventory',
