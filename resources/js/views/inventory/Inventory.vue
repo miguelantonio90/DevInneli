@@ -7,7 +7,6 @@
       >
         <v-autocomplete
           chips
-          clearable
           rounded
           solo
           :items="localArticles"
