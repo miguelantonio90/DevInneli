@@ -18,7 +18,6 @@ import Coupons from '../components/sales/Coupons'
 import AppColorPicker from '../components/core/AppColorPicker'
 import AppDateTimePicker from '../components/core/AppDateTimePicker'
 import AppUploadMultipleImage from '../components/core/AppUploadMultipleImage'
-import AppDataTableExpand from '../components/core/app-data-table-expand/AppDataTableExpad'
 
 const components = [
   AppDataTable,
