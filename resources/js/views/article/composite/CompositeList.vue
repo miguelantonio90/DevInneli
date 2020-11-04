@@ -8,6 +8,8 @@
     <template v-slot:top>
       <v-toolbar flat>
         <h4> {{ $vuetify.lang.t('$vuetify.variants.total_cost') }} ${{ totalCost }}</h4>
+        <v-spacer />
+        <h4> {{ $vuetify.lang.t('$vuetify.variants.total_price') }} ${{ totalPrice }}</h4>
       </v-toolbar>
     </template>
     <template v-slot:item.name="{ item }">
@@ -83,23 +85,22 @@ export default {
   },
   data: () => ({
     totalCost: 0.00,
+    totalPrice: 0.00,
     dialog: false,
     headers: [],
     composite: [],
     editedIndex: -1,
     editedItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     },
     defaultItem: {
       name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      cant: 0,
+      cost: 0,
+      price: 0
     }
   }),
   computed: {
@@ -112,18 +113,19 @@ export default {
     dialog (val) {
       val || this.close()
     },
-    compositeList: function (val) {
-      this.composite = val
+    compositeList: function () {
+      this.composite = this.compositeList
       this.updateTotalCost()
     }
   },
   created () {
+    this.composite = this.compositeList
     this.initialize()
+    this.updateTotalCost()
   },
 
   methods: {
     initialize () {
-      this.composite = []
       this.headers = [
         {
           text: this.$vuetify.lang.t('$vuetify.variants.name'),
@@ -138,6 +140,10 @@ export default {
           value: 'cost'
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.variants.price'),
+          value: 'price'
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
@@ -145,14 +151,19 @@ export default {
       ]
     },
     updateData (item) {
-      this.composite[this.composite.indexOf(item)].cost = item.price * item.cant
+      this.composite[this.composite.indexOf(item)].composite_id = item.composite_id
+      this.composite[this.composite.indexOf(item)].cant = item.cant
+      this.composite[this.composite.indexOf(item)].cost = item.cant * item.cost
+      this.composite[this.composite.indexOf(item)].price = item.cant * item.price
       this.updateTotalCost()
       this.updateComposite()
     },
     updateTotalCost () {
       this.totalCost = 0.00
+      this.totalPrice = 0.00
       this.composite.forEach((comp) => {
-        this.totalCost += comp.cant * comp.price
+        this.totalCost += comp.cant * comp.cost
+        this.totalPrice += parseFloat(comp.price)
       })
     },
     editItem (item) {

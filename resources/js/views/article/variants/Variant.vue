@@ -70,7 +70,6 @@
                       chips
                       deletable-chips
                       class="tag-input"
-                      @keyup.tab="updateTags"
                       @paste="updateTags"
                     />
                   </v-col>
@@ -111,7 +110,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ `${user.company.currency +' '+item.price}` }}</div>
+        <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -147,7 +146,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ `${user.company.currency +' '+item.cost}` }}</div>
+        <div>{{ `${user.company.currency + ' ' + item.cost}` }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -171,7 +170,27 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.barCode="item">
+    <template v-slot:item.ref="{ item }">
+      <v-edit-dialog
+        :return-value.sync="item.ref"
+        large
+        persistent
+        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+        :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+        @save="saveModalEdit"
+        @cancel="cancelModalEdit"
+        @open="openModalEdit"
+        @close="closeModalEdit"
+      >
+        <div>{{ item.ref }}</div>
+        <template v-slot:input>
+          <div class="mt-4 title">
+            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+          </div>
+        </template>
+      </v-edit-dialog>
+    </template>
+    <template v-slot:item.barCode="{ item }">
       <v-edit-dialog
         :return-value.sync="item.barCode"
         large
@@ -183,7 +202,7 @@
         @open="openModalEdit"
         @close="closeModalEdit"
       >
-        <div>{{ item.barCode || 0 }}</div>
+        <div>{{ item.barCode }}</div>
         <template v-slot:input>
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -192,19 +211,18 @@
         <template v-slot:input>
           <v-text-field-simplemask
             v-model="item.barCode"
-            :label="$vuetify.lang.t('$vuetify.actions.edit')"
+            :label="$vuetify.lang.t('$vuetify.barCode')"
             :properties="{
               clearable: true,
-              singleLine:true,
-              counter:true,
-              autofocus:true,
             }"
             :options="{
               inputMask: '##-####-####-###',
-              outputMask: '##-####-####-###',
+              outputMask: '#############',
               empty: 0,
               alphanumeric: true,
             }"
+            :focus="focus"
+            @focus="focus = false"
           />
         </template>
       </v-edit-dialog>
@@ -238,18 +256,21 @@ export default {
       type: Array
     },
     refParent: {
-      type: String
+      type: Number
     }
   },
   data () {
     return {
       ref: '10001',
+      barCode: 0,
+      focus: false,
       updated: true,
       variants: [],
       variantsValues: [],
       dialog: false,
       headers: [],
       editedIndex: -1,
+      formRule: this.$rules,
       editedItem: {
         name: '',
         valueVariant: ''
@@ -296,6 +317,7 @@ export default {
     }
   },
   created () {
+    this.ref = parseFloat(this.refParent) + 1
     this.initialize()
   },
   mounted () {
@@ -307,7 +329,7 @@ export default {
       this.headers = [
         {
           text: this.$vuetify.lang.t('$vuetify.variants.name'),
-          value: 'variant'
+          value: 'name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.price'),
@@ -333,7 +355,7 @@ export default {
       ]
     },
     editChips (tag) {
-      this.editedItem.name = tag.name
+      this.editedItem = tag
       this.editedIndex = this.variants.indexOf(tag)
       this.select = tag.value
       this.dialog = true
@@ -404,19 +426,16 @@ export default {
       this.snackText = 'Canceled'
     },
     closeModalEdit () {
-      console.log('Dialog closed')
     },
     save () {
       if (this.editedIndex > -1) {
         Object.assign(this.variants[this.editedIndex], {
-          id: this.editedItem ? this.editedItem.id : '',
           name: this.editedItem.name,
           value: this.select
         })
         this.select = []
       } else {
         this.variants.push({
-          id: this.editedItem ? this.editedItem.id : '',
           name: this.editedItem.name,
           value: this.select
         })
@@ -426,44 +445,46 @@ export default {
       this.close()
     },
     myComb () {
-      const data = this.variants.reverse()
+      const data = this.variants
       let result = []
       let localResult = []
       data.forEach((value, index) => {
         if (index === 0) {
           value.value.forEach(localValue => {
-            if (localValue) {
-              console.log(this.ref)
-              this.ref = parseInt(this.ref) + 1
-              result.push({
-                variant: localValue.toString(),
-                price: '0.00',
-                cost: '0.00',
-                ref: this.ref,
-                barCode: ''
-              })
-            }
+            const localArticle = this.variantsValues.filter(sh => sh.name === localValue)
+            if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+            result.push({
+              articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+              name: localValue.toString(),
+              price: localArticle.length > 0 ? localArticle[0].price : '0.00',
+              cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',
+              ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
+              barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+            })
+            if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
           })
         } else {
           value.value.forEach(localValue => {
             localResult.forEach(v => {
-              console.log(this.ref)
-              if (localValue) {
-                this.ref = parseInt(this.ref) + 1
-                result.push({
-                  variant: localValue.toString() + '/' + v.variant.toString(),
-                  price: '0.00',
-                  cost: '0.00',
-                  ref: this.ref,
-                  barCode: ''
-                })
-              }
+              const localArticle = this.variantsValues.filter(sh => sh.name === localValue.toString() + '/' + v.name.toString() ||
+                                sh.name === v.name.toString() + '/' + localValue.toString())
+              if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+              result.push({
+                articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+                name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
+                price: localArticle.length > 0 ? localArticle[0].price : '0.00',
+                cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',
+                ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
+                barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+              })
+              if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
             })
           })
         }
         localResult = result
-        // eslint-disable-next-line no-unused-expressions
-        index + 1 !== data.length ? (result = []) : ''
+        if (index + 1 !== data.length) {
+          result = []
+        }
       })
       this.variantsValues = result
       this.updateVariants()
@@ -476,33 +497,33 @@ export default {
 </script>
 
 <style scoped>
-.tag-input span.chip {
-  background-color: #1976d2;
-  color: #fff;
-  font-size: 1em;
+.tag-input span {
+    background-color: #1976d2;
+    color: #fff;
+    font-size: 1em;
 }
 
-.tag-input span.v-chip {
-  background-color: #1976d2;
-  color: #fff;
-  font-size: 1em;
-  padding-left: 7px;
+.tag-input span {
+    background-color: #1976d2;
+    color: #fff;
+    font-size: 1em;
+    padding-left: 7px;
 }
 
-.tag-input span.v-chip::before {
-  content: "label";
-  font-family: "Material Icons", serif;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: "liga";
-  -webkit-font-smoothing: antialiased;
+.tag-input span::before {
+    content: "label";
+    font-family: "Material Icons", serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
 }
 </style>

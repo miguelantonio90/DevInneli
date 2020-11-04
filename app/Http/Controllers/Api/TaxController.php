@@ -4,29 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
+use App\Managers\TaxManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class ArticleController extends Controller
+class TaxController extends Controller
 {
     /**
-     * @var ArticleManager
+     * @var TaxManager
      */
-    private $articleManager;
+    private $taxManager;
 
     /**
-     * UserController constructor.
-     * @param  ArticleManager  $articleManager
+     * ClientController constructor.
+     * @param  TaxManager  $taxManager
      */
-    public function __construct(ArticleManager $articleManager)
+    public function __construct(TaxManager $taxManager)
     {
         $this->middleware('auth');
-        $this->articleManager = $articleManager;
+        $this->taxManager = $taxManager;
     }
 
     /**
@@ -37,8 +37,8 @@ class ArticleController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->findAllByCompany(),
-            'Articles retrieved successfully.'
+            $this->taxManager->findAllByCompany(),
+            'Taxes retrieved successfully.'
         );
     }
 
@@ -54,11 +54,11 @@ class ArticleController extends Controller
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
-        $user = $this->articleManager->new($data);
+        $user = $this->taxManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
-            'Article has created successfully.'
+            'Tax has created successfully.'
         );
     }
 
@@ -70,8 +70,18 @@ class ArticleController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'barCode' => ['required', 'string', 'max:255']
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param    $id
+     * @return void
+     */
+    public function show($id)
+    {
+//        return Tax::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -86,11 +96,10 @@ class ArticleController extends Controller
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->articleManager->edit($id, $request->all()),
-            'Article has updated successfully.'
+            $this->taxManager->edit($id, $request->all()),
+            'Tax has updated successfully.'
         );
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -101,8 +110,8 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->delete($id),
-            'Article has deleted successfully.'
+            $this->taxManager->delete($id),
+            'Taxes has deleted successfully.'
         );
     }
 }

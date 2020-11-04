@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariantsTable extends Migration
+class CreateTaxesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateVariantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('variants', function (Blueprint $table) {
+        Schema::create('taxes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->json('value');
-
-            $table->foreignUuid('article_id')->references('id')->on('articles')
-                ->onDelete('cascade');
+            $table->float('value')->nullable();
+            $table->string('percent')->default(true);
             $table->timestamps();
+
+            $table->foreignUuid('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ class CreateVariantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variants');
+        Schema::dropIfExists('taxes');
     }
 }

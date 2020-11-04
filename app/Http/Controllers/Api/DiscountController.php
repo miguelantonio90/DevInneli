@@ -4,29 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
+use App\Managers\DiscountManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class ArticleController extends Controller
+class DiscountController extends Controller
 {
     /**
-     * @var ArticleManager
+     * @var DiscountManager
      */
-    private $articleManager;
+    private $discountManager;
 
     /**
-     * UserController constructor.
-     * @param  ArticleManager  $articleManager
+     * ClientController constructor.
+     * @param  DiscountManager  $discountManager
      */
-    public function __construct(ArticleManager $articleManager)
+    public function __construct(DiscountManager $discountManager)
     {
         $this->middleware('auth');
-        $this->articleManager = $articleManager;
+        $this->discountManager = $discountManager;
     }
 
     /**
@@ -34,11 +34,11 @@ class ArticleController extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->findAllByCompany(),
-            'Articles retrieved successfully.'
+            $this->discountManager->findAllByCompany(),
+            'Taxes retrieved successfully.'
         );
     }
 
@@ -46,19 +46,19 @@ class ArticleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
-        $user = $this->articleManager->new($data);
+        $user = $this->discountManager->new($data);
 
         return ResponseHelper::sendResponse(
             $user,
-            'Article has created successfully.'
+            'Tax has created successfully.'
         );
     }
 
@@ -66,11 +66,10 @@ class ArticleController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'barCode' => ['required', 'string', 'max:255']
         ]);
     }
 
@@ -86,11 +85,10 @@ class ArticleController extends Controller
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->articleManager->edit($id, $request->all()),
-            'Article has updated successfully.'
+            $this->discountManager->edit($id, $request->all()),
+            'Tax has updated successfully.'
         );
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -101,8 +99,8 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->delete($id),
-            'Article has deleted successfully.'
+            $this->discountManager->delete($id),
+            'Taxes has deleted successfully.'
         );
     }
 }

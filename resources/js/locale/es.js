@@ -94,7 +94,9 @@ export default {
     assistance: 'Tarjeta de asistencia',
     supply_product: 'Abastecer',
     finance: 'Finanzas',
-    type_of_order: 'Tipo de Pedido'
+    type_of_order: 'Tipo de Pedido',
+    tax_list: 'Impuesto',
+    discount: 'Descuento'
   },
   // settings
   settings: {
@@ -155,7 +157,9 @@ export default {
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
-    idle_counter: 'La sesión se cierra en {0} segundos'
+    idle_counter: 'La sesión se cierra en {0} segundos',
+    warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.'
   },
   // options
   actions: {
@@ -264,7 +268,8 @@ export default {
     barCode: 'Código de Barras',
     options: 'Opciones',
     cant: 'Cantidad',
-    total_cost: 'Costo Total: '
+    total_cost: 'Costo Total: ',
+    total_price: 'Precio Total: '
   },
   shop_article: {
     under_inventory: 'Bajo Inventario',
@@ -296,6 +301,22 @@ export default {
     contract: 'Número de Contrato',
     expense: 'Categoría de Gasto',
     note: 'Nota'
+  },
+  tax: {
+    name: 'Impuesto',
+    value: 'Valor',
+    rate: 'Tasa',
+    percent: 'Porciento',
+    permanent: 'Fijo',
+    noFacture: 'No. Factura'
+  },
+  pay: {
+    counted: 'Contado',
+    credit: 'Crédito',
+    pay: 'Pago',
+    extra_data: 'Datos adicionales',
+    sub_total: 'Sub Total',
+    total: 'Total'
   },
   ...es
 }

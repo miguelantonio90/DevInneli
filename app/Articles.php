@@ -5,7 +5,6 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -46,7 +45,7 @@ class Articles extends Model
 
     public function variants(): HasMany
     {
-        return $this->hasMany(Variant::class);
+        return $this->hasMany(Variant::class, 'article_id');
     }
 
     public function images(): HasMany
@@ -54,35 +53,24 @@ class Articles extends Model
         return $this->hasMany(ArticleImage::class, 'article_id');
     }
 
-    public function variants_values(): HasMany
+    public function variantValues(): HasMany
     {
-        return $this->hasMany(VariantsValues::class);
+        return $this->hasMany(Articles::class, 'parent_id')->with('articlesShops');
     }
 
-    public function variants_shops(): HasMany
+    public function articlesShops(): HasMany
     {
-        return $this->hasMany(VariantsShops::class)->addSelect([
-            'name' => Shop::select('name')
-                ->whereColumn('shops.id', 'variants_shops.shop_id')
-        ])->addSelect([
-            'variant' => VariantsValues::select('variant')
-                ->whereColumn('variants_values.id', 'variants_shops.vv_id')
-        ]);
+        return $this->hasMany(ArticlesShops::class, 'article_id')->with('shops');
     }
 
     public function composites(): HasMany
     {
-        return $this->hasMany(ArticlesComposite::class)->addSelect([
+        return $this->hasMany(ArticlesComposite::class, 'article_id')->addSelect([
             'articles_name' => self::select('name')
-                ->whereColumn('articles_composites.articles_id', 'articles.id')
+                ->whereColumn('articles_composites.article_id', 'articles.id')
         ])->addSelect([
             'composite_name' => self::select('name')
                 ->whereColumn('articles_composites.composite_id', 'articles.id')
         ]);
-    }
-
-    public function shops(): BelongsToMany
-    {
-        return $this->belongsToMany(Shop::class);
     }
 }

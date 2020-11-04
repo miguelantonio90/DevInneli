@@ -94,7 +94,9 @@ export default {
     assistance: 'Assistance card',
     supply_product: 'Supply',
     finance: 'Finance',
-    type_of_order: 'Type of Order'
+    type_of_order: 'Type of Order',
+    tax_list: 'Tax',
+    discount: 'Discount'
   },
   // settings
   settings: {
@@ -143,7 +145,9 @@ export default {
     info_exchange_rate: 'The rate of change is with respect to 1',
     idle_title: 'Session Expired',
     idle_info: 'You have left this browser idle for 10 minutes.',
-    idle_counter: 'The session closes in {0} seconds'
+    idle_counter: 'The session closes in {0} seconds',
+    warning_ref: "You can't create this article. The Reference {0} exist.",
+    warning_barCode: "You can't create this article. The Bar Code {0} exist."
   },
   // profile
   profile: {
@@ -261,7 +265,8 @@ export default {
     barCode: 'Bar Code',
     options: 'Options',
     cant: 'Quantify',
-    total_cost: 'Total Cost: '
+    total_cost: 'Total Cost: ',
+    total_price: 'Total Price: '
   },
   shop_article: {
     under_inventory: 'Low Inventory',
@@ -293,6 +298,22 @@ export default {
     contract: 'Contract Number',
     expense: 'Expense Category',
     note: 'Note'
+  },
+  tax: {
+    name: 'Tax',
+    value: 'Value',
+    rate: 'Rate',
+    percent: 'Percent',
+    permanent: 'Permanent',
+    noFacture: 'No. Facture'
+  },
+  pay: {
+    counted: 'Counted',
+    credit: 'Credit',
+    pay: 'Payment',
+    extra_data: 'Additional Data',
+    sub_total: 'Sub Total',
+    total: 'Total'
   },
   ...en
 }

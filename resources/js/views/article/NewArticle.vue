@@ -73,6 +73,18 @@
                       cols="12"
                       md="4"
                     >
+                      <v-text-field
+                        v-model="newArticle.ref"
+                        :label="$vuetify.lang.t('$vuetify.articles.ref')"
+                        :rules="formRule.required"
+                        required
+                        @keypress="numbers"
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="2"
+                    >
                       <v-text-field-money
                         v-model="newArticle.price"
                         :label="$vuetify.lang.t('$vuetify.price')"
@@ -90,7 +102,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      md="4"
+                      md="2"
                     >
                       <v-text-field-money
                         v-model="newArticle.cost"
@@ -107,6 +119,25 @@
                           empty: 0.00,
                         }"
                       />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
+                      <v-radio-group
+                        v-model="newArticle.unit"
+                        row
+                      >
+                        <v-radio
+                          :label="$vuetify.lang.t('$vuetify.articles.unit')"
+                          value="unit"
+                        />
+                        <v-radio
+                          :label="$vuetify.lang.t('$vuetify.articles.p_v')"
+                          value="vol"
+                        />
+                      </v-radio-group>
                     </v-col>
                     <v-col
                       cols="12"
@@ -159,25 +190,6 @@
                         </v-card>
                       </v-dialog>
                     </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
-                      <v-radio-group
-                        v-model="newArticle.unit"
-                        row
-                      >
-                        <v-radio
-                          :label="$vuetify.lang.t('$vuetify.articles.unit')"
-                          value="unit"
-                        />
-                        <v-radio
-                          :label="$vuetify.lang.t('$vuetify.articles.p_v')"
-                          value="vol"
-                        />
-                      </v-radio-group>
-                    </v-col>
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -219,7 +231,9 @@
                                   mdi-information-outline
                                 </v-icon>
                               </template>
-                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.articles.composite_text')
+                              }}</span>
                             </v-tooltip>
                           </div>
                         </template>
@@ -232,7 +246,7 @@
                     >
                       <v-select
                         ref="selectArticle"
-                        :items="articles"
+                        :items="localArticles"
                         :label="$vuetify.lang.t('$vuetify.rule.select')"
                         item-text="name"
                         chips
@@ -317,6 +331,7 @@
                           md="12"
                         >
                           <variant
+                            :ref-parent="ref"
                             :updated="updated"
                             :variants-parent="newArticle.variants"
                             :variants-values-parent="variantData"
@@ -461,7 +476,6 @@
 </template>
 
 <script>
-
 import { mapActions, mapState, mapGetters } from 'vuex'
 import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
@@ -469,7 +483,7 @@ import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
 
 export default {
-  name: 'NewArticlePage',
+  name: 'NewArticle',
   components: { NewCategory, CompositeList, ShopsArticles, Variant },
   data () {
     return {
@@ -486,7 +500,8 @@ export default {
       updated: true,
       formRule: this.$rules,
       loadingData: false,
-      focus: false
+      focus: false,
+      localArticles: []
     }
   },
   computed: {
@@ -502,9 +517,9 @@ export default {
       this.shops.forEach((shop) => {
         this.shopData.push({
           shop_id: shop.id,
-          name: shop.name,
+          shop_name: shop.name,
           checked: true,
-          variant: '',
+          name: '',
           price: '0.00',
           stock: '',
           under_inventory: ''
@@ -512,12 +527,35 @@ export default {
       })
     })
     await this.getCategories()
-    await this.getArticles()
+    await this.getArticles().then(() => {
+      this.articles.forEach((value) => {
+        this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
+        if (!value.article_id) {
+          if (value.variant_values.length > 0) {
+            value.variant_values.forEach((v) => {
+              this.localArticles.push({
+                name: value.name + '(' + v.name + ')',
+                price: v.price,
+                cost: v.cost,
+                cant: '1',
+                composite_id: v.id
+              })
+            })
+          } else {
+            this.localArticles.push({
+              name: value.name,
+              price: value.price,
+              cost: value.cost,
+              cant: '1',
+              composite_id: value.id
+            })
+          }
+        }
+      })
+    })
+    this.ref = parseFloat(this.ref) + 1
+    this.newArticle.ref = this.ref
     this.loadingData = false
-    this.ref = '10001'
-  },
-  mounted () {
-    this.ref = '10001'
   },
   methods: {
     ...mapActions('article', ['createArticle', 'toogleNewModal', 'getArticles']),
@@ -525,81 +563,6 @@ export default {
     ...mapActions('shop', ['getShops']),
     inputColor (color) {
       this.newArticle.color = color
-    },
-    selectArticle (item) {
-      if (this.composite.filter(art => art.id === item.id).length === 0) {
-        this.composite.push({
-          name: item.name,
-          price: item.price,
-          cost: item.price,
-          color: item.color,
-          path: item.path,
-          images: item.images,
-          cant: '1',
-          composite_id: item.id
-        })
-        let totalCost = 0.00
-        this.composite.forEach((comp) => {
-          totalCost += comp.cant * comp.price
-        })
-        this.newArticle.cost = totalCost
-      } else {
-        this.showInfoAdd = true
-      }
-      this.selected = null
-    },
-    changeComposite () {
-      if (this.newArticle.composite) {
-        this.variantData = []
-      } else {
-        this.updated = false
-      }
-    },
-    changeInventory () {
-      this.track_inventory = this.newArticle.track_inventory
-    },
-    updateComposite (composite) {
-      this.composite = composite
-      let cost = 0.00
-      this.composite.forEach((comp) => {
-        cost += comp.cant * comp.price
-      })
-      this.newArticle.cost = cost
-      this.newArticle.price = cost
-    },
-    updateVariant (variants, dataUpdated) {
-      this.variantData = dataUpdated
-      this.newArticle.variants = variants
-      this.shopData = []
-      this.shops.forEach((shop) => {
-        if (variants.length > 0) {
-          this.variantData.forEach((v) => {
-            this.shopData.push({
-              shop_id: shop.id,
-              name: shop.name,
-              checked: true,
-              variant: v.variant,
-              price: v.price,
-              stock: '0',
-              under_inventory: '0'
-            })
-          })
-        } else {
-          this.shopData.push({
-            shop_id: shop.id,
-            name: shop.name,
-            checked: true,
-            variant: '',
-            price: '0.00',
-            stock: '',
-            under_inventory: ''
-          })
-        }
-      })
-      this.updated = true
-    },
-    updateShopData (shopsDataUpdated) {
-      this.shopData = shopsDataUpdated
     },
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
@@ -631,48 +594,194 @@ export default {
         return false
       }
     },
-    createNewArticle () {
-      if (parseFloat(this.newArticle.cost) > parseFloat(this.newArticle.price)) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.articles.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_price'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
+    changeComposite () {
+      if (this.newArticle.composite) {
+        this.variantData = []
+      } else {
+        this.updated = false
+      }
+    },
+    changeInventory () {
+      this.track_inventory = this.newArticle.track_inventory
+    },
+    updateComposite (composite) {
+      this.composite = composite
+      let cost = 0.00
+      let price = 0.00
+      this.composite.forEach((comp) => {
+        cost += comp.cant * comp.cost
+        price += comp.cant * comp.price
+      })
+      this.newArticle.cost = cost
+      this.newArticle.price = price
+    },
+    selectArticle (item) {
+      if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
+        this.composite.push({
+          name: item.name,
+          price: item.price,
+          cost: item.cost,
+          cant: '1',
+          composite_id: item.composite_id
+        })
+        let totalCost = 0.00
+        this.composite.forEach((comp) => {
+          totalCost += comp.cant * comp.cost
+        })
+        this.newArticle.cost = totalCost
+      } else {
+        this.showInfoAdd = true
+      }
+      this.selected = null
+    },
+    updateShopData (shopsDataUpdated) {
+      this.shopData = shopsDataUpdated
+    },
+    updateVariant (variants, dataUpdated) {
+      this.variantData = dataUpdated
+      this.newArticle.variants = variants
+      this.shopData = []
+      this.shops.forEach((shop) => {
+        if (variants.length > 0) {
+          this.variantData.forEach((v) => {
+            this.shopData.push({
+              shop_id: shop.id,
+              shop_name: shop.name,
+              checked: true,
+              name: v.name,
+              price: v.price,
+              stock: '0',
+              under_inventory: '0'
+            })
           })
+        } else {
+          this.shopData.push({
+            shop_id: shop.id,
+            name: shop.name,
+            checked: true,
+            price: '0.00',
+            stock: '0',
+            under_inventory: '0'
+          })
+        }
+      })
+      this.updated = true
+    },
+    createNewArticle () {
+      let valid = true
+      if (!this.validateRef() || !this.validateBarCode()) {
+        valid = false
       } else {
         if (this.newArticle.composite) {
           if (this.composite.length === 0) {
-            this.$Swal
-              .fire({
-                title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                  this.$vuetify.lang.t('$vuetify.menu.articles')
-                ]),
-                text: this.$vuetify.lang.t(
-                  '$vuetify.messages.warning_composite'
-                ),
-                icon: 'warning',
-                showCancelButton: false,
-                confirmButtonText: this.$vuetify.lang.t(
-                  '$vuetify.actions.accept'
-                ),
-                confirmButtonColor: 'red'
-              })
+            this.$Swal.fire({
+              title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                this.$vuetify.lang.t('$vuetify.menu.articles')
+              ]),
+              text: this.$vuetify.lang.t(
+                '$vuetify.messages.warning_composite'
+              ),
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: this.$vuetify.lang.t(
+                '$vuetify.actions.accept'
+              ),
+              confirmButtonColor: 'red'
+            })
           } else {
-            this.validCreate()
+            this.newArticle.composites = this.composite
           }
         } else {
-          this.validCreate()
+          this.newArticle.variantsValues = this.variantData
         }
       }
+      if (valid) { this.validCreate() }
+    },
+    validateBarCode () {
+      let valid = true
+      this.variantData.forEach((value) => {
+        if (valid) {
+          valid = !this.articles.filter(art => art.barCode === value.barCode).length > 0
+          if (!valid) {
+            this.$Swal.fire({
+              title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                this.$vuetify.lang.t('$vuetify.menu.articles')
+              ]),
+              text: this.$vuetify.lang.t(
+                '$vuetify.messages.warning_barCode', [value.barCode]
+              ),
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: this.$vuetify.lang.t(
+                '$vuetify.actions.accept'
+              ),
+              confirmButtonColor: 'red'
+            })
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.barCode === this.newArticle.barCode).length > 0 ||
+                this.articles.filter(art => art.barCode === this.newArticle.barCode).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.new', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_barCode', [this.newArticle.barCode]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      }
+      return valid
+    },
+    validateRef () {
+      let valid = true
+      this.variantData.forEach((value) => {
+        if (valid) {
+          valid = !this.articles.filter(art => art.ref === value.ref).length > 0
+          if (!valid) {
+            this.$Swal.fire({
+              title: this.$vuetify.lang.t('$vuetify.titles.new', [
+                this.$vuetify.lang.t('$vuetify.menu.articles')
+              ]),
+              text: this.$vuetify.lang.t(
+                '$vuetify.messages.warning_ref', [value.ref]
+              ),
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: this.$vuetify.lang.t(
+                '$vuetify.actions.accept'
+              ),
+              confirmButtonColor: 'red'
+            })
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.ref === this.newArticle.ref).length > 0 ||
+                this.articles.filter(art => art.ref === this.newArticle.ref).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.new', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_ref', [this.newArticle.ref]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      }
+      return valid
     },
     closeInfoAdd () {
       this.showInfoAdd = false
@@ -689,8 +798,6 @@ export default {
             this.newArticle.shops.push(value)
           }
         })
-        this.newArticle.variantsValues = this.variantData
-        this.newArticle.composites = this.composite
         await this.createArticle(this.newArticle)
         await this.$router.push({ name: 'product_list' })
       }

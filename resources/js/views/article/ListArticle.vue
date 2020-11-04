@@ -8,13 +8,14 @@
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
-          csv-filename="Articles"
           :headers="getTableColumns"
-          :is-loading="isTableLoading"
+          csv-filename="Articles"
           :items="articles"
+          :options="vBindOption"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort
+          :is-loading="isTableLoading"
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
@@ -40,13 +41,19 @@
             </v-chip>
           </template>
           <template v-slot:item.percent="{ item }">
-            {{ item.percent }} %
+            <template v-if="item.variant_values.length===0">
+              {{ item.percent }} %
+            </template>
           </template>
           <template v-slot:item.price="{ item }">
-            {{ `${user.company.currency +' '+item.price}` }}
+            <template v-if="item.variant_values.length===0">
+              {{ `${user.company.currency + ' ' + item.price}` }}
+            </template>
           </template>
           <template v-slot:item.cost="{ item }">
-            {{ `${user.company.currency +' '+item.cost}` }}
+            <template v-if="item.variant_values.length===0">
+              {{ `${user.company.currency + ' ' + item.cost}` }}
+            </template>
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
@@ -55,6 +62,72 @@
             >
               {{ shop }}
             </v-chip>
+          </template>
+          <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
+            <v-btn
+              v-if="item.variant_values.length > 0"
+              color="primary"
+              fab
+              x-small
+              dark
+              @click="expand(!isExpanded)"
+            >
+              <v-icon v-if="isExpanded">
+                mdi-chevron-up
+              </v-icon>
+              <v-icon v-else>
+                mdi-chevron-down
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              fab
+              x-small
+              disabled
+            >
+              <v-icon>
+                mdi-check
+              </v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:expanded-item="{ headers,item }">
+            <td
+              :colspan="headers.length"
+              style="padding: 0 0 0 0"
+            >
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th>{{ $vuetify.lang.t('$vuetify.firstName') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.price') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.cost') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.percent') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.menu.shop') }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="dessert in item.variant_values"
+                      :key="dessert.name"
+                    >
+                      <td>{{ dessert.name }}</td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
+                      <td>{{ dessert.percent + ' %' }}</td>
+                      <td>
+                        <v-chip
+                          v-for="(shop, i) of dessert.shopsNames"
+                          :key="i+shop"
+                        >
+                          {{ shop }}
+                        </v-chip>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </td>
           </template>
         </app-data-table>
       </v-col>
@@ -69,7 +142,13 @@ export default {
   name: 'ListArticle',
   data () {
     return {
-      search: ''
+      localArticles: [],
+      search: '',
+      vBindOption: {
+        itemKey: 'name',
+        singleExpand: false,
+        showExpand: true
+      }
     }
   },
   computed: {
@@ -112,7 +191,7 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
           value: 'shopsNames',
-          select_filter_many: true
+          select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),

@@ -28,7 +28,7 @@ class ArticlesComposite extends Model
      * @var array
      */
     protected $fillable = [
-        'cant', 'price', 'articles_id', 'composite_id',
+        'cant', 'price', 'article_id', 'composite_id',
     ];
 
     public function article(): BelongsTo

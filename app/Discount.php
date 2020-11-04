@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class VariantsShops
+ * Class Discount
+ * @package App
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */
-class VariantsShops extends Model
+class Discount extends Model
 {
     use Uuid;
 
@@ -23,20 +24,18 @@ class VariantsShops extends Model
     protected $keyType = 'string';
     protected $guarded = [];
 
-    protected $fillable = ['vv_id', 'price', 'stock', 'under_inventory', 'shop_id', 'articles_id'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'value', 'percent', 'company_id'
+    ];
 
-    public function variants(): BelongsTo
-    {
-        return $this->belongsTo(VariantsValues::class);
-    }
 
-    public function shops(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(Shop::class);
-    }
-
-    public function article(): BelongsTo
-    {
-        return $this->belongsTo(Articles::class);
+        return $this->belongsTo(Company::class);
     }
 }

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Variant
+ * Class Tax
+ * @package App
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */
-class Variant extends Model
+class Tax extends Model
 {
     use Uuid;
 
@@ -29,11 +30,12 @@ class Variant extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'article_id',
+        'name', 'value', 'percent', 'company_id'
     ];
 
-    public function article(): BelongsTo
+
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(Articles::class);
+        return $this->belongsTo(Company::class);
     }
 }

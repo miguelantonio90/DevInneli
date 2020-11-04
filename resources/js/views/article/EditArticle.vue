@@ -1,5 +1,5 @@
 <template>
-  <div class="page-edit-product">
+  <div class="page-add-product">
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.edit', [
+            $vuetify.lang.t('$vuetify.titles.new', [
               $vuetify.lang.t('$vuetify.articles.name'),
             ])
           }}</span>
@@ -195,36 +195,7 @@
                     <v-col
                       cols="12"
                       md="3"
-                    >
-                      <v-switch
-                        v-model="editArticle.composite"
-                        :disabled="articles.length===0"
-                        :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
-                        @change="changeComposite"
-                      >
-                        <template v-slot:label>
-                          <div>
-                            {{ $vuetify.lang.t('$vuetify.articles.composite') }}
-                            <v-tooltip
-                              right
-                              class="md-6"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                  color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
-                                >
-                                  mdi-information-outline
-                                </v-icon>
-                              </template>
-                              <span>{{ $vuetify.lang.t('$vuetify.articles.composite_text') }}</span>
-                            </v-tooltip>
-                          </div>
-                        </template>
-                      </v-switch>
-                    </v-col>
+                    />
                     <v-col
                       v-show="editArticle.composite"
                       cols="12"
@@ -232,7 +203,7 @@
                     >
                       <v-select
                         ref="selectArticle"
-                        :items="articles"
+                        :items="localArticles"
                         :label="$vuetify.lang.t('$vuetify.rule.select')"
                         item-text="name"
                         chips
@@ -278,6 +249,7 @@
                         v-model="editArticle.track_inventory"
                         class="md-6"
                         :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        @change="changeInventory"
                       />
                     </v-col>
                   </v-row>
@@ -316,8 +288,9 @@
                           md="12"
                         >
                           <variant
+                            :ref-parent="ref"
                             :updated="updated"
-                            :variants-parent="editArticle.variants"
+                            :variants-parent="variants"
                             :variants-values-parent="variantData"
                             @updateVariants="updateVariant"
                           />
@@ -460,26 +433,25 @@
 </template>
 
 <script>
-
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
-import AppLoading from '../../components/core/AppLoading'
 
 export default {
-  name: 'EditArticlePage',
-  components: { NewCategory, AppLoading, CompositeList, ShopsArticles, Variant },
+  name: 'EditArticle',
+  components: { NewCategory, CompositeList, ShopsArticles, Variant },
   data () {
     return {
+      localArticles: [],
       track_inventory: false,
-      variants: [],
+      ref: '10001',
       representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
-      panel: [0, 1, 2],
+      panel: [0],
       formValid: false,
       shopData: [],
       variantData: [],
@@ -500,72 +472,65 @@ export default {
     this.formValid = false
     await this.getCategories()
     this.variants = []
-    this.composite = []
-    this.editArticle.variants.forEach((vtn) => {
-      this.variants.push({
-        id: vtn.id,
-        name: vtn.name,
-        articles_id: vtn.articles_id,
-        created_at: vtn.created_at,
-        updated_at: vtn.updated_at,
-        value: JSON.parse(vtn.value)
-      })
-    })
-    this.variantData = this.editArticle.variants_values
-    await this.getShops().then(() => {
-      this.shops.forEach((shop) => {
-        if (this.variants.length > 0) {
-          this.variantData.forEach((v) => {
-            this.shopData.push({
-              shop_id: shop.id,
-              name: shop.name,
-              checked: this.editArticle.variants_shops.filter(sh => sh.variant === v.variant).length > 0,
-              variant: v.variant,
-              price: v.price,
-              stock: '0',
-              under_inventory: '0'
-            })
-          })
-        } else {
-          this.shopData.push({
-            shop_id: shop.id,
-            name: shop.name,
-            checked: true,
-            variant: '',
-            price: '0.00',
-            stock: '',
-            under_inventory: ''
-          })
-        }
-      })
-    })
-    await this.getArticles()
-    if (this.editArticle.composite === 0) {
-      this.editArticle.composite = false
-    } else if (this.editArticle.composite === 1) {
-      this.editArticle.composite = true
-      this.editArticle.composites.forEach((cmp) => {
-        this.composite.push({
-          composite_id: cmp.composite_id,
-          name: cmp.composite_name,
-          price: cmp.price,
-          cost: cmp.price * cmp.cant,
-          cant: cmp.cant,
-          id: cmp.id
+    if (this.editArticle.variant_values.length > 0) {
+      this.editArticle.variants.forEach((vtn) => {
+        this.variants.push({
+          id: vtn.id,
+          name: vtn.name,
+          articles_id: vtn.articles_id,
+          created_at: vtn.created_at,
+          updated_at: vtn.updated_at,
+          value: JSON.parse(vtn.value)
         })
       })
     }
-    if (this.editArticle.inventory === 0) {
-      this.editArticle.track_inventory = false
-    } else if (this.editArticle.inventory === 1) {
-      this.editArticle.track_inventory = true
-    }
-    this.track_inventory = this.editArticle.track_inventory
-
-    if (this.editArticle.unit === 1) {
-      this.editArticle.unit = 'unit'
-    }
-    this.representation = this.articles.color ? 'color' : 'image'
+    this.variantData = this.editArticle.variant_values
+    await this.getShops().then(() => {
+      this.updateVariant(this.variants, this.variantData)
+    })
+    this.composite = []
+    await this.getArticles().then(() => {
+      this.localArticles = []
+      this.articles.forEach((value, index) => {
+        this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
+        if (value.id !== this.editArticle.id) {
+          if (!value.parent_id) {
+            if (value.variant_values.length > 0) {
+              value.variant_values.forEach((v, i) => {
+                this.localArticles.push({
+                  name: value.name + '(' + v.name + ')',
+                  price: v.price,
+                  cost: v.cost,
+                  cant: '1',
+                  composite_id: v.id
+                })
+              })
+            } else {
+              this.localArticles.push({
+                name: value.name,
+                price: value.price,
+                cost: value.cost,
+                cant: '1',
+                composite_id: value.id
+              })
+            }
+          }
+        }
+      })
+    })
+    this.editArticle.composites.forEach((value, index) => {
+      const comp = this.articles.filter(art => art.id === value.composite_id)[0]
+      this.composite.push({
+        name: comp.parent_id ? this.articles.filter(art => art.id === comp.parent_id)[0].name + '(' +
+                    comp.name + ')' : comp.name,
+        price: value.price,
+        id: value.id,
+        cost: comp.cost,
+        cant: value.cant,
+        composite_id: value.composite_id
+      })
+    })
+    this.ref = parseFloat(this.ref) + 1
     this.loadingData = false
   },
   mounted () {
@@ -577,81 +542,6 @@ export default {
     ...mapActions('shop', ['getShops']),
     inputColor (color) {
       this.editArticle.color = color
-    },
-    selectArticle (item) {
-      if (this.composite.filter(art => art.id === item.id).length === 0) {
-        this.composite.push({
-          name: item.name,
-          price: item.price,
-          cost: item.price,
-          color: item.color,
-          path: item.path,
-          images: item.images,
-          cant: '1',
-          composite_id: item.id
-        })
-        let totalCost = 0.00
-        this.composite.forEach((comp) => {
-          totalCost += comp.cant * comp.price
-        })
-        this.newArticle.cost = totalCost
-      } else {
-        this.showInfoAdd = true
-      }
-      this.selected = null
-    },
-    changeComposite () {
-      if (this.editArticle.composite) {
-        this.variantData = []
-      } else {
-        this.updated = false
-      }
-    },
-    changeInventory () {
-      this.track_inventory = this.editArticle.track_inventory
-    },
-    updateComposite (composite) {
-      this.composite = composite
-      let cost = 0.00
-      this.composite.forEach((comp) => {
-        cost += comp.cant * comp.price
-      })
-      this.editArticle.cost = cost
-      this.editArticle.price = cost
-    },
-    updateVariant (variants, dataUpdated) {
-      this.variantData = dataUpdated
-      this.editArticle.variants = variants
-      this.shopData = []
-      this.shops.forEach((shop) => {
-        if (variants.length > 0) {
-          this.variantData.forEach((v) => {
-            this.shopData.push({
-              shop_id: shop.id,
-              name: shop.name,
-              checked: this.editArticle.variants_shops.filter(sh => sh.variant === v.variant).length > 0,
-              variant: v.variant,
-              price: v.price,
-              stock: '0',
-              under_inventory: '0'
-            })
-          })
-        } else {
-          this.shopData.push({
-            shop_id: shop.id,
-            name: shop.name,
-            checked: true,
-            variant: '',
-            price: '0.00',
-            stock: '',
-            under_inventory: ''
-          })
-        }
-      })
-      this.updated = true
-    },
-    updateShopData (shopsDataUpdated) {
-      this.shopData = shopsDataUpdated
     },
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
@@ -683,15 +573,98 @@ export default {
         return false
       }
     },
+    changeComposite () {
+      if (this.editArticle.composite) {
+        this.variantData = []
+      } else {
+        this.updated = false
+      }
+    },
+    changeInventory () {
+      this.track_inventory = this.editArticle.track_inventory
+    },
+    updateComposite (composite) {
+      this.composite = composite
+      let cost = 0.00
+      let price = 0.00
+      this.composite.forEach((comp) => {
+        cost += comp.cant * comp.cost
+        price += comp.cant * comp.price
+      })
+
+      this.editArticle.cost = cost
+      this.editArticle.price = price
+    },
+    selectArticle (item) {
+      if (this.composite.filter(art => art.composite_id === item.composite_id).length === 0) {
+        this.composite.push({
+          name: item.name,
+          price: item.price,
+          cost: item.cost,
+          cant: '1',
+          composite_id: item.composite_id
+        })
+        let totalCost = 0.00
+        let totalPrice = 0.00
+        this.composite.forEach((comp) => {
+          totalCost += comp.cant * comp.cost
+          totalPrice += comp.cant * comp.price
+        })
+        this.editArticle.cost = totalCost
+        this.editArticle.price = totalPrice
+      } else {
+        this.showInfoAdd = true
+      }
+      this.selected = null
+    },
+    updateShopData (shopsDataUpdated) {
+      this.shopData = shopsDataUpdated
+    },
+    updateVariant (variants, dataUpdated) {
+      this.variantData = dataUpdated
+      this.editArticle.variants = variants
+      this.shopData = []
+      this.shops.forEach((shop) => {
+        if (variants.length > 0) {
+          this.variantData.forEach((v) => {
+            // eslint-disable-next-line camelcase
+            const articles_shop = v.articles_shops.filter(sh => sh.shop_id === shop.id)
+            this.shopData.push({
+              articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
+              shop_id: shop.id,
+              shop_name: shop.name,
+              checked: articles_shop.length > 0,
+              name: v.name,
+              price: articles_shop.length > 0 ? articles_shop[0].price : v.price,
+              under_inventory: articles_shop.length > 0 ? articles_shop[0].under_inventory : '0',
+              stock: articles_shop.length > 0 ? articles_shop[0].stock : '0'
+            })
+          })
+        } else {
+          this.shopData.push({
+            shop_id: shop.id,
+            shop_name: shop.name,
+            checked: true,
+            name: '',
+            price: '0.00',
+            stock: '0',
+            under_inventory: '0'
+          })
+        }
+      })
+      this.updated = true
+    },
     editArticleHandler () {
-      if (parseFloat(this.editArticle.cost) > parseFloat(this.editArticle.price)) {
-        this.$Swal
-          .fire({
+      let valid = true
+      if (!this.validateRef() || !this.validateBarCode()) { valid = false } else if (this.editArticle.composite) {
+        if (this.composite.length === 0) {
+          valid = false
+          this.$Swal.fire({
             title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.articles.name')
+              this.$vuetify.lang.t('$vuetify.menu.articles')
             ]),
             text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_price'
+              '$vuetify.messages.warning_composite'
             ),
             icon: 'warning',
             showCancelButton: false,
@@ -700,34 +673,151 @@ export default {
             ),
             confirmButtonColor: 'red'
           })
-      } else {
-        if (this.editArticle.composite) {
-          if (this.composite.length === 0) {
-            this.$Swal
-              .fire({
-                title: this.$vuetify.lang.t('$vuetify.titles.new', [
-                  this.$vuetify.lang.t('$vuetify.articles.name')
-                ]),
-                text: this.$vuetify.lang.t(
-                  '$vuetify.messages.warning_composite'
-                ),
-                icon: 'warning',
-                showCancelButton: false,
-                confirmButtonText: this.$vuetify.lang.t(
-                  '$vuetify.actions.accept'
-                ),
-                confirmButtonColor: 'red'
-              })
-          } else {
-            this.validCreate()
-          }
         } else {
-          this.validCreate()
+          this.editArticle.composites = this.composite
+        }
+      } else {
+        this.editArticle.variantsValues = this.variantData
+      }
+      if (valid) { this.validCreate() }
+    },
+    validateBarCode () {
+      let valid = true
+      this.variantData.forEach((value, index) => {
+        if (valid) {
+          const localArt = this.articles.filter(art => art.barCode === value.barCode)
+          if (localArt.length > 0) {
+            if (localArt[0].id !== value.id) {
+              valid = false
+              if (!valid) {
+                this.$Swal.fire({
+                  title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+                    this.$vuetify.lang.t('$vuetify.menu.articles')
+                  ]),
+                  text: this.$vuetify.lang.t(
+                    '$vuetify.messages.warning_barCode', [value.barCode]
+                  ),
+                  icon: 'warning',
+                  showCancelButton: false,
+                  confirmButtonText: this.$vuetify.lang.t(
+                    '$vuetify.actions.accept'
+                  ),
+                  confirmButtonColor: 'red'
+                })
+              }
+            }
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.barCode === this.editArticle.barCode).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else {
+        const localArt = this.articles.filter(art => art.barCode === this.editArticle.barCode && art.id !== this.editArticle.id)
+        if (localArt.length > 0) {
+          valid = false
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_barCode', [this.editArticle.barCode]
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
         }
       }
+      return valid
+    },
+    validateRef () {
+      let valid = true
+      this.variantData.forEach((value, index) => {
+        if (valid) {
+          const localArt = this.articles.filter(art => art.ref === value.ref)
+          if (localArt.length > 0) {
+            if (localArt[0].id !== value.id) {
+              valid = false
+              if (!valid) {
+                this.$Swal.fire({
+                  title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+                    this.$vuetify.lang.t('$vuetify.menu.articles')
+                  ]),
+                  text: this.$vuetify.lang.t(
+                    '$vuetify.messages.warning_ref', [value.ref]
+                  ),
+                  icon: 'warning',
+                  showCancelButton: false,
+                  confirmButtonText: this.$vuetify.lang.t(
+                    '$vuetify.actions.accept'
+                  ),
+                  confirmButtonColor: 'red'
+                })
+              }
+            }
+          }
+        }
+      })
+      if (this.variantData.filter(vd => vd.ref === this.editArticle.ref).length > 0) {
+        valid = false
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_ref', [this.editArticle.ref]
+          ),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else {
+        const localArt = this.articles.filter(art => art.ref === this.editArticle.ref && art.id !== this.editArticle.id)
+        if (localArt.length > 0) {
+          valid = false
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+              this.$vuetify.lang.t('$vuetify.menu.articles')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_ref', [this.editArticle.ref]
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+        }
+      }
+      return valid
+    },
+    closeInfoAdd () {
+      this.showInfoAdd = false
     },
     uploadImage (formData, index, fileList) {
-      this.newArticle.images = fileList
+      this.editArticle.images = fileList
     },
     async validCreate () {
       if (this.$refs.form.validate()) {
@@ -738,14 +828,11 @@ export default {
             this.editArticle.shops.push(value)
           }
         })
-        this.editArticle.variantsValues = this.variantData
+        this.editArticle.variant_values = this.variantData
         this.editArticle.composites = this.composite
         await this.updateArticle(this.editArticle)
         await this.$router.push({ name: 'product_list' })
       }
-    },
-    closeInfoAdd () {
-      this.showInfoAdd = false
     }
   }
 }

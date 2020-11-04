@@ -48,7 +48,7 @@ class TypeOfOrderManager
         $result = [];
         if (count($shopTypeOfOrder) > 0) {
             foreach ($shopTypeOfOrder as $k => $value) {
-                if(($value['typeOfOrder'])){
+                if (($value['typeOfOrder'])) {
                     $result[$k]['id'] = $value['typeOfOrder']['id'];
                     $result[$k]['name'] = $value['typeOfOrder']['name'];
                     $result[$k]['description'] = $value['typeOfOrder']['description'];

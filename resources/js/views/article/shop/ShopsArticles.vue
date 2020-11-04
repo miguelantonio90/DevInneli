@@ -139,7 +139,7 @@ export default {
     variantsData: function () {
       this.initialize()
     },
-    trackInventoryParent: function (val) {
+    trackInventoryParent: function () {
       this.track_inventory = this.trackInventoryParent
       this.initialize()
     }
@@ -161,13 +161,13 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'name'
+          value: 'shop_name'
         }
       ]
       if (this.variantsData.length > 0) {
         this.headers.push({
           text: this.$vuetify.lang.t('$vuetify.variants.variant'),
-          value: 'variant'
+          value: 'name'
         })
       }
       this.headers.push({

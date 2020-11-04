@@ -256,7 +256,18 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/NewArticlePage')
+            component: () => import('../views/article/NewArticle')
+          },
+          {
+            path: '/articles/supply_product',
+            name: 'supply_product',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/Inventory')
           },
           {
             path: '/articles/product.edit',
@@ -267,7 +278,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/EditArticlePage')
+            component: () => import('../views/article/EditArticle')
           }
         ]
       },
