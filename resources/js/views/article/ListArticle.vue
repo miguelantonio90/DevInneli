@@ -202,14 +202,7 @@ export default {
     }
   },
   created () {
-    this.getArticles()/* .then(() => {
-      this.articles.forEach((value) => {
-        if (!value.parent_id) {
-          this.localArticles.push(value)
-        }
-      })
-    }) */
-    console.log(this.localArticles)
+    this.getArticles()
   },
   methods: {
     ...mapActions('article', [
