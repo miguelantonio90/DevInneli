@@ -33,8 +33,7 @@ const components = [
   Coupons,
   AppColorPicker,
   AppDateTimePicker,
-  AppUploadMultipleImage,
-  AppDataTableExpand
+  AppUploadMultipleImage
 ]
 
 // Installation of the library as a plugin
