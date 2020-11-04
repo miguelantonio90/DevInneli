@@ -24,7 +24,10 @@
           {{ supply.supplier.name }}
         </v-col>
       </v-row>
-      <v-row v-for="tax in supply.taxes">
+      <v-row
+        v-for="tax in supply.taxes"
+        :key="tax.name"
+      >
         <v-col cols="6">
           {{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})
         </v-col>
