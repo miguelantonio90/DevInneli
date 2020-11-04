@@ -8,7 +8,6 @@
         <v-autocomplete
           chips
           clearable
-          deletable-chips
           rounded
           solo
           :items="localArticles"
@@ -21,7 +20,7 @@
         <v-data-table
           :headers="getTableColumns"
           :items="supplies_product"
-          @click:row="printSelectedValues"
+          @click:row="selectRow"
         >
           <template v-slot:item.cost="{ item }">
             <v-edit-dialog
@@ -30,6 +29,7 @@
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
               :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+              @save="calcTotal"
             >
               <div>{{ item.cost }}</div>
               <template v-slot:input>
@@ -61,6 +61,7 @@
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
               :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+              @save="calcTotal"
             >
               <div>{{ item.cant }}</div>
               <template v-slot:input>
@@ -94,19 +95,16 @@
         cols="6"
       >
         <detail-supplier
-          :shop-supply="shopSupply"
-          :no-facture-supply="noFactureSupply"
-          :supplier-supply="supplier_supply"
-          :tax-supply="tax_supply"
+          :supply-selected="supplySelected"
           @updateSupplyData="updateSupplyData"
         />
       </v-col>
-      <!--      <v-col-->
-      <!--        v-show="supplies_product.length > 0"-->
-      <!--        cols="6"-->
-      <!--      >-->
-      <!--        <resume-supply />-->
-      <!--      </v-col>-->
+      <v-col
+        v-show="supplies_product.length > 0 "
+        cols="6"
+      >
+        <resume-supply :supply-selected="supplySelected" />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -117,15 +115,29 @@ import ResumeSupply from './ResumeSupply'
 
 export default {
   name: 'Inventory',
-  components: { DetailSupplier },
+  components: { ResumeSupply, DetailSupplier },
   data () {
     return {
       supplies_product: [],
       localArticles: [],
-      supplier_supply: null,
-      tax_supply: null,
-      noFactureSupply: '',
-      shopSupply: null
+      supplySelected: {
+        ref: '',
+        name: '',
+        price: 0,
+        cost: 0,
+        inventory: 0,
+        taxes: [],
+        cant: 1,
+        shop: {},
+        pay: '',
+        payment: {},
+        supplier: '',
+        noFacture: '',
+        totalCost: 0,
+        totalPrice: 0,
+        article_id: ''
+      },
+      editedIndex: -1
     }
   },
   computed: {
@@ -169,14 +181,22 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+          value: 'totalPrice',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+          value: 'totalCost',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
         }
       ]
     }
-  },
-  watch: {
   },
   created () {
     this.getArticles().then(() => {
@@ -196,8 +216,11 @@ export default {
                 price: v.price ? v.price : 0,
                 cost: v.cost ? v.cost : 0,
                 inventory: inventory || 0,
-                tax: 0,
+                taxes: [],
                 cant: 1,
+                shop: {},
+                pay: '',
+                payment: {},
                 supplier: '',
                 noFacture: '',
                 totalCost: v.cost,
@@ -216,12 +239,15 @@ export default {
               name: value.name,
               price: value.price ? value.price : 0,
               cost: value.cost ? value.cost : 0,
-              cant: 1,
-              tax: 0,
               inventory: inventory || 0,
+              taxes: [],
+              cant: 1,
+              shop: {},
+              pay: '',
+              payment: {},
+              supplier: '',
               noFacture: '',
               totalCost: value.cost,
-              supplier: '',
               totalPrice: value.price,
               article_id: value.id
             })
@@ -234,16 +260,25 @@ export default {
     ...mapActions('article', ['getArticles']),
     selectArticle (item) {
       this.supplies_product.push(item)
-      this.supply = item
+      if (this.supplies_product.length === 1) {
+        this.supplySelected = item
+        this.editedIndex = 0
+      }
     },
-    updateSupplyData () {
-      console.log('updateSupplyData')
+    updateSupplyData (supply) {
+      Object.assign(this.supplies_product[this.editedIndex], supply)
+      this.supplySelected = supply
     },
     deleteItem (item) {
       this.supplies_product.splice(this.supplies_product.indexOf(item), 1)
     },
-    printSelectedValues (item) {
-      console.log(item)
+    selectRow (item) {
+      this.editedIndex = this.supplies_product.indexOf(item)
+      this.supplySelected = item
+    },
+    calcTotal () {
+      this.supplies_product[this.editedIndex].totalPrice = Math.round((this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant) * 100) / 100
+      this.supplies_product[this.editedIndex].totalCost = Math.round((this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant) * 100) / 100
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-card-subtitle>
+    <v-card-title>
       {{ $vuetify.lang.t('$vuetify.pay.extra_data') }}
-    </v-card-subtitle>
+    </v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="6">
           <v-select
-            v-model="supplier"
+            v-model="supply.supplier"
             clearable
             :items="suppliers"
             :label="$vuetify.lang.t('$vuetify.menu.supplier')"
@@ -16,6 +16,7 @@
             :loading="isSupplierTableLoading"
             :disabled="!!isSupplierTableLoading"
             return-object
+            @input="updateSupplyData"
           >
             <template v-slot:append-outer>
               <v-tooltip bottom>
@@ -35,7 +36,7 @@
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="shop"
+            v-model="supply.shop"
             clearable
             :items="shops"
             :label="$vuetify.lang.t('$vuetify.menu.shop')"
@@ -43,17 +44,18 @@
             :loading="isShopLoading"
             :disabled="!!isShopLoading"
             return-object
+            @input="updateSupplyData"
           />
         </v-col>
         <v-col cols="6">
           <v-text-field
-            v-model="noFacture"
+            v-model="supply.noFacture"
             :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
           />
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="taxValue"
+            v-model="supply.taxes"
             chips
             clearable
             deletable-chips
@@ -64,6 +66,7 @@
             :loading="isTaxLoading"
             :disabled="!!isTaxLoading"
             return-object
+            @change="updateSupplyData"
           >
             <template v-slot:append-outer>
               <v-tooltip bottom>
@@ -83,20 +86,21 @@
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="pay"
+            v-model="supply.pay"
             clearable
             :items="getPay()"
             :label="$vuetify.lang.t('$vuetify.pay.pay')"
             item-text="text"
             item-value="value"
+            @input="updateSupplyData"
           />
         </v-col>
         <v-col
-          v-show="pay === 'counted'"
+          v-show="supply.pay === 'counted'"
           cols="6"
         >
           <v-select
-            v-model="payment"
+            v-model="supply.payment"
             clearable
             :items="payments"
             :label="$vuetify.lang.t('$vuetify.payment.name')"
@@ -136,39 +140,34 @@ export default {
   name: 'DetailSupplier',
   components: { NewPayment, NewTax, NewSupplier },
   props: {
-    supplierSupply: {
+    supplySelected: {
       type: Object,
-      default: null
-    },
-    taxSupply: {
-      type: Object,
-      default: null
-    },
-    shopSupply: {
-      type: Object,
-      default: null
-    },
-    noFactureSupply: {
-      type: String,
-      default: ''
-    },
-    paySupply: {
-      type: String,
-      default: ''
-    },
-    paymentSupply: {
-      type: Object,
-      default: null
+      default: function () {
+        return {
+          supply: {
+            ref: '',
+            name: '',
+            price: 0,
+            cost: 0,
+            inventory: 0,
+            taxes: [],
+            cant: 1,
+            shop: {},
+            pay: '',
+            payment: {},
+            supplier: '',
+            noFacture: '',
+            totalCost: 0,
+            totalPrice: 0,
+            article_id: ''
+          }
+        }
+      }
     }
   },
   data () {
     return {
-      supplier: {},
-      taxValue: {},
-      noFacture: '',
-      shop: {},
-      pay: '',
-      payment: ''
+      supply: null
     }
   },
   computed: {
@@ -177,17 +176,17 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading'])
   },
+  watch: {
+    supplySelected () {
+      this.supply = this.supplySelected
+    }
+  },
   created () {
+    this.supply = this.supplySelected
     this.getSuppliers()
     this.getTaxes()
     this.getShops()
     this.getPayments()
-    this.supplier = this.supplierSupply ? this.supplierSupply : null
-    this.taxValue = this.taxSupply ? this.taxSupply : null
-    this.noFacture = this.noFactureSupply ? this.noFactureSupply : null
-    this.shop = this.shopSupply ? this.shopSupply : null
-    this.pay = this.paySupply ? this.paySupply : null
-    this.payment = this.paymentSupply ? this.paymentSupply : null
   },
   methods: {
     ...mapActions('supplier', ['getSuppliers']),
@@ -205,8 +204,10 @@ export default {
           value: 'credit'
         }
       ]
+    },
+    updateSupplyData () {
+      this.$emit('updateSupplyData', this.supply)
     }
-
   }
 }
 </script>
