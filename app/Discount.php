@@ -30,7 +30,7 @@ class Discount extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value','percent', 'company_id'
+        'name', 'value', 'percent', 'company_id'
     ];
 
 

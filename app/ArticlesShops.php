@@ -23,6 +23,7 @@ class ArticlesShops extends Model
     protected $keyType = 'string';
     protected $guarded = [];
     protected $fillable = ['price', 'stock', 'under_inventory', 'shop_id', 'article_id'];
+
     public function article(): BelongsTo
     {
         return $this->belongsTo(Articles::class);
