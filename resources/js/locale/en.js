@@ -93,7 +93,7 @@ export default {
     product_add: 'New Article',
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
-    supply_product: 'Supply',
+    supply_product: 'Buy',
     finance: 'Finance',
     type_of_order: 'Type of Order',
     tax_list: 'Tax',
@@ -315,6 +315,9 @@ export default {
     extra_data: 'Additional Data',
     sub_total: 'Sub Total',
     total: 'Total'
+  },
+  supply: {
+    name: 'Buy'
   },
   ...en
 }

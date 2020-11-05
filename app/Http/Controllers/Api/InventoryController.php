@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
-use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
+use App\Managers\InventoryManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,18 +15,18 @@ use Illuminate\Validation\ValidationException;
 class InventoryController extends Controller
 {
     /**
-     * @var ArticleManager
+     * @var InventoryManager
      */
-    private $articleManager;
+    private $inventoryManager;
 
     /**
      * UserController constructor.
-     * @param  ArticleManager  $articleManager
+     * @param  InventoryManager  $inventoryManager
      */
-    public function __construct(ArticleManager $articleManager)
+    public function __construct(InventoryManager $inventoryManager)
     {
         $this->middleware('auth');
-        $this->articleManager = $articleManager;
+        $this->inventoryManager = $inventoryManager;
     }
 
     /**
@@ -37,7 +37,7 @@ class InventoryController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->findAllByCompany(),
+            $this->inventoryManager->findAllByCompany(),
             'Articles retrieved successfully.'
         );
     }
@@ -47,17 +47,15 @@ class InventoryController extends Controller
      *
      * @param  Request  $request
      * @return Response
-     * @throws ValidationException
      */
     public function store(Request $request)
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
-        $this->validator($data)->validate();
-        $user = $this->articleManager->new($data);
+        $inventory = $this->inventoryManager->new($data);
 
         return ResponseHelper::sendResponse(
-            $user,
+            $inventory,
             'Article has created successfully.'
         );
     }
@@ -86,7 +84,7 @@ class InventoryController extends Controller
     {
         $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->articleManager->edit($id, $request->all()),
+            $this->inventoryManager->edit($id, $request->all()),
             'Article has updated successfully.'
         );
     }
@@ -101,7 +99,7 @@ class InventoryController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->delete($id),
+            $this->inventoryManager->delete($id),
             'Article has deleted successfully.'
         );
     }

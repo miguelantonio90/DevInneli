@@ -47,7 +47,7 @@ class Inventory extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'pay', 'company_id'
+        'no_facture', 'pay', 'company_id','payment_id'
     ];
 
     /**

@@ -26,7 +26,7 @@ const state = {
     noFacture: '',
     pay: '',
     taxes: [],
-    payments: [],
+    payments: {},
     articles: [],
     shop: null,
     supplier: null
@@ -36,7 +36,7 @@ const state = {
     noFacture: '',
     pay: '',
     taxes: [],
-    payments: [],
+    payments: {},
     articles: [],
     shop: {},
     supplier: {}
@@ -76,7 +76,7 @@ const mutations = {
       noFacture: '',
       pay: '',
       taxes: [],
-      payments: [],
+      payments: {},
       articles: [],
       shop: {},
       supplier: {}
@@ -102,7 +102,7 @@ const mutations = {
       noFacture: '',
       pay: '',
       taxes: [],
-      payments: [],
+      payments: {},
       articles: [],
       shop: {},
       supplier: {}

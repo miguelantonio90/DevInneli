@@ -1,16 +1,16 @@
 import api from '../config/api'
 
 export default {
-  fetchArticles () {
-    return api.get('article')
+  fetchInventories () {
+    return api.get('inventory')
   },
-  sendCreateRequest (article) {
-    return api.post('article', article)
+  sendCreateRequest (inventory) {
+    return api.post('inventory', inventory)
   },
-  sendUpdateRequest (article) {
-    return api.put('article/' + article.id, article)
+  sendUpdateRequest (inventory) {
+    return api.put('inventory/' + inventory.id, inventory)
   },
-  sendDeleteRequest (articleId) {
-    return api.remove('article/' + articleId)
+  sendDeleteRequest (inventoryId) {
+    return api.remove('inventory/' + inventoryId)
   }
 }
