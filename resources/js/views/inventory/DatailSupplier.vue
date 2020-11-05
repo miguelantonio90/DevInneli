@@ -16,7 +16,6 @@
             :loading="isSupplierTableLoading"
             :disabled="!!isSupplierTableLoading"
             return-object
-            @input="updateSupplyData"
           >
             <template v-slot:append-outer>
               <v-tooltip bottom>
@@ -44,7 +43,6 @@
             :loading="isShopLoading"
             :disabled="!!isShopLoading"
             return-object
-            @input="updateSupplyData"
           />
         </v-col>
         <v-col cols="6">
@@ -66,7 +64,6 @@
             :loading="isTaxLoading"
             :disabled="!!isTaxLoading"
             return-object
-            @change="updateSupplyData"
           >
             <template v-slot:append-outer>
               <v-tooltip bottom>
@@ -92,7 +89,6 @@
             :label="$vuetify.lang.t('$vuetify.pay.pay')"
             item-text="text"
             item-value="value"
-            @input="updateSupplyData"
           />
         </v-col>
         <v-col
@@ -135,7 +131,6 @@ import { mapActions, mapState } from 'vuex'
 import NewSupplier from '../supplier/NewSupplier'
 import NewTax from '../tax/NewTax'
 import NewPayment from '../payment/NewPayment'
-import { mapState } from 'vuex'
 
 export default {
   name: 'DetailSupplier',
@@ -147,11 +142,6 @@ export default {
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('inventory', ['newInventory'])
   },
-    watch: {
-      newInventory: function (){
-
-        }
-    },
   created () {
     this.getSuppliers()
     this.getTaxes()
@@ -162,7 +152,7 @@ export default {
     ...mapActions('supplier', ['getSuppliers']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('payment', ['getPayments']),
+    ...mapActions('payment', ['getPayments'])
   }
 }
 </script>

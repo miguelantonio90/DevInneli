@@ -50,7 +50,7 @@
           {{ $vuetify.lang.t('$vuetify.pay.total') }}
         </v-col>
         <v-col cols="6">
-          {{ newInventory.totalCost }}
+          {{ total }}
         </v-col>
       </v-row>
     </v-card-text>
@@ -64,31 +64,32 @@ export default {
   data () {
     return {
       totalTax: 0,
-      sub_total: 0
+      sub_total: 0,
+      total: 0
     }
   },
   computed: {
     ...mapState('inventory', ['newInventory'])
   },
   watch: {
-    supplySelected () {
-      this.supply = this.supplySelected
+    'newInventory.taxes' () {
       this.updateData()
     },
-    'supplySelected.taxes' () {
-      this.updateData()
-    },
-    'supplySelected.totalCost' () {
+    'newInventory.articles' () {
       this.updateData()
     }
   },
   methods: {
     updateData () {
       this.totalTax = 0
+      this.total = 0
+      this.newInventory.articles.forEach((v) => {
+        this.total += v.totalCost
+      })
       this.newInventory.taxes.forEach((v) => {
         this.totalTax += v.percent ? this.newInventory.totalCost * v.value / 100 : v.value
       })
-      this.sub_total = parseFloat(parseFloat(this.newInventory.totalCost) - parseFloat(this.totalTax)).toFixed(2)
+      this.sub_total = (this.total - parseFloat(this.totalTax)).toFixed(2)
     }
   }
 }
