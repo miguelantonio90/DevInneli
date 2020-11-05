@@ -7,7 +7,7 @@
       <v-row>
         <v-col cols="6">
           <v-select
-            v-model="supply.supplier"
+            v-model="newInventory.supplier"
             clearable
             :items="suppliers"
             :label="$vuetify.lang.t('$vuetify.menu.supplier')"
@@ -36,7 +36,7 @@
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="supply.shop"
+            v-model="newInventory.shop"
             clearable
             :items="shops"
             :label="$vuetify.lang.t('$vuetify.menu.shop')"
@@ -49,13 +49,13 @@
         </v-col>
         <v-col cols="6">
           <v-text-field
-            v-model="supply.noFacture"
+            v-model="newInventory.noFacture"
             :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
           />
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="supply.taxes"
+            v-model="newInventory.taxes"
             chips
             clearable
             deletable-chips
@@ -86,7 +86,7 @@
         </v-col>
         <v-col cols="6">
           <v-select
-            v-model="supply.pay"
+            v-model="newInventory.pay"
             clearable
             :items="getPay()"
             :label="$vuetify.lang.t('$vuetify.pay.pay')"
@@ -96,11 +96,11 @@
           />
         </v-col>
         <v-col
-          v-show="supply.pay === 'counted'"
+          v-show="newInventory.pay === 'counted'"
           cols="6"
         >
           <v-select
-            v-model="supply.payment"
+            v-model="newInventory.payment"
             clearable
             :items="payments"
             :label="$vuetify.lang.t('$vuetify.payment.name')"
@@ -135,54 +135,24 @@ import { mapActions, mapState } from 'vuex'
 import NewSupplier from '../supplier/NewSupplier'
 import NewTax from '../tax/NewTax'
 import NewPayment from '../payment/NewPayment'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DetailSupplier',
   components: { NewPayment, NewTax, NewSupplier },
-  props: {
-    supplySelected: {
-      type: Object,
-      default: function () {
-        return {
-          supply: {
-            ref: '',
-            name: '',
-            price: 0,
-            cost: 0,
-            inventory: 0,
-            taxes: [],
-            cant: 1,
-            shop: {},
-            pay: '',
-            payment: {},
-            supplier: '',
-            noFacture: '',
-            totalCost: 0,
-            totalPrice: 0,
-            article_id: ''
-          }
-        }
-      }
-    }
-  },
-  data () {
-    return {
-      supply: null
-    }
-  },
   computed: {
     ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapState('payment', ['payments', 'isPaymentLoading'])
+    ...mapState('payment', ['payments', 'isPaymentLoading']),
+    ...mapState('inventory', ['newInventory'])
   },
-  watch: {
-    supplySelected () {
-      this.supply = this.supplySelected
-    }
-  },
+    watch: {
+      newInventory: function (){
+
+        }
+    },
   created () {
-    this.supply = this.supplySelected
     this.getSuppliers()
     this.getTaxes()
     this.getShops()
@@ -193,21 +163,6 @@ export default {
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
     ...mapActions('payment', ['getPayments']),
-    getPay () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.counted'),
-          value: 'counted'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.credit'),
-          value: 'credit'
-        }
-      ]
-    },
-    updateSupplyData () {
-      this.$emit('updateSupplyData', this.supply)
-    }
   }
 }
 </script>

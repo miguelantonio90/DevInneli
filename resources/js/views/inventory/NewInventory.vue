@@ -3,7 +3,8 @@
     <v-row>
       <v-col
         class="py-0"
-        cols="5"
+        cols="12"
+        md="5"
       >
         <v-autocomplete
           chips
@@ -15,11 +16,13 @@
           @input="selectArticle"
         />
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        md="12"
+      >
         <v-data-table
           :headers="getTableColumns"
-          :items="supplies_product"
-          @click:row="selectRow"
+          :items="newInventory.articles"
         >
           <template v-slot:item.cost="{ item }">
             <v-edit-dialog
@@ -28,7 +31,7 @@
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
               :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
-              @save="calcTotal"
+              @save="calcTotal(item)"
             >
               <div>{{ item.cost }}</div>
               <template v-slot:input>
@@ -60,7 +63,7 @@
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
               :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
-              @save="calcTotal"
+              @save="calcTotal(item)"
             >
               <div>{{ item.cant }}</div>
               <template v-slot:input>
@@ -90,54 +93,39 @@
         </v-data-table>
       </v-col>
       <v-col
-        v-show="supplies_product.length > 0"
-        cols="6"
+        v-show="newInventory.articles.length > 0"
+        cols="12"
+        md="6"
       >
         <detail-supplier
-          :supply-selected="supplySelected"
+          :supply-selected="newInventory"
           @updateSupplyData="updateSupplyData"
         />
       </v-col>
       <v-col
-        v-show="supplies_product.length > 0 "
-        cols="6"
+        v-show="newInventory.articles.length > 0 "
+        cols="12"
+        md="6"
       >
-        <resume-supply :supply-selected="supplySelected" />
+        <resume-supply :supply-selected="newInventory" />
       </v-col>
     </v-row>
   </v-container>
 </template>
+
 <script>
 import { mapActions, mapState } from 'vuex'
 import DetailSupplier from './DatailSupplier'
 import ResumeSupply from './ResumeSupply'
 
 export default {
-  name: 'Inventory',
+  name: 'NewInventory',
   components: { ResumeSupply, DetailSupplier },
   data () {
     return {
-      supplies_product: [],
-      localArticles: [],
-      supplySelected: {
-        ref: '',
-        name: '',
-        price: 0,
-        cost: 0,
-        inventory: 0,
-        taxes: [],
-        cant: 1,
-        shop: {},
-        pay: '',
-        payment: {},
-        supplier: '',
-        noFacture: '',
-        totalCost: 0,
-        totalPrice: 0,
-        article_id: ''
-      },
+      loadingData: false,
       editedIndex: -1,
-      loadingData: false
+      localArticles: []
     }
   },
   computed: {
@@ -218,13 +206,7 @@ export default {
                 price: v.price ? v.price : 0,
                 cost: v.cost ? v.cost : 0,
                 inventory: inventory || 0,
-                taxes: [],
                 cant: 1,
-                shop: {},
-                pay: '',
-                payment: {},
-                supplier: '',
-                noFacture: '',
                 totalCost: v.cost,
                 totalPrice: v.price,
                 article_id: v.id
@@ -242,13 +224,7 @@ export default {
               price: value.price ? value.price : 0,
               cost: value.cost ? value.cost : 0,
               inventory: inventory || 0,
-              taxes: [],
               cant: 1,
-              shop: {},
-              pay: '',
-              payment: {},
-              supplier: '',
-              noFacture: '',
               totalCost: value.cost,
               totalPrice: value.price,
               article_id: value.id
@@ -257,37 +233,28 @@ export default {
         }
       })
     })
-
     this.loadingData = false
   },
   methods: {
     ...mapActions('article', ['getArticles']),
     selectArticle (item) {
-      this.supplies_product.push(item)
-      if (this.supplies_product.length === 1) {
-        this.supplySelected = item
-        this.editedIndex = 0
-      }
+      this.newInventory.articles.push(item)
     },
     updateSupplyData (supply) {
-      Object.assign(this.supplies_product[this.editedIndex], supply)
-      this.supplySelected = supply
+      this.$store.state.newInventory = supply
+      console.log(this.newInventory)
     },
     deleteItem (item) {
-      this.supplies_product.splice(this.supplies_product.indexOf(item), 1)
+      this.newInventory.articles.splice(this.newInventory.articles.indexOf(item), 1)
     },
-    selectRow (item) {
-      this.editedIndex = this.supplies_product.indexOf(item)
-      this.supplySelected = item
-    },
-    calcTotal: function () {
-      this.supplies_product[this.editedIndex].totalPrice = parseFloat(this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant).toFixed(2)
-      this.supplies_product[this.editedIndex].totalCost = parseFloat(this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant).toFixed(2)
-    },
-    createNewInvetory () {
-
+    calcTotal: function (item) {
+      console.log(item)
+      this.editedIndex = this.newInventory.articles.indexOf(item)
+      this.newInventory.articles[this.editedIndex].totalPrice = parseFloat(this.newInventory.articles[this.editedIndex].price * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
+      this.newInventory.articles[this.editedIndex].totalCost = parseFloat(this.newInventory.articles[this.editedIndex].cost * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
     }
   }
+
 }
 </script>
 

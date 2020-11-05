@@ -13,7 +13,8 @@ class CreateArticlesShopsTable extends Migration
      */
     public function up()
     {
-        Schema::create('articles_shops', function (Blueprint $table) { $table->uuid('id')->primary();
+        Schema::create('articles_shops', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->decimal('price',15,2)->default(0);
             $table->integer('stock')->nullable();
             $table->integer('under_inventory')->nullable();
