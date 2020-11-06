@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Managers\ArticleManager;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class InventoriesArticlesShops
@@ -30,6 +33,13 @@ class InventoriesArticlesShops extends Model
     protected $fillable = [
         'inventory_id', 'articles_shops_id', 'cant', 'cost'
     ];
+
+
+
+    public function articles_shops():BelongsTo
+    {
+        return $this->belongsTo(ArticlesShops::class);
+    }
 
 
 

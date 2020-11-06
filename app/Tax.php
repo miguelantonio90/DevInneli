@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
- * @method find($id)
+ * @method static find(array $idShops)
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */

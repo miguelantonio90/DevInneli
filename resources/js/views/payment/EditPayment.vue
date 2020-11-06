@@ -43,6 +43,7 @@
                 item-text="name"
                 item-value="key"
                 required
+                :rules="formRule.country"
               />
             </v-col>
           </v-row>

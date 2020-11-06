@@ -3,16 +3,17 @@
     <v-row>
       <v-col cols="6">
         <v-select
-          v-model="newInventory.supplier"
+          v-model="supply.supplier"
           clearable
           :items="suppliers"
           :label="$vuetify.lang.t('$vuetify.menu.supplier')"
           item-text="name"
-          item-value="id"
           :loading="isSupplierTableLoading"
           :disabled="!!isSupplierTableLoading"
           return-object
-          @input="$emit('updateData')"
+          required
+          :rules="formRule.country"
+          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -32,7 +33,7 @@
       </v-col>
       <v-col cols="6">
         <v-select
-          v-model="newInventory.shop"
+          v-model="supply.shop"
           clearable
           :items="shops"
           :label="$vuetify.lang.t('$vuetify.menu.shop')"
@@ -40,17 +41,23 @@
           :loading="isShopLoading"
           :disabled="!!isShopLoading"
           return-object
+          required
+          :rules="formRule.country"
+          @input="updateStore"
         />
       </v-col>
       <v-col cols="6">
         <v-text-field
-          v-model="newInventory.noFacture"
+          v-model="supply.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
+          required
+          :rules="formRule.required"
+          @onchange="updateStore"
         />
       </v-col>
       <v-col cols="6">
         <v-select
-          v-model="newInventory.taxes"
+          v-model="supply.taxes"
           chips
           clearable
           deletable-chips
@@ -61,7 +68,9 @@
           :loading="isTaxLoading"
           :disabled="!!isTaxLoading"
           return-object
-          @input="$emit('updateData')"
+          required
+          :rules="formRule.country"
+          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -81,20 +90,23 @@
       </v-col>
       <v-col cols="6">
         <v-select
-          v-model="newInventory.pay"
+          v-model="supply.pay"
           clearable
           :items="getPay"
           :label="$vuetify.lang.t('$vuetify.pay.pay')"
           item-text="text"
           item-value="value"
+          required
+          :rules="formRule.country"
+          @input="updateStore"
         />
       </v-col>
       <v-col
-        v-show="newInventory.pay === 'counted'"
+        v-show="supply.pay === 'counted'"
         cols="6"
       >
         <v-select
-          v-model="newInventory.payments"
+          v-model="supply.payments"
           clearable
           :items="payments"
           :label="$vuetify.lang.t('$vuetify.payment.name')"
@@ -132,12 +144,24 @@ import NewPayment from '../payment/NewPayment'
 export default {
   name: 'DetailSupplier',
   components: { NewPayment, NewTax, NewSupplier },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      formRule: this.$rules,
+      supply: {}
+    }
+  },
   computed: {
     ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading']),
-    ...mapState('inventory', ['newInventory']),
+    ...mapState('inventory', ['newInventory', 'editInventory']),
     getPay () {
       return [
         {
@@ -156,12 +180,32 @@ export default {
     this.getTaxes()
     this.getShops()
     this.getPayments()
+    this.supply = this.edit ? this.editInventory : this.newInventory
+    console.log(this.supply)
   },
   methods: {
     ...mapActions('supplier', ['getSuppliers']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('payment', ['getPayments'])
+    ...mapActions('payment', ['getPayments']),
+    updateStore () {
+      if (this.edit) {
+        this.$store.state['inventory/editInventory'].supplier = this.supply.supplier
+        this.$store.state['inventory/editInventory'].taxes = this.supply.taxes
+        this.$store.state['inventory/editInventory'].pay = this.supply.pay
+        this.$store.state['inventory/editInventory'].payments = this.supply.payments
+        this.$store.state['inventory/editInventory'].shop = this.supply.shop
+        this.$store.state['inventory/editInventory'].no_facture = this.supply.no_facture
+      } else {
+        this.$store.state['inventory/newInventory'].supplier = this.supply.supplier
+        this.$store.state['inventory/newInventory'].taxes = this.supply.taxes
+        this.$store.state['inventory/newInventory'].pay = this.supply.pay
+        this.$store.state['inventory/newInventory'].payments = this.supply.payments
+        this.$store.state['inventory/newInventory'].shop = this.supply.shop
+        this.$store.state['inventory/newInventory'].no_facture = this.supply.no_facture
+      }
+      this.$emit('updateData')
+    }
   }
 }
 </script>

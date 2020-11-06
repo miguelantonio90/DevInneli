@@ -240,18 +240,18 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col
-                      v-show="!editArticle.composite"
-                      cols="12"
-                      md="3"
-                    >
-                      <v-switch
-                        v-model="editArticle.track_inventory"
-                        class="md-6"
-                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
-                        @change="changeInventory"
-                      />
-                    </v-col>
+                    <!--                    <v-col-->
+                    <!--                      v-show="!editArticle.composite"-->
+                    <!--                      cols="12"-->
+                    <!--                      md="3"-->
+                    <!--                    >-->
+                    <!--                      <v-switch-->
+                    <!--                        v-model="editArticle.track_inventory"-->
+                    <!--                        class="md-6"-->
+                    <!--                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"-->
+                    <!--                        @change="changeInventory"-->
+                    <!--                      />-->
+                    <!--                    </v-col>-->
                   </v-row>
                   <v-row v-show="editArticle.composite">
                     <v-col

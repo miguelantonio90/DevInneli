@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
+            $vuetify.lang.t('$vuetify.titles.edit', [
               $vuetify.lang.t('$vuetify.supply.name'),
             ])
           }}</span>
@@ -56,7 +56,7 @@
                     >
                       <v-data-table
                         :headers="getTableColumns"
-                        :items="newInventory.articles"
+                        :items="editInventory.articles"
                       >
                         <template v-slot:item.cost="{ item }">
                           <v-edit-dialog
@@ -138,7 +138,7 @@
                       </v-data-table>
                     </v-col>
                     <v-col
-                      v-show="newInventory.articles.length > 0 "
+                      v-show="editInventory.articles.length > 0 "
                       cols="12"
                       md="6"
                     />
@@ -146,7 +146,7 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
               <v-col
-                v-show="newInventory.articles.length > 0"
+                v-show="editInventory.articles.length > 0"
                 cols="12"
                 md="7"
               >
@@ -160,17 +160,20 @@
                     </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <detail-supplier @updateData="update = true" />
+                    <detail-supplier
+                      :edit="true"
+                      @updateData="update = true"
+                    />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-col>
               <v-col
-                v-show="newInventory.articles.length > 0"
+                v-show="editInventory.articles.length > 0"
                 cols="12"
                 md="5"
               >
                 <v-expansion-panel
-                  v-show="newInventory.articles.length > 0"
+                  v-show="editInventory.articles.length > 0"
                   cols="12"
                   md="6"
                 >
@@ -184,7 +187,7 @@
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <resume-supply
-                      :edit="false"
+                      :edit="true"
                       :update="update"
                       @updateData="update = false"
                     />
@@ -208,7 +211,7 @@
             color="primary"
             :disabled="!formValid"
             :loading="isActionInProgress"
-            @click="createNewInventory"
+            @click="HandlerEditInventory"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -240,7 +243,6 @@
     </v-container>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import DetailSupplier from './DatailSupplier'
@@ -248,21 +250,21 @@ import ResumeSupply from './ResumeSupply'
 import AppLoading from '../../components/core/AppLoading'
 
 export default {
-  name: 'NewInventory',
+  name: 'EditInventory',
   components: { AppLoading, ResumeSupply, DetailSupplier },
   data () {
     return {
       loadingData: false,
       editedIndex: -1,
       localArticles: [],
+      formValid: false,
       update: false,
       panel: [0, 1, 2],
-      formValid: false,
       showInfoAdd: false
     }
   },
   computed: {
-    ...mapState('inventory', ['newInventory', 'isActionInProgress']),
+    ...mapState('inventory', ['editInventory', 'isActionInProgress']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -323,6 +325,7 @@ export default {
   },
   created () {
     this.loadingData = true
+    this.formValid = false
     this.getArticles().then(() => {
       this.articles.forEach((value) => {
         if (value.track_inventory) {
@@ -370,37 +373,44 @@ export default {
       })
     })
     this.loadingData = false
+    this.editInventory.articles.forEach((article) => {
+      const invData = this.editInventory.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
+      article.totalPrice = invData.cant * article.price
+      article.totalCost = invData.cant * invData.cost
+    })
+    this.loadingData = false
+    console.log(this.editInventory)
   },
   methods: {
-    ...mapActions('inventory', ['createInventory']),
+    ...mapActions('inventory', ['updateInventory']),
     ...mapActions('article', ['getArticles']),
     selectArticle (item) {
       if (item) {
-        if (this.newInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
-          this.newInventory.articles.push(item)
+        if (this.editInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
+          this.editInventory.articles.push(item)
         } else {
           this.showInfoAdd = true
         }
       }
     },
     deleteItem (item) {
-      this.newInventory.articles.splice(this.newInventory.articles.indexOf(item), 1)
+      this.editInventory.articles.splice(this.editInventory.articles.indexOf(item), 1)
       this.update = true
     },
     calcTotal: function (item) {
-      this.editedIndex = this.newInventory.articles.indexOf(item)
-      this.newInventory.articles[this.editedIndex].totalPrice = parseFloat(this.newInventory.articles[this.editedIndex].price * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
-      this.newInventory.articles[this.editedIndex].totalCost = parseFloat(this.newInventory.articles[this.editedIndex].cost * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
+      this.editedIndex = this.editInventory.articles.indexOf(item)
+      this.editInventory.articles[this.editedIndex].totalPrice = parseFloat(this.editInventory.articles[this.editedIndex].price * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
+      this.editInventory.articles[this.editedIndex].totalCost = parseFloat(this.editInventory.articles[this.editedIndex].cost * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
       this.update = true
     },
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async createNewInventory () {
-      if (this.newInventory.articles.length > 0) {
+    async HandlerEditInventory () {
+      if (this.editInventory.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
-          await this.createInventory(this.newInventory)
+          await this.updateInventory(this.editInventory)
           await this.$router.push({ name: 'supply_product' })
         }
       } else {
@@ -411,7 +421,7 @@ export default {
     },
     shopMessageError (message) {
       this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
           this.$vuetify.lang.t('$vuetify.menu.supply_productS')
         ]),
         text: message,
@@ -424,7 +434,6 @@ export default {
       })
     }
   }
-
 }
 </script>
 

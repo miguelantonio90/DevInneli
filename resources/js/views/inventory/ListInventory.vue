@@ -7,65 +7,36 @@
       >
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.supply')])"
+                                  [$vuetify.lang.t('$vuetify.menu.supply_product'),])"
           :headers="getTableColumns"
-          csv-filename="Inventories"
-          :items="articles"
+          csv-filename="Articles"
+          :items="inventories"
           :options="vBindOption"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort
           :is-loading="isTableLoading"
-          @create-row="createArticleHandler"
-          @edit-row="editArticleHandler($event)"
-          @delete-row="deleteArticleHandler($event)"
+          @create-row="createInventoryHandler"
+          @edit-row="editInventoryHandler($event)"
+          @delete-row="deleteInventoryHandler($event)"
         >
-          <template v-slot:item.name="{ item }">
-            <v-chip
-              :key="JSON.stringify(item)"
-            >
-              <v-avatar
-                v-if="item.color"
-                class="white--text"
-                :color="item.color"
-                left
-                v-text="item.name.slice(0, 1).toUpperCase()"
-              />
-              <v-avatar
-                v-else
-                left
-              >
-                <v-img :src="item.path" />
-              </v-avatar>
-              {{ item.name }}
+          <template v-slot:item.pay="{ item }">
+            {{ item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit') }}
+          </template>
+          <template v-slot:item.shop.name="{ item }">
+            <v-chip>
+              {{ item.shop.name }}
             </v-chip>
           </template>
-          <template v-slot:item.percent="{ item }">
-            <template v-if="item.variant_values.length===0">
-              {{ item.percent }} %
-            </template>
+          <template v-slot:item.totalPrice="{ item }">
+            {{ `${user.company.currency + ' ' + item.totalPrice}` }}
           </template>
-          <template v-slot:item.price="{ item }">
-            <template v-if="item.variant_values.length===0">
-              {{ `${user.company.currency + ' ' + item.price}` }}
-            </template>
-          </template>
-          <template v-slot:item.cost="{ item }">
-            <template v-if="item.variant_values.length===0">
-              {{ `${user.company.currency + ' ' + item.cost}` }}
-            </template>
-          </template>
-          <template v-slot:item.shopsNames="{ item }">
-            <v-chip
-              v-for="(shop, i) of item.shopsNames"
-              :key="i"
-            >
-              {{ shop }}
-            </v-chip>
+          <template v-slot:item.totalCost="{ item }">
+            {{ `${user.company.currency + ' ' + item.totalCost}` }}
           </template>
           <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
             <v-btn
-              v-if="item.variant_values.length > 0"
+              v-if="item.articles.length > 0"
               color="primary"
               fab
               x-small
@@ -99,30 +70,29 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.ref') }}</th>
                       <th>{{ $vuetify.lang.t('$vuetify.firstName') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.articles.inventory') }}</th>
                       <th>{{ $vuetify.lang.t('$vuetify.articles.price') }}</th>
                       <th>{{ $vuetify.lang.t('$vuetify.articles.cost') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.percent') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.menu.shop') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.variants.cant') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.variants.total_price') }}</th>
+                      <th>{{ $vuetify.lang.t('$vuetify.variants.total_cost') }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr
-                      v-for="dessert in item.variant_values"
-                      :key="dessert.name"
+                      v-for="article in item.articles"
+                      :key="article.name"
                     >
-                      <td>{{ dessert.name }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
-                      <td>{{ dessert.percent + ' %' }}</td>
-                      <td>
-                        <v-chip
-                          v-for="(shop, i) of dessert.shopsNames"
-                          :key="i+shop"
-                        >
-                          {{ shop }}
-                        </v-chip>
-                      </td>
+                      <td>{{ article.ref }}</td>
+                      <td>{{ article.name }}</td>
+                      <td>{{ article.inventory }}</td>
+                      <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + article.cost}` }}</td>
+                      <td>{{ `${article.cant}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + article.price * article.cant}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + article.cost * article.cant}` }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -134,7 +104,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -159,38 +128,42 @@ export default {
       'inventories',
       'isTableLoading'
     ]),
-    ...mapState('category', ['categories', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
         {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
+          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+          value: 'no_facture',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.menu.category'),
-          value: 'category.name',
+          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
+          value: 'pay',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.articles.price'),
-          value: 'price',
+          text: this.$vuetify.lang.t('$vuetify.payment.name'),
+          value: 'payments.name',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
-          value: 'cost',
+          text: this.$vuetify.lang.t('$vuetify.supplier.name'),
+          value: 'supplier.name',
           select_filter: true
-        }, {
-          text: this.$vuetify.lang.t('$vuetify.articles.percent'),
-          value: 'percent',
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+          value: 'totalCost',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+          value: 'totalPrice',
           select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
+          value: 'shop.name',
           select_filter: true
         },
         {
@@ -205,24 +178,21 @@ export default {
     this.getInventories()
   },
   methods: {
-    ...mapActions('article', [
+    ...mapActions('inventory', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
       'getInventories',
-      'deleteArticle'
+      'deleteInventory'
     ]),
-    ...mapActions('category', ['getCategories']),
-    ...mapActions('shop', ['getShops']),
-    createArticleHandler () {
-      // this.toogleNewModal(true)
-      this.$router.push({ name: 'product_add' })
+    createInventoryHandler () {
+      this.$router.push({ name: 'supply_add' })
     },
-    editArticleHandler ($event) {
+    editInventoryHandler ($event) {
       this.openEditModal($event)
-      this.$router.push({ name: 'product_edit' })
+      this.$router.push({ name: 'supply_edit' })
     },
-    deleteArticleHandler (articleId) {
+    deleteInventoryHandler (articleId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -242,7 +212,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.isConfirmed) this.deleteArticle(articleId)
+          if (result.isConfirmed) this.deleteInventory(articleId)
         })
     }
   }

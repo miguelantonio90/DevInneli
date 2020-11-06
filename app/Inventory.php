@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
@@ -47,7 +49,7 @@ class Inventory extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'pay', 'company_id','payment_id'
+        'no_facture', 'pay', 'company_id','payment_id','supplier_id'
     ];
 
     /**
@@ -58,8 +60,25 @@ class Inventory extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function payment(): HasMany
+    public function payments(): HasOne
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasOne(Payment::class);
     }
+
+    public function supplier(): HasOne
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    public function articles_shops():HasMany
+    {
+        return $this->hasMany(InventoriesArticlesShops::class)
+            ->with('articles_shops');
+    }
+
+    public function taxes(): BelongsToMany
+    {
+        return $this->belongsToMany(Tax::class,'inventories_tax');
+    }
+
 }

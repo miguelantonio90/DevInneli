@@ -23,7 +23,7 @@ const state = {
   loading: false,
   saved: false,
   newInventory: {
-    noFacture: '',
+    no_facture: '',
     pay: '',
     taxes: [],
     payments: {},
@@ -33,13 +33,15 @@ const state = {
   },
   editInventory: {
     id: '',
-    noFacture: '',
+    no_facture: '',
     pay: '',
     taxes: [],
     payments: {},
     articles: [],
+    articles_shops: [],
     shop: {},
-    supplier: {}
+    supplier: {},
+    supplier_id: ''
   },
   isInventoryTableLoading: false,
   isActionInProgress: false,
@@ -73,7 +75,7 @@ const mutations = {
   [INVENTORY_CREATED] (state) {
     state.showNewModal = false
     state.newInventory = {
-      noFacture: '',
+      no_facture: '',
       pay: '',
       taxes: [],
       payments: {},
@@ -99,7 +101,7 @@ const mutations = {
     state.showEditModal = false
     state.editInventory = {
       id: '',
-      noFacture: '',
+      no_facture: '',
       pay: '',
       taxes: [],
       payments: {},

@@ -1,28 +1,53 @@
 <template>
   <v-container>
     <v-row>
-      <v-col v-if="newInventory.supplier">
-        <b>{{ $vuetify.lang.t('$vuetify.to') }}</b>: {{ newInventory.supplier.name }}
+      <v-col v-if="edit?editInventory.supplier:newInventory.supplier">
+        <b>{{ $vuetify.lang.t('$vuetify.to') }}</b>: {{ edit?editInventory.supplier.name:newInventory.supplier.name }}
       </v-col>
       <v-spacer />
       <v-col
-        v-if="newInventory.noFacture"
+        v-if="edit?editInventory.no_facture:newInventory.no_facture"
         cols="md-6"
       >
-        {{ $vuetify.lang.t('$vuetify.tax.noFacture') }}: {{ newInventory.noFacture }}
+        {{ $vuetify.lang.t('$vuetify.tax.noFacture') }}: {{ edit?editInventory.no_facture:newInventory.no_facture }}
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="6">
         {{ $vuetify.lang.t('$vuetify.pay.sub_total') }}
       </v-col>
-      <v-col cols="6">
+      <v-col
+        v-if="sub_total > 0"
+        cols="6"
+      >
         {{ `${user.company.currency + ' ' + sub_total}` }}
       </v-col>
+      <v-col v-else>
+        <v-tooltip
+          right
+          class="md-6"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              mdi-information-outline
+            </v-icon>
+          </template>
+          <span>{{
+            $vuetify.lang.t('$vuetify.messages.warning_tax_cost')
+          }}</span>
+        </v-tooltip><strike style="color: crimson">
+          {{ `${user.company.currency + ' ' + sub_total}` }}
+        </strike>
+      </v-col>
     </v-row>
-    <v-row v-if="newInventory.supplier" />
+    <v-row v-if="taxes.length > 0" />
     <v-row
-      v-for="tax in newInventory.taxes"
+      v-for="tax in taxes"
       :key="tax.name"
     >
       <v-col cols="6">
@@ -57,6 +82,10 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'ResumeSupply',
   props: {
+    edit: {
+      type: Boolean,
+      default: false
+    },
     update: {
       type: Boolean,
       default: false
@@ -64,13 +93,14 @@ export default {
   },
   data () {
     return {
+      taxes: [],
       totalTax: 0,
       sub_total: 0,
       total: 0
     }
   },
   computed: {
-    ...mapState('inventory', ['newInventory']),
+    ...mapState('inventory', ['newInventory', 'editInventory']),
     ...mapGetters('auth', ['user'])
   },
   watch: {
@@ -82,17 +112,28 @@ export default {
     },
     update () {
       this.updateData()
+    },
+    'editInventory.taxes' () {
+      this.updateData()
+    },
+    'editInventory.articles' () {
+      this.updateData()
     }
+  },
+  created () {
+    this.updateData()
   },
   methods: {
     updateData () {
       this.totalTax = 0
       this.total = 0
       this.sub_total = 0
-      this.newInventory.articles.forEach((v) => {
-        this.total = parseFloat(v.totalCost) + this.total
+      const articles = this.edit ? this.editInventory.articles : this.newInventory.articles
+      articles.forEach((v) => {
+        this.total = parseFloat(v.cant * v.cost) + this.total
       })
-      this.newInventory.taxes.forEach((v) => {
+      this.taxes = this.edit ? this.editInventory.taxes : this.newInventory.taxes
+      this.taxes.forEach((v) => {
         console.log(v)
         this.totalTax += v.percent === 'true' ? this.total * v.value / 100 : v.value
       })

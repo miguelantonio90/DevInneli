@@ -56,20 +56,8 @@ class InventoryController extends Controller
 
         return ResponseHelper::sendResponse(
             $inventory,
-            'Article has created successfully.'
+            'Inventory has created successfully.'
         );
-    }
-
-    /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'barCode' => ['required', 'string', 'max:255']
-        ]);
     }
 
     /**
@@ -78,11 +66,9 @@ class InventoryController extends Controller
      * @param  Request  $request
      * @param    $id
      * @return JsonResponse|Response
-     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
             $this->inventoryManager->edit($id, $request->all()),
             'Article has updated successfully.'

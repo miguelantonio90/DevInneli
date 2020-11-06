@@ -290,10 +290,34 @@
                     >
                       <v-switch
                         v-model="newArticle.track_inventory"
-                        class="md-6"
-                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
                         @change="changeInventory"
-                      />
+                      >
+                        <template v-slot:label>
+                          <div>
+                            {{
+                              $vuetify.lang.t('$vuetify.articles.track_inventory') }}
+                            <v-tooltip
+                              right
+                              class="md-6"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                  color="primary"
+                                  dark
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                              }}</span>
+                            </v-tooltip>
+                          </div>
+                        </template>
+                      </v-switch>
                     </v-col>
                   </v-row>
                   <v-row v-show="newArticle.composite">
