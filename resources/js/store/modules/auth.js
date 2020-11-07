@@ -197,6 +197,9 @@ const actions = {
         if (data.success && data.data.isManager) {
           commit(IS_MANAGER, true)
           localStorage.saveTokenManager(data.data.access_token)
+        } else {
+          commit(IS_MANAGER, false)
+          localStorage.removeTokenManager()
         }
       })
       .catch(({ response }) => {
