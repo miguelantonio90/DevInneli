@@ -2,6 +2,7 @@
 
 namespace App\Managers;
 
+use App\Articles;
 use App\Category;
 
 class CategoryManager
@@ -67,6 +68,14 @@ class CategoryManager
      */
     public function delete($id)
     {
+        $articles = Articles::latest()
+            ->where('category_id', '=',$id)
+            ->get();
+        foreach ($articles as $k=>$article)
+        {
+            $article->category_id = null;
+            $article->save();
+        }
         return Category::findOrFail($id)->delete();
     }
 
