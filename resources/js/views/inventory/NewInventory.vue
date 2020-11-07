@@ -1,5 +1,5 @@
 <template>
-  <div class="page-add-product">
+  <div class="page-add-inventory">
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
@@ -198,7 +198,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
-            @click="$router.push({name:'supply_list'})"
+            @click="$router.push({name:'supply_product'})"
           >
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}

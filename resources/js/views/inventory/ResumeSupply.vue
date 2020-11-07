@@ -40,9 +40,9 @@
           <span>{{
             $vuetify.lang.t('$vuetify.messages.warning_tax_cost')
           }}</span>
-        </v-tooltip><strike style="color: crimson">
+        </v-tooltip><span style="color: crimson; text-decoration: line-through;">
           {{ `${user.company.currency + ' ' + sub_total}` }}
-        </strike>
+        </span>
       </v-col>
     </v-row>
     <v-row v-if="taxes.length > 0" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-add-product">
+  <div class="page-add-inventory">
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
@@ -372,7 +372,6 @@ export default {
         }
       })
     })
-    this.loadingData = false
     this.editInventory.articles.forEach((article) => {
       const invData = this.editInventory.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
       article.totalPrice = invData.cant * article.price
