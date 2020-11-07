@@ -259,17 +259,6 @@ export const protectedRoute = [
             component: () => import('../views/article/NewArticle')
           },
           {
-            path: '/articles/supply_product',
-            name: 'supply_product',
-            meta: {
-              title: 'supply_product',
-              icon: 'mdi-database-plus',
-              hiddenInMenu: false,
-              requiresAuth: true
-            },
-            component: () => import('../views/inventory/Inventory')
-          },
-          {
             path: '/articles/product.edit',
             name: 'product_edit',
             meta: {
@@ -302,6 +291,39 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/supplier/ListSupplier')
+          },
+          {
+            path: '/finance/buy_list',
+            name: 'supply_product',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/ListInventory')
+          },
+          {
+            path: '/finance/buy.add',
+            name: 'supply_add',
+            meta: {
+              title: 'supply_add',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/NewInventory')
+          },
+          {
+            path: '/finance/supply.edit',
+            name: 'supply_edit',
+            meta: {
+              title: 'supply_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/EditInventory')
           }
         ]
       },

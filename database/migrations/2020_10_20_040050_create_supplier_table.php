@@ -24,10 +24,14 @@ class CreateSupplierTable extends Migration
             $table->string('contract')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
             $table->foreignUuid('expense_id')->references('id')->on('expense_categories')
                 ->onDelete('cascade');
+        });
+        Schema::table('inventories', function($table) {
+            $table->foreignUuid('supplier_id')->nullable()->references('id')->on('suppliers');
         });
     }
 

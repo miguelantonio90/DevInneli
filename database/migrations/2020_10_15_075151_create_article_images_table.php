@@ -19,6 +19,7 @@ class CreateArticleImagesTable extends Migration
             $table->longText('path')->nullable();
             $table->boolean('default')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');

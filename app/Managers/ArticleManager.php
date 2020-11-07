@@ -128,7 +128,6 @@ class ArticleManager
                 }
             }
             $article->save();
-            return $article;
         }
 
         if (count($data['images']) > 0) {

@@ -95,15 +95,25 @@
               :colspan="headers.length"
               style="padding: 0 0 0 0"
             >
-              <v-simple-table>
+              <v-simple-table dense>
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th>{{ $vuetify.lang.t('$vuetify.firstName') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.price') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.cost') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.percent') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.menu.shop') }}</th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.firstName') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.price') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.cost') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.percent') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.menu.shop') }}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -119,6 +129,7 @@
                         <v-chip
                           v-for="(shop, i) of dessert.shopsNames"
                           :key="i+shop"
+                          small
                         >
                           {{ shop }}
                         </v-chip>

@@ -240,18 +240,18 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col
-                      v-show="!editArticle.composite"
-                      cols="12"
-                      md="3"
-                    >
-                      <v-switch
-                        v-model="editArticle.track_inventory"
-                        class="md-6"
-                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
-                        @change="changeInventory"
-                      />
-                    </v-col>
+                    <!--                    <v-col-->
+                    <!--                      v-show="!editArticle.composite"-->
+                    <!--                      cols="12"-->
+                    <!--                      md="3"-->
+                    <!--                    >-->
+                    <!--                      <v-switch-->
+                    <!--                        v-model="editArticle.track_inventory"-->
+                    <!--                        class="md-6"-->
+                    <!--                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"-->
+                    <!--                        @change="changeInventory"-->
+                    <!--                      />-->
+                    <!--                    </v-col>-->
                   </v-row>
                   <v-row v-show="editArticle.composite">
                     <v-col
@@ -410,6 +410,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
+            :disabled="isActionInProgress"
             @click="$router.push({name:'product_list'})"
           >
             <v-icon>mdi-close</v-icon>
@@ -418,7 +419,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid"
+            :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
             @click="editArticleHandler"
           >

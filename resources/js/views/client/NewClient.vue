@@ -144,13 +144,14 @@
         <v-spacer />
         <v-btn
           class="mb-2"
+          :disabled="isActionInProgress"
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-          :disabled="!formValid"
+          :disabled="!formValid || isActionInProgress"
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"

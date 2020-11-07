@@ -18,6 +18,7 @@ class CreateShopTypeOfOrdersTable extends Migration
             $table->boolean('available')->default(true);
             $table->boolean('principal')->default(false);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');

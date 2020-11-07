@@ -51,6 +51,7 @@ class CreateOauthClientsTable extends Migration
             $table->boolean('password_client');
             $table->boolean('revoked');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

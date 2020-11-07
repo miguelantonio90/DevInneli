@@ -14,13 +14,13 @@ class CreateInventoriesTable extends Migration
     public function up()
     {
         Schema::create('inventories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->decimal('cost',15,2);
-            $table->integer('operation')->nullable();
-            $table->decimal('cant',15,2);
+            $table->uuid('id')->primary();
+            $table->string('no_facture')->nullable();
+            $table->string('pay')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->foreignUuid('article_id')->references('id')->on('articles')
+            $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
         });
     }

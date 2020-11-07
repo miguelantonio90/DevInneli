@@ -290,10 +290,34 @@
                     >
                       <v-switch
                         v-model="newArticle.track_inventory"
-                        class="md-6"
-                        :label="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                        :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
                         @change="changeInventory"
-                      />
+                      >
+                        <template v-slot:label>
+                          <div>
+                            {{
+                              $vuetify.lang.t('$vuetify.articles.track_inventory') }}
+                            <v-tooltip
+                              right
+                              class="md-6"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                  color="primary"
+                                  dark
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                              }}</span>
+                            </v-tooltip>
+                          </div>
+                        </template>
+                      </v-switch>
                     </v-col>
                   </v-row>
                   <v-row v-show="newArticle.composite">
@@ -453,6 +477,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
+            :disabled="isActionInProgress"
             @click="$router.push({name:'product_list'})"
           >
             <v-icon>mdi-close</v-icon>
@@ -461,7 +486,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid"
+            :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
             @click="createNewArticle"
           >

@@ -16,6 +16,7 @@ class CreateShopTypeOfOrderTable extends Migration
         Schema::create('shop_type_of_order', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');

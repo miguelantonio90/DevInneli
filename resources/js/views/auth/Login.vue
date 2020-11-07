@@ -85,7 +85,7 @@
               <span>{{ item.text }}</span>
             </v-tooltip>-->
             <v-btn
-              :disabled="!formValid"
+              :disabled="!formValid || loading"
               :loading="loading"
               block
               color="primary"

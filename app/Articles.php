@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Articles
@@ -18,7 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Articles extends Model
 {
-    use Uuid;
+    use Uuid, SoftDeletes, SoftCascadeTrait;
+
+    protected $dates = ['deleted_at'];
+    protected $softCascade = ['articlesShops',
+        'variants', 'images', 'variantValues'];
+
 
     public $incrementing = false;
     protected $keyType = 'string';

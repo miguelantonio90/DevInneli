@@ -14,6 +14,7 @@ export default {
   hint_forgot: 'Ingrese su correo electrónico y se le enviarán las instrucciones',
   username: 'Usuario',
   name: 'Nombre',
+  provider: 'Proveedor',
   email: 'Correo',
   holder_email: 'Dirección de correo de la compañía',
   firstName: 'Nombre',
@@ -92,7 +93,10 @@ export default {
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
-    supply_product: 'Abastecer',
+    supply_product: 'Compras',
+    supply_productS: 'Compra',
+    supply_add: 'Nueva Compra',
+    supply_edit: 'Editar Compra',
     finance: 'Finanzas',
     type_of_order: 'Tipo de Pedido',
     tax_list: 'Impuesto',
@@ -154,6 +158,9 @@ export default {
     login_failed: 'Correo electrónico o contraseña no válidos.',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
+    warning_cant_article: 'No puede adicionar esta compra. Debe adicionar al menos un artículo.',
+    warning_tax_cost: 'Usted está pagando mas de impuesto que el propio costo del producto.',
+    warning_article_service: 'Si no selecciona este campo el sistema asumirá que está creando un servicio y no podrá abastecerlo(Realizar una compra).',
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
@@ -268,8 +275,8 @@ export default {
     barCode: 'Código de Barras',
     options: 'Opciones',
     cant: 'Cantidad',
-    total_cost: 'Costo Total: ',
-    total_price: 'Precio Total: '
+    total_cost: 'Costo Total',
+    total_price: 'Precio Total'
   },
   shop_article: {
     under_inventory: 'Bajo Inventario',
@@ -317,6 +324,9 @@ export default {
     extra_data: 'Datos adicionales',
     sub_total: 'Sub Total',
     total: 'Total'
+  },
+  supply: {
+    name: 'Compra'
   },
   ...es
 }

@@ -19,6 +19,7 @@ class CreateExchangeRatesTable extends Migration
             $table->string('currency')->nullable();
             $table->float('change')->default(1);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

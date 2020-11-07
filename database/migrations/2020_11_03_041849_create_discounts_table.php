@@ -19,6 +19,7 @@ class CreateDiscountsTable extends Migration
             $table->float('value')->nullable();
             $table->string('percent')->default(true);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

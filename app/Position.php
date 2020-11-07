@@ -2,8 +2,10 @@
 
 namespace App;
 
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static latest()
@@ -15,7 +17,11 @@ use Illuminate\Database\Eloquent\Model;
 class Position extends Model
 {
 
-    use Uuid;
+    use Uuid, SoftDeletes, SoftCascadeTrait;
+
+    protected $dates = ['deleted_at'];
+
+    protected $softCascade = [ 'users'];
 
     public $incrementing = false;
     protected $keyType = 'string';

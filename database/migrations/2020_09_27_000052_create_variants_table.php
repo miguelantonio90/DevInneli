@@ -17,10 +17,11 @@ class CreateVariantsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->json('value');
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

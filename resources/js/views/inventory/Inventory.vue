@@ -136,10 +136,12 @@ export default {
         totalPrice: 0,
         article_id: ''
       },
-      editedIndex: -1
+      editedIndex: -1,
+      loadingData: false
     }
   },
   computed: {
+    ...mapState('inventory', ['newInventory']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -197,8 +199,9 @@ export default {
       ]
     }
   },
-  created () {
-    this.getArticles().then(() => {
+  async created () {
+    this.loadingData = true
+    await this.getArticles().then(() => {
       this.articles.forEach((value) => {
         if (!value.parent_id) {
           let inventory = 0
@@ -206,7 +209,7 @@ export default {
             value.variant_values.forEach((v) => {
               if (v.articles_shops.length > 0) {
                 v.articles_shops.forEach((k) => {
-                  inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
+                  inventory += k.stock ? parseFloat(k.stock) : 0
                 })
               }
               this.localArticles.push({
@@ -230,7 +233,7 @@ export default {
           } else {
             if (value.articles_shops.length > 0) {
               value.articles_shops.forEach((k) => {
-                inventory += k.under_inventory ? parseFloat(k.under_inventory) : 0
+                inventory += k.stock ? parseFloat(k.stock) : 0
               })
             }
             this.localArticles.push({
@@ -254,6 +257,7 @@ export default {
         }
       })
     })
+    this.loadingData = false
   },
   methods: {
     ...mapActions('article', ['getArticles']),

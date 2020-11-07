@@ -23,6 +23,7 @@ class CreateCompaniesTable extends Migration
             $table->string('address')->nullable();
             $table->longText('logo')->nullable();
             $table->string('faker')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

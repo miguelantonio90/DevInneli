@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static latest()
@@ -19,6 +20,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class TypeOfOrder extends Model
 {
     use Uuid;
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';

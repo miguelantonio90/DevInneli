@@ -79,7 +79,7 @@
             </v-tooltip>
             <v-spacer />
             <v-btn
-              :disabled="!formValid"
+              :disabled="!formValid || loadingReset"
               :loading="loadingReset"
               color="primary"
               @click="changePassword"

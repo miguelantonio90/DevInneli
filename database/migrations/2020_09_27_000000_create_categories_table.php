@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('color')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

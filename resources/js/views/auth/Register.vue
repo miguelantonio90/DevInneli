@@ -127,7 +127,7 @@
             </v-tooltip>
             <v-spacer />
             <v-btn
-              :disabled="!formValid"
+              :disabled="!formValid || loading"
               :loading="loading"
               color="primary"
               @click="registerUser"

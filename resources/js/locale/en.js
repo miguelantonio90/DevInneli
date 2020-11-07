@@ -14,6 +14,7 @@ export default {
   hint_forgot: 'Enter your Email and instructions will be sent to you!',
   username: 'Username',
   name: 'Name',
+  provider: 'Provider',
   firstName: 'First Name',
   lastName: 'Last Name',
   description: 'Description',
@@ -92,7 +93,10 @@ export default {
     product_add: 'New Article',
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
-    supply_product: 'Supply',
+    supply_product: 'Buy',
+    supply_products: 'Buy',
+    supply_add: 'New Buy',
+    supply_edit: 'Edit Buy',
     finance: 'Finance',
     type_of_order: 'Type of Order',
     tax_list: 'Tax',
@@ -142,6 +146,9 @@ export default {
     login_failed: 'Invalid email or password.',
     warning_composite: 'This article is composite, please select the element that compose it ',
     warning_price: "You can't create this article.The cost can't be higher than price",
+    warning_cant_article: "You can't create this buy. You need select at least one article",
+    warning_tax_cost: 'You are paying more tax than the cost of the product.',
+    warning_article_service: "If you don't select this field, the system will assume that you are creating a service and you will not be able to supply it (Make a buy)",
     info_exchange_rate: 'The rate of change is with respect to 1',
     idle_title: 'Session Expired',
     idle_info: 'You have left this browser idle for 10 minutes.',
@@ -265,8 +272,8 @@ export default {
     barCode: 'Bar Code',
     options: 'Options',
     cant: 'Quantify',
-    total_cost: 'Total Cost: ',
-    total_price: 'Total Price: '
+    total_cost: 'Total Cost',
+    total_price: 'Total Price'
   },
   shop_article: {
     under_inventory: 'Low Inventory',
@@ -314,6 +321,9 @@ export default {
     extra_data: 'Additional Data',
     sub_total: 'Sub Total',
     total: 'Total'
+  },
+  supply: {
+    name: 'Buy'
   },
   ...en
 }
