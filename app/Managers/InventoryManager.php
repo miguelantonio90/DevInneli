@@ -45,10 +45,11 @@ class InventoryManager
                     'articles_shops.stock as inventory', 'articles.id as article_id'])
                 ->where('inventories.id', '=', $value['id'])
                 ->get();
-            $inventories[$key]['payments'] = DB::table('payments')
+            $payments = DB::table('payments')
                 ->join('inventories', 'inventories.payment_id', '=', 'payments.id')
                 ->where('inventories.id', '=', $value['id'])
-                ->get()[0];
+                ->get();
+            $inventories[$key]['payments'] = count($payments) > 0 ? $payments[0] : null;
             $inventories[$key]['supplier'] = DB::table('suppliers')
                 ->join('inventories', 'inventories.supplier_id', '=', 'suppliers.id')
                 ->where('inventories.id', '=', $value['id'])
@@ -71,14 +72,21 @@ class InventoryManager
         $inventory = Inventory::create([
             'no_facture' => $data['no_facture'],
             'pay' => $data['pay'] ? $data['pay'] : null,
-            'company_id' => $data['company_id'],
-            'payment_id' => $data['payments']['id'] ? $data['payments']['id'] : null,
-            'supplier_id' => $data['supplier']['id'] ? $data['supplier']['id'] : null
+            'company_id' => $data['company_id']
         ]);
+        var_dump(isset($data['payments']['id']));
+        if (isset($data['payments']['id'])) {
+            $inventory->payment_id = $data['payments']['id'];
+        }
+        if (isset($data['supplier']['id'])) {
+            $inventory->supplier_id = $data['supplier']['id'];
+        }
+        $inventory->save();
         $this->updateInventoryData($inventory, $data, false);
         return $inventory;
 
     }
+
     public function edit($id, $data)
     {
         $inventory = Inventory::findOrFail($id);
@@ -98,7 +106,7 @@ class InventoryManager
         foreach ($articles as $key => $value) {
             $articlesShops = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
-                ->where('shop_id', '=', $edit?$data['shop']['shop_id']:$data['shop']['id'])
+                ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->get();
             if (count($articles) > 0) {
                 $articleShop = $articlesShops[0];
@@ -140,7 +148,7 @@ class InventoryManager
                 'cant' => $data['cant'],
                 'cost' => $data['cost']
             ]);
-        else{
+        else {
             $invAS = InventoriesArticlesShops::findOrFail($inventoriesArtShop[0]['id']);
             $invAS['cant'] = $data['cant'];
             $invAS['cost'] = $data['cost'];

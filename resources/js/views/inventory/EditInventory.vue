@@ -201,7 +201,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
-            @click="$router.push({name:'supply_list'})"
+            @click="$router.push({name:'supply_product'})"
           >
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -379,7 +379,6 @@ export default {
       article.totalCost = invData.cant * invData.cost
     })
     this.loadingData = false
-    console.log(this.editInventory)
   },
   methods: {
     ...mapActions('inventory', ['updateInventory']),

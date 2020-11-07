@@ -2,9 +2,11 @@
 
 namespace App;
 
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -19,8 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Payment extends Model
 {
-    use Uuid;
-    use SoftDeletes;
+    use Uuid, SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
@@ -40,6 +41,11 @@ class Payment extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(Inventory::class);
     }
 
 }

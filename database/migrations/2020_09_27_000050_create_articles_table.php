@@ -28,8 +28,7 @@ class CreateArticlesTable extends Migration
             $table->softDeletes();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
-            $table->foreignUuid('category_id')->nullable()->references('id')->on('categories')
-                ->onDelete('cascade');
+            $table->foreignUuid('category_id')->nullable()->references('id')->on('categories');
 
         });
         Schema::table('articles', function($table) {

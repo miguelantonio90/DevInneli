@@ -196,7 +196,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
+            this.$vuetify.lang.t('$vuetify.menu.menu.supply_productS')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'

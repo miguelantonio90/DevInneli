@@ -4,6 +4,7 @@ namespace App;
 
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,14 +39,15 @@ use Laravel\Passport\HasApiTokens;
  */
 class Inventory extends Model
 {
-    use Uuid;
-    use SoftDeletes;
+    use Uuid, SoftDeletes, SoftCascadeTrait;
 
     protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';
     protected $guarded = [];
+
+    protected $softCascade = ['articles_shops'];
 
     /**
      * The attributes that are mass assignable.

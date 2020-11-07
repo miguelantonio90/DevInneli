@@ -4,11 +4,13 @@ namespace App;
 
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +38,9 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasApiTokens, Uuid;
+    use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait;
+
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -68,6 +72,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    protected $softCascade = [ 'assistances'];
 
     /**
      * @param $data

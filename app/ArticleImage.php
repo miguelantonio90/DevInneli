@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,8 +14,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class ArticleImage extends Model
 {
-    use Uuid;
-    use SoftDeletes;
+    use Uuid, SoftDeletes;
 
     protected $dates = ['deleted_at'];
 

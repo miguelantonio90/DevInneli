@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ArticlesShops extends Model
 {
     use Uuid;
-    use SoftDeletes;
+    use SoftDeletes, SoftCascadeTrait;
 
     protected $dates = ['deleted_at'];
 
