@@ -9,10 +9,10 @@
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.supply_product'),])"
           :headers="getTableColumns"
-          csv-filename="Articles"
+          csv-filename="ProductBuys"
           :items="inventories"
           :options="vBindOption"
-          :sort-by="['name']"
+          :sort-by="['no_facture']"
           :sort-desc="[false, true]"
           multi-sort
           :is-loading="isTableLoading"
@@ -21,7 +21,9 @@
           @delete-row="deleteInventoryHandler($event)"
         >
           <template v-slot:item.pay="{ item }">
-            {{ item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit') }}
+            {{
+              item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
+            }}
           </template>
           <template v-slot:item.shop.name="{ item }">
             <v-chip>
@@ -50,34 +52,40 @@
                 mdi-chevron-down
               </v-icon>
             </v-btn>
-            <v-btn
-              v-else
-              fab
-              x-small
-              disabled
-            >
-              <v-icon>
-                mdi-check
-              </v-icon>
-            </v-btn>
           </template>
           <template v-slot:expanded-item="{ headers,item }">
             <td
               :colspan="headers.length"
               style="padding: 0 0 0 0"
             >
-              <v-simple-table>
+              <v-simple-table dense>
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.ref') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.firstName') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.inventory') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.price') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.articles.cost') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.variants.cant') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.variants.total_price') }}</th>
-                      <th>{{ $vuetify.lang.t('$vuetify.variants.total_cost') }}</th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.ref') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.firstName') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.price') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.cost') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.variants.cant') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.variants.total_cost') }}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -114,7 +122,7 @@ export default {
       localInventories: [],
       search: '',
       vBindOption: {
-        itemKey: 'name',
+        itemKey: 'no_facture',
         singleExpand: false,
         showExpand: true
       }
@@ -196,7 +204,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.menu.supply_productS')
+            this.$vuetify.lang.t('$vuetify.menu.supply_productS')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'

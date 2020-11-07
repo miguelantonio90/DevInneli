@@ -14,7 +14,7 @@ export default {
   hint_forgot: 'Enter your Email and instructions will be sent to you!',
   username: 'Username',
   name: 'Name',
-  to: 'To',
+  provider: 'Provider',
   firstName: 'First Name',
   lastName: 'Last Name',
   description: 'Description',

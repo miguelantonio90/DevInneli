@@ -111,6 +111,7 @@ const mutations = {
   [FAILED_CATEGORY] (state, error) {
     state.saved = false
     state.error = error
+    state.isActionInProgress = false
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(

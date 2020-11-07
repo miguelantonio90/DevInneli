@@ -186,6 +186,7 @@
                     <resume-supply
                       :edit="false"
                       :update="update"
+                      :currency="user.company.currency || ''"
                       @updateData="update = false"
                     />
                   </v-expansion-panel-content>
@@ -198,6 +199,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
+            :disabled="isActionInProgress"
             @click="$router.push({name:'supply_product'})"
           >
             <v-icon>mdi-close</v-icon>
@@ -206,7 +208,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid"
+            :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
             @click="createNewInventory"
           >
@@ -321,9 +323,9 @@ export default {
       ]
     }
   },
-  created () {
+  async created () {
     this.loadingData = true
-    this.getArticles().then(() => {
+    await this.getArticles().then(() => {
       this.articles.forEach((value) => {
         if (value.track_inventory) {
           if (!value.parent_id) {

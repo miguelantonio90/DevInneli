@@ -8,7 +8,6 @@ use App\ArticlesShops;
 use App\InventoriesArticlesShops;
 use App\Inventory;
 use App\Tax;
-use App\User;
 use Illuminate\Support\Facades\DB;
 
 class InventoryManager
@@ -33,16 +32,20 @@ class InventoryManager
         foreach ($inventories as $key => $value) {
             $inventories[$key]['shop'] = DB::table('shops')
                 ->join('articles_shops', 'articles_shops.shop_id', '=', 'shops.id')
-                ->join('inventories_articles_shops', 'inventories_articles_shops.articles_shops_id', '=', 'articles_shops.id')
+                ->join('inventories_articles_shops', 'inventories_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
                 ->join('inventories', 'inventories.id', '=', 'inventories_articles_shops.inventory_id')
                 ->where('inventories.id', '=', $value['id'])
                 ->get()[0];
             $inventories[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
-                ->join('inventories_articles_shops', 'inventories_articles_shops.articles_shops_id', '=', 'articles_shops.id')
+                ->join('inventories_articles_shops', 'inventories_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
                 ->join('inventories', 'inventories.id', '=', 'inventories_articles_shops.inventory_id')
-                ->select(['articles.*', 'inventories_articles_shops.cant', 'inventories_articles_shops.cost',
-                    'articles_shops.stock as inventory', 'articles.id as article_id'])
+                ->select([
+                    'articles.*', 'inventories_articles_shops.cant', 'inventories_articles_shops.cost',
+                    'articles_shops.stock as inventory', 'articles.id as article_id'
+                ])
                 ->where('inventories.id', '=', $value['id'])
                 ->get();
             $payments = DB::table('payments')
@@ -141,14 +144,14 @@ class InventoryManager
             ->where('inventory_id', '=', $inventory->id)
             ->where('articles_shops_id', '=', $articleShopId)
             ->get();
-        if (count($inventoriesArtShop) === 0)
+        if (count($inventoriesArtShop) === 0) {
             InventoriesArticlesShops::create([
                 'inventory_id' => $inventory->id,
                 'articles_shops_id' => $articleShopId,
                 'cant' => $data['cant'],
                 'cost' => $data['cost']
             ]);
-        else {
+        } else {
             $invAS = InventoriesArticlesShops::findOrFail($inventoriesArtShop[0]['id']);
             $invAS['cant'] = $data['cant'];
             $invAS['cost'] = $data['cost'];
@@ -170,12 +173,12 @@ class InventoryManager
         foreach ($inventoryArtShopDB as $art => $value) {
             $exist = false;
             foreach ($articles as $k => $v) {
-                if ($v['id'] === $value['articles_shops']['article_id']) {
+                if (key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
                     $exist = true;
                 }
             }
             if (!$exist) {
-                $artShop = ArticlesShops::findOrFail($value['aricles_shops_id']['article_id']);
+                $artShop = ArticlesShops::findOrFail($value['articles_shops']['article_id']);
                 $artShop['stock'] -= $value['cant'];
                 $artShop->save();
             }

@@ -201,6 +201,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
+            :disabled="isActionInProgress"
             @click="$router.push({name:'supply_product'})"
           >
             <v-icon>mdi-close</v-icon>
@@ -209,7 +210,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid"
+            :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
             @click="HandlerEditInventory"
           >
@@ -323,10 +324,10 @@ export default {
       ]
     }
   },
-  created () {
+  async created () {
     this.loadingData = true
     this.formValid = false
-    this.getArticles().then(() => {
+    await this.getArticles().then(() => {
       this.articles.forEach((value) => {
         if (value.track_inventory) {
           if (!value.parent_id) {
@@ -372,7 +373,7 @@ export default {
         }
       })
     })
-    this.editInventory.articles.forEach((article) => {
+    await this.editInventory.articles.forEach((article) => {
       const invData = this.editInventory.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
       article.totalPrice = invData.cant * article.price
       article.totalCost = invData.cant * invData.cost

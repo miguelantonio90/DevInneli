@@ -73,6 +73,7 @@
         <v-spacer />
         <v-btn
           class="mb-2"
+          :disabled="isActionInProgress"
           @click="toogleShowModal(false)"
         >
           <v-icon>mdi-close</v-icon>

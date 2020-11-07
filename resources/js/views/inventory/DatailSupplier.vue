@@ -175,13 +175,12 @@ export default {
       ]
     }
   },
-  created () {
-    this.getSuppliers()
-    this.getTaxes()
-    this.getShops()
-    this.getPayments()
+  async created () {
+    await this.getSuppliers()
+    await this.getTaxes()
+    await this.getShops()
+    await this.getPayments()
     this.supply = this.edit ? this.editInventory : this.newInventory
-    console.log(this.supply)
   },
   methods: {
     ...mapActions('supplier', ['getSuppliers']),
@@ -190,19 +189,19 @@ export default {
     ...mapActions('payment', ['getPayments']),
     updateStore () {
       if (this.edit) {
-        this.$store.state['inventory/editInventory'].supplier = this.supply.supplier
-        this.$store.state['inventory/editInventory'].taxes = this.supply.taxes
-        this.$store.state['inventory/editInventory'].pay = this.supply.pay
-        this.$store.state['inventory/editInventory'].payments = this.supply.payments
-        this.$store.state['inventory/editInventory'].shop = this.supply.shop
-        this.$store.state['inventory/editInventory'].no_facture = this.supply.no_facture
+        this.editInventory.supplier = this.supply.supplier
+        this.editInventory.taxes = this.supply.taxes
+        this.editInventory.pay = this.supply.pay
+        this.editInventory.payments = this.supply.payments
+        this.editInventory.shop = this.supply.shop
+        this.editInventory.no_facture = this.supply.no_facture
       } else {
-        this.$store.state['inventory/newInventory'].supplier = this.supply.supplier
-        this.$store.state['inventory/newInventory'].taxes = this.supply.taxes
-        this.$store.state['inventory/newInventory'].pay = this.supply.pay
-        this.$store.state['inventory/newInventory'].payments = this.supply.payments
-        this.$store.state['inventory/newInventory'].shop = this.supply.shop
-        this.$store.state['inventory/newInventory'].no_facture = this.supply.no_facture
+        this.newInventory.supplier = this.supply.supplier
+        this.newInventory.taxes = this.supply.taxes
+        this.newInventory.pay = this.supply.pay
+        this.newInventory.payments = this.supply.payments
+        this.newInventory.shop = this.supply.shop
+        this.newInventory.no_facture = this.supply.no_facture
       }
       this.$emit('updateData')
     }

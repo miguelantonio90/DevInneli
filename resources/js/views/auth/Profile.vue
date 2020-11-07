@@ -256,7 +256,7 @@
                     xs12
                   >
                     <v-btn
-                      :disabled="!formValid"
+                      :disabled="!formValid || loading"
                       :loading="loading"
                       color="primary"
                       @click="updateProfile"

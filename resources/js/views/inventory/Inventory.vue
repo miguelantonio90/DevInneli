@@ -199,9 +199,9 @@ export default {
       ]
     }
   },
-  created () {
+  async created () {
     this.loadingData = true
-    this.getArticles().then(() => {
+    await this.getArticles().then(() => {
       this.articles.forEach((value) => {
         if (!value.parent_id) {
           let inventory = 0
@@ -257,7 +257,6 @@ export default {
         }
       })
     })
-
     this.loadingData = false
   },
   methods: {
@@ -283,9 +282,6 @@ export default {
     calcTotal: function () {
       this.supplies_product[this.editedIndex].totalPrice = parseFloat(this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant).toFixed(2)
       this.supplies_product[this.editedIndex].totalCost = parseFloat(this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant).toFixed(2)
-    },
-    createNewInvetory () {
-
     }
   }
 }

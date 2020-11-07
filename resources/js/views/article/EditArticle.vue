@@ -410,6 +410,7 @@
           <v-spacer />
           <v-btn
             class="mb-2"
+            :disabled="isActionInProgress"
             @click="$router.push({name:'product_list'})"
           >
             <v-icon>mdi-close</v-icon>
@@ -418,7 +419,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid"
+            :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
             @click="editArticleHandler"
           >

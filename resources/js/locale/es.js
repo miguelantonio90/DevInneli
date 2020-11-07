@@ -14,7 +14,7 @@ export default {
   hint_forgot: 'Ingrese su correo electrónico y se le enviarán las instrucciones',
   username: 'Usuario',
   name: 'Nombre',
-  to: 'A',
+  provider: 'Proveedor',
   email: 'Correo',
   holder_email: 'Dirección de correo de la compañía',
   firstName: 'Nombre',

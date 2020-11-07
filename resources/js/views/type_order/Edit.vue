@@ -78,13 +78,14 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
+          :disabled="isActionInProgress"
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-          :disabled="!formValid"
+          :disabled="!formValid || isActionInProgress"
           :loading="isActionInProgress"
           color="primary"
           @click="handleSubmit"
