@@ -21,6 +21,7 @@ class CreatePositionsTable extends Migration
             $table->boolean('accessEmail')->default(0);
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

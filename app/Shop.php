@@ -6,6 +6,7 @@ use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property mixed name
@@ -18,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Shop extends Model
 {
     use Uuid;
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';

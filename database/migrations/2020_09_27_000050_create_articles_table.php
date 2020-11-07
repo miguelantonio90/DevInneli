@@ -25,6 +25,7 @@ class CreateArticlesTable extends Migration
             $table->boolean('composite')->default(false);
             $table->boolean('track_inventory')->default(false);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
             $table->foreignUuid('category_id')->nullable()->references('id')->on('categories')

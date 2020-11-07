@@ -19,6 +19,7 @@ class CreateArticlesShopsTable extends Migration
             $table->integer('stock')->nullable();
             $table->integer('under_inventory')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->foreignUuid('shop_id')->references('id')->on('shops')

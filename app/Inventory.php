@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -38,6 +39,9 @@ use Laravel\Passport\HasApiTokens;
 class Inventory extends Model
 {
     use Uuid;
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';

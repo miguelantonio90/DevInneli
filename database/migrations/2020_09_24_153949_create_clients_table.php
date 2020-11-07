@@ -28,6 +28,7 @@ class CreateClientsTable extends Migration
             $table->longText('avatar')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies');
         });

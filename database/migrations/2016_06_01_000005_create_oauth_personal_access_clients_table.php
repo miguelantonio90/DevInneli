@@ -34,6 +34,7 @@ class CreateOauthPersonalAccessClientsTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('client_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

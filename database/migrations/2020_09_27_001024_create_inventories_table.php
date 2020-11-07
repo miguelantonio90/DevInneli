@@ -18,6 +18,7 @@ class CreateInventoriesTable extends Migration
             $table->string('no_facture')->nullable();
             $table->string('pay')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

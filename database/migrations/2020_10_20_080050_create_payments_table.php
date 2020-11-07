@@ -18,6 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->string('name');
             $table->string('method')->default('cash');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
         });

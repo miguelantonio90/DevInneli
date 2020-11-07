@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->longText('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

@@ -16,6 +16,7 @@ class CreateInventoriesTax extends Migration
         Schema::create('inventories_tax', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('tax_id')->references('id')->on('taxes')
                 ->onDelete('cascade');
             $table->foreignUuid('inventory_id')->references('id')->on('inventories')

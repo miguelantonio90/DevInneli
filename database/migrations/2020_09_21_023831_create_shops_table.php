@@ -22,6 +22,7 @@ class CreateShopsTable extends Migration
             $table->string('description')->nullable();
             $table->string('country')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');

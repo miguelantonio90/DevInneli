@@ -18,6 +18,7 @@ class CreateInventoriesArticlesShopsTable extends Migration
             $table->decimal('cant',15,2)->default(1);
             $table->decimal('cost',15,2)->default(1);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignUuid('inventory_id')->references('id')->on('inventories')
                 ->onDelete('cascade');
             $table->foreignUuid('articles_shops_id')->references('id')->on('articles_shops')

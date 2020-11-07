@@ -4,6 +4,7 @@ namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static latest()
@@ -14,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class ExchangeRate extends Model
 {
     use Uuid;
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';
