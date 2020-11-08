@@ -5,7 +5,6 @@
         class="py-0"
         cols="12"
       >
-        <transfer v-show="showTransfer" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
@@ -151,11 +150,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import Transfer from './Transfer'
 
 export default {
   name: 'ListArticle',
-  components: { Transfer },
   data () {
     return {
       localArticles: [],
