@@ -462,7 +462,7 @@ export const protectedRoute = [
     meta: {
       title: 'vending'
     },
-    redirect: '/employee/vending',
+    redirect: '/sales/vending',
     hidden: true,
     children: [
       {
@@ -473,7 +473,27 @@ export const protectedRoute = [
           hiddenInMenu: true,
           requiresAuth: true
         },
-        component: () => import('../views/sales/Sales')
+        component: () => import('../views/sales/ListSale')
+      },
+      {
+        path: 'vending/new',
+        name: 'vending_new',
+        meta: {
+          title: 'vending_new',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/sales/NewSale')
+      },
+      {
+        path: 'vending/edit',
+        name: 'vending_edit',
+        meta: {
+          title: 'vending_edit',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/sales/EditSale')
       }
     ]
   }

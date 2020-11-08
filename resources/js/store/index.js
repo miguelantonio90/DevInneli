@@ -25,6 +25,7 @@ import typeOrder from './modules/type_order'
 import tax from './modules/tax'
 import discount from './modules/discount'
 import inventory from './modules/inventory'
+import sale from './modules/sale'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -62,7 +63,8 @@ const store = new Vuex.Store({
     typeOrder,
     tax,
     discount,
-    inventory
+    inventory,
+    sale
   },
   plugins: [vuexLocal.plugin],
   getters: {

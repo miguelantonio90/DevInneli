@@ -89,6 +89,8 @@ export default {
     sell_types_payment: 'Sale by types of payment',
     pinlogin: 'Pin Code',
     vending: 'Sales',
+    vending_new: 'New Sale',
+    vending_edit: 'Edit Sale',
     turnOn: 'Register Shift',
     product_add: 'New Article',
     product_edit: 'Edit Article',
@@ -181,7 +183,8 @@ export default {
     cancel: 'Cancel',
     close: 'Close',
     change: 'Change',
-    apply: 'Apply'
+    apply: 'Apply',
+    transfer: 'Transfer'
   },
   titles: {
     list: '{0} List',
@@ -250,6 +253,8 @@ export default {
     p_v: 'P/Vol',
     ref: 'REF',
     inventory: 'Inventory',
+    new_inventory: 'New Inventory',
+    total_inventory: 'Total Inventory',
     composite: 'Composite article',
     track_inventory: 'Track inventory',
     itbis: 'ITBIS(18%)',
@@ -273,7 +278,8 @@ export default {
     options: 'Options',
     cant: 'Quantify',
     total_cost: 'Total Cost',
-    total_price: 'Total Price'
+    total_price: 'Total Price',
+    total_cant: 'New Quantify'
   },
   shop_article: {
     under_inventory: 'Low Inventory',
@@ -324,6 +330,12 @@ export default {
   },
   supply: {
     name: 'Buy'
+  },
+  sale: {
+    sale: 'Sale',
+    selectArticle: 'Please select the article',
+    selectShop: 'You should select a shop',
+    emptyArticle: 'This shop no have article. Please supply the shop'
   },
   ...en
 }

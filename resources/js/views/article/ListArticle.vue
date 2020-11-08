@@ -5,10 +5,12 @@
         class="py-0"
         cols="12"
       >
+        <transfer v-show="showTransfer" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
           :headers="getTableColumns"
+          :view-transfer-button="true"
           csv-filename="Articles"
           :items="articles"
           :options="vBindOption"
@@ -19,6 +21,7 @@
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
+          @transfer-row="transferHandler($event)"
         >
           <template v-slot:item.name="{ item }">
             <v-chip
@@ -148,9 +151,11 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import Transfer from './Transfer'
 
 export default {
   name: 'ListArticle',
+  components: { Transfer },
   data () {
     return {
       localArticles: [],
@@ -165,6 +170,7 @@ export default {
   computed: {
     ...mapState('article', [
       'showNewModal',
+      'showTransfer',
       'showEditModal',
       'showShowModal',
       'articles',
@@ -218,7 +224,9 @@ export default {
   methods: {
     ...mapActions('article', [
       'toogleNewModal',
+      'toogleTransferModal',
       'openEditModal',
+      'openTransferModal',
       'openShowModal',
       'getArticles',
       'deleteArticle'
@@ -228,6 +236,10 @@ export default {
     createArticleHandler () {
       // this.toogleNewModal(true)
       this.$router.push({ name: 'product_add' })
+    },
+    transferHandler ($event) {
+      this.openTransferModal($event)
+      this.toogleTransferModal(true)
     },
     editArticleHandler ($event) {
       this.openEditModal($event)

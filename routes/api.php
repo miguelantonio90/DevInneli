@@ -65,6 +65,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('inventory', 'InventoryController');
 
+        Route::resource('sale', 'SaleController');
+
         Route::resource('assistance', 'AssistanceController');
 
         Route::resource('expense/category', 'ExpenseCategoryController');
