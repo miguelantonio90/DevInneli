@@ -29,7 +29,7 @@
             <template v-if="item.payments">
               {{ item.payments.name }}
             </template>
-            <template>
+            <template v-else>
               <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
@@ -97,7 +97,7 @@
                     >
                       <td>{{ article.ref }}</td>
                       <td>{{ article.name }}</td>
-                      <td>{{ `${article.cant}` }}</td>
+                      <td>{{ article.cant }}</td>
                       <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
                       <td>{{ article.inventory }}</td>
                       <td>{{ `${user.company.currency + ' ' + article.price * article.cant}` }}</td>
@@ -179,7 +179,7 @@ export default {
     }
   },
   created () {
-    this.getArticles().then((value) => {
+    this.getArticles().then(() => {
       this.getSales().then(() => {
         this.sales.forEach((value) => {
           const sale = value

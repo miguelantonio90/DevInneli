@@ -5,15 +5,17 @@
         v-if="edit ? editSale.client:newSale.client"
         cols="md-7"
       >
-        <b>{{ $vuetify.lang.t('$vuetify.menu.client') }}</b>:
-        {{ edit ? editSale.client.firstName:newSale.client.firstName }}
+        <b>{{ $vuetify.lang.t('$vuetify.menu.client') }}</b>:<br>
+        {{ edit ?
+          editSale.client.firstName+' '+ `${editSale.client.lastName!==null?editSale.client.lastName:''}`
+          :newSale.client.firstName+' '+ `${newSale.client.lastName!==null?newSale.client.lastName:''}` }}
       </v-col>
       <v-spacer />
       <v-col
         v-if="edit ? editSale.no_facture:newSale.no_facture"
         cols="md-5"
       >
-        <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:
+        <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
         {{ edit ? editSale.no_facture:newSale.no_facture }}
       </v-col>
     </v-row>
@@ -146,7 +148,6 @@ export default {
       })
       this.taxes = this.edit ? this.editSale.taxes : this.newSale.taxes
       this.taxes.forEach((v) => {
-        console.log(v)
         this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
       })
       this.total = (this.sub_total + parseFloat(this.totalTax)).toFixed(2)

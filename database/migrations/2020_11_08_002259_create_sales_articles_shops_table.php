@@ -15,7 +15,7 @@ class CreateSalesArticlesShopsTable extends Migration
     {
         Schema::create('sales_articles_shops', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->decimal('cant',15,2)->default(1);
+            $table->integer('cant')->default(1);
             $table->decimal('price',15,2)->default(1);
             $table->foreignUuid('sale_id')->references('id')->on('sales')
                 ->onDelete('cascade');

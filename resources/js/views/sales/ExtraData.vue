@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="6">
-        <v-select
+      <v-col cols="8">
+        <v-autocomplete
           v-model="sale.client"
           clearable
           :items="clients"
@@ -29,9 +29,36 @@
               <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
             </v-tooltip>
           </template>
-        </v-select>
+          <template v-slot:selection="data">
+            <v-chip
+              v-bind="data.attrs"
+              :input-value="data.selected"
+              @click="data.select"
+            >
+              <v-avatar left>
+                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+              </v-avatar>
+              {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+            </v-chip>
+          </template>
+          <template v-slot:item="data">
+            <template>
+              <v-list-item-avatar>
+                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ `${data.item.email }` }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </template>
+        </v-autocomplete>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="4">
         <v-text-field
           v-model="sale.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"

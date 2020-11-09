@@ -15,7 +15,7 @@ class CreateInventoriesArticlesShopsTable extends Migration
     {
         Schema::create('inventories_articles_shops', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->decimal('cant',15,2)->default(1);
+            $table->integer('cant')->default(1);
             $table->decimal('cost',15,2)->default(1);
             $table->timestamps();
             $table->softDeletes();

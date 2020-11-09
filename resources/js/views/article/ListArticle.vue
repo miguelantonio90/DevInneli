@@ -26,7 +26,7 @@
               :key="JSON.stringify(item)"
             >
               <v-avatar
-                v-if="item.color"
+                v-if="item.color && item.images.length === 0"
                 class="white--text"
                 :color="item.color"
                 left
