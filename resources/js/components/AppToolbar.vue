@@ -32,6 +32,7 @@
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
       <v-btn
+        v-if="showSalesIcon"
         icon
         @click="handleSales"
       >
@@ -158,6 +159,10 @@ export default {
       default: true
     },
     showLockIcon: {
+      type: Boolean,
+      default: true
+    },
+    showSalesIcon: {
       type: Boolean,
       default: true
     },

@@ -56,13 +56,18 @@
             </div>
           </template>
           <template v-slot:input>
-            <v-text-field
+            <v-text-field-integer
               v-model="item.stock"
-              :rules="[max25chars]"
               label="Edit"
-              single-line
-              counter
-              autofocus
+              :properties="{
+                clearable: true,
+              }"
+              :options="{
+                inputMask: '#########',
+                outputMask: '#########',
+                empty: 1,
+                applyAfter: false,
+              }"
             />
           </template>
         </v-edit-dialog>
@@ -83,13 +88,18 @@
             </div>
           </template>
           <template v-slot:input>
-            <v-text-field
+            <v-text-field-integer
               v-model="item.under_inventory"
-              :rules="[max25chars]"
               label="Edit"
-              single-line
-              counter
-              autofocus
+              :properties="{
+                clearable: true,
+              }"
+              :options="{
+                inputMask: '#########',
+                outputMask: '#########',
+                empty: 1,
+                applyAfter: false,
+              }"
             />
           </template>
         </v-edit-dialog>
