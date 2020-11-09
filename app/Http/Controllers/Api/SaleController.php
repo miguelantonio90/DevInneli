@@ -5,28 +5,28 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
-use App\Managers\InventoryManager;
+use App\Managers\SaleManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class InventoryController extends Controller
+class SaleController extends Controller
 {
     /**
-     * @var InventoryManager
+     * @var SaleManager
      */
-    private $inventoryManager;
+    private $saleManager;
 
     /**
-     * UserController constructor.
-     * @param  InventoryManager  $inventoryManager
+     * SaleController constructor.
+     * @param  SaleManager  $saleManager
      */
-    public function __construct(InventoryManager $inventoryManager)
+    public function __construct(SaleManager $saleManager)
     {
         $this->middleware('auth');
-        $this->inventoryManager = $inventoryManager;
+        $this->saleManager = $saleManager;
     }
 
     /**
@@ -37,8 +37,8 @@ class InventoryController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->inventoryManager->findAllByCompany(),
-            'Inventories retrieved successfully.'
+            $this->saleManager->findAllByCompany(),
+            'Sale retrieved successfully.'
         );
     }
 
@@ -52,11 +52,11 @@ class InventoryController extends Controller
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
-        $inventory = $this->inventoryManager->new($data);
+        $sale = $this->saleManager->new($data);
 
         return ResponseHelper::sendResponse(
-            $inventory,
-            'Inventory has created successfully.'
+            $sale,
+            'Sale has created successfully.'
         );
     }
 
@@ -70,8 +70,8 @@ class InventoryController extends Controller
     public function update(Request $request, $id)
     {
         return ResponseHelper::sendResponse(
-            $this->inventoryManager->edit($id, $request->all()),
-            'Inventory has updated successfully.'
+            $this->saleManager->edit($id, $request->all()),
+            'Sale has updated successfully.'
         );
     }
 
@@ -85,8 +85,8 @@ class InventoryController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->inventoryManager->delete($id),
-            'Inventory has deleted successfully.'
+            $this->saleManager->delete($id),
+            'Sale has deleted successfully.'
         );
     }
 }

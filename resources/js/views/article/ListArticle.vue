@@ -9,6 +9,7 @@
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.articles'),])"
           :headers="getTableColumns"
+          :view-transfer-button="true"
           csv-filename="Articles"
           :items="articles"
           :options="vBindOption"
@@ -25,7 +26,7 @@
               :key="JSON.stringify(item)"
             >
               <v-avatar
-                v-if="item.color"
+                v-if="item.color && item.images.length === 0"
                 class="white--text"
                 :color="item.color"
                 left
@@ -165,6 +166,7 @@ export default {
   computed: {
     ...mapState('article', [
       'showNewModal',
+      'showTransfer',
       'showEditModal',
       'showShowModal',
       'articles',
@@ -218,7 +220,9 @@ export default {
   methods: {
     ...mapActions('article', [
       'toogleNewModal',
+      'toogleTransferModal',
       'openEditModal',
+      'openTransferModal',
       'openShowModal',
       'getArticles',
       'deleteArticle'
@@ -226,8 +230,11 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
     createArticleHandler () {
-      // this.toogleNewModal(true)
       this.$router.push({ name: 'product_add' })
+    },
+    transferHandler ($event) {
+      this.openTransferModal($event)
+      this.toogleTransferModal(true)
     },
     editArticleHandler ($event) {
       this.openEditModal($event)

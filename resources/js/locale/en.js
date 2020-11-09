@@ -14,6 +14,7 @@ export default {
   hint_forgot: 'Enter your Email and instructions will be sent to you!',
   username: 'Username',
   name: 'Name',
+  no_defined: 'No defined',
   provider: 'Provider',
   firstName: 'First Name',
   lastName: 'Last Name',
@@ -89,6 +90,8 @@ export default {
     sell_types_payment: 'Sale by types of payment',
     pinlogin: 'Pin Code',
     vending: 'Sales',
+    vending_new: 'New Sale',
+    vending_edit: 'Edit Sale',
     turnOn: 'Register Shift',
     product_add: 'New Article',
     product_edit: 'Edit Article',
@@ -181,7 +184,8 @@ export default {
     cancel: 'Cancel',
     close: 'Close',
     change: 'Change',
-    apply: 'Apply'
+    apply: 'Apply',
+    transfer: 'Transfer'
   },
   titles: {
     list: '{0} List',
@@ -250,6 +254,8 @@ export default {
     p_v: 'P/Vol',
     ref: 'REF',
     inventory: 'Inventory',
+    new_inventory: 'New Inventory',
+    total_inventory: 'Total Inventory',
     composite: 'Composite article',
     track_inventory: 'Track inventory',
     itbis: 'ITBIS(18%)',
@@ -273,7 +279,8 @@ export default {
     options: 'Options',
     cant: 'Quantify',
     total_cost: 'Total Cost',
-    total_price: 'Total Price'
+    total_price: 'Total Price',
+    total_cant: 'New Quantify'
   },
   shop_article: {
     under_inventory: 'Low Inventory',
@@ -312,7 +319,12 @@ export default {
     rate: 'Rate',
     percent: 'Percent',
     permanent: 'Permanent',
-    noFacture: 'No. Facture'
+    noFacture: 'No. Facture',
+    type: 'Type',
+    include_tax: 'Included in the price',
+    added_tax: 'Added to the price',
+    option_tax: 'Apply to existing articles',
+    example: 'Example: For a price of 100 {1}, the {0}% would: {0} {1}'
   },
   pay: {
     counted: 'Counted',
@@ -324,6 +336,12 @@ export default {
   },
   supply: {
     name: 'Buy'
+  },
+  sale: {
+    sale: 'Sale',
+    selectArticle: 'Please select the article',
+    selectShop: 'You should select a shop',
+    emptyArticle: 'This shop no have article. Please supply the shop'
   },
   ...en
 }

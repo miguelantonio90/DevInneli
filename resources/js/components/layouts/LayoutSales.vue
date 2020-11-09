@@ -56,4 +56,7 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="sass" scoped>
+.page-wrapper
+  min-height: calc(100vh - 112px - 48px)
+</style>

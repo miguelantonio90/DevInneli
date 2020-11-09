@@ -23,12 +23,16 @@ const state = {
   newTax: {
     name: '',
     value: '',
+    type: '',
+    existing: false,
     percent: 'true'
   },
   editTax: {
     id: '',
     name: '',
     value: '',
+    type: '',
+    existing: false,
     percent: true
   },
   isTaxLoading: false,
@@ -61,6 +65,8 @@ const mutations = {
     state.newTax = {
       name: '',
       value: '',
+      type: '',
+      existing: false,
       percent: true
     }
     state.saved = true
@@ -83,6 +89,8 @@ const mutations = {
       id: '',
       name: '',
       value: '',
+      type: '',
+      existing: false,
       percent: true
     }
     state.saved = true

@@ -14,6 +14,7 @@ export default {
   hint_forgot: 'Ingrese su correo electrónico y se le enviarán las instrucciones',
   username: 'Usuario',
   name: 'Nombre',
+  no_defined: 'No definido',
   provider: 'Proveedor',
   email: 'Correo',
   holder_email: 'Dirección de correo de la compañía',
@@ -89,6 +90,8 @@ export default {
     sell_types_payment: 'Venta por tipos de pago',
     pinlogin: 'Pin Code',
     vending: 'Ventas',
+    vending_new: 'Nueva Venta',
+    vending_edit: 'Editar Venta',
     turnOn: 'Registrar Turno',
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
@@ -184,7 +187,8 @@ export default {
     cancel: 'Cancelar',
     close: 'Cerrar',
     change: 'Cambiar',
-    apply: 'Aplicar'
+    apply: 'Aplicar',
+    transfer: 'Transferir'
   },
   titles: {
     list: 'Lista de {0}',
@@ -253,6 +257,8 @@ export default {
     p_v: 'P/Vol',
     ref: 'REF',
     inventory: 'Inventario',
+    new_inventory: 'Nuevo Inventario',
+    total_inventory: 'Inventorario Total',
     composite: 'Artículo compuesto',
     track_inventory: 'Seguir  inventario',
     itbis: 'ITBIS(18%)',
@@ -276,7 +282,8 @@ export default {
     options: 'Opciones',
     cant: 'Cantidad',
     total_cost: 'Costo Total',
-    total_price: 'Precio Total'
+    total_price: 'Precio Total',
+    total_cant: 'Cantidad Total'
   },
   shop_article: {
     under_inventory: 'Bajo Inventario',
@@ -315,7 +322,13 @@ export default {
     rate: 'Tasa',
     percent: 'Porciento',
     permanent: 'Fijo',
-    noFacture: 'No. Factura'
+    noFacture: 'No. Factura',
+    type: 'Tipo',
+    include_tax: 'Incluido en el precio',
+    added_tax: 'Adicionado al precio',
+    option_tax: 'Aplicar a todos los artículos existentes',
+    example: 'Ejemplo: Para un precio de 100 {1}, el {0}% sería: {0} {1}'
+
   },
   pay: {
     counted: 'Contado',
@@ -327,6 +340,12 @@ export default {
   },
   supply: {
     name: 'Compra'
+  },
+  sale: {
+    sale: 'Venta',
+    selectArticle: 'Por favor seleccione el artículo',
+    selectShop: 'Debe seleccionar una tienda',
+    emptyArticle: 'Esta tienda no tiene artículos. Por favor abastezca la tienda'
   },
   ...es
 }

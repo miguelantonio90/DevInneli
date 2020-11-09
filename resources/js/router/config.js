@@ -3,8 +3,8 @@ import {
   LayoutDefault,
   RouteWrapper,
   LayoutVerify,
-  LayoutLock,
-  LayoutSales
+  LayoutLock/*,
+  LayoutSales */
 } from '../components/layouts'
 
 export const publicRoute = [
@@ -193,6 +193,47 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/error/Deny')
+          }
+        ]
+      },
+      {
+        path: '/sales',
+        component: RouteWrapper,
+        redirect: '/sales/vending.list',
+        meta: {
+          title: 'vending',
+          icon: 'mdi-cart',
+          group: 'sales'
+        },
+        children: [
+          {
+            path: '/sales/vending.list',
+            name: 'vending',
+            meta: {
+              title: 'vending',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale')
+          },
+          {
+            path: '/sales/vending/new',
+            name: 'vending_new',
+            meta: {
+              title: 'vending_new',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/NewSale')
+          },
+          {
+            path: '/sales/vending/edit',
+            name: 'vending_edit',
+            meta: {
+              title: 'vending_edit',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/EditSale')
           }
         ]
       },
@@ -453,27 +494,6 @@ export const protectedRoute = [
           requiresAuth: true
         },
         component: () => import('../views/AppLock')
-      }
-    ]
-  },
-  {
-    path: '/employee',
-    component: LayoutSales,
-    meta: {
-      title: 'vending'
-    },
-    redirect: '/employee/vending',
-    hidden: true,
-    children: [
-      {
-        path: 'vending',
-        name: 'vending',
-        meta: {
-          title: 'vending',
-          hiddenInMenu: true,
-          requiresAuth: true
-        },
-        component: () => import('../views/sales/Sales')
       }
     ]
   }

@@ -31,6 +31,12 @@
       >
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
+      <v-btn
+        icon
+        @click="handleSales"
+      >
+        <v-icon>mdi-cart</v-icon>
+      </v-btn>
       <v-menu
         v-if="showMenuLang"
         class="elelvation-1"
@@ -267,6 +273,9 @@ export default {
     handlePinLogin () {
       localStorage.removeTokenManager()
       this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
+    },
+    handleSales () {
+      this.$router.push({ name: 'vending' }).catch(() => {})
     }
   }
 }

@@ -77,7 +77,6 @@ class InventoryManager
             'pay' => $data['pay'] ? $data['pay'] : null,
             'company_id' => $data['company_id']
         ]);
-        var_dump(isset($data['payments']['id']));
         if (isset($data['payments']['id'])) {
             $inventory->payment_id = $data['payments']['id'];
         }

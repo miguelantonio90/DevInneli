@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTaxesTable extends Migration
+class CreateSalesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateTaxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('taxes', function (Blueprint $table) {
+        Schema::create('sales', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->float('value')->nullable();
-            $table->string('type')->default('included');
-            $table->boolean('existing')->default(false);
-            $table->string('percent')->default(true);
-            $table->timestamps();
-            $table->softDeletes();
-
+            $table->string('no_facture')->nullable();
+            $table->string('pay')->nullable();
+            $table->foreignUuid('client_id')->references('id')->on('clients');
+            $table->foreignUuid('payment_id')->nullable()->references('id')->on('payments');
             $table->foreignUuid('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -35,6 +33,6 @@ class CreateTaxesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taxes');
+        Schema::dropIfExists('sales');
     }
 }

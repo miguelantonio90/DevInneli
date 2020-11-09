@@ -13,9 +13,11 @@ const FAILED_ARTICLE = 'FAILED_ARTICLE'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
 const SET_EDIT_ARTICLE = 'SET_EDIT_ARTICLE'
 const SET_ARTICLE_AVATAR = 'SET_ARTICLE_AVATAR'
+const SWITCH_TRANSFER_MODAL = 'SWITCH_TRANSFER_MODAL'
 
 const state = {
   showNewModal: false,
+  showTransfer: false,
   showEditModal: false,
   showShowModal: false,
   articles: [],
@@ -64,6 +66,9 @@ const state = {
 }
 
 const mutations = {
+  [SWITCH_TRANSFER_MODAL] (state, showModal) {
+    state.showTransfer = showModal
+  },
   [SWITCH_ARTICLE_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
   },
@@ -89,6 +94,7 @@ const mutations = {
   },
   [ARTICLE_CREATED] (state) {
     state.showNewModal = false
+    state.showTransfer = false
     state.newArticle = {
       name: '',
       price: 0.00,
@@ -123,6 +129,7 @@ const mutations = {
   },
   [ARTICLE_UPDATED] (state) {
     state.showEditModal = false
+    state.showTransfer = false
     state.editArticle = {
       id: '',
       name: '',
@@ -183,6 +190,9 @@ const mutations = {
 const getters = {}
 
 const actions = {
+  toogleTransferModal ({ commit }, showModal) {
+    commit(SWITCH_TRANSFER_MODAL, showModal)
+  },
   toogleNewModal ({ commit }, showModal) {
     commit(SWITCH_ARTICLE_NEW_MODAL, showModal)
   },
@@ -191,6 +201,9 @@ const actions = {
   },
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_ARTICLE_SHOW_MODAL, showModal)
+  },
+  openTransferModal ({ commit }, articleId) {
+    commit(ARTICLE_EDIT, articleId)
   },
   openEditModal ({ commit }, articleId) {
     commit(ARTICLE_EDIT, articleId)

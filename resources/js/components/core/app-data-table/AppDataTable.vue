@@ -114,6 +114,22 @@
           </template>
           <span>{{ $vuetify.lang.t('$vuetify.actions.delete') }}</span>
         </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="viewTransferButton"
+              class="mr-2"
+              color="success"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="transferButtonClicked(item.id)"
+            >
+              mdi-truck
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.actions.transfer') }}</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </v-card>
@@ -178,6 +194,10 @@ export default {
     viewDeleteButton: {
       type: Boolean,
       default: true
+    },
+    viewTransferButton: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -281,6 +301,9 @@ export default {
     },
     deleteButtonClicked (clickedRowId) {
       this.$emit('delete-row', clickedRowId)
+    },
+    transferButtonClicked (clickedRowId) {
+      this.$emit('transfer-row', clickedRowId)
     },
     getClassStyle () {
       return 'elevation-1'

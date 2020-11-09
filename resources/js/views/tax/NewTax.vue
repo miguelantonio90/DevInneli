@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleNewModal"
-    max-width="450"
+    max-width="500"
     persistent
   >
     <v-card>
@@ -22,7 +22,7 @@
           <v-row>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field
                 v-model="newTax.name"
@@ -33,7 +33,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field-money
                 v-model="newTax.value"
@@ -50,21 +50,46 @@
                 }"
               />
             </v-col>
-            <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
-            <v-radio-group
-              v-model="newTax.percent"
-              row
+            <v-col md="12">
+              <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
+              <v-radio-group
+                v-model="newTax.percent"
+                row
+              >
+                <v-radio
+                  :label="$vuetify.lang.t('$vuetify.tax.percent')"
+                  value="true"
+                />
+                <v-radio
+                  :label="$vuetify.lang.t('$vuetify.tax.permanent')"
+                  value="false"
+                />
+              </v-radio-group>
+            </v-col>
+            <v-col md="6">
+              <v-select
+                v-model="newTax.type"
+                clearable
+                :items="getTypeTax"
+                :label="$vuetify.lang.t('$vuetify.tax.type')"
+                item-text="text"
+                item-value="value"
+                required
+                :rules="formRule.country"
+              />
+            </v-col>
+            <v-col md="6">
+              <v-switch
+                v-model="newTax.existing"
+                :label="$vuetify.lang.t('$vuetify.tax.option_tax')"
+              />
+            </v-col>
+            <v-col
+              v-if="newTax.value && newTax.value !== 0.00 && newTax.value !== 0.00 && newTax.percent === 'true'"
+              md="12"
             >
-              <v-radio
-                :label="$vuetify.lang.t('$vuetify.tax.percent')"
-                value="true"
-              />
-              <v-radio
-                :label="$vuetify.lang.t('$vuetify.tax.permanent')"
-                value="false"
-              />
-            </v-radio-group>
-            <v-col />
+              <i style="color: green">{{ $vuetify.lang.t('$vuetify.tax.example', [newTax.value], [user.company.currency]) }}</i>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -94,7 +119,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'NewTax',
@@ -108,7 +133,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('tax', ['saved', 'newTax', 'isActionInProgress'])
+    ...mapState('tax', ['saved', 'newTax', 'isActionInProgress']),
+    ...mapGetters('auth', ['user']),
+    getTypeTax () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
+          value: 'included'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
+          value: 'added'
+        }
+      ]
+    }
   },
   created () {
     this.formValid = false
