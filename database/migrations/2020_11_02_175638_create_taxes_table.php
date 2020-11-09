@@ -17,6 +17,8 @@ class CreateTaxesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->float('value')->nullable();
+            $table->string('type')->default('included');
+            $table->boolean('existing')->default(false);
             $table->string('percent')->default(true);
             $table->timestamps();
             $table->softDeletes();

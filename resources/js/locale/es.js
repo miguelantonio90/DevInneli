@@ -322,7 +322,13 @@ export default {
     rate: 'Tasa',
     percent: 'Porciento',
     permanent: 'Fijo',
-    noFacture: 'No. Factura'
+    noFacture: 'No. Factura',
+    type: 'Tipo',
+    include_tax: 'Incluido en el precio',
+    added_tax: 'Adicionado al precio',
+    option_tax: 'Aplicar a todos los artículos existentes',
+    example: 'Ejemplo: Para un precio de 100 {1}, el {0}% sería: {0} {1}'
+
   },
   pay: {
     counted: 'Contado',

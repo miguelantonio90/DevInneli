@@ -65,6 +65,18 @@
               />
             </v-radio-group>
             <v-col />
+            <v-col md="12">
+              <v-select
+                v-model="editTax.type"
+                clearable
+                :items="getTypeTax"
+                :label="$vuetify.lang.t('$vuetify.tax.type')"
+                item-text="text"
+                item-value="value"
+                required
+                :rules="formRule.country"
+              />
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -106,7 +118,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('tax', ['saved', 'editTax', 'isActionInProgress'])
+    ...mapState('tax', ['saved', 'editTax', 'isActionInProgress']),
+    getTypeTax () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
+          value: 'included'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
+          value: 'added'
+        }
+      ]
+    }
   },
   methods: {
     ...mapActions('tax', ['updateTax', 'toogleEditModal']),
