@@ -324,7 +324,7 @@ export default {
     include_tax: 'Included in the price',
     added_tax: 'Added to the price',
     option_tax: 'Apply to existing articles',
-    example: 'EjemExampleplo: For a price of 100 {1}, the {0}% would: {0} {1}'
+    example: 'Example: For a price of 100 {1}, the {0}% would: {0} {1}'
   },
   pay: {
     counted: 'Counted',
