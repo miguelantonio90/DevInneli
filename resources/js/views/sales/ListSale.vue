@@ -19,12 +19,19 @@
           @create-row="createSaleHandler"
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
-          @transfer-row="transferHandler($event)"
         >
           <template v-slot:item.pay="{ item }">
             {{
               item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
             }}
+          </template>
+          <template v-slot:item.payments.name="{ item }">
+            <template v-if="item.payments">
+              {{ item.payments.name }}
+            </template>
+            <template>
+              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+            </template>
           </template>
           <template v-slot:item.shop.name="{ item }">
             <v-chip>
@@ -76,7 +83,7 @@
                         {{ $vuetify.lang.t('$vuetify.articles.price') }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
+                        {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
                       </th>
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
@@ -154,11 +161,6 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
           value: 'totalPrice',
           select_filter: true
@@ -209,7 +211,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.client')
+            this.$vuetify.lang.t('$vuetify.sale.sale')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'

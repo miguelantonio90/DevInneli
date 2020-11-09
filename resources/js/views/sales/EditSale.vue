@@ -40,10 +40,36 @@
                       cols="12"
                       md="5"
                     >
-                      <v-autocomplete
+                      <v-select
+                        v-model="editSale.shop"
                         chips
+                        readonly
                         rounded
                         solo
+                        :items="shops"
+                        :label="$vuetify.lang.t('$vuetify.menu.shop')"
+                        item-text="name"
+                        :loading="isShopLoading"
+                        return-object
+                        required
+                        :rules="formRule.country"
+                        @input="updateDataArticle"
+                        @change="updateDataArticle"
+                      />
+                    </v-col>
+                    <v-col
+                      class="py-0"
+                      cols="12"
+                      md="5"
+                    >
+                      <v-autocomplete
+                        ref="selectArticle"
+                        :disabled="!editSale.shop"
+                        :hint="!editSale.shop ? $vuetify.lang.t('$vuetify.sale.selectShop') : localArticles.length > 0 ? $vuetify.lang.t('$vuetify.sale.selectArticle') : $vuetify.lang.t('$vuetify.sale.emptyArticle')"
+                        persistent-hint
+                        chips
+                        rounded
+                        :label="$vuetify.lang.t('$vuetify.menu.articles')"
                         :items="localArticles"
                         item-text="name"
                         return-object
@@ -116,11 +142,11 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.totalCost="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalCost }` }}
+                        <template v-slot:item.totalCant="{ item }">
+                          <div>{{ parseFloat(item.inventory) - parseFloat(item.cant) }}</div>
                         </template>
                         <template v-slot:item.totalPrice="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalPrice }` }}
+                          <div>{{ item.cant * item.price }}</div>
                         </template>
                         <template v-slot:item.actions="{ item }">
                           <v-icon
@@ -208,7 +234,7 @@
             color="primary"
             :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
-            @click="editSaleHandler"
+            @click="handlerEditSale"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -257,7 +283,8 @@ export default {
       update: false,
       panel: [0, 1, 2],
       formValid: false,
-      showInfoAdd: false
+      showInfoAdd: false,
+      formRule: this.$rules
     }
   },
   computed: {
@@ -269,6 +296,7 @@ export default {
       'articles',
       'isTableLoading'
     ]),
+    ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
@@ -278,7 +306,7 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
+          text: this.$vuetify.lang.t('$vuetify.articles.total_inventory'),
           value: 'inventory',
           select_filter: true
         },
@@ -298,7 +326,7 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+          text: this.$vuetify.lang.t('$vuetify.articles.new_inventory'),
           value: 'totalCant',
           select_filter: true
         },
@@ -318,66 +346,78 @@ export default {
   async created () {
     this.loadingData = true
     await this.getArticles().then(() => {
-      this.articles.forEach((value) => {
-        if (value.track_inventory) {
-          if (!value.parent_id) {
-            let inventory = 0
-            if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
-                inventory = 0
-                if (v.articles_shops.length > 0) {
-                  v.articles_shops.forEach((k) => {
-                    inventory += k.stock ? parseFloat(k.stock) : 0
-                  })
-                }
-                if (inventory > 0) {
-                  this.localArticles.push({
-                    ref: value.ref,
-                    name: value.name + '(' + v.name + ')',
-                    price: v.price ? v.price : 0,
-                    cost: v.cost ? v.cost : 0,
-                    inventory: inventory || 0,
-                    cant: 1,
-                    totalCost: v.cost,
-                    totalPrice: v.price,
-                    article_id: v.id
-                  })
-                }
-              })
-            } else {
-              if (value.articles_shops.length > 0) {
-                value.articles_shops.forEach((k) => {
-                  inventory += k.stock ? parseFloat(k.stock) : 0
-                })
-              }
-              if (inventory > 0) {
-                this.localArticles.push({
-                  ref: value.ref,
-                  name: value.name,
-                  price: value.price ? value.price : 0,
-                  cost: value.cost ? value.cost : 0,
-                  inventory: inventory || 0,
-                  cant: 1,
-                  totalCost: value.cost,
-                  totalPrice: value.price,
-                  article_id: value.id
-                })
-              }
-            }
-          }
-        }
-      })
+      this.updateDataArticle()
     })
-    await this.editSale.articles.forEach((article) => {
-      const invData = this.editSale.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
-      article.totalPrice = invData.cant * article.price
-      article.totalCost = invData.cant * invData.cost
+    this.editSale.articles.forEach((v) => {
+      v.inventory = parseFloat(v.inventory) + parseFloat(v.cant)
+      v.totalCost = v.cant * v.cost
+      v.totalPrice = v.cant * v.price
+      v.totalCant = v.inventory - v.cant
     })
+    await this.getShops()
     this.loadingData = false
   },
   methods: {
     ...mapActions('sale', ['updateSale']),
     ...mapActions('article', ['getArticles']),
+    ...mapActions('shop', ['getShops']),
+    async updateDataArticle () {
+      console.log('asdasdsa')
+      this.localArticles = []
+      if (this.editSale.shop) {
+        await this.articles.forEach((value) => {
+          if (value.track_inventory) {
+            if (!value.parent_id) {
+              let inventory = 0
+              if (value.variant_values.length > 0) {
+                value.variant_values.forEach((v) => {
+                  console.log(v)
+                  inventory = 0
+                  if (v.articles_shops.length > 0) {
+                    const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
+                    inventory = artS.length > 0 ? artS[0].stock : 0
+                  }
+                  if (inventory > 0) {
+                    this.localArticles.push({
+                      ref: value.ref,
+                      name: value.name + '(' + v.name + ')',
+                      price: v.price ? v.price : 0,
+                      cost: v.cost ? v.cost : 0,
+                      inventory: inventory || 0,
+                      cant: 1,
+                      totalCant: (inventory || 0) + 1,
+                      totalCost: v.cost,
+                      totalPrice: v.price,
+                      article_id: v.id
+                    })
+                  }
+                })
+              } else {
+                if (value.articles_shops.length > 0) {
+                  const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
+                  inventory = artS.length > 0 ? artS[0].stock : 0
+                }
+                console.log(inventory)
+                if (inventory > 0) {
+                  this.localArticles.push({
+                    ref: value.ref,
+                    name: value.name,
+                    price: value.price ? value.price : 0,
+                    cost: value.cost ? value.cost : 0,
+                    inventory: inventory || 0,
+                    cant: 1,
+                    totalCant: (inventory || 0) + 1,
+                    totalCost: value.cost,
+                    totalPrice: value.price,
+                    article_id: value.id
+                  })
+                }
+              }
+            }
+          }
+        })
+      }
+    },
     selectArticle (item) {
       if (item) {
         if (this.editSale.articles.filter(art => art.article_id === item.article_id).length === 0) {
@@ -393,14 +433,16 @@ export default {
     },
     calcTotal: function (item) {
       this.editedIndex = this.editSale.articles.indexOf(item)
-      this.editSale.articles[this.editedIndex].totalPrice = parseFloat(this.editSale.articles[this.editedIndex].price * this.editSale.articles[this.editedIndex].cant).toFixed(2)
-      this.editSale.articles[this.editedIndex].totalCost = parseFloat(this.editSale.articles[this.editedIndex].cost * this.editSale.articles[this.editedIndex].cant).toFixed(2)
+      item.totalPrice = parseFloat(item.price * item.cant).toFixed(2)
+      item.totalCost = parseFloat(item.cost * item.cant).toFixed(2)
+      item.totalCant = item.inventory - item.cant
+      this.$store.state.sale.editSale.articles[this.editedIndex] = item
       this.update = true
     },
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async editSaleHandler () {
+    async handlerEditSale () {
       if (this.editSale.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
@@ -415,7 +457,7 @@ export default {
     },
     shopMessageError (message) {
       this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+        title: this.$vuetify.lang.t('$vuetify.titles.newF', [
           this.$vuetify.lang.t('$vuetify.menu.vending')
         ]),
         text: message,

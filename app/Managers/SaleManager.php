@@ -91,7 +91,9 @@ class SaleManager
         $sale = Sale::findOrFail($id);
         $sale->no_facture = $data['no_facture'];
         $sale->pay = $data['pay'];
-        $sale->payment_id = $data['payments']['payment_id'];
+        if (isset($data['payments']['payment_id'])) {
+            $sale->payment_id = $data['payments']['payment_id'];
+        }
         $sale->client_id = $data['client']['client_id'];
         $sale->save();
         $this->removeSaleArticle($sale, $data['articles']);
@@ -107,8 +109,9 @@ class SaleManager
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->get()[0];
-            $this->createSaleArticleShop($sale, $articleShop->id, $value);
-            $articleShop['stock'] -= $value['cant'];
+
+            $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
+            $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
             $articleShop->save();
         }
         $taxes = [];
@@ -122,9 +125,11 @@ class SaleManager
      * @param $sale
      * @param $articleShopId
      * @param $data
+     * @return float
      */
-    private function createSaleArticleShop($sale, $articleShopId, $data): void
+    private function createSaleArticleShop($sale, $articleShopId, $data): float
     {
+        $cant = 0;
         $salesArtShop = SalesArticlesShops::latest()
             ->where('sale_id', '=', $sale->id)
             ->where('articles_shops_id', '=', $articleShopId)
@@ -137,11 +142,13 @@ class SaleManager
                 'cost' => $data['cost']
             ]);
         } else {
-            $invAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
-            $invAS['cant'] = $data['cant'];
-            $invAS['cost'] = $data['cost'];
-            $invAS->save();
+            $saleAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
+            $cant = $saleAS['cant'];
+            $saleAS['cant'] = $data['cant'];
+            $saleAS['price'] = $data['price'];
+            $saleAS->save();
         }
+        return $cant;
     }
 
 

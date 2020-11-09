@@ -21,7 +21,6 @@
           @create-row="createArticleHandler"
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
-          @transfer-row="transferHandler($event)"
         >
           <template v-slot:item.name="{ item }">
             <v-chip
@@ -234,7 +233,6 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
     createArticleHandler () {
-      // this.toogleNewModal(true)
       this.$router.push({ name: 'product_add' })
     },
     transferHandler ($event) {
