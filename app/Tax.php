@@ -5,6 +5,7 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -34,12 +35,17 @@ class Tax extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'percent', 'company_id'
+        'name', 'value', 'percent', 'company_id','type','existing'
     ];
 
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function article():BelongsToMany
+    {
+        return $this->belongsToMany(Articles::class, 'article_tax', 'tax_id','article_id');
     }
 }

@@ -83,10 +83,13 @@
                         {{ $vuetify.lang.t('$vuetify.articles.price') }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
+                        {{ $vuetify.lang.t('$vuetify.tax.name') }}
                       </th>
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
+                      </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
                       </th>
                     </tr>
                   </thead>
@@ -99,8 +102,18 @@
                       <td>{{ article.name }}</td>
                       <td>{{ article.cant }}</td>
                       <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
+                      <td>
+                        <template>
+                          <v-chip
+                            v-for="(lTax, i) of article.tax"
+                            :key="i"
+                          >
+                            {{ lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)':'' }} +{{ `${user.company.currency}` }} {{ lTax.percent ? lTax.value*article.cant*article.price/100 : lTax.value }}
+                          </v-chip>
+                        </template>
+                      </td>
+                      <td>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</td>
                       <td>{{ article.inventory }}</td>
-                      <td>{{ `${user.company.currency + ' ' + article.price * article.cant}` }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -200,6 +213,13 @@ export default {
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
+    total_pay (item) {
+      let suma = 0
+      item.tax.forEach((v) => {
+        suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      })
+      return item.cant * item.price + suma
+    },
     createSaleHandler () {
       this.$router.push({ name: 'vending_new' })
     },

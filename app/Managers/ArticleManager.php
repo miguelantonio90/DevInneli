@@ -47,6 +47,7 @@ class ArticleManager
                 ->with('composites')
                 ->with('articlesShops')
                 ->with('variants')
+                ->with('tax')
                 ->with('variantValues')
                 ->with([
                     'images' => function ($q) {
@@ -102,6 +103,7 @@ class ArticleManager
     public function new($data)
     {
         $shops = $data['shops'];
+        $taxes = $data['tax'];
         $article = $this->insertArticle($data);
         if ($data['composite'] === true) {
             $this->updateComposite($article, $data);
@@ -116,6 +118,7 @@ class ArticleManager
                     $articleChildren = $this->insertArticle($value);
                     $this->updateData($articleChildren, $value);
                     $articleChildren->parent_id = $article->id;
+                    $this->updateTaxes($article, $taxes);
                     $articleChildren->save();
                     $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
                     foreach ($arrayShops as $k => $v) {
@@ -129,12 +132,25 @@ class ArticleManager
             }
             $article->save();
         }
-
         if (count($data['images']) > 0) {
             ArticleImageManager::new($article->id, $data['images']);
         }
-
+        $this->updateTaxes($article, $taxes);
         return $article;
+    }
+
+    /**
+     * @param Articles $article
+     * @param $taxes
+     */
+    public function updateTaxes(Articles $article, $taxes):void{
+        $idTaxes = [];
+        foreach ($taxes as $key=>$tax) {
+            $idTaxes[] = $tax['id'];
+            var_dump($tax['id']);
+        }
+        $article->tax()->sync($idTaxes);
+        $article->save();
     }
 
     /**
@@ -264,6 +280,7 @@ class ArticleManager
         $article = Articles::findOrFail($id);
         $article->name = $data['name'];
         $article->save();
+        $taxes = $data['tax'];
         if ($data['composite']) {
             $this->removeComposite($article, $data['composites']);
             $this->updateComposite($article, $data);
@@ -272,6 +289,7 @@ class ArticleManager
             $this->updateChidrensArticles($article, $data);
 
         }
+        $this->updateTaxes($article, $taxes);
         return $article;
     }
 
@@ -336,6 +354,7 @@ class ArticleManager
     public function updateChidrensArticles($article, $data): void
     {
         $shops = $data['shops'];
+        $taxes = $data['tax'];
         $variantValues = $data['variant_values'];
         $variantsValue = Articles::latest()
             ->where('parent_id', '=', $article->id)
@@ -365,6 +384,8 @@ class ArticleManager
             $articleChildren->name = $v['name'];
             $articleChildren->save();
             $this->updateData($articleChildren, $v);
+            $this->updateTaxes($articleChildren, $taxes);
+            $this->updateArticlesShops($articleChildren, $shops);
             $this->updateArticlesShops($articleChildren, $shops);
             $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
             foreach ($arrayShops as $l => $m) {

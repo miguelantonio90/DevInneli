@@ -163,6 +163,7 @@ export default {
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta compra. Debe adicionar al menos un artículo.',
     warning_tax_cost: 'Usted está pagando mas de impuesto que el propio costo del producto.',
+    warning_value_tax: 'El valor del impuesto no puede ser nulo ni cero',
     warning_article_service: 'Si no selecciona este campo el sistema asumirá que está creando un servicio y no podrá abastecerlo(Realizar una compra).',
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
@@ -327,8 +328,11 @@ export default {
     include_tax: 'Incluido en el precio',
     added_tax: 'Adicionado al precio',
     option_tax: 'Aplicar a todos los artículos existentes',
-    example: 'Ejemplo: Para un precio de 100 {1}, el {0}% sería: {0} {1}'
-
+    example: 'Ejemplo: Para un precio de 100 {1}, el {0}% sería: {0} {1}',
+    to_pay_tax: 'A pagar por Impuesto',
+    total_pay_tax: 'Total por Impuesto',
+    to_pay_discount: 'A descontar',
+    total_pay_discount: 'Total de Descuento'
   },
   pay: {
     counted: 'Contado',

@@ -151,6 +151,7 @@ export default {
     warning_price: "You can't create this article.The cost can't be higher than price",
     warning_cant_article: "You can't create this buy. You need select at least one article",
     warning_tax_cost: 'You are paying more tax than the cost of the product.',
+    warning_value_tax: "The tax value can't by null or zero",
     warning_article_service: "If you don't select this field, the system will assume that you are creating a service and you will not be able to supply it (Make a buy)",
     info_exchange_rate: 'The rate of change is with respect to 1',
     idle_title: 'Session Expired',
@@ -324,7 +325,9 @@ export default {
     include_tax: 'Included in the price',
     added_tax: 'Added to the price',
     option_tax: 'Apply to existing articles',
-    example: 'Example: For a price of 100 {1}, the {0}% would: {0} {1}'
+    example: 'Example: For a price of 100 {1}, the {0}% would: {0} {1}',
+    to_pay: 'To page by Tax',
+    total_pay: 'Total by Tax'
   },
   pay: {
     counted: 'Counted',

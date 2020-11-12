@@ -178,6 +178,41 @@
                         />
                       </v-radio-group>
                     </v-col>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-select
+                        v-model="editArticle.tax"
+                        chips
+                        clearable
+                        deletable-chips
+                        :items="taxes"
+                        multiple
+                        :label="$vuetify.lang.t('$vuetify.tax.name')"
+                        item-text="name"
+                        :loading="isTaxLoading"
+                        :disabled="!!isTaxLoading"
+                        return-object
+                        required
+                        :rules="formRule.country"
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('tax/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
+                    </v-col>
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -428,6 +463,7 @@
           </v-btn>
         </v-card-actions>
         <new-category v-if="$store.state.category.showNewModal" />
+        <new-tax v-if="$store.state.tax.showNewModal" />
       </v-card>
     </v-container>
   </div>
@@ -439,10 +475,11 @@ import NewCategory from '../../views/category/NewCategory'
 import ShopsArticles from './shop/ShopsArticles'
 import Variant from './variants/Variant'
 import CompositeList from './composite/CompositeList'
+import NewTax from '../tax/NewTax'
 
 export default {
   name: 'EditArticle',
-  components: { NewCategory, CompositeList, ShopsArticles, Variant },
+  components: { NewCategory, CompositeList, ShopsArticles, Variant, NewTax },
   data () {
     return {
       localArticles: [],
@@ -466,6 +503,7 @@ export default {
     ...mapState('article', ['saved', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapGetters('auth', ['user'])
   },
   created: async function () {
@@ -531,6 +569,7 @@ export default {
         composite_id: value.composite_id
       })
     })
+    await this.getTaxes()
     this.ref = parseFloat(this.ref) + 1
     this.loadingData = false
   },
@@ -540,6 +579,7 @@ export default {
   methods: {
     ...mapActions('article', ['updateArticle', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
+    ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
     inputColor (color) {
       this.editArticle.color = color

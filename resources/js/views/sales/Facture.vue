@@ -58,19 +58,39 @@
       :key="tax.name"
     >
       <v-col cols="7">
-        <b>{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b>
+        <b style="color: darkblue">{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b>
       </v-col>
       <v-col
         v-if="tax.percent==='true'"
         cols="5"
       >
-        <i style="color: red">{{ `${getCurrency + ' ' + tax.value * sub_total / 100}` }}( {{ tax.value }}%)</i>
+        <i style="color: darkblue">{{ `${getCurrency + ' ' + tax.value * sub_total / 100}` }} ({{ tax.value }}%)</i>
       </v-col>
       <v-col
         v-else
         cols="5"
       >
-        <i style="color: red">{{ `${getCurrency + ' ' + tax.value}` }}</i>
+        <i style="color: darkblue">{{ `${getCurrency + ' ' + tax.value}` }}</i>
+      </v-col>
+    </v-row>
+    <v-row
+      v-for="disc in localDiscounts"
+      :key="disc.name"
+    >
+      <v-col cols="7">
+        <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
+      </v-col>
+      <v-col
+        v-if="disc.percent==='true'"
+        cols="5"
+      >
+        <i style="color: red">{{ `${getCurrency + ' ' + disc.value * sub_total / 100}` }} ({{ disc.value }}%)</i>
+      </v-col>
+      <v-col
+        v-else
+        cols="5"
+      >
+        <i style="color: red">{{ `${getCurrency + ' ' + disc.value}` }}</i>
       </v-col>
     </v-row>
     <v-row>
@@ -84,7 +104,7 @@
   </v-container>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Facture',
@@ -105,7 +125,9 @@ export default {
   data () {
     return {
       taxes: [],
+      localDiscounts: [],
       totalTax: 0,
+      totalDisc: 0,
       sub_total: 0,
       total: 0
     }
@@ -113,6 +135,7 @@ export default {
   computed: {
     ...mapState('sale', ['newSale', 'editSale']),
     ...mapGetters('auth', ['user']),
+    ...mapState('discount', ['discounts']),
     getCurrency () {
       return this.currency
     }
@@ -124,6 +147,9 @@ export default {
     'newSale.articles' () {
       this.updateData()
     },
+    'newSale.discounts' () {
+      this.updateData()
+    },
     update () {
       this.updateData()
     },
@@ -132,25 +158,35 @@ export default {
     },
     'editSale.articles' () {
       this.updateData()
+    },
+    'editSale.discounts' () {
+      this.updateData()
     }
   },
   async created () {
     await this.updateData()
+    await this.getDiscounts()
   },
   methods: {
+    ...mapActions('discount', ['getDiscounts']),
     updateData () {
       this.totalTax = 0
+      this.totalDisc = 0
       this.total = 0
       this.sub_total = 0
       const articles = this.edit ? this.editSale.articles : this.newSale.articles
       articles.forEach((v) => {
-        this.sub_total = parseFloat(v.cant * v.price) + this.sub_total
+        this.sub_total = parseFloat(v.totalPrice) + this.sub_total
       })
       this.taxes = this.edit ? this.editSale.taxes : this.newSale.taxes
       this.taxes.forEach((v) => {
         this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
       })
-      this.total = (this.sub_total + parseFloat(this.totalTax)).toFixed(2)
+      this.localDiscounts = this.edit ? this.editSale.discounts : this.newSale.discounts
+      this.localDiscounts.forEach((v) => {
+        this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+      })
+      this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
       this.total = parseFloat(this.total).toFixed(2)
       this.$emit('updateData')
     }

@@ -25,6 +25,7 @@ const state = {
   newSale: {
     no_facture: '',
     pay: '',
+    discounts: [],
     taxes: [],
     payments: {},
     articles: [],
@@ -35,6 +36,7 @@ const state = {
     id: '',
     no_facture: '',
     pay: '',
+    discounts: [],
     taxes: [],
     payments: {},
     articles: [],
@@ -77,6 +79,7 @@ const mutations = {
     state.newSale = {
       no_facture: '',
       pay: '',
+      discounts: [],
       taxes: [],
       payments: {},
       articles: [],
@@ -103,6 +106,7 @@ const mutations = {
       id: '',
       no_facture: '',
       pay: '',
+      discounts: [],
       taxes: [],
       payments: {},
       articles: [],

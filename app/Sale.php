@@ -70,4 +70,9 @@ class Sale extends Model
     {
         return $this->belongsToMany(Tax::class,'sales_taxes');
     }
+
+    public function discounts(): BelongsToMany
+    {
+        return $this->belongsToMany(Discount::class,'sales_discounts');
+    }
 }

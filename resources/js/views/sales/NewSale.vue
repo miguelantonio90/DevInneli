@@ -128,9 +128,19 @@
                       cols="12"
                       md="12"
                     >
-                      <v-data-table
+                      <app-data-table
+                        :view-show-filter="false"
+                        :view-edit-button="false"
+                        :view-new-button="false"
                         :headers="getTableColumns"
                         :items="newSale.articles"
+                        csv-filename="ProductBuys"
+                        :options="vBindOption"
+                        :sort-by="['name']"
+                        :sort-desc="[false, true]"
+                        multi-sort
+                        :is-loading="isTableLoading"
+                        @delete-row="deleteItem($event)"
                       >
                         <template v-slot:item.name="{ item }">
                           <v-chip
@@ -184,6 +194,32 @@
                             </template>
                           </v-edit-dialog>
                         </template>
+                        <template v-slot:item.discount="{ item }">
+                          <v-autocomplete
+                            v-model="item.discount"
+                            chips
+                            multiple
+                            :items="localDiscounts"
+                            item-text="name"
+                            return-object
+                            @input="total_pay"
+                          >
+                            <template v-slot:append-outer>
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="$store.dispatch('discount/toogleNewModal',true)"
+                                  >
+                                    mdi-plus
+                                  </v-icon>
+                                </template>
+                                <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                              </v-tooltip>
+                            </template>
+                          </v-autocomplete>
+                        </template>
                         <template v-slot:item.cant="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.cant"
@@ -216,21 +252,82 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.totalCost="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalCost }` }}
-                        </template>
                         <template v-slot:item.totalPrice="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalPrice }` }}
+                          {{ `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2) }` }}
                         </template>
-                        <template v-slot:item.actions="{ item }">
-                          <v-icon
-                            small
-                            @click="deleteItem(item)"
+                        <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
+                          <v-btn
+                            v-if="item.taxes.length > 0"
+                            color="primary"
+                            fab
+                            x-small
+                            dark
+                            @click="expand(!isExpanded)"
                           >
-                            mdi-delete
-                          </v-icon>
+                            <v-icon v-if="isExpanded">
+                              mdi-chevron-up
+                            </v-icon>
+                            <v-icon v-else>
+                              mdi-chevron-down
+                            </v-icon>
+                          </v-btn>
                         </template>
-                      </v-data-table>
+                        <template v-slot:expanded-item="{ headers,item }">
+                          <td
+                            :colspan="headers.length"
+                            style="padding: 0 0 0 0"
+                          >
+                            <v-simple-table dense>
+                              <template v-slot:default>
+                                <thead>
+                                  <tr>
+                                    <th class="text-left">
+                                      {{ $vuetify.lang.t('$vuetify.tax.name') }}
+                                    </th>
+                                    <th class="text-left">
+                                      {{ $vuetify.lang.t('$vuetify.tax.value') }}
+                                    </th>
+                                    <th class="text-left">
+                                      {{ $vuetify.lang.t('$vuetify.tax.to_pay_tax') }}
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    v-for="(tax) in item.taxes"
+                                    :key="tax.name"
+                                  >
+                                    <td style="color: #0d47a1">
+                                      {{ tax.name }}
+                                    </td>
+                                    <td style="color: #0d47a1">
+                                      {{ tax.percent ? tax.value+'%': tax.value }}
+                                    </td>
+                                    <td style="color: #0d47a1">
+                                      {{ `${user.company.currency}` }} {{ tax.percent ? parseFloat(tax.value*item.cant*item.price/100).toFixed(2) : parseFloat(tax.value).toFixed(2) }}
+                                    </td>
+                                  </tr>
+                                </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td
+                                      style="margin-left: 10px"
+                                      colspan="2"
+                                      class="text-left"
+                                    >
+                                      <b style="color: #db0610">{{ $vuetify.lang.t('$vuetify.tax.total_pay_tax') }}</b>
+                                    </td>
+                                    <td>
+                                      <b style="color: #db0610"> {{ `${user.company.currency}` }} {{ parseFloat(total_pay(item)).toFixed(2) }}</b>
+                                    </td>
+                                  </tr>
+                                </tfoot>
+                              </template>
+                            </v-simple-table>
+                          </td>
+                        </template>
+                      </app-data-table>
+                      <v-data-table />
                     </v-col>
                     <v-col
                       v-show="newSale.articles.length > 0 "
@@ -243,7 +340,7 @@
               <v-col
                 v-show="newSale.articles.length > 0"
                 cols="12"
-                md="8"
+                md="7"
               >
                 <v-expansion-panel>
                   <v-expansion-panel-header>
@@ -262,7 +359,7 @@
               <v-col
                 v-show="newSale.articles.length > 0"
                 cols="12"
-                md="4"
+                md="5"
               >
                 <v-expansion-panel
                   v-show="newSale.articles.length > 0"
@@ -334,6 +431,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <new-discount v-if="this.$store.state.discount.showNewModal" />
     </v-container>
   </div>
 </template>
@@ -343,18 +441,25 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import ExtraData from './ExtraData'
 import AppLoading from '../../components/core/AppLoading'
 import Facture from './Facture'
+import NewDiscount from '../discount/NewDiscount'
 export default {
   name: 'NewSale',
-  components: { AppLoading, Facture, ExtraData },
+  components: { NewDiscount, AppLoading, Facture, ExtraData },
   data () {
     return {
       loadingData: false,
       editedIndex: -1,
       localArticles: [],
+      localDiscounts: [],
       update: false,
       panel: [0, 1, 2],
       formValid: false,
       showInfoAdd: false,
+      vBindOption: {
+        itemKey: 'name',
+        singleExpand: false,
+        showExpand: true
+      },
       formRule: this.$rules
     }
   },
@@ -368,6 +473,7 @@ export default {
       'isTableLoading'
     ]),
     ...mapState('shop', ['shops', 'isShopLoading']),
+    ...mapState('discount', ['discounts']),
     ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
@@ -384,6 +490,11 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.articles.price'),
           value: 'price',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.discount'),
+          value: 'discount',
           select_filter: true
         },
         {
@@ -404,16 +515,25 @@ export default {
       ]
     }
   },
+  watch: {
+    discounts: function () {
+      this.getLocalDiscounts()
+    }
+  },
   async created () {
     this.loadingData = true
     await this.getArticles()
     await this.getShops()
+    await this.getDiscounts().then((response) => {
+      this.getLocalDiscounts()
+    })
     this.loadingData = false
   },
   methods: {
     ...mapActions('sale', ['createSale']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
+    ...mapActions('discount', ['getDiscounts']),
     async updateDataArticle () {
       this.localArticles = []
       this.newSale.articles = []
@@ -433,9 +553,11 @@ export default {
                     this.localArticles.push({
                       ref: value.ref,
                       name: value.name + '(' + v.name + ')',
-                      category: value.category.name,
+                      category: !value.category ? '' : value.category.name,
                       path: value.path,
                       images: value.images,
+                      taxes: v.tax,
+                      discount: [],
                       color: value.color,
                       price: v.price ? v.price : 0,
                       cost: v.cost ? v.cost : 0,
@@ -454,12 +576,15 @@ export default {
                   inventory = artS.length > 0 ? artS[0].stock : 0
                 }
                 if (inventory > 0) {
+                  console.log(value)
                   this.localArticles.push({
                     ref: value.ref,
                     name: value.name,
-                    category: value.category.name,
+                    category: !value.category ? '' : value.category.name,
                     path: value.path,
                     images: value.images,
+                    taxes: value.tax,
+                    discount: [],
                     color: value.color,
                     price: value.price ? value.price : 0,
                     cost: value.cost ? value.cost : 0,
@@ -477,6 +602,31 @@ export default {
         })
       }
     },
+    getLocalDiscounts () {
+      this.discounts.forEach((v) => {
+        this.localDiscounts.push({
+          id: v.id,
+          name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
+          value: v.value,
+          percent: v.percent
+        })
+      })
+    },
+    total_pay (item) {
+      let suma = 0
+      item.taxes.forEach((v) => {
+        suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      })
+      item.totalPrice = item.cant * item.price + suma - this.total_discount(item)
+      return suma
+    },
+    total_discount (item) {
+      let disc = 0
+      item.discount.forEach((v) => {
+        disc += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      })
+      return disc
+    },
     selectArticle (item) {
       if (item) {
         if (this.newSale.articles.filter(art => art.article_id === item.article_id).length === 0) {
@@ -492,10 +642,10 @@ export default {
     },
     calcTotal: function (item) {
       this.editedIndex = this.newSale.articles.indexOf(item)
-      this.newSale.articles[this.editedIndex].totalPrice = parseFloat(this.newSale.articles[this.editedIndex].price * this.newSale.articles[this.editedIndex].cant).toFixed(2)
       this.newSale.articles[this.editedIndex].totalCost = parseFloat(this.newSale.articles[this.editedIndex].cost * this.newSale.articles[this.editedIndex].cant).toFixed(2)
       const total = parseFloat(this.newSale.articles[this.editedIndex].inventory) - parseFloat(this.newSale.articles[this.editedIndex].cant) || 0
       this.newSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
+      this.total_pay(item)
       this.update = true
     },
     closeInfoAdd () {

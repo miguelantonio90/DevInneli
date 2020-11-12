@@ -41,6 +41,8 @@ class SalesArticlesShops extends Model
 
     public function articles_shops():BelongsTo
     {
-        return $this->belongsTo(ArticlesShops::class);
+        return $this->belongsTo(ArticlesShops::class)
+            ->with('shops')
+            ->with('article');
     }
 }

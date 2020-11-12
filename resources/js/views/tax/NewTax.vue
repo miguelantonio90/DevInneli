@@ -108,7 +108,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="createNewTax"
+          @click="createNewTaxHandler"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -163,12 +163,34 @@ export default {
         return false
       }
     },
-    async createNewTax () {
+    async validCreate () {
+      this.loading = true
+      await this.createTax(this.newTax).catch(() => {
+        this.loading = false
+      })
+    },
+    createNewTaxHandler () {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createTax(this.newTax).catch(() => {
-          this.loading = false
-        })
+        if (!this.newTax.value || this.newTax.value <= 0) {
+          this.$Swal.fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+              this.$vuetify.lang.t('$vuetify.articles.tax')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_value_tax'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+            .then((result) => {
+            })
+        } else {
+          this.validCreate()
+        }
       }
     }
   }
