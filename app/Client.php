@@ -40,7 +40,7 @@ class Client extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
+     *TODO: Poner mascara en codigo de Barras en la vista
      * @var string[]
      */
     protected $fillable = [

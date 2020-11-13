@@ -122,10 +122,10 @@
                           </v-edit-dialog>
                         </template>
                         <template v-slot:item.totalCost="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalCost }` }}
+                          {{ `${user.company.currency + ' ' + item.cant * item.cost }` }}
                         </template>
                         <template v-slot:item.totalPrice="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalPrice }` }}
+                          {{ `${user.company.currency + ' ' + item.cant * item.price }` }}
                         </template>
                         <template v-slot:item.actions="{ item }">
                           <v-icon

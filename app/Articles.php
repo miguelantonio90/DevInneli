@@ -6,6 +6,7 @@ use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -62,7 +63,9 @@ class Articles extends Model
 
     public function variantValues(): HasMany
     {
-        return $this->hasMany(Articles::class, 'parent_id')->with('articlesShops');
+        return $this->hasMany(Articles::class, 'parent_id')
+            ->with('articlesShops')
+            ->with('tax');
     }
 
     public function articlesShops(): HasMany
@@ -79,5 +82,10 @@ class Articles extends Model
             'composite_name' => self::select('name')
                 ->whereColumn('articles_composites.composite_id', 'articles.id')
         ]);
+    }
+
+    public function tax():BelongsToMany
+    {
+        return $this->belongsToMany(Tax::class, 'article_tax','article_id','tax_id');
     }
 }

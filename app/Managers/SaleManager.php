@@ -4,7 +4,9 @@
 namespace App\Managers;
 
 
+use App\Articles;
 use App\ArticlesShops;
+use App\Discount;
 use App\SalesArticlesShops;
 use App\Sale;
 use App\Tax;
@@ -26,6 +28,7 @@ class SaleManager
                 ->with('company')
                 ->with('articles_shops')
                 ->with('taxes')
+                ->with('discounts')
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
@@ -37,35 +40,68 @@ class SaleManager
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->where('sales.id', '=', $value['id'])
                 ->get()[0];
-                $sales[$key]['articles'] = DB::table('articles')
-                    ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
-                    ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                        'articles_shops.id')
+            $sales[$key]['articles'] = DB::table('articles')
+                ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
+                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
+                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->select([
+                    'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
+                    'articles_shops.stock as inventory', 'articles.id as article_id'
+                ])
+                ->where('sales.id', '=', $value['id'])
+                ->get();
+            $payments = DB::table('payments')
+                ->join('sales', 'sales.payment_id', '=', 'payments.id')
+                ->where('sales.id', '=', $value['id'])
+                ->get();
+            $sales[$key]['payments'] = count($payments) > 0 ? $payments[0] : null;
+            $sales[$key]['client'] = DB::table('clients')
+                ->join('sales', 'sales.client_id', '=', 'clients.id')
+                ->where('sales.id', '=', $value['id'])
+                ->get()[0];
+            $totalCost = 0;
+            $totalPrice = 0;
+            foreach ($sales[$key]['articles'] as $k => $v) {
+                $sales[$key]['articles'][$k]->taxes = DB::table('taxes')
+                    ->join('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
+                    ->join('articles', 'articles.id', '=', 'article_tax.article_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->addSelect(['taxes.*'])
+                    ->get();
+                $sales[$key]['articles'][$k]->discount = DB::table('discounts')
+                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=', 'discounts.id')
+                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=', 'sales_articles_shop_discounts.sales_articles_shops_id')
+                    ->join('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->join('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->join('shops', 'shops.id', '=', 'articles_shops.shop_id')
                     ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-                    ->select([
-                        'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
-                        'articles_shops.stock as inventory', 'articles.id as article_id'
-                    ])
-                    ->where('sales.id', '=', $value['id'])
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $sales[$key]['shop']->shop_id)
+                    ->where('sales.id', '=', $sales[$key]['id'])
+                    ->addSelect(['discounts.*'])
                     ->get();
-                $payments = DB::table('payments')
-                    ->join('sales', 'sales.payment_id', '=', 'payments.id')
-                    ->where('sales.id', '=', $value['id'])
-                    ->get();
-                $sales[$key]['payments'] = count($payments) > 0 ? $payments[0] : null;
-                $sales[$key]['client'] = DB::table('clients')
-                    ->join('sales', 'sales.client_id', '=', 'clients.id')
-                    ->where('sales.id', '=', $value['id'])
-                    ->get()[0];
-                $totalCost = 0;
-                $totalPrice = 0;
-                foreach ($sales[$key]['articles'] as $k => $v) {
-                    $totalCost += $v->cant * $v->cost;
-                    $totalPrice += $v->cant * $v->price;
+                $sum = 0;
+                $discount = 0;
+                foreach ($sales[$key]['articles'][$k]->discount as $j => $i) {
+                    $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
                 }
-                $sales[$key]['totalCost'] = round($totalCost, 2);
-                $sales[$key]['totalPrice'] = round($totalPrice, 2);
+                $totalCost += $v->cant * $v->cost;
+                $totalPrice += $v->cant * $v->price + $sum - $discount;
+                $discount = 0;
+                foreach ($sales[$key]['taxes'] as $j => $i) {
+                    $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $sum = 0;
+                foreach ($sales[$key]['discounts'] as $j => $i) {
+                    $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $totalPrice = $totalPrice + $sum- $discount;
+
             }
+            $sales[$key]['totalCost'] = round($totalCost, 2);
+            $sales[$key]['totalPrice'] = round($totalPrice, 2);
+        }
         return $sales;
     }
 
@@ -109,7 +145,6 @@ class SaleManager
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->get()[0];
-
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
             $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
             $articleShop->save();
@@ -119,6 +154,11 @@ class SaleManager
             $taxes[] = $v['id'];
         }
         $sale->taxes()->sync(Tax::find($taxes));
+        $discounts = [];
+        foreach ($data['discounts'] as $k => $v) {
+            $discounts[] = $v['id'];
+        }
+        $sale->discounts()->sync($discounts);
     }
 
     /**
@@ -135,11 +175,11 @@ class SaleManager
             ->where('articles_shops_id', '=', $articleShopId)
             ->get();
         if (count($salesArtShop) === 0) {
-            SalesArticlesShops::create([
+            $saleAS = SalesArticlesShops::create([
                 'sale_id' => $sale->id,
                 'articles_shops_id' => $articleShopId,
                 'cant' => $data['cant'],
-                'cost' => $data['cost']
+                'price' => $data['price']
             ]);
         } else {
             $saleAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
@@ -148,6 +188,11 @@ class SaleManager
             $saleAS['price'] = $data['price'];
             $saleAS->save();
         }
+        $discounts = [];
+        foreach ($data['discount'] as $key => $discount){
+            $discounts[] = $discount['id'];
+        }
+        $saleAS->discount()->sync($discounts);
         return $cant;
     }
 

@@ -42,4 +42,6 @@ class Discount extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+
 }

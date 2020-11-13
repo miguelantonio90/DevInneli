@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title v-if="title !== ''">
       {{ title }}
     </v-card-title>
     <v-card-subtitle>
@@ -9,6 +9,7 @@
     <v-container fluid>
       <!-- SEARCH BAR -->
       <filter-header
+        v-if="viewShowFilter"
         :has-csv-export="hasCsvExport"
         :select-many-filters="selectManyFilters"
         :select-filters="selectFilters"
@@ -36,7 +37,10 @@
       :search="searchValueDebounced"
       v-on="$listeners"
     >
-      <template v-slot:top>
+      <template
+        v-if="viewNewButton"
+        v-slot:top
+      >
         <v-toolbar flat>
           <v-spacer />
           <v-btn
@@ -183,6 +187,10 @@ export default {
       type: String,
       default: ''
     },
+    viewNewButton: {
+      type: Boolean,
+      default: true
+    },
     viewShowButton: {
       type: Boolean,
       default: false
@@ -198,6 +206,10 @@ export default {
     viewTransferButton: {
       type: Boolean,
       default: false
+    },
+    viewShowFilter: {
+      type: Boolean,
+      default: true
     }
   },
   data () {

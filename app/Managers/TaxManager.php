@@ -2,6 +2,7 @@
 
 namespace App\Managers;
 
+use App\Articles;
 use App\Tax;
 
 class TaxManager
@@ -20,6 +21,7 @@ class TaxManager
             $company = CompanyManager::getCompanyByAdmin();
             $categories = Tax::latest()
                 ->where('company_id', '=', $company->id)
+                ->with('article')
                 ->get();
         }
 
@@ -32,12 +34,19 @@ class TaxManager
      */
     public function new($data)
     {
-        return Tax::create([
+        $tax = Tax::create([
             'company_id' => $data['company_id'],
             'name' => $data['name'],
             'value' => $data['value'],
+            'type'=>$data['type'],
+            'existing'=>$data['existing'],
             'percent' => $data['percent'],
         ]);
+        if($tax->existing)
+        {
+            $this->addToAllArticle($tax);
+        }
+        return $tax;
     }
 
     /**
@@ -61,6 +70,25 @@ class TaxManager
         return $category;
     }
 
+    /**
+     * @param Tax $tax
+     */
+    public function addToAllArticle(Tax $tax):void
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $articles = Articles::latest()
+            ->where('company_id', '=', $company->id)
+            ->get();
+        if(count($articles) > 0){
+            $idArticles = [];
+            foreach ($articles as $key=>$article) {
+                $idArticles[] = $article->id;
+            }
+            $tax->article()->sync($idArticles);
+            $tax->save();
+        }
+
+    }
     /**
      * @param $id
      * @return mixed

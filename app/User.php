@@ -101,6 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * @return BelongsTo
+     * TODO: Un usuario pertenece a una sola company
      */
     public function company(): BelongsTo
     {

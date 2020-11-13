@@ -25,6 +25,14 @@
               item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
             }}
           </template>
+          <template v-slot:item.payments.name="{ item }">
+            <template v-if="item.payments">
+              {{ item.payments.name }}
+            </template>
+            <template v-else>
+              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+            </template>
+          </template>
           <template v-slot:item.shop.name="{ item }">
             <v-chip>
               {{ item.shop.name }}
