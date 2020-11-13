@@ -182,7 +182,6 @@ export default {
       this.taxes.forEach((v) => {
         this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
       })
-      console.log(this.discounts)
       this.localDiscounts = this.edit ? this.editSale.discounts : this.newSale.discounts
       this.localDiscounts.forEach((v) => {
         this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value

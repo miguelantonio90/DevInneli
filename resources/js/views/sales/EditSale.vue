@@ -606,7 +606,6 @@ export default {
                   inventory = artS.length > 0 ? artS[0].stock : 0
                 }
                 if (inventory > 0) {
-                  console.log(value)
                   this.localArticles.push({
                     ref: value.ref,
                     name: value.name,

@@ -214,7 +214,6 @@ const actions = {
     await sale
       .sendDeleteRequest(saleId)
       .then(() => {
-        console.log(state.sales)
         commit(SALE_DELETE)
         dispatch('sale/getSales', null, { root: true })
       })

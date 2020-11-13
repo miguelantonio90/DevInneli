@@ -253,7 +253,6 @@ export default {
       })
     },
     updateStore () {
-      console.log(this.sale)
       if (this.edit) {
         this.editSale.client = this.sale.client
         this.editSale.taxes = this.sale.taxes
