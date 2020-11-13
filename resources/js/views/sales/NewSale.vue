@@ -614,17 +614,21 @@ export default {
     },
     total_pay (item) {
       let suma = 0
-      item.taxes.forEach((v) => {
-        suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
+      if (item.taxes.length > 0) {
+        item.taxes.forEach((v) => {
+          suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        })
+      }
       item.totalPrice = item.cant * item.price + suma - this.total_discount(item)
       return suma
     },
     total_discount (item) {
       let disc = 0
-      item.discount.forEach((v) => {
-        disc += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
+      if (item.discount.length > 0) {
+        item.discount.forEach((v) => {
+          disc += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        })
+      }
       return disc
     },
     selectArticle (item) {

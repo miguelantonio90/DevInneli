@@ -63,7 +63,8 @@ class Sale extends Model
     public function articles_shops():HasMany
     {
         return $this->hasMany(SalesArticlesShops::class)
-            ->with('articles_shops');
+            ->with('articles_shops')
+            ->with('discount');
     }
 
     public function taxes(): BelongsToMany

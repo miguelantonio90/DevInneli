@@ -28,6 +28,7 @@ class SaleManager
                 ->with('company')
                 ->with('articles_shops')
                 ->with('taxes')
+                ->with('discounts')
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
@@ -43,7 +44,6 @@ class SaleManager
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
                 ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                     'articles_shops.id')
-                ->join('article_tax', 'article_tax.article_id', '=', 'articles.id')
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->select([
                     'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
@@ -63,18 +63,41 @@ class SaleManager
             $totalCost = 0;
             $totalPrice = 0;
             foreach ($sales[$key]['articles'] as $k => $v) {
-                $sales[$key]['articles'][$k]->tax = DB::table('taxes')
+                $sales[$key]['articles'][$k]->taxes = DB::table('taxes')
                     ->join('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
                     ->join('articles', 'articles.id', '=', 'article_tax.article_id')
                     ->where('articles.id', '=', $v->id)
                     ->addSelect(['taxes.*'])
                     ->get();
+                $sales[$key]['articles'][$k]->discount = DB::table('discounts')
+                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=', 'discounts.id')
+                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=', 'sales_articles_shop_discounts.sales_articles_shops_id')
+                    ->join('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->join('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->join('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $sales[$key]['shop']->shop_id)
+                    ->where('sales.id', '=', $sales[$key]['id'])
+                    ->addSelect(['discounts.*'])
+                    ->get();
                 $sum = 0;
-                foreach ($sales[$key]['articles'][$k]->tax as $j => $i) {
-                    $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
-                    }
+                $discount = 0;
+                foreach ($sales[$key]['articles'][$k]->discount as $j => $i) {
+                    $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
                 $totalCost += $v->cant * $v->cost;
-                $totalPrice += $v->cant * $v->price + $sum;
+                $totalPrice += $v->cant * $v->price + $sum - $discount;
+                $discount = 0;
+                foreach ($sales[$key]['taxes'] as $j => $i) {
+                    $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $sum = 0;
+                foreach ($sales[$key]['discounts'] as $j => $i) {
+                    $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $totalPrice = $totalPrice + $sum- $discount;
+
             }
             $sales[$key]['totalCost'] = round($totalCost, 2);
             $sales[$key]['totalPrice'] = round($totalPrice, 2);
@@ -152,15 +175,12 @@ class SaleManager
             ->where('articles_shops_id', '=', $articleShopId)
             ->get();
         if (count($salesArtShop) === 0) {
-            $sale = SalesArticlesShops::create([
+            $saleAS = SalesArticlesShops::create([
                 'sale_id' => $sale->id,
                 'articles_shops_id' => $articleShopId,
                 'cant' => $data['cant'],
                 'price' => $data['price']
             ]);
-            if(count($data['discount']) > 0){
-//                $sale
-            }
         } else {
             $saleAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
             $cant = $saleAS['cant'];
@@ -168,6 +188,11 @@ class SaleManager
             $saleAS['price'] = $data['price'];
             $saleAS->save();
         }
+        $discounts = [];
+        foreach ($data['discount'] as $key => $discount){
+            $discounts[] = $discount['id'];
+        }
+        $saleAS->discount()->sync($discounts);
         return $cant;
     }
 

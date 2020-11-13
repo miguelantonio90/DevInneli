@@ -44,6 +44,32 @@
           <template v-slot:item.totalCost="{ item }">
             {{ `${user.company.currency + ' ' + item.totalCost}` }}
           </template>
+          <template v-slot:item.taxes="{item}">
+            <template v-if="item.taxes.length > 0">
+              <v-chip
+                v-for="(lTax, i) of item.taxes"
+                :key="i"
+              >
+                {{ lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)':'' }}
+              </v-chip>
+            </template>
+            <template v-else>
+              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+            </template>
+          </template>
+          <template v-slot:item.discounts="{item}">
+            <template v-if="item.discounts.length > 0">
+              <v-chip
+                v-for="(lDiscount, i) of item.discounts"
+                :key="i"
+              >
+                {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%)':'' }}
+              </v-chip>
+            </template>
+            <template v-else>
+              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+            </template>
+          </template>
           <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
             <v-btn
               v-if="item.articles.length > 0"
@@ -86,6 +112,9 @@
                         {{ $vuetify.lang.t('$vuetify.tax.name') }}
                       </th>
                       <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.menu.discount') }}
+                      </th>
+                      <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
                       </th>
                       <th class="text-left">
@@ -103,13 +132,29 @@
                       <td>{{ article.cant }}</td>
                       <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
                       <td>
-                        <template>
+                        <template v-if="article.taxes.length > 0">
                           <v-chip
                             v-for="(lTax, i) of article.tax"
                             :key="i"
                           >
                             {{ lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)':'' }} +{{ `${user.company.currency}` }} {{ lTax.percent ? lTax.value*article.cant*article.price/100 : lTax.value }}
                           </v-chip>
+                        </template>
+                        <template v-else>
+                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+                        </template>
+                      </td>
+                      <td>
+                        <template v-if="article.discount.length > 0">
+                          <v-chip
+                            v-for="(lDiscount, i) of article.discount"
+                            :key="i"
+                          >
+                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i style="color: red"> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
+                          </v-chip>
+                        </template>
+                        <template v-else>
+                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
                         </template>
                       </td>
                       <td>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</td>
@@ -174,6 +219,16 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.tax.name'),
+          value: 'taxes',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.discount'),
+          value: 'discounts',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
           value: 'totalPrice',
           select_filter: true
@@ -191,17 +246,22 @@ export default {
       ]
     }
   },
-  created () {
-    this.getArticles().then(() => {
-      this.getSales().then(() => {
-        this.sales.forEach((value) => {
-          const sale = value
-          value.articles.forEach((v, i) => {
-            if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
-          })
-          this.localSales.push(sale)
+  watch: {
+    sales: function () {
+      this.localSales = []
+      this.sales.forEach((value) => {
+        const sale = value
+        value.articles.forEach((v, i) => {
+          if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
         })
+        this.localSales.push(sale)
       })
+    }
+  },
+  created () {
+    this.localSales = []
+    this.getArticles().then(() => {
+      this.getSales()
     })
   },
   methods: {
@@ -213,12 +273,18 @@ export default {
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
+    loadLocalData () {
+    },
     total_pay (item) {
-      let suma = 0
-      item.tax.forEach((v) => {
-        suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      let sum = 0
+      item.taxes.forEach((v) => {
+        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
       })
-      return item.cant * item.price + suma
+      let discount = 0
+      item.discount.forEach((v) => {
+        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      })
+      return item.cant * item.price + sum - discount
     },
     createSaleHandler () {
       this.$router.push({ name: 'vending_new' })

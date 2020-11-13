@@ -90,7 +90,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.supply.name')]
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.sale.sale')]
       )
     })
   },
@@ -117,7 +117,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.supply.name')]
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.sale.sale')]
       )
     })
   },
@@ -129,7 +129,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.supply.name')]
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.sale.sale')]
       )
     })
   },
@@ -146,7 +146,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(
-        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.supply.name')]
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.sale.sale')]
       )
     })
   }
@@ -210,10 +210,11 @@ const actions = {
         commit(FAILED_SALE, error)
       })
   },
-  async deleteSale ({ commit, dispatch }, saleId) {
+  async deleteSale ({ commit, dispatch, state }, saleId) {
     await sale
       .sendDeleteRequest(saleId)
       .then(() => {
+        console.log(state.sales)
         commit(SALE_DELETE)
         dispatch('sale/getSales', null, { root: true })
       })
