@@ -348,7 +348,6 @@
                           </template>
                         </template>
                       </app-data-table>
-                      <v-data-table />
                     </v-col>
                     <v-col
                       v-show="editSale.articles.length > 0 "
@@ -578,7 +577,7 @@ export default {
                   const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
                   inventory = artS.length > 0 ? artS[0].stock : 0
                 }
-                if (inventory > 0) {
+                if (inventory > 0 || !value.track_inventory) {
                   this.localArticles.push({
                     ref: value.ref,
                     name: value.name + '(' + v.name + ')',
@@ -604,7 +603,7 @@ export default {
                 const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.id)
                 inventory = artS.length > 0 ? artS[0].stock : 0
               }
-              if (inventory > 0) {
+              if (inventory > 0 || !value.track_inventory) {
                 this.localArticles.push({
                   ref: value.ref,
                   name: value.name,
