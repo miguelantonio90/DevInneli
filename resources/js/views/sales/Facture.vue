@@ -64,7 +64,7 @@
         v-if="tax.percent==='true'"
         cols="5"
       >
-        <i style="color: darkblue">{{ `${getCurrency + ' ' + tax.value * sub_total / 100}` }} ({{ tax.value }}%)</i>
+        <i style="color: darkblue">{{ `${getCurrency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
       </v-col>
       <v-col
         v-else
@@ -84,7 +84,7 @@
         v-if="disc.percent==='true'"
         cols="5"
       >
-        <i style="color: red">{{ `${getCurrency + ' ' + disc.value * sub_total / 100}` }} ({{ disc.value }}%)</i>
+        <i style="color: red">{{ `${getCurrency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
       </v-col>
       <v-col
         v-else

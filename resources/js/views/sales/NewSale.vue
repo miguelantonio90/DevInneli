@@ -616,10 +616,7 @@ export default {
       const total = parseFloat(this.newSale.articles[this.editedIndex].inventory) - parseFloat(this.newSale.articles[this.editedIndex].cant) || 0
       this.newSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
       item.totalPrice = 0
-      this.item.articles.forEach((v) => {
-        this.total_pay(v)
-        item.totalPrice += v.totalPrice
-      })
+      this.total_pay(item)
       this.update = true
     },
     total_pay (item) {
