@@ -573,9 +573,9 @@ export default {
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v) => {
                 inventory = 0
-                if (v.articles_shops.length > 0) {
-                  const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
-                  inventory = artS.length > 0 ? artS[0].stock : 0
+                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+                if (artS.length > 0) {
+                  inventory = artS[0].stock
                 }
                 if (inventory > 0 || !value.track_inventory) {
                   this.localArticles.push({
@@ -587,7 +587,7 @@ export default {
                     taxes: v.tax,
                     discount: [],
                     color: value.color,
-                    price: v.price ? v.price : 0,
+                    price: artS[0].price ? artS[0].price : 0,
                     cost: v.cost ? v.cost : 0,
                     inventory: inventory || 0,
                     cant: 1,
@@ -599,9 +599,9 @@ export default {
                 }
               })
             } else {
-              if (value.articles_shops.length > 0) {
-                const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.id)
-                inventory = artS.length > 0 ? artS[0].stock : 0
+              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              if (artS.length > 0) {
+                inventory = artS[0].stock
               }
               if (inventory > 0 || !value.track_inventory) {
                 this.localArticles.push({
@@ -613,7 +613,7 @@ export default {
                   taxes: value.tax,
                   discount: [],
                   color: value.color,
-                  price: value.price ? value.price : 0,
+                  price: artS[0].price ? artS[0].price : 0,
                   cost: value.cost ? value.cost : 0,
                   inventory: inventory || 0,
                   cant: 1,
