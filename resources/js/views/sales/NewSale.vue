@@ -202,7 +202,7 @@
                             :items="localDiscounts"
                             item-text="name"
                             return-object
-                            @input="total_pay"
+                            @input="total_pay(item)"
                           >
                             <template v-slot:append-outer>
                               <v-tooltip bottom>
@@ -571,11 +571,11 @@ export default {
                 }
               })
             } else {
-              if (inventory > 0 || !value.track_inventory) {
+              if (inventory > 0) {
                 const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
                 inventory = artS.length > 0 ? artS[0].stock : 0
               }
-              if (inventory > 0) {
+              if (inventory > 0 || !value.track_inventory) {
                 this.localArticles.push({
                   ref: value.ref,
                   name: value.name,
@@ -610,6 +610,18 @@ export default {
         })
       })
     },
+    calcTotal: function (item) {
+      this.editedIndex = this.newSale.articles.indexOf(item)
+      this.newSale.articles[this.editedIndex].totalCost = parseFloat(this.newSale.articles[this.editedIndex].cost * this.newSale.articles[this.editedIndex].cant).toFixed(2)
+      const total = parseFloat(this.newSale.articles[this.editedIndex].inventory) - parseFloat(this.newSale.articles[this.editedIndex].cant) || 0
+      this.newSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
+      item.totalPrice = 0
+      this.item.articles.forEach((v) => {
+        this.total_pay(v)
+        item.totalPrice += v.totalPrice
+      })
+      this.update = true
+    },
     total_pay (item) {
       let suma = 0
       if (item.taxes.length > 0) {
@@ -640,14 +652,6 @@ export default {
     },
     deleteItem (item) {
       this.newSale.articles.splice(this.newSale.articles.indexOf(item), 1)
-      this.update = true
-    },
-    calcTotal: function (item) {
-      this.editedIndex = this.newSale.articles.indexOf(item)
-      this.newSale.articles[this.editedIndex].totalCost = parseFloat(this.newSale.articles[this.editedIndex].cost * this.newSale.articles[this.editedIndex].cant).toFixed(2)
-      const total = parseFloat(this.newSale.articles[this.editedIndex].inventory) - parseFloat(this.newSale.articles[this.editedIndex].cant) || 0
-      this.newSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
-      this.total_pay(item)
       this.update = true
     },
     closeInfoAdd () {
