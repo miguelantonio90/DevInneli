@@ -69,10 +69,9 @@ class CategoryManager
     public function delete($id)
     {
         $articles = Articles::latest()
-            ->where('category_id', '=',$id)
+            ->where('category_id', '=', $id)
             ->get();
-        foreach ($articles as $k=>$article)
-        {
+        foreach ($articles as $k => $article) {
             $article->category_id = null;
             $article->save();
         }

@@ -89,23 +89,6 @@ class InventoryManager
 
     }
 
-    public function edit($id, $data)
-    {
-        $inventory = Inventory::findOrFail($id);
-        $inventory->no_facture = $data['no_facture'];
-        $inventory->pay = $data['pay'];
-        if (isset($data['payments']['id'])) {
-            $inventory->payment_id = $data['payments']['payment_id'];
-        }
-        if (isset($data['supplier']['id'])) {
-            $inventory->supplier_id = $data['supplier']['supplier_id'];
-        }
-        $inventory->save();
-        $this->removeInventoryArticle($inventory, $data['articles']);
-        $this->updateInventoryData($inventory, $data, true);
-        return $inventory;
-    }
-
     public function updateInventoryData($inventory, $data, $edit)
     {
         $articles = $data['articles'];
@@ -162,6 +145,22 @@ class InventoryManager
         }
     }
 
+    public function edit($id, $data)
+    {
+        $inventory = Inventory::findOrFail($id);
+        $inventory->no_facture = $data['no_facture'];
+        $inventory->pay = $data['pay'];
+        if (isset($data['payments']['id'])) {
+            $inventory->payment_id = $data['payments']['payment_id'];
+        }
+        if (isset($data['supplier']['id'])) {
+            $inventory->supplier_id = $data['supplier']['supplier_id'];
+        }
+        $inventory->save();
+        $this->removeInventoryArticle($inventory, $data['articles']);
+        $this->updateInventoryData($inventory, $data, true);
+        return $inventory;
+    }
 
     /**
      * @param $inventory

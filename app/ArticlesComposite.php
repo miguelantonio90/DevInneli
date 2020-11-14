@@ -21,9 +21,8 @@ class ArticlesComposite extends Model
     use Uuid;
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
     /**

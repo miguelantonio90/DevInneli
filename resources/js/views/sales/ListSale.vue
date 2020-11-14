@@ -273,8 +273,6 @@ export default {
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
-    loadLocalData () {
-    },
     total_pay (item) {
       let sum = 0
       item.taxes.forEach((v) => {

@@ -40,9 +40,8 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -74,7 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    protected $softCascade = [ 'assistances'];
+    protected $softCascade = ['assistances'];
 
     /**
      * @param $data

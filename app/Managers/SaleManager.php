@@ -4,11 +4,9 @@
 namespace App\Managers;
 
 
-use App\Articles;
 use App\ArticlesShops;
-use App\Discount;
-use App\SalesArticlesShops;
 use App\Sale;
+use App\SalesArticlesShops;
 use App\Tax;
 use Illuminate\Support\Facades\DB;
 
@@ -70,8 +68,10 @@ class SaleManager
                     ->addSelect(['taxes.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
-                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=', 'discounts.id')
-                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=', 'sales_articles_shop_discounts.sales_articles_shops_id')
+                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
+                        'discounts.id')
+                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=',
+                        'sales_articles_shop_discounts.sales_articles_shops_id')
                     ->join('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
                     ->join('articles', 'articles.id', '=', 'articles_shops.article_id')
                     ->join('shops', 'shops.id', '=', 'articles_shops.shop_id')
@@ -96,7 +96,7 @@ class SaleManager
                 foreach ($sales[$key]['discounts'] as $j => $i) {
                     $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
                 }
-                $totalPrice = $totalPrice + $sum- $discount;
+                $totalPrice = $totalPrice + $sum - $discount;
 
             }
             $sales[$key]['totalCost'] = round($totalCost, 2);
@@ -120,21 +120,6 @@ class SaleManager
         $this->updateSaleData($sale, $data, false);
         return $sale;
 
-    }
-
-    public function edit($id, $data)
-    {
-        $sale = Sale::findOrFail($id);
-        $sale->no_facture = $data['no_facture'];
-        $sale->pay = $data['pay'];
-        if (isset($data['payments']['payment_id'])) {
-            $sale->payment_id = $data['payments']['payment_id'];
-        }
-        $sale->client_id = $data['client']['client_id'];
-        $sale->save();
-        $this->removeSaleArticle($sale, $data['articles']);
-        $this->updateSaleData($sale, $data, true);
-        return $sale;
     }
 
     public function updateSaleData($sale, $data, $edit): void
@@ -189,13 +174,27 @@ class SaleManager
             $saleAS->save();
         }
         $discounts = [];
-        foreach ($data['discount'] as $key => $discount){
+        foreach ($data['discount'] as $key => $discount) {
             $discounts[] = $discount['id'];
         }
         $saleAS->discount()->sync($discounts);
         return $cant;
     }
 
+    public function edit($id, $data)
+    {
+        $sale = Sale::findOrFail($id);
+        $sale->no_facture = $data['no_facture'];
+        $sale->pay = $data['pay'];
+        if (isset($data['payments']['payment_id'])) {
+            $sale->payment_id = $data['payments']['payment_id'];
+        }
+        $sale->client_id = $data['client']['client_id'];
+        $sale->save();
+        $this->removeSaleArticle($sale, $data['articles']);
+        $this->updateSaleData($sale, $data, true);
+        return $sale;
+    }
 
     /**
      * @param $sale

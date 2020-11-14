@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\Notifications\MailResetPasswordNotification;
-use App\Notifications\VerifyEmail;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
@@ -12,10 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * @method static findOrFail($id)
@@ -41,9 +35,8 @@ class Inventory extends Model
 {
     use Uuid, SoftDeletes, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -55,7 +48,7 @@ class Inventory extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'pay', 'company_id','payment_id','supplier_id'
+        'no_facture', 'pay', 'company_id', 'payment_id', 'supplier_id'
     ];
 
     /**
@@ -76,7 +69,7 @@ class Inventory extends Model
         return $this->hasOne(Supplier::class);
     }
 
-    public function articles_shops():HasMany
+    public function articles_shops(): HasMany
     {
         return $this->hasMany(InventoriesArticlesShops::class)
             ->with('articles_shops');
@@ -84,7 +77,7 @@ class Inventory extends Model
 
     public function taxes(): BelongsToMany
     {
-        return $this->belongsToMany(Tax::class,'inventories_tax');
+        return $this->belongsToMany(Tax::class, 'inventories_tax');
     }
 
 }

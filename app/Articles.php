@@ -23,12 +23,12 @@ class Articles extends Model
 {
     use Uuid, SoftDeletes, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-    protected $softCascade = ['articlesShops',
-        'variants', 'images', 'variantValues'];
-
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
+    protected $softCascade = [
+        'articlesShops',
+        'variants', 'images', 'variantValues'
+    ];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -84,8 +84,8 @@ class Articles extends Model
         ]);
     }
 
-    public function tax():BelongsToMany
+    public function tax(): BelongsToMany
     {
-        return $this->belongsToMany(Tax::class, 'article_tax','article_id','tax_id');
+        return $this->belongsToMany(Tax::class, 'article_tax', 'article_id', 'tax_id');
     }
 }

@@ -140,20 +140,6 @@ class ArticleManager
     }
 
     /**
-     * @param Articles $article
-     * @param $taxes
-     */
-    public function updateTaxes(Articles $article, $taxes):void{
-        $idTaxes = [];
-        foreach ($taxes as $key=>$tax) {
-            $idTaxes[] = $tax['id'];
-            var_dump($tax['id']);
-        }
-        $article->tax()->sync($idTaxes);
-        $article->save();
-    }
-
-    /**
      * @param $data
      * @return Articles
      */
@@ -251,6 +237,21 @@ class ArticleManager
         if (isset($data['color'])) {
             $article->color = $data['color'];
         }
+        $article->save();
+    }
+
+    /**
+     * @param  Articles  $article
+     * @param $taxes
+     */
+    public function updateTaxes(Articles $article, $taxes): void
+    {
+        $idTaxes = [];
+        foreach ($taxes as $key => $tax) {
+            $idTaxes[] = $tax['id'];
+            var_dump($tax['id']);
+        }
+        $article->tax()->sync($idTaxes);
         $article->save();
     }
 

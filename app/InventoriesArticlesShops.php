@@ -2,11 +2,9 @@
 
 namespace App;
 
-use App\Managers\ArticleManager;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -23,9 +21,8 @@ class InventoriesArticlesShops extends Model
     use Uuid;
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -39,12 +36,10 @@ class InventoriesArticlesShops extends Model
     ];
 
 
-
-    public function articles_shops():BelongsTo
+    public function articles_shops(): BelongsTo
     {
         return $this->belongsTo(ArticlesShops::class);
     }
-
 
 
 }

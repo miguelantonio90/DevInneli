@@ -22,9 +22,8 @@ class ArticlesShops extends Model
     use Uuid;
     use SoftDeletes, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
     protected $fillable = ['price', 'stock', 'under_inventory', 'shop_id', 'article_id'];

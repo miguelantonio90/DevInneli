@@ -22,10 +22,9 @@ class Shop extends Model
     use Uuid;
     use SoftDeletes, SoftCascadeTrait;
 
+    public $incrementing = false;
     protected $dates = ['deleted_at'];
     protected $softCascade = ['shopTypeOfOrders', 'assistances', 'articlesShops', 'shopTypeOfOrders'];
-
-    public $incrementing = false;
     protected $keyType = 'string';
     protected $guarded = [];
 

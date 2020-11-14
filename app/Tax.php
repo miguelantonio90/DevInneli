@@ -23,9 +23,8 @@ class Tax extends Model
     use Uuid;
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -35,7 +34,7 @@ class Tax extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'percent', 'company_id','type','existing'
+        'name', 'value', 'percent', 'company_id', 'type', 'existing'
     ];
 
 
@@ -44,8 +43,8 @@ class Tax extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function article():BelongsToMany
+    public function article(): BelongsToMany
     {
-        return $this->belongsToMany(Articles::class, 'article_tax', 'tax_id','article_id');
+        return $this->belongsToMany(Articles::class, 'article_tax', 'tax_id', 'article_id');
     }
 }

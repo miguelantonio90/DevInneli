@@ -554,7 +554,7 @@ export default {
     this.loadingData = true
     await this.getArticles()
     await this.getShops()
-    await this.getDiscounts().then((response) => {
+    await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
     await this.updateDataArticle()
@@ -569,62 +569,60 @@ export default {
       this.localArticles = []
       if (this.editSale.shop) {
         await this.articles.forEach((value) => {
-          if (value.track_inventory) {
-            if (!value.parent_id) {
-              let inventory = 0
-              if (value.variant_values.length > 0) {
-                value.variant_values.forEach((v) => {
-                  inventory = 0
-                  if (v.articles_shops.length > 0) {
-                    const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
-                    inventory = artS.length > 0 ? artS[0].stock : 0
-                  }
-                  if (inventory > 0) {
-                    this.localArticles.push({
-                      ref: value.ref,
-                      name: value.name + '(' + v.name + ')',
-                      category: !value.category ? '' : value.category.name,
-                      path: value.path,
-                      images: value.images,
-                      taxes: v.tax,
-                      discount: [],
-                      color: value.color,
-                      price: v.price ? v.price : 0,
-                      cost: v.cost ? v.cost : 0,
-                      inventory: inventory || 0,
-                      cant: 1,
-                      totalCant: (inventory || 0) + 1,
-                      totalCost: v.cost,
-                      totalPrice: v.price,
-                      article_id: v.id
-                    })
-                  }
-                })
-              } else {
-                if (value.articles_shops.length > 0) {
-                  const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.id)
+          if (!value.parent_id) {
+            let inventory = 0
+            if (value.variant_values.length > 0) {
+              value.variant_values.forEach((v) => {
+                inventory = 0
+                if (v.articles_shops.length > 0) {
+                  const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
                   inventory = artS.length > 0 ? artS[0].stock : 0
                 }
                 if (inventory > 0) {
                   this.localArticles.push({
                     ref: value.ref,
-                    name: value.name,
+                    name: value.name + '(' + v.name + ')',
                     category: !value.category ? '' : value.category.name,
                     path: value.path,
                     images: value.images,
-                    taxes: value.tax,
+                    taxes: v.tax,
                     discount: [],
                     color: value.color,
-                    price: value.price ? value.price : 0,
-                    cost: value.cost ? value.cost : 0,
+                    price: v.price ? v.price : 0,
+                    cost: v.cost ? v.cost : 0,
                     inventory: inventory || 0,
                     cant: 1,
                     totalCant: (inventory || 0) + 1,
-                    totalCost: value.cost,
-                    totalPrice: value.price,
-                    article_id: value.id
+                    totalCost: v.cost,
+                    totalPrice: v.price,
+                    article_id: v.id
                   })
                 }
+              })
+            } else {
+              if (value.articles_shops.length > 0) {
+                const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.id)
+                inventory = artS.length > 0 ? artS[0].stock : 0
+              }
+              if (inventory > 0) {
+                this.localArticles.push({
+                  ref: value.ref,
+                  name: value.name,
+                  category: !value.category ? '' : value.category.name,
+                  path: value.path,
+                  images: value.images,
+                  taxes: value.tax,
+                  discount: [],
+                  color: value.color,
+                  price: value.price ? value.price : 0,
+                  cost: value.cost ? value.cost : 0,
+                  inventory: inventory || 0,
+                  cant: 1,
+                  totalCant: (inventory || 0) + 1,
+                  totalCost: value.cost,
+                  totalPrice: value.price,
+                  article_id: value.id
+                })
               }
             }
           }

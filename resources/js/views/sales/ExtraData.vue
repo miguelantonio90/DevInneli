@@ -232,7 +232,7 @@ export default {
     await this.getClients()
     await this.getTaxes()
     await this.getPayments()
-    await this.getDiscounts().then((response) => {
+    await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
     this.sale = this.edit ? this.editSale : this.newSale

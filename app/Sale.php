@@ -25,9 +25,8 @@ class Sale extends Model
 {
     use Uuid, SoftDeletes, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -39,7 +38,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'pay', 'company_id','client_id', 'payment_id'
+        'no_facture', 'pay', 'company_id', 'client_id', 'payment_id'
     ];
 
     /**
@@ -60,7 +59,7 @@ class Sale extends Model
         return $this->hasOne(Client::class);
     }
 
-    public function articles_shops():HasMany
+    public function articles_shops(): HasMany
     {
         return $this->hasMany(SalesArticlesShops::class)
             ->with('articles_shops')
@@ -69,11 +68,11 @@ class Sale extends Model
 
     public function taxes(): BelongsToMany
     {
-        return $this->belongsToMany(Tax::class,'sales_taxes');
+        return $this->belongsToMany(Tax::class, 'sales_taxes');
     }
 
     public function discounts(): BelongsToMany
     {
-        return $this->belongsToMany(Discount::class,'sales_discounts');
+        return $this->belongsToMany(Discount::class, 'sales_discounts');
     }
 }

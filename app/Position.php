@@ -19,11 +19,9 @@ class Position extends Model
 
     use Uuid, SoftDeletes, SoftCascadeTrait;
 
-    protected $dates = ['deleted_at'];
-
-    protected $softCascade = [ 'users'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
+    protected $softCascade = ['users'];
     protected $keyType = 'string';
     protected $guarded = [];
 

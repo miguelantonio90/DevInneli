@@ -23,9 +23,8 @@ class SalesArticlesShops extends Model
     use Uuid;
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-
     public $incrementing = false;
+    protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -38,7 +37,7 @@ class SalesArticlesShops extends Model
         'sale_id', 'articles_shops_id', 'cant', 'price'
     ];
 
-    public function articles_shops():BelongsTo
+    public function articles_shops(): BelongsTo
     {
         return $this->belongsTo(ArticlesShops::class)
             ->with('shops')
@@ -47,6 +46,6 @@ class SalesArticlesShops extends Model
 
     public function discount(): BelongsToMany
     {
-        return $this->belongsToMany(Discount::class,'sales_articles_shop_discounts');
+        return $this->belongsToMany(Discount::class, 'sales_articles_shop_discounts');
     }
 }
