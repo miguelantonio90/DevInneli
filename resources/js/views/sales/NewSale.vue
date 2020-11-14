@@ -277,7 +277,9 @@
                             :colspan="headers.length"
                             style="padding: 0 0 0 0"
                           >
-                            <v-simple-table dense>
+                            <v-simple-table
+                              dense
+                            >
                               <template v-slot:default>
                                 <thead>
                                   <tr>
@@ -327,7 +329,6 @@
                           </td>
                         </template>
                       </app-data-table>
-                      <v-data-table />
                     </v-col>
                     <v-col
                       v-show="newSale.articles.length > 0 "
@@ -548,7 +549,7 @@ export default {
                   const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
                   inventory = artS.length > 0 ? artS[0].stock : 0
                 }
-                if (inventory > 0) {
+                if (inventory > 0 || !value.track_inventory) {
                   this.localArticles.push({
                     ref: value.ref,
                     name: value.name + '(' + v.name + ')',
@@ -570,7 +571,7 @@ export default {
                 }
               })
             } else {
-              if (value.articles_shops.length > 0) {
+              if (inventory > 0 || !value.track_inventory) {
                 const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
                 inventory = artS.length > 0 ? artS[0].stock : 0
               }
