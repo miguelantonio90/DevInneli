@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
+            $vuetify.lang.t('$vuetify.titles.edit', [
               $vuetify.lang.t('$vuetify.sale.sale'),
             ])
           }}</span>
@@ -573,11 +573,11 @@ export default {
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v) => {
                 inventory = 0
-                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+                const artS = v.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
                 if (artS.length > 0) {
                   inventory = artS[0].stock
                 }
-                if (inventory > 0 || !value.track_inventory) {
+                if ((inventory > 0 || !value.track_inventory) && artS.length > 0) {
                   this.localArticles.push({
                     ref: value.ref,
                     name: value.name + '(' + v.name + ')',
@@ -599,11 +599,12 @@ export default {
                 }
               })
             } else {
-              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              console.log(this.editSale)
+              const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
               if (artS.length > 0) {
                 inventory = artS[0].stock
               }
-              if (inventory > 0 || !value.track_inventory) {
+              if ((inventory > 0 || !value.track_inventory) && artS.length > 0) {
                 this.localArticles.push({
                   ref: value.ref,
                   name: value.name,
@@ -697,7 +698,7 @@ export default {
     },
     shopMessageError (message) {
       this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
           this.$vuetify.lang.t('$vuetify.menu.vending')
         ]),
         text: message,
