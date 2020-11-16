@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\ExpenseCategory;
 
-class ExpenseCategoryManager
+class ExpenseCategoryManager extends BaseManager
 {
 
     /**
@@ -41,6 +41,7 @@ class ExpenseCategoryManager
             $category->description = $data['description'];
             $category->save();
         }
+        $this->managerBy('new', $category);
         return $category;
     }
 
@@ -58,6 +59,7 @@ class ExpenseCategoryManager
         if (isset($data['description'])) {
             $category->description = $data['description'];
         }
+        $this->managerBy('delete', $category);
         $category->save();
         return $category;
     }
@@ -68,6 +70,8 @@ class ExpenseCategoryManager
      */
     public function delete($id)
     {
-        return ExpenseCategory::findOrFail($id)->delete();
+        $category = ExpenseCategory::findOrFail($id);
+        $this->managerBy('delete', $category);
+        return $category->delete();
     }
 }

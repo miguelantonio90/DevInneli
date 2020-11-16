@@ -1,30 +1,27 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalesArticlesShopsTable extends Migration
+class CreateSalesArticlesShopsTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'sales_articles_shops', bool $company = false): void
     {
-        Schema::create('sales_articles_shops',
+        Schema::create($tableName,
             function (Blueprint $table) {
-                $table->uuid('id')->primary();
                 $table->integer('cant')->default(1);
                 $table->decimal('price', 15, 2)->default(1);
                 $table->foreignUuid('sale_id')->references('id')->on('sales')
                     ->onDelete('cascade');
                 $table->foreignUuid('articles_shops_id')->references('id')->on('articles_shops')
                     ->onDelete('cascade');
-                $table->timestamps();
-                $table->softDeletes();
             });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -32,7 +29,7 @@ class CreateSalesArticlesShopsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sales_articles_shops');
     }

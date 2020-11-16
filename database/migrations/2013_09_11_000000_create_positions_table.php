@@ -1,30 +1,28 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePositionsTable extends Migration
+class CreatePositionsTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName='positions', $company=true):void
     {
-        Schema::create('positions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create($tableName, function (Blueprint $table) {
             $table->string('key');
             $table->string('name');
             $table->boolean('accessPin')->default(0);
             $table->boolean('accessEmail')->default(0);
             $table->string('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
+        });
+        parent::up($tableName, $company);
+        Schema::table('users', function($table) {
+        $table->foreignUuid('position_id')->references('id')->on('positions')
+            ->onDelete('cascade');
         });
     }
 
@@ -33,7 +31,7 @@ class CreatePositionsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down():void
     {
         Schema::dropIfExists('positions');
     }

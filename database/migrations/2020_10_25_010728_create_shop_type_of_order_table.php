@@ -1,28 +1,24 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopTypeOfOrderTable extends Migration
+class CreateShopTypeOfOrderTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'shop_type_of_order', bool $company = true): void
     {
-        Schema::create('shop_type_of_order', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->softDeletes();
-
+        Schema::create($tableName, function (Blueprint $table) {
             $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
             $table->foreignUuid('type_of_order_id')->references('id')->on('type_of_orders')
                 ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -30,7 +26,7 @@ class CreateShopTypeOfOrderTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('shop_type_of_order');
     }

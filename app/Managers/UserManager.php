@@ -7,7 +7,7 @@ namespace App\Managers;
 use App\Shop;
 use App\User;
 
-class UserManager
+class UserManager extends BaseManager
 {
 
     /**
@@ -86,6 +86,7 @@ class UserManager
             'firstName' => $data['firstName'],
             'email' => $data['email']
         ]);
+        $this->managerBy('new', $user);
         return $this->updateData($user, $data, $shops, $position);
     }
 
@@ -129,6 +130,7 @@ class UserManager
         $position = $data['position'];
         $shops = $data['shops'];
         $user = User::findOrFail($id);
+        $this->managerBy('edit', $user);
         return $this->updateData($user, $data, $shops, $position);
     }
 
@@ -138,7 +140,9 @@ class UserManager
      */
     public function delete($id)
     {
-        return User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        $this->managerBy('new', $user);
+        return $user->delete();
     }
 
 }

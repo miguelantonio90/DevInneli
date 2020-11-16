@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Client;
 
-class ClientManager
+class ClientManager extends BaseManager
 {
 
     /**
@@ -36,16 +36,34 @@ class ClientManager
             'firstName' => $data['firstName'],
             'email' => $data['email']
         ]);
-        return $this->updateData($client, $data);
+        return $this->updateData($client, $data, true);
     }
 
     /**
-     * @param $client
+     * @param $id
      * @param $data
      * @return mixed
      */
-    private function updateData($client, $data)
+    public function edit($id, $data)
     {
+        $client = Client::findOrFail($id);
+        if (isset($data['firstName'])) {
+            $client->firstName = $data['firstName'];
+        }
+        if (isset($data['email'])) {
+            $client->email = $data['email'];
+        }
+        return $this->updateData($client, $data, false);
+    }
+    /**
+     * @param $client
+     * @param $data
+     * @param bool $new
+     * @return mixed
+     */
+    private function updateData($client, $data, $new)
+    {
+        $new? $this->managerBy('new', $client) : $this->managerBy('edit', $client);
         if (isset($data['phone'])) {
             $client->phone = $data['phone'];
         }
@@ -80,22 +98,6 @@ class ClientManager
         return $client;
     }
 
-    /**
-     * @param $id
-     * @param $data
-     * @return mixed
-     */
-    public function edit($id, $data)
-    {
-        $client = Client::findOrFail($id);
-        if (isset($data['firstName'])) {
-            $client->firstName = $data['firstName'];
-        }
-        if (isset($data['email'])) {
-            $client->email = $data['email'];
-        }
-        return $this->updateData($client, $data);
-    }
 
     /**
      * @param $id
@@ -103,7 +105,9 @@ class ClientManager
      */
     public function delete($id)
     {
-        return Client::findOrFail($id)->delete();
+        $client = Client::findOrFail($id);
+        $this->managerBy('delete', $client);
+        return $client->delete();
     }
 
 }

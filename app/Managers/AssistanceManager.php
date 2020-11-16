@@ -8,7 +8,7 @@ use App\Assistance;
 use Carbon\Carbon;
 use Exception;
 
-class AssistanceManager
+class AssistanceManager extends BaseManager
 {
 
     /**
@@ -56,7 +56,7 @@ class AssistanceManager
         $entry = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeEntry']));
         $exit = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeExit']));
 
-        return Assistance::create([
+        $assitence = Assistance::create([
             'datetimeEntry' => Carbon::parse($entry),
             'datetimeExit' => Carbon::parse($exit),
             'totalHours' => $data['totalHours'],
@@ -64,6 +64,9 @@ class AssistanceManager
             'user_id' => $data['user'],
             'company_id' => (CompanyManager::getCompanyByAdmin())->id
         ]);
+        $this->managerBy('new', $assitence);
+        $assitence->save();
+        return $assitence;
     }
 
     /**
@@ -84,8 +87,8 @@ class AssistanceManager
             $assistance->shop_id = $data['shop']['id'];
             $assistance->user_id = $data['user']['id'];
             $assistance->company_id = (CompanyManager::getCompanyByAdmin())->id;
+            $this->managerBy('edit', $assistance);
             $assistance->save();
-
             return $assistance;
         }
     }
@@ -96,6 +99,8 @@ class AssistanceManager
      */
     public function delete($id)
     {
-        return Assistance::findOrFail($id)->delete();
+        $assistance = Assistance::findOrFail($id);
+        $this->managerBy('new', $assistance);
+        return $assistance->delete();
     }
 }

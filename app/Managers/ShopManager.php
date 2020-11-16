@@ -5,7 +5,7 @@ namespace App\Managers;
 use App\Shop;
 use App\User;
 
-class ShopManager
+class ShopManager extends BaseManager
 {
     /**
      * @return mixed
@@ -31,6 +31,7 @@ class ShopManager
         if (auth()->user()['isManager'] === 1 && auth()->user()['company_id'] === $company->id) {
             $user->shops()->attach($shop);
         }
+        $this->managerBy('new', $shop);
         return $shop;
     }
 
@@ -41,20 +42,24 @@ class ShopManager
      */
     public function edit($id, $request)
     {
-        return Shop::findOrFail($id)->update($request->all());
+        $shop = Shop::findOrFail($id);
+        $this->managerBy('edit', $shop);
+        return $shop->update($request->all());
     }
 
     /**
      * @param $id
      * @return array
      */
-    public function delete($id)
+    public function delete($id): array
     {
         $shops = Shop::latest()
             ->where('company_id', '=', (CompanyManager::getCompanyByAdmin())->id)
             ->get();
         if (count($shops) > 1) {
-            $delete = Shop::findOrFail($id)->delete();
+            $shop = Shop::findOrFail($id);
+            $this->managerBy('delete', $shop);
+            $delete = $shop->delete();
             return [true, $delete, 'Shop has deleted successfully.'];
         }
         return [false, null, "Shop can't by deleted"];

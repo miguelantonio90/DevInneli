@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Supplier;
 
-class SupplierManager
+class SupplierManager extends BaseManager
 {
 
     /**
@@ -13,18 +13,18 @@ class SupplierManager
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $payments = Supplier::latest()
+            $suppliers = Supplier::latest()
                 ->with('company')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
-            $payments = Supplier::latest()
+            $suppliers = Supplier::latest()
                 ->where('company_id', '=', $company->id)
                 ->with('expanse')
                 ->get();
         }
 
-        return $payments;
+        return $suppliers;
     }
 
     /**
@@ -38,6 +38,7 @@ class SupplierManager
             'expense_id' => $data['expanse'],
             'name' => $data['name']
         ]);
+        $this->managerBy('new', $supplier);
         return $this->updateData($supplier, $data);
     }
 
@@ -82,15 +83,16 @@ class SupplierManager
      */
     public function edit($id, $data)
     {
-        $payment = Supplier::findOrFail($id);
+        $supplier = Supplier::findOrFail($id);
         if (isset($data['name'])) {
-            $payment->name = $data['name'];
+            $supplier->name = $data['name'];
         }
         if (isset($data['address'])) {
-            $payment->address = $data['address'];
+            $supplier->address = $data['address'];
         }
-        $payment->save();
-        return $payment;
+        $supplier->save();
+        $this->managerBy('edit', $supplier);
+        return $supplier;
     }
 
     /**
@@ -99,7 +101,9 @@ class SupplierManager
      */
     public function delete($id)
     {
-        return Supplier::findOrFail($id)->delete();
+        $supplier  = Supplier::findOrFail($id);
+        $this->managerBy('delete', $supplier);
+        return $supplier->delete();
     }
 
 }

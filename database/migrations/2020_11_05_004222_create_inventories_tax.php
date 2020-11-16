@@ -1,27 +1,24 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInventoriesTax extends Migration
+class CreateInventoriesTax extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'inventories_tax', bool $company = false): void
     {
-        Schema::create('inventories_tax', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::create($tableName, function (Blueprint $table) {
             $table->foreignUuid('tax_id')->references('id')->on('taxes')
                 ->onDelete('cascade');
             $table->foreignUuid('inventory_id')->references('id')->on('inventories')
                 ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -29,7 +26,7 @@ class CreateInventoriesTax extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('inventories_tax');
     }

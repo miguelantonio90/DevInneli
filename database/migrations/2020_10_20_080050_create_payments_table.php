@@ -1,31 +1,27 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreatePaymentsTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'payments', bool $company = true): void
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create($tableName, function (Blueprint $table) {
             $table->string('name');
             $table->string('method')->default('cash');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
         Schema::table('inventories', function($table) {
             $table->foreignUuid('payment_id')->nullable()->references('id')->on('payments')
                 ->onDelete('cascade');
         });
+
     }
 
     /**
@@ -33,7 +29,7 @@ class CreatePaymentsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('payments');
     }

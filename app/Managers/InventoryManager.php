@@ -10,7 +10,7 @@ use App\Inventory;
 use App\Tax;
 use Illuminate\Support\Facades\DB;
 
-class InventoryManager
+class InventoryManager extends BaseManager
 {
     public function findAllByCompany()
     {
@@ -84,6 +84,7 @@ class InventoryManager
             $inventory->supplier_id = $data['supplier']['id'];
         }
         $inventory->save();
+        $this->managerBy('new', $inventory);
         $this->updateInventoryData($inventory, $data, false);
         return $inventory;
 
@@ -148,6 +149,7 @@ class InventoryManager
     public function edit($id, $data)
     {
         $inventory = Inventory::findOrFail($id);
+        $this->managerBy('edit', $inventory);
         $inventory->no_facture = $data['no_facture'];
         $inventory->pay = $data['pay'];
         if (isset($data['payments']['id'])) {
@@ -193,7 +195,9 @@ class InventoryManager
      */
     public function delete($id)
     {
-        return Inventory::findOrFail($id)->delete();
+        $inventory = Inventory::findOrFail($id);
+        $this->managerBy('delete', $inventory);
+        return $inventory->delete();
     }
 
 }

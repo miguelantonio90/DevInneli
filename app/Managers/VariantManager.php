@@ -5,7 +5,7 @@ namespace App\Managers;
 use App\ArticlesShops;
 use App\Variant;
 
-class VariantManager
+class VariantManager extends BaseManager
 {
 
     /**
@@ -15,11 +15,13 @@ class VariantManager
      */
     public function newVariant($data, $articleId): Variant
     {
-        return Variant::create([
+        $variant = Variant::create([
             'article_id' => $articleId,
             'name' => $data['name'],
             'value' => json_encode($data['value'])
         ]);
+        $this->managerBy('new', $variant);
+        return $variant;
     }
 
     /**
@@ -32,6 +34,7 @@ class VariantManager
         $variant['name'] = $data['name'];
         $variant['value'] = json_encode($data['value']);
         $variant->save();
+        $this->managerBy('edit', $variant);
         return $variant;
     }
 
@@ -41,7 +44,9 @@ class VariantManager
      */
     public function deleteVariant($id): bool
     {
-        return Variant::findOrFail($id)->delete();
+        $variant = Variant::findOrFail($id);
+        $this->managerBy('delete', $variant);
+        return $variant->delete();
     }
 
     /**
@@ -51,13 +56,15 @@ class VariantManager
      */
     public function newArticleShop($data, $article): ArticlesShops
     {
-        return ArticlesShops::create([
+        $artShop = ArticlesShops::create([
             'article_id' => $article->id,
             'shop_id' => $data['shop_id'],
             'stock' => $data['stock'] ?: 0,
             'price' => $data['price'],
             'under_inventory' => $data['under_inventory'] ?: 0
         ]);
+        $this->managerBy('new', $artShop);
+        return $artShop;
     }
 
     /**
@@ -73,6 +80,7 @@ class VariantManager
         $article_shop['price'] = $data['price'];
         $article_shop['under_inventory'] = $data['under_inventory'] ?: 0;
         $article_shop->save();
+        $this->managerBy('edit', $article_shop);
         return $article_shop;
 
     }
@@ -83,7 +91,9 @@ class VariantManager
      */
     public function deleteArticlesShops($id): bool
     {
-        return ArticlesShops::findOrFail($id)->delete();
+        $article_shop = ArticlesShops::findOrFail($id);
+        $this->managerBy('delete', $article_shop);
+        return $article_shop->delete();
 
     }
 

@@ -1,19 +1,18 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateUsersTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'users', bool $company = true): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create($tableName, function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('firstName');
             $table->string('lastName')->nullable();
@@ -26,16 +25,10 @@ class CreateUsersTable extends Migration
             $table->boolean('isAdmin')->default(0);
             $table->boolean('isManager')->default(0);
             $table->longText('avatar')->nullable();
+            $table->boolean('isLoginPin')->nullable()->default(false);
             $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
-
-            $table->foreignUuid('position_id')->references('id')->on('positions')
-                ->onDelete('cascade');
         });
+        parent::up($tableName, true);
     }
 
     /**
@@ -43,7 +36,7 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('users');
     }

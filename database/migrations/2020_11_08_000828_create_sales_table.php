@@ -1,29 +1,25 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalesTable extends Migration
+class CreateSalesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'sales', bool $company = true): void
     {
-        Schema::create('sales', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create($tableName, function (Blueprint $table) {
             $table->string('no_facture')->nullable();
             $table->string('pay')->nullable();
             $table->foreignUuid('client_id')->references('id')->on('clients');
             $table->foreignUuid('payment_id')->nullable()->references('id')->on('payments');
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
         });
+        parent::up($tableName, $company);
+
     }
 
     /**
@@ -31,7 +27,7 @@ class CreateSalesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sales');
     }

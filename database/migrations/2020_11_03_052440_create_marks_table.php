@@ -1,23 +1,24 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMarksTable extends Migration
+class CreateMarksTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'marks', bool $company = true): void
     {
-        Schema::create('marks', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->string('name');
+            $table->string('description');
+            $table->string('color')->nullable();
+            $table->longText('avatar')->nullable();
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -25,7 +26,7 @@ class CreateMarksTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('marks');
     }

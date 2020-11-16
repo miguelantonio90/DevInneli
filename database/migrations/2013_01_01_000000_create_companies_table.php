@@ -7,14 +7,11 @@ use Illuminate\Support\Facades\Schema;
 class CreateCompaniesTable extends Migration
 {
     /**
-     * Run the migrations.
      *
-     * @return void
      */
-    public function up()
+    public function up():void
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
@@ -23,8 +20,9 @@ class CreateCompaniesTable extends Migration
             $table->string('address')->nullable();
             $table->longText('logo')->nullable();
             $table->string('faker')->default(0);
-            $table->softDeletes();
+            $table->uuid('id')->primary();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,7 +31,7 @@ class CreateCompaniesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('companies');
     }

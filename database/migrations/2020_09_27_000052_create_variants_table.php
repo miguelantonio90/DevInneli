@@ -1,28 +1,24 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariantsTable extends Migration
+class CreateVariantsTable  extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'variants', bool $company = false): void
     {
         Schema::create('variants', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('name');
             $table->json('value');
-            $table->timestamps();
-            $table->softDeletes();
-
             $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -30,7 +26,7 @@ class CreateVariantsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('variants');
     }

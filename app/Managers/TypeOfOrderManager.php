@@ -8,7 +8,7 @@ use App\Shop;
 use App\ShopTypeOfOrder;
 use App\TypeOfOrder;
 
-class TypeOfOrderManager
+class TypeOfOrderManager extends BaseManager
 {
     /**
      * @return mixed
@@ -87,6 +87,7 @@ class TypeOfOrderManager
         }
         $employShop = Shop::find($idShops);
         $typeOrder->shops()->sync($employShop);
+        $this->managerBy('new', $typeOrder);
 
         $typeOrder->save();
 
@@ -117,6 +118,7 @@ class TypeOfOrderManager
         $employShop = Shop::find($idShops);
         $typeOrder->shops()->sync($employShop);
 
+        $this->managerBy('edit', $typeOrder);
         $typeOrder->save();
 
         return $typeOrder;
@@ -128,7 +130,9 @@ class TypeOfOrderManager
      */
     public function delete($id)
     {
-        return TypeOfOrder::findOrFail($id)->delete();
+        $typeOrder = TypeOfOrder::findOrFail($id);
+        $this->managerBy('delete', $typeOrder);
+        return $typeOrder->delete();
     }
 
     public function setPrincipal($id, $data)
