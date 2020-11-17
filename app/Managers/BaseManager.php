@@ -10,6 +10,7 @@ class BaseManager
     /**
      * @param $action
      * @param $object
+     * @throws \Exception
      */
     public function managerBy($action, $object): void
     {

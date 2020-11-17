@@ -25,6 +25,8 @@ class TaxController extends Controller
      */
     public function __construct(TaxManager $taxManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->taxManager = $taxManager;
     }

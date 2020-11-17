@@ -24,6 +24,8 @@ class ExpenseCategoryController extends Controller
      */
     public function __construct(ExpenseCategoryManager $categoryManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->categoryManager = $categoryManager;
     }

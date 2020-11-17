@@ -7,8 +7,8 @@ use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Filesystem\Cache;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
 use function cache as cacheAlias;
 
 /**
- * @group Auth endpos
+ * @group Auth endpoints
  */
 class LoginController extends Controller
 {
@@ -46,6 +46,8 @@ class LoginController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('guest')->except('logout');
     }
 
@@ -114,10 +116,10 @@ class LoginController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function loginPincode(Request $request)
     {
@@ -125,9 +127,9 @@ class LoginController extends Controller
         $user = UserManager::loginByPincode($request->all());
 
         if (isset($user[0])) {
-            $userPin = User::latest()->where('isLoginPin', '=',true)->get();
-            if(count($userPin)>0){
-                foreach ($userPin as $key => $userP){
+            $userPin = User::latest()->where('isLoginPin', '=', true)->get();
+            if (count($userPin) > 0) {
+                foreach ($userPin as $key => $userP) {
                     $userP['isLoginPin'] = false;
                     $userP->save();
                 }

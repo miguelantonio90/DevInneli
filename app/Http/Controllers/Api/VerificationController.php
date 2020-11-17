@@ -15,7 +15,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * @group Auth endpos
+ * @group Auth endpoints
  */
 class VerificationController extends Controller
 {
@@ -46,6 +46,8 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }

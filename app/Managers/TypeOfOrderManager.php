@@ -65,6 +65,7 @@ class TypeOfOrderManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {

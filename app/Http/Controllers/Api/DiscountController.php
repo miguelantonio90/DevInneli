@@ -25,6 +25,8 @@ class DiscountController extends Controller
      */
     public function __construct(DiscountManager $discountManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->discountManager = $discountManager;
     }

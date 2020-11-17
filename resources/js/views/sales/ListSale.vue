@@ -136,6 +136,7 @@
                           <v-chip
                             v-for="(lTax, i) of article.tax"
                             :key="i"
+                            small
                           >
                             {{ lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)':'' }} +{{ `${user.company.currency}` }} {{ lTax.percent ? lTax.value*article.cant*article.price/100 : lTax.value }}
                           </v-chip>
@@ -149,6 +150,7 @@
                           <v-chip
                             v-for="(lDiscount, i) of article.discount"
                             :key="i"
+                            small
                           >
                             {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i style="color: red"> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
                           </v-chip>

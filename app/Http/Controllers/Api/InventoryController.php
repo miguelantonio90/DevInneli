@@ -23,6 +23,8 @@ class InventoryController extends Controller
      */
     public function __construct(InventoryManager $inventoryManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->inventoryManager = $inventoryManager;
     }

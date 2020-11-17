@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -15,6 +16,7 @@ class Controller extends BaseController
      * @var User
      */
     protected $userPin;
+
     /**
      * Controller constructor.
      */
@@ -32,16 +34,11 @@ class Controller extends BaseController
     }
 
     /**
-     * @param User|null $userPin
+     * @param  User|null  $userPin
      */
-    public function setUserPin(User $userPin=null): void
+    public function setUserPin(User $userPin = null): void
     {
         $this->userPin = $userPin;
     }
-
-
-
-
-
 
 }

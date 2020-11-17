@@ -25,6 +25,8 @@ class PaymentController extends Controller
      */
     public function __construct(PaymentManager $paymentManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->paymentManager = $paymentManager;
     }

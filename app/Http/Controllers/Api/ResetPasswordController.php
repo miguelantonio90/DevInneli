@@ -37,6 +37,14 @@ class ResetPasswordController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
+     * ResetPasswordController constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
      * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      */

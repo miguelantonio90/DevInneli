@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Mail;
 class PingController extends Controller
 {
     /**
+     * PingController constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
      * @return JsonResponse
      */
     public function index()

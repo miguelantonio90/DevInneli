@@ -21,18 +21,20 @@ class ArticleController extends Controller
 
     /**
      * ArticleController constructor.
-     * @param ArticleManager $articleManager
-     * @param LoginController $loginController
+     * @param  ArticleManager  $articleManager
+     * @param  LoginController  $loginController
      */
     public function __construct(ArticleManager $articleManager, LoginController $loginController)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->articleManager = $articleManager;
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
     public function index(Request $request)
