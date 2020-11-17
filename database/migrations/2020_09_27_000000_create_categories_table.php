@@ -1,28 +1,23 @@
 <?php
 
+use App\BaseMigration;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateCategoriesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function  up(string $tableName = 'categories', bool $company = true): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('color')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**

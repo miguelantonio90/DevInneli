@@ -26,6 +26,8 @@ class TypeOfOrderController extends Controller
      */
     public function __construct(TypeOfOrderManager $typeOrderManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->typeOrderManager = $typeOrderManager;
     }

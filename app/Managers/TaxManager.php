@@ -5,7 +5,7 @@ namespace App\Managers;
 use App\Articles;
 use App\Tax;
 
-class TaxManager
+class TaxManager extends BaseManager
 {
 
     /**
@@ -42,6 +42,7 @@ class TaxManager
             'existing' => $data['existing'],
             'percent' => $data['percent'],
         ]);
+        $this->managerBy('new', $tax);
         if ($tax->existing) {
             $this->addToAllArticle($tax);
         }
@@ -75,18 +76,19 @@ class TaxManager
      */
     public function edit($id, $data)
     {
-        $category = Tax::findOrFail($id);
+        $tax = Tax::findOrFail($id);
         if (isset($data['name'])) {
-            $category->name = $data['name'];
+            $tax->name = $data['name'];
         }
         if (isset($data['value'])) {
-            $category->value = $data['value'];
+            $tax->value = $data['value'];
         }
         if (isset($data['percent'])) {
-            $category->percent = $data['percent'];
+            $tax->percent = $data['percent'];
         }
-        $category->save();
-        return $category;
+        $this->managerBy('edit', $tax);
+        $tax->save();
+        return $tax;
     }
 
     /**
@@ -95,7 +97,9 @@ class TaxManager
      */
     public function delete($id)
     {
-        return Tax::findOrFail($id)->delete();
+        $tax = Tax::findOrFail($id);
+        $this->managerBy('delete', $tax);
+        return $tax->delete();
     }
 
 }

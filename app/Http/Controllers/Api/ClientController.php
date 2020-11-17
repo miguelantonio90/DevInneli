@@ -26,6 +26,8 @@ class ClientController extends Controller
      */
     public function __construct(ClientManager $clientManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->clientManager = $clientManager;
     }

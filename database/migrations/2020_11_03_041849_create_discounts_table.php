@@ -1,29 +1,23 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiscountsTable extends Migration
+class CreateDiscountsTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'discounts', bool $company = true): void
     {
-        Schema::create('discounts', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create($tableName, function (Blueprint $table) {
             $table->string('name');
             $table->float('value')->nullable();
             $table->string('percent')->default(true);
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -31,7 +25,7 @@ class CreateDiscountsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('discounts');
     }

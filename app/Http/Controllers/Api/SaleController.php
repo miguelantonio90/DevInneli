@@ -23,6 +23,8 @@ class SaleController extends Controller
      */
     public function __construct(SaleManager $saleManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->saleManager = $saleManager;
     }

@@ -10,7 +10,7 @@ use App\SalesArticlesShops;
 use App\Tax;
 use Illuminate\Support\Facades\DB;
 
-class SaleManager
+class SaleManager extends BaseManager
 {
     public function findAllByCompany()
     {
@@ -119,7 +119,21 @@ class SaleManager
         $sale->save();
         $this->updateSaleData($sale, $data, false);
         return $sale;
+    }
 
+    public function edit($id, $data)
+    {
+        $sale = Sale::findOrFail($id);
+        $sale->no_facture = $data['no_facture'];
+        $sale->pay = $data['pay'];
+        if (isset($data['payments']['payment_id'])) {
+            $sale->payment_id = $data['payments']['payment_id'];
+        }
+        $sale->client_id = $data['client']['client_id'];
+        $sale->save();
+        $this->removeSaleArticle($sale, $data['articles']);
+        $this->updateSaleData($sale, $data, true);
+        return $sale;
     }
 
     public function updateSaleData($sale, $data, $edit): void
@@ -143,6 +157,7 @@ class SaleManager
         foreach ($data['discounts'] as $k => $v) {
             $discounts[] = $v['id'];
         }
+        $edit? $this->managerBy('edit', $sale): $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
     }
 
@@ -181,21 +196,6 @@ class SaleManager
         return $cant;
     }
 
-    public function edit($id, $data)
-    {
-        $sale = Sale::findOrFail($id);
-        $sale->no_facture = $data['no_facture'];
-        $sale->pay = $data['pay'];
-        if (isset($data['payments']['payment_id'])) {
-            $sale->payment_id = $data['payments']['payment_id'];
-        }
-        $sale->client_id = $data['client']['client_id'];
-        $sale->save();
-        $this->removeSaleArticle($sale, $data['articles']);
-        $this->updateSaleData($sale, $data, true);
-        return $sale;
-    }
-
     /**
      * @param $sale
      * @param $articles
@@ -216,6 +216,7 @@ class SaleManager
             if (!$exist) {
                 $artShop = ArticlesShops::findOrFail($value['articles_shops']['article_id']);
                 $artShop['stock'] -= $value['cant'];
+                $this->managerBy('edit', $artShop);
                 $artShop->save();
             }
         }
@@ -227,7 +228,9 @@ class SaleManager
      */
     public function delete($id)
     {
-        return Sale::findOrFail($id)->delete();
+        $sale = Sale::findOrFail($id);
+        $this->managerBy('delete', $sale);
+        return $sale->delete();
     }
 
 }

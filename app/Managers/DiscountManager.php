@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Discount;
 
-class DiscountManager
+class DiscountManager extends BaseManager
 {
 
     /**
@@ -32,12 +32,15 @@ class DiscountManager
      */
     public function new($data)
     {
-        return Discount::create([
+        $discount = Discount::create([
             'company_id' => $data['company_id'],
             'name' => $data['name'],
             'value' => $data['value'],
             'percent' => $data['percent'],
         ]);
+        $this->managerBy('new', $discount);
+        $discount->save();
+        return $discount;
     }
 
     /**
@@ -47,16 +50,17 @@ class DiscountManager
      */
     public function edit($id, $data)
     {
-        $category = Discount::findOrFail($id);
+        $discount = Discount::findOrFail($id);
         if (isset($data['name'])) {
-            $category->name = $data['name'];
+            $discount->name = $data['name'];
         }
         if (isset($data['value'])) {
-            $category->value = $data['value'];
+            $discount->value = $data['value'];
         }
         if (isset($data['percent'])) {
-            $category->percent = $data['percent'];
+            $discount->percent = $data['percent'];
         }
+        $this->managerBy('edit', $discount);
         $category->save();
         return $category;
     }
@@ -67,7 +71,10 @@ class DiscountManager
      */
     public function delete($id)
     {
-        return Discount::findOrFail($id)->delete();
+        $discount =Discount::findOrFail($id);
+        $this->managerBy('delete', $discount);
+        $discount->save();
+        return $discount->delete();
     }
 
 }

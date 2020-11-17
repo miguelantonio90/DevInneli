@@ -6,7 +6,7 @@ namespace App\Managers;
 
 use App\ExchangeRate;
 
-class ExchangeRateManger
+class ExchangeRateManger extends BaseManager
 {
     /**
      * @return mixed
@@ -43,7 +43,8 @@ class ExchangeRateManger
                 'currency' => $data['country']['currencyId'],
                 'change' => $data['change'],
             ]);
-
+            $this->managerBy('new', $response);
+            $response->save();
             return $response;
         } else {
             return ['success' => false, 'message' => 'exist'.$data['currencyId']];
@@ -67,6 +68,7 @@ class ExchangeRateManger
         if (isset($data['change'])) {
             $exchangeRate->change = $data['change'];
         }
+        $this->managerBy('edit', $exchangeRate);
         $exchangeRate->save();
 
         return $exchangeRate;
@@ -78,7 +80,9 @@ class ExchangeRateManger
      */
     public function delete($id)
     {
-        return ExchangeRate::findOrFail($id)->delete();
+        $exchangeRate = ExchangeRate::findOrFail($id);
+        $this->managerBy('delete', $exchangeRate);
+        return $exchangeRate->delete();
     }
 
 }

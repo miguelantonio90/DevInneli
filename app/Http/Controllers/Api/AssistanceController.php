@@ -23,6 +23,8 @@ class AssistanceController extends Controller
      */
     public function __construct(AssistanceManager $manager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->manager = $manager;
     }

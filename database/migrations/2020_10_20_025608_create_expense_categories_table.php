@@ -1,28 +1,22 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpenseCategoriesTable extends Migration
+class CreateExpenseCategoriesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'expense_categories', bool $company = true): void
     {
         Schema::create('expense_categories', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -30,7 +24,7 @@ class CreateExpenseCategoriesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('expense_categories');
     }

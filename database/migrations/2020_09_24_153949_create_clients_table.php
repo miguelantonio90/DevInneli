@@ -1,20 +1,18 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientsTable extends Migration
+class CreateClientsTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'clients', bool $company = true): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('firstName');
             $table->string('lastName')->nullable();
             $table->string('email');
@@ -27,11 +25,8 @@ class CreateClientsTable extends Migration
             $table->string('barCode')->nullable();
             $table->longText('avatar')->nullable();
             $table->string('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -39,7 +34,7 @@ class CreateClientsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('clients');
     }

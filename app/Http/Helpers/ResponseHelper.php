@@ -27,8 +27,6 @@ class ResponseHelper
             'data' => $result,
             'message' => $message,
         ];
-
-
         return response()->json($response, 200);
     }
 

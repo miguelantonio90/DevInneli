@@ -571,7 +571,7 @@ export default {
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user', 'userPin'])
   },
   created: async function () {
     this.loadingData = true
@@ -863,6 +863,7 @@ export default {
             this.newArticle.shops.push(value)
           }
         })
+        this.newArticle.userPin = this.userPin
         await this.createArticle(this.newArticle)
         await this.$router.push({ name: 'product_list' })
       }

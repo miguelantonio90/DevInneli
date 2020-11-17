@@ -26,6 +26,8 @@ class UserController extends Controller
      */
     public function __construct(UserManager $userManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->userManager = $userManager;
     }

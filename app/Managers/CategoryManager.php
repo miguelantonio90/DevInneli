@@ -5,9 +5,8 @@ namespace App\Managers;
 use App\Articles;
 use App\Category;
 
-class CategoryManager
+class CategoryManager extends BaseManager
 {
-
     /**
      * @return mixed
      */
@@ -39,8 +38,9 @@ class CategoryManager
         ]);
         if (isset($data['color'])) {
             $category->color = $data['color'];
-            $category->save();
         }
+        $this->managerBy('new', $category);
+        $category->save();
         return $category;
     }
 
@@ -58,6 +58,7 @@ class CategoryManager
         if (isset($data['color'])) {
             $category->color = $data['color'];
         }
+        $this->managerBy('edit', $category);
         $category->save();
         return $category;
     }
@@ -75,7 +76,9 @@ class CategoryManager
             $article->category_id = null;
             $article->save();
         }
-        return Category::findOrFail($id)->delete();
+        $category = Category::findOrFail($id);
+        $this->managerBy('delete', $category);
+        return $category->delete();
     }
 
 }

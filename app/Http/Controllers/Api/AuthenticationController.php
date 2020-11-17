@@ -17,6 +17,8 @@ class AuthenticationController extends Controller
 
     public function __construct(UserManager $userManager)
     {
+        parent::__construct();
+
         $this->userManager = $userManager;
     }
 

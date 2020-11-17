@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Articles extends Model
 {
+
     use Uuid, SoftDeletes, SoftCascadeTrait;
 
     public $incrementing = false;
@@ -38,7 +39,7 @@ class Articles extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'company_id', 'category_id',
+        'name', 'company_id', 'category_id','created_by'
     ];
 
     public function company(): BelongsTo
@@ -88,4 +89,5 @@ class Articles extends Model
     {
         return $this->belongsToMany(Tax::class, 'article_tax', 'article_id', 'tax_id');
     }
+
 }

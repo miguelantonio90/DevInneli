@@ -18,6 +18,8 @@ class ShopController extends Controller
 
     public function __construct(ShopManager $shopManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->shopManager = $shopManager;
     }

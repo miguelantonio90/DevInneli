@@ -20,21 +20,24 @@ class ArticleController extends Controller
     private $articleManager;
 
     /**
-     * UserController constructor.
+     * ArticleController constructor.
      * @param  ArticleManager  $articleManager
+     * @param  LoginController  $loginController
      */
-    public function __construct(ArticleManager $articleManager)
+    public function __construct(ArticleManager $articleManager, LoginController $loginController)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->articleManager = $articleManager;
     }
 
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse|Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return ResponseHelper::sendResponse(
             $this->articleManager->findAllByCompany(),

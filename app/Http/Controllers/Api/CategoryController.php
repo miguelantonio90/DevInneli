@@ -25,6 +25,8 @@ class CategoryController extends Controller
      */
     public function __construct(CategoryManager $categoryManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->categoryManager = $categoryManager;
     }

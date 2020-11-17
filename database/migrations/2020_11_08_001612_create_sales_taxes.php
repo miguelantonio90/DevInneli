@@ -11,7 +11,7 @@ class CreateSalesTaxes extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('sales_taxes', function (Blueprint $table) {
             $table->foreignUuid('tax_id')->references('id')->on('taxes')
@@ -28,7 +28,7 @@ class CreateSalesTaxes extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sales_taxes');
     }

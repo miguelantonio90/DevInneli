@@ -26,6 +26,8 @@ class ExchangeRateController extends Controller
      */
     public function __construct(ExchangeRateManger $exchangeManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->exchangeManager = $exchangeManager;
     }

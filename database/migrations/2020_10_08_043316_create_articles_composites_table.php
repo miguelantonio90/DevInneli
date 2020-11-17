@@ -1,29 +1,26 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticlesCompositesTable extends Migration
+class CreateArticlesCompositesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function up(string $tableName = 'articles_composites', bool $company = false): void
     {
         Schema::create('articles_composites', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->integer('cant')->default(1);
             $table->decimal('price',15,2)->default(0);
-            $table->timestamps();
-            $table->softDeletes();
             $table->foreignUuid('article_id')->references('id')->on('articles')
                 ->onDelete('cascade');
             $table->foreignUuid('composite_id')->references('id')->on('articles')
                 ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**

@@ -19,7 +19,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @group Auth endpos
+ * @group Auth endpoints
  */
 class RegisterController extends Controller
 {
@@ -48,6 +48,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('guest');
     }
 

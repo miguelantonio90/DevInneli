@@ -5,10 +5,16 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
+use App\User;
 use App\Variant;
+use Illuminate\Auth\AuthManager;
 
-class ArticleManager
+class ArticleManager extends BaseManager
 {
+    /**
+     * @var AuthManager
+     */
+    protected $authManager;
 
     /**
      * @var VariantManager
@@ -17,11 +23,12 @@ class ArticleManager
 
     /**
      * ArticleManager constructor.
-     * @param  VariantManager  $variantManager
+     * @param VariantManager $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
         $this->variantManager = $variantManager;
+
     }
 
     /**
@@ -145,10 +152,13 @@ class ArticleManager
      */
     public function insertArticle($data): Articles
     {
-        return Articles::create([
+        $article = Articles::create([
             'company_id' => $data['company_id'],
-            'name' => $data['name'],
+            'name' => $data['name']
         ]);
+        $this->managerBy('new', $article);
+        $article->save();
+        return $article;
     }
 
     /**
@@ -237,6 +247,7 @@ class ArticleManager
         if (isset($data['color'])) {
             $article->color = $data['color'];
         }
+        $this->managerBy('edit', $article);
         $article->save();
     }
 
@@ -249,7 +260,6 @@ class ArticleManager
         $idTaxes = [];
         foreach ($taxes as $key => $tax) {
             $idTaxes[] = $tax['id'];
-            var_dump($tax['id']);
         }
         $article->tax()->sync($idTaxes);
         $article->save();
@@ -290,6 +300,7 @@ class ArticleManager
             $this->updateChidrensArticles($article, $data);
 
         }
+        $this->managerBy('edit', $article);
         $this->updateTaxes($article, $taxes);
         return $article;
     }
@@ -313,6 +324,7 @@ class ArticleManager
                 }
             }
             if (!$exist) {
+                $this->managerBy('delete', $value);
                 $value->delete();
             }
 
@@ -411,10 +423,13 @@ class ArticleManager
             ->get();
         if (count($childrens) > 0) {
             foreach ($childrens as $key => $value) {
+                $this->managerBy('delete', $value);
                 $value->delete();
             }
         }
-        return Articles::findOrFail($id)->delete();
+        $article =Articles::findOrFail($id);
+        $this->managerBy('delete', $article);
+        return $article->delete();
     }
 
     /**

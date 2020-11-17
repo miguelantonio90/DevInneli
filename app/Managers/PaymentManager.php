@@ -4,7 +4,7 @@ namespace App\Managers;
 
 use App\Payment;
 
-class PaymentManager
+class PaymentManager extends BaseManager
 {
 
     /**
@@ -32,11 +32,13 @@ class PaymentManager
      */
     public function new($data)
     {
-        return Payment::create([
+        $payment = Payment::create([
             'company_id' => $data['company_id'],
             'name' => $data['name'],
             'method' => $data['method'],
         ]);
+        $this->managerBy('new', $payment);
+        return $payment;
     }
 
     /**
@@ -53,6 +55,7 @@ class PaymentManager
         if (isset($data['method'])) {
             $payment->method = $data['method'];
         }
+        $this->managerBy('edit', $payment);
         $payment->save();
         return $payment;
     }
@@ -63,7 +66,9 @@ class PaymentManager
      */
     public function delete($id)
     {
-        return Payment::findOrFail($id)->delete();
+        $payment = Payment::findOrFail($id);
+        $this->managerBy('delete', $payment);
+        return $payment->delete();
     }
 
 }

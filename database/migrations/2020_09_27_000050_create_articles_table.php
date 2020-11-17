@@ -1,20 +1,18 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticlesTable extends Migration
+class CreateArticlesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function  up(string $tableName = 'articles', bool $company = true): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('unit')->default(false);
             $table->decimal('price', 15, 2)->default(0);
@@ -24,13 +22,10 @@ class CreateArticlesTable extends Migration
             $table->string('barCode')->nullable();
             $table->boolean('composite')->default(false);
             $table->boolean('track_inventory')->default(false);
-            $table->timestamps();
-            $table->softDeletes();
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
             $table->foreignUuid('category_id')->nullable()->references('id')->on('categories');
 
         });
+        parent::up($tableName, $company);
         Schema::table('articles', function($table) {
             $table->foreignUuid('parent_id')->nullable()->references('id')->on('articles');
         });

@@ -11,7 +11,7 @@ class CreateArticleImagesTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('article_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -31,7 +31,7 @@ class CreateArticleImagesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('article_images');
     }

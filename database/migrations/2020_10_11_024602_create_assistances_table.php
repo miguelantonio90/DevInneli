@@ -1,33 +1,28 @@
 <?php
 
+use App\BaseMigration;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssistancesTable extends Migration
+class CreateAssistancesTable extends BaseMigration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @param string $tableName
+     * @param bool $company
      */
-    public function up()
+    public function  up(string $tableName = 'assistances', bool $company = true): void
     {
         Schema::create('assistances', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->dateTime('datetimeEntry');
             $table->dateTime('datetimeExit');
             $table->integer('totalHours');
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreignUuid('company_id')->references('id')->on('companies')
-                ->onDelete('cascade');
             $table->foreignUuid('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
             $table->foreignUuid('shop_id')->references('id')->on('shops')
                 ->onDelete('cascade');
         });
+        parent::up($tableName, $company);
     }
 
     /**
@@ -35,7 +30,7 @@ class CreateAssistancesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('assistances');
     }

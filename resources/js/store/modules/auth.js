@@ -20,6 +20,7 @@ const state = {
   isLoggedIn: !!localStorage.getToken(),
   isManager: !!localStorage.getTokenManager(),
   userData: [],
+  userPin: {},
   pending: false,
   pinSuccess: false,
   loadingReset: false,
@@ -61,6 +62,7 @@ const state = {
 // getters
 const getters = {
   user: (state) => state.userData,
+  userPin: (state) => state.userPin,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
   pinSuccess: (state) => state.pinSuccess
@@ -85,8 +87,9 @@ const mutations = {
     state.isLoggedIn = true
     state.pending = false
   },
-  [PIN_SUCCESS] (state) {
+  [PIN_SUCCESS] (state, userPin) {
     state.pinSuccess = true
+    state.userPin = userPin
     state.pending = false
   },
   [LOGOUT] (state) {
@@ -193,7 +196,7 @@ const actions = {
     return await auth
       .loginPincodeRequest(login)
       .then(({ data }) => {
-        commit(PIN_SUCCESS)
+        commit(PIN_SUCCESS, data.data)
         if (data.success && data.data.isManager) {
           commit(IS_MANAGER, true)
           localStorage.saveTokenManager(data.data.access_token)

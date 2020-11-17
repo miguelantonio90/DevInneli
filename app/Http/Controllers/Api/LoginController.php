@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Providers\RouteServiceProvider;
+use App\User;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
@@ -15,9 +17,10 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use function cache as cacheAlias;
 
 /**
- * @group Auth endpos
+ * @group Auth endpoints
  */
 class LoginController extends Controller
 {
@@ -43,6 +46,8 @@ class LoginController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('guest')->except('logout');
     }
 
@@ -53,7 +58,8 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-
+        $this->getUserPin()['isLoginPin'] = false;
+        $this->getUserPin()->save();
         return $request->wantsJson()
             ? new Response('', 204)
             : redirect('/');
@@ -113,17 +119,27 @@ class LoginController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function loginPincode(Request $request)
     {
         $this->validatePin($request->all())->validate();
-
         $user = UserManager::loginByPincode($request->all());
 
         if (isset($user[0])) {
+            $userPin = User::latest()->where('isLoginPin', '=', true)->get();
+            if (count($userPin) > 0) {
+                foreach ($userPin as $key => $userP) {
+                    $userP['isLoginPin'] = false;
+                    $userP->save();
+                }
+            }
             $this->guard()->login($user[0]);
+            $user[0]['isLoginPin'] = true;
+            $user[0]->save();
             $token = $user[0]->createToken(config('services.passport.client_secret'))->accessToken;
             $user[0]['access_token'] = $token;
+            cacheAlias()->put('userPin', $user[0]);
             return ResponseHelper::sendResponse($user[0], 'Success login.');
         } else {
             return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);

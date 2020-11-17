@@ -18,6 +18,8 @@ class AccessController extends Controller
 
     public function __construct(AccessManager $accessManager)
     {
+        parent::__construct();
+
         $this->middleware('auth');
         $this->accessManager = $accessManager;
     }
