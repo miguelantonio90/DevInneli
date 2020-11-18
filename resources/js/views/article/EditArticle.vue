@@ -601,27 +601,6 @@
             </v-stepper-items>
           </v-stepper>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            class="mb-2"
-            :disabled="isActionInProgress"
-            @click="$router.push({name:'product_list'})"
-          >
-            <v-icon>mdi-close</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-          </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="editArticleHandler"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
-          </v-btn>
-        </v-card-actions>
         <new-category v-if="$store.state.category.showNewModal" />
         <new-tax v-if="$store.state.tax.showNewModal" />
       </v-card>
