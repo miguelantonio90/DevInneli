@@ -28,7 +28,7 @@ class Controller extends BaseController
     /**
      * @return User
      */
-    public function getUserPin(): User
+    public function getUserPin()
     {
         return $this->userPin;
     }

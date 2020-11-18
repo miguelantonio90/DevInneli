@@ -29,6 +29,7 @@ class DiscountManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {
@@ -47,6 +48,7 @@ class DiscountManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function edit($id, $data)
     {
@@ -61,13 +63,14 @@ class DiscountManager extends BaseManager
             $discount->percent = $data['percent'];
         }
         $this->managerBy('edit', $discount);
-        $category->save();
-        return $category;
+        $discount->save();
+        return $discount;
     }
 
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

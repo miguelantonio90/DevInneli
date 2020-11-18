@@ -149,6 +149,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $data
      * @return Articles
+     * @throws \Exception
      */
     public function insertArticle($data): Articles
     {
@@ -217,6 +218,7 @@ class ArticleManager extends BaseManager
      * @param $article
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     private function updateData($article, $data): void
     {
@@ -285,6 +287,7 @@ class ArticleManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function edit($id, $data)
     {
@@ -308,6 +311,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $composites
+     * @throws \Exception
      */
     public function removeComposite($article, $composites): void
     {
@@ -363,6 +367,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $data
+     * @throws \Exception
      */
     public function updateChidrensArticles($article, $data): void
     {
@@ -415,6 +420,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

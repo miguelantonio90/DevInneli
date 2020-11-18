@@ -238,7 +238,7 @@
                             <template v-slot:input>
                               <v-text-field-integer
                                 v-model="item.cant"
-                                label="Edit"
+                                :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 :properties="{
                                   clearable: true,
                                 }"

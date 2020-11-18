@@ -189,7 +189,9 @@ export default {
     close: 'Cerrar',
     change: 'Cambiar',
     apply: 'Aplicar',
-    transfer: 'Transferir'
+    transfer: 'Transferir',
+    next: 'Siguiente',
+    back: 'Atrás'
   },
   titles: {
     list: 'Lista de {0}',

@@ -1,5 +1,8 @@
 <template>
-  <v-row justify="space-around">
+  <v-row
+    justify="space-around"
+    style="margin-left: 0"
+  >
     <div class="form__field">
       <div class="form__label">
         <strong>{{ $vuetify.lang.t('$vuetify.component.fieldColor') }}:</strong>
@@ -22,13 +25,13 @@ export default {
   props: {
     value: {
       type: String,
-      default: '',
+      default: '#1FBC9C',
       required: true
     }
   },
   data () {
     return {
-      color: this.value || '#1FBC9C'
+      color: this.value
     }
   },
   methods: {

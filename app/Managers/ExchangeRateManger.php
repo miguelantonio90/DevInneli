@@ -30,11 +30,11 @@ class ExchangeRateManger extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {
         $company = CompanyManager::getCompanyByAdmin();
-        $response = [];
         $exist = ExchangeRate::where('currency', '=', $data['country']['currencyId'])->first();
         if ($exist === null) {
             $response = ExchangeRate::create([
@@ -55,6 +55,7 @@ class ExchangeRateManger extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function edit($id, $data)
     {
@@ -77,6 +78,7 @@ class ExchangeRateManger extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

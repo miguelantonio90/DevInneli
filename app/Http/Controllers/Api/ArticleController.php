@@ -72,8 +72,7 @@ class ArticleController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'barCode' => ['required', 'string', 'max:255']
+            'name' => ['required', 'string', 'max:255']
         ]);
     }
 

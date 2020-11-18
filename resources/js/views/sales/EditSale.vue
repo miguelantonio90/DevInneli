@@ -238,7 +238,7 @@
                             <template v-slot:input>
                               <v-text-field-integer
                                 v-model="item.cant"
-                                label="Edit"
+                                :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 :properties="{
                                   clearable: true,
                                 }"
@@ -599,7 +599,6 @@ export default {
                 }
               })
             } else {
-              console.log(this.editSale)
               const artS = value.articles_shops.filter(artS => artS.shop_id === this.editSale.shop.shop_id)
               if (artS.length > 0) {
                 inventory = artS[0].stock

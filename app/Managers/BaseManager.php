@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 
 namespace App\Managers;
@@ -16,10 +16,12 @@ class BaseManager
     {
         if ($action === 'new') {
             $object->created_by = cache()->get('userPin')['id'];
-        } else if ($action === 'edit') {
-            $object->updated_by =cache()->get('userPin')['id'];
         } else {
-            $object->deleted_by = cache()->get('userPin')['id'];
+            if ($action === 'edit') {
+                $object->updated_by = cache()->get('userPin')['id'];
+            } else {
+                $object->deleted_by = cache()->get('userPin')['id'];
+            }
         }
         $object->save();
     }
