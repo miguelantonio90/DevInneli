@@ -13,7 +13,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ `${user.company.currency +' '+item.price}` }}</div>
@@ -46,7 +46,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ item.stock }}</div>
@@ -78,7 +78,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ item.under_inventory }}</div>

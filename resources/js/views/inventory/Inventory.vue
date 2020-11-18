@@ -27,7 +27,7 @@
               large
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-              :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+              :save-text="$vuetify.lang.t('$vuetify.actions.save')"
               @save="calcTotal"
             >
               <div>{{ item.cost }}</div>
@@ -59,7 +59,7 @@
               large
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-              :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+              :save-text="$vuetify.lang.t('$vuetify.actions.save')"
               @save="calcTotal"
             >
               <div>{{ item.cant }}</div>
