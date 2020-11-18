@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\Tax;
+use Exception;
 
 class TaxManager extends BaseManager
 {
@@ -31,6 +32,7 @@ class TaxManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function new($data)
     {
@@ -73,6 +75,7 @@ class TaxManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -94,6 +97,7 @@ class TaxManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function delete($id)
     {

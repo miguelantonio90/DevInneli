@@ -13,522 +13,594 @@
           }}</span>
         </v-card-title>
         <v-card-text>
-          <v-form
-            ref="form"
-            v-model="formValid"
-            style="padding: 0"
-            lazy-validation
-          >
-            <v-expansion-panels
-              v-model="panel"
-              style="margin: 0"
-              multiple
-            >
-              <v-expansion-panel style="margin: 0">
-                <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-database-edit</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.panel.basic') }}
-                    </span>
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="4"
+          <v-stepper v-model="step">
+            <v-stepper-header>
+              <v-stepper-step
+                :complete="step > 1"
+                :editable="formValid"
+                step="1"
+              >
+                {{ $vuetify.lang.t('$vuetify.panel.basic') }}
+              </v-stepper-step>
+              <v-divider />
+              <v-stepper-step
+                :complete="step > 2"
+                :editable="formValid"
+                step="2"
+              >
+                {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
+              </v-stepper-step>
+              <v-divider />
+              <v-stepper-step
+                v-if="!newArticle.composite"
+                step="3"
+                :complete="step > 3"
+                :editable="formValid"
+              >
+                {{ $vuetify.lang.t('$vuetify.panel.variant') }}
+              </v-stepper-step>
+              <v-divider v-if="!newArticle.composite" />
+              <v-stepper-step
+                :complete="newArticle.composite ? step > 3:step > 4"
+                :editable="formValid"
+                :step="`${newArticle.composite ? 3 : 4 }`"
+              >
+                {{ $vuetify.lang.t('$vuetify.menu.shop') }}
+              </v-stepper-step>
+              <v-divider />
+              <v-stepper-step
+                :step="`${newArticle.composite ? 4 : 5 }`"
+                editable
+              >
+                {{ $vuetify.lang.t('$vuetify.representation.representation') }}
+              </v-stepper-step>
+            </v-stepper-header>
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-card>
+                  <v-card-text>
+                    <v-form
+                      ref="form"
+                      v-model="formValid"
+                      style="padding: 0"
+                      lazy-validation
                     >
-                      <v-text-field
-                        v-model="newArticle.name"
-                        :label="$vuetify.lang.t('$vuetify.firstName')"
-                        :rules="formRule.required"
-                        required
-                        @keypress="lnSpace"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-text-field-simplemask
-                        v-model="newArticle.barCode"
-                        :label="$vuetify.lang.t('$vuetify.barCode')"
-                        :properties="{
-                          clearable: true,
-                          required:true,
-                          rules:formRule.required
-                        }"
-                        :options="{
-                          inputMask: '##-####-####-###',
-                          outputMask: '#############',
-                          empty: null,
-                          alphanumeric: true,
-                        }"
-                        :focus="focus"
-                        @focus="focus = false"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="newArticle.ref"
-                        :label="$vuetify.lang.t('$vuetify.articles.ref')"
-                        :rules="formRule.required"
-                        required
-                        @keypress="numbers"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-text-field-money
-                        v-model="newArticle.price"
-                        :label="$vuetify.lang.t('$vuetify.price')"
-                        required
-                        :properties="{
-                          prefix: user.company.currency,
-                          clearable: true
-                        }"
-                        :options="{
-                          length: 15,
-                          precision: 2,
-                          empty: 0.00,
-                        }"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-text-field-money
-                        v-model="newArticle.cost"
-                        :disabled="newArticle.composite"
-                        :label="$vuetify.lang.t('$vuetify.articles.cost')"
-                        required
-                        :properties="{
-                          prefix: user.company.currency,
-                          clearable: true
-                        }"
-                        :options="{
-                          length: 15,
-                          precision: 2,
-                          empty: 0.00,
-                        }"
-                      />
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
-                      <v-radio-group
-                        v-model="newArticle.unit"
-                        row
-                      >
-                        <v-radio
-                          :label="$vuetify.lang.t('$vuetify.articles.unit')"
-                          value="unit"
-                        />
-                        <v-radio
-                          :label="$vuetify.lang.t('$vuetify.articles.p_v')"
-                          value="vol"
-                        />
-                      </v-radio-group>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-select
-                        v-model="newArticle.category"
-                        :items="categories"
-                        :label="$vuetify.lang.t('$vuetify.menu.category')"
-                        item-text="name"
-                        :loading="isCategoryLoading"
-                        :disabled="!!isCategoryLoading"
-                        return-object
-                      >
-                        <template v-slot:append-outer>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="$store.dispatch('category/toogleNewModal',true)"
-                              >
-                                mdi-plus
-                              </v-icon>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </v-select>
-                      <v-dialog
-                        v-model="showInfoAdd"
-                        max-width="500px"
-                      >
-                        <v-card>
-                          <v-card-title class="headline">
-                            {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
-                          </v-card-title>
-                          <v-card-actions>
-                            <v-spacer />
-                            <v-btn
-                              class="mb-2"
-                              color="primary"
-                              @click="closeInfoAdd"
-                            >
-                              <v-icon>mdi-check</v-icon>
-                              {{ $vuetify.lang.t('$vuetify.actions.accept') }}
-                            </v-btn>
-                            <v-spacer />
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="4"
-                    >
-                      <v-select
-                        v-model="newArticle.tax"
-                        chips
-                        clearable
-                        deletable-chips
-                        :items="taxes"
-                        multiple
-                        :label="$vuetify.lang.t('$vuetify.tax.name')"
-                        item-text="name"
-                        :loading="isTaxLoading"
-                        :disabled="!!isTaxLoading"
-                        return-object
-                        required
-                        :rules="formRule.country"
-                      >
-                        <template v-slot:append-outer>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="$store.dispatch('tax/toogleNewModal',true)"
-                              >
-                                mdi-plus
-                              </v-icon>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </v-select>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-book-open-variant</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.articles.inventory') }}
-                    </span>
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="3"
-                    >
-                      <v-switch
-                        v-model="newArticle.composite"
-                        :disabled="articles.length===0"
-                        :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
-                        @change="changeComposite"
-                      >
-                        <template v-slot:label>
-                          <div>
-                            {{ $vuetify.lang.t('$vuetify.articles.composite') }}
-                            <v-tooltip
-                              right
-                              class="md-6"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                  color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
-                                >
-                                  mdi-information-outline
-                                </v-icon>
-                              </template>
-                              <span>{{
-                                $vuetify.lang.t('$vuetify.articles.composite_text')
-                              }}</span>
-                            </v-tooltip>
-                          </div>
-                        </template>
-                      </v-switch>
-                    </v-col>
-                    <v-col
-                      v-show="newArticle.composite"
-                      cols="12"
-                      md="3"
-                    >
-                      <v-select
-                        ref="selectArticle"
-                        :items="localArticles"
-                        :label="$vuetify.lang.t('$vuetify.rule.select')"
-                        item-text="name"
-                        chips
-                        :loading="isShopLoading"
-                        :disabled="!!isShopLoading"
-                        return-object
-                        @input="selectArticle"
-                      >
-                        <template v-slot:selection="data">
-                          <v-chip
-                            :key="JSON.stringify(data.item)"
-                            v-bind="data.attrs"
-                            :input-value="data.selected"
-                            :disabled="data.disabled"
-                            @click:close="data.parent.selectItem(data.item)"
+                      <v-row>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-text-field
+                            v-model="newArticle.name"
+                            :label="$vuetify.lang.t('$vuetify.firstName')"
+                            :rules="formRule.required"
+                            required
+                            autofocus
+                            @keypress="lnSpace"
+                          />
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-text-field-simplemask
+                            v-model="newArticle.barCode"
+                            :label="$vuetify.lang.t('$vuetify.barCode')"
+                            :properties="{
+                              clearable: true,
+                            }"
+                            :options="{
+                              inputMask: '##-####-####-###',
+                              outputMask: '#############',
+                              empty: null,
+                              alphanumeric: true,
+                            }"
+                            :focus="focus"
+                            @focus="focus = false"
+                          />
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-text-field
+                            v-model="newArticle.ref"
+                            :label="$vuetify.lang.t('$vuetify.articles.ref')"
+                            :rules="formRule.required"
+                            required
+                            @keypress="numbers"
+                          />
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-text-field-money
+                            v-model="newArticle.price"
+                            :label="$vuetify.lang.t('$vuetify.price')"
+                            required
+                            :properties="{
+                              prefix: user.company.currency,
+                              clearable: true
+                            }"
+                            :options="{
+                              length: 15,
+                              precision: 2,
+                              empty: 0.00,
+                            }"
+                          />
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-text-field-money
+                            v-model="newArticle.cost"
+                            :disabled="newArticle.composite"
+                            :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                            required
+                            :properties="{
+                              prefix: user.company.currency,
+                              clearable: true
+                            }"
+                            :options="{
+                              length: 15,
+                              precision: 2,
+                              empty: 0.00,
+                            }"
+                          />
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <h4>{{ $vuetify.lang.t('$vuetify.articles.sell_by') }}</h4>
+                          <v-radio-group
+                            v-model="newArticle.unit"
+                            row
                           >
-                            <v-avatar
-                              v-if="data.item.color"
-                              class="white--text"
-                              :color="data.item.color"
-                              left
-                              v-text="data.item.name.slice(0, 1).toUpperCase()"
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.articles.unit')"
+                              value="unit"
                             />
-                            <v-avatar
-                              v-else
-                              left
-                            >
-                              <v-img :src="data.item.path" />
-                            </v-avatar>
-                            {{ data.item.name }}
-                          </v-chip>
-                        </template>
-                      </v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      v-show="!newArticle.composite"
-                      cols="12"
-                      md="3"
-                    >
-                      <v-switch
-                        v-model="newArticle.track_inventory"
-                        :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
-                        @change="changeInventory"
-                      >
-                        <template v-slot:label>
-                          <div>
-                            {{
-                              $vuetify.lang.t('$vuetify.articles.track_inventory') }}
-                            <v-tooltip
-                              right
-                              class="md-6"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
+                            <v-radio
+                              :label="$vuetify.lang.t('$vuetify.articles.p_v')"
+                              value="vol"
+                            />
+                          </v-radio-group>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="4"
+                        >
+                          <v-select
+                            v-model="newArticle.category"
+                            :items="categories"
+                            :label="$vuetify.lang.t('$vuetify.menu.category')"
+                            item-text="name"
+                            :loading="isCategoryLoading"
+                            :disabled="!!isCategoryLoading"
+                            return-object
+                          >
+                            <template v-slot:append-outer>
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="$store.dispatch('category/toogleNewModal',true)"
+                                  >
+                                    mdi-plus
+                                  </v-icon>
+                                </template>
+                                <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                              </v-tooltip>
+                            </template>
+                          </v-select>
+                          <v-dialog
+                            v-model="showInfoAdd"
+                            max-width="500px"
+                          >
+                            <v-card>
+                              <v-card-title class="headline">
+                                {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
+                              </v-card-title>
+                              <v-card-actions>
+                                <v-spacer />
+                                <v-btn
+                                  class="mb-2"
                                   color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
+                                  @click="closeInfoAdd"
                                 >
-                                  mdi-information-outline
-                                </v-icon>
-                              </template>
-                              <span>{{
-                                $vuetify.lang.t('$vuetify.messages.warning_article_service')
-                              }}</span>
-                            </v-tooltip>
-                          </div>
-                        </template>
-                      </v-switch>
-                    </v-col>
-                  </v-row>
-                  <v-row v-show="newArticle.composite">
-                    <v-col
-                      cols="12"
-                      md="12"
-                    >
-                      <composite-list
-                        :composite-list="composite"
-                        style="margin-top: 0"
-                        @updateComposite="updateComposite"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel v-show="!newArticle.composite">
-                <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-order-bool-descending-variant</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.panel.variant') }}
-                    </span>
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="12"
-                    >
-                      <v-row>
+                                  <v-icon>mdi-check</v-icon>
+                                  {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+                                </v-btn>
+                                <v-spacer />
+                              </v-card-actions>
+                            </v-card>
+                          </v-dialog>
+                        </v-col>
                         <v-col
                           cols="12"
-                          md="12"
+                          md="4"
                         >
-                          <variant
-                            :ref-parent="ref"
-                            :updated="updated"
-                            :variants-parent="newArticle.variants"
-                            :variants-values-parent="variantData"
-                            @updateVariants="updateVariant"
-                          />
+                          <v-select
+                            v-model="newArticle.tax"
+                            chips
+                            clearable
+                            deletable-chips
+                            :items="taxes"
+                            multiple
+                            :label="$vuetify.lang.t('$vuetify.tax.name')"
+                            item-text="name"
+                            :loading="isTaxLoading"
+                            :disabled="!!isTaxLoading"
+                            return-object
+                            required
+                            :rules="formRule.country"
+                          >
+                            <template v-slot:append-outer>
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="$store.dispatch('tax/toogleNewModal',true)"
+                                  >
+                                    mdi-plus
+                                  </v-icon>
+                                </template>
+                                <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                              </v-tooltip>
+                            </template>
+                          </v-select>
                         </v-col>
                       </v-row>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-shopping</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.menu.shop') }}
-                    </span>
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="12"
+                    </v-form>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      :disabled="!formValid || isActionInProgress"
+                      @click="step = 2"
                     >
-                      <v-row>
-                        <v-col
-                          cols="12"
-                          md="12"
+                      <v-icon>mdi-chevron-right</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-card>
+                  <v-card-text>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        md="3"
+                      >
+                        <v-switch
+                          v-model="newArticle.composite"
+                          :disabled="articles.length===0"
+                          :title="$vuetify.lang.t('$vuetify.articles.composite_text')"
+                          @change="changeComposite"
                         >
-                          <shops-articles
-                            :track-inventory-parent="track_inventory"
-                            :shop-data="shopData"
-                            :variants-data="variantData"
-                            @updateShopsData="updateShopData"
-                          />
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <div>
-                    <v-icon>mdi-palette</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.representation.representation') }}
-                    </span>
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="12"
+                          <template v-slot:label>
+                            <div>
+                              {{ $vuetify.lang.t('$vuetify.articles.composite') }}
+                              <v-tooltip
+                                right
+                                class="md-6"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon
+                                    color="primary"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    mdi-information-outline
+                                  </v-icon>
+                                </template>
+                                <span>{{
+                                  $vuetify.lang.t('$vuetify.articles.composite_text')
+                                }}</span>
+                              </v-tooltip>
+                            </div>
+                          </template>
+                        </v-switch>
+                      </v-col>
+                      <v-col
+                        v-show="newArticle.composite"
+                        cols="12"
+                        md="3"
+                      >
+                        <v-select
+                          ref="selectArticle"
+                          :items="localArticles"
+                          :label="$vuetify.lang.t('$vuetify.rule.select')"
+                          item-text="name"
+                          chips
+                          :loading="isShopLoading"
+                          :disabled="!!isShopLoading"
+                          return-object
+                          @input="selectArticle"
+                        >
+                          <template v-slot:selection="data">
+                            <v-chip
+                              :key="JSON.stringify(data.item)"
+                              v-bind="data.attrs"
+                              :input-value="data.selected"
+                              :disabled="data.disabled"
+                              @click:close="data.parent.selectItem(data.item)"
+                            >
+                              <v-avatar
+                                v-if="data.item.color"
+                                class="white&#45;&#45;text"
+                                :color="data.item.color"
+                                left
+                                v-text="data.item.name.slice(0, 1).toUpperCase()"
+                              />
+                              <v-avatar
+                                v-else
+                                left
+                              >
+                                <v-img :src="data.item.path" />
+                              </v-avatar>
+                              {{ data.item.name }}
+                            </v-chip>
+                          </template>
+                        </v-select>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col
+                        v-show="!newArticle.composite"
+                        cols="12"
+                        md="3"
+                      >
+                        <v-switch
+                          v-model="newArticle.track_inventory"
+                          :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+                          @change="changeInventory"
+                        >
+                          <template v-slot:label>
+                            <div>
+                              {{
+                                $vuetify.lang.t('$vuetify.articles.track_inventory') }}
+                              <v-tooltip
+                                right
+                                class="md-6"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon
+                                    color="primary"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    mdi-information-outline
+                                  </v-icon>
+                                </template>
+                                <span>{{
+                                  $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                                }}</span>
+                              </v-tooltip>
+                            </div>
+                          </template>
+                        </v-switch>
+                      </v-col>
+                    </v-row>
+                    <v-row v-show="newArticle.composite">
+                      <v-col
+                        cols="12"
+                        md="12"
+                      >
+                        <composite-list
+                          :composite-list="composite"
+                          style="margin-top: 0"
+                          @updateComposite="updateComposite"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      @click="step = 3"
                     >
-                      <v-radio-group
-                        v-model="representation"
-                        row
+                      <v-icon>mdi-chevron-right</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                    </v-btn>
+
+                    <v-btn
+                      text
+                      @click="step = 1"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-stepper-content>
+
+              <v-stepper-content
+                v-if="!newArticle.composite"
+                :step="!newArticle.composite ? 3: null"
+              >
+                <v-card>
+                  <v-card-text>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        md="12"
                       >
                         <v-row>
                           <v-col
                             cols="12"
-                            md="4"
+                            md="12"
                           >
-                            <v-radio
-                              :label="$vuetify.lang.t('$vuetify.representation.image')"
-                              value="image"
-                            />
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            md="8"
-                          >
-                            <v-radio
-                              :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
-                              value="color"
+                            <variant
+                              :ref-parent="ref"
+                              :updated="updated"
+                              :variants-parent="newArticle.variants"
+                              :variants-values-parent="variantData"
+                              @updateVariants="updateVariant"
                             />
                           </v-col>
                         </v-row>
-                      </v-radio-group>
-                    </v-col>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      @click="step = 4"
+                    >
+                      <v-icon>mdi-chevron-right</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                    </v-btn>
+
+                    <v-btn
+                      text
+                      @click="step = 2"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-stepper-content>
+
+              <v-stepper-content :step="`${newArticle.composite ? 3 : 4}`">
+                <v-card>
+                  <v-card-text>
                     <v-row>
                       <v-col
-                        v-show="representation===`image`"
                         cols="12"
                         md="12"
                       >
-                        <div
-                          id="multiple-image"
-                          style="display: flex; justify-content: center;"
-                        >
-                          <app-upload-multiple-image
-                            :data-images="newArticle.images"
-                            :upload-success="uploadImage"
-                          />
-                        </div>
-                      </v-col>
-                      <v-col
-                        v-show="representation===`color`"
-                        cols="12"
-                        md="9"
-                      >
-                        <app-color-picker
-                          :value="newArticle.color || ``"
-                          @input="inputColor"
-                        />
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="12"
+                          >
+                            <shops-articles
+                              :track-inventory-parent="track_inventory"
+                              :shop-data="shopData"
+                              :variants-data="variantData"
+                              @updateShopsData="updateShopData"
+                            />
+                          </v-col>
+                        </v-row>
                       </v-col>
                     </v-row>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </v-form>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      @click="newArticle.composite ? step = 4 : step = 5"
+                    >
+                      <v-icon>mdi-chevron-right</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                    </v-btn>
+
+                    <v-btn
+                      text
+                      @click="newArticle.composite ? step = 2 : step = 3"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-stepper-content>
+
+              <v-stepper-content :step="`${newArticle.composite ? 4 : 5}`">
+                <v-card>
+                  <v-card-text>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        md="12"
+                      >
+                        <v-radio-group
+                          v-model="representation"
+                          row
+                        >
+                          <v-row>
+                            <v-col
+                              cols="12"
+                              md="4"
+                            >
+                              <v-radio
+                                :label="$vuetify.lang.t('$vuetify.representation.image')"
+                                value="image"
+                              />
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              md="8"
+                            >
+                              <v-radio
+                                :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
+                                value="color"
+                              />
+                            </v-col>
+                          </v-row>
+                        </v-radio-group>
+                      </v-col>
+                      <v-row>
+                        <v-col
+                          v-show="representation===`image`"
+                          cols="12"
+                          md="12"
+                        >
+                          <div
+                            id="multiple-image"
+                            style="display: flex; justify-content: center;"
+                          >
+                            <app-upload-multiple-image
+                              :data-images="newArticle.images"
+                              :upload-success="uploadImage"
+                            />
+                          </div>
+                        </v-col>
+                        <v-col
+                          v-show="representation===`color`"
+                          cols="12"
+                          md="9"
+                        >
+                          <app-color-picker
+                            :value="newArticle.color || ``"
+                            @input="inputColor"
+                          />
+                        </v-col>
+                      </v-row>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      class="mb-2"
+                      color="primary"
+                      :disabled="!formValid || isActionInProgress"
+                      :loading="isActionInProgress"
+                      @click="createNewArticle"
+                    >
+                      <v-icon>mdi-check</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                    </v-btn>
+                    <v-btn
+                      class="mb-2"
+                      :disabled="isActionInProgress"
+                      @click="$router.push({name:'product_list'})"
+                    >
+                      <v-icon>mdi-close</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            class="mb-2"
-            :disabled="isActionInProgress"
-            @click="$router.push({name:'product_list'})"
-          >
-            <v-icon>mdi-close</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-          </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="createNewArticle"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
-          </v-btn>
-        </v-card-actions>
         <new-category v-if="$store.state.category.showNewModal" />
         <new-tax v-if="$store.state.tax.showNewModal" />
       </v-card>
@@ -549,13 +621,13 @@ export default {
   components: { NewCategory, CompositeList, ShopsArticles, Variant, NewTax },
   data () {
     return {
+      step: 1,
       track_inventory: false,
       ref: '10001',
       representation: 'image',
       showInfoAdd: false,
       composite: [],
       row: null,
-      panel: [0],
       formValid: false,
       shopData: [],
       variantData: [],
@@ -575,7 +647,6 @@ export default {
   },
   created: async function () {
     this.loadingData = true
-    this.formValid = false
     await this.getShops().then(() => {
       this.shops.forEach((shop) => {
         this.shopData.push({
@@ -584,8 +655,8 @@ export default {
           checked: true,
           name: '',
           price: '0.00',
-          stock: '',
-          under_inventory: ''
+          stock: '0',
+          under_inventory: '0'
         })
       })
     })

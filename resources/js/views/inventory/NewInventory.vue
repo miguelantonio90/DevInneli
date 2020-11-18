@@ -64,7 +64,7 @@
                             large
                             persistent
                             :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                            :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+                            :save-text="$vuetify.lang.t('$vuetify.actions.save')"
                             @save="calcTotal(item)"
                           >
                             <div>{{ `${user.company.currency + ' ' + item.cost }` }}</div>
@@ -101,7 +101,7 @@
                             large
                             persistent
                             :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                            :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+                            :save-text="$vuetify.lang.t('$vuetify.actions.save')"
                             @save="calcTotal(item)"
                           >
                             <div>{{ item.cant }}</div>
@@ -113,7 +113,7 @@
                             <template v-slot:input>
                               <v-text-field
                                 v-model="item.cant"
-                                label="Edit"
+                                :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 single-line
                                 counter
                                 autofocus
@@ -264,7 +264,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('inventory', ['newInventory', 'isActionInProgress']),
+    ...mapState('inventory', ['newInventory', 'isActionInProgress', 'inventories']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -374,8 +374,9 @@ export default {
     this.loadingData = false
   },
   methods: {
-    ...mapActions('inventory', ['createInventory']),
+    ...mapActions('inventory', ['createInventory', 'getInventories']),
     ...mapActions('article', ['getArticles']),
+    ...mapActions('sale', ['getSales']),
     selectArticle (item) {
       if (item) {
         if (this.newInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {

@@ -56,7 +56,7 @@ class AssistanceManager extends BaseManager
         $entry = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeEntry']));
         $exit = trim(preg_replace("/\([^)]+\)/", "", $data['datetimeExit']));
 
-        $assitence = Assistance::create([
+        $assistance = Assistance::create([
             'datetimeEntry' => Carbon::parse($entry),
             'datetimeExit' => Carbon::parse($exit),
             'totalHours' => $data['totalHours'],
@@ -64,9 +64,9 @@ class AssistanceManager extends BaseManager
             'user_id' => $data['user'],
             'company_id' => (CompanyManager::getCompanyByAdmin())->id
         ]);
-        $this->managerBy('new', $assitence);
-        $assitence->save();
-        return $assitence;
+        $this->managerBy('new', $assistance);
+        $assistance->save();
+        return $assistance;
     }
 
     /**
@@ -96,6 +96,7 @@ class AssistanceManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function delete($id)
     {

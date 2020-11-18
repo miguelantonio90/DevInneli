@@ -5,6 +5,7 @@ namespace App\Managers;
 use App\Shop;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class ShopManager extends BaseManager
 {
@@ -22,6 +23,7 @@ class ShopManager extends BaseManager
     /**
      * @param $request
      * @return mixed
+     * @throws Exception
      */
     public function new($request)
     {
@@ -41,6 +43,7 @@ class ShopManager extends BaseManager
      * @param $id
      * @param $request
      * @return mixed
+     * @throws Exception
      */
     public function edit($id, $request)
     {
@@ -52,6 +55,7 @@ class ShopManager extends BaseManager
     /**
      * @param $id
      * @return array
+     * @throws Exception
      */
     public function delete($id): array
     {

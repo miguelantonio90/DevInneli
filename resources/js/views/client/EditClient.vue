@@ -145,9 +145,7 @@
               <v-text-field
                 v-model="editClient.description"
                 :counter="120"
-                :rules="formRule.description"
                 :label="$vuetify.lang.t('$vuetify.access.description')"
-                required
               />
             </v-col>
           </v-row>

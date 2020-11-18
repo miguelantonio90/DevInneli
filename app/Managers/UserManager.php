@@ -6,6 +6,7 @@ namespace App\Managers;
 
 use App\Shop;
 use App\User;
+use Exception;
 
 class UserManager extends BaseManager
 {
@@ -75,6 +76,7 @@ class UserManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function new($data)
     {
@@ -124,6 +126,7 @@ class UserManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -137,6 +140,7 @@ class UserManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function delete($id)
     {

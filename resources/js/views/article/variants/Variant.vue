@@ -104,7 +104,7 @@
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         @save="saveModalEdit"
         @cancel="cancelModalEdit"
         @open="openModalEdit"
@@ -140,7 +140,7 @@
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         @save="saveModalEdit"
         @cancel="cancelModalEdit"
         @open="openModalEdit"
@@ -176,7 +176,7 @@
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         @save="saveModalEdit"
         @cancel="cancelModalEdit"
         @open="openModalEdit"
@@ -196,7 +196,7 @@
         large
         persistent
         :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         @save="saveModalEdit"
         @cancel="cancelModalEdit"
         @open="openModalEdit"

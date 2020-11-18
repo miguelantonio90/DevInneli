@@ -55,11 +55,13 @@ class ClientManager extends BaseManager
         }
         return $this->updateData($client, $data, false);
     }
+
     /**
      * @param $client
      * @param $data
-     * @param bool $new
+     * @param  bool  $new
      * @return mixed
+     * @throws \Exception
      */
     private function updateData($client, $data, $new)
     {
@@ -102,6 +104,7 @@ class ClientManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

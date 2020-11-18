@@ -63,6 +63,7 @@
           v-model="sale.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
           required
+          readonly
           :rules="formRule.required"
           @onchange="updateStore"
         />

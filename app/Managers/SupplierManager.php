@@ -30,6 +30,7 @@ class SupplierManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {
@@ -42,6 +43,11 @@ class SupplierManager extends BaseManager
         return $this->updateData($supplier, $data);
     }
 
+    /**
+     * @param $supplier
+     * @param $data
+     * @return mixed
+     */
     public function updateData($supplier, $data)
     {
         if (isset($data['name'])) {
@@ -80,6 +86,7 @@ class SupplierManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function edit($id, $data)
     {
@@ -98,6 +105,7 @@ class SupplierManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

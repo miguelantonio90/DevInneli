@@ -66,7 +66,7 @@ export default {
         { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate'), icon: 'mdi-bank' },
         { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order'), icon: 'mdi-food' },
         { name: this.$vuetify.lang.t('$vuetify.menu.tax_list'), icon: 'mdi-wallet' },
-        { name: this.$vuetify.lang.t('$vuetify.menu.discount'), icon: 'mdi-arrow-top-left' }
+        { name: this.$vuetify.lang.t('$vuetify.menu.discount'), icon: 'mdi-cash-minus' }
       ]
     }
   }

@@ -58,8 +58,6 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-        $this->getUserPin()['isLoginPin'] = false;
-        $this->getUserPin()->save();
         return $request->wantsJson()
             ? new Response('', 204)
             : redirect('/');

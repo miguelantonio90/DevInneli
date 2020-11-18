@@ -30,6 +30,7 @@ class ExpenseCategoryManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {
@@ -49,6 +50,7 @@ class ExpenseCategoryManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function edit($id, $data)
     {
@@ -67,6 +69,7 @@ class ExpenseCategoryManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

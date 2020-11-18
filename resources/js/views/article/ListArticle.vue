@@ -215,7 +215,6 @@ export default {
     }
   },
   created () {
-    console.log(this)
     this.getArticles()
   },
   methods: {

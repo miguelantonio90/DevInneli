@@ -13,7 +13,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ `${user.company.currency +' '+item.price}` }}</div>
@@ -46,7 +46,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ item.stock }}</div>
@@ -58,7 +58,7 @@
           <template v-slot:input>
             <v-text-field-integer
               v-model="item.stock"
-              label="Edit"
+              :label="$vuetify.lang.t('$vuetify.actions.save') "
               :properties="{
                 clearable: true,
               }"
@@ -78,7 +78,7 @@
           large
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-          :save-text="$vuetify.lang.t('$vuetify.actions.edit')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="updateShopsData"
         >
           <div>{{ item.under_inventory }}</div>
@@ -90,7 +90,7 @@
           <template v-slot:input>
             <v-text-field-integer
               v-model="item.under_inventory"
-              label="Edit"
+              :label="$vuetify.lang.t('$vuetify.actions.save') "
               :properties="{
                 clearable: true,
               }"
