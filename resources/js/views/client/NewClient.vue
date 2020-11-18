@@ -114,9 +114,22 @@
               cols="12"
               md="4"
             >
-              <v-text-field
+              <v-text-field-simplemask
                 v-model="newClient.barCode"
                 :label="$vuetify.lang.t('$vuetify.barCode')"
+                :properties="{
+                  clearable: true,
+                  required:true,
+                  rules:formRule.required
+                }"
+                :options="{
+                  inputMask: '##-####-####-###',
+                  outputMask: '#############',
+                  empty: null,
+                  alphanumeric: true,
+                }"
+                :focus="focus"
+                @focus="focus = false"
               />
             </v-col>
             <v-col>
@@ -132,9 +145,7 @@
               <v-text-field
                 v-model="newClient.description"
                 :counter="120"
-                :rules="formRule.description"
                 :label="$vuetify.lang.t('$vuetify.access.description')"
-                required
               />
             </v-col>
           </v-row>

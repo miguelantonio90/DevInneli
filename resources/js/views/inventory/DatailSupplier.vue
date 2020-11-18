@@ -51,6 +51,7 @@
           v-model="supply.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
           required
+          readonly
           :rules="formRule.required"
           @onchange="updateStore"
         />
@@ -161,7 +162,8 @@ export default {
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading']),
-    ...mapState('inventory', ['newInventory', 'editInventory']),
+    ...mapState('sale', ['sales']),
+    ...mapState('inventory', ['newInventory', 'editInventory', 'inventories']),
     getPay () {
       return [
         {
@@ -175,18 +177,33 @@ export default {
       ]
     }
   },
+  watch: {
+    'newInventory.no_facture': function () {
+      if (this.sales.filter(art => art.no_facture === this.newInventory.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newInventory.no_facture).length > 0) {
+        this.supply.no_facture = this.generateNF()
+      }
+    }
+  },
   async created () {
     await this.getSuppliers()
     await this.getTaxes()
     await this.getShops()
     await this.getPayments()
+    await this.getInventories()
+    await this.getSales()
     this.supply = this.edit ? this.editInventory : this.newInventory
+    if (!this.edit) { this.supply.no_facture = this.generateNF() }
   },
   methods: {
     ...mapActions('supplier', ['getSuppliers']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
+    ...mapActions('inventory', ['getInventories']),
+    ...mapActions('sale', ['getSales']),
     ...mapActions('payment', ['getPayments']),
+    generateNF () {
+      return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
+    },
     updateStore () {
       if (this.edit) {
         this.editInventory.supplier = this.supply.supplier

@@ -117,7 +117,7 @@
                             <v-list-item-content>
                               <v-list-item-title>{{ data.item.name }}</v-list-item-title>
                               <v-list-item-subtitle>
-                                {{ `${user.company.currency + ' ' + data.item.price }` }}
+                                {{ `${user.company.currency + ' ' + data.item.price}` }}
                               </v-list-item-subtitle>
                             </v-list-item-content>
                           </template>
@@ -171,7 +171,7 @@
                             :save-text="$vuetify.lang.t('$vuetify.actions.save')"
                             @save="calcTotal(item)"
                           >
-                            <div>{{ `${user.company.currency + ' ' + item.price }` }}</div>
+                            <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
                             <template v-slot:input>
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -215,7 +215,9 @@
                                     mdi-plus
                                   </v-icon>
                                 </template>
-                                <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                                <span>{{
+                                  $vuetify.lang.t('$vuetify.titles.newAction')
+                                }}</span>
                               </v-tooltip>
                             </template>
                           </v-autocomplete>
@@ -253,7 +255,9 @@
                           </v-edit-dialog>
                         </template>
                         <template v-slot:item.totalPrice="{ item }">
-                          {{ `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2) }` }}
+                          {{
+                            `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2)}`
+                          }}
                         </template>
                         <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
                           <v-btn
@@ -303,10 +307,12 @@
                                       {{ tax.name }}
                                     </td>
                                     <td style="color: #0d47a1">
-                                      {{ tax.percent ? tax.value+'%': tax.value }}
+                                      {{ tax.percent ? tax.value + '%' : tax.value }}
                                     </td>
                                     <td style="color: #0d47a1">
-                                      {{ `${user.company.currency}` }} {{ tax.percent ? parseFloat(tax.value*item.cant*item.price/100).toFixed(2) : parseFloat(tax.value).toFixed(2) }}
+                                      {{ `${user.company.currency}` }} {{
+                                        tax.percent ? parseFloat(tax.value * item.cant * item.price / 100).toFixed(2) : parseFloat(tax.value).toFixed(2)
+                                      }}
                                     </td>
                                   </tr>
                                 </tbody>
@@ -317,10 +323,15 @@
                                       colspan="2"
                                       class="text-left"
                                     >
-                                      <b style="color: #db0610">{{ $vuetify.lang.t('$vuetify.tax.total_pay_tax') }}</b>
+                                      <b style="color: #db0610">{{
+                                        $vuetify.lang.t('$vuetify.tax.total_pay_tax')
+                                      }}</b>
                                     </td>
                                     <td>
-                                      <b style="color: #db0610"> {{ `${user.company.currency}` }} {{ parseFloat(total_pay(item)).toFixed(2) }}</b>
+                                      <b style="color: #db0610">
+                                        {{ `${user.company.currency}` }} {{
+                                          parseFloat(total_pay(item)).toFixed(2)
+                                        }}</b>
                                     </td>
                                   </tr>
                                 </tfoot>
@@ -443,6 +454,7 @@ import ExtraData from './ExtraData'
 import AppLoading from '../../components/core/AppLoading'
 import Facture from './Facture'
 import NewDiscount from '../discount/NewDiscount'
+
 export default {
   name: 'NewSale',
   components: { NewDiscount, AppLoading, Facture, ExtraData },
@@ -475,6 +487,8 @@ export default {
     ]),
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('discount', ['discounts']),
+    ...mapState('sale', ['sales']),
+    ...mapState('inventory', ['inventories']),
     ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
@@ -519,22 +533,34 @@ export default {
   watch: {
     discounts: function () {
       this.getLocalDiscounts()
+    },
+    'newSale.no_facture': function () {
+      if (this.sales.filter(art => art.no_facture === this.newSale.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newSale.no_facture).length > 0) {
+        this.newSale.no_facture = this.generateNF()
+      }
     }
   },
   async created () {
     this.loadingData = true
     await this.getArticles()
     await this.getShops()
+    await this.getSales()
+    await this.getInventories()
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
+    this.newSale.no_facture = this.generateNF()
     this.loadingData = false
   },
   methods: {
-    ...mapActions('sale', ['createSale']),
+    ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
+    ...mapActions('sale', ['getSales']),
     ...mapActions('discount', ['getDiscounts']),
+    generateNF () {
+      return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
+    },
     async updateDataArticle () {
       this.localArticles = []
       this.newSale.articles = []
@@ -545,7 +571,7 @@ export default {
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v) => {
                 inventory = 0
-                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
                 if (artS.length > 0) {
                   inventory = artS[0].stock
                 }
@@ -571,7 +597,7 @@ export default {
                 }
               })
             } else {
-              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
               if (artS.length > 0) {
                 inventory = artS[0].stock
               }

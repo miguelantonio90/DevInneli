@@ -264,7 +264,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('inventory', ['newInventory', 'isActionInProgress']),
+    ...mapState('inventory', ['newInventory', 'isActionInProgress', 'inventories']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -374,8 +374,9 @@ export default {
     this.loadingData = false
   },
   methods: {
-    ...mapActions('inventory', ['createInventory']),
+    ...mapActions('inventory', ['createInventory', 'getInventories']),
     ...mapActions('article', ['getArticles']),
+    ...mapActions('sale', ['getSales']),
     selectArticle (item) {
       if (item) {
         if (this.newInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
