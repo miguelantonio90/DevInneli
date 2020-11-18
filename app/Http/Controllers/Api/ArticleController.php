@@ -51,6 +51,7 @@ class ArticleController extends Controller
      * @param  Request  $request
      * @return Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function store(Request $request)
     {

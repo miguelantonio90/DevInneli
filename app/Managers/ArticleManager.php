@@ -5,7 +5,6 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
-use App\User;
 use App\Variant;
 use Illuminate\Auth\AuthManager;
 
@@ -23,7 +22,7 @@ class ArticleManager extends BaseManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -106,6 +105,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function new($data)
     {
@@ -165,6 +165,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $data
+     * @throws \Exception
      */
     public function updateComposite($article, $data): void
     {
@@ -196,6 +197,16 @@ class ArticleManager extends BaseManager
             $article->category_id = $data['category']['id'];
         }
         $article->save();
+        foreach ($data['shops'] as $key => $value) {
+            $artShop = ArticlesShops::create([
+                'article_id' => $article->id,
+                'shop_id' => $value['shop_id'],
+                'stock' => $value['stock'] ?: 0,
+                'price' => $value['price'],
+                'under_inventory' => $value['under_inventory'] ?: 0
+            ]);
+            $this->managerBy('new', $artShop);
+        }
         foreach ($data['composites'] as $key => $value) {
             if (!isset($value['id'])) {
                 ArticlesComposite::create([
@@ -433,7 +444,7 @@ class ArticleManager extends BaseManager
                 $value->delete();
             }
         }
-        $article =Articles::findOrFail($id);
+        $article = Articles::findOrFail($id);
         $this->managerBy('delete', $article);
         return $article->delete();
     }
