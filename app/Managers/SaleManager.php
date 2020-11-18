@@ -8,6 +8,7 @@ use App\ArticlesShops;
 use App\Sale;
 use App\SalesArticlesShops;
 use App\Tax;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class SaleManager extends BaseManager
@@ -105,6 +106,10 @@ class SaleManager extends BaseManager
         return $sales;
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
     public function new($data)
     {
         $sale = Sale::create([
@@ -121,21 +126,12 @@ class SaleManager extends BaseManager
         return $sale;
     }
 
-    public function edit($id, $data)
-    {
-        $sale = Sale::findOrFail($id);
-        $sale->no_facture = $data['no_facture'];
-        $sale->pay = $data['pay'];
-        if (isset($data['payments']['payment_id'])) {
-            $sale->payment_id = $data['payments']['payment_id'];
-        }
-        $sale->client_id = $data['client']['client_id'];
-        $sale->save();
-        $this->removeSaleArticle($sale, $data['articles']);
-        $this->updateSaleData($sale, $data, true);
-        return $sale;
-    }
-
+    /**
+     * @param $sale
+     * @param $data
+     * @param $edit
+     * @throws Exception
+     */
     public function updateSaleData($sale, $data, $edit): void
     {
         $articles = $data['articles'];
@@ -157,7 +153,7 @@ class SaleManager extends BaseManager
         foreach ($data['discounts'] as $k => $v) {
             $discounts[] = $v['id'];
         }
-        $edit? $this->managerBy('edit', $sale): $this->managerBy('new', $sale);
+        $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
     }
 
@@ -197,8 +193,29 @@ class SaleManager extends BaseManager
     }
 
     /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function edit($id, $data)
+    {
+        $sale = Sale::findOrFail($id);
+        $sale->no_facture = $data['no_facture'];
+        $sale->pay = $data['pay'];
+        if (isset($data['payments']['payment_id'])) {
+            $sale->payment_id = $data['payments']['payment_id'];
+        }
+        $sale->client_id = $data['client']['client_id'];
+        $sale->save();
+        $this->removeSaleArticle($sale, $data['articles']);
+        $this->updateSaleData($sale, $data, true);
+        return $sale;
+    }
+
+    /**
      * @param $sale
      * @param $articles
+     * @throws Exception
      */
     private function removeSaleArticle($sale, $articles): void
     {
@@ -225,6 +242,7 @@ class SaleManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function delete($id)
     {

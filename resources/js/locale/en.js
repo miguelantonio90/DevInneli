@@ -186,7 +186,9 @@ export default {
     close: 'Close',
     change: 'Change',
     apply: 'Apply',
-    transfer: 'Transfer'
+    transfer: 'Transfer',
+    next: 'Next',
+    back: 'Back'
   },
   titles: {
     list: '{0} List',

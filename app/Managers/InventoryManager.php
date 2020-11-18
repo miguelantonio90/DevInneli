@@ -70,6 +70,11 @@ class InventoryManager extends BaseManager
         return $inventories;
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     * @throws \Exception
+     */
     public function new($data)
     {
         $inventory = Inventory::create([
@@ -90,6 +95,11 @@ class InventoryManager extends BaseManager
 
     }
 
+    /**
+     * @param $inventory
+     * @param $data
+     * @param $edit
+     */
     public function updateInventoryData($inventory, $data, $edit)
     {
         $articles = $data['articles'];
@@ -146,6 +156,12 @@ class InventoryManager extends BaseManager
         }
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     * @throws \Exception
+     */
     public function edit($id, $data)
     {
         $inventory = Inventory::findOrFail($id);
@@ -192,6 +208,7 @@ class InventoryManager extends BaseManager
     /**
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function delete($id)
     {

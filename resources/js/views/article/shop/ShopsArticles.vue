@@ -58,7 +58,7 @@
           <template v-slot:input>
             <v-text-field-integer
               v-model="item.stock"
-              label="Edit"
+              :label="$vuetify.lang.t('$vuetify.actions.save') "
               :properties="{
                 clearable: true,
               }"
@@ -90,7 +90,7 @@
           <template v-slot:input>
             <v-text-field-integer
               v-model="item.under_inventory"
-              label="Edit"
+              :label="$vuetify.lang.t('$vuetify.actions.save') "
               :properties="{
                 clearable: true,
               }"

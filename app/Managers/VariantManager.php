@@ -12,6 +12,7 @@ class VariantManager extends BaseManager
      * @param $data
      * @param $articleId
      * @return Variant
+     * @throws \Exception
      */
     public function newVariant($data, $articleId): Variant
     {
@@ -27,6 +28,7 @@ class VariantManager extends BaseManager
     /**
      * @param $data
      * @return Variant
+     * @throws \Exception
      */
     public function editVariant($data): Variant
     {
@@ -41,6 +43,7 @@ class VariantManager extends BaseManager
     /**
      * @param $id
      * @return bool
+     * @throws \Exception
      */
     public function deleteVariant($id): bool
     {
@@ -53,6 +56,7 @@ class VariantManager extends BaseManager
      * @param $data
      * @param $article
      * @return ArticlesShops
+     * @throws \Exception
      */
     public function newArticleShop($data, $article): ArticlesShops
     {
@@ -71,6 +75,7 @@ class VariantManager extends BaseManager
      * @param $id
      * @param $data
      * @return ArticlesShops
+     * @throws \Exception
      */
     public function updateArticleShop($id, $data): ArticlesShops
     {
@@ -88,6 +93,7 @@ class VariantManager extends BaseManager
     /**
      * @param $id
      * @return bool
+     * @throws \Exception
      */
     public function deleteArticlesShops($id): bool
     {

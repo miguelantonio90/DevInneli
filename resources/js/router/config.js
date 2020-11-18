@@ -145,58 +145,6 @@ export const protectedRoute = [
         component: () => import('../views/auth/Profile')
       },
       {
-        path: '/resume',
-        component: RouteWrapper,
-        redirect: '/resume',
-        meta: {
-          title: 'resume',
-          icon: 'mdi-chart-bar',
-          group: 'resume'
-        },
-        children: [
-          {
-            path: '/resume/sell_product.list',
-            name: 'sell_product',
-            meta: {
-              title: 'sell_product',
-              icon: 'mdi-database-plus',
-              requiresAuth: true
-            },
-            component: () => import('../views/error/Deny')
-          },
-          {
-            path: '/resume/sell_category.list',
-            name: 'sell_category',
-            meta: {
-              title: 'sell_category',
-              icon: 'mdi-database-plus',
-              requiresAuth: true
-            },
-            component: () => import('../views/error/Deny')
-          },
-          {
-            path: '/resume/sell_user.list',
-            name: 'sell_user',
-            meta: {
-              title: 'sell_user',
-              icon: 'mdi-database-plus',
-              requiresAuth: true
-            },
-            component: () => import('../views/error/Deny')
-          },
-          {
-            path: '/resume/sell_types_payment.list',
-            name: 'sell_types_payment',
-            meta: {
-              title: 'sell_types_payment',
-              icon: 'mdi-database-plus',
-              requiresAuth: true
-            },
-            component: () => import('../views/error/Deny')
-          }
-        ]
-      },
-      {
         path: '/sales',
         component: RouteWrapper,
         redirect: '/sales/vending.list',
@@ -365,6 +313,58 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/inventory/EditInventory')
+          }
+        ]
+      },
+      {
+        path: '/resume',
+        component: RouteWrapper,
+        redirect: '/resume',
+        meta: {
+          title: 'resume',
+          icon: 'mdi-chart-bar',
+          group: 'resume'
+        },
+        children: [
+          {
+            path: '/resume/sell_product.list',
+            name: 'sell_product',
+            meta: {
+              title: 'sell_product',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/resume/sell_category.list',
+            name: 'sell_category',
+            meta: {
+              title: 'sell_category',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/resume/sell_user.list',
+            name: 'sell_user',
+            meta: {
+              title: 'sell_user',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/resume/sell_types_payment.list',
+            name: 'sell_types_payment',
+            meta: {
+              title: 'sell_types_payment',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
           }
         ]
       },

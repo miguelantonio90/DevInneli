@@ -113,7 +113,7 @@
                             <template v-slot:input>
                               <v-text-field
                                 v-model="item.cant"
-                                label="Edit"
+                                :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 single-line
                                 counter
                                 autofocus
