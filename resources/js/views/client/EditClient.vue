@@ -114,9 +114,22 @@
               cols="12"
               md="4"
             >
-              <v-text-field
+              <v-text-field-simplemask
                 v-model="editClient.barCode"
                 :label="$vuetify.lang.t('$vuetify.barCode')"
+                :properties="{
+                  clearable: true,
+                  required:true,
+                  rules:formRule.required
+                }"
+                :options="{
+                  inputMask: '##-####-####-###',
+                  outputMask: '#############',
+                  empty: null,
+                  alphanumeric: true,
+                }"
+                :focus="focus"
+                @focus="focus = false"
               />
             </v-col>
             <v-col>

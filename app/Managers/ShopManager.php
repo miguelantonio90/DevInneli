@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\Shop;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class ShopManager extends BaseManager
 {
@@ -12,8 +13,9 @@ class ShopManager extends BaseManager
      */
     public function findAllByCompany()
     {
-        return Shop::latest()
-            ->where('company_id', '=', (CompanyManager::getCompanyByAdmin())->id)
+        return DB::table('shops')
+            ->join('shop_user', 'shop_user.shop_id', '=', 'shops.id')
+            ->where('shop_user.user_id', '=', cache()->get('userPin')['id'])
             ->get();
     }
 
