@@ -1,5 +1,5 @@
 <template>
-  <div class="page-add-product">
+  <div class="page-edit-product">
     <app-loading v-show="loadingData" />
     <v-container
       v-if="!loadingData"
