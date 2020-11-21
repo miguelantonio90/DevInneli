@@ -14,9 +14,15 @@ class ShopManager extends BaseManager
      */
     public function findAllByCompany()
     {
-        return DB::table('shops')
-            ->join('shop_user', 'shop_user.shop_id', '=', 'shops.id')
-            ->where('shop_user.user_id', '=', cache()->get('userPin')['id'])
+        $company = CompanyManager::getCompanyByAdmin();
+        $created_by = cache()->get('userPin')['id'];
+
+        return Shop::where('company_id', '=', $company->id)
+            ->with([
+                'users' => function ($q) use ($created_by) {
+                    $q->where('users.id', '=', $created_by);
+                }
+            ])
             ->get();
     }
 
@@ -69,6 +75,5 @@ class ShopManager extends BaseManager
             return [true, $delete, 'Shop has deleted successfully.'];
         }
         return [false, null, "Shop can't by deleted"];
-
     }
 }

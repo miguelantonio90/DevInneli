@@ -51,7 +51,7 @@
                 @click:append="hidePassword = !hidePassword"
               />
               <router-link
-                v-slot="{ href, route, navigate }"
+                v-slot="{ href, navigate }"
                 :to="{ name: 'forgot' }"
               >
                 <div class="sm12">
@@ -96,7 +96,7 @@
             </v-btn>
           </v-card-actions>
           <router-link
-            v-slot="{ href, route, navigate }"
+            v-slot="{ href, navigate }"
             :to="{ name: 'register' }"
           >
             <div class="sm12 text-center">

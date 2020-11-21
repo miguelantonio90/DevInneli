@@ -98,7 +98,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.price="{ item }">
+    <template v-slot:[`item.price`]="{ item }">
       <v-edit-dialog
         :return-value.sync="item.price"
         large
@@ -115,8 +115,6 @@
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
           </div>
-        </template>
-        <template v-slot:input>
           <v-text-field-money
             v-model="item.price"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
@@ -134,7 +132,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.cost="{ item }">
+    <template v-slot:[`item.cost`]="{ item }">
       <v-edit-dialog
         :return-value.sync="item.cost"
         large
@@ -151,8 +149,6 @@
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
           </div>
-        </template>
-        <template v-slot:input>
           <v-text-field-money
             v-model="item.cost"
             :label="$vuetify.lang.t('$vuetify.actions.edit')"
@@ -170,7 +166,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.ref="{ item }">
+    <template v-slot:[`item.ref`]="{ item }">
       <v-edit-dialog
         :return-value.sync="item.ref"
         large
@@ -190,7 +186,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.barCode="{ item }">
+    <template v-slot:[`item.barCode`]="{ item }">
       <v-edit-dialog
         :return-value.sync="item.barCode"
         large
@@ -207,8 +203,6 @@
           <div class="mt-4 title">
             {{ $vuetify.lang.t('$vuetify.actions.edit') }}
           </div>
-        </template>
-        <template v-slot:input>
           <v-text-field-simplemask
             v-model="item.barCode"
             :label="$vuetify.lang.t('$vuetify.barCode')"
@@ -227,7 +221,7 @@
         </template>
       </v-edit-dialog>
     </template>
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon
         small
         @click="deleteItem(item)"
@@ -523,7 +517,7 @@ export default {
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
-    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
     -webkit-font-smoothing: antialiased;
 }
 </style>

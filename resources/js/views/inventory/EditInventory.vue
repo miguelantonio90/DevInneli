@@ -58,7 +58,7 @@
                         :headers="getTableColumns"
                         :items="editInventory.articles"
                       >
-                        <template v-slot:item.cost="{ item }">
+                        <template v-slot:[`item.cost`]="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.cost"
                             large
@@ -72,8 +72,6 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                            </template>
-                            <template v-slot:input>
                               <v-text-field-money
                                 v-model="item.cost"
                                 :label="$vuetify.lang.t('$vuetify.actions.edit')"
@@ -90,12 +88,12 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.price="{ item }">
+                        <template v-slot:[`item.price`]="{ item }">
                           <div>
                             {{ `${user.company.currency + ' ' + item.price }` }}
                           </div>
                         </template>
-                        <template v-slot:item.cant="{ item }">
+                        <template v-slot:[`item.cant`]="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.cant"
                             large
@@ -109,8 +107,6 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                            </template>
-                            <template v-slot:input>
                               <v-text-field
                                 v-model="item.cant"
                                 :label="$vuetify.lang.t('$vuetify.actions.save') "
@@ -121,13 +117,13 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.totalCost="{ item }">
+                        <template v-slot:[`item.totalCost`]="{ item }">
                           {{ `${user.company.currency + ' ' + item.cant * item.cost }` }}
                         </template>
-                        <template v-slot:item.totalPrice="{ item }">
+                        <template v-slot:[`item.totalPrice`]="{ item }">
                           {{ `${user.company.currency + ' ' + item.cant * item.price }` }}
                         </template>
-                        <template v-slot:item.actions="{ item }">
+                        <template v-slot:[`item.actions`]="{ item }">
                           <v-icon
                             small
                             @click="deleteItem(item)"

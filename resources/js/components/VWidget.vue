@@ -23,7 +23,8 @@ export default {
   name: 'VWidget',
   props: {
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     enableHeader: {
       type: Boolean,

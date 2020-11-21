@@ -20,12 +20,12 @@
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
         >
-          <template v-slot:item.pay="{ item }">
+          <template v-slot:[`item.pay`]="{ item }">
             {{
               item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
             }}
           </template>
-          <template v-slot:item.payments.name="{ item }">
+          <template v-slot:[`item.payments.name`]="{ item }">
             <template v-if="item.payments">
               {{ item.payments.name }}
             </template>
@@ -33,18 +33,18 @@
               <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
-          <template v-slot:item.shop.name="{ item }">
+          <template v-slot:[`item.shop.name`]="{ item }">
             <v-chip>
               {{ item.shop.name }}
             </v-chip>
           </template>
-          <template v-slot:item.totalPrice="{ item }">
+          <template v-slot:[`item.totalPrice`]="{ item }">
             {{ `${user.company.currency + ' ' + item.totalPrice}` }}
           </template>
-          <template v-slot:item.totalCost="{ item }">
+          <template v-slot:[`item.totalCost`]="{ item }">
             {{ `${user.company.currency + ' ' + item.totalCost}` }}
           </template>
-          <template v-slot:item.taxes="{item}">
+          <template v-slot:[`item.taxes`]="{item}">
             <template v-if="item.taxes.length > 0">
               <v-chip
                 v-for="(lTax, i) of item.taxes"
@@ -57,7 +57,7 @@
               <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
-          <template v-slot:item.discounts="{item}">
+          <template v-slot:[`item.discounts`]="{item}">
             <template v-if="item.discounts.length > 0">
               <v-chip
                 v-for="(lDiscount, i) of item.discounts"
@@ -70,7 +70,7 @@
               <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
-          <template v-slot:item.data-table-expand="{item, expand, isExpanded }">
+          <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
             <v-btn
               v-if="item.articles.length > 0"
               color="primary"

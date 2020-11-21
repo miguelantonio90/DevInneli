@@ -21,14 +21,14 @@
           @delete-row="deleteClientHandler($event)"
         >
           <template
-            v-slot:item.firstName="{ item }"
+            v-slot:[`item.firstName`]="{ item }"
           >
             <v-avatar>
               <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
             </v-avatar>
             {{ item.firstName }}
           </template>
-          <template v-slot:item.nameCountry="{ item }">
+          <template v-slot:[`item.nameCountry`]="{ item }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-chip

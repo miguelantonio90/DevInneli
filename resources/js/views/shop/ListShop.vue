@@ -24,11 +24,11 @@
             @edit-row="openEditModal($event)"
             @delete-row="deleteShopHandler($event)"
           >
-            <template v-slot:item.name="{ item }">
+            <template v-slot:[`item.name`]="{ item }">
               <v-icon>mdi-shopping</v-icon>
               {{ item.name }}
             </template>
-            <template v-slot:item.nameCountry="{ item }">
+            <template v-slot:[`item.nameCountry`]="{ item }">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip

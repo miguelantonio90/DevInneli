@@ -140,7 +140,7 @@
                         :is-loading="isTableLoading"
                         @delete-row="deleteItem($event)"
                       >
-                        <template v-slot:item.name="{ item }">
+                        <template v-slot:[`item.name`]="{ item }">
                           <v-chip
                             :key="JSON.stringify(item)"
                           >
@@ -160,7 +160,7 @@
                             {{ item.name }}
                           </v-chip>
                         </template>
-                        <template v-slot:item.price="{ item }">
+                        <template v-slot:[`item.price`]="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.price"
                             large
@@ -174,8 +174,6 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                            </template>
-                            <template v-slot:input>
                               <v-text-field-money
                                 v-model="item.price"
                                 :label="$vuetify.lang.t('$vuetify.actions.edit')"
@@ -192,7 +190,7 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.discount="{ item }">
+                        <template v-slot:[`item.discount`]="{ item }">
                           <v-autocomplete
                             v-model="item.discount"
                             chips
@@ -220,7 +218,7 @@
                             </template>
                           </v-autocomplete>
                         </template>
-                        <template v-slot:item.cant="{ item }">
+                        <template v-slot:[`item.cant`]="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.cant"
                             large
@@ -234,8 +232,6 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                            </template>
-                            <template v-slot:input>
                               <v-text-field-integer
                                 v-model="item.cant"
                                 :label="$vuetify.lang.t('$vuetify.actions.save') "
@@ -252,13 +248,13 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:item.totalPrice="{ item }">
+                        <template v-slot:[`item.totalPrice`]="{ item }">
                           {{
                             `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2)}`
                           }}
                         </template>
                         <template
-                          v-slot:item.data-table-expand="{item, expand, isExpanded }"
+                          v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }"
                         >
                           <v-btn
                             v-show="item.taxes.length > 0"

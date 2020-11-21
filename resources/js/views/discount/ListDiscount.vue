@@ -22,7 +22,7 @@
           @delete-row="deleteDiscountHandler($event)"
         >
           <template
-            v-slot:item.percent="{ item }"
+            v-slot:[`item.percent`]="{ item }"
           >
             {{ item.percent ==="true" ? $vuetify.lang.t('$vuetify.tax.percent'):$vuetify.lang.t('$vuetify.tax.permanent') }}
           </template>

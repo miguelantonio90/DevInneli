@@ -23,14 +23,14 @@
           @delete-row="deleteUserHandler($event)"
         >
           <template
-            v-slot:item.firstName="{ item }"
+            v-slot:[`item.firstName`]="{ item }"
           >
             <v-avatar>
               <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
             </v-avatar>
             {{ item.firstName }}
           </template>
-          <template v-slot:item.shopsNames="{ item }">
+          <template v-slot:[`item.shopsNames`]="{ item }">
             <v-chip
               v-for="(shop, i) of item.shopsNames"
               :key="i"

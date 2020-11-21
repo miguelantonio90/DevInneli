@@ -20,7 +20,7 @@
           @edit-row="openEditModal($event)"
           @delete-row="deleteSupplierHandler($event)"
         >
-          <template v-slot:item.nameCountry="{ item }">
+          <template v-slot:[`item.nameCountry`]="{ item }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-chip

@@ -23,11 +23,11 @@
             @edit-row="openEditModal($event)"
             @delete-row="deleteRole($event)"
           >
-            <template v-slot:item.name="{ item }">
+            <template v-slot:[`item.name`]="{ item }">
               <v-icon>mdi-account-key</v-icon>
               {{ item.name }}
             </template>
-            <template v-slot:item.accessEmail="{ item }">
+            <template v-slot:[`item.accessEmail`]="{ item }">
               <v-icon
                 v-if="item.accessEmail"
                 small
@@ -41,7 +41,7 @@
                 mdi-cancel
               </v-icon>
             </template>
-            <template v-slot:item.accessPin="{ item }">
+            <template v-slot:[`item.accessPin`]="{ item }">
               <v-icon
                 v-if="item.accessPin"
                 small

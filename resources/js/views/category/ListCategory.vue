@@ -21,7 +21,7 @@
           @delete-row="deleteCategoryHandler($event)"
         >
           <template
-            v-slot:item.color="{ item }"
+            v-slot:[`item.color`]="{ item }"
           >
             <v-chip
               :color="item.color"

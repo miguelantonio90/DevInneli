@@ -37,6 +37,7 @@ class Position extends Model
         $position->accessEmail = 1;
         $position->accessPin = 1;
         $position->company_id = $company->id;
+        $position->created_by = auth()->id;
         $position->save();
         return $position;
     }

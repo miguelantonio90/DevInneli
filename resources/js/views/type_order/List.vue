@@ -21,7 +21,7 @@
           @edit-row="openEditModal($event)"
           @delete-row="deleteHandler($event)"
         >
-          <template v-slot:group.header="{items, isOpen, toggle}">
+          <template v-slot:[`group.header`]="{items, isOpen, toggle}">
             <th colspan="100%">
               <v-icon
                 @click="toggle"
