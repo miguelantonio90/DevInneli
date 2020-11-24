@@ -12,5 +12,8 @@ export default {
   },
   sendDeleteRequest (articleId) {
     return api.remove('article/' + articleId)
+  },
+  importArticles (dataFile) {
+    return api.importData('article/import', dataFile)
   }
 }

@@ -8,9 +8,12 @@ import * as AppComponents from './components'
 import '@mdi/font/css/materialdesignicons.css'
 import './registerServiceWorker'
 import VueTelInputVuetify from 'vue-tel-input-vuetify'
+import HighchartsVue from 'highcharts-vue'
+
 // Import the styles too, typically in App.vue or main.js
 import 'vue-swatches/dist/vue-swatches.css'
 import IdleVue from 'idle-vue'
+Vue.use(HighchartsVue)
 
 const eventsHub = new Vue()
 

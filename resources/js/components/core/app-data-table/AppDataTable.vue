@@ -11,6 +11,7 @@
       <filter-header
         v-if="viewShowFilter"
         :has-csv-export="hasCsvExport"
+        :has-csv-import="hasCsvImport"
         :select-many-filters="selectManyFilters"
         :select-filters="selectFilters"
         :checkbox-filters="checkboxFilters"
@@ -26,6 +27,7 @@
         @searchValueChanged="searchValueChanged"
         @showFilterMenuChanged="showFilterMenuChanged"
         @headersChoosenChanged="headersChoosenChanged"
+        @onClickImport="onClickImport"
       />
     </v-container>
     <v-data-table
@@ -136,6 +138,7 @@
         </v-tooltip>
       </template>
     </v-data-table>
+    <import-article v-if="showImportModal" />
   </v-card>
 </template>
 
@@ -146,12 +149,14 @@ import { downloadAsJson } from './helpers/json-to-csv'
 import { debounce } from './debounce'
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs'
 import { filter, takeUntil } from 'rxjs/operators'
+import { mapActions, mapState } from 'vuex'
+import ImportArticle from '../../../views/article/ImportArticle'
 import * as _ from 'lodash'
 
 const DEFAULT_ARRAY = []
 export default {
   name: 'AppDataTable',
-  components: { FilterHeader },
+  components: { FilterHeader, ImportArticle },
   inheritAttrs: false,
   props: {
     title: {
@@ -210,6 +215,10 @@ export default {
     viewShowFilter: {
       type: Boolean,
       default: true
+    },
+    hasCsvImport: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -235,6 +244,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('article', [
+      'showImportModal'
+    ]),
     hasCsvExport () {
       const has = this.csvFilename
       return !!has
@@ -299,6 +311,7 @@ export default {
     this.o$destroyed.next()
   },
   methods: {
+    ...mapActions('article', ['importArticles', 'toogleImportModal']),
     createButtonClicked () {
       this.$emit('create-row')
     },
@@ -325,6 +338,9 @@ export default {
       const headerValues = this.headersChoosen
       const filenamePrefix = this.csvFilename || 'exported'
       downloadAsJson(filtered, headerValues, filenamePrefix)
+    },
+    onClickImport () {
+      this.toogleImportModal(true)
     },
     searchValueChanged (e) {
       this.searchValue = e

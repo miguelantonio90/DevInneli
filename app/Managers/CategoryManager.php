@@ -33,8 +33,9 @@ class CategoryManager extends BaseManager
      */
     public function new($data)
     {
+        $company = CompanyManager::getCompanyByAdmin();
         $category = Category::create([
-            'company_id' => $data['company_id'],
+            'company_id' => $company->id,
             'name' => $data['name'],
         ]);
         if (isset($data['color'])) {
@@ -83,5 +84,8 @@ class CategoryManager extends BaseManager
         $this->managerBy('delete', $category);
         return $category->delete();
     }
+
+
+
 
 }

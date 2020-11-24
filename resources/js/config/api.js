@@ -24,7 +24,6 @@ const put = (resource, params) => {
     }
   })
 }
-
 const remove = (resource) => {
   return axios.delete(baseUrl + resource, {
     headers: {
@@ -32,10 +31,18 @@ const remove = (resource) => {
     }
   })
 }
-
+const importData = (resource, data) => {
+  return axios.post(baseUrl + resource, data, {
+    headers: {
+      Authorization: storage.getToken(),
+      'content-type': 'multipart/form-data'
+    }
+  })
+}
 export default {
   get,
   post,
   put,
-  remove
+  remove,
+  importData
 }

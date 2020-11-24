@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
+use App\Managers\ImportManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,21 +21,25 @@ class ArticleController extends Controller
     private $articleManager;
 
     /**
-     * ArticleController constructor.
-     * @param  ArticleManager  $articleManager
-     * @param  LoginController  $loginController
+     * @var ImportManager
      */
-    public function __construct(ArticleManager $articleManager, LoginController $loginController)
+    private $importManger;
+
+    /**
+     * ArticleController constructor.
+     * @param ArticleManager $articleManager
+     * @param ImportManager $importManger
+     */
+    public function __construct(ArticleManager $articleManager, ImportManager $importManger)
     {
         parent::__construct();
-
-        $this->middleware('auth');
         $this->articleManager = $articleManager;
+        $this->importManger = $importManger;
     }
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse|Response
      */
     public function index(Request $request)
@@ -48,7 +53,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return Response
      * @throws ValidationException
      * @throws \Exception
@@ -67,7 +72,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -80,7 +85,7 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
@@ -107,5 +112,13 @@ class ArticleController extends Controller
             $this->articleManager->delete($id),
             'Article has deleted successfully.'
         );
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function import(Request $request)
+    {
+        $this->importManger->importData($request->file);
     }
 }

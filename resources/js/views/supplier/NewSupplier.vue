@@ -106,6 +106,8 @@
                 :loading="isCategoryLoading"
                 :disabled="!!isCategoryLoading"
                 :label="$vuetify.lang.t('$vuetify.supplier.expense')"
+                required
+                :rules="formRule.country"
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>

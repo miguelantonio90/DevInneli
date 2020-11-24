@@ -4,6 +4,9 @@
 namespace App\Managers;
 
 
+use App\Category;
+use App\Shop;
+
 class BaseManager
 {
 
@@ -24,5 +27,25 @@ class BaseManager
             }
         }
         $object->save();
+    }
+
+    public function findCategoryByName($name)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        return  Category::latest()
+            ->where('company_id', '=', $company->id)
+            ->where('name', '=', $name)
+            ->get();
+
+    }
+
+    public function findShopByName($name)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        return  Shop::latest()
+            ->where('company_id', '=', $company->id)
+            ->where('name', '=', $name)
+            ->get();
+
     }
 }

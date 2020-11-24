@@ -68,6 +68,7 @@ class VariantManager extends BaseManager
             'under_inventory' => $data['under_inventory'] ?: 0
         ]);
         $this->managerBy('new', $artShop);
+        var_dump('aa');
         return $artShop;
     }
 

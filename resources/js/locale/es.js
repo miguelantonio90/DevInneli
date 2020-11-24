@@ -51,6 +51,8 @@ export default {
   price: 'Precio',
   color: 'Color',
   principal: 'Principal',
+  file: 'Archivo',
+  system: 'Sistema',
   // menu
   menu: {
     setting: 'Configuración',
@@ -170,7 +172,14 @@ export default {
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
     idle_counter: 'La sesión se cierra en {0} segundos',
     warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
-    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.'
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.',
+    info_import_category: 'Si este archivo contiene Categorías, serán importadas al sistema, pero si usted ya ha creado alguna antes de importar, ' +
+       'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
+    info_import_shop: 'Si este archivo contiene artículos relacionado con tiendas, las mismas serán importadas al sistema  con el país donde usted fue registrado, ' +
+        'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándola los nuevos artículos. Si desea ' +
+        'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el listado.',
+    info_import_ref: 'Si usted ya ha creado Artículos y las Referencias coinciden con las de los Artículos importados, se le rescribirá a los nuevos artículos.',
+    observation: 'Observación'
   },
   // options
   actions: {
@@ -201,7 +210,8 @@ export default {
     show: 'Mostrar {0}',
     delete: 'Eliminar {0}',
     no_action: 'No puede {0}',
-    newAction: 'Crear nuevo'
+    newAction: 'Crear nuevo',
+    importData: 'Importar'
   },
   access: {
     key: 'Llave',
@@ -229,6 +239,7 @@ export default {
     many_filter: 'Seleccionar (de muchos)',
     active_switch_filter: 'Filtros de conmutador activo',
     download_csv: 'Descargar como archivo CSV',
+    upload_csv: 'Importar archivo CSV',
     choose_columns: 'Elija columnas',
     reset_columns: 'Restablecer columnas',
     no_filters: 'No hay filtros habilitados',
