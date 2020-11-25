@@ -5,6 +5,7 @@ namespace App\Managers;
 
 
 use App\Articles;
+use App\ArticlesComposite;
 use App\ArticlesShops;
 use App\Shop;
 use Exception;
@@ -36,28 +37,66 @@ class ImportManager extends BaseManager
 
     public function importData($file)
     {
-        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
 //        $fileName = time() . '.' . $file->getClientOriginalExtension();
 //        $file->move(public_path('upload'), $fileName);
 //        $csv = file_get_contents((public_path('upload/') . $fileName));
+        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
         $csv = str_replace(',variable,', '', $csv);
         $array = array_map("str_getcsv", explode("\n", $csv));
         $company = CompanyManager::getCompanyByAdmin();
         $shopsInfo = $this->insertShopsFromImportFile(explode(',', json_encode($array[0]), 18)[17], $company);
-        $parent =null;
+//        $jsonInfo = explode(',', (json_encode(str_replace(['"', ']', 'variable'], '', $array[73]))), 18)[17];
+//        var_dump($basicData);
+//        var_dump($basicData[6] !== '""');
+//        if ($basicData[2] !== '""') {
+//            $parent = $this->createArticleFromImportFile($basicData, $shopsInfo, '', $basicData[2], $jsonInfo);
+//        }
+//        if ($basicData[6] !== '""') {
+//            $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[6], $jsonInfo);
+//        }
+        $composite = [];
         foreach ($array as $key => $value) {
             if ($key > 0 && count($value) > 1) {
                 $basicData = explode(',', json_encode($value, JSON_UNESCAPED_UNICODE));
                 $jsonInfo = explode(',', (json_encode(str_replace(['"', ']', 'variable'], '', $value))), 18)[17];
-                if (!$basicData[2] !== null)
-                    $parent = $this->createArticleFromImportFile($basicData, $shopsInfo, '', 2, $jsonInfo);
-                if (!isset($basicData[6]))
-                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, 6, $jsonInfo);
-                if (!isset($basicData[8]))
-                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, 8, $jsonInfo);
-                if (!isset($basicData[10]))
-                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, 10, $jsonInfo);
+                if ($basicData[2] !== '""') {
+                    $parent = $this->createArticleFromImportFile($basicData, $shopsInfo, '', $basicData[2], $jsonInfo, $company);
+                }
+                if ($basicData[6] !== '""') {
+                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[6], $jsonInfo, $company);
+                }
+                if ($basicData[8] !== '""') {
+                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[8], $jsonInfo, $company);
+                }
+                if ($basicData[10] !== '""') {
+                    $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[10], $jsonInfo, $company);
+                }
+                if(str_replace(['"','['],'',$basicData[0]) === ''){
+                    $composite[] = [
+                        'parent_id' =>$parent->id,
+                        'children_ref'=>str_replace('"','',$basicData[14]),
+                        'cant'=>str_replace('"','',$basicData[15]),
+                    ];
+                }
             }
+        }
+        $this->createCompositeFromImportFile($composite, $company);
+
+    }
+
+    public function createCompositeFromImportFile($composites, $company)
+    {
+        foreach ($composites as $key => $value) {
+            $composite = Articles::latest()
+                ->where('company_id', '=', $company->id)
+                ->where('ref', '=', $value['children_ref'])
+                ->get()[0];
+            ArticlesComposite::create([
+                'article_id' => $value['parent_id'],
+                'composite_id' => $composite->id,
+                'cant' => $value['cant'] ?: 0,
+                'price' => $composite->price ?: 0,
+            ]);
         }
     }
 
@@ -66,20 +105,22 @@ class ImportManager extends BaseManager
      * @param $shopsInfo
      * @param $parentId
      * @param $pos
+     * @param $jsonInfo
+     * @param $company
      * @return Articles
      * @throws Exception
      */
-    public function createArticleFromImportFile($basicData, $shopsInfo, $parentId, $pos, $jsonInfo): Articles
+    public function createArticleFromImportFile($basicData, $shopsInfo, $parentId, $pos, $jsonInfo, $company): Articles
     {
-
         $categoryId = $this->getCategoryIdFromImportFile(str_replace('"', '', $basicData[3]));
         $newArticle = new Articles();
         $newArticle->ref = str_replace('"', '', $basicData[1]);
-        $newArticle->name = str_replace('"', '', $basicData[$pos]);
+        $newArticle->name = str_replace('"', '', $pos);
         if (isset($categoryId))
             $newArticle->category_id = $categoryId;
         if ($parentId !== '')
             $newArticle->parent_id = $parentId;
+        $newArticle->company_id = $company->id;
         $newArticle->unit = str_replace('"', '', $basicData[4]) === 'Y';
         $newArticle->track_inventory = str_replace('"', '', $basicData[16]) === 'Y';
         $newArticle->price = str_replace('"', '', $basicData[11]) ?: 0.00;
