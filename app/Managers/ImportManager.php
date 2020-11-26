@@ -39,10 +39,10 @@ class ImportManager extends BaseManager
 
     public function importData($file)
     {
-//        $fileName = time() . '.' . $file->getClientOriginalExtension();
-//        $file->move(public_path('upload'), $fileName);
-//        $csv = file_get_contents((public_path('upload/') . $fileName));
-        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('upload'), $fileName);
+        $csv = file_get_contents((public_path('upload/') . $fileName));
+//        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
         $csv = str_replace(',variable,', ',,', $csv);
         $array = array_map("str_getcsv", explode("\n", $csv));
         $company = CompanyManager::getCompanyByAdmin();
