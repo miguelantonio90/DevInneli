@@ -176,7 +176,7 @@ export default {
     info_import_category: 'Si este archivo contiene Categorías, serán importadas al sistema, pero si usted ya ha creado alguna antes de importar, ' +
        'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
     info_import_shop: 'Si este archivo contiene artículos relacionado con tiendas, las mismas serán importadas al sistema  con el país donde usted fue registrado, ' +
-        'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándola los nuevos artículos. Si desea ' +
+        'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándole los nuevos artículos. Si desea ' +
         'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el listado.',
     info_import_ref: 'Si usted ya ha creado Artículos y las Referencias coinciden con las de los Artículos importados, se le rescribirá a los nuevos artículos.',
     observation: 'Observación'

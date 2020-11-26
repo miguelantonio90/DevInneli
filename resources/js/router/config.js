@@ -161,7 +161,7 @@ export const protectedRoute = [
               title: 'vending',
               requiresAuth: true
             },
-            component: () => import('../views/sales/ListSale')
+            component: () => import('../views/sales/ListSale.vue')
           },
           {
             path: '/sales/vending/new',

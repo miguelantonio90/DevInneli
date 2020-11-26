@@ -49,12 +49,14 @@
                 :rules="formRule.country"
               />
             </v-col>
+            <v-col>
+              <p><b>{{ $vuetify.lang.t('$vuetify.messages.observation') }}</b></p>
+              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_category') }}</p>
+              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_shop') }}</p>
+              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_ref') }}</p>
+            </v-col>
           </v-row>
         </v-form>
-        <p><b>{{ $vuetify.lang.t('$vuetify.messages.observation') }}</b></p>
-        <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_category') }}</p>
-        <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_shop') }}</p>
-        <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_ref') }}</p>
       </v-card-text>
       <v-card-actions>
         <v-spacer />

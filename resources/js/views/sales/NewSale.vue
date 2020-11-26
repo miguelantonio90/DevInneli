@@ -556,7 +556,7 @@ export default {
     ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSales']),
+    ...mapActions('sale', ['getSales', 'createSale']),
     ...mapActions('discount', ['getDiscounts']),
     generateNF () {
       return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
@@ -688,6 +688,7 @@ export default {
           await this.$router.push({ name: 'vending' })
         }
       } else {
+        this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
           '$vuetify.messages.warning_cant_article'
         ))

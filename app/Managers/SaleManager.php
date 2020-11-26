@@ -15,7 +15,7 @@ class SaleManager extends BaseManager
 {
     public function findAllByCompany()
     {
-
+        $sales = [];
         if (auth()->user()['isAdmin'] === 1) {
             $sales = Sale::latest()
                 ->with('company')
@@ -38,6 +38,7 @@ class SaleManager extends BaseManager
                     'articles_shops.id')
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->where('sales.id', '=', $value['id'])
+                ->select('shops.id as shop_id')
                 ->get()[0];
             $sales[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
@@ -108,9 +109,10 @@ class SaleManager extends BaseManager
 
     /**
      * @param $data
-     * @return mixed
+     * @return Sale
+     * @throws Exception
      */
-    public function new($data)
+    public function new($data):Sale
     {
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
@@ -138,7 +140,7 @@ class SaleManager extends BaseManager
         foreach ($articles as $key => $value) {
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
-                ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
+                ->where('shop_id', '=', $data['shop']['shop_id'])
                 ->get()[0];
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
             $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
@@ -166,6 +168,7 @@ class SaleManager extends BaseManager
     private function createSaleArticleShop($sale, $articleShopId, $data): float
     {
         $cant = 0;
+        var_dump($articleShopId);
         $salesArtShop = SalesArticlesShops::latest()
             ->where('sale_id', '=', $sale->id)
             ->where('articles_shops_id', '=', $articleShopId)
