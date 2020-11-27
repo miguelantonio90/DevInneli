@@ -43,7 +43,7 @@ class Shop extends Model
         $shop->name = $data['shopName'];
         $shop->country = $data['country']['id'];
         $shop->company_id = $company->id;
-        $shop->created_by = auth()->id;
+        $shop->created_by = cache()->get('userPin')['id'];
         $shop->save();
 
         return $shop;
