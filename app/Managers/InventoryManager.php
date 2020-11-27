@@ -36,7 +36,8 @@ class InventoryManager extends BaseManager
                     'articles_shops.id')
                 ->join('inventories', 'inventories.id', '=', 'inventories_articles_shops.inventory_id')
                 ->where('inventories.id', '=', $value['id'])
-                ->get()[0];
+                ->select('shops.*','shops.id as shop_id')
+                ->get()->first();
             $inventories[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
                 ->join('inventories_articles_shops', 'inventories_articles_shops.articles_shops_id', '=',
