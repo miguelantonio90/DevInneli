@@ -319,7 +319,7 @@ export const protectedRoute = [
       {
         path: '/resume',
         component: RouteWrapper,
-        redirect: '/resume',
+        redirect: '/resume/sell_product.list',
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',

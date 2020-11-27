@@ -5,9 +5,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
-              $vuetify.lang.t('$vuetify.supply.name'),
-            ])
+            $vuetify.lang.t('$vuetify.menu.sell_product')
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -19,10 +17,8 @@
                 :close-on-content-click="false"
                 :nudge-right="40"
                 :return-value.sync="dates"
-                lazy
                 transition="scale-transition"
                 offset-y
-                full-width
                 min-width="290px"
               >
                 <template v-slot:activator="{ on }">
@@ -120,5 +116,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

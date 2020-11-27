@@ -42,14 +42,14 @@ class ImportManager extends BaseManager
         $fileName = time() . '.' . $file->getClientOriginalExtension();
         $file->move(public_path('upload'), $fileName);
         $csv = file_get_contents((public_path('upload/') . $fileName));
-//        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
+        //        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
         $csv = str_replace(',variable,', ',,', $csv);
         $array = array_map("str_getcsv", explode("\n", $csv));
         $company = CompanyManager::getCompanyByAdmin();
         $shopsInfo = $this->insertShopsFromImportFile(explode(',', json_encode($array[0]), 18)[17], $company);
         $composite = [];
         $variants = [];
-        $v = ['','',''];
+        $v = ['', '', ''];
         $parent = null;
         foreach ($array as $key => $value) {
             if ($key > 0 && count($value) > 1) {
@@ -65,7 +65,7 @@ class ImportManager extends BaseManager
                         $variants[$v[0]]['article'] = $parent->id;
                         $variants[$v[0]]['values'] = [];
                     }
-                    $variants[$v[0]]['values'] = array_merge($variants[$v[0]]['values'],[str_replace('"', '', $basicData[6])]);
+                    $variants[$v[0]]['values'] = array_merge($variants[$v[0]]['values'], [str_replace('"', '', $basicData[6])]);
                 }
                 if ($basicData[8] !== '""') {
                     $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[8], $jsonInfo, $company);
@@ -74,7 +74,7 @@ class ImportManager extends BaseManager
                         $variants[$v[1]]['article'] = $parent->id;
                         $variants[$v[1]]['values'] = [];
                     }
-                    $variants[$v[1]]['values'] = array_merge($variants[$v[1]]['values'],[str_replace('"', '', $basicData[8])]);
+                    $variants[$v[1]]['values'] = array_merge($variants[$v[1]]['values'], [str_replace('"', '', $basicData[8])]);
                 }
                 if ($basicData[10] !== '""') {
                     $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[10], $jsonInfo, $company);
@@ -84,13 +84,13 @@ class ImportManager extends BaseManager
                         $variants[$v[2]]['article'] = $parent->id;
                         $variants[$v[2]]['values'] = [];
                     }
-                    $variants[$v[2]]['values'] = array_merge($variants[$v[2]]['values'],[str_replace('"', '', $basicData[10])]);
+                    $variants[$v[2]]['values'] = array_merge($variants[$v[2]]['values'], [str_replace('"', '', $basicData[10])]);
                 }
-                if(str_replace(['"','['],'',$basicData[0]) === ''){
+                if (str_replace(['"', '['], '', $basicData[0]) === '') {
                     $composite[] = [
-                        'parent_id' =>$parent->id,
-                        'children_ref'=>str_replace('"','',$basicData[14]),
-                        'cant'=>str_replace('"','',$basicData[15]),
+                        'parent_id' => $parent->id,
+                        'children_ref' => str_replace('"', '', $basicData[14]),
+                        'cant' => str_replace('"', '', $basicData[15]),
                     ];
                 }
             }
@@ -104,12 +104,11 @@ class ImportManager extends BaseManager
      */
     public function createVariantsFromImportFile($variants)
     {
-        foreach ($variants as $key=>$variant)
-        {
+        foreach ($variants as $key => $variant) {
             $v = Variant::create([
-            'article_id' => $variant['article'],
-            'name' => $key,
-            'value' => json_encode($variant['values'])
+                'article_id' => $variant['article'],
+                'name' => $key,
+                'value' => json_encode($variant['values'])
             ]);
             $this->managerBy('new', $v);
         }
@@ -157,6 +156,7 @@ class ImportManager extends BaseManager
         $newArticle->price = str_replace('"', '', $basicData[11]) ?: 0.00;
         $newArticle->cost = str_replace('"', '', $basicData[12]) ?: 0.00;
         $newArticle->barCode = str_replace('"', '', $basicData[13]);
+        $newArticle->color = '#1FBC9C';
         $newArticle->save();
         $this->insertArticleShopFromImportFile($newArticle, $shopsInfo, $jsonInfo);
         return $newArticle;
@@ -192,21 +192,23 @@ class ImportManager extends BaseManager
      */
     public function insertShopsFromImportFile($shopData, $company): array
     {
+
         $dataShops = explode(',', json_encode(str_replace('"', '', $shopData)));
         $shops = [];
         $country = ['id' => cache()->get('userPin')['country']];
         foreach ($dataShops as $key => $value) {
-            $shopName = str_replace([']', '"'], '', explode('[', $value)[1]);
-            $exist = $this->findShopByName($shopName);
-            $data = ['shopName' => $shopName, 'country' => $country];
-            $shop = count($exist) === 0 ? Shop::createFirst($data, $company) : $exist[0];
-            User::latest()
-                ->where('id', '=', cache()->get('userPin')['id'])
-                ->get()[0]->shops()->saveMany([$shop]);
-            $shops [] = $shop->id;
+            if (array_key_exists(1, explode('[', $value))) {
+                $shopName = str_replace([']', '"'], '', explode('[', $value)[1]);
+                $exist = $this->findShopByName($shopName);
+                $data = ['shopName' => $shopName, 'country' => $country];
+                $shop = count($exist) === 0 ? Shop::createFirst($data, $company) : $exist[0];
+                User::latest()
+                    ->where('id', '=', cache()->get('userPin')['id'])
+                    ->get()[0]->shops()->saveMany([$shop]);
+                $shops[] = $shop->id;
+            }
         }
         return $shops;
-
     }
 
     /**

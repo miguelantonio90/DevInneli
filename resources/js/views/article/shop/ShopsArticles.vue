@@ -4,10 +4,10 @@
       :headers="headers"
       :items="shopData"
     >
-      <template v-slot:item.checked="{ item }">
+      <template v-slot:[`item.checked`]="{ item }">
         <v-simple-checkbox v-model="item.checked" />
       </template>
-      <template v-slot:item.price="{ item }">
+      <template v-slot:[`item.price`]="{ item }">
         <v-edit-dialog
           :return-value.sync="item.price"
           large
@@ -21,8 +21,6 @@
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
             </div>
-          </template>
-          <template v-slot:input>
             <v-text-field-money
               v-model="item.price"
               :label="$vuetify.lang.t('$vuetify.actions.edit')"
@@ -40,7 +38,7 @@
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:item.stock="{ item }">
+      <template v-slot:[`item.stock`]="{ item }">
         <v-edit-dialog
           :return-value.sync="item.stock"
           large
@@ -54,8 +52,6 @@
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
             </div>
-          </template>
-          <template v-slot:input>
             <v-text-field-integer
               v-model="item.stock"
               :label="$vuetify.lang.t('$vuetify.actions.save') "
@@ -72,7 +68,7 @@
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:item.under_inventory="{ item }">
+      <template v-slot:[`item.under_inventory`]="{ item }">
         <v-edit-dialog
           :return-value.sync="item.under_inventory"
           large
@@ -86,8 +82,6 @@
             <div class="mt-4 title">
               {{ $vuetify.lang.t('$vuetify.actions.edit') }}
             </div>
-          </template>
-          <template v-slot:input>
             <v-text-field-integer
               v-model="item.under_inventory"
               :label="$vuetify.lang.t('$vuetify.actions.save') "

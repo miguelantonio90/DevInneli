@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="showImportModal"
-    max-width="500"
+    max-width="650"
     persistent
   >
     <v-card>
@@ -11,7 +11,29 @@
         }}</span>
       </v-card-title>
       <v-card-text>
+        <v-row
+          v-if="isActionInProgress"
+          class="fill-height"
+          align-content="center"
+          justify="center"
+        >
+          <v-col
+            class="subtitle-1 text-center"
+            cols="12"
+          >
+            {{ $vuetify.lang.t('$vuetify.import_csv') }}
+          </v-col>
+          <v-col cols="6">
+            <v-progress-linear
+              color="deep-purple"
+              indeterminate
+              rounded
+              height="6"
+            />
+          </v-col>
+        </v-row>
         <v-form
+          v-show="!isActionInProgress"
           ref="form"
           v-model="formValid"
           class="my-10"
@@ -117,13 +139,11 @@ export default {
   methods: {
     ...mapActions('article', ['importArticles', 'toogleImportModal']),
     onFileChange (e) {
-      console.log(e)
       // this.file = e.target.files[0]
       this.file = e
     },
     async createNewCategory () {
       const formData = new FormData()
-      console.log(this.importArticle)
       formData.append('file', this.file)
       formData.append('type', this.importArticle.type)
       if (this.$refs.form.validate()) {

@@ -216,7 +216,6 @@ const actions = {
     commit(SWITCH_ARTICLE_SHOW_MODAL, showModal)
   },
   toogleImportModal ({ commit }, showModal) {
-    console.log(showModal)
     commit(SWITCH_ARTICLE_IMPORT_MODAL, showModal)
   },
   openTransferModal ({ commit }, articleId) {
@@ -239,13 +238,15 @@ const actions = {
         commit(ARTICLE_TABLE_LOADING, false)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
-  async importArticles ({ commit }, articlesData) {
-    commit(ARTICLE_TABLE_LOADING, true)
+  async importArticles ({ commit, dispatch }, articlesData) {
+    commit(ENV_DATA_PROCESS, true)
     // noinspection JSUnresolvedVariable
     await article
       .importArticles(articlesData)
       .then(({ data }) => {
-        commit(ARTICLE_TABLE_LOADING, false)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('article/toogleImportModal', false, { root: true })
+        dispatch('article/getArticles', null, { root: true })
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async createArticle ({ commit, dispatch }, newArticle) {

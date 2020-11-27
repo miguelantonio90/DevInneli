@@ -53,6 +53,7 @@ export default {
   principal: 'Principal',
   file: 'File',
   system: 'System',
+  import_csv: 'Getting your file',
   // menu
   menu: {
     setting: 'Setting',
