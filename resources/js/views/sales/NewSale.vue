@@ -563,64 +563,51 @@ export default {
       if (this.newSale.shop) {
         await this.articles.forEach((value) => {
           if (!value.parent_id) {
-            let inventory = 0
             if (value.variant_values.length > 0) {
               value.variant_values.forEach((v) => {
-                inventory = 0
                 const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-                if (artS.length > 0) {
-                  inventory = artS[0].stock
-                }
-                if (inventory > 0 || !value.track_inventory) {
-                  this.localArticles.push({
-                    ref: value.ref,
-                    name: value.name + '(' + v.name + ')',
-                    category: !value.category ? '' : value.category.name,
-                    path: value.path,
-                    images: value.images,
-                    taxes: v.tax,
-                    discount: [],
-                    color: value.color,
-                    price: artS[0].price ? artS[0].price : 0,
-                    cost: v.cost ? v.cost : 0,
-                    inventory: inventory || 0,
-                    cant: 1,
-                    totalCant: (inventory || 0) + 1,
-                    totalCost: v.cost,
-                    totalPrice: v.price,
-                    article_id: v.id
-                  })
-                }
+                this.validAddToLocalArticle(v, value, artS)
               })
             } else {
               const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-              if (artS.length > 0) {
-                inventory = artS[0].stock
-              }
-              if (inventory > 0 || !value.track_inventory) {
-                this.localArticles.push({
-                  ref: value.ref,
-                  name: value.name,
-                  category: !value.category ? '' : value.category.name,
-                  path: value.path,
-                  images: value.images,
-                  taxes: value.tax,
-                  discount: [],
-                  color: value.color,
-                  price: artS[0].price ? artS[0].price : 0,
-                  cost: value.cost ? value.cost : 0,
-                  inventory: inventory || 0,
-                  cant: 1,
-                  totalCant: (inventory || 0) + 1,
-                  totalCost: value.cost,
-                  totalPrice: value.price,
-                  article_id: value.id
-                })
-              }
+              this.validAddToLocalArticle(value, value, artS)
             }
           }
         })
       }
+    },
+    validAddToLocalArticle (v, value, artS) {
+      let inventory = 0
+      if (!value.track_inventory) {
+        this.addToLocalArticle(v, value, 0, [])
+      } else {
+        if (artS.length > 0) {
+          inventory = artS[0].stock
+        }
+        if (inventory > 0) {
+          this.addToLocalArticle(v, value, inventory, artS[0])
+        }
+      }
+    },
+    addToLocalArticle (v, value, inventory, artS) {
+      this.localArticles.push({
+        ref: value.ref,
+        name: value.name + '(' + v.name + ')',
+        category: !value.category ? '' : value.category.name,
+        path: value.path,
+        images: value.images,
+        taxes: v.tax,
+        discount: [],
+        color: value.color,
+        price: inventory > 0 ? artS.price : 0,
+        cost: v.cost ? v.cost : 0,
+        inventory: inventory || 0,
+        cant: 1,
+        totalCant: (inventory || 0) + 1,
+        totalCost: v.cost,
+        totalPrice: v.price,
+        article_id: v.id
+      })
     },
     getLocalDiscounts () {
       this.discounts.forEach((v) => {
