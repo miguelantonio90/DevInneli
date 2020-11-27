@@ -183,7 +183,6 @@ const actions = {
   },
   async createSale ({ commit, dispatch }, newSale) {
     commit(ENV_DATA_PROCESS, true)
-
     await sale
       .sendCreateRequest(newSale)
       .then(() => {

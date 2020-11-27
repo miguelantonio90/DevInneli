@@ -22,7 +22,6 @@ class PaymentManager extends BaseManager
                 ->where('company_id', '=', $company->id)
                 ->get();
         }
-
         return $payments;
     }
 

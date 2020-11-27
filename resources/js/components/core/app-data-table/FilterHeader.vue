@@ -139,6 +139,26 @@
 
       <div class="d-flex flex-row">
         <v-tooltip
+          v-if="hasCsvImport"
+          bottom
+        >
+          <template v-slot:activator="{ on: onTooltip }">
+            <div
+              class="mr-1"
+              v-on="onTooltip"
+            >
+              <v-btn
+                fab
+                x-small
+                @click="onClickImport()"
+              >
+                <v-icon>mdi-file-upload</v-icon>
+              </v-btn>
+            </div>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.component.upload_csv') }}</span>
+        </v-tooltip>
+        <v-tooltip
           v-if="hasCsvExport"
           bottom
         >
@@ -227,8 +247,8 @@ export default {
       return Array.isArray(val) && !!val.length
     }
   },
-
   props: [
+    'hasCsvImport',
     'hasCsvExport',
     'headersChoosen',
     'headerChoices',
@@ -268,6 +288,9 @@ export default {
     },
     onClickExport () {
       this.$emit('onClickExport')
+    },
+    onClickImport () {
+      this.$emit('onClickImport')
     }
   }
 }

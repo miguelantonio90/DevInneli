@@ -4,6 +4,7 @@ const FETCHING_ARTICLES = 'FETCHING_ARTICLES'
 const SWITCH_ARTICLE_NEW_MODAL = 'SWITCH_ARTICLE_NEW_MODAL'
 const SWITCH_ARTICLE_EDIT_MODAL = 'SWITCH_ARTICLE_EDIT_MODAL'
 const SWITCH_ARTICLE_SHOW_MODAL = 'SWITCH_ARTICLE_SHOW_MODAL'
+const SWITCH_ARTICLE_IMPORT_MODAL = 'SWITCH_ARTICLE_IMPORT_MODAL'
 const ARTICLE_CREATED = 'ARTICLE_CREATED'
 const ARTICLE_EDIT = 'ARTICLE_EDIT'
 const ARTICLE_UPDATED = 'ARTICLE_UPDATED'
@@ -62,6 +63,11 @@ const state = {
     variants_shops: [],
     images: []
   },
+  importArticle: {
+    type: 'loyverse',
+    file: ''
+  },
+  showImportModal: false,
   isArticleTableLoading: false,
   isActionInProgress: false,
   isTableLoading: false
@@ -79,6 +85,9 @@ const mutations = {
   },
   [SWITCH_ARTICLE_SHOW_MODAL] (state, showModal) {
     state.showShowModal = showModal
+  },
+  [SWITCH_ARTICLE_IMPORT_MODAL] (state, showModal) {
+    state.showImportModal = showModal
   },
   [ARTICLE_TABLE_LOADING] (state, isLoading) {
     state.isTableLoading = isLoading
@@ -206,6 +215,9 @@ const actions = {
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_ARTICLE_SHOW_MODAL, showModal)
   },
+  toogleImportModal ({ commit }, showModal) {
+    commit(SWITCH_ARTICLE_IMPORT_MODAL, showModal)
+  },
   openTransferModal ({ commit }, articleId) {
     commit(ARTICLE_EDIT, articleId)
   },
@@ -224,6 +236,17 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
+      }).catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async importArticles ({ commit, dispatch }, articlesData) {
+    commit(ENV_DATA_PROCESS, true)
+    // noinspection JSUnresolvedVariable
+    await article
+      .importArticles(articlesData)
+      .then(({ data }) => {
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('article/toogleImportModal', false, { root: true })
+        dispatch('article/getArticles', null, { root: true })
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async createArticle ({ commit, dispatch }, newArticle) {

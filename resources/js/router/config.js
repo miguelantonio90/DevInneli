@@ -161,7 +161,7 @@ export const protectedRoute = [
               title: 'vending',
               requiresAuth: true
             },
-            component: () => import('../views/sales/ListSale')
+            component: () => import('../views/sales/ListSale.vue')
           },
           {
             path: '/sales/vending/new',
@@ -319,7 +319,7 @@ export const protectedRoute = [
       {
         path: '/resume',
         component: RouteWrapper,
-        redirect: '/resume',
+        redirect: '/resume/sell_product.list',
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
@@ -334,7 +334,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesProduct')
           },
           {
             path: '/resume/sell_category.list',

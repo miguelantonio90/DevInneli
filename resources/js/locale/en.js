@@ -51,6 +51,9 @@ export default {
   price: 'Price',
   color: 'Color',
   principal: 'Principal',
+  file: 'File',
+  system: 'System',
+  import_csv: 'Getting your file',
   // menu
   menu: {
     setting: 'Setting',
@@ -158,7 +161,14 @@ export default {
     idle_info: 'You have left this browser idle for 10 minutes.',
     idle_counter: 'The session closes in {0} seconds',
     warning_ref: "You can't create this article. The Reference {0} exist.",
-    warning_barCode: "You can't create this article. The Bar Code {0} exist."
+    warning_barCode: "You can't create this article. The Bar Code {0} exist.",
+    info_import_category: 'If this file contains Categories, they will be imported into the system, but if you have already created some before importing, ' +
+        'and the names match, then the old ones will be kept, attaching the new articles.',
+    info_import_shop: 'If this file contains articles related to shops, they will be imported into the system with the country where you were registered, ' +
+        'but if you have already created one before importing, and the names match, then the old one will be kept, relating it to the new articles. ' +
+        'If you want to change the country, after importing it, you can go to the Configuration menu, Shops section and Edit it in the list.',
+    info_import_ref: 'If you have already created Articles and the References match those of the imported Articles, you will be rewritten to the new articles',
+    observation: 'Observation'
   },
   // profile
   profile: {
@@ -198,7 +208,8 @@ export default {
     show: 'Show {0}',
     delete: 'Delete {0}',
     no_action: "Can't {0}",
-    newAction: 'Create new'
+    newAction: 'Create new',
+    importData: 'Import'
   },
 
   access: {
@@ -226,6 +237,7 @@ export default {
     many_filter: 'Select (From Many)',
     active_switch_filter: 'Active Switch Filters',
     download_csv: 'Download as CSV file',
+    upload_csv: 'Upload a CSV file',
     choose_columns: 'Choose Columns',
     reset_columns: 'Reset Columns',
     no_filters: 'No filters enabled',

@@ -5,7 +5,10 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
+use App\Shop;
+use App\User;
 use App\Variant;
+use Exception;
 use Illuminate\Auth\AuthManager;
 
 class ArticleManager extends BaseManager
@@ -20,15 +23,21 @@ class ArticleManager extends BaseManager
      */
     private $variantManager;
 
+
+    /**
+     * @var ShopManager
+     */
+    private $shopManager;
+
     /**
      * ArticleManager constructor.
-     * @param  VariantManager  $variantManager
+     * @param VariantManager $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
         $this->variantManager = $variantManager;
-
     }
+
 
     /**
      * @return mixed
@@ -105,7 +114,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -149,7 +158,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $data
      * @return Articles
-     * @throws \Exception
+     * @throws Exception
      */
     public function insertArticle($data): Articles
     {
@@ -165,7 +174,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $data
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateComposite($article, $data): void
     {
@@ -229,7 +238,7 @@ class ArticleManager extends BaseManager
      * @param $article
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateData($article, $data): void
     {
@@ -265,7 +274,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param  Articles  $article
+     * @param Articles $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void
@@ -298,7 +307,7 @@ class ArticleManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -322,7 +331,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $composites
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeComposite($article, $composites): void
     {
@@ -378,7 +387,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $data
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateChidrensArticles($article, $data): void
     {
@@ -431,7 +440,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {
@@ -470,5 +479,7 @@ class ArticleManager extends BaseManager
             }
         }
     }
+
+
 
 }

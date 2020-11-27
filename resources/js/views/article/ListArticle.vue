@@ -11,10 +11,11 @@
           :headers="getTableColumns"
           :view-transfer-button="true"
           csv-filename="Articles"
+          has-csv-import
           :items="articles"
           :options="vBindOption"
-          :sort-by="['name']"
-          :sort-desc="[false, true]"
+          :sort-by="['ref']"
+          :sort-desc="[false]"
           multi-sort
           :is-loading="isTableLoading"
           @create-row="createArticleHandler"
@@ -120,7 +121,7 @@
                   <tbody>
                     <tr
                       v-for="dessert in item.variant_values"
-                      :key="dessert.name"
+                      :key="dessert.ref"
                     >
                       <td>{{ dessert.name }}</td>
                       <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
@@ -157,7 +158,7 @@ export default {
       localArticles: [],
       search: '',
       vBindOption: {
-        itemKey: 'name',
+        itemKey: 'ref',
         singleExpand: false,
         showExpand: true
       }
