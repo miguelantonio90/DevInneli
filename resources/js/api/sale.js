@@ -12,5 +12,8 @@ export default {
   },
   sendDeleteRequest (saleId) {
     return api.remove('sale/' + saleId)
+  },
+  fetchSaleByCategory (filter) {
+    return api.post('sale/category', filter)
   }
 }

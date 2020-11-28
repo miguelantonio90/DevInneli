@@ -344,7 +344,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesCategory')
           },
           {
             path: '/resume/sell_user.list',

@@ -4,11 +4,13 @@
 namespace App\Managers;
 
 
+use App\Articles;
 use App\ArticlesShops;
 use App\Sale;
 use App\SalesArticlesShops;
 use App\Tax;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SaleManager extends BaseManager
@@ -38,7 +40,7 @@ class SaleManager extends BaseManager
                     'articles_shops.id')
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->where('sales.id', '=', $value['id'])
-                ->select('shops.*','shops.id as shop_id')
+                ->select('shops.*', 'shops.id as shop_id')
                 ->get()[0];
             $sales[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
@@ -112,7 +114,7 @@ class SaleManager extends BaseManager
      * @return Sale
      * @throws Exception
      */
-    public function new($data):Sale
+    public function new($data): Sale
     {
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
@@ -140,7 +142,7 @@ class SaleManager extends BaseManager
         foreach ($articles as $key => $value) {
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
-                ->where('shop_id', '=', $edit?$data['shop']['shop_id']:$data['shop']['id'])
+                ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->get()[0];
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
             $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
@@ -251,6 +253,118 @@ class SaleManager extends BaseManager
         $sale = Sale::findOrFail($id);
         $this->managerBy('delete', $sale);
         return $sale->delete();
+    }
+
+    public function saleCategory($filter)
+    {
+        $categoriesData = CategoryManager::findAllByCompany();
+        $categories = [];
+        $pos = 0;
+        foreach ($categoriesData as $key => $value) {
+            $categories[$pos]['name'] = $value->name;
+            $categories[$pos]['count'] = $this->getArticleInfo($filter, $value->id);
+            $pos++;
+        }
+        return $categories;
+    }
+
+    /**
+     * @param $filter
+     * @param $id
+     * @return Collection
+     */
+    private function getArticleInfo($filter, $id): Collection
+    {
+//        $articles = DB::table('articles')
+//            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+//            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+//                'articles_shops.id')
+//            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+//            ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
+//            ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
+//            ->where('articles.category_id', '=', $id)
+//            ->whereIn('articles_shops.shop_id', $shops)
+//            ->orderBy('articles.created_at')
+//            ->select('sales.id as sales_id', 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales_articles_shops.created_at')
+//            ->get();
+        $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
+        $shops = [];
+        foreach ($filter['shops'] as $key => $value) {
+            $shops[] = $value['id'];
+        }
+        $sales = [];
+        if (auth()->user()['isAdmin'] === 1) {
+            $sales = Sale::latest()
+                ->with('company')
+                ->get();
+        } else {
+            $sales = Sale::latest()
+                ->with('company')
+                ->with('articles_shops')
+                ->with('taxes')
+                ->with('discounts')
+                ->orderBy('created_at', 'ASC')
+                ->whereDate('created_at', '>=', $dates[0])
+                ->whereDate('created_at', '<=', $dates[1])
+                ->get();
+        }
+        foreach ($sales as $key => $value) {
+            $sales[$key]['articles'] = DB::table('articles')
+                ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
+                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
+                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->select([
+                    'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
+                    'articles_shops.stock as inventory', 'articles.id as article_id'
+                ])
+                ->where('sales.id', '=', $value['id'])
+                ->get();
+            $totalCost = 0;
+            $totalPrice = 0;
+            foreach ($sales[$key]['articles'] as $k => $v) {
+                $sales[$key]['articles'][$k]->taxes = DB::table('taxes')
+                    ->join('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
+                    ->join('articles', 'articles.id', '=', 'article_tax.article_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->addSelect(['taxes.*'])
+                    ->get();
+                $sales[$key]['articles'][$k]->discount = DB::table('discounts')
+                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
+                        'discounts.id')
+                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=',
+                        'sales_articles_shop_discounts.sales_articles_shops_id')
+                    ->join('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->join('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->join('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $id)
+                    ->where('sales.id', '=', $sales[$key]['id'])
+                    ->addSelect(['discounts.*'])
+                    ->get();
+                $sum = 0;
+                $discount = 0;
+                foreach ($sales[$key]['articles'][$k]->discount as $j => $i) {
+                    $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
+                $totalCost += $v->cant * $v->cost;
+                $totalPrice += $v->cant * $v->price + $sum - $discount;
+                $discount = 0;
+                foreach ($sales[$key]['taxes'] as $j => $i) {
+                    $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $sum = 0;
+                foreach ($sales[$key]['discounts'] as $j => $i) {
+                    $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
+                }
+                $totalPrice = $totalPrice + $sum - $discount;
+
+            }
+            $sales[$key]['totalCost'] = round($totalCost, 2);
+            $sales[$key]['totalPrice'] = round($totalPrice, 2);
+        }
+        return $sales;
     }
 
 }
