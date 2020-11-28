@@ -90,4 +90,9 @@ class Articles extends Model
         return $this->belongsToMany(Tax::class, 'article_tax', 'article_id', 'tax_id');
     }
 
+    public function discounts(): BelongsToMany
+    {
+        return $this->belongsToMany(Discount::class, 'articles_discounts', 'article_id', 'discount_id');
+    }
+
 }

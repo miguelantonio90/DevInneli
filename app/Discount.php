@@ -5,6 +5,7 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -40,6 +41,11 @@ class Discount extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function article(): BelongsToMany
+    {
+        return $this->belongsToMany(Articles::class, 'articles_discounts', 'discount_id', 'article_id');
     }
 
 
