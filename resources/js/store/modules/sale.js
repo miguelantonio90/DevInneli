@@ -2,6 +2,7 @@ import sale from '../../api/sale'
 
 const FETCHING_SALES = 'FETCHING_SALES'
 const FETCHING_SALES_BY_CATEGORIES = 'FETCHING_SALES_BY_CATEGORIES'
+const FETCHING_SALES_BY_PAYMENT = 'FETCHING_SALES_BY_PAYMENT'
 const SWITCH_SALE_NEW_MODAL = 'SWITCH_SALE_NEW_MODAL'
 const SWITCH_SALE_EDIT_MODAL = 'SWITCH_SALE_EDIT_MODAL'
 const SWITCH_SALE_SHOW_MODAL = 'SWITCH_SALE_SHOW_MODAL'
@@ -49,7 +50,8 @@ const state = {
   isSaleTableLoading: false,
   isActionInProgress: false,
   isTableLoading: false,
-  salesByCategories: []
+  salesByCategories: [],
+  salesByPayments: []
 }
 
 const mutations = {
@@ -154,6 +156,9 @@ const mutations = {
   },
   [FETCHING_SALES_BY_CATEGORIES] (state, saleByCategory) {
     state.salesByCategories = saleByCategory
+  },
+  [FETCHING_SALES_BY_PAYMENT] (state, salesByPayment) {
+    state.salesByPayments = salesByPayment
   }
 }
 
@@ -193,6 +198,16 @@ const actions = {
       .fetchSaleByCategory(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_CATEGORIES, data.data)
+        commit(SALE_TABLE_LOADING, false)
+      }).catch((error) => commit(FAILED_SALE, error))
+  },
+  async getSalesByPayment ({ commit }, filter) {
+    commit(SALE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await sale
+      .fetchSaleByPayment(filter)
+      .then(({ data }) => {
+        commit(FETCHING_SALES_BY_PAYMENT, data.data)
         commit(SALE_TABLE_LOADING, false)
       }).catch((error) => commit(FAILED_SALE, error))
   },

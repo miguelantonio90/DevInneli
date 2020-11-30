@@ -15,5 +15,8 @@ export default {
   },
   fetchSaleByCategory (filter) {
     return api.post('sale/category', filter)
+  },
+  fetchSaleByPayment (filter) {
+    return api.post('sale/payment', filter)
   }
 }

@@ -81,7 +81,7 @@
                           color="primary"
                         >
                           <v-list-item
-                            v-for="(item, i) in localSalesByCategories.slice(0,5)"
+                            v-for="(item, i) in localSalesByPayments.slice(0,5)"
                             :key="i"
                           >
                             <v-list-item-icon>
@@ -122,7 +122,7 @@
                                           [$vuetify.lang.t('$vuetify.menu.vending'),])"
                   :headers="getTableColumns"
                   csv-filename="ProductBuys"
-                  :items="localSalesByCategories"
+                  :items="localSalesByPayments"
                   :options="vBindOption"
                   :sort-by="['no_facture']"
                   :sort-desc="[false, true]"
@@ -148,7 +148,7 @@ import { Chart } from 'highcharts-vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'SalesCategory',
+  name: 'SalesPayment',
   components: { AppLoading, highcharts: Chart },
   data () {
     return {
@@ -165,12 +165,12 @@ export default {
       formRule: this.$rules,
       dates: [],
       localShops: [],
-      localSalesByCategories: []
+      localSalesByPayments: []
     }
   },
   computed: {
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapState('sale', ['salesByCategories', 'isTableLoading']),
+    ...mapState('sale', ['salesByPayments', 'isTableLoading']),
     ...mapGetters('auth', ['user']),
     dateRangeText () {
       return this.dates.join(' ---> ')
@@ -239,11 +239,11 @@ export default {
     await this.getShops().then(() => {
       this.localShops = this.shops
     })
-    await this.getSalesByCategories({
+    await this.getSalesByPayment({
       shops: this.shops,
       dates: this.dates
     }).then(() => {
-      this.localSalesByCategories = this.salesByCategories.sort(function (a, b) {
+      this.localSalesByPayments = this.salesByPayments.sort(function (a, b) {
         if (a.data.netPrice > b.data.netPrice) return -1
         if (a.data.netPrice < b.data.netPrice) return 1
         return 0
@@ -254,11 +254,11 @@ export default {
   },
   methods: {
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSalesByCategories']),
+    ...mapActions('sale', ['getSalesByPayment']),
     loadData: function () {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
-      this.localSalesByCategories.slice(0, 4).forEach((v) => {
+      this.localSalesByPayments.slice(0, 4).forEach((v) => {
         categories.push(v.name)
         series.grossPrice.push(v.data.grossPrice)
         series.totalDiscount.push(v.data.totalDiscount)

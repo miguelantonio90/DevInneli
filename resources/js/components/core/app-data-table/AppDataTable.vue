@@ -38,6 +38,7 @@
       :headers="headersChoosenObjs || []"
       :search="searchValueDebounced"
       v-on="$listeners"
+      @click:row="handleClick"
     >
       <template
         v-if="viewNewButton"
@@ -314,6 +315,10 @@ export default {
     ...mapActions('article', ['importArticles', 'toogleImportModal']),
     createButtonClicked () {
       this.$emit('create-row')
+    },
+    handleClick (row) {
+      console.log(row)
+      this.$emit('rowClick', row)
     },
     refreshButtonClicked () {
       this.$emit('refresh-table')

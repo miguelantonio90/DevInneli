@@ -365,5 +365,14 @@ export default {
     selectShop: 'Debe seleccionar una tienda',
     emptyArticle: 'Esta tienda no tiene artículos. Por favor abastezca la tienda'
   },
+  report: {
+    top5: 'Los 5 mas vendidos',
+    netPrice: 'Ventas Netas',
+    grossPrice: 'Ventas Brutas',
+    discountsSale: 'Descuentos por Ventas',
+    graphics: 'Gráfico',
+    barGraphics: 'Gráfico de Barras',
+    margin: 'Margen'
+  },
   ...es
 }

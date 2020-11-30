@@ -360,5 +360,14 @@ export default {
     selectShop: 'You should select a shop',
     emptyArticle: 'This shop no have article. Please supply the shop'
   },
+  report: {
+    top5: 'Top 5 elements',
+    netPrice: 'Net Sales',
+    grossSale: 'Gross Sale',
+    discountsSale: 'Discounts Sales',
+    graphics: 'Graphic',
+    barGraphics: 'Bar Graphic',
+    margin: 'Margin'
+  },
   ...en
 }

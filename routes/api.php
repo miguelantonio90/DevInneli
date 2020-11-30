@@ -68,6 +68,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('sale', 'SaleController');
         Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');
+        Route::post('sale/payment', 'SaleController@salePayment')->name('salePayment');
 
         Route::resource('assistance', 'AssistanceController');
 

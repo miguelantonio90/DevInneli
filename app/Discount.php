@@ -43,10 +43,4 @@ class Discount extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function article(): BelongsToMany
-    {
-        return $this->belongsToMany(Articles::class, 'articles_discounts', 'discount_id', 'article_id');
-    }
-
-
 }

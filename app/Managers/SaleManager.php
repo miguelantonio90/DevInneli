@@ -262,7 +262,8 @@ class SaleManager extends BaseManager
         $pos = 0;
         foreach ($categoriesData as $key => $value) {
             $categories[$pos]['name'] = $value->name;
-            $categories[$pos]['count'] = $this->getArticleInfo($filter, $value->id);
+            $categories[$pos]['color'] = $value->color;
+            $categories[$pos]['data'] = $this->getArticleInfoCategory($filter, $value->id);
             $pos++;
         }
         return $categories;
@@ -273,7 +274,7 @@ class SaleManager extends BaseManager
      * @param $id
      * @return array
      */
-    private function getArticleInfo($filter, $id): array
+    private function getArticleInfoCategory($filter, $id): array
     {
         $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
         $shops = [];
@@ -290,18 +291,95 @@ class SaleManager extends BaseManager
             ->where('articles.category_id', '=', $id)
             ->whereIn('articles_shops.shop_id', $shops)
             ->orderBy('articles.created_at')
-            ->select('articles.id as article_id','sales.id as sales_id', 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales_articles_shops.created_at')
+            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
+                'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost')
             ->get();
         $grossPrice = 0;
-       foreach ($articles as $key=>$value)
-       {
-           $grossPrice += $value->price*$value->cant;
-           $taxes = Articles::findOrFail($value->article_id)
-               ->with('tax')
-               ->with('discounts')->get();
+        $totalTax = 0;
+        $totalDiscounts = 0;
+        $totalCost = 0;
+        foreach ($articles as $key => $value) {
+            $price = $value->price * $value->cant;
+            $grossPrice += $price;
+            $totalCost += $value->cost;
+            $taxes = DB::table('taxes')
+                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->where('article_tax.article_id', '=', $value->article_id)
+                ->get();
+            foreach ($taxes as $k => $tax) {
+                $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
+            }
+            $discounts = DB::table('discounts')
+                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
+                ->get();
+            foreach ($discounts as $k => $discount) {
+                $totalDiscounts = $discount->percent ? $discount->value * $price / 100 : $price + $discount->value;
+            }
+        }
+        return ['cantArt' => count($articles), 'grossPrice' => round($grossPrice, 2), 'totalDiscount' => round($totalDiscounts, 2),
+            'netPrice' => round(($grossPrice + $totalTax - $totalDiscounts), 2), 'totalCost' => round($totalCost, 2),
+            'grossBenefit' => round(($grossPrice + $totalTax - $totalDiscounts) - $totalCost, 2), 'totalTax' => round($totalTax, 2),
+            'margin' => ($grossPrice === 0.00 || $grossPrice === 0) ? 0.00 : round(100 * $totalCost / $grossPrice, 2)];
+    }
 
-       }
-        return ['grossPrice'=>$grossPrice];
+    public function salePayment($filter)
+    {
+        $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
+        $shops = [];
+        foreach ($filter['shops'] as $key => $value) {
+            $shops[] = $value['id'];
+        }
+        $pos = 0;
+        $articles = DB::table('articles')
+            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                'articles_shops.id')
+            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+            ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
+            ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
+            ->whereIn('articles_shops.shop_id', $shops)
+            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
+                'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost', 'sales.pay')
+            ->get();
+        $result = [];
+        $grossPrice = 0;
+        $totalTax = 0;
+        $totalDiscounts = 0;
+        $totalCost = 0;
+        foreach ($articles as $key => $value) {
+            $price = $value->price * $value->cant;
+            $grossPrice += $price;
+            $totalCost += $value->cost;
+            $taxes = DB::table('taxes')
+                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->where('article_tax.article_id', '=', $value->article_id)
+                ->get();
+            foreach ($taxes as $k => $tax) {
+                $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
+            }
+            $discounts = DB::table('discounts')
+                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
+                ->get();
+            foreach ($discounts as $k => $discount) {
+                $totalDiscounts = $discount->percent ? $discount->value * $price / 100 : $price + $discount->value;
+            }
+            if (!array_key_exists($value->pay, $result)) {
+                $result[$value->pay]['cantTransactions'] = 0;
+                $result[$value->pay]['grossPrice'] = 0;
+                $result[$value->pay]['totalDiscount'] = 0;
+                $result[$value->pay]['totalTax'] = 0;
+                $result[$value->pay]['netPrice'] = 0;
+            }
+            $price = $value->price * $value->cant;
+            $result[$value->pay]['cantTransactions'] +=1;
+            $result[$value->pay]['grossPrice'] += $price;
+            $result[$value->pay]['totalDiscount'] += $totalDiscounts;
+            $result[$value->pay]['totalTax'] += round($totalTax, 2);
+            $result[$value->pay]['netPrice'] = round($result[$value->pay]['grossPrice'] + $result[$value->pay]['totalTax']-$result[$value->pay]['totalDiscount'],2);
+        }
+        return $result;
     }
 
 }
