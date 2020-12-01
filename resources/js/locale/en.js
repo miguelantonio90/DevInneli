@@ -315,6 +315,10 @@ export default {
     cash: 'Cash',
     card: 'Card',
     check: 'Check',
+    credit: 'Credit',
+    deposit: 'Deposit',
+    wire_transfer: 'Wire Transfer',
+    digital_transfer: 'Digital Transfer',
     other: 'Other'
   },
   supplier: {

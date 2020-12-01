@@ -323,7 +323,11 @@ class SaleManager extends BaseManager
             'margin' => ($grossPrice === 0.00 || $grossPrice === 0) ? 0.00 : round(100 * $totalCost / $grossPrice, 2)];
     }
 
-    public function salePayment($filter)
+    /**
+     * @param $filter
+     * @return array
+     */
+    public function salePayment($filter): array
     {
         $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
         $shops = [];
@@ -379,7 +383,19 @@ class SaleManager extends BaseManager
             $result[$value->pay]['totalTax'] += round($totalTax, 2);
             $result[$value->pay]['netPrice'] = round($result[$value->pay]['grossPrice'] + $result[$value->pay]['totalTax']-$result[$value->pay]['totalDiscount'],2);
         }
-        return $result;
+        $data = [];
+        $pos = 0;
+        foreach ($result as $item=>$value)
+        {
+            $data[$pos]['name'] = $item;
+            $data[$pos]['data']['cantTransactions'] = $value['cantTransactions'];
+            $data[$pos]['data']['grossPrice'] = $value['grossPrice'];
+            $data[$pos]['data']['totalDiscount'] = $value['totalDiscount'];
+            $data[$pos]['data']['totalTax'] = $value['totalTax'];
+            $data[$pos]['data']['netPrice'] = $value['netPrice'];
+            $pos ++;
+        }
+        return $data;
     }
 
 }

@@ -93,7 +93,7 @@
                               </v-chip>
                             </v-list-item-icon>
                             <v-list-item-content>
-                              <v-list-item-title v-text="item.name" />
+                              <v-list-item-title v-text="`${$vuetify.lang.t('$vuetify.payment.' + item.name)}`" />
                               <v-list-item-subtitle v-text="`${item.data.netPrice + ' ' + user.company.currency }` " />
                             </v-list-item-content>
                           </v-list-item>
@@ -133,7 +133,23 @@
                   :view-delete-button="false"
                   :is-loading="isTableLoading"
                   @rowClick="rowClick"
-                />
+                >
+                  <template v-slot:[`item.name`]="{ item }">
+                    {{ $vuetify.lang.t('$vuetify.payment.' + item.name) }}
+                  </template>
+                  <template v-slot:[`item.data.grossPrice`]="{ item }">
+                    {{ `${user.company.currency + ' ' + item.data.grossPrice}` }}
+                  </template>
+                  <template v-slot:[`item.data.netPrice`]="{ item }">
+                    {{ `${user.company.currency + ' ' + item.data.netPrice}` }}
+                  </template>
+                  <template v-slot:[`item.data.totalTax`]="{ item }">
+                    {{ `${user.company.currency + ' ' + item.data.totalTax}` }}
+                  </template>
+                  <template v-slot:[`item.data.totalDiscount`]="{ item }">
+                    {{ `${user.company.currency + ' ' + item.data.totalDiscount}` }}
+                  </template>
+                </app-data-table>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -171,6 +187,7 @@ export default {
   computed: {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('sale', ['salesByPayments', 'isTableLoading']),
+    ...mapState('payment', ['paymentsConst']),
     ...mapGetters('auth', ['user']),
     dateRangeText () {
       return this.dates.join(' ---> ')
@@ -184,12 +201,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'data.cantArt',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'data.grossBenefit',
+          value: 'data.cantTransactions',
           select_filter: true
         },
         {
@@ -203,11 +215,6 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'data.totalCost',
-          select_filter: true
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.report.discountsSale'),
           value: 'data.totalDiscount',
           select_filter: true
@@ -215,11 +222,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
           value: 'data.totalTax',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.report.margin'),
-          value: 'data.margin',
           select_filter: true
         }
       ]
@@ -236,6 +238,7 @@ export default {
       lastWeek = (i > 0) ? lastWeek + '-' + v : v
     })
     this.dates = [lastWeek, toDay]
+    await this.loadPaymentsConst()
     await this.getShops().then(() => {
       this.localShops = this.shops
     })
@@ -255,16 +258,19 @@ export default {
   methods: {
     ...mapActions('shop', ['getShops']),
     ...mapActions('sale', ['getSalesByPayment']),
+    ...mapActions('payment', ['loadPaymentsConst']),
     loadData: function () {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
       this.localSalesByPayments.slice(0, 4).forEach((v) => {
-        categories.push(v.name)
-        series.grossPrice.push(v.data.grossPrice)
-        series.totalDiscount.push(v.data.totalDiscount)
-        series.netPrice.push(v.data.netPrice)
-        series.totalCost.push(v.data.totalCost)
-        series.totalTax.push(v.data.totalTax)
+        if (v.name !== undefined) {
+          categories.push(this.paymentsConst.filter(pay => (pay.value === v.name))[0].name)
+          series.grossPrice.push(v.data.grossPrice)
+          series.totalDiscount.push(v.data.totalDiscount)
+          series.netPrice.push(v.data.netPrice)
+          series.totalCost.push(v.data.totalCost)
+          series.totalTax.push(v.data.totalTax)
+        }
       })
       this.chartOptions = {
         chart: {
@@ -272,9 +278,6 @@ export default {
         },
         title: {
           text: this.$vuetify.lang.t('$vuetify.report.barGraphics')
-        },
-        subtitle: {
-          text: 'Source: WorldClimate.com'
         },
         xAxis: {
           categories: categories,

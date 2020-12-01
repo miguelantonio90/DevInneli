@@ -318,6 +318,10 @@ export default {
     cash: 'Efectivo',
     card: 'Targeta',
     check: 'Cheque',
+    credit: 'Crédito',
+    deposit: 'Depósito',
+    wire_transfer: 'Transferencia Bancaria',
+    digital_transfer: 'Transferencia Digital',
     other: 'Otro'
   },
   supplier: {
