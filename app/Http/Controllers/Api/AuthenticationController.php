@@ -33,7 +33,6 @@ class AuthenticationController extends Controller
         $user['position']->accessPin = $position['accessPin'] === 1;
         $user['position']->accessEmail = $position['accessEmail'] === 1;
         $user['position']->disabled = $position['key'] === 'super_manager';
-
         $user['company'] = $company;
         $user['position'] = $position;
 

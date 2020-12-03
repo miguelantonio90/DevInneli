@@ -26,6 +26,7 @@ class ResponseHelper
             'success' => true,
             'data' => $result,
             'message' => $message,
+            'access'=>cache()->get('userPin')['id']!==''?cache()->get('userPin')['position']['access_permit']:''
         ];
         return response()->json($response, 200);
     }
