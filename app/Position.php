@@ -62,18 +62,6 @@ class Position extends Model
         return $position;
     }
 
-    public static function makePosition($company_id, $properties)
-    {
-        $position = new Position();
-        $position->key = $properties['name'];
-        $position->name = $properties['country'];
-        $position->accessEmail = $properties['address'];
-        $position->accessPin = $properties['phone'];
-        $position->description = $properties['description'];
-        $position->company_id = $company_id;
-        return $position;
-    }
-
     public function company()
     {
         return $this->belongsTo(Company::class);
