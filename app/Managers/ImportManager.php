@@ -202,6 +202,7 @@ class ImportManager extends BaseManager
                 $exist = $this->findShopByName($shopName);
                 $data = ['shopName' => $shopName, 'country' => $country];
                 $shop = count($exist) === 0 ? Shop::createFirst($data, $company) : $exist[0];
+                $shop->created_by = cache()->get('userPin')['id'];
                 User::latest()
                     ->where('id', '=', cache()->get('userPin')['id'])
                     ->get()[0]->shops()->saveMany([$shop]);

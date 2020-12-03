@@ -22,7 +22,7 @@
           <v-row justify="space-around">
             <v-col
               cols="12"
-              md="6"
+              md="3"
             >
               <v-select
                 v-model="newAccess.key"
@@ -51,7 +51,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="6"
+              md="3"
             >
               <v-text-field
                 v-model="newAccess.name"
@@ -62,12 +62,12 @@
             </v-col>
             <v-checkbox
               v-model="newAccess.accessEmail"
-              class="md-6"
+              class="md-3"
               :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
             />
             <v-checkbox
               v-model="newAccess.accessPin"
-              class="md-6"
+              class="md-3"
               :label="$vuetify.lang.t('$vuetify.access.accessPin')"
             />
             <v-col
@@ -79,6 +79,9 @@
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
+          </v-row>
+          <v-row>
+            <v-col md="12" />
           </v-row>
         </v-form>
       </v-card-text>
