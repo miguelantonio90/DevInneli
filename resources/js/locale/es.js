@@ -69,6 +69,7 @@ export default {
     user: 'Empleados',
     employee: 'Empleado',
     access: 'Permiso de acceso',
+    access_new: 'Nuevo Permiso de acceso',
     access_list: 'Lista de Permisos',
     client: 'Cliente',
     client_list: 'Listado de Clientes',
@@ -219,7 +220,14 @@ export default {
     name: 'Cargo o Especialidad',
     accessPin: 'Acceso con Pin',
     accessEmail: 'Acceso con Correo',
-    description: 'Descripción'
+    description: 'Descripción',
+    keys: {
+      atm: 'Cajero',
+      waiter: 'Camarero',
+      supervisor: 'Supervisor',
+      seller: 'Vendedor',
+      super_manager: 'CEO Administrador'
+    }
   },
   assistance: {
     entry: 'Entrada',

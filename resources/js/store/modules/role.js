@@ -11,6 +11,7 @@ const ACCESS_DELETE = 'ACCESS_DELETE'
 const ACCESS_TABLE_LOADING = 'ACCESS_TABLE_LOADING'
 const FAILED_ACCESS = 'FAILED_ACCESS'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
+const LOAD_KEY_CONST = 'LOAD_KEY_CONST'
 
 const state = {
   showNewModal: false,
@@ -22,12 +23,6 @@ const state = {
   loading: false,
   saved: false,
   keys: [
-    { name: 'CEO Manager', value: 'super_manager', disabled: true },
-    { name: 'Manager', value: 'manager' },
-    { name: 'Supervisor (Supervisor)', value: 'supervisor' },
-    { name: 'Atm (Cajero)', value: 'atm' },
-    { name: 'Waiter (Camarero)', value: 'waiter' },
-    { name: 'Seller (Vendedor)', value: 'seller' }
   ],
   newAccess: {
     key: '',
@@ -51,6 +46,15 @@ const state = {
 }
 
 const mutations = {
+  [LOAD_KEY_CONST] (state) {
+    state.keys = [
+      { name: this._vm.$language.t('$vuetify.access.keys.super_manager'), value: 'super_manager', disabled: true },
+      { name: this._vm.$language.t('$vuetify.access.keys.supervisor'), value: 'supervisor' },
+      { name: this._vm.$language.t('$vuetify.access.keys.atm'), value: 'atm' },
+      { name: this._vm.$language.t('$vuetify.access.keys.waiter'), value: 'waiter' },
+      { name: this._vm.$language.t('$vuetify.access.keys.seller'), value: 'seller' }
+    ]
+  },
   [SWITCH_ACCESS_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
   },
@@ -139,9 +143,11 @@ const getters = {}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
+    commit(LOAD_KEY_CONST)
     commit(SWITCH_ACCESS_NEW_MODAL, showModal)
   },
   toogleEditModal ({ commit }, showModal) {
+    commit(LOAD_KEY_CONST)
     commit(SWITCH_ACCESS_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
@@ -165,6 +171,9 @@ const actions = {
         commit(ACCESS_TABLE_LOADING, false)
       })
       .catch(error => commit(FAILED_ACCESS, error))
+  },
+  loadPaymentsConst ({ commit }) {
+    commit(LOAD_KEY_CONST)
   },
   async createRole ({ commit, dispatch }, newAccess) {
     commit(ENV_DATA_PROCESS, true)

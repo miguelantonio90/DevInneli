@@ -91,6 +91,14 @@ class SaleController extends Controller
         );
     }
 
+    public function saleByProduct(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->saleManager->saleByProduct($request->all()),
+            'Sale by category retrieved successfully.'
+        );
+    }
+
     /**
      * Remove the specified resource from storage.
      *

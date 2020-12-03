@@ -68,6 +68,7 @@ import NewAccess from './NewAccess'
 import EditAccess from './EditAccess'
 
 export default {
+  name: 'ListAccess',
   components: {
     NewAccess,
     EditAccess

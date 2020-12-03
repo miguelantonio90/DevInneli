@@ -69,6 +69,7 @@ export default {
     user: 'Users',
     employee: 'Employee',
     access: 'Access permission',
+    access_new: 'New Access permission',
     access_list: 'Permission List',
     client: 'Client',
     client_list: 'Client List',
@@ -217,7 +218,14 @@ export default {
     name: 'Position or specialty',
     accessPin: 'Access with Pin Code',
     accessEmail: 'Access with Email',
-    description: 'Description'
+    description: 'Description',
+    keys: {
+      atm: 'ATM',
+      waiter: 'Waiter',
+      supervisor: 'Supervisor',
+      seller: 'Seller',
+      super_manager: 'CEO Manager'
+    }
   },
   assistance: {
     entry: 'Entry',

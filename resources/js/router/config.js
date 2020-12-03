@@ -231,6 +231,7 @@ export const protectedRoute = [
             name: 'discounts_list',
             meta: {
               title: 'discounts_list',
+              hiddenInMenu: true,
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
@@ -393,10 +394,22 @@ export const protectedRoute = [
             name: 'access',
             meta: {
               title: 'access',
+              hiddenInMenu: true,
               icon: 'mdi-account-key',
               requiresAuth: true
             },
             component: () => import('../views/access/ListAccess')
+          },
+          {
+            path: '/users/access.add',
+            name: 'access_new',
+            meta: {
+              title: 'access_new',
+              hiddenInMenu: true,
+              icon: 'mdi-account-key',
+              requiresAuth: true
+            },
+            component: () => import('../views/access/NewAccess')
           },
           {
             path: '/users/assistance.list',

@@ -14,7 +14,7 @@ const FAILED_PAYMENT = 'FAILED_PAYMENT'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
 const SET_EDIT_PAYMENT = 'SET_EDIT_PAYMENT'
 const SET_PAYMENT_AVATAR = 'SET_PAYMENT_AVATAR'
-const LOAD_PAYMENS_CONST = 'LOAD_PAYMENS_CONST'
+const LOAD_PAYMENTS_CONST = 'LOAD_PAYMENTS_CONST'
 const state = {
   showNewModal: false,
   showEditModal: false,
@@ -80,7 +80,7 @@ const mutations = {
       )
     })
   },
-  [LOAD_PAYMENS_CONST] (state) {
+  [LOAD_PAYMENTS_CONST] (state) {
     state.paymentsConst = [
       {
         name: this._vm.$language.t('$vuetify.payment.cash'),
@@ -170,11 +170,11 @@ const getters = {}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
-    commit(LOAD_PAYMENS_CONST)
+    commit(LOAD_PAYMENTS_CONST)
     commit(SWITCH_PAYMENT_NEW_MODAL, showModal)
   },
   toogleEditModal ({ commit }, showModal) {
-    commit(LOAD_PAYMENS_CONST)
+    commit(LOAD_PAYMENTS_CONST)
     commit(SWITCH_PAYMENT_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
@@ -185,12 +185,12 @@ const actions = {
     commit(PAYMENT_EDIT, paymentId)
   },
   openShowModal ({ commit }, paymentId) {
-    commit(LOAD_PAYMENS_CONST)
+    commit(LOAD_PAYMENTS_CONST)
     commit(SWITCH_PAYMENT_SHOW_MODAL, true)
     commit(PAYMENT_EDIT, paymentId)
   },
   loadPaymentsConst ({ commit }) {
-    commit(LOAD_PAYMENS_CONST)
+    commit(LOAD_PAYMENTS_CONST)
   },
   async getPayments ({ commit }) {
     commit(PAYMENT_TABLE_LOADING, true)

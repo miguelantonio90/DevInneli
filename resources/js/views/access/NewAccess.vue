@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleNewModal"
-    max-width="450px"
+    max-width="850px"
     persistent
   >
     <v-card>
@@ -32,7 +32,22 @@
                 :label="$vuetify.lang.t('$vuetify.access.key')"
                 requiered
                 :rules="formRule.key"
-              />
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('category/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
             <v-col
               cols="12"

@@ -15,6 +15,7 @@ class CreatePositionsTable extends BaseMigration
         Schema::create($tableName, function (Blueprint $table) {
             $table->string('key');
             $table->string('name');
+            $table->json('access_permit')->nullable();
             $table->boolean('accessPin')->default(0);
             $table->boolean('accessEmail')->default(0);
             $table->string('description')->nullable();

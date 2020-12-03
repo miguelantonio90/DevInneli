@@ -40,14 +40,16 @@ import ListPayment from '../payment/ListPayment'
 import TypeOfOrder from '../type_order/List'
 import ListTax from '../tax/ListTax'
 import ListDiscount from '../discount/ListDiscount'
+import ListAccess from '../access/ListAccess'
 export default {
   name: 'General2',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax, ListDiscount },
+  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax, ListDiscount, ListAccess },
   data () {
     return {
       tab: null,
       itemsTabs: [
         { key: 'shop-list', content: 'shop-list' },
+        { key: 'list-access', content: 'list-access' },
         { key: 'list-payment', content: 'list-payment' },
         { key: 'expense-category', content: 'expense-category' },
         { key: 'exchange-rate', content: 'exchange-rate' },
@@ -61,6 +63,7 @@ export default {
     tabName () {
       return [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.access'), icon: 'mdi-key' },
         { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: ' mdi-cash-multiple' },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check' },
         { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate'), icon: 'mdi-bank' },
