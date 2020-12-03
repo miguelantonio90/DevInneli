@@ -293,9 +293,9 @@ export default {
       exchange_rate_edit: 'Editar Métodos de Pago',
       exchange_rate_delete: 'Eliminar Métodos de Pago',
       type_of_order_list: 'Ver Lista de Métodos de Pagos',
-      exchange_rate_add: 'Adicionar Métodos de Pago',
-      exchange_rate_edit: 'Editar Métodos de Pago',
-      exchange_rate_delete: 'Eliminar Métodos de Pago'
+      type_of_order_add: 'Adicionar Métodos de Pago',
+      type_of_order_edit: 'Editar Métodos de Pago',
+      type_of_order_delete: 'Eliminar Métodos de Pago'
     }
   },
   assistance: {
