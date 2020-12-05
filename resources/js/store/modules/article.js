@@ -289,7 +289,7 @@ const actions = {
         commit(ARTICLE_DELETE)
         this.$store.state.auth.dispatch('auth/updateAccess', response.access)
         dispatch('article/getArticles', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', response.access)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))
   }
