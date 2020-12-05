@@ -29,8 +29,10 @@ const state = {
     name: '',
     accessPin: false,
     accessEmail: false,
-    description: ''
+    description: '',
+    access_permit: [
 
+    ]
   },
   editAccess: {
     id: '',
@@ -48,11 +50,1206 @@ const state = {
 const mutations = {
   [LOAD_KEY_CONST] (state) {
     state.keys = [
-      { name: this._vm.$language.t('$vuetify.access.keys.super_manager'), value: 'super_manager', disabled: true },
-      { name: this._vm.$language.t('$vuetify.access.keys.supervisor'), value: 'supervisor' },
-      { name: this._vm.$language.t('$vuetify.access.keys.atm'), value: 'atm' },
-      { name: this._vm.$language.t('$vuetify.access.keys.waiter'), value: 'waiter' },
-      { name: this._vm.$language.t('$vuetify.access.keys.seller'), value: 'seller' }
+      {
+        name: this._vm.$language.t('$vuetify.access.keys.supervisor'),
+        value: 'supervisor',
+        access_permit: [
+          {
+            title: {
+              name: 'manager_article',
+              value: false
+            },
+            actions: [
+              {
+                name: 'article_list',
+                value: false
+              },
+              {
+                name: 'article_add',
+                value: false
+              },
+              {
+                name: 'article_edit',
+                value: false
+              },
+              {
+                name: 'article_delete',
+                value: false
+              }
+            ]
+
+          },
+          {
+            title: {
+              name: 'manager_vending',
+              value: false
+            },
+            actions: [{
+              name: 'vending_list',
+              value: false
+            },
+            {
+              name: 'vending_add',
+              value: false
+            }, {
+              name: 'vending_edit',
+              value: false
+            }, {
+              name: 'vending_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_category',
+              value: false
+            },
+            actions: [{
+              name: 'category_list',
+              value: false
+            }, {
+              name: 'category_add',
+              value: false
+            }, {
+              name: 'category_edit',
+              value: false
+            }, {
+              name: 'category_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_mod',
+              value: false
+            },
+            actions: [{
+              name: 'mod_list',
+              value: false
+            }, {
+              name: 'mod_add',
+              value: false
+            }, {
+              name: 'mod_edit',
+              value: false
+            }, {
+              name: 'mod_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_supplier',
+              value: false
+            },
+            actions: [{
+              name: 'supplier_list',
+              value: false
+            }, {
+              name: 'supplier_add',
+              value: false
+            }, {
+              name: 'supplier_edit',
+              value: false
+            }, {
+              name: 'supplier_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_buy',
+              value: false
+            },
+            actions: [{
+              name: 'buy_list',
+              value: false
+            }, {
+              name: 'buy_add',
+              value: false
+            }, {
+              name: 'buy_edit',
+              value: false
+            }, {
+              name: 'buy_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_sell',
+              value: false
+            },
+            actions: [{
+              name: 'sell_by_product',
+              value: false
+            }, {
+              name: 'sell_by_category',
+              value: false
+            }, {
+              name: 'sell_by_employer',
+              value: false
+            }, {
+              name: 'sell_by_payments',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_emplyer',
+              value: false
+            },
+            actions: [{
+              name: 'employer_list',
+              value: false
+            }, {
+              name: 'employer_add',
+              value: false
+            }, {
+              name: 'employer_edit',
+              value: false
+            }, {
+              name: 'employer_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_assistance',
+              value: false
+            },
+            actions: [{
+              name: 'assistance_list',
+              value: false
+            }, {
+              name: 'assistance_add',
+              value: false
+            }, {
+              name: 'assistance_edit',
+              value: false
+            }, {
+              name: 'assistance_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_client',
+              value: false
+            },
+            actions: [{
+              name: 'client_list',
+              value: false
+            }, {
+              name: 'client_add',
+              value: false
+            }, {
+              name: 'client_edit',
+              value: false
+            }, {
+              name: 'client_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_shop',
+              value: false
+            },
+            actions: [{
+              name: 'shop_list',
+              value: false
+            }, {
+              name: 'shop_add',
+              value: false
+            }, {
+              name: 'shop_edit',
+              value: false
+            }, {
+              name: 'shop_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_access',
+              value: false
+            },
+            actions: [{
+              name: 'access_list',
+              value: false
+            }, {
+              name: 'access_add',
+              value: false
+            }, {
+              name: 'access_edit',
+              value: false
+            }, {
+              name: 'access_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_payment',
+              value: false
+            },
+            actions: [{
+              name: 'payment_list',
+              value: false
+            }, {
+              name: 'payment_add',
+              value: false
+            }, {
+              name: 'payment_edit',
+              value: false
+            }, {
+              name: 'payment_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_exchange_rate',
+              value: false
+            },
+            actions: [{
+              name: 'exchange_rate_list',
+              value: false
+            }, {
+              name: 'exchange_rate_add',
+              value: false
+            }, {
+              name: 'exchange_rate_edit',
+              value: false
+            }, {
+              name: 'exchange_rate_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_type_of_order',
+              value: false
+            },
+            actions: [{
+              name: 'type_of_order_list',
+              value: false
+            }, {
+              name: 'type_of_order_add',
+              value: false
+            }, {
+              name: 'type_of_order_edit',
+              value: false
+            }, {
+              name: 'type_of_order_delete',
+              value: false
+            }]
+          }
+        ]
+      },
+      {
+        name: this._vm.$language.t('$vuetify.access.keys.atm'),
+        value: 'atm',
+        access_permit: [
+          {
+            title: {
+              name: 'manager_article',
+              value: false
+            },
+            actions: [
+              {
+                name: 'article_list',
+                value: false
+              },
+              {
+                name: 'article_add',
+                value: false
+              },
+              {
+                name: 'article_edit',
+                value: false
+              },
+              {
+                name: 'article_delete',
+                value: false
+              }
+            ]
+
+          },
+          {
+            title: {
+              name: 'manager_vending',
+              value: false
+            },
+            actions: [{
+              name: 'vending_list',
+              value: false
+            },
+            {
+              name: 'vending_add',
+              value: false
+            }, {
+              name: 'vending_edit',
+              value: false
+            }, {
+              name: 'vending_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_category',
+              value: false
+            },
+            actions: [{
+              name: 'category_list',
+              value: false
+            }, {
+              name: 'category_add',
+              value: false
+            }, {
+              name: 'category_edit',
+              value: false
+            }, {
+              name: 'category_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_mod',
+              value: false
+            },
+            actions: [{
+              name: 'mod_list',
+              value: false
+            }, {
+              name: 'mod_add',
+              value: false
+            }, {
+              name: 'mod_edit',
+              value: false
+            }, {
+              name: 'mod_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_supplier',
+              value: false
+            },
+            actions: [{
+              name: 'supplier_list',
+              value: false
+            }, {
+              name: 'supplier_add',
+              value: false
+            }, {
+              name: 'supplier_edit',
+              value: false
+            }, {
+              name: 'supplier_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_buy',
+              value: false
+            },
+            actions: [{
+              name: 'buy_list',
+              value: false
+            }, {
+              name: 'buy_add',
+              value: false
+            }, {
+              name: 'buy_edit',
+              value: false
+            }, {
+              name: 'buy_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_sell',
+              value: false
+            },
+            actions: [{
+              name: 'sell_by_product',
+              value: false
+            }, {
+              name: 'sell_by_category',
+              value: false
+            }, {
+              name: 'sell_by_employer',
+              value: false
+            }, {
+              name: 'sell_by_payments',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_emplyer',
+              value: false
+            },
+            actions: [{
+              name: 'employer_list',
+              value: false
+            }, {
+              name: 'employer_add',
+              value: false
+            }, {
+              name: 'employer_edit',
+              value: false
+            }, {
+              name: 'employer_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_assistance',
+              value: false
+            },
+            actions: [{
+              name: 'assistance_list',
+              value: false
+            }, {
+              name: 'assistance_add',
+              value: false
+            }, {
+              name: 'assistance_edit',
+              value: false
+            }, {
+              name: 'assistance_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_client',
+              value: false
+            },
+            actions: [{
+              name: 'client_list',
+              value: false
+            }, {
+              name: 'client_add',
+              value: false
+            }, {
+              name: 'client_edit',
+              value: false
+            }, {
+              name: 'client_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_shop',
+              value: false
+            },
+            actions: [{
+              name: 'shop_list',
+              value: false
+            }, {
+              name: 'shop_add',
+              value: false
+            }, {
+              name: 'shop_edit',
+              value: false
+            }, {
+              name: 'shop_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_access',
+              value: false
+            },
+            actions: [{
+              name: 'access_list',
+              value: false
+            }, {
+              name: 'access_add',
+              value: false
+            }, {
+              name: 'access_edit',
+              value: false
+            }, {
+              name: 'access_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_payment',
+              value: false
+            },
+            actions: [{
+              name: 'payment_list',
+              value: false
+            }, {
+              name: 'payment_add',
+              value: false
+            }, {
+              name: 'payment_edit',
+              value: false
+            }, {
+              name: 'payment_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_exchange_rate',
+              value: false
+            },
+            actions: [{
+              name: 'exchange_rate_list',
+              value: false
+            }, {
+              name: 'exchange_rate_add',
+              value: false
+            }, {
+              name: 'exchange_rate_edit',
+              value: false
+            }, {
+              name: 'exchange_rate_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_type_of_order',
+              value: false
+            },
+            actions: [{
+              name: 'type_of_order_list',
+              value: false
+            }, {
+              name: 'type_of_order_add',
+              value: false
+            }, {
+              name: 'type_of_order_edit',
+              value: false
+            }, {
+              name: 'type_of_order_delete',
+              value: false
+            }]
+          }
+        ]
+      },
+      {
+        name: this._vm.$language.t('$vuetify.access.keys.waiter'),
+        value: 'waiter',
+        access_permit: [
+          {
+            title: {
+              name: 'manager_article',
+              value: false
+            },
+            actions: [
+              {
+                name: 'article_list',
+                value: false
+              },
+              {
+                name: 'article_add',
+                value: false
+              },
+              {
+                name: 'article_edit',
+                value: false
+              },
+              {
+                name: 'article_delete',
+                value: false
+              }
+            ]
+
+          },
+          {
+            title: {
+              name: 'manager_vending',
+              value: false
+            },
+            actions: [{
+              name: 'vending_list',
+              value: false
+            },
+            {
+              name: 'vending_add',
+              value: false
+            }, {
+              name: 'vending_edit',
+              value: false
+            }, {
+              name: 'vending_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_category',
+              value: false
+            },
+            actions: [{
+              name: 'category_list',
+              value: false
+            }, {
+              name: 'category_add',
+              value: false
+            }, {
+              name: 'category_edit',
+              value: false
+            }, {
+              name: 'category_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_mod',
+              value: false
+            },
+            actions: [{
+              name: 'mod_list',
+              value: false
+            }, {
+              name: 'mod_add',
+              value: false
+            }, {
+              name: 'mod_edit',
+              value: false
+            }, {
+              name: 'mod_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_supplier',
+              value: false
+            },
+            actions: [{
+              name: 'supplier_list',
+              value: false
+            }, {
+              name: 'supplier_add',
+              value: false
+            }, {
+              name: 'supplier_edit',
+              value: false
+            }, {
+              name: 'supplier_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_buy',
+              value: false
+            },
+            actions: [{
+              name: 'buy_list',
+              value: false
+            }, {
+              name: 'buy_add',
+              value: false
+            }, {
+              name: 'buy_edit',
+              value: false
+            }, {
+              name: 'buy_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_sell',
+              value: false
+            },
+            actions: [{
+              name: 'sell_by_product',
+              value: false
+            }, {
+              name: 'sell_by_category',
+              value: false
+            }, {
+              name: 'sell_by_employer',
+              value: false
+            }, {
+              name: 'sell_by_payments',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_emplyer',
+              value: false
+            },
+            actions: [{
+              name: 'employer_list',
+              value: false
+            }, {
+              name: 'employer_add',
+              value: false
+            }, {
+              name: 'employer_edit',
+              value: false
+            }, {
+              name: 'employer_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_assistance',
+              value: false
+            },
+            actions: [{
+              name: 'assistance_list',
+              value: false
+            }, {
+              name: 'assistance_add',
+              value: false
+            }, {
+              name: 'assistance_edit',
+              value: false
+            }, {
+              name: 'assistance_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_client',
+              value: false
+            },
+            actions: [{
+              name: 'client_list',
+              value: false
+            }, {
+              name: 'client_add',
+              value: false
+            }, {
+              name: 'client_edit',
+              value: false
+            }, {
+              name: 'client_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_shop',
+              value: false
+            },
+            actions: [{
+              name: 'shop_list',
+              value: false
+            }, {
+              name: 'shop_add',
+              value: false
+            }, {
+              name: 'shop_edit',
+              value: false
+            }, {
+              name: 'shop_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_access',
+              value: false
+            },
+            actions: [{
+              name: 'access_list',
+              value: false
+            }, {
+              name: 'access_add',
+              value: false
+            }, {
+              name: 'access_edit',
+              value: false
+            }, {
+              name: 'access_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_payment',
+              value: false
+            },
+            actions: [{
+              name: 'payment_list',
+              value: false
+            }, {
+              name: 'payment_add',
+              value: false
+            }, {
+              name: 'payment_edit',
+              value: false
+            }, {
+              name: 'payment_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_exchange_rate',
+              value: false
+            },
+            actions: [{
+              name: 'exchange_rate_list',
+              value: false
+            }, {
+              name: 'exchange_rate_add',
+              value: false
+            }, {
+              name: 'exchange_rate_edit',
+              value: false
+            }, {
+              name: 'exchange_rate_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_type_of_order',
+              value: false
+            },
+            actions: [{
+              name: 'type_of_order_list',
+              value: false
+            }, {
+              name: 'type_of_order_add',
+              value: false
+            }, {
+              name: 'type_of_order_edit',
+              value: false
+            }, {
+              name: 'type_of_order_delete',
+              value: false
+            }]
+          }
+        ]
+      },
+      {
+        name: this._vm.$language.t('$vuetify.access.keys.seller'),
+        value: 'seller',
+        access_permit: [
+          {
+            title: {
+              name: 'manager_article',
+              value: false
+            },
+            actions: [
+              {
+                name: 'article_list',
+                value: false
+              },
+              {
+                name: 'article_add',
+                value: false
+              },
+              {
+                name: 'article_edit',
+                value: false
+              },
+              {
+                name: 'article_delete',
+                value: false
+              }
+            ]
+
+          },
+          {
+            title: {
+              name: 'manager_vending',
+              value: false
+            },
+            actions: [{
+              name: 'vending_list',
+              value: false
+            },
+            {
+              name: 'vending_add',
+              value: false
+            }, {
+              name: 'vending_edit',
+              value: false
+            }, {
+              name: 'vending_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_category',
+              value: false
+            },
+            actions: [{
+              name: 'category_list',
+              value: false
+            }, {
+              name: 'category_add',
+              value: false
+            }, {
+              name: 'category_edit',
+              value: false
+            }, {
+              name: 'category_delete',
+              value: false
+            }
+            ]
+          },
+          {
+            title: {
+              name: 'manager_mod',
+              value: false
+            },
+            actions: [{
+              name: 'mod_list',
+              value: false
+            }, {
+              name: 'mod_add',
+              value: false
+            }, {
+              name: 'mod_edit',
+              value: false
+            }, {
+              name: 'mod_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_supplier',
+              value: false
+            },
+            actions: [{
+              name: 'supplier_list',
+              value: false
+            }, {
+              name: 'supplier_add',
+              value: false
+            }, {
+              name: 'supplier_edit',
+              value: false
+            }, {
+              name: 'supplier_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_buy',
+              value: false
+            },
+            actions: [{
+              name: 'buy_list',
+              value: false
+            }, {
+              name: 'buy_add',
+              value: false
+            }, {
+              name: 'buy_edit',
+              value: false
+            }, {
+              name: 'buy_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_sell',
+              value: false
+            },
+            actions: [{
+              name: 'sell_by_product',
+              value: false
+            }, {
+              name: 'sell_by_category',
+              value: false
+            }, {
+              name: 'sell_by_employer',
+              value: false
+            }, {
+              name: 'sell_by_payments',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_emplyer',
+              value: false
+            },
+            actions: [{
+              name: 'employer_list',
+              value: false
+            }, {
+              name: 'employer_add',
+              value: false
+            }, {
+              name: 'employer_edit',
+              value: false
+            }, {
+              name: 'employer_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_assistance',
+              value: false
+            },
+            actions: [{
+              name: 'assistance_list',
+              value: false
+            }, {
+              name: 'assistance_add',
+              value: false
+            }, {
+              name: 'assistance_edit',
+              value: false
+            }, {
+              name: 'assistance_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_client',
+              value: false
+            },
+            actions: [{
+              name: 'client_list',
+              value: false
+            }, {
+              name: 'client_add',
+              value: false
+            }, {
+              name: 'client_edit',
+              value: false
+            }, {
+              name: 'client_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_shop',
+              value: false
+            },
+            actions: [{
+              name: 'shop_list',
+              value: false
+            }, {
+              name: 'shop_add',
+              value: false
+            }, {
+              name: 'shop_edit',
+              value: false
+            }, {
+              name: 'shop_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_access',
+              value: false
+            },
+            actions: [{
+              name: 'access_list',
+              value: false
+            }, {
+              name: 'access_add',
+              value: false
+            }, {
+              name: 'access_edit',
+              value: false
+            }, {
+              name: 'access_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_payment',
+              value: false
+            },
+            actions: [{
+              name: 'payment_list',
+              value: false
+            }, {
+              name: 'payment_add',
+              value: false
+            }, {
+              name: 'payment_edit',
+              value: false
+            }, {
+              name: 'payment_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_exchange_rate',
+              value: false
+            },
+            actions: [{
+              name: 'exchange_rate_list',
+              value: false
+            }, {
+              name: 'exchange_rate_add',
+              value: false
+            }, {
+              name: 'exchange_rate_edit',
+              value: false
+            }, {
+              name: 'exchange_rate_delete',
+              value: false
+            }]
+          },
+          {
+            title: {
+              name: 'manager_type_of_order',
+              value: false
+            },
+            actions: [{
+              name: 'type_of_order_list',
+              value: false
+            }, {
+              name: 'type_of_order_add',
+              value: false
+            }, {
+              name: 'type_of_order_edit',
+              value: false
+            }, {
+              name: 'type_of_order_delete',
+              value: false
+            }]
+          }
+        ]
+      }
     ]
   },
   [SWITCH_ACCESS_NEW_MODAL] (state, showModal) {
@@ -172,7 +1369,7 @@ const actions = {
       })
       .catch(error => commit(FAILED_ACCESS, error))
   },
-  loadPaymentsConst ({ commit }) {
+  loadKeysPermitConst ({ commit }) {
     commit(LOAD_KEY_CONST)
   },
   async createRole ({ commit, dispatch }, newAccess) {

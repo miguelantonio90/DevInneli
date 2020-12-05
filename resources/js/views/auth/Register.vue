@@ -178,7 +178,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true
         await setTimeout(() => {
-          this.sendRegisterRequest(this.formRegister)
+          this.sendRegisterRequest(this.formRegister).then(() => {
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
         }, 1000)
       }
     }

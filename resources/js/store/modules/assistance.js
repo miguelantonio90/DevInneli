@@ -150,6 +150,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ASSIST, data.data)
         commit(TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch(error => commit(FAILED_ASSIST, error))
   },
@@ -158,10 +159,11 @@ const actions = {
 
     await assistance
       .sendCreateRequest(newAssistance)
-      .then(() => {
+      .then((data) => {
         commit(ASSIST_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('assistance/getAssistances', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch(error => commit(FAILED_ASSIST, error))
   },
@@ -170,19 +172,21 @@ const actions = {
 
     await assistance
       .sendUpdateRequest(editAssistance)
-      .then(() => {
+      .then((data) => {
         commit(ASSIST_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('assistance/getAssistances', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch(error => commit(FAILED_ASSIST, error))
   },
   async deleteAssistance ({ commit, dispatch }, assistanceId) {
     await assistance
       .sendDeleteRequest(assistanceId)
-      .then(() => {
+      .then((data) => {
         commit(ASSIST_DELETE)
         dispatch('assistance/getAssistances', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch(error => commit(FAILED_ASSIST, error))
   }

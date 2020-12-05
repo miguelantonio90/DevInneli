@@ -15,6 +15,7 @@ const SET_RESET = 'SET_RESET'
 const IN_PROCESS_RESET = 'IN_PROCESS_RESET'
 const IS_MANAGER = 'IS_MANAGER'
 const FAILED_CATCH = 'FAILED_CATCH'
+const UPDATE_ACCESS = 'UPDATE_ACCESS'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
@@ -26,6 +27,7 @@ const state = {
   loadingReset: false,
   successForgot: false,
   successReset: false,
+  access: {},
   fromModel: {
     email: '',
     password: ''
@@ -63,6 +65,7 @@ const state = {
 const getters = {
   user: (state) => state.userData,
   userPin: (state) => state.userPin,
+  access: (state) => state.access,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
   pinSuccess: (state) => state.pinSuccess
@@ -79,7 +82,10 @@ const mutations = {
   [IN_PROCESS_RESET] (state, process) {
     state.loadingReset = process
   },
-
+  [UPDATE_ACCESS] (state, access) {
+    const atob = require('atob')
+    state.access = JSON.parse(atob(access))
+  },
   [LOGIN] (state) {
     state.pending = true
   },
@@ -169,6 +175,7 @@ const actions = {
       .getUserData()
       .then(({ data }) => {
         commit(SET_USER_DATA, data)
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch(({ response }) => {
         commit(FAILED_CATCH, response)
@@ -197,6 +204,7 @@ const actions = {
       .loginPincodeRequest(login)
       .then(({ data }) => {
         commit(PIN_SUCCESS, data.data)
+        commit(UPDATE_ACCESS, data.access)
         if (data.success && data.data.isManager) {
           commit(IS_MANAGER, true)
           localStorage.saveTokenManager(data.data.access_token)
@@ -276,6 +284,9 @@ const actions = {
           commit(SET_RESET, false)
         }
       })
+  },
+  async updateAccess ({ commit }, access) {
+    commit(UPDATE_ACCESS, access)
   }
 }
 

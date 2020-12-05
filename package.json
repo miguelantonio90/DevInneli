@@ -19,6 +19,7 @@
         "@antv/g2plot": "^1.1.25",
         "@mdi/font": "^5.3.45",
         "@sweetalert2/themes": "^3.2.0",
+        "atob": "^2.1.2",
         "awesome-phonenumber": "^2.38.0",
         "axios": "^0.19",
         "core-js": "^3.3.2",
