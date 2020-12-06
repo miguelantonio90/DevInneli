@@ -144,6 +144,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_EXPENSE, data.data)
         commit(EXPENSE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_EXPENSE, error))
   },
@@ -152,10 +153,11 @@ const actions = {
 
     await expenseCategory
       .sendCreateRequest(newCategory)
-      .then(() => {
+      .then((data) => {
         commit(EXPENSE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('expenseCategory/getExpenseCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_EXPENSE, error))
   },
@@ -163,19 +165,21 @@ const actions = {
     commit(ENV_DATA_PROCESS, true)
     await expenseCategory
       .sendUpdateRequest(editCategory)
-      .then(() => {
+      .then((data) => {
         commit(EXPENSE_UPDATE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('expenseCategory/getExpenseCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_EXPENSE, error))
   },
   deleteCategory: async function ({ commit, dispatch }, categoryId) {
     await expenseCategory
       .sendDeleteRequest(categoryId)
-      .then(() => {
+      .then((data) => {
         commit(EXPENSE_DELETE)
         dispatch('expenseCategory/getExpenseCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_EXPENSE, error))
   }
