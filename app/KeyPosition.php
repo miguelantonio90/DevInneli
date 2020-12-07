@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class KeyPosition extends Model
 {
-    use Uuid, SoftDeletes, SoftCascadeTrait;
+    use Uuid, SoftDeletes;
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];

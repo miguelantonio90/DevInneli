@@ -166,6 +166,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SHOPS, data.data)
         commit(SHOP_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SHOP, error))
   },
   async createShop ({ commit, dispatch }, newShop) {
@@ -173,10 +174,11 @@ const actions = {
 
     await shop
       .sendCreateRequest(newShop)
-      .then(() => {
+      .then((data) => {
         commit(SHOP_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   },
@@ -185,19 +187,21 @@ const actions = {
 
     await shop
       .sendUpdateRequest(shopEdited)
-      .then(() => {
+      .then((data) => {
         commit(SHOP_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   },
   async deleteShop ({ commit, dispatch }, shopId) {
     await shop
       .sendDeleteRequest(shopId)
-      .then(() => {
+      .then((data) => {
         commit(SHOP_DELETE)
         dispatch('shop/getShops', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   }

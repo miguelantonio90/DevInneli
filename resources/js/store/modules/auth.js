@@ -27,7 +27,7 @@ const state = {
   loadingReset: false,
   successForgot: false,
   successReset: false,
-  access: {},
+  access: [],
   fromModel: {
     email: '',
     password: ''
@@ -65,7 +65,7 @@ const state = {
 const getters = {
   user: (state) => state.userData,
   userPin: (state) => state.userPin,
-  access: (state) => state.access,
+  access_permit: (state) => state.access,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
   pinSuccess: (state) => state.pinSuccess
@@ -83,8 +83,9 @@ const mutations = {
     state.loadingReset = process
   },
   [UPDATE_ACCESS] (state, access) {
-    const atob = require('atob')
-    state.access = JSON.parse(atob(access))
+    // const atob = require('atob')
+    state.access = JSON.parse((access))
+    // state.access = access
   },
   [LOGIN] (state) {
     state.pending = true
@@ -174,7 +175,7 @@ const actions = {
     await auth
       .getUserData()
       .then(({ data }) => {
-        commit(SET_USER_DATA, data)
+        commit(SET_USER_DATA, data.data)
         this.dispatch('auth/updateAccess', data.access)
       })
       .catch(({ response }) => {

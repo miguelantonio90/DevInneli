@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Company;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
 
@@ -35,7 +36,6 @@ class AuthenticationController extends Controller
         $user['position']->disabled = $position['key'] === 'super_manager';
         $user['company'] = $company;
         $user['position'] = $position;
-
-        return $user;
+        return ResponseHelper::sendResponse($user,'');
     }
 }

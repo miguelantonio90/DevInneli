@@ -1,14 +1,14 @@
 <template>
   <v-dialog
-    v-model="toogleNewModal"
+    v-model="toogleEditModal"
     max-width="850px"
     persistent
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.access'),
+          $vuetify.lang.t('$vuetify.titles.edit', [
+            $vuetify.lang.t('$vuetify.menu.keys'),
           ])
         }}</span>
       </v-card-title>
@@ -22,69 +22,20 @@
           <v-row justify="space-around">
             <v-col
               cols="12"
-              md="3"
-            >
-              <v-select
-                v-model="newAccess.key"
-                :items="keys"
-                item-text="key"
-                :label="$vuetify.lang.t('$vuetify.access.key')"
-                requiered
-                return-object
-                :rules="formRule.key"
-                @change="updateAccessPermit"
-              >
-                <template v-slot:append-outer>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="$store.dispatch('keys/toogleNewModal',true)"
-                      >
-                        mdi-plus
-                      </v-icon>
-                    </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                  </v-tooltip>
-                </template>
-              </v-select>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
+              md="6"
             >
               <v-text-field
-                v-model="newAccess.name"
-                :label="$vuetify.lang.t('$vuetify.access.name')"
+                v-model="editKey.key"
+                :label="$vuetify.lang.t('$vuetify.first_name')"
                 required
                 :rules="formRule.position"
-              />
-            </v-col>
-            <v-checkbox
-              v-model="newAccess.accessEmail"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
-            />
-            <v-checkbox
-              v-model="newAccess.accessPin"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessPin')"
-            />
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="newAccess.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
           </v-row>
           <v-row>
             <v-expansion-panels popout>
               <v-col
-                v-for="(access,j) in access_permit"
+                v-for="(access,j) in editKey.access_permit"
                 :key="j"
                 md="6"
               >
@@ -148,7 +99,7 @@
         <v-btn
           class="mb-2"
           :disabled="isActionInProgress"
-          @click="toogleNewModal(false)"
+          @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -158,7 +109,7 @@
           class="mb-2"
           color="primary"
           :loading="isActionInProgress"
-          @click="createNewRole"
+          @click="updateKeyHandler"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -172,40 +123,29 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  name: 'EditKeys',
   data () {
     return {
       formValid: false,
-      access_permit: [],
       formRule: this.$rules
     }
   },
   computed: {
-    ...mapState('role', ['saved', 'newAccess', 'isActionInProgress']),
-    ...mapState('keys', ['saved', 'keys', 'isActionInProgress'])
+    ...mapState('keys', ['saved', 'editKey', 'isActionInProgress'])
   },
   created () {
-    this.getKeys().then(() => {
-      this.newAccess.key = this.keys[0]
-    })
-  },
-  mounted () {
-    this.formValid = false
+    console.log(this.editKey.access_permit)
   },
   methods: {
-    ...mapActions('role', ['createRole', 'toogleNewModal']),
-    ...mapActions('keys', ['getKeys']),
-    updateAccessPermit () {
-      this.access_permit = JSON.parse(this.newAccess.key.access_permit)
-    },
-    async createNewRole () {
+    ...mapActions('keys', ['updateKey', 'toogleEditModal']),
+
+    async updateKeyHandler () {
       if (this.$refs.form.validate()) {
-        this.newAccess.access_permit = this.access_permit
-        await this.createRole(this.newAccess)
+        await this.updateKey(this.editKey)
       }
     }
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -41,14 +41,16 @@ import TypeOfOrder from '../type_order/List'
 import ListTax from '../tax/ListTax'
 import ListDiscount from '../discount/ListDiscount'
 import ListAccess from '../access/ListAccess'
+import ListKeys from '../keys/ListKeys'
 export default {
   name: 'General2',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax, ListDiscount, ListAccess },
+  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax, ListDiscount, ListAccess, ListKeys },
   data () {
     return {
       tab: null,
       itemsTabs: [
         { key: 'shop-list', content: 'shop-list' },
+        { key: 'list-keys', content: 'list-keys' },
         { key: 'list-access', content: 'list-access' },
         { key: 'list-payment', content: 'list-payment' },
         { key: 'expense-category', content: 'expense-category' },
@@ -63,6 +65,7 @@ export default {
     tabName () {
       return [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping' },
+        { name: this.$vuetify.lang.t('$vuetify.menu.keys'), icon: 'mdi-key' },
         { name: this.$vuetify.lang.t('$vuetify.menu.access'), icon: 'mdi-key' },
         { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: ' mdi-cash-multiple' },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check' },

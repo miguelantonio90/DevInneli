@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\KeyPosition;
 use App\Managers\AccessManager;
+use App\Managers\KeyPositionsManager;
 use App\Position;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,16 +14,21 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class AccessController extends Controller
+class KeyPositionsController extends Controller
 {
-    protected $accessManager;
 
-    public function __construct(AccessManager $accessManager)
+
+    /**
+     * @var KeyPositionsManager
+     */
+    protected $keyPositionsManager;
+
+    public function __construct(KeyPositionsManager $keyPositionsManager)
     {
         parent::__construct();
 
         $this->middleware('auth');
-        $this->accessManager = $accessManager;
+        $this->keyPositionsManager = $keyPositionsManager;
     }
 
     /**
@@ -32,8 +39,8 @@ class AccessController extends Controller
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->accessManager->getByCompany(),
-            'Positions retrieved successfully.'
+            $this->keyPositionsManager->getByCompany(),
+            'Key Positions retrieved successfully.'
         );
     }
 
@@ -46,8 +53,10 @@ class AccessController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validator($request->all())->validate();
+
         return ResponseHelper::sendResponse(
-            $this->accessManager->new($request->all()), 'Position has created successfully.');
+            $this->keyPositionsManager->new($request->all()), 'Key Positions has created successfully.');
     }
 
     /**
@@ -57,9 +66,7 @@ class AccessController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'accessPin' => ['boolean'],
-            'accessEmail' => ['boolean'],
+            'key' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -84,9 +91,7 @@ class AccessController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
-
-        $edit = Position::findOrFail($id)->update($request->all());
+        $edit = $this->keyPositionsManager->edit($id, $request->all());
 
         return ResponseHelper::sendResponse(
             $edit,
@@ -102,9 +107,8 @@ class AccessController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Position::findOrFail($id)->delete();
         return ResponseHelper::sendResponse(
-            $delete,
+            $this->keyPositionsManager->delete($id),
             'Role has deleted successfully.'
         );
     }

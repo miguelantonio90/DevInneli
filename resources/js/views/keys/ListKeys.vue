@@ -5,55 +5,27 @@
         class="py-0"
         cols="12"
       >
-        <new-access v-if="showNewModal" />
-        <edit-access v-if="showEditModal" />
+        <new-keys v-if="showNewModal" />
+        <edit-keys v-if="showEditModal" />
         <v-card>
           <app-data-table
             :title="$vuetify.lang.t('$vuetify.titles.list',
-                                    [$vuetify.lang.t('$vuetify.menu.access'),])"
+                                    [$vuetify.lang.t('$vuetify.menu.keys'),])"
 
             :is-loading="isTableLoading"
-            csv-filename="Access"
+            csv-filename="Keys"
             :headers="getTableColumns"
-            :items="roles"
-            :sort-by="['name']"
+            :items="keys"
+            :sort-by="['key']"
             :sort-desc="[false, true]"
             multi-sort
             @create-row="toogleNewModal(true)"
             @edit-row="openEditModal($event)"
-            @delete-row="deleteRole($event)"
+            @delete-row="deleteKeyHandler($event)"
           >
-            <template v-slot:[`item.name`]="{ item }">
+            <template v-slot:[`item.key`]="{ item }">
               <v-icon>mdi-account-key</v-icon>
-              {{ item.name }}
-            </template>
-            <template v-slot:[`item.accessEmail`]="{ item }">
-              <v-icon
-                v-if="item.accessEmail"
-                small
-              >
-                mdi-check
-              </v-icon>
-              <v-icon
-                v-else
-                small
-              >
-                mdi-cancel
-              </v-icon>
-            </template>
-            <template v-slot:[`item.accessPin`]="{ item }">
-              <v-icon
-                v-if="item.accessPin"
-                small
-              >
-                mdi-check
-              </v-icon>
-              <v-icon
-                v-else
-                small
-              >
-                mdi-cancel
-              </v-icon>
+              {{ item.key }}
             </template>
           </app-data-table>
         </v-card>
@@ -64,14 +36,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewAccess from './NewAccess'
-import EditAccess from './EditAccess'
+import NewKeys from './NewKeys'
+import EditKeys from './EditKeys'
 
 export default {
-  name: 'ListAccess',
+  name: 'ListKeys',
   components: {
-    NewAccess,
-    EditAccess
+    NewKeys,
+    EditKeys
   },
   data () {
     return {
@@ -79,27 +51,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('role', [
+    ...mapState('keys', [
       'showNewModal',
       'showEditModal',
       'showShowModal',
-      'roles',
+      'keys',
       'isTableLoading'
     ]),
     getTableColumns () {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.access.name'),
-          value: 'name',
+          value: 'key',
           select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.access.accessPin'),
-          value: 'accessPin'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.access.accessEmail'),
-          value: 'accessEmail'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -110,17 +74,17 @@ export default {
     }
   },
   created () {
-    this.getRoles()
+    this.getKeys()
   },
   methods: {
-    ...mapActions('role', [
+    ...mapActions('keys', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getRoles',
-      'deleteRole'
+      'getKeys',
+      'deleteKey'
     ]),
-    deleteRoleHandler (roleId) {
+    deleteKeyHandler (keyId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -140,7 +104,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteRole(roleId)
+          if (result.value) this.deleteKey(keyId)
         })
     }
   }

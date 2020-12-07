@@ -69,6 +69,7 @@ export default {
     user: 'Users',
     employee: 'Employee',
     access: 'Access permission',
+    keys: 'Keys for permission',
     access_new: 'New Access permission',
     access_list: 'Permission List',
     client: 'Client',

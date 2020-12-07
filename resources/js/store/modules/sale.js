@@ -194,6 +194,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SALES, data.data)
         commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))
   },
   async getSalesByCategories ({ commit }, filter) {
@@ -204,6 +205,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_CATEGORIES, data.data)
         commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))
   },
   async getSalesByPayment ({ commit }, filter) {
@@ -214,6 +216,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_PAYMENT, data.data)
         commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))
   },
   async getSaleByProduct ({ commit }, filter) {
@@ -224,16 +227,18 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_PRODUCT, data.data)
         commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))
   },
   async createSale ({ commit, dispatch }, newSale) {
     commit(ENV_DATA_PROCESS, true)
     await sale
       .sendCreateRequest(newSale)
-      .then(() => {
+      .then((data) => {
         commit(SALE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('sale/getSales', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SALE, error))
   },
@@ -244,10 +249,11 @@ const actions = {
     // const request = profile || state.editUser
     await sale
       .sendUpdateRequest(request)
-      .then(() => {
+      .then((data) => {
         commit(SALE_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('sale/getSales', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -257,9 +263,10 @@ const actions = {
   async deleteSale ({ commit, dispatch, state }, saleId) {
     await sale
       .sendDeleteRequest(saleId)
-      .then(() => {
+      .then((data) => {
         commit(SALE_DELETE)
         dispatch('sale/getSales', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SALE, error))
   }
