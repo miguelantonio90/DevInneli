@@ -12,6 +12,7 @@
           csv-filename="ProductBuys"
           :items="inventories"
           :options="vBindOption"
+          :manager="'buy'"
           :sort-by="['no_facture']"
           :sort-desc="[false, true]"
           multi-sort

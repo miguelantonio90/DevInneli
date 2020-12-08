@@ -144,6 +144,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CHANGE, data.data)
         commit(CHANGE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -152,10 +153,11 @@ const actions = {
 
     await exchangeRate
       .sendCreateRequest(newChange)
-      .then(() => {
+      .then((data) => {
         commit(CHANGE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -164,10 +166,11 @@ const actions = {
 
     await exchangeRate
       .sendUpdateRequest(editChange)
-      .then(() => {
+      .then((data) => {
         commit(CHANGE_UPDATE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -176,10 +179,11 @@ const actions = {
 
     await exchangeRate
       .sendDeleteRequest(id)
-      .then(() => {
+      .then((data) => {
         commit(CHANGE_DELETE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   }

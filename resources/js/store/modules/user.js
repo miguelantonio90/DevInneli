@@ -179,6 +179,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_USERS, data.data)
         commit(USER_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => {
         commit(ENV_DATA_PROCESS, false)
         commit(FAILED_USER, error)
@@ -189,10 +190,11 @@ const actions = {
 
     await user
       .sendCreateRequest(newUser)
-      .then(() => {
+      .then((data) => {
         commit(USER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -205,10 +207,11 @@ const actions = {
     // const request = profile || state.editUser
     await user
       .sendUpdateRequest(profile)
-      .then(() => {
+      .then((data) => {
         commit(USER_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -218,9 +221,10 @@ const actions = {
   async deleteUser ({ commit, dispatch }, userId) {
     await user
       .sendDeleteRequest(userId)
-      .then(() => {
+      .then((data) => {
         commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_USER, error))
   },
@@ -231,9 +235,10 @@ const actions = {
       id: file.id,
       image: image
     }
-    await user.updateAvatar(sendData).then(() => {
+    await user.updateAvatar(sendData).then((data) => {
       commit(SET_USER_AVATAR, file.file.base64)
       dispatch('auth/getUserData', null, { root: true })
+      this.dispatch('auth/updateAccess', data.access)
     })
   }
 }

@@ -8,7 +8,7 @@
       <v-card-title>
         <span class="headline">{{
           $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.access'),
+            $vuetify.lang.t('$vuetify.menu.keys'),
           ])
         }}</span>
       </v-card-title>
@@ -22,48 +22,13 @@
           <v-row justify="space-around">
             <v-col
               cols="12"
-              md="3"
-            >
-              <v-select
-                v-model="key"
-                :items="keys"
-                item-text="key"
-                :label="$vuetify.lang.t('$vuetify.access.key')"
-                requiered
-                disabled
-                return-object
-                :rules="formRule.key"
-                @change="updateAccessPermit"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
+              md="6"
             >
               <v-text-field
-                v-model="editAccess.name"
-                :label="$vuetify.lang.t('$vuetify.access.name')"
+                v-model="editKey.key"
+                :label="$vuetify.lang.t('$vuetify.first_name')"
                 required
                 :rules="formRule.position"
-              />
-            </v-col>
-            <v-checkbox
-              v-model="editAccess.accessEmail"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
-            />
-            <v-checkbox
-              v-model="editAccess.accessPin"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessPin')"
-            />
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-text-field
-                v-model="editAccess.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
           </v-row>
@@ -144,7 +109,7 @@
           class="mb-2"
           color="primary"
           :loading="isActionInProgress"
-          @click="updateRoleHandler"
+          @click="updateKeyHandler"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -158,35 +123,28 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  name: 'EditKeys',
   data () {
     return {
       formValid: false,
       access_permit: [],
-      key: {},
       formRule: this.$rules
     }
   },
   computed: {
-    ...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress']),
-    ...mapState('keys', ['keys'])
+    ...mapState('keys', ['saved', 'editKey', 'isActionInProgress'])
   },
   created () {
-    this.getKeys().then(() => {
-      this.key = this.keys.filter(k => k.id === this.editAccess.key_position_id)[0]
-    })
-    this.access_permit = JSON.parse(this.editAccess.access_permit)
+    this.access_permit = this.editKey.access_permit
+    console.log(this.access_permit)
   },
   methods: {
-    ...mapActions('role', ['updateRole', 'toogleEditModal']),
-    ...mapActions('keys', ['getKeys']),
-    updateAccessPermit () {
-      this.access_permit = JSON.parse(this.newAccess.key.access_permit)
-    },
+    ...mapActions('keys', ['updateKey', 'toogleEditModal']),
 
-    async updateRoleHandler () {
+    async updateKeyHandler () {
       if (this.$refs.form.validate()) {
-        this.editAccess.access_permit = this.access_permit
-        await this.updateRole(this.editAccess)
+        this.editKey.access_permit = this.access_permit
+        await this.updateKey(this.editKey)
       }
     }
   }

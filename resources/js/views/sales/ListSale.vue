@@ -9,7 +9,8 @@
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
           :headers="getTableColumns"
-          csv-filename="ProductBuys"
+          csv-filename="SaleProducts"
+          :manager="'vending'"
           :items="localSales"
           :options="vBindOption"
           :sort-by="['no_facture']"
@@ -181,6 +182,7 @@ export default {
     return {
       localSales: [],
       search: '',
+      localAccess: {},
       vBindOption: {
         itemKey: 'no_facture',
         singleExpand: false,
@@ -197,7 +199,7 @@ export default {
       'isTableLoading'
     ]),
     ...mapState('article', ['articles']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user', 'access_permit']),
     getTableColumns () {
       return [
         {

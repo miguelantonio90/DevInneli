@@ -14,6 +14,7 @@
           :is-loading="isTableLoading"
           :headers="getTableColumns"
           :items="assistances"
+          :manager="'assistence'"
           :sort-by="['datetimeEntry']"
           :sort-desc="[false, true]"
           multi-sort

@@ -179,7 +179,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'user', 'access', 'isManagerIn']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },

@@ -8,6 +8,7 @@ import auth from './modules/auth'
 import user from './modules/user'
 import assistance from './modules/assistance'
 import role from './modules/role'
+import keys from './modules/keys'
 import shop from './modules/shop'
 import payment from './modules/payment'
 import client from './modules/client'
@@ -48,6 +49,7 @@ const store = new Vuex.Store({
     user,
     assistance,
     role,
+    keys,
     shop,
     category,
     client,

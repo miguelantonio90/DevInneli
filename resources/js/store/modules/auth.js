@@ -1,7 +1,6 @@
 import auth from '../../api/auth'
 import localStorage from '../../config/localStorage'
 import router from '../../router'
-import atob from 'atob'
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -28,7 +27,7 @@ const state = {
   loadingReset: false,
   successForgot: false,
   successReset: false,
-  access: {},
+  access: [],
   fromModel: {
     email: '',
     password: ''
@@ -66,7 +65,7 @@ const state = {
 const getters = {
   user: (state) => state.userData,
   userPin: (state) => state.userPin,
-  access: (state) => state.access,
+  access_permit: (state) => state.access,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
   pinSuccess: (state) => state.pinSuccess
@@ -84,7 +83,10 @@ const mutations = {
     state.loadingReset = process
   },
   [UPDATE_ACCESS] (state, access) {
-    state.access = JSON.parse(atob(access))
+    if (access !== undefined) {
+      state.access = []
+      state.access = JSON.parse((access))
+    }
   },
   [LOGIN] (state) {
     state.pending = true
@@ -160,9 +162,15 @@ const mutations = {
       localStorage.removeToken()
       router.push({ name: 'login' })
     } else {
+      let msg = this._vm.$language.t('$vuetify.messages.login_failed')
+      Object.keys(state.error.data.errors).forEach((v) => {
+        if (v !== 'message') {
+          if (v === 'email') { msg = this._vm.$language.t('$vuetify.messages.login_failed_email') }
+        }
+      })
       this._vm.$Toast.fire({
         icon: 'error',
-        title: this._vm.$language.t('$vuetify.messages.login_failed')
+        title: msg
       })
     }
   }
@@ -174,7 +182,7 @@ const actions = {
     await auth
       .getUserData()
       .then(({ data }) => {
-        commit(SET_USER_DATA, data)
+        commit(SET_USER_DATA, data.data)
         this.dispatch('auth/updateAccess', data.access)
       })
       .catch(({ response }) => {
@@ -232,6 +240,7 @@ const actions = {
         router.push('/hi')
       })
       .catch(({ response }) => {
+        console.log(response)
         commit(FAILED_CATCH, response)
       })
   },

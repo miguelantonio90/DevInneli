@@ -43,6 +43,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
 
         Route::resource('access', 'AccessController');
+        Route::resource('keys', 'KeyPositionsController');
 
         Route::resource('shop', 'ShopController');
 

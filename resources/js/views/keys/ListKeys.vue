@@ -5,22 +5,31 @@
         class="py-0"
         cols="12"
       >
-        <new-expense-category v-if="showNewModal" />
-        <edit-expense-category v-if="showEditModal" />
-        <app-data-table
-          :title="$vuetify.lang.t('$vuetify.menu.expense_category_list')"
-          csv-filename="ExpenseCategories"
-          :headers="getTableColumns"
-          :is-loading="isTableLoading"
-          :items="categories"
-          :manager="'expense_category'"
-          :sort-by="['name']"
-          :sort-desc="[false, true]"
-          multi-sort
-          @create-row="toogleNewModal(true)"
-          @edit-row="openEditModal($event)"
-          @delete-row="deleteCategoryHandler($event)"
-        />
+        <new-keys v-if="showNewModal" />
+        <edit-keys v-if="showEditModal" />
+        <v-card>
+          <app-data-table
+            :title="$vuetify.lang.t('$vuetify.titles.list',
+                                    [$vuetify.lang.t('$vuetify.menu.keys'),])"
+
+            :is-loading="isTableLoading"
+            csv-filename="Keys"
+            :headers="getTableColumns"
+            :items="keys"
+            :manager="'key'"
+            :sort-by="['key']"
+            :sort-desc="[false, true]"
+            multi-sort
+            @create-row="toogleNewModal(true)"
+            @edit-row="openEditModal($event)"
+            @delete-row="deleteKeyHandler($event)"
+          >
+            <template v-slot:[`item.key`]="{ item }">
+              <v-icon>mdi-account-key</v-icon>
+              {{ item.key }}
+            </template>
+          </app-data-table>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -28,13 +37,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import NewExpenseCategory from './New'
-import EditExpenseCategory from './Edit'
+import NewKeys from './NewKeys'
+import EditKeys from './EditKeys'
 
 export default {
+  name: 'ListKeys',
   components: {
-    NewExpenseCategory,
-    EditExpenseCategory
+    NewKeys,
+    EditKeys
   },
   data () {
     return {
@@ -42,23 +52,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('expenseCategory', [
+    ...mapState('keys', [
       'showNewModal',
       'showEditModal',
       'showShowModal',
-      'categories',
+      'keys',
       'isTableLoading'
     ]),
     getTableColumns () {
       return [
         {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
+          text: this.$vuetify.lang.t('$vuetify.access.name'),
+          value: 'key',
           select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.access.description'),
-          value: 'description'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -69,21 +75,21 @@ export default {
     }
   },
   created () {
-    this.getExpenseCategories()
+    this.getKeys()
   },
   methods: {
-    ...mapActions('expenseCategory', [
+    ...mapActions('keys', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getExpenseCategories',
-      'deleteCategory'
+      'getKeys',
+      'deleteKey'
     ]),
-    deleteCategoryHandler (categoryId) {
+    deleteKeyHandler (keyId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.expense_category')
+            this.$vuetify.lang.t('$vuetify.menu.access')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -99,7 +105,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteCategory(categoryId)
+          if (result.value) this.deleteKey(keyId)
         })
     }
   }

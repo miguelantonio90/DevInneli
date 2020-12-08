@@ -200,6 +200,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_PAYMENTS, data.data)
         commit(PAYMENT_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_PAYMENT, error))
   },
@@ -208,10 +209,11 @@ const actions = {
 
     await payment
       .sendCreateRequest(newPayment)
-      .then(() => {
+      .then((data) => {
         commit(PAYMENT_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('payment/getPayments', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_PAYMENT, error))
   },
@@ -219,19 +221,21 @@ const actions = {
     commit(ENV_DATA_PROCESS, true)
     await payment
       .sendUpdateRequest(editPayment)
-      .then(() => {
+      .then((data) => {
         commit(PAYMENT_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('payment/getPayments', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_PAYMENT, error))
   },
   async deletePayment ({ commit, dispatch }, paymentId) {
     await payment
       .sendDeleteRequest(paymentId)
-      .then(() => {
+      .then((data) => {
         commit(PAYMENT_DELETE)
         dispatch('payment/getPayments', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_PAYMENT, error))
   }

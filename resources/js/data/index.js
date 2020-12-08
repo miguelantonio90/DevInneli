@@ -1,6 +1,4 @@
-import Vuetify from 'vuetify'
 // const language = Vuetify.framework.lang
-console.log(Vuetify)
 const continents = {
   AF: 'Africa',
   AN: 'Antarctica',

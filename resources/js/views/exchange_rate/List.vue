@@ -13,6 +13,7 @@
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="changes"
+          :manager="'exchange_rate'"
           :sort-by="['country']"
           :sort-desc="[false, true]"
           multi-sort
