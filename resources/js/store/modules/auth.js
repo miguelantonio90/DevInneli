@@ -162,9 +162,15 @@ const mutations = {
       localStorage.removeToken()
       router.push({ name: 'login' })
     } else {
+      let msg = this._vm.$language.t('$vuetify.messages.login_failed')
+      Object.keys(state.error.data.errors).forEach((v) => {
+        if (v !== 'message') {
+          if (v === 'email') { msg = this._vm.$language.t('$vuetify.messages.login_failed_email') }
+        }
+      })
       this._vm.$Toast.fire({
         icon: 'error',
-        title: this._vm.$language.t('$vuetify.messages.login_failed')
+        title: msg
       })
     }
   }
@@ -234,6 +240,7 @@ const actions = {
         router.push('/hi')
       })
       .catch(({ response }) => {
+        console.log(response)
         commit(FAILED_CATCH, response)
       })
   },

@@ -164,6 +164,7 @@ export default {
     dont_add: 'Ya este elemento se encuentra adicinado.',
     pin_failed: 'No tienes acceso. El código PIN no es válido',
     login_failed: 'Correo electrónico o contraseña no válidos.',
+    login_failed_email: 'Este correo electrónico ya está en uso.',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta compra. Debe adicionar al menos un artículo.',

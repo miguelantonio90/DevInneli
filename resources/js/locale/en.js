@@ -152,6 +152,7 @@ export default {
     warning_create: "You can't create this element. You should create {0}",
     pin_failed: 'You do not have access. Pin Code is not valid',
     login_failed: 'Invalid email or password.',
+    login_failed_email: 'This Email is used by other user.',
     warning_composite: 'This article is composite, please select the element that compose it ',
     warning_price: "You can't create this article.The cost can't be higher than price",
     warning_cant_article: "You can't create this buy. You need select at least one article",
