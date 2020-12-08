@@ -16,6 +16,7 @@
             csv-filename="Keys"
             :headers="getTableColumns"
             :items="keys"
+            :manager="'key'"
             :sort-by="['key']"
             :sort-desc="[false, true]"
             multi-sort

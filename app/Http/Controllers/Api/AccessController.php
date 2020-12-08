@@ -38,16 +38,14 @@ class AccessController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse|Response
-     * @throws ValidationException
      */
     public function store(Request $request)
     {
         return ResponseHelper::sendResponse(
-            $this->accessManager->new($request->all()), 'Position has created successfully.');
+            $this->accessManager->new($request->all()),
+            'Position has created successfully.');
     }
 
     /**
@@ -86,10 +84,8 @@ class AccessController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $edit = Position::findOrFail($id)->update($request->all());
-
         return ResponseHelper::sendResponse(
-            $edit,
+            $this->accessManager->edit($id,$request->all()),
             'Role has updated successfully.'
         );
     }

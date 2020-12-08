@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleEditModal"
-    max-width="450px"
+    max-width="850px"
     persistent
   >
     <v-card>
@@ -12,7 +12,6 @@
           ])
         }}</span>
       </v-card-title>
-
       <v-card-text>
         <v-form
           ref="form"
@@ -23,20 +22,23 @@
           <v-row justify="space-around">
             <v-col
               cols="12"
-              md="6"
+              md="3"
             >
               <v-select
-                v-model="editAccess.key"
-                disabled
+                v-model="key"
                 :items="keys"
-                item-text="name"
-                item-value="value"
+                item-text="key"
                 :label="$vuetify.lang.t('$vuetify.access.key')"
+                requiered
+                disabled
+                return-object
+                :rules="formRule.key"
+                @change="updateAccessPermit"
               />
             </v-col>
             <v-col
               cols="12"
-              md="6"
+              md="3"
             >
               <v-text-field
                 v-model="editAccess.name"
@@ -47,12 +49,12 @@
             </v-col>
             <v-checkbox
               v-model="editAccess.accessEmail"
-              class="md-6"
+              class="md-3"
               :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
             />
             <v-checkbox
               v-model="editAccess.accessPin"
-              class="md-6"
+              class="md-3"
               :label="$vuetify.lang.t('$vuetify.access.accessPin')"
             />
             <v-col
@@ -64,6 +66,66 @@
                 :label="$vuetify.lang.t('$vuetify.access.description')"
               />
             </v-col>
+          </v-row>
+          <v-row>
+            <v-expansion-panels popout>
+              <v-col
+                v-for="(access,j) in access_permit"
+                :key="j"
+                md="6"
+              >
+                <v-expansion-panel>
+                  <v-expansion-panel-header>
+                    <v-switch
+                      v-model="access.title.value"
+                      :title="$vuetify.lang.t('$vuetify.access.access.' + access.title.name)"
+                    >
+                      <template v-slot:label>
+                        <div>
+                          <b>
+                            {{ $vuetify.lang.t('$vuetify.access.access.' + access.title.name) }}
+                          </b>
+                          <v-tooltip
+                            right
+                            class="md-6"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span>{{
+                              $vuetify.lang.t('$vuetify.access.access.manager_help')
+                            }}</span>
+                          </v-tooltip>
+                        </div>
+                      </template>
+                    </v-switch>
+                    <template v-slot:actions>
+                      <v-icon
+                        v-show="access.title.value"
+                        color="error"
+                      >
+                        mdi-key-plus
+                      </v-icon>
+                    </template>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content v-show="access.title.value">
+                    <v-switch
+                      v-for="(item,i) in access.actions"
+                      :key="i"
+                      v-model="access.actions[i]"
+                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-col>
+            </v-expansion-panels>
           </v-row>
         </v-form>
       </v-card-text>
@@ -99,17 +161,31 @@ export default {
   data () {
     return {
       formValid: false,
+      access_permit: [],
+      key: {},
       formRule: this.$rules
     }
   },
   computed: {
-    ...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress'])
+    ...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress']),
+    ...mapState('keys', ['keys'])
+  },
+  created () {
+    this.getKeys().then(() => {
+      this.key = this.keys.filter(k => k.id === this.editAccess.key_position_id)[0]
+    })
+    this.access_permit = JSON.parse(this.editAccess.access_permit)
   },
   methods: {
     ...mapActions('role', ['updateRole', 'toogleEditModal']),
+    ...mapActions('keys', ['getKeys']),
+    updateAccessPermit () {
+      this.access_permit = JSON.parse(this.newAccess.key.access_permit)
+    },
 
     async updateRoleHandler () {
       if (this.$refs.form.validate()) {
+        this.editAccess.access_permit = this.access_permit
         await this.updateRole(this.editAccess)
       }
     }

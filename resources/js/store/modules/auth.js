@@ -83,9 +83,10 @@ const mutations = {
     state.loadingReset = process
   },
   [UPDATE_ACCESS] (state, access) {
-    // const atob = require('atob')
-    state.access = JSON.parse((access))
-    // state.access = access
+    if (access !== undefined) {
+      state.access = []
+      state.access = JSON.parse((access))
+    }
   },
   [LOGIN] (state) {
     state.pending = true

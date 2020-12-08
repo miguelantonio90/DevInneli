@@ -13,6 +13,7 @@
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="payments"
+          :manager="'payment'"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort

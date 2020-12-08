@@ -65,7 +65,9 @@
               :class="drawerWidth === 64 ? 'pl-4' : ''"
               :to="subItem.path"
             >
-              <template v-if="drawerWidth === 64">
+              <template
+                v-if="drawerWidth === 64"
+              >
                 <v-list-item-icon>
                   <v-tooltip bottom>
                     <template
@@ -86,14 +88,13 @@
                   </v-tooltip>
                 </v-list-item-icon>
               </template>
-              <template v-else>
+              <template>
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="
-                      $vuetify.lang.t(
-                        '$vuetify.menu.' +
-                          subItem.meta.title
-                      )
+                    v-text="$vuetify.lang.t(
+                      '$vuetify.menu.' +
+                        subItem.meta.title
+                    )
                     "
                   />
                 </v-list-item-content>
@@ -173,6 +174,11 @@ export default {
       routes[0].children.forEach((v) => {
         if (this.showInMenu(v.access)) { routers.push(v) }
       })
+      routers.forEach((a) => {
+        a.children.forEach((c) => {
+          c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
+        })
+      })
       return routers
     }
   },
@@ -203,8 +209,6 @@ export default {
         permit.forEach((v) => {
           const exist = this.localAccess.filter(a => a.title.name === v && a.title.value === true)
           if (exist.length > 0) {
-            // console.log(exist)
-            // console.log(v)
             countAccess++
           }
         })

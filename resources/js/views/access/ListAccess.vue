@@ -16,6 +16,7 @@
             csv-filename="Access"
             :headers="getTableColumns"
             :items="roles"
+            :manager="'access'"
             :sort-by="['name']"
             :sort-desc="[false, true]"
             multi-sort

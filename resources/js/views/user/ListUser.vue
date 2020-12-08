@@ -15,6 +15,7 @@
           csv-filename="Employees"
           :headers="getTableColumns"
           :items="users"
+          :manager="'employer'"
           :sort-by="['firstName']"
           :sort-desc="[false, true]"
           multi-sort

@@ -12,6 +12,7 @@
           :view-transfer-button="true"
           csv-filename="Articles"
           has-csv-import
+          :manager="'article'"
           :items="articles"
           :options="vBindOption"
           :sort-by="['ref']"

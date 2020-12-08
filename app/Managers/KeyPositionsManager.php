@@ -19,6 +19,7 @@ class KeyPositionsManager
         return DB::table('key_positions')
             ->where('company_id', '=', $company->id)
             ->where('deleted_at', '=', null)
+            ->where('key', '<>','CEO')
             ->get();
     }
 

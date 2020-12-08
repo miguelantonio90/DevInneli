@@ -78,7 +78,7 @@ class LoginController extends Controller
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
+            cacheAlias()->set('userPin', auth());
             return $this->sendLockoutResponse($request);
         }
 
@@ -137,7 +137,7 @@ class LoginController extends Controller
             $user[0]->save();
             $token = $user[0]->createToken(config('services.passport.client_secret'))->accessToken;
             $user[0]['access_token'] = $token;
-            cacheAlias()->put('userPin', $user[0]);
+            cacheAlias()->set('userPin', $user[0]);
             return ResponseHelper::sendResponse($user[0], 'Success login.');
         } else {
             return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);

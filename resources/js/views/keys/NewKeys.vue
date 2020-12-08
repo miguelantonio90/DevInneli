@@ -84,8 +84,8 @@
                     <v-switch
                       v-for="(item,i) in access.actions"
                       :key="i"
-                      v-model="item.value"
-                      :label="$vuetify.lang.t('$vuetify.access.access.' + item.name)"
+                      v-model="access.actions[i]"
+                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -140,6 +140,7 @@ export default {
     ...mapActions('keys', ['createKey', 'toogleNewModal']),
     async createNewKey () {
       if (this.$refs.form.validate()) {
+        this.newKey.access_permit = this.access_permit
         await this.createKey(this.newKey)
       }
     }

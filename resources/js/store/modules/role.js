@@ -31,16 +31,16 @@ const state = {
     accessEmail: false,
     description: '',
     access_permit: [
-
     ]
   },
   editAccess: {
     id: '',
-    key: '',
+    key: {},
     name: '',
     accessPin: false,
     accessEmail: false,
-    description: ''
+    description: '',
+    access_permit: []
   },
   isAccessLoading: false,
   isActionInProgress: false,

@@ -14,6 +14,7 @@
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="discounts"
+          :manager="'discount'"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort

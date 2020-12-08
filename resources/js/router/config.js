@@ -10,6 +10,7 @@ import {
 export const publicRoute = [
   {
     path: '*',
+    children: [],
     component: () => import('../views/error/NotFound')
   },
   {
@@ -72,17 +73,22 @@ export const publicRoute = [
   {
     path: '/404',
     name: '404',
+    hidden: true,
     meta: {
       title: 'Not Found'
     },
+
+    children: [],
     component: () => import('../views/error/NotFound')
   },
   {
     path: '/500',
     name: '500',
+    hidden: true,
     meta: {
       title: 'Server Error'
     },
+    children: [],
     component: () => import('../views/error/Error')
   },
   {
@@ -123,6 +129,7 @@ export const protectedRoute = [
           icon: 'mdi-view-dashboard',
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/Dashboard')
       },
       {
@@ -134,6 +141,7 @@ export const protectedRoute = [
           hiddenInMenu: true,
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/error/Deny')
       },
       {
@@ -145,6 +153,7 @@ export const protectedRoute = [
           hiddenInMenu: true,
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/auth/Profile')
       },
       {
@@ -164,6 +173,7 @@ export const protectedRoute = [
             access: 'vending_list',
             meta: {
               title: 'vending',
+              hiddenInMenu: false,
               requiresAuth: true
             },
             component: () => import('../views/sales/ListSale.vue')
@@ -478,12 +488,13 @@ export const protectedRoute = [
       },
       {
         path: '/setting',
-        access: ['config'],
+        access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
         meta: {
           title: 'setting',
           icon: 'mdi-cog',
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/general/General')
       }
     ]

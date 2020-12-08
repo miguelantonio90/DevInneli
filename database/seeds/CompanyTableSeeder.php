@@ -43,10 +43,6 @@ class CompanyTableSeeder extends Seeder
         $key->key = 'admin';
         $key->access_permit = json_encode([
             [
-                'title' => ['name' =>  'all', 'value' => true],
-                'actions' => []
-            ],
-            [
                 'title' => ['name' => 'manager_article', 'value' => false],
                 'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
             ],
@@ -86,10 +82,6 @@ class CompanyTableSeeder extends Seeder
             [
                 'title' => ['name' => 'manager_client', 'value' => false],
                 'actions' => ['client_list' => true, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
-            ],
-            [
-                'title' => ['name' =>  'config', 'value' => true],
-                'actions' => []
             ],
             [
                 'title' => ['name' => 'manager_shop', 'value' => false],

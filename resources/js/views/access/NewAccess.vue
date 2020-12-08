@@ -133,8 +133,8 @@
                     <v-switch
                       v-for="(item,i) in access.actions"
                       :key="i"
-                      v-model="item.value"
-                      :label="$vuetify.lang.t('$vuetify.access.access.' + item.name)"
+                      v-model="access.actions[i]"
+                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -186,6 +186,7 @@ export default {
   created () {
     this.getKeys().then(() => {
       this.newAccess.key = this.keys[0]
+      this.access_permit = JSON.parse(this.keys[0].access_permit)
     })
   },
   mounted () {

@@ -13,6 +13,7 @@
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="typeOrders"
+          :manager="'type_of_order'"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           :options="bindProps"

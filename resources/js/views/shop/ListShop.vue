@@ -17,6 +17,7 @@
             csv-filename="Shops"
             :headers="getTableColumns"
             :items="shops"
+            :manager="'shop'"
             :sort-by="['name']"
             :sort-desc="[false, true]"
             multi-sort

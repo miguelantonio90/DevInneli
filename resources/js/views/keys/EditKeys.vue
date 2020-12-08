@@ -35,7 +35,7 @@
           <v-row>
             <v-expansion-panels popout>
               <v-col
-                v-for="(access,j) in editKey.access_permit"
+                v-for="(access,j) in access_permit"
                 :key="j"
                 md="6"
               >
@@ -84,8 +84,8 @@
                     <v-switch
                       v-for="(item,i) in access.actions"
                       :key="i"
-                      v-model="item.value"
-                      :label="$vuetify.lang.t('$vuetify.access.access.' + item.name)"
+                      v-model="access.actions[i]"
+                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -127,6 +127,7 @@ export default {
   data () {
     return {
       formValid: false,
+      access_permit: [],
       formRule: this.$rules
     }
   },
@@ -134,13 +135,15 @@ export default {
     ...mapState('keys', ['saved', 'editKey', 'isActionInProgress'])
   },
   created () {
-    console.log(this.editKey.access_permit)
+    this.access_permit = this.editKey.access_permit
+    console.log(this.access_permit)
   },
   methods: {
     ...mapActions('keys', ['updateKey', 'toogleEditModal']),
 
     async updateKeyHandler () {
       if (this.$refs.form.validate()) {
+        this.editKey.access_permit = this.access_permit
         await this.updateKey(this.editKey)
       }
     }

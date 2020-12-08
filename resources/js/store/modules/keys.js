@@ -32,43 +32,22 @@ const state = {
         },
         actions: [
           {
-            name: 'article_list',
-            value: false
+            article_list: false
           },
           {
-            name: 'article_add',
-            value: false
+            article_add: false
           },
           {
-            name: 'article_edit',
-            value: false
+            article_edit: false
           },
-          {
-            name: 'article_delete',
-            value: false
-          }
+          { article_delete: false }
         ]
 
       },
       {
-        title: {
-          name: 'manager_vending',
-          value: false
-        },
-        actions: [{
-          name: 'vending_list',
-          value: false
-        },
-        {
-          name: 'vending_add',
-          value: false
-        }, {
-          name: 'vending_edit',
-          value: false
-        }, {
-          name: 'vending_delete',
-          value: false
-        }
+        title: { name: 'manager_vending', value: false },
+        actions: [{ vending_list: false },
+          { vending_add: false }, { vending_edit: false }, { vending_delete: false }
         ]
       },
       {
@@ -76,19 +55,7 @@ const state = {
           name: 'manager_category',
           value: false
         },
-        actions: [{
-          name: 'category_list',
-          value: false
-        }, {
-          name: 'category_add',
-          value: false
-        }, {
-          name: 'category_edit',
-          value: false
-        }, {
-          name: 'category_delete',
-          value: false
-        }
+        actions: [{ category_list: false }, { category_add: false }, { category_edit: false }, { category_delete: false }
         ]
       },
       {
@@ -96,228 +63,105 @@ const state = {
           name: 'manager_mod',
           value: false
         },
-        actions: [{
-          name: 'mod_list',
-          value: false
-        }, {
-          name: 'mod_add',
-          value: false
-        }, {
-          name: 'mod_edit',
-          value: false
-        }, {
-          name: 'mod_delete',
-          value: false
-        }]
+        actions: [{ mod_list: false }, { mod_add: false }, { mod_edit: false }, { mod_delete: false }]
       },
       {
         title: {
           name: 'manager_supplier',
           value: false
         },
-        actions: [{
-          name: 'supplier_list',
-          value: false
-        }, {
-          name: 'supplier_add',
-          value: false
-        }, {
-          name: 'supplier_edit',
-          value: false
-        }, {
-          name: 'supplier_delete',
-          value: false
-        }]
+        actions: [{ supplier_list: false }, { supplier_add: false }, { supplier_edit: false }, { supplier_delete: false }]
       },
       {
         title: {
           name: 'manager_buy',
           value: false
         },
-        actions: [{
-          name: 'buy_list',
-          value: false
-        }, {
-          name: 'buy_add',
-          value: false
-        }, {
-          name: 'buy_edit',
-          value: false
-        }, {
-          name: 'buy_delete',
-          value: false
-        }]
+        actions: [{ buy_list: false }, { buy_add: false }, { buy_edit: false }, { buy_delete: false }]
       },
       {
         title: {
           name: 'manager_sell',
           value: false
         },
-        actions: [{
-          name: 'sell_by_product',
-          value: false
-        }, {
-          name: 'sell_by_category',
-          value: false
-        }, {
-          name: 'sell_by_employer',
-          value: false
-        }, {
-          name: 'sell_by_payments',
-          value: false
-        }]
+        actions: [{ sell_by_product: false }, { sell_by_category: false }, { sell_by_employer: false }, { sell_by_payments: false }]
       },
       {
         title: {
           name: 'manager_employer',
           value: false
         },
-        actions: [{
-          name: 'employer_list',
-          value: false
-        }, {
-          name: 'employer_add',
-          value: false
-        }, {
-          name: 'employer_edit',
-          value: false
-        }, {
-          name: 'employer_delete',
-          value: false
-        }]
+        actions: [{ employer_list: false }, { employer_add: false }, { employer_edit: false }, { employer_delete: false }]
       },
       {
         title: {
           name: 'manager_assistance',
           value: false
         },
-        actions: [{
-          name: 'assistance_list',
-          value: false
-        }, {
-          name: 'assistance_add',
-          value: false
-        }, {
-          name: 'assistance_edit',
-          value: false
-        }, {
-          name: 'assistance_delete',
-          value: false
-        }]
+        actions: [{ assistance_list: false }, { assistance_add: false }, { assistance_edit: false }, { assistance_delete: false }]
       },
       {
         title: {
           name: 'manager_client',
           value: false
         },
-        actions: [{
-          name: 'client_list',
-          value: false
-        }, {
-          name: 'client_add',
-          value: false
-        }, {
-          name: 'client_edit',
-          value: false
-        }, {
-          name: 'client_delete',
-          value: false
-        }]
+        actions: [{ client_list: false }, { client_add: false }, { client_edit: false }, { client_delete: false }]
       },
       {
         title: {
           name: 'manager_shop',
           value: false
         },
-        actions: [{
-          name: 'shop_list',
-          value: false
-        }, {
-          name: 'shop_add',
-          value: false
-        }, {
-          name: 'shop_edit',
-          value: false
-        }, {
-          name: 'shop_delete',
-          value: false
-        }]
+        actions: [{ shop_list: false }, { shop_add: false }, { shop_edit: false }, { shop_delete: false }]
       },
       {
         title: {
           name: 'manager_access',
           value: false
         },
-        actions: [{
-          name: 'access_list',
-          value: false
-        }, {
-          name: 'access_add',
-          value: false
-        }, {
-          name: 'access_edit',
-          value: false
-        }, {
-          name: 'access_delete',
-          value: false
-        }]
+        actions: [{ access_list: false }, { access_add: false }, { access_edit: false }, { access_delete: false }]
       },
       {
         title: {
           name: 'manager_payment',
           value: false
         },
-        actions: [{
-          name: 'payment_list',
+        actions: [{ payment_list: false }, { payment_add: false }, { payment_edit: false }, { payment_delete: false }]
+      },
+      {
+        title: {
+          name: 'manager_expense_category',
           value: false
-        }, {
-          name: 'payment_add',
-          value: false
-        }, {
-          name: 'payment_edit',
-          value: false
-        }, {
-          name: 'payment_delete',
-          value: false
-        }]
+        },
+        actions: [{ expense_category_list: false }, { expense_category_add: false }, { expense_category_edit: false }, { expense_category_delete: false }]
       },
       {
         title: {
           name: 'manager_exchange_rate',
           value: false
         },
-        actions: [{
-          name: 'exchange_rate_list',
-          value: false
-        }, {
-          name: 'exchange_rate_add',
-          value: false
-        }, {
-          name: 'exchange_rate_edit',
-          value: false
-        }, {
-          name: 'exchange_rate_delete',
-          value: false
-        }]
+        actions: [{ exchange_rate_list: false }, { exchange_rate_add: false }, { exchange_rate_edit: false }, { exchange_rate_delete: false }]
       },
       {
         title: {
           name: 'manager_type_of_order',
           value: false
         },
-        actions: [{
-          name: 'type_of_order_list',
+        actions: [{ type_of_order_list: false }, { type_of_order_add: false }, { type_of_order_edit: false }, { type_of_order_delete: false }]
+      },
+      {
+        title: {
+          name: 'manager_tax',
           value: false
-        }, {
-          name: 'type_of_order_add',
+        },
+        actions: [{ tax_list: false }, { tax_add: false }, { tax_edit: false }, { tax_delete: false }]
+      },
+      {
+        title: {
+          name: 'manager_discount',
           value: false
-        }, {
-          name: 'type_of_order_edit',
-          value: false
-        }, {
-          name: 'type_of_order_delete',
-          value: false
-        }]
+        },
+        actions: [{ discount_list: false }, { discount_add: false }, { discount_edit: false }, { discount_delete: false }]
       }
     ]
   },
@@ -356,10 +200,147 @@ const mutations = {
   [KEY_CREATED] (state) {
     state.showNewModal = false
     state.newKey = {
-      name: '',
-      accessPin: false,
-      accessEmail: false,
-      description: ''
+      key: '',
+      access_permit: [
+        {
+          title: {
+            name: 'manager_article',
+            value: false
+          },
+          actions: [
+            {
+              article_list: false
+            },
+            {
+              article_add: false
+            },
+            {
+              article_edit: false
+            },
+            { article_delete: false }
+          ]
+
+        },
+        {
+          title: { name: 'manager_vending', value: false },
+          actions: [{ vending_list: false },
+            { vending_add: false }, { vending_edit: false }, { vending_delete: false }
+          ]
+        },
+        {
+          title: {
+            name: 'manager_category',
+            value: false
+          },
+          actions: [{ category_list: false }, { category_add: false }, { category_edit: false }, { category_delete: false }
+          ]
+        },
+        {
+          title: {
+            name: 'manager_mod',
+            value: false
+          },
+          actions: [{ mod_list: false }, { mod_add: false }, { mod_edit: false }, { mod_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_supplier',
+            value: false
+          },
+          actions: [{ supplier_list: false }, { supplier_add: false }, { supplier_edit: false }, { supplier_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_buy',
+            value: false
+          },
+          actions: [{ buy_list: false }, { buy_add: false }, { buy_edit: false }, { buy_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_sell',
+            value: false
+          },
+          actions: [{ sell_by_product: false }, { sell_by_category: false }, { sell_by_employer: false }, { sell_by_payments: false }]
+        },
+        {
+          title: {
+            name: 'manager_employer',
+            value: false
+          },
+          actions: [{ employer_list: false }, { employer_add: false }, { employer_edit: false }, { employer_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_assistance',
+            value: false
+          },
+          actions: [{ assistance_list: false }, { assistance_add: false }, { assistance_edit: false }, { assistance_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_client',
+            value: false
+          },
+          actions: [{ client_list: false }, { client_add: false }, { client_edit: false }, { client_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_shop',
+            value: false
+          },
+          actions: [{ shop_list: false }, { shop_add: false }, { shop_edit: false }, { shop_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_access',
+            value: false
+          },
+          actions: [{ access_list: false }, { access_add: false }, { access_edit: false }, { access_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_payment',
+            value: false
+          },
+          actions: [{ payment_list: false }, { payment_add: false }, { payment_edit: false }, { payment_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_expense_category',
+            value: false
+          },
+          actions: [{ expense_category_list: false }, { expense_category_add: false }, { expense_category_edit: false }, { expense_category_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_exchange_rate',
+            value: false
+          },
+          actions: [{ exchange_rate_list: false }, { exchange_rate_add: false }, { exchange_rate_edit: false }, { exchange_rate_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_type_of_order',
+            value: false
+          },
+          actions: [{ type_of_order_list: false }, { type_of_order_add: false }, { type_of_order_edit: false }, { type_of_order_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_tax',
+            value: false
+          },
+          actions: [{ tax_list: false }, { tax_add: false }, { tax_edit: false }, { tax_delete: false }]
+        },
+        {
+          title: {
+            name: 'manager_discount',
+            value: false
+          },
+          actions: [{ discount_list: false }, { discount_add: false }, { discount_edit: false }, { discount_delete: false }]
+        }
+      ]
     }
     state.saved = true
     this._vm.$Toast.fire({
