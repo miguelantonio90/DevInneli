@@ -45,7 +45,7 @@
                         chips
                         rounded
                         solo
-                        clearable
+                        :clearable="shops.length > 1"
                         :items="shops"
                         :label="$vuetify.lang.t('$vuetify.menu.shop')"
                         item-text="name"
@@ -539,13 +539,16 @@ export default {
   async created () {
     this.loadingData = true
     await this.getArticles()
-    await this.getShops()
+    await this.getShops().then((s) => {
+      this.newSale.shop = this.shops[0]
+    })
     await this.getSales()
     await this.getInventories()
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
     this.newSale.no_facture = this.generateNF()
+    this.updateDataArticle()
     this.loadingData = false
   },
   methods: {

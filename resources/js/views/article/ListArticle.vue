@@ -48,7 +48,7 @@
               {{ item.percent }} %
             </template>
           </template>
-          <template v-slot:[`item.price`]="{ item }">
+          <template v-slot:item.price="{ item }">
             <template v-if="item.variant_values.length===0">
               {{ `${user.company.currency + ' ' + item.price}` }}
             </template>
