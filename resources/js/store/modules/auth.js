@@ -1,6 +1,7 @@
 import auth from '../../api/auth'
 import localStorage from '../../config/localStorage'
 import router from '../../router'
+import atob from 'atob'
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -83,7 +84,6 @@ const mutations = {
     state.loadingReset = process
   },
   [UPDATE_ACCESS] (state, access) {
-    const atob = require('atob')
     state.access = JSON.parse(atob(access))
   },
   [LOGIN] (state) {

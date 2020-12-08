@@ -41,7 +41,7 @@ class SaleManager extends BaseManager
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->where('sales.id', '=', $value['id'])
                 ->select('shops.*', 'shops.id as shop_id')
-                ->get()[0];
+                ->first();
             $sales[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
                 ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
@@ -61,7 +61,7 @@ class SaleManager extends BaseManager
             $sales[$key]['client'] = DB::table('clients')
                 ->join('sales', 'sales.client_id', '=', 'clients.id')
                 ->where('sales.id', '=', $value['id'])
-                ->get()[0];
+                ->first();
             $totalCost = 0;
             $totalPrice = 0;
             foreach ($sales[$key]['articles'] as $k => $v) {
@@ -143,7 +143,7 @@ class SaleManager extends BaseManager
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
-                ->get()[0];
+                ->first();
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
             $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
             $articleShop->save();
@@ -200,6 +200,7 @@ class SaleManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function edit($id, $data)
     {

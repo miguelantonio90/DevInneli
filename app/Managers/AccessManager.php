@@ -16,13 +16,13 @@ class AccessManager
     {
         $company = CompanyManager::getCompanyByAdmin();
         $positions = DB::table('positions')
-            ->where('key', '<>', 'admin')
+            ->where('name', '<>', 'admin')
             ->where('company_id', '=', $company->id)
             ->get();
         foreach ($positions as $k => $v) {
             $positions[$k]->accessPin = $v->accessPin === 1;
             $positions[$k]->accessEmail = $v->accessEmail === 1;
-            $positions[$k]->disabled = $v->key === 'super_manager';
+            $positions[$k]->disabled = $v->name === 'super_manager';
         }
 
         return $positions;
