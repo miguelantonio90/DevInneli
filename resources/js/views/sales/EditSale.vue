@@ -417,14 +417,25 @@
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
           <v-btn
+            v-show="editSale.state === 'open'"
+            class="mb-2"
+            color="success"
+            :disabled="!formValid || isActionInProgress"
+            :loading="isActionInProgress"
+            @click="editSaleHandler('open')"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+          </v-btn>
+          <v-btn
             class="mb-2"
             color="primary"
             :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
-            @click="createNewSale"
+            @click="editSaleHandler('accepted')"
           >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
+            <v-icon>mdi-check-all</v-icon>
+            {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -678,10 +689,11 @@ export default {
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async createNewSale () {
+    async editSaleHandler (state) {
       if (this.editSale.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
+          this.editSale.state = state
           await this.updateSale(this.editSale)
           await this.$router.push({ name: 'vending' })
         }

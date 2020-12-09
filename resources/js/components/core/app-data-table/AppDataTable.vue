@@ -311,6 +311,7 @@ export default {
     }
   },
   mounted () {
+    this.showButtons()
     combineLatest([this.o$items, this.o$headers])
       .pipe(
         filter(
@@ -322,6 +323,9 @@ export default {
         this._processHeaders(headers)
         this._processItems(items)
       })
+  },
+  created () {
+    this.showButtons()
   },
   destroyed () {
     this.o$destroyed.next()

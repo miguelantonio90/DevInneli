@@ -287,8 +287,7 @@ const actions = {
       .sendDeleteRequest(articleId)
       .then((response) => {
         commit(ARTICLE_DELETE)
-        this.$store.state.auth.dispatch('auth/updateAccess', response.access)
-        dispatch('article/getArticles', null, { root: true })
+        this.dispatch('article/getArticles')
         this.dispatch('auth/updateAccess', response.access)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))

@@ -54,6 +54,7 @@ export default {
   file: 'Archivo',
   system: 'Sistema',
   import_csv: 'Importando archivo',
+  state: 'Estado',
   // menu
   menu: {
     setting: 'Configuración',
@@ -333,7 +334,6 @@ export default {
     exit_hour: 'Hora de Salida',
     total_hours: 'Total de Horas'
   },
-
   component: {
     select: 'Selecciona columnas',
     others: 'otros',
@@ -472,6 +472,11 @@ export default {
     sale: 'Venta',
     selectArticle: 'Por favor seleccione el artículo',
     selectShop: 'Debe seleccionar una tienda',
+    state: {
+      open: 'En proceso',
+      accepted: 'Aceptada',
+      cancelled: 'Cancelada'
+    },
     emptyArticle: 'Esta tienda no tiene artículos. Por favor abastezca la tienda'
   },
   report: {

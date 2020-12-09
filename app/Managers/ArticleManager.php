@@ -141,13 +141,20 @@ class ArticleManager extends BaseManager
                         $this->variantManager->newArticleShop($v, $articleChildren);
                     }
                 }
-            } else {
-                foreach ($shops as $key => $value) {
-                    $this->variantManager->newArticleShop($value, $article);
-                }
             }
-            $article->save();
         }
+
+        foreach ($shops as $key => $value) {
+            $artShop = ArticlesShops::create([
+                'article_id' => $article->id,
+                'shop_id' => $value['shop_id'],
+                'stock' => $value['stock'] ?: 0,
+                'price' => $value['price'],
+                'under_inventory' => $value['under_inventory'] ?: 0
+            ]);
+            $this->managerBy('new', $artShop);
+        }
+        $article->save();
         if (count($data['images']) > 0) {
             ArticleImageManager::new($article->id, $data['images']);
         }
@@ -376,7 +383,7 @@ class ArticleManager extends BaseManager
             }
         }
         foreach ($variants as $k => $v) {
-            if ($v['id'] != "") {
+            if (array_key_exists('id',$v)) {
                 $this->variantManager->editVariant($v);
             } else {
                 $this->variantManager->newVariant($v, $article->id);

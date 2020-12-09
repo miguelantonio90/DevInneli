@@ -119,6 +119,7 @@ class SaleManager extends BaseManager
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
             'pay' => $data['pay'] ?: null,
+            'state' => $data['state'] ?: null,
             'company_id' => $data['company_id'],
             'client_id' => $data['client']['id']
         ]);
@@ -206,6 +207,7 @@ class SaleManager extends BaseManager
         $sale = Sale::findOrFail($id);
         $sale->no_facture = $data['no_facture'];
         $sale->pay = $data['pay'];
+        $sale->state = $data['state'];
         if (isset($data['payments']['payment_id'])) {
             $sale->payment_id = $data['payments']['payment_id'];
         }

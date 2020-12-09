@@ -407,13 +407,23 @@
           </v-btn>
           <v-btn
             class="mb-2"
+            color="success"
+            :disabled="!formValid || isActionInProgress"
+            :loading="isActionInProgress"
+            @click="createNewSale('open')"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+          </v-btn>
+          <v-btn
+            class="mb-2"
             color="primary"
             :disabled="!formValid || isActionInProgress"
             :loading="isActionInProgress"
-            @click="createNewSale"
+            @click="createNewSale('accepted')"
           >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
+            <v-icon>mdi-check-all</v-icon>
+            {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -517,11 +527,6 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
           value: 'totalPrice',
           select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
         }
       ]
     }
@@ -548,7 +553,7 @@ export default {
       this.getLocalDiscounts()
     })
     this.newSale.no_facture = this.generateNF()
-    this.updateDataArticle()
+    await this.updateDataArticle()
     this.loadingData = false
   },
   methods: {
@@ -565,31 +570,32 @@ export default {
       this.newSale.articles = []
       if (this.newSale.shop) {
         await this.articles.forEach((value) => {
-          if (!value.parent_id) {
-            if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
-                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-                this.validAddToLocalArticle(v, value, artS)
-              })
-            } else {
-              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-              this.validAddToLocalArticle(value, value, artS)
-            }
+          if (value.variant_values.length > 0) {
+            value.variant_values.forEach((v) => {
+              const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              this.validAddToLocalArticle(v, value, artS)
+            })
+          } else {
+            const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+            this.validAddToLocalArticle(value, value, artS)
           }
         })
       }
     },
     validAddToLocalArticle (v, value, artS) {
       let inventory = 0
+      console.log(v)
       if (!value.track_inventory) {
         this.addToLocalArticle(v, value, 0, [])
       } else {
         if (artS.length > 0) {
           inventory = artS[0].stock
         }
-        if (inventory > 0) {
-          this.addToLocalArticle(v, value, inventory, artS[0])
-        }
+
+        this.addToLocalArticle(v, value, inventory, artS[0])
+        // if (inventory > 0) {
+        //   this.addToLocalArticle(v, value, inventory, artS[0])
+        // }
       }
     },
     addToLocalArticle (v, value, inventory, artS) {
@@ -666,10 +672,11 @@ export default {
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async createNewSale () {
+    async createNewSale (state) {
       if (this.newSale.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
+          this.newSale.state = state
           await this.createSale(this.newSale)
           await this.$router.push({ name: 'vending' })
         }

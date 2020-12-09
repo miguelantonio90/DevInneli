@@ -617,6 +617,7 @@ import CompositeList from './composite/CompositeList'
 import NewTax from '../tax/NewTax'
 
 export default {
+  // TODO: Arreglar que cuando el articulo no es compuesto no salga el segundo paso
   name: 'EditArticle',
   components: { NewCategory, CompositeList, ShopsArticles, Variant, NewTax },
   data () {
