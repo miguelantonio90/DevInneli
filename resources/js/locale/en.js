@@ -186,6 +186,7 @@ export default {
   // options
   actions: {
     actions: 'Actions',
+    refund: 'Refund',
     accept: 'Accept',
     search: 'Search',
     new: 'New',

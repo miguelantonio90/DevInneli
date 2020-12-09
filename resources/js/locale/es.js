@@ -189,6 +189,7 @@ export default {
   // options
   actions: {
     actions: 'Acciones',
+    refund: 'Reembolsar',
     accept: 'Aceptar',
     search: 'Buscar',
     new: 'Nuevo',

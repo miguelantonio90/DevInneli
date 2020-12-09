@@ -167,6 +167,9 @@
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
                       </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.actions.actions') }}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,6 +211,24 @@
                       </td>
                       <td>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</td>
                       <td>{{ article.inventory }}</td>
+                      <td>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <b><v-icon
+                              v-if="article.cant > 0"
+                              style="color: #ff752b"
+                              class="mr-2"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="refundArticle(item)"
+                            >
+                              mdi-undo
+                            </v-icon></b>
+                          </template>
+                          <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                        </v-tooltip>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -353,6 +374,9 @@ export default {
     ...mapActions('article', ['getArticles']),
     changeState (item) {
       this.updateSale(item)
+    },
+    refundArticle (item) {
+      console.log(item)
     },
     total_pay (item) {
       let sum = 0
