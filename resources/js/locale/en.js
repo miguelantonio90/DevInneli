@@ -54,6 +54,7 @@ export default {
   file: 'File',
   system: 'System',
   import_csv: 'Getting your file',
+  state: 'State',
   // menu
   menu: {
     setting: 'Setting',
@@ -467,6 +468,11 @@ export default {
     sale: 'Sale',
     selectArticle: 'Please select the article',
     selectShop: 'You should select a shop',
+    state: {
+      open: 'In Process',
+      accepted: 'Accepted',
+      cancelled: 'Cancelled'
+    },
     emptyArticle: 'This shop no have article. Please supply the shop'
   },
   report: {

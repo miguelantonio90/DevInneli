@@ -32,7 +32,7 @@
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
       <v-btn
-        v-if="showSalesIcon"
+        v-if="showSale"
         icon
         @click="handleSales"
       >
@@ -176,10 +176,12 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      showSale: false
+    }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user', 'access', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'user', 'access_permit', 'isManagerIn']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },
@@ -202,9 +204,9 @@ export default {
       const { matched } = this.$route
       return matched.map((route, index) => {
         const to =
-            index === matched.length - 1
-              ? this.$route.path
-              : route.path || route.redirect
+                    index === matched.length - 1
+                      ? this.$route.path
+                      : route.path || route.redirect
         const text = this.$vuetify.lang.t(
           '$vuetify.menu.' + route.meta.title
         )
@@ -248,8 +250,17 @@ export default {
       ]
     }
   },
+  watch: {
+    access_permit () {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+    }
+  },
   created () {
-    this.getUserData()
+    this.getUserData().then((v) => {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+    })
   },
   methods: {
     ...mapActions('auth', ['sendLogoutRequest', 'getUserData']),
@@ -280,7 +291,7 @@ export default {
       this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
     },
     handleSales () {
-      this.$router.push({ name: 'vending' }).catch(() => {})
+      this.$router.push({ name: 'vending_new' }).catch(() => {})
     }
   }
 }

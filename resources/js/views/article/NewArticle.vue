@@ -512,7 +512,6 @@
                   </v-card-actions>
                 </v-card>
               </v-stepper-content>
-
               <v-stepper-content :step="`${newArticle.composite ? 4 : 5}`">
                 <v-card>
                   <v-card-text>
@@ -793,7 +792,7 @@ export default {
         } else {
           this.shopData.push({
             shop_id: shop.id,
-            name: shop.name,
+            shop_name: shop.name,
             checked: true,
             price: '0.00',
             stock: '0',

@@ -21,6 +21,52 @@
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
         >
+          <template v-slot:item.state="{ item }">
+            <v-autocomplete
+              v-model="item.state"
+              :disabled="item.state !== 'open'"
+              chips
+              :items="getLocalStates"
+              item-text="text"
+              item-value="value"
+              @input="changeState(item)"
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.item.value"
+                  @click="data.select"
+                >
+                  <i :style="'color: ' + data.item.color">
+                    <v-icon left>
+                      {{ data.item.icon }}
+                    </v-icon>
+                    {{ data.item.text }}</i>
+                </v-chip>
+              </template>
+              <template v-slot:item="data">
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item" />
+                </template>
+                <template v-else>
+                  <v-list-item-icon>
+                    <v-icon
+                      left
+                      :style="'color: ' + data.item.color"
+                    >
+                      {{ data.item.icon }}
+                    </v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      :style="'color: ' + data.item.color"
+                      v-html="data.item.text"
+                    />
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-autocomplete>
+          </template>
           <template v-slot:[`item.pay`]="{ item }">
             {{
               item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
@@ -223,6 +269,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.state'),
+          value: 'state',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.tax.name'),
           value: 'taxes',
           select_filter: true
@@ -246,6 +297,28 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
           value: 'actions',
           sortable: false
+        }
+      ]
+    },
+    getLocalStates () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
+          value: 'open',
+          icon: 'mdi-star-half',
+          color: '#4caf50'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
+          value: 'accepted',
+          icon: 'mdi-star',
+          color: '#3f51b5'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+          value: 'cancelled',
+          icon: 'mdi-star-off',
+          color: '#ff0000'
         }
       ]
     }
@@ -274,9 +347,13 @@ export default {
       'openEditModal',
       'openShowModal',
       'getSales',
+      'updateSale',
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
+    changeState (item) {
+      this.updateSale(item)
+    },
     total_pay (item) {
       let sum = 0
       item.taxes.forEach((v) => {

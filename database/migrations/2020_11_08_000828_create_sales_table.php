@@ -15,6 +15,7 @@ class CreateSalesTable extends BaseMigration
         Schema::create($tableName, function (Blueprint $table) {
             $table->string('no_facture')->nullable();
             $table->string('pay')->nullable();
+            $table->string('state')->nullable();
             $table->foreignUuid('client_id')->references('id')->on('clients');
             $table->foreignUuid('payment_id')->nullable()->references('id')->on('payments');
         });

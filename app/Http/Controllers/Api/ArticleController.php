@@ -64,7 +64,6 @@ class ArticleController extends Controller
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $user = $this->articleManager->new($data);
-
         return ResponseHelper::sendResponse(
             $user,
             'Article has created successfully.'
