@@ -578,6 +578,7 @@ export default {
       this.getLocalDiscounts()
     })
     await this.updateDataArticle()
+    console.log(this.editSale)
     this.loadingData = false
   },
   methods: {

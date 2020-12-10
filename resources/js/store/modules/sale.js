@@ -31,7 +31,7 @@ const state = {
     state: 'open',
     discounts: [],
     taxes: [],
-    payments: {},
+    payments: null,
     articles: [],
     shop: null,
     client: null

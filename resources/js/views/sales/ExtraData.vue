@@ -147,11 +147,10 @@
         />
       </v-col>
       <v-col
-        v-show="sale.pay === 'counted'"
+        v-if="sale.pay === 'counted'"
         cols="6"
       >
         <v-select
-          v-show="sale.pay==='counted'"
           v-model="sale.payments"
           clearable
           :rules="formRule.country"

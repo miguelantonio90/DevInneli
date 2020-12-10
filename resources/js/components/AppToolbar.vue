@@ -31,13 +31,38 @@
       >
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
-      <v-btn
+      <v-tooltip
         v-if="showSale"
-        icon
-        @click="handleSales"
+        bottom
       >
-        <v-icon>mdi-cart</v-icon>
-      </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            class="mr-3"
+            v-on="on"
+            @click="handleSales"
+            v-text="'mdi-currency-usd'"
+          />
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.titles.newF', [
+          $vuetify.lang.t('$vuetify.sale.sale'),
+        ]) }}</span>
+      </v-tooltip>
+      <v-tooltip
+        v-if="showBuy"
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            class="mr-3"
+            v-on="on"
+            @click="handleBuy"
+            v-text="'mdi-cart'"
+          />
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.access.access.buy_add') }}</span>
+      </v-tooltip>
       <v-menu
         v-if="showMenuLang"
         class="elelvation-1"
@@ -166,6 +191,10 @@ export default {
       type: Boolean,
       default: true
     },
+    showBuyIcon: {
+      type: Boolean,
+      default: true
+    },
     showMenuLang: {
       type: Boolean,
       default: true
@@ -177,7 +206,8 @@ export default {
   },
   data () {
     return {
-      showSale: false
+      showSale: false,
+      showBuy: false
     }
   },
   computed: {
@@ -254,12 +284,16 @@ export default {
     access_permit () {
       this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
         ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
     }
   },
   created () {
     this.getUserData().then((v) => {
       this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
         ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
     })
   },
   methods: {
@@ -292,6 +326,9 @@ export default {
     },
     handleSales () {
       this.$router.push({ name: 'vending_new' }).catch(() => {})
+    },
+    handleBuy () {
+      this.$router.push({ name: 'supply_add' }).catch(() => {})
     }
   }
 }

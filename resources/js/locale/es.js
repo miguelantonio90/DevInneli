@@ -262,7 +262,7 @@ export default {
       supplier_delete: 'Eliminar Proveedor',
       manager_buy: 'Gestionar Compras',
       buy_list: 'Listar Compras',
-      buy_add: 'Adicionar Nueva Compra',
+      buy_add: 'Adicionar Compra',
       buy_edit: 'Editar Compra',
       buy_delete: 'Eliminar Compra',
       manager_sell: 'Ver Resumen de Ventas',

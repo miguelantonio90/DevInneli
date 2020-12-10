@@ -65,6 +65,9 @@ class SaleManager extends BaseManager
             $totalCost = 0;
             $totalPrice = 0;
             foreach ($sales[$key]['articles'] as $k => $v) {
+                $sales[$key]['articles'] [$k]->images = DB::table('article_images')
+                    ->where('article_images.article_id', '=',$v->id)
+                    ->get();
                 $sales[$key]['articles'][$k]->taxes = DB::table('taxes')
                     ->join('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
                     ->join('articles', 'articles.id', '=', 'article_tax.article_id')

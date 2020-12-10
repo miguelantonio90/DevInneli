@@ -163,7 +163,7 @@ export const protectedRoute = [
         redirect: '/sales/vending.list',
         meta: {
           title: 'vending',
-          icon: 'mdi-cart',
+          icon: 'mdi-cash-usd',
           group: 'sales'
         },
         children: [

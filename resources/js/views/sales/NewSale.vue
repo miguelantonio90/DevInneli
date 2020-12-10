@@ -704,8 +704,9 @@ export default {
         if (this.$refs.form.validate()) {
           this.loading = true
           this.newSale.state = state
-          await this.createSale(this.newSale)
-          await this.$router.push({ name: 'vending' })
+          await this.createSale(this.newSale).then(() => {
+            this.$router.push({ name: 'vending' })
+          })
         }
       } else {
         this.loading = false
