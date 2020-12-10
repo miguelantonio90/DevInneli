@@ -16,6 +16,7 @@
             csv-filename="Access"
             :headers="getTableColumns"
             :items="roles"
+            :manager="'access'"
             :sort-by="['name']"
             :sort-desc="[false, true]"
             multi-sort
@@ -68,6 +69,7 @@ import NewAccess from './NewAccess'
 import EditAccess from './EditAccess'
 
 export default {
+  name: 'ListAccess',
   components: {
     NewAccess,
     EditAccess

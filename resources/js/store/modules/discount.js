@@ -147,6 +147,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_DISCOUNTS, data.data)
         commit(DISCOUNTS_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_DISCOUNTS, error))
   },
@@ -155,10 +156,11 @@ const actions = {
 
     await discount
       .sendCreateRequest(newDiscount)
-      .then(() => {
+      .then((data) => {
         commit(DISCOUNTS_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('discount/getDiscounts', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   },
@@ -166,19 +168,21 @@ const actions = {
     commit(ENV_DATA_PROCESS, true)
     await discount
       .sendUpdateRequest(editDiscount)
-      .then(() => {
+      .then((data) => {
         commit(DISCOUNTS_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('discount/getDiscounts', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   },
   async deleteDiscount ({ commit, dispatch }, discountId) {
     await discount
       .sendDeleteRequest(discountId)
-      .then(() => {
+      .then((data) => {
         commit(DISCOUNTS_DELETE)
         dispatch('discount/getDiscounts', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   }

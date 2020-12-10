@@ -38,9 +38,10 @@
       :headers="headersChoosenObjs || []"
       :search="searchValueDebounced"
       v-on="$listeners"
+      @click:row="handleClick"
     >
       <template
-        v-if="viewNewButton"
+        v-if="accessNewButton"
         v-slot:top
       >
         <v-toolbar flat>
@@ -91,7 +92,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="viewEditButton"
+              v-if="accessEditButton"
               class="mr-2"
               color="warning"
               small
@@ -107,7 +108,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="viewDeleteButton"
+              v-if="accessDeleteButton"
               class="mr-2"
               color="error"
               small
@@ -149,7 +150,7 @@ import { downloadAsJson } from './helpers/json-to-csv'
 import { debounce } from './debounce'
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs'
 import { filter, takeUntil } from 'rxjs/operators'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import ImportArticle from '../../../views/article/ImportArticle'
 import * as _ from 'lodash'
 
@@ -160,6 +161,11 @@ export default {
   inheritAttrs: false,
   props: {
     title: {
+      type: String,
+      default: '',
+      required: false
+    },
+    manager: {
       type: String,
       default: '',
       required: false
@@ -240,13 +246,17 @@ export default {
       itemsFiltered: [],
       selectFiltersRegistered: {},
       selectManyFiltersRegistered: {},
-      checkboxFiltersRegistered: {}
+      checkboxFiltersRegistered: {},
+      accessNewButton: false,
+      accessEditButton: false,
+      accessDeleteButton: true
     }
   },
   computed: {
     ...mapState('article', [
       'showImportModal'
     ]),
+    ...mapGetters('auth', ['access_permit']),
     hasCsvExport () {
       const has = this.csvFilename
       return !!has
@@ -278,6 +288,12 @@ export default {
     }
   },
   watch: {
+    access_permit () {
+      this.showButtons()
+    },
+    manager () {
+      this.showButtons()
+    },
     searchValue: debounce(function (newVal) {
       this.searchValueDebounced = newVal
     }, 300),
@@ -295,6 +311,7 @@ export default {
     }
   },
   mounted () {
+    this.showButtons()
     combineLatest([this.o$items, this.o$headers])
       .pipe(
         filter(
@@ -307,13 +324,30 @@ export default {
         this._processItems(items)
       })
   },
+  created () {
+    this.showButtons()
+  },
   destroyed () {
     this.o$destroyed.next()
   },
   methods: {
     ...mapActions('article', ['importArticles', 'toogleImportModal']),
+    showButtons () {
+      if (this.access_permit.length > 0 && this.manager !== '') {
+        this.access_permit.forEach((v) => {
+          if ('manager_' + this.manager === v.title.name && !Array.isArray(v.actions)) {
+            this.accessNewButton = this.viewNewButton && v.actions[this.manager + '_add']
+            this.accessEditButton = this.viewEditButton && v.actions[this.manager + '_edit']
+            this.accessDeleteButton = this.viewDeleteButton && v.actions[this.manager + '_delete']
+          }
+        })
+      }
+    },
     createButtonClicked () {
       this.$emit('create-row')
+    },
+    handleClick (row) {
+      this.$emit('rowClick', row)
     },
     refreshButtonClicked () {
       this.$emit('refresh-table')

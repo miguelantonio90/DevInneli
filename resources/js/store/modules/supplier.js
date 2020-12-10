@@ -180,6 +180,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SUPPLIERS, data.data)
         commit(SUPPLIER_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SUPPLIER, error))
   },
   async createSupplier ({ commit, dispatch }, newSupplier) {
@@ -187,10 +188,11 @@ const actions = {
 
     await supplier
       .sendCreateRequest(newSupplier)
-      .then(() => {
+      .then((data) => {
         commit(SUPPLIER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('supplier/getSuppliers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
@@ -199,10 +201,11 @@ const actions = {
 
     await supplier
       .sendUpdateRequest(editSupplier)
-      .then(() => {
+      .then((data) => {
         commit(SUPPLIER_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('supplier/getSuppliers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
@@ -211,10 +214,11 @@ const actions = {
 
     await supplier
       .sendDeleteRequest(supplierId)
-      .then(() => {
+      .then((data) => {
         commit(ENV_DATA_PROCESS, false)
         commit(SUPPLIER_DELETE)
         dispatch('supplier/getSuppliers', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
@@ -225,9 +229,10 @@ const actions = {
       id: file.id,
       image: image
     }
-    await supplier.updateAvatar(sendData).then(() => {
+    await supplier.updateAvatar(sendData).then((data) => {
       commit(SET_SUPPLIER_AVATAR, file.file.base64)
       dispatch('auth/getSupplierData', null, { root: true })
+      this.dispatch('auth/updateAccess', data.access)
     })
   }
 }

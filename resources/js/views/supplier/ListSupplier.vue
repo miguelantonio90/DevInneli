@@ -13,6 +13,7 @@
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="suppliers"
+          :manager="'supplier'"
           :sort-by="['firstName']"
           :sort-desc="[false, true]"
           multi-sort

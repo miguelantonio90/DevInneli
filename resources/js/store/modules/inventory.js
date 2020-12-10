@@ -175,6 +175,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_INVENTORIES, data.data)
         commit(INVENTORY_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_INVENTORY, error))
   },
   async createInventory ({ commit, dispatch }, newInventory) {
@@ -182,10 +183,11 @@ const actions = {
 
     await inventory
       .sendCreateRequest(newInventory)
-      .then(() => {
+      .then((data) => {
         commit(INVENTORY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('inventory/getInventories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_INVENTORY, error))
   },
@@ -196,10 +198,11 @@ const actions = {
     // const request = profile || state.editUser
     await inventory
       .sendUpdateRequest(request)
-      .then(() => {
+      .then((data) => {
         commit(INVENTORY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('inventory/getInventories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -209,9 +212,10 @@ const actions = {
   async deleteInventory ({ commit, dispatch }, inventoryId) {
     await inventory
       .sendDeleteRequest(inventoryId)
-      .then(() => {
+      .then((data) => {
         commit(INVENTORY_DELETE)
         dispatch('inventory/getInventories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_INVENTORY, error))
   }

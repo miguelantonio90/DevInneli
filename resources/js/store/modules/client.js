@@ -191,6 +191,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CLIENTS, data.data)
         commit(CLIENT_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_CLIENT, error))
   },
   async createClient ({ commit, dispatch }, newClient) {
@@ -198,29 +199,32 @@ const actions = {
 
     await client
       .sendCreateRequest(newClient)
-      .then(() => {
+      .then((data) => {
         commit(CLIENT_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('client/getClients', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CLIENT, error))
   },
   async updateClient ({ commit, dispatch }, editClient) {
     await client
       .sendUpdateRequest(editClient)
-      .then(() => {
+      .then((data) => {
         commit(CLIENT_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('client/getClients', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CLIENT, error))
   },
   async deleteClient ({ commit, dispatch }, clientId) {
     await client
       .sendDeleteRequest(clientId)
-      .then(() => {
+      .then((data) => {
         commit(CLIENT_DELETE)
         dispatch('client/getClients', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CLIENT, error))
   },
@@ -231,9 +235,10 @@ const actions = {
       id: file.id,
       image: image
     }
-    await client.updateAvatar(sendData).then(() => {
+    await client.updateAvatar(sendData).then((data) => {
       commit(SET_CLIENT_AVATAR, file.file.base64)
       dispatch('auth/getClientData', null, { root: true })
+      this.dispatch('auth/updateAccess', data.access)
     })
   }
 }

@@ -148,6 +148,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING, data.data)
         commit(ORDER_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_ORDER, error))
   },
@@ -156,10 +157,11 @@ const actions = {
 
     await ordersAPI
       .sendCreateRequest(newOrder)
-      .then(() => {
+      .then((data) => {
         commit(ORDER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -168,10 +170,11 @@ const actions = {
 
     await ordersAPI
       .sendUpdateRequest(editOrder)
-      .then(() => {
+      .then((data) => {
         commit(ORDER_UPDATE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -180,10 +183,11 @@ const actions = {
 
     await ordersAPI
       .sendDeleteRequest(id)
-      .then(() => {
+      .then((data) => {
         commit(ORDER_DELETE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -192,9 +196,10 @@ const actions = {
 
     await ordersAPI
       .sendSetPrincipal(item)
-      .then(() => {
+      .then((data) => {
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   }

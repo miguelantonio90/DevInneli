@@ -416,16 +416,41 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="createNewSale"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
-          </v-btn>
+          <template v-if="!editSale.pay">
+            <v-btn
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('preform')"
+            >
+              <v-icon>mdi-calendar-clock</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              v-show="editSale.state === 'open'"
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('open')"
+            >
+              <v-icon>mdi-check</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+            </v-btn>
+            <v-btn
+              class="mb-2"
+              color="primary"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('accepted')"
+            >
+              <v-icon>mdi-check-all</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
       <v-dialog
@@ -553,6 +578,7 @@ export default {
       this.getLocalDiscounts()
     })
     await this.updateDataArticle()
+    console.log(this.editSale)
     this.loadingData = false
   },
   methods: {
@@ -678,10 +704,11 @@ export default {
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async createNewSale () {
+    async editSaleHandler (state) {
       if (this.editSale.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
+          this.editSale.state = state
           await this.updateSale(this.editSale)
           await this.$router.push({ name: 'vending' })
         }

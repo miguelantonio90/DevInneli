@@ -1,3 +1,4 @@
+// const language = Vuetify.framework.lang
 const continents = {
   AF: 'Africa',
   AN: 'Antarctica',

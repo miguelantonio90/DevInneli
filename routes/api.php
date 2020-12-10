@@ -43,6 +43,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
 
         Route::resource('access', 'AccessController');
+        Route::resource('keys', 'KeyPositionsController');
 
         Route::resource('shop', 'ShopController');
 
@@ -67,6 +68,9 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('inventory', 'InventoryController');
 
         Route::resource('sale', 'SaleController');
+        Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');
+        Route::post('sale/payment', 'SaleController@salePayment')->name('salePayment');
+        Route::post('sale/product', 'SaleController@saleByProduct')->name('saleByProduct');
 
         Route::resource('assistance', 'AssistanceController');
 

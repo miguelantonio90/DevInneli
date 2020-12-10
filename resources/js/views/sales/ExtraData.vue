@@ -143,17 +143,17 @@
           item-text="text"
           item-value="value"
           required
-          :rules="formRule.country"
           @input="updateStore"
         />
       </v-col>
       <v-col
-        v-show="sale.pay === 'counted'"
+        v-if="sale.pay === 'counted'"
         cols="6"
       >
         <v-select
           v-model="sale.payments"
           clearable
+          :rules="formRule.country"
           :items="payments"
           :label="$vuetify.lang.t('$vuetify.payment.name')"
           item-text="name"

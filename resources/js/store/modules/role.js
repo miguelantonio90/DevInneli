@@ -1,16 +1,17 @@
 import role from '../../api/role'
 
-const FETCHING_ACCESS = 'FETCHING_ACCESS'
-const SWITCH_ACCESS_NEW_MODAL = 'SWITCH_ACCESS_NEW_MODAL'
-const SWITCH_ACCESS_EDIT_MODAL = 'SWITCH_ACCESS_EDIT_MODAL'
-const SWITCH_ACCESS_SHOW_MODAL = 'SWITCH_ACCESS_SHOW_MODAL'
-const ACCESS_CREATED = 'ACCESS_CREATED'
-const ACCESS_EDIT = 'ACCESS_EDIT'
-const ACCESS_UPDATED = 'ACCESS_UPDATED'
-const ACCESS_DELETE = 'ACCESS_DELETE'
-const ACCESS_TABLE_LOADING = 'ACCESS_TABLE_LOADING'
-const FAILED_ACCESS = 'FAILED_ACCESS'
+const FETCHING_KEY = 'FETCHING_KEY'
+const SWITCH_KEY_NEW_MODAL = 'SWITCH_KEY_NEW_MODAL'
+const SWITCH_KEY_EDIT_MODAL = 'SWITCH_KEY_EDIT_MODAL'
+const SWITCH_KEY_SHOW_MODAL = 'SWITCH_KEY_SHOW_MODAL'
+const KEY_CREATED = 'KEY_CREATED'
+const KEY_EDIT = 'KEY_EDIT'
+const KEY_UPDATED = 'KEY_UPDATED'
+const KEY_DELETE = 'KEY_DELETE'
+const KEY_TABLE_LOADING = 'KEY_TABLE_LOADING'
+const FAILED_KEY = 'FAILED_KEY'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
+const LOAD_KEY_CONST = 'LOAD_KEY_CONST'
 
 const state = {
   showNewModal: false,
@@ -22,28 +23,24 @@ const state = {
   loading: false,
   saved: false,
   keys: [
-    { name: 'CEO Manager', value: 'super_manager', disabled: true },
-    { name: 'Manager', value: 'manager' },
-    { name: 'Supervisor (Supervisor)', value: 'supervisor' },
-    { name: 'Atm (Cajero)', value: 'atm' },
-    { name: 'Waiter (Camarero)', value: 'waiter' },
-    { name: 'Seller (Vendedor)', value: 'seller' }
   ],
   newAccess: {
     key: '',
     name: '',
     accessPin: false,
     accessEmail: false,
-    description: ''
-
+    description: '',
+    access_permit: [
+    ]
   },
   editAccess: {
     id: '',
-    key: '',
+    key: {},
     name: '',
     accessPin: false,
     accessEmail: false,
-    description: ''
+    description: '',
+    access_permit: []
   },
   isAccessLoading: false,
   isActionInProgress: false,
@@ -51,26 +48,29 @@ const state = {
 }
 
 const mutations = {
-  [SWITCH_ACCESS_NEW_MODAL] (state, showModal) {
+  [LOAD_KEY_CONST] (state) {
+    state.keys = []
+  },
+  [SWITCH_KEY_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
   },
-  [SWITCH_ACCESS_EDIT_MODAL] (state, showModal) {
+  [SWITCH_KEY_EDIT_MODAL] (state, showModal) {
     state.showEditModal = showModal
   },
-  [SWITCH_ACCESS_SHOW_MODAL] (state, showModal) {
+  [SWITCH_KEY_SHOW_MODAL] (state, showModal) {
     state.showShowModal = showModal
   },
-  [ACCESS_TABLE_LOADING] (state, isLoading) {
+  [KEY_TABLE_LOADING] (state, isLoading) {
     state.isTableLoading = isLoading
     state.isAccessLoading = isLoading
   },
-  [FETCHING_ACCESS] (state, roles) {
+  [FETCHING_KEY] (state, roles) {
     state.roles = roles
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
   },
-  [ACCESS_CREATED] (state) {
+  [KEY_CREATED] (state) {
     state.showNewModal = false
     state.newAccess = {
       key: '',
@@ -87,13 +87,13 @@ const mutations = {
       )
     })
   },
-  [ACCESS_EDIT] (state, roleId) {
+  [KEY_EDIT] (state, roleId) {
     state.editAccess = Object.assign({}, state.roles
       .filter(node => node.id === roleId)
       .shift()
     )
   },
-  [ACCESS_UPDATED] (state) {
+  [KEY_UPDATED] (state) {
     state.showEditModal = false
     state.editAccess = {
       id: '',
@@ -111,7 +111,7 @@ const mutations = {
       )
     })
   },
-  [ACCESS_DELETE] (state) {
+  [KEY_DELETE] (state) {
     state.saved = true
     this._vm.$Toast.fire({
       icon: 'success',
@@ -120,7 +120,7 @@ const mutations = {
       )
     })
   },
-  [FAILED_ACCESS] (state, error) {
+  [FAILED_KEY] (state, error) {
     state.saved = false
     state.error = error
     state.isAccessLoading = false
@@ -139,65 +139,74 @@ const getters = {}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
-    commit(SWITCH_ACCESS_NEW_MODAL, showModal)
+    commit(LOAD_KEY_CONST)
+    commit(SWITCH_KEY_NEW_MODAL, showModal)
   },
   toogleEditModal ({ commit }, showModal) {
-    commit(SWITCH_ACCESS_EDIT_MODAL, showModal)
+    commit(LOAD_KEY_CONST)
+    commit(SWITCH_KEY_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
-    commit(SWITCH_ACCESS_SHOW_MODAL, showModal)
+    commit(SWITCH_KEY_SHOW_MODAL, showModal)
   },
   openEditModal ({ commit }, roleId) {
-    commit(SWITCH_ACCESS_EDIT_MODAL, true)
-    commit(ACCESS_EDIT, roleId)
+    commit(SWITCH_KEY_EDIT_MODAL, true)
+    commit(KEY_EDIT, roleId)
   },
   openShowModal ({ commit }, roleId) {
-    commit(SWITCH_ACCESS_SHOW_MODAL, true)
-    commit(ACCESS_EDIT, roleId)
+    commit(SWITCH_KEY_SHOW_MODAL, true)
+    commit(KEY_EDIT, roleId)
   },
   async getRoles ({ commit }) {
-    commit(ACCESS_TABLE_LOADING, true)
+    commit(KEY_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
     await role
       .fetchRoles()
       .then(({ data }) => {
-        commit(FETCHING_ACCESS, data.data)
-        commit(ACCESS_TABLE_LOADING, false)
+        commit(FETCHING_KEY, data.data)
+        commit(KEY_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       })
-      .catch(error => commit(FAILED_ACCESS, error))
+      .catch(error => commit(FAILED_KEY, error))
+  },
+  loadKeysPermitConst ({ commit }) {
+    commit(LOAD_KEY_CONST)
   },
   async createRole ({ commit, dispatch }, newAccess) {
     commit(ENV_DATA_PROCESS, true)
 
     await role
       .sendCreateRequest(newAccess)
-      .then(() => {
-        commit(ACCESS_CREATED)
+      .then((data) => {
+        commit(KEY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('role/getRoles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
-      .catch(error => commit(FAILED_ACCESS, error))
+      .catch(error => commit(FAILED_KEY, error))
   },
   async updateRole ({ commit, dispatch }, editAccess) {
     commit(ENV_DATA_PROCESS, true)
 
     await role
       .sendUpdateRequest(editAccess)
-      .then(() => {
-        commit(ACCESS_UPDATED)
+      .then((data) => {
+        commit(KEY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('role/getRoles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
-      .catch(error => commit(FAILED_ACCESS, error))
+      .catch(error => commit(FAILED_KEY, error))
   },
   async deleteRole ({ commit, dispatch }, roleId) {
     await role
       .sendDeleteRequest(roleId)
-      .then(() => {
-        commit(ACCESS_DELETE)
+      .then((data) => {
+        commit(KEY_DELETE)
         dispatch('role/getRoles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
-      .catch(error => commit(FAILED_ACCESS, error))
+      .catch(error => commit(FAILED_KEY, error))
   }
 }
 

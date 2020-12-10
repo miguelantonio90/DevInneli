@@ -9,7 +9,8 @@
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
           :headers="getTableColumns"
-          csv-filename="ProductBuys"
+          csv-filename="SaleProducts"
+          :manager="'vending'"
           :items="localSales"
           :options="vBindOption"
           :sort-by="['no_facture']"
@@ -20,6 +21,62 @@
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
         >
+          <template v-slot:item.state="{ item }">
+            <template v-if="item.state !== 'preform'">
+              <v-autocomplete
+                v-model="item.state"
+                :disabled="item.state !== 'open'"
+                chips
+                :items="getLocalStates"
+                item-text="text"
+                item-value="value"
+                @input="changeState(item)"
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.item.value"
+                    @click="data.select"
+                  >
+                    <i :style="'color: ' + data.item.color">
+                      <v-icon left>
+                        {{ data.item.icon }}
+                      </v-icon>
+                      {{ data.item.text }}</i>
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-item-content v-text="data.item" />
+                  </template>
+                  <template v-else>
+                    <v-list-item-icon>
+                      <v-icon
+                        left
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.icon }}
+                      </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.text }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+            </template>
+            <template v-else>
+              <v-chip>
+                <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+                </i>
+              </v-chip>
+            </template>
+          </template>
           <template v-slot:[`item.pay`]="{ item }">
             {{
               item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
@@ -30,7 +87,7 @@
               {{ item.payments.name }}
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
@@ -54,7 +111,7 @@
               </v-chip>
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.discounts`]="{item}">
@@ -67,7 +124,7 @@
               </v-chip>
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
@@ -120,6 +177,9 @@
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
                       </th>
+                      <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.actions.actions') }}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -142,7 +202,7 @@
                           </v-chip>
                         </template>
                         <template v-else>
-                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
                         </template>
                       </td>
                       <td>
@@ -152,15 +212,47 @@
                             :key="i"
                             small
                           >
-                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i style="color: red"> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
+                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
                           </v-chip>
                         </template>
                         <template v-else>
-                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
                         </template>
                       </td>
-                      <td>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</td>
-                      <td>{{ article.inventory }}</td>
+                      <td>
+                        {{ `${user.company.currency + ' ' + total_pay(article)}` }}
+                      </td>
+                      <td>
+                        <template v-if="article.inventory > 0">
+                          {{ article.inventory }}
+                        </template>
+                        <template v-else>
+                          <i style="color: red">
+                            <v-icon style="color: red">
+                              mdi-arrow-down-bold-circle
+                            </v-icon>
+                            {{ article.inventory }}
+                          </i>
+                        </template>
+                      </td>
+                      <td>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <b><v-icon
+                              v-if="article.cant > 0"
+                              style="color: #ff752b"
+                              class="mr-2"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="refundArticle(item)"
+                            >
+                              mdi-undo
+                            </v-icon></b>
+                          </template>
+                          <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                        </v-tooltip>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -181,6 +273,7 @@ export default {
     return {
       localSales: [],
       search: '',
+      localAccess: {},
       vBindOption: {
         itemKey: 'no_facture',
         singleExpand: false,
@@ -197,7 +290,7 @@ export default {
       'isTableLoading'
     ]),
     ...mapState('article', ['articles']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user', 'access_permit']),
     getTableColumns () {
       return [
         {
@@ -218,6 +311,11 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.menu.client'),
           value: 'client.firstName',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.state'),
+          value: 'state',
           select_filter: true
         },
         {
@@ -246,6 +344,28 @@ export default {
           sortable: false
         }
       ]
+    },
+    getLocalStates () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
+          value: 'open',
+          icon: 'mdi-star-half',
+          color: '#4caf50'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
+          value: 'accepted',
+          icon: 'mdi-star',
+          color: '#3f51b5'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+          value: 'cancelled',
+          icon: 'mdi-star-off',
+          color: '#ff0000'
+        }
+      ]
     }
   },
   watch: {
@@ -272,9 +392,16 @@ export default {
       'openEditModal',
       'openShowModal',
       'getSales',
+      'updateSale',
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
+    changeState (item) {
+      this.updateSale(item)
+    },
+    refundArticle (item) {
+      console.log(item)
+    },
     total_pay (item) {
       let sum = 0
       item.taxes.forEach((v) => {

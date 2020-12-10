@@ -188,7 +188,8 @@ export default {
       hidePinCode2: true,
       errorPhone: null,
       formRule: this.$rules,
-      countrySelect: null
+      countrySelect: null,
+      focus: false
     }
   },
   computed: {

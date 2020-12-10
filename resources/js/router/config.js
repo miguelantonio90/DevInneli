@@ -10,6 +10,7 @@ import {
 export const publicRoute = [
   {
     path: '*',
+    children: [],
     component: () => import('../views/error/NotFound')
   },
   {
@@ -72,17 +73,22 @@ export const publicRoute = [
   {
     path: '/404',
     name: '404',
+    hidden: true,
     meta: {
       title: 'Not Found'
     },
+
+    children: [],
     component: () => import('../views/error/NotFound')
   },
   {
     path: '/500',
     name: '500',
+    hidden: true,
     meta: {
       title: 'Server Error'
     },
+    children: [],
     component: () => import('../views/error/Error')
   },
   {
@@ -116,49 +122,58 @@ export const protectedRoute = [
       {
         path: '/dashboard',
         name: 'dashboard',
+        access: ['dashboard'],
         meta: {
           title: 'dashboard',
           group: 'apps',
           icon: 'mdi-view-dashboard',
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/Dashboard')
       },
       {
         path: '/403',
         name: 'Forbidden',
+        access: ['Forbidden'],
         meta: {
           title: 'access_denied',
           hiddenInMenu: true,
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/error/Deny')
       },
       {
         path: '/user/profile',
         name: 'Profile',
+        access: ['profile'],
         meta: {
           title: 'profile',
           hiddenInMenu: true,
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/auth/Profile')
       },
       {
         path: '/sales',
         component: RouteWrapper,
+        access: ['manager_vending'],
         redirect: '/sales/vending.list',
         meta: {
           title: 'vending',
-          icon: 'mdi-cart',
+          icon: 'mdi-cash-usd',
           group: 'sales'
         },
         children: [
           {
             path: '/sales/vending.list',
             name: 'vending',
+            access: 'vending_list',
             meta: {
               title: 'vending',
+              hiddenInMenu: false,
               requiresAuth: true
             },
             component: () => import('../views/sales/ListSale.vue')
@@ -166,6 +181,7 @@ export const protectedRoute = [
           {
             path: '/sales/vending/new',
             name: 'vending_new',
+            access: 'vending_add',
             meta: {
               title: 'vending_new',
               hiddenInMenu: true,
@@ -176,6 +192,7 @@ export const protectedRoute = [
           {
             path: '/sales/vending/edit',
             name: 'vending_edit',
+            access: 'vending_edit',
             meta: {
               title: 'vending_edit',
               hiddenInMenu: true,
@@ -188,6 +205,7 @@ export const protectedRoute = [
       {
         path: '/articles',
         component: RouteWrapper,
+        access: ['manager_article', 'manager_category', 'manager_mod'],
         redirect: '/articles/product.list',
         meta: {
           title: 'articles',
@@ -199,6 +217,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.list',
             name: 'product_list',
+            access: 'article_list',
             meta: {
               title: 'product_list',
               icon: 'mdi-database-plus',
@@ -209,6 +228,7 @@ export const protectedRoute = [
           {
             path: '/articles/category.list',
             name: 'category_list',
+            access: 'category_list',
             meta: {
               title: 'category_list',
               icon: 'mdi-database-plus',
@@ -219,6 +239,7 @@ export const protectedRoute = [
           {
             path: '/articles/modifiers.list',
             name: 'modifiers_list',
+            access: 'mod_list',
             meta: {
               title: 'modifiers_list',
               icon: 'mdi-database-plus',
@@ -231,6 +252,7 @@ export const protectedRoute = [
             name: 'discounts_list',
             meta: {
               title: 'discounts_list',
+              hiddenInMenu: true,
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
@@ -239,6 +261,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.add',
             name: 'product_add',
+            access: 'article_add',
             meta: {
               title: 'product_add',
               icon: 'mdi-database-plus',
@@ -250,6 +273,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.edit',
             name: 'product_edit',
+            access: 'article_edit',
             meta: {
               title: 'product_edit',
               icon: 'mdi-database-plus',
@@ -264,6 +288,7 @@ export const protectedRoute = [
         path: '/finance',
         component: RouteWrapper,
         redirect: '/finance/supplier.list',
+        access: ['manager_supplier', 'manager_buy'],
         meta: {
           title: 'finance',
           icon: 'mdi-podium',
@@ -274,6 +299,7 @@ export const protectedRoute = [
           {
             path: '/finance/supplier.list',
             name: 'supplier_list',
+            access: 'supplier_list',
             meta: {
               title: 'supplier_list',
               icon: 'mdi-car',
@@ -284,6 +310,7 @@ export const protectedRoute = [
           {
             path: '/finance/buy_list',
             name: 'supply_product',
+            access: 'buy_list',
             meta: {
               title: 'supply_product',
               icon: 'mdi-database-plus',
@@ -295,6 +322,7 @@ export const protectedRoute = [
           {
             path: '/finance/buy.add',
             name: 'supply_add',
+            access: 'supplier_add',
             meta: {
               title: 'supply_add',
               icon: 'mdi-database-plus',
@@ -306,6 +334,7 @@ export const protectedRoute = [
           {
             path: '/finance/supply.edit',
             name: 'supply_edit',
+            access: 'supplier_edit',
             meta: {
               title: 'supply_edit',
               icon: 'mdi-database-plus',
@@ -320,6 +349,7 @@ export const protectedRoute = [
         path: '/resume',
         component: RouteWrapper,
         redirect: '/resume/sell_product.list',
+        access: ['manager_sell'],
         meta: {
           title: 'resume',
           icon: 'mdi-chart-bar',
@@ -329,6 +359,7 @@ export const protectedRoute = [
           {
             path: '/resume/sell_product.list',
             name: 'sell_product',
+            access: 'sell_by_product',
             meta: {
               title: 'sell_product',
               icon: 'mdi-database-plus',
@@ -339,16 +370,18 @@ export const protectedRoute = [
           {
             path: '/resume/sell_category.list',
             name: 'sell_category',
+            access: 'sell_by_category',
             meta: {
               title: 'sell_category',
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesCategory')
           },
           {
             path: '/resume/sell_user.list',
             name: 'sell_user',
+            access: 'sell_by_employer',
             meta: {
               title: 'sell_user',
               icon: 'mdi-database-plus',
@@ -359,12 +392,13 @@ export const protectedRoute = [
           {
             path: '/resume/sell_types_payment.list',
             name: 'sell_types_payment',
+            access: 'sell_by_payments',
             meta: {
               title: 'sell_types_payment',
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesPayment')
           }
         ]
       },
@@ -372,6 +406,7 @@ export const protectedRoute = [
         path: '/users',
         component: RouteWrapper,
         redirect: '/users/employer.list',
+        access: ['manager_employer', 'manager_access', 'manager_assistence'],
         meta: {
           title: 'user',
           icon: 'mdi-account-star',
@@ -381,6 +416,7 @@ export const protectedRoute = [
           {
             path: '/users/employer.list',
             name: 'employer_list',
+            access: 'employer_list',
             meta: {
               title: 'employer_list',
               icon: 'mdi-database-plus',
@@ -391,16 +427,31 @@ export const protectedRoute = [
           {
             path: '/users/access.list',
             name: 'access',
+            access: 'access_list',
             meta: {
               title: 'access',
+              hiddenInMenu: true,
               icon: 'mdi-account-key',
               requiresAuth: true
             },
             component: () => import('../views/access/ListAccess')
           },
           {
+            path: '/users/access.add',
+            name: 'access_new',
+            access: 'access_add',
+            meta: {
+              title: 'access_new',
+              hiddenInMenu: true,
+              icon: 'mdi-account-key',
+              requiresAuth: true
+            },
+            component: () => import('../views/access/NewAccess')
+          },
+          {
             path: '/users/assistance.list',
             name: 'assistance',
+            access: 'assistance_list',
             meta: {
               title: 'assistance',
               icon: 'mdi-clock',
@@ -414,6 +465,7 @@ export const protectedRoute = [
         path: '/clients',
         component: RouteWrapper,
         redirect: '/clients/client.list',
+        access: ['manager_client'],
         meta: {
           title: 'client',
           icon: 'mdi-account-multiple',
@@ -424,6 +476,7 @@ export const protectedRoute = [
           {
             path: '/clients/client.list',
             name: 'clients_list',
+            access: 'client_list',
             meta: {
               title: 'client_list',
               icon: 'mdi-database-plus',
@@ -435,11 +488,13 @@ export const protectedRoute = [
       },
       {
         path: '/setting',
+        access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
         meta: {
           title: 'setting',
           icon: 'mdi-cog',
           requiresAuth: true
         },
+        children: [],
         component: () => import('../views/general/General')
       }
     ]

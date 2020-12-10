@@ -31,13 +31,38 @@
       >
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
-      <v-btn
-        v-if="showSalesIcon"
-        icon
-        @click="handleSales"
+      <v-tooltip
+        v-if="showSale"
+        bottom
       >
-        <v-icon>mdi-cart</v-icon>
-      </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            class="mr-3"
+            v-on="on"
+            @click="handleSales"
+            v-text="'mdi-currency-usd'"
+          />
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.titles.newF', [
+          $vuetify.lang.t('$vuetify.sale.sale'),
+        ]) }}</span>
+      </v-tooltip>
+      <v-tooltip
+        v-if="showBuy"
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            class="mr-3"
+            v-on="on"
+            @click="handleBuy"
+            v-text="'mdi-cart'"
+          />
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.access.access.buy_add') }}</span>
+      </v-tooltip>
       <v-menu
         v-if="showMenuLang"
         class="elelvation-1"
@@ -166,6 +191,10 @@ export default {
       type: Boolean,
       default: true
     },
+    showBuyIcon: {
+      type: Boolean,
+      default: true
+    },
     showMenuLang: {
       type: Boolean,
       default: true
@@ -176,10 +205,13 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      showSale: false,
+      showBuy: false
+    }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'user', 'access_permit', 'isManagerIn']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },
@@ -202,9 +234,9 @@ export default {
       const { matched } = this.$route
       return matched.map((route, index) => {
         const to =
-            index === matched.length - 1
-              ? this.$route.path
-              : route.path || route.redirect
+                    index === matched.length - 1
+                      ? this.$route.path
+                      : route.path || route.redirect
         const text = this.$vuetify.lang.t(
           '$vuetify.menu.' + route.meta.title
         )
@@ -248,8 +280,21 @@ export default {
       ]
     }
   },
+  watch: {
+    access_permit () {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
+    }
+  },
   created () {
-    this.getUserData()
+    this.getUserData().then((v) => {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
+    })
   },
   methods: {
     ...mapActions('auth', ['sendLogoutRequest', 'getUserData']),
@@ -280,7 +325,10 @@ export default {
       this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
     },
     handleSales () {
-      this.$router.push({ name: 'vending' }).catch(() => {})
+      this.$router.push({ name: 'vending_new' }).catch(() => {})
+    },
+    handleBuy () {
+      this.$router.push({ name: 'supply_add' }).catch(() => {})
     }
   }
 }

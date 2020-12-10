@@ -14,6 +14,7 @@
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="taxes"
+          :manager="'tax'"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort

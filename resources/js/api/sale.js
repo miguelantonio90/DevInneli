@@ -12,5 +12,14 @@ export default {
   },
   sendDeleteRequest (saleId) {
     return api.remove('sale/' + saleId)
+  },
+  fetchSaleByCategory (filter) {
+    return api.post('sale/category', filter)
+  },
+  fetchSaleByPayment (filter) {
+    return api.post('sale/payment', filter)
+  },
+  fetchSaleByProduct (filter) {
+    return api.post('sale/product', filter)
   }
 }

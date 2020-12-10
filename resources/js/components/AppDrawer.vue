@@ -65,7 +65,9 @@
               :class="drawerWidth === 64 ? 'pl-4' : ''"
               :to="subItem.path"
             >
-              <template v-if="drawerWidth === 64">
+              <template
+                v-if="drawerWidth === 64"
+              >
                 <v-list-item-icon>
                   <v-tooltip bottom>
                     <template
@@ -86,14 +88,13 @@
                   </v-tooltip>
                 </v-list-item-icon>
               </template>
-              <template v-else>
+              <template>
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="
-                      $vuetify.lang.t(
-                        '$vuetify.menu.' +
-                          subItem.meta.title
-                      )
+                    v-text="$vuetify.lang.t(
+                      '$vuetify.menu.' +
+                        subItem.meta.title
+                    )
                     "
                   />
                 </v-list-item-content>
@@ -140,6 +141,7 @@
 </template>
 <script>
 import { protectedRoute as routes } from '../router/config'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AppDrawer',
@@ -154,6 +156,7 @@ export default {
   data () {
     return {
       mini: false,
+      localAccess: [],
       drawerWidth: 256,
       drawer: true,
       scrollSettings: {
@@ -161,16 +164,32 @@ export default {
       }
     }
   },
-
   computed: {
+    ...mapGetters('auth', ['access_permit']),
     computeLogo () {
       return '/assets/logo_bar.ico'
     },
     computeMenu () {
-      return routes[0].children
+      const routers = []
+      routes[0].children.forEach((v) => {
+        if (this.showInMenu(v.access)) { routers.push(v) }
+      })
+      routers.forEach((a) => {
+        a.children.forEach((c) => {
+          c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
+        })
+      })
+      return routers
     }
   },
   watch: {
+    access_permit () {
+      this.localAccess = []
+      const keys = Object.keys(this.access_permit)
+      keys.forEach((v) => {
+        this.localAccess.push(this.access_permit[v])
+      })
+    },
     showDrawer: {
       handler (val) {
         this.drawer = val
@@ -180,10 +199,21 @@ export default {
   },
   created () {
   },
-
   methods: {
     handleDrawerCollapse () {
       this.drawerWidth = this.drawerWidth === 256 ? 64 : 256
+    },
+    showInMenu (permit) {
+      let countAccess = 0
+      if (this.localAccess.length > 0) {
+        permit.forEach((v) => {
+          const exist = this.localAccess.filter(a => a.title.name === v && a.title.value === true)
+          if (exist.length > 0) {
+            countAccess++
+          }
+        })
+      }
+      return countAccess > 0
     }
   }
 }
@@ -191,9 +221,9 @@ export default {
 
 <style lang="sass" scoped>
 .app--drawer
-  overflow: hidden !important
+    overflow: hidden !important
 
-  .drawer-menu--scroll
-    height: calc(100vh - 48px)
-    overflow: auto
+    .drawer-menu--scroll
+        height: calc(100vh - 48px)
+        overflow: auto
 </style>

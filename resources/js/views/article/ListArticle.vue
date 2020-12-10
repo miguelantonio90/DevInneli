@@ -12,6 +12,7 @@
           :view-transfer-button="true"
           csv-filename="Articles"
           has-csv-import
+          :manager="'article'"
           :items="articles"
           :options="vBindOption"
           :sort-by="['ref']"
@@ -22,7 +23,7 @@
           @edit-row="editArticleHandler($event)"
           @delete-row="deleteArticleHandler($event)"
         >
-          <template v-slot:[`item.name`]="{ item }">
+          <template v-slot:item.name="{ item }">
             <v-chip
               :key="JSON.stringify(item)"
             >
@@ -42,22 +43,22 @@
               {{ item.name }}
             </v-chip>
           </template>
-          <template v-slot:[`item.percent`]="{ item }">
+          <template v-slot:item.percent="{ item }">
             <template v-if="item.variant_values.length===0">
               {{ item.percent }} %
             </template>
           </template>
-          <template v-slot:[`item.price`]="{ item }">
+          <template v-slot:item.price="{ item }">
             <template v-if="item.variant_values.length===0">
               {{ `${user.company.currency + ' ' + item.price}` }}
             </template>
           </template>
-          <template v-slot:[`item.cost`]="{ item }">
+          <template v-slot:item.cost="{ item }">
             <template v-if="item.variant_values.length===0">
               {{ `${user.company.currency + ' ' + item.cost}` }}
             </template>
           </template>
-          <template v-slot:[`item.shopsNames`]="{ item }">
+          <template v-slot:item.shopsNames="{ item }">
             <v-chip
               v-for="(shop, i) of item.shopsNames"
               :key="i"
@@ -158,7 +159,6 @@ export default {
       localArticles: [],
       search: '',
       vBindOption: {
-        itemKey: 'ref',
         singleExpand: false,
         showExpand: true
       }

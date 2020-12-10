@@ -45,7 +45,7 @@
                         chips
                         rounded
                         solo
-                        clearable
+                        :clearable="shops.length > 1"
                         :items="shops"
                         :label="$vuetify.lang.t('$vuetify.menu.shop')"
                         item-text="name"
@@ -132,6 +132,7 @@
                         :view-show-filter="false"
                         :view-edit-button="false"
                         :view-new-button="false"
+                        :view-delete-button="true"
                         :headers="getTableColumns"
                         :items="newSale.articles"
                         csv-filename="ProductBuys"
@@ -405,16 +406,42 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="createNewSale"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
-          </v-btn>
+          <template v-if="!newSale.pay">
+            <v-btn
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('preform')"
+            >
+              <v-icon>mdi-calendar-clock</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              v-show="newSale.pay"
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('open')"
+            >
+              <v-icon>mdi-check</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+            </v-btn>
+            <v-btn
+              v-show="newSale.pay"
+              class="mb-2"
+              color="primary"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('accepted')"
+            >
+              <v-icon>mdi-check-all</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
       <v-dialog
@@ -499,6 +526,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
+          value: 'inventory',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.articles.price'),
           value: 'price',
           select_filter: true
@@ -539,13 +571,16 @@ export default {
   async created () {
     this.loadingData = true
     await this.getArticles()
-    await this.getShops()
+    await this.getShops().then((s) => {
+      this.newSale.shop = this.shops[0]
+    })
     await this.getSales()
     await this.getInventories()
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
     this.newSale.no_facture = this.generateNF()
+    await this.updateDataArticle()
     this.loadingData = false
   },
   methods: {
@@ -562,19 +597,19 @@ export default {
       this.newSale.articles = []
       if (this.newSale.shop) {
         await this.articles.forEach((value) => {
-          if (!value.parent_id) {
-            if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
-                const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-                this.validAddToLocalArticle(v, value, artS)
-              })
-            } else {
-              const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.shop_id)
-              this.validAddToLocalArticle(value, value, artS)
-            }
+          if (value.variant_values.length > 0) {
+            value.variant_values.forEach((v) => {
+              const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              if (artS.length > 0) { this.validAddToLocalArticle(v, value, artS) }
+            })
+          } else {
+            const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+            if (artS.length > 0) { this.validAddToLocalArticle(value, value, artS) }
           }
         })
       }
+      // console.log(this.localArticles)
+      console.log('asadasdsadsadsa')
     },
     validAddToLocalArticle (v, value, artS) {
       let inventory = 0
@@ -584,9 +619,10 @@ export default {
         if (artS.length > 0) {
           inventory = artS[0].stock
         }
-        if (inventory > 0) {
-          this.addToLocalArticle(v, value, inventory, artS[0])
-        }
+        this.addToLocalArticle(v, value, inventory, artS[0])
+        // if (inventory > 0) {
+        //   this.addToLocalArticle(v, value, inventory, artS[0])
+        // }
       }
     },
     addToLocalArticle (v, value, inventory, artS) {
@@ -599,7 +635,7 @@ export default {
         taxes: v.tax,
         discount: [],
         color: value.color,
-        price: inventory > 0 ? artS.price : 0,
+        price: artS.price,
         cost: v.cost ? v.cost : 0,
         inventory: inventory || 0,
         cant: 1,
@@ -663,12 +699,14 @@ export default {
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async createNewSale () {
+    async createNewSale (state) {
       if (this.newSale.articles.length > 0) {
         if (this.$refs.form.validate()) {
           this.loading = true
-          await this.createSale(this.newSale)
-          await this.$router.push({ name: 'vending' })
+          this.newSale.state = state
+          await this.createSale(this.newSale).then(() => {
+            this.$router.push({ name: 'vending' })
+          })
         }
       } else {
         this.loading = false

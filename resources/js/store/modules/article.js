@@ -228,7 +228,7 @@ const actions = {
     commit(SWITCH_ARTICLE_SHOW_MODAL, true)
     commit(ARTICLE_EDIT, articleId)
   },
-  async getArticles ({ commit }) {
+  async getArticles ({ commit, dispatch }) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
     await article
@@ -236,6 +236,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async importArticles ({ commit, dispatch }, articlesData) {
@@ -247,6 +248,7 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/toogleImportModal', false, { root: true })
         dispatch('article/getArticles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async createArticle ({ commit, dispatch }, newArticle) {
@@ -254,10 +256,11 @@ const actions = {
 
     await article
       .sendCreateRequest(newArticle)
-      .then(() => {
+      .then((data) => {
         commit(ARTICLE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/getArticles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))
   },
@@ -268,10 +271,11 @@ const actions = {
     // const request = profile || state.editUser
     await article
       .sendUpdateRequest(request)
-      .then(() => {
+      .then((response) => {
         commit(ARTICLE_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/getArticles', null, { root: true })
+        this.dispatch('auth/updateAccess', response.access)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -281,9 +285,10 @@ const actions = {
   async deleteArticle ({ commit, dispatch }, articleId) {
     await article
       .sendDeleteRequest(articleId)
-      .then(() => {
+      .then((response) => {
         commit(ARTICLE_DELETE)
-        dispatch('article/getArticles', null, { root: true })
+        this.dispatch('article/getArticles')
+        this.dispatch('auth/updateAccess', response.access)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))
   }

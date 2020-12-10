@@ -37,7 +37,7 @@
             >
               <v-select
                 v-model="newPayment.method"
-                :items="payments"
+                :items="paymentsConst"
                 clearable
                 :label="$vuetify.lang.t('$vuetify.menu.pay')"
                 item-text="name"
@@ -89,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
+    ...mapState('payment', ['saved', 'newPayment', 'paymentsConst', 'isActionInProgress']),
     ...mapState('statics', ['payments'])
   },
   created () {

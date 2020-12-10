@@ -186,7 +186,8 @@ export default {
       formValid: false,
       errorPhone: null,
       formRule: this.$rules,
-      countrySelect: null
+      countrySelect: null,
+      focus: false
     }
   },
   computed: {

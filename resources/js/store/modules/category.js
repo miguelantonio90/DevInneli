@@ -149,6 +149,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CATEGORIES, data.data)
         commit(CATEGORY_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
         return data
       }).catch((error) => commit(FAILED_CATEGORY, error))
   },
@@ -157,10 +158,11 @@ const actions = {
 
     await category
       .sendCreateRequest(newCategory)
-      .then(() => {
+      .then((data) => {
         commit(CATEGORY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
   },
@@ -168,19 +170,21 @@ const actions = {
     commit(ENV_DATA_PROCESS, true)
     await category
       .sendUpdateRequest(editCategory)
-      .then(() => {
+      .then((data) => {
         commit(CATEGORY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
   },
   async deleteCategory ({ commit, dispatch }, categoryId) {
     await category
       .sendDeleteRequest(categoryId)
-      .then(() => {
+      .then((data) => {
         commit(CATEGORY_DELETE)
         dispatch('category/getCategories', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
   }
