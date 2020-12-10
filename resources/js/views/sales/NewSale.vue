@@ -132,6 +132,7 @@
                         :view-show-filter="false"
                         :view-edit-button="false"
                         :view-new-button="false"
+                        :view-delete-button="true"
                         :headers="getTableColumns"
                         :items="newSale.articles"
                         csv-filename="ProductBuys"
@@ -405,26 +406,42 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <v-btn
-            class="mb-2"
-            color="success"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="createNewSale('open')"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
-          </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="createNewSale('accepted')"
-          >
-            <v-icon>mdi-check-all</v-icon>
-            {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
-          </v-btn>
+          <template v-if="!newSale.pay">
+            <v-btn
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('preform')"
+            >
+              <v-icon>mdi-calendar-clock</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              v-show="newSale.pay"
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('open')"
+            >
+              <v-icon>mdi-check</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+            </v-btn>
+            <v-btn
+              v-show="newSale.pay"
+              class="mb-2"
+              color="primary"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="createNewSale('accepted')"
+            >
+              <v-icon>mdi-check-all</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
       <v-dialog
@@ -509,6 +526,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
+          value: 'inventory',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.articles.price'),
           value: 'price',
           select_filter: true
@@ -527,6 +549,11 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
           value: 'totalPrice',
           select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+          value: 'actions',
+          sortable: false
         }
       ]
     }
@@ -573,25 +600,25 @@ export default {
           if (value.variant_values.length > 0) {
             value.variant_values.forEach((v) => {
               const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
-              this.validAddToLocalArticle(v, value, artS)
+              if (artS.length > 0) { this.validAddToLocalArticle(v, value, artS) }
             })
           } else {
             const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
-            this.validAddToLocalArticle(value, value, artS)
+            if (artS.length > 0) { this.validAddToLocalArticle(value, value, artS) }
           }
         })
       }
+      // console.log(this.localArticles)
+      console.log('asadasdsadsadsa')
     },
     validAddToLocalArticle (v, value, artS) {
       let inventory = 0
-      console.log(v)
       if (!value.track_inventory) {
         this.addToLocalArticle(v, value, 0, [])
       } else {
         if (artS.length > 0) {
           inventory = artS[0].stock
         }
-
         this.addToLocalArticle(v, value, inventory, artS[0])
         // if (inventory > 0) {
         //   this.addToLocalArticle(v, value, inventory, artS[0])
@@ -608,7 +635,7 @@ export default {
         taxes: v.tax,
         discount: [],
         color: value.color,
-        price: inventory > 0 ? artS.price : 0,
+        price: artS.price,
         cost: v.cost ? v.cost : 0,
         inventory: inventory || 0,
         cant: 1,

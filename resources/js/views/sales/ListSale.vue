@@ -22,50 +22,60 @@
           @delete-row="deleteSaleHandler($event)"
         >
           <template v-slot:item.state="{ item }">
-            <v-autocomplete
-              v-model="item.state"
-              :disabled="item.state !== 'open'"
-              chips
-              :items="getLocalStates"
-              item-text="text"
-              item-value="value"
-              @input="changeState(item)"
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  v-bind="data.attrs"
-                  :input-value="data.item.value"
-                  @click="data.select"
-                >
-                  <i :style="'color: ' + data.item.color">
-                    <v-icon left>
-                      {{ data.item.icon }}
-                    </v-icon>
-                    {{ data.item.text }}</i>
-                </v-chip>
-              </template>
-              <template v-slot:item="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item" />
+            <template v-if="item.state !== 'preform'">
+              <v-autocomplete
+                v-model="item.state"
+                :disabled="item.state !== 'open'"
+                chips
+                :items="getLocalStates"
+                item-text="text"
+                item-value="value"
+                @input="changeState(item)"
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.item.value"
+                    @click="data.select"
+                  >
+                    <i :style="'color: ' + data.item.color">
+                      <v-icon left>
+                        {{ data.item.icon }}
+                      </v-icon>
+                      {{ data.item.text }}</i>
+                  </v-chip>
                 </template>
-                <template v-else>
-                  <v-list-item-icon>
-                    <v-icon
-                      left
-                      :style="'color: ' + data.item.color"
-                    >
-                      {{ data.item.icon }}
-                    </v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      :style="'color: ' + data.item.color"
-                      v-html="data.item.text"
-                    />
-                  </v-list-item-content>
+                <template v-slot:item="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-item-content v-text="data.item" />
+                  </template>
+                  <template v-else>
+                    <v-list-item-icon>
+                      <v-icon
+                        left
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.icon }}
+                      </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.text }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
                 </template>
-              </template>
-            </v-autocomplete>
+              </v-autocomplete>
+            </template>
+            <template v-else>
+              <v-chip>
+                <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+                </i>
+              </v-chip>
+            </template>
           </template>
           <template v-slot:[`item.pay`]="{ item }">
             {{
@@ -77,7 +87,7 @@
               {{ item.payments.name }}
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
@@ -101,7 +111,7 @@
               </v-chip>
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.discounts`]="{item}">
@@ -114,7 +124,7 @@
               </v-chip>
             </template>
             <template v-else>
-              <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+              <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
             </template>
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
@@ -192,7 +202,7 @@
                           </v-chip>
                         </template>
                         <template v-else>
-                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
                         </template>
                       </td>
                       <td>
@@ -202,15 +212,29 @@
                             :key="i"
                             small
                           >
-                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i style="color: red"> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
+                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
                           </v-chip>
                         </template>
                         <template v-else>
-                          <i style="color: red">{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
+                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
                         </template>
                       </td>
-                      <td>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</td>
-                      <td>{{ article.inventory }}</td>
+                      <td>
+                        {{ `${user.company.currency + ' ' + total_pay(article)}` }}
+                      </td>
+                      <td>
+                        <template v-if="article.inventory > 0">
+                          {{ article.inventory }}
+                        </template>
+                        <template v-else>
+                          <i style="color: red">
+                            <v-icon style="color: red">
+                              mdi-arrow-down-bold-circle
+                            </v-icon>
+                            {{ article.inventory }}
+                          </i>
+                        </template>
+                      </td>
                       <td>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">

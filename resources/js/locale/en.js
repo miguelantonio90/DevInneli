@@ -471,6 +471,7 @@ export default {
     selectShop: 'You should select a shop',
     state: {
       open: 'In Process',
+      preform: 'Preform',
       accepted: 'Accepted',
       cancelled: 'Cancelled'
     },

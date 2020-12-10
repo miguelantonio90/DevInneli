@@ -475,6 +475,7 @@ export default {
     selectShop: 'Debe seleccionar una tienda',
     state: {
       open: 'En proceso',
+      preform: 'Preforma',
       accepted: 'Aceptada',
       cancelled: 'Cancelada'
     },

@@ -249,7 +249,7 @@ export default {
       checkboxFiltersRegistered: {},
       accessNewButton: false,
       accessEditButton: false,
-      accessDeleteButton: false
+      accessDeleteButton: true
     }
   },
   computed: {

@@ -416,27 +416,41 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <v-btn
-            v-show="editSale.state === 'open'"
-            class="mb-2"
-            color="success"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="editSaleHandler('open')"
-          >
-            <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
-          </v-btn>
-          <v-btn
-            class="mb-2"
-            color="primary"
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            @click="editSaleHandler('accepted')"
-          >
-            <v-icon>mdi-check-all</v-icon>
-            {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
-          </v-btn>
+          <template v-if="!editSale.pay">
+            <v-btn
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('preform')"
+            >
+              <v-icon>mdi-calendar-clock</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              v-show="editSale.state === 'open'"
+              class="mb-2"
+              color="success"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('open')"
+            >
+              <v-icon>mdi-check</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
+            </v-btn>
+            <v-btn
+              class="mb-2"
+              color="primary"
+              :disabled="!formValid || isActionInProgress"
+              :loading="isActionInProgress"
+              @click="editSaleHandler('accepted')"
+            >
+              <v-icon>mdi-check-all</v-icon>
+              {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
       <v-dialog

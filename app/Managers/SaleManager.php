@@ -118,14 +118,16 @@ class SaleManager extends BaseManager
     {
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
-            'pay' => $data['pay'] ?: null,
-            'state' => $data['state'] ?: null,
             'company_id' => $data['company_id'],
             'client_id' => $data['client']['id']
         ]);
         if (isset($data['payments']['id'])) {
             $sale->payment_id = $data['payments']['id'];
         }
+        if(array_key_exists('pay',$data)) {
+            $sale->pay = $data['pay'] ?: null;
+        }
+        $sale->state = $data['state'] ?: null;
         $sale->save();
         $this->updateSaleData($sale, $data, false);
         return $sale;
@@ -146,7 +148,9 @@ class SaleManager extends BaseManager
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->first();
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
-            $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
+            if($data['state']!=='preform') {
+                $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
+            }
             $articleShop->save();
         }
         $taxes = [];
