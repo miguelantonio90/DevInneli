@@ -9,8 +9,8 @@
           }}</span>
         </v-card-title>
         <v-card-text>
-          <v-row>
-            <v-col md="4">
+          <v-row cols="12">
+            <v-col md="6">
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -35,7 +35,7 @@
                 />
               </v-menu>
             </v-col>
-            <v-col md="4">
+            <v-col md="6">
               <v-select
                 v-model="localShops"
                 chips

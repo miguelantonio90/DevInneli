@@ -380,11 +380,10 @@ export default {
       })
     }
   },
-  created () {
+  async created () {
     this.localSales = []
-    this.getArticles().then(() => {
-      this.getSales()
-    })
+    await this.getSales()
+    await this.getArticles()
   },
   methods: {
     ...mapActions('sale', [
