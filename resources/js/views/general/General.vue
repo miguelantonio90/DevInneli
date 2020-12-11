@@ -4,6 +4,7 @@
   >
     <v-card>
       <v-tabs
+        v-if="!isMobile"
         vertical
       >
         <v-tab
@@ -28,6 +29,35 @@
           </v-card>
         </v-tab-item>
       </v-tabs>
+      <v-tabs
+        v-else
+        v-model="tab"
+        background-color="transparent"
+        icons-and-text
+      >
+        <v-tab
+          v-for="item in tabsData.tabName"
+          :key="item.name"
+        >
+          <v-icon>
+            {{ item.icon }}
+          </v-icon>
+          <span style="text-transform: capitalize">{{ item.name }}</span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item
+          v-for="item in tabsData.itemsTabs"
+          :key="item.key"
+        >
+          <v-card flat>
+            <v-card-text>
+              <component :is="item.content" />
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
     </v-card>
   </v-container>
 </template>
@@ -49,6 +79,7 @@ export default {
   data () {
     return {
       tab: null,
+      isMobile: false,
       itemsTabs: [
         { key: 'shop-list', content: 'shop-list' },
         { key: 'list-keys', content: 'list-keys' },
@@ -92,6 +123,20 @@ export default {
   watch: {
     access_permit () {
       return this.access_permit
+    }
+  },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+  },
+  beforeDestroy () {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize, { passive: true })
+    }
+  },
+  methods: {
+    onResize () {
+      this.isMobile = window.innerWidth < 600
     }
   }
 }
