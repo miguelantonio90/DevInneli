@@ -36,6 +36,8 @@ class AuthenticationController extends Controller
         $user['position']->disabled = $position['key'] === 'super_manager';
         $user['company'] = $company;
         $user['position'] = $position;
+        cache()->put('userPin', $user);
+
         return ResponseHelper::sendResponse($user,'');
     }
 }

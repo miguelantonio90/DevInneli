@@ -43,76 +43,80 @@ class CompanyTableSeeder extends Seeder
         $key->key = 'admin';
         $key->access_permit = json_encode([
             [
-                'title' => ['name' => 'manager_article', 'value' => false],
+                'title' => ['name' => 'manager_all', 'value' => true],
+                'actions' => []
+            ],
+            [
+                'title' => ['name' => 'manager_article', 'value' => true],
                 'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
             ],
             [
-                'title' => ['name' => 'manager_vending', 'value' => false],
+                'title' => ['name' => 'manager_vending', 'value' => true],
                 'actions' => ['vending_list' => true, 'vending_add' => false, 'vending_edit' => false, 'vending_delete' => false,]
             ],
             [
-                'title' => ['name' => 'manager_category', 'value' => false],
+                'title' => ['name' => 'manager_category', 'value' => true],
                 'actions' => ['category_list' => true, 'category_add' => false, 'category_edit' => false, 'category_delete' => false,]
             ],
             [
-                'title' => ['name' => 'manager_mod', 'value' => false],
+                'title' => ['name' => 'manager_mod', 'value' => true],
                 'actions' => ['mod_list' => true, 'mod_add' => false, 'mod_edit' => false, 'mod_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_supplier', 'value' => false],
+                'title' => ['name' => 'manager_supplier', 'value' => true],
                 'actions' => ['supplier_list' => true, 'supplier_add' => false, 'supplier_edit' => false, 'supplier_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_buy', 'value' => false],
+                'title' => ['name' => 'manager_buy', 'value' => true],
                 'actions' => ['buy_list' => true, 'buy_add' => false, 'buy_edit' => false, 'buy_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_sell', 'value' => false],
+                'title' => ['name' => 'manager_sell', 'value' => true],
                 'actions' =>
                     ['sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false, 'sell_by_payments' => false]
             ],
             [
-                'title' => ['name' => 'manager_employer', 'value' => false],
+                'title' => ['name' => 'manager_employer', 'value' => true],
                 'actions' => ['employer_list' => true, 'employer_add' => false, 'employer_edit' => false, 'employer_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_assistence', 'value' => false],
+                'title' => ['name' => 'manager_assistence', 'value' => true],
                 'actions' => ['assistance_list' => true, 'assistance_add' => false, 'assistance_edit' => false, 'assistance_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_client', 'value' => false],
+                'title' => ['name' => 'manager_client', 'value' => true],
                 'actions' => ['client_list' => true, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_shop', 'value' => false],
+                'title' => ['name' => 'manager_shop', 'value' => true],
                 'actions' => ['shop_list' => true, 'shop_add' => false, 'shop_edit' => false, 'shop_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_access', 'value' => false],
+                'title' => ['name' => 'manager_access', 'value' => true],
                 'actions' => ['access_list' => true, 'access_add' => false, 'access_edit' => false, 'access_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_payment', 'value' => false],
+                'title' => ['name' => 'manager_payment', 'value' => true],
                 'actions' => ['payment_list' => true, 'payment_add' => false, 'payment_edit' => false, 'payment_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_expense_category', 'value' => false],
+                'title' => ['name' => 'manager_expense_category', 'value' => true],
                 'actions' => ['expense_category_list' => true, 'expense_category_add' => false, 'expense_category_edit' => false, 'expense_category_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_exchage_rate', 'value' => false],
+                'title' => ['name' => 'manager_exchage_rate', 'value' => true],
                 'actions' => ['exchange_rate_list' => true, 'exchange_rate_add' => false, 'exchange_rate_edit' => false, 'exchange_rate_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_type_of_order', 'value' => false],
+                'title' => ['name' => 'manager_type_of_order', 'value' => true],
                 'actions' => ['type_of_order_list' => true, 'type_of_order_add' => false, 'type_of_order_edit' => false, 'type_of_order_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_tax', 'value' => false],
+                'title' => ['name' => 'manager_tax', 'value' => true],
                 'actions' => ['tax_list' => true, 'tax_add' => false, 'tax_edit' => false, 'tax_delete' => false]
             ],
             [
-                'title' => ['name' => 'manager_discount', 'value' => false],
+                'title' => ['name' => 'manager_discount', 'value' => true],
                 'actions' => ['discount_list' => true, 'discount_add' => false, 'discount_edit' => false, 'discount_delete' => false]
             ]
         ]);
@@ -126,6 +130,7 @@ class CompanyTableSeeder extends Seeder
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
             'isAdmin' => true,
+            'isLoginPin' => true,
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

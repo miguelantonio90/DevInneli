@@ -17,21 +17,13 @@ class UserManager extends BaseManager
      */
     public static function loginByPincode($login)
     {
-
         $company = CompanyManager::getCompanyByEmail($login['email']);
-
-        return User::where('pinCode', '=', $login['pincode'])
-            ->where('isAdmin', '=', '0')
+        $user = User::where('pinCode', '=', $login['pincode'])
             ->where('company_id', '=', $company->id)
             ->with('company')
-            ->with([
-                'position' => function ($q) use ($company) {
-                    $q->where('positions.company_id', '=', $company->id)
-                        ->where('positions.accessPin', '=', 1);
-                }
-            ])
             ->with('shops')
             ->get();
+        return $user;
     }
 
     /**

@@ -78,7 +78,6 @@ class LoginController extends Controller
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-            cacheAlias()->set('userPin', auth());
             return $this->sendLockoutResponse($request);
         }
 

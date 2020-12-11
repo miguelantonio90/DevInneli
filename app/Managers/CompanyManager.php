@@ -16,7 +16,6 @@ class CompanyManager
     public static function getCompanyByEmail(string $email)
     {
         return Company::where('email', '=', $email)
-            ->where('companies.faker', '<>', 1)
             ->firstOrFail();
     }
 

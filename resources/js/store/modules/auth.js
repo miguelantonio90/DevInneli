@@ -165,7 +165,9 @@ const mutations = {
       let msg = this._vm.$language.t('$vuetify.messages.login_failed')
       Object.keys(state.error.data.errors).forEach((v) => {
         if (v !== 'message') {
-          if (v === 'email') { msg = this._vm.$language.t('$vuetify.messages.login_failed_email') }
+          if (v === 'email') {
+            msg = this._vm.$language.t('$vuetify.messages.login_failed_email')
+          }
         }
       })
       this._vm.$Toast.fire({
