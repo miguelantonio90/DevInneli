@@ -34,6 +34,7 @@ const mutations = {
 
 const getters = {
   arrayCurrency: state => state.arrayCurrency,
+  arrayCountry: state => state.arrayCountry,
   payments: state => state.payments
 }
 

@@ -124,7 +124,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="viewTransferButton"
+              v-if="accessTransportButton"
               class="mr-2"
               color="success"
               small
@@ -249,6 +249,7 @@ export default {
       checkboxFiltersRegistered: {},
       accessNewButton: false,
       accessEditButton: false,
+      accessTransportButton: false,
       accessDeleteButton: true
     }
   },
@@ -339,6 +340,7 @@ export default {
             this.accessNewButton = this.viewNewButton && v.actions[this.manager + '_add']
             this.accessEditButton = this.viewEditButton && v.actions[this.manager + '_edit']
             this.accessDeleteButton = this.viewDeleteButton && v.actions[this.manager + '_delete']
+            this.accessTransportButton = this.viewTransferButton && v.actions[this.manager + '_transfer']
           }
         })
       }

@@ -171,14 +171,21 @@ export default {
     },
     computeMenu () {
       const routers = []
-      routes[0].children.forEach((v) => {
-        if (this.showInMenu(v.access)) { routers.push(v) }
-      })
-      routers.forEach((a) => {
-        a.children.forEach((c) => {
-          c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
+      if (this.access_permit.length > 0) {
+        let localRoutes = routes[0]
+        if (this.access_permit[0].title.value) {
+          localRoutes = routes[3]
+        }
+        console.log(localRoutes)
+        localRoutes.children.forEach((v) => {
+          if (this.showInMenu(v.access)) { routers.push(v) }
         })
-      })
+        routers.forEach((a) => {
+          a.children.forEach((c) => {
+            c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
+          })
+        })
+      }
       return routers
     }
   },

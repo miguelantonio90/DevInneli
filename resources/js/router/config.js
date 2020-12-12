@@ -551,5 +551,268 @@ export const protectedRoute = [
         component: () => import('../views/AppLock')
       }
     ]
+  },
+  {
+    path: '/',
+    component: LayoutDefault,
+    meta: {
+      title: 'home',
+      group: 'apps',
+      icon: ''
+    },
+    redirect: '/admin/dashboard',
+    children: [
+      {
+        path: '/admin/dashboard',
+        name: 'admin_dashboard',
+        access: ['dashboard'],
+        meta: {
+          title: 'dashboard',
+          group: 'apps',
+          icon: 'mdi-view-dashboard',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/AdminDashboard')
+      },
+      {
+        path: '/403',
+        name: 'Forbidden',
+        access: ['Forbidden'],
+        meta: {
+          title: 'access_denied',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/error/Deny')
+      },
+      {
+        path: '/user/profile',
+        name: 'Profile',
+        access: ['profile'],
+        meta: {
+          title: 'profile',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/auth/Profile')
+      },
+      {
+        path: '/admin/sales',
+        component: RouteWrapper,
+        access: ['manager_vending'],
+        redirect: '/sales/vending.list',
+        meta: {
+          title: 'vending',
+          icon: 'mdi-cash-usd',
+          group: 'sales'
+        },
+        children: [
+          {
+            path: '/admin/sales/vending.list',
+            name: 'vending',
+            access: 'vending_list',
+            meta: {
+              title: 'vending',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale.vue')
+          }
+        ]
+      },
+      {
+        path: '/admin/articles',
+        component: RouteWrapper,
+        access: ['manager_article', 'manager_category', 'manager_mod'],
+        redirect: '/admin/articles/product.list',
+        meta: {
+          title: 'articles',
+          icon: 'mdi-shopping',
+          requiresAuth: true,
+          group: 'articles'
+        },
+        children: [
+          {
+            path: '/admin/articles/product.list',
+            name: 'product_list',
+            access: 'article_list',
+            meta: {
+              title: 'product_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/article/AdminArticle.vue')
+          },
+          {
+            path: '/admin/articles/category.list',
+            name: 'category_list',
+            access: 'category_list',
+            meta: {
+              title: 'category_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/category/ListCategoryAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/finance',
+        component: RouteWrapper,
+        redirect: '/admin/finance/supplier.list',
+        access: ['manager_supplier', 'manager_buy'],
+        meta: {
+          title: 'finance',
+          icon: 'mdi-podium',
+          requiresAuth: true,
+          group: 'finance'
+        },
+        children: [
+          {
+            path: '/admin/finance/supplier.list',
+            name: 'supplier_list',
+            access: 'supplier_list',
+            meta: {
+              title: 'supplier_list',
+              icon: 'mdi-car',
+              requiresAuth: true
+            },
+            component: () => import('../views/supplier/ListSupplierAdmin')
+          },
+          {
+            path: '/admin/finance/buy_list',
+            name: 'supply_product',
+            access: 'buy_list',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/ListInventoryAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/resume',
+        component: RouteWrapper,
+        redirect: '/resume/sell_product.list',
+        access: ['manager_sell'],
+        meta: {
+          title: 'resume',
+          icon: 'mdi-chart-bar',
+          group: 'resume'
+        },
+        children: [
+          {
+            path: '/admin/resume/sell_product.list',
+            name: 'sell_product',
+            access: 'sell_by_product',
+            meta: {
+              title: 'sell_product',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesProduct')
+          },
+          {
+            path: '/admin/resume/sell_category.list',
+            name: 'sell_category',
+            access: 'sell_by_category',
+            meta: {
+              title: 'sell_category',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesCategory')
+          },
+          {
+            path: '/admin/resume/sell_user.list',
+            name: 'sell_user',
+            access: 'sell_by_employer',
+            meta: {
+              title: 'sell_user',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/admin/resume/sell_types_payment.list',
+            name: 'sell_types_payment',
+            access: 'sell_by_payments',
+            meta: {
+              title: 'sell_types_payment',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesPayment')
+          }
+        ]
+      },
+      {
+        path: '/admin/users',
+        component: RouteWrapper,
+        redirect: '/admin/users/employer.list',
+        access: ['manager_employer', 'manager_access', 'manager_assistence'],
+        meta: {
+          title: 'user',
+          icon: 'mdi-account-star',
+          group: 'user'
+        },
+        children: [
+          {
+            path: '/admin/users/employer.list',
+            name: 'employer_list',
+            access: 'employer_list',
+            meta: {
+              title: 'employer_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/user/ListUserAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/clients',
+        component: RouteWrapper,
+        redirect: '/clients/client.list',
+        access: ['manager_client'],
+        meta: {
+          title: 'client',
+          icon: 'mdi-account-multiple',
+          group: 'clients',
+          requiresAuth: true
+        },
+        children: [
+          {
+            path: '/admin/clients/client.list',
+            name: 'clients_list',
+            access: 'client_list',
+            meta: {
+              title: 'client_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/client/ListClientAdmin')
+          }
+        ]
+      },
+      {
+        path: '/setting',
+        access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
+        meta: {
+          title: 'setting',
+          icon: 'mdi-cog',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/general/General')
+      }
+    ]
   }
 ]

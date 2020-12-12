@@ -33,7 +33,11 @@ class UserManager extends BaseManager
     {
         if (auth()->user()['isAdmin'] === 1) {
             $users = User::latest()
+                ->where('isAdmin', '<>', '1')
                 ->with('company')
+                ->with('position')
+                ->with('shops')
+                ->orderBy('created_at', 'ASC')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
@@ -48,6 +52,7 @@ class UserManager extends BaseManager
                 ])
                 ->with('shops')
                 ->orderBy('created_at', 'ASC')
+                ->groupBy()
                 ->get();
         }
         foreach ($users as $k => $user) {

@@ -60,6 +60,7 @@ export default {
     setting: 'Setting',
     home: 'Home',
     dashboard: 'Dashboard',
+    admin_dashboard: 'Dashboard',
     access_denied: 'Access Deny',
     verify: 'Email Verify',
     welcome: 'Welcome',

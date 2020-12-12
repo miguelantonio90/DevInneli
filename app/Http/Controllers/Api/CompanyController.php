@@ -14,12 +14,23 @@ use Illuminate\Validation\ValidationException;
 
 class CompanyController extends Controller
 {
-    public function __construct()
+    /**
+     * @var CompanyManager
+     */
+    protected $companyManager;
+
+    /**
+     * CompanyController constructor.
+     * @param CompanyManager $compnayManager
+     */
+    public function __construct(CompanyManager $compnayManager)
     {
+        $this->companyManager = $compnayManager;
         parent::__construct();
 
         $this->middleware('auth');
     }
+
 
     /**
      * @param $email
@@ -41,7 +52,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return ResponseHelper::sendResponse(
+            $this->companyManager->getAllCompanies(),
+            'Categories retrieved successfully.'
+        );
+
     }
 
     /**

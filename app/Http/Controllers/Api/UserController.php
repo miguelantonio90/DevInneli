@@ -46,6 +46,18 @@ class UserController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getAll(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->userManager->findAllByCompany(),
+            'Users retrieved successfully.'
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  Request  $request

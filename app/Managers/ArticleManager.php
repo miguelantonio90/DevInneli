@@ -45,9 +45,19 @@ class ArticleManager extends BaseManager
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $articles = Articles::latest()
+            $articles =  Articles::latest()
+                ->with('company')
+                ->with('category')
+                ->with('composites')
                 ->with('articlesShops')
-                ->with('categories')
+                ->with('variants')
+                ->with('tax')
+                ->with('variantValues')
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('article_images.default', 'desc');
+                    }
+                ])
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();

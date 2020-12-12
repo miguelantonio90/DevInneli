@@ -20,6 +20,7 @@ const UPDATE_ACCESS = 'UPDATE_ACCESS'
 const state = {
   isLoggedIn: !!localStorage.getToken(),
   isManager: !!localStorage.getTokenManager(),
+  isAdmin: false,
   userData: [],
   userPin: {},
   pending: false,
@@ -68,6 +69,7 @@ const getters = {
   access_permit: (state) => state.access,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
+  isAdminIn: (state) => state.isAdmin,
   pinSuccess: (state) => state.pinSuccess
 }
 
@@ -86,6 +88,7 @@ const mutations = {
     if (access !== undefined) {
       state.access = []
       state.access = JSON.parse((access))
+      state.isAdmin = state.access[0].title.value
     }
   },
   [LOGIN] (state) {

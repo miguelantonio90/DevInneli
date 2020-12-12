@@ -47,77 +47,81 @@ class CompanyTableSeeder extends Seeder
                 'actions' => []
             ],
             [
+                'title' => ['name' => 'dashboard', 'value' => true],
+                'actions' => ['dashboard' => true]
+            ],
+            [
                 'title' => ['name' => 'manager_article', 'value' => true],
-                'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
+                'actions' => ['article_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_vending', 'value' => true],
-                'actions' => ['vending_list' => true, 'vending_add' => false, 'vending_edit' => false, 'vending_delete' => false,]
+                'actions' => ['vending_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_category', 'value' => true],
-                'actions' => ['category_list' => true, 'category_add' => false, 'category_edit' => false, 'category_delete' => false,]
+                'actions' => ['category_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_mod', 'value' => true],
-                'actions' => ['mod_list' => true, 'mod_add' => false, 'mod_edit' => false, 'mod_delete' => false]
+                'actions' => ['mod_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_supplier', 'value' => true],
-                'actions' => ['supplier_list' => true, 'supplier_add' => false, 'supplier_edit' => false, 'supplier_delete' => false]
+                'actions' => ['supplier_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_buy', 'value' => true],
-                'actions' => ['buy_list' => true, 'buy_add' => false, 'buy_edit' => false, 'buy_delete' => false]
+                'actions' => ['buy_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_sell', 'value' => true],
                 'actions' =>
-                    ['sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false, 'sell_by_payments' => false]
+                    ['sell_by_product' => true, 'sell_by_category' => true, 'sell_by_employer' => true, 'sell_by_payments' => true]
             ],
             [
                 'title' => ['name' => 'manager_employer', 'value' => true],
-                'actions' => ['employer_list' => true, 'employer_add' => false, 'employer_edit' => false, 'employer_delete' => false]
+                'actions' => ['employer_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_assistence', 'value' => true],
-                'actions' => ['assistance_list' => true, 'assistance_add' => false, 'assistance_edit' => false, 'assistance_delete' => false]
+                'actions' => ['assistance_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_client', 'value' => true],
-                'actions' => ['client_list' => true, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
+                'actions' => ['client_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_shop', 'value' => true],
-                'actions' => ['shop_list' => true, 'shop_add' => false, 'shop_edit' => false, 'shop_delete' => false]
+                'actions' => ['shop_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_access', 'value' => true],
-                'actions' => ['access_list' => true, 'access_add' => false, 'access_edit' => false, 'access_delete' => false]
+                'actions' => ['access_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_payment', 'value' => true],
-                'actions' => ['payment_list' => true, 'payment_add' => false, 'payment_edit' => false, 'payment_delete' => false]
+                'actions' => ['payment_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_expense_category', 'value' => true],
-                'actions' => ['expense_category_list' => true, 'expense_category_add' => false, 'expense_category_edit' => false, 'expense_category_delete' => false]
+                'actions' => ['expense_category_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_exchage_rate', 'value' => true],
-                'actions' => ['exchange_rate_list' => true, 'exchange_rate_add' => false, 'exchange_rate_edit' => false, 'exchange_rate_delete' => false]
+                'actions' => ['exchange_rate_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_type_of_order', 'value' => true],
-                'actions' => ['type_of_order_list' => true, 'type_of_order_add' => false, 'type_of_order_edit' => false, 'type_of_order_delete' => false]
+                'actions' => ['type_of_order_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_tax', 'value' => true],
-                'actions' => ['tax_list' => true, 'tax_add' => false, 'tax_edit' => false, 'tax_delete' => false]
+                'actions' => ['tax_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_discount', 'value' => true],
-                'actions' => ['discount_list' => true, 'discount_add' => false, 'discount_edit' => false, 'discount_delete' => false]
+                'actions' => ['discount_list' => true]
             ]
         ]);
         $key->save();
