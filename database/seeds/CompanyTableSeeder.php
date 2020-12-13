@@ -35,6 +35,7 @@ class CompanyTableSeeder extends Seeder
             'email' => 'admin@admin.com',
             'logo' => '',
             'country' => $this->faker->countryCode,
+            'sector' =>'others',
             'currency' => $this->faker->currencyCode,
             'address' => $this->faker->address,
             'faker' => true,
@@ -94,6 +95,10 @@ class CompanyTableSeeder extends Seeder
             [
                 'title' => ['name' => 'manager_shop', 'value' => true],
                 'actions' => ['shop_list' => true]
+            ],
+            [
+                'title' => ['name' => 'manager_key', 'value' => true],
+                'actions' => ['key_list' => true]
             ],
             [
                 'title' => ['name' => 'manager_access', 'value' => true],

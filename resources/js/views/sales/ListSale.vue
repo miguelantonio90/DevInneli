@@ -38,30 +38,16 @@
                     :input-value="data.item.value"
                     @click="data.select"
                   >
-                    <i :style="'color: ' + data.item.color">
-                      <v-icon left>
-                        {{ data.item.icon }}
-                      </v-icon>
-                      {{ data.item.text }}</i>
+                    {{ data.item.value }}
                   </v-chip>
                 </template>
                 <template v-slot:item="data">
                   <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item" />
+                    <v-list-item-content v-text="data.item.value" />
                   </template>
                   <template v-else>
-                    <v-list-item-icon>
-                      <v-icon
-                        left
-                        :style="'color: ' + data.item.color"
-                      >
-                        {{ data.item.icon }}
-                      </v-icon>
-                    </v-list-item-icon>
                     <v-list-item-content>
-                      <v-list-item-title
-                        :style="'color: ' + data.item.color"
-                      >
+                      <v-list-item-title>
                         {{ data.item.text }}
                       </v-list-item-title>
                     </v-list-item-content>

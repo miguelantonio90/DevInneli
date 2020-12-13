@@ -576,7 +576,7 @@ export const protectedRoute = [
         component: () => import('../views/AdminDashboard')
       },
       {
-        path: '/403',
+        path: '/admin/403',
         name: 'Forbidden',
         access: ['Forbidden'],
         meta: {
@@ -588,7 +588,7 @@ export const protectedRoute = [
         component: () => import('../views/error/Deny')
       },
       {
-        path: '/user/profile',
+        path: '/admin/user/profile',
         name: 'Profile',
         access: ['profile'],
         meta: {
@@ -803,7 +803,7 @@ export const protectedRoute = [
         ]
       },
       {
-        path: '/setting',
+        path: '/admin/setting',
         access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
         meta: {
           title: 'setting',

@@ -15,7 +15,6 @@ class TypeOfOrderManager extends BaseManager
      */
     public function findAllByCompany()
     {
-
         $company = CompanyManager::getCompanyByAdmin();
         if (auth()->user()['isAdmin'] === 1) {
             $typeOrder = TypeOfOrder::latest()

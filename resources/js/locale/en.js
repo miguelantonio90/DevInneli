@@ -487,5 +487,27 @@ export default {
     barGraphics: 'Bar Graphic',
     margin: 'Margin'
   },
+  sector: {
+    name: 'Sector',
+    agriculture: 'Agriculture/Livestock',
+    food: 'Food/Gastronomy',
+    architecture: 'Architecture/Construction',
+    arts: 'Arts / Crafts',
+    automotive: 'Automotive and parts',
+    retail: 'Retail trade',
+    consultancy: 'Consultancy',
+    health: 'Personal care / Beauty / Health',
+    education: 'Rducation',
+    entertainment: 'Rntertainment',
+    hotel: 'Hotel / Tourism',
+    manufacture: 'Manufacture',
+    ong: 'Non Governmental Organization',
+    advertising: 'Advertising / Digital Media',
+    accounting: 'Accounting or financial services',
+    specialized: 'Specialized services',
+    technologies: 'Technologies / Telecommunications',
+    transport: 'Transport / Logistics',
+    others: 'Others'
+  },
   ...en
 }

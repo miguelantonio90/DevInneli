@@ -98,10 +98,16 @@ class RegisterController extends Controller
             'country' => $data['country']['id'],
             'currency' => $data['country']['currency']
         ]);
+        $company->sector = $data['sector'];
+        $company->save();
         if ($company) {
             $key = KeyPosition::create([
                 'key' => 'CEO',
                 'access_permit' => json_encode([
+                    [
+                        'title' => ['name' => 'dashboard', 'value' => true],
+                        'actions' => ['dashboard' => true]
+                    ],
                     [
                         'title' => ['name' => 'manager_article', 'value' => false],
                         'actions' => ['article_list' => true, 'article_add' => true, 'article_edit' => true, 'article_delete' => true, 'article_transport' => true]
@@ -202,6 +208,10 @@ class RegisterController extends Controller
                         'key' => 'Supervisor',
                         'access_permit' => json_encode([
                             [
+                                'title' => ['name' => 'dashboard', 'value' => true],
+                                'actions' => ['dashboard' => true]
+                            ],
+                            [
                                 'title' => ['name' => 'manager_article', 'value' => true],
                                 'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
                             ],
@@ -280,6 +290,10 @@ class RegisterController extends Controller
                         'company_id' => $company->id,
                         'key' => 'ATM',
                         'access_permit' => json_encode([
+                            [
+                                'title' => ['name' => 'dashboard', 'value' => true],
+                                'actions' => ['dashboard' => true]
+                            ],
                             [
                                 'title' => ['name' => 'manager_article', 'value' => false],
                                 'actions' => ['article_list' => true, 'article_add' => true, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]

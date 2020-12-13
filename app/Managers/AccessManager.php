@@ -15,10 +15,20 @@ class AccessManager
      */
     public function getByCompany()
     {
-        $company = CompanyManager::getCompanyByAdmin();
-        $positions = DB::table('positions')
-            ->where('company_id', '=', $company->id)
-            ->get();
+        if (auth()->user()['isAdmin'] === 1) {
+            $positions = DB::table('positions')
+                ->join('companies','companies.id','=','company_id')
+                ->where('companies.faker', '<>', 1)
+                ->where('companies.deleted_at', '=', null)
+                ->where('positions.deleted_at', '=', null)
+                ->select('positions.*','companies.country','companies.name as company_name')
+                ->get();
+        } else {
+            $company = CompanyManager::getCompanyByAdmin();
+            $positions = DB::table('positions')
+                ->where('company_id', '=', $company->id)
+                ->get();
+        }
         $pos = 0;
         $p = [];
         foreach ($positions as $k => $v) {

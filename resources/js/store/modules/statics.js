@@ -8,6 +8,7 @@ const FAILED = 'FAILED'
 
 const state = {
   arrayCountry: data.getCountryToSelect(),
+  arraySector: data.getSector(),
   arrayCurrency: data.getCurrencyToSelect(),
   payments: data.getPaymentToSelect(),
   isCountryLoading: false,
@@ -35,6 +36,7 @@ const mutations = {
 const getters = {
   arrayCurrency: state => state.arrayCurrency,
   arrayCountry: state => state.arrayCountry,
+  arraySector: state => state.arraySector,
   payments: state => state.payments
 }
 

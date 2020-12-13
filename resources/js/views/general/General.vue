@@ -65,31 +65,66 @@
 <script>
 import ShopList from '../shop/ListShop'
 import ExpenseCategory from '../expense_category/List'
+import ExpenseCategoryAdmin from '../expense_category/ListAdmin'
 import ExchangeRate from '../exchange_rate/List'
 import ListPayment from '../payment/ListPayment'
+import ListPaymentAdmin from '../payment/ListPaymentAdmin'
 import TypeOfOrder from '../type_order/List'
+import TypeOfOrderAdmin from '../type_order/ListAdmin'
 import ListTax from '../tax/ListTax'
+import ListTaxAdmin from '../tax/ListTaxAdmin'
 import ListDiscount from '../discount/ListDiscount'
 import ListAccess from '../access/ListAccess'
+import ListAccessAdmin from '../access/ListAccessAdmin'
 import ListKeys from '../keys/ListKeys'
+import ListKeysAdmin from '../keys/ListKeysAdmin'
 import { mapGetters } from 'vuex'
 export default {
   name: 'General2',
-  components: { ShopList, ListPayment, ExpenseCategory, ExchangeRate, TypeOfOrder, ListTax, ListDiscount, ListAccess, ListKeys },
+  components: {
+    ShopList,
+    ListPayment,
+    ExpenseCategory,
+    ExchangeRate,
+    TypeOfOrder,
+    ListTax,
+    ListDiscount,
+    ListAccess,
+    ListKeys,
+    ListKeysAdmin,
+    ListAccessAdmin,
+    ListPaymentAdmin,
+    ExpenseCategoryAdmin,
+    TypeOfOrderAdmin,
+    ListTaxAdmin
+  },
   data () {
     return {
       tab: null,
       isMobile: false,
       itemsTabs: [
-        { key: 'shop-list', content: 'shop-list' },
-        { key: 'list-keys', content: 'list-keys' },
-        { key: 'list-access', content: 'list-access' },
-        { key: 'list-payment', content: 'list-payment' },
-        { key: 'expense-category', content: 'expense-category' },
-        { key: 'exchange-rate', content: 'exchange-rate' },
-        { key: 'type-of-order', content: 'type-of-order' },
-        { key: 'tax', content: 'list-tax' },
-        { key: 'discount', content: 'list-discount' }
+        [
+          { key: 'shop-list', content: 'shop-list' },
+          { key: 'list-keys', content: 'list-keys' },
+          { key: 'list-access', content: 'list-access' },
+          { key: 'list-payment', content: 'list-payment' },
+          { key: 'expense-category', content: 'expense-category' },
+          { key: 'exchange-rate', content: 'exchange-rate' },
+          { key: 'type-of-order', content: 'type-of-order' },
+          { key: 'tax', content: 'list-tax' },
+          { key: 'discount', content: 'list-discount' }
+        ],
+        [
+          { key: 'shop-list', content: 'shop-list' },
+          { key: 'list-keys', content: 'list-keys-admin' },
+          { key: 'list-access', content: 'list-access-admin' },
+          { key: 'list-payment', content: 'list-payment-admin' },
+          { key: 'expense-category', content: 'expense-category-admin' },
+          { key: 'exchange-rate', content: 'exchange-rate' },
+          { key: 'type-of-order', content: 'type-of-order-admin' },
+          { key: 'tax', content: 'list-tax-admin' },
+          { key: 'discount', content: 'list-discount' }
+        ]
       ],
       tabName: [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping', access: 'manager_shop' },
@@ -113,7 +148,7 @@ export default {
         if (access.length > 0) {
           if (access[0].title.value === true) {
             result.tabName.push(v)
-            result.itemsTabs.push(this.itemsTabs[i])
+            result.itemsTabs.push(this.access_permit[0].title.value ? this.itemsTabs[1][i] : this.itemsTabs[0][i])
           }
         }
       })

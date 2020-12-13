@@ -69,40 +69,57 @@
                 required
                 @click:append="hidePassword2 = !hidePassword2"
               />
+              <vue-tel-input-vuetify
+                v-model="formRegister.phone"
+                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
+                :label="$vuetify.lang.t('$vuetify.phone')"
+                required
+                :rules="formRule.phone"
+                :select-label="$vuetify.lang.t('$vuetify.country')"
+                v-bind="bindProps"
+                :error-messages="errorPhone"
+                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                @country-changed="onCountry"
+                @keypress="numbers"
+                @input="onInput"
+              >
+                <template #message="{ key, message }">
+                  <slot
+                    name="label"
+                    v-bind="{ key, message }"
+                  />
+                  {{ message }}
+                </template>
+              </vue-tel-input-vuetify>
               <v-autocomplete
-                v-model="formRegister.country"
-                :items="arrayCountry"
+                v-model="formRegister.sector"
+                :items="arraySector"
                 :label="
-                  $vuetify.lang.t('$vuetify.country')
+                  $vuetify.lang.t('$vuetify.sector.name')
                 "
                 :rules="formRule.country"
                 clearable
-                item-text="name"
+                item-value="value"
                 required
-                return-object
               >
-                <template
-                  slot="item"
-                  slot-scope="data"
-                >
-                  <template
-                    v-if="
-                      typeof data.item !==
-                        'object'
-                    "
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.item.value"
+                    @click="data.select"
                   >
-                    <v-list-item-content
-                      v-text="data.item"
-                    />
+                    {{ $vuetify.lang.t('$vuetify.sector.' +data.item.value) }}
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-item-content v-text="$vuetify.lang.t('$vuetify.sector.' +data.item.value)" />
                   </template>
                   <template v-else>
-                    <v-list-item-avatar>
-                      {{
-                        data.item.emoji
-                      }}
-                    </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ $vuetify.lang.t('$vuetify.sector.' +data.item.value) }}
+                      </v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </template>
@@ -149,6 +166,8 @@ export default {
   name: 'Register',
   data () {
     return {
+      errorPhone: null,
+      countrySelect: null,
       loading: false,
       formValid: false,
       hidePassword1: true,
@@ -170,13 +189,55 @@ export default {
   computed: {
     ...mapState('auth', ['isLoggedIn', 'formRegister']),
     ...mapGetters(['errors']),
-    ...mapState('statics', ['arrayCountry'])
+    ...mapState('statics', ['arrayCountry', 'arraySector']),
+    bindProps () {
+      return {
+        mode: 'national',
+        clearable: true,
+        disabledFetchingCountry: false,
+        autocomplete: 'off',
+        dropdownOptions: {
+          disabledDialCode: false
+        },
+        inputOptions: {
+          showDialCode: false
+        }
+      }
+    }
   },
   methods: {
     ...mapActions('auth', ['sendRegisterRequest']),
+    onCountry (event) {
+      this.formRegister.country = event.iso2
+      this.countrySelect = event
+      console.log(this.countrySelect)
+    },
+    numbers (event) {
+      const regex = new RegExp('^[0-9]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    onInput (number, object) {
+      const lang = this.$vuetify.lang
+      if (object.valid) {
+        this.formRegister.phone = number
+        this.errorPhone = null
+      } else {
+        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+          lang.t('$vuetify.phone')
+        ])
+      }
+    },
     async registerUser () {
       if (this.$refs.form.validate()) {
         this.loading = true
+        console.log(this.countrySelect.iso2)
+        this.formRegister.country = this.arrayCountry.filter(count => count.id === this.countrySelect.iso2)[0]
         await setTimeout(() => {
           this.sendRegisterRequest(this.formRegister).then(() => {
             this.loading = false

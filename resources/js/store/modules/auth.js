@@ -38,7 +38,9 @@ const state = {
     username: '',
     email: '',
     password: '',
+    phone: '',
     password_confirmation: '',
+    sector: '',
     country: ''
   },
   formReset: {
