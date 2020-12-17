@@ -99,6 +99,7 @@
                 "
                 :rules="formRule.country"
                 clearable
+                :filter="customFilter"
                 item-value="value"
                 required
               >
@@ -207,6 +208,13 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['sendRegisterRequest']),
+    customFilter (item, queryText, itemText) {
+      const textOne = this.$vuetify.lang.t('$vuetify.sector.' + item.value.toLowerCase())
+      const textTwo = this.$vuetify.lang.t('$vuetify.sector.' + item.value.toLowerCase())
+      const searchText = queryText.toLowerCase()
+      return textOne.indexOf(searchText) > -1 ||
+              textTwo.indexOf(searchText) > -1
+    },
     onCountry (event) {
       this.formRegister.country = event.iso2
       this.countrySelect = event

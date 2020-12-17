@@ -2863,10 +2863,11 @@ const getCurrencyToSelect = () => {
 const getSector = () => {
   let result = []
   result =
-        [{ value: 'agriculture' }, { value: 'food' }, { value: 'architecture' }, { value: 'arts' }, { value: 'automotive' }, { value: 'retail' },
-          { value: 'consultancy' }, { value: 'health' }, { value: 'education' }, { value: 'entertainment' }, { value: 'hotel' },
-          { value: 'manufacture' }, { value: 'ong' }, { value: 'advertising' }, { value: 'accounting' }, { value: 'specialized' },
-          { value: 'technologies' }, { value: 'transport' }, { value: 'others' }]
+        [{ value: 'agricultural' }, { value: 'arts' }, { value: 'automotive' }, { value: 'construction' }, { value: 'consultancy' },
+          { value: 'drink' }, { value: 'education' }, { value: 'entertainment' }, { value: 'food' }, { value: 'health' }, { value: 'home' },
+          { value: 'hostelry' }, { value: 'industrial' }, { value: 'ironmongery' }, { value: 'rental' }, { value: 'restaurant' },
+          { value: 'service' }, { value: 'shops' }, { value: 'technologies' }, { value: 'tourism' }, { value: 'transport' },
+          { value: 'real_state' }, { value: 'others' }]
   return result
 }
 

@@ -89,8 +89,8 @@ const mutations = {
   [UPDATE_ACCESS] (state, access) {
     if (access !== undefined) {
       state.access = []
-      state.access = JSON.parse((access))
-      state.isAdmin = state.access[0].title.value
+      state.access = JSON.parse((atob(access[1])))
+      state.isAdmin = access[0]
     }
   },
   [LOGIN] (state) {

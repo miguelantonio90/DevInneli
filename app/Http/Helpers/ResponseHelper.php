@@ -22,12 +22,11 @@ class ResponseHelper
      */
     public static function sendResponse($result, $message)
     {
-//        var_dump(base64_encode(cache()->get('userPin')->position['access_permit']));
         $response = [
             'success' => true,
             'data' => $result,
             'message' => $message,
-            'access'=>cache()->get('userPin')?(cache()->get('userPin')->position['access_permit']):''
+            'access'=>cache()->get('userPin')?[cache()->get('userPin')->position['name']==='admin', base64_encode(cache()->get('userPin')->position['access_permit'])]:''
         ];
         return response()->json($response, 200);
     }

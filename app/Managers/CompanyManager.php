@@ -2,6 +2,7 @@
 
 namespace App\Managers;
 
+use App\Articles;
 use App\Client;
 use App\Company;
 use App\Shop;
@@ -34,6 +35,7 @@ class CompanyManager
           $companies[$key]->employers = User::latest()->where('company_id','=',$company->id)->get();
           $companies[$key]->clients = Client::latest()->where('company_id','=',$company->id)->get();
           $companies[$key]->suppliers = Supplier::latest()->where('company_id','=',$company->id)->get();
+          $companies[$key]->articles = Articles::latest()->where('company_id','=',$company->id)->get();
       }
       return $companies;
     }

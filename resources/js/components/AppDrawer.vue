@@ -76,8 +76,9 @@
                       <v-icon
                         v-bind="attrs"
                         v-on="on"
-                        v-text="subItem.meta.icon"
-                      />
+                      >
+                        {{ subItem.meta.icon }}
+                      </v-icon>
                     </template>
                     <span>{{
                       $vuetify.lang.t(
@@ -165,7 +166,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['access_permit']),
+    ...mapGetters('auth', ['isAdminIn', 'access_permit']),
     computeLogo () {
       return '/assets/logo_bar.ico'
     },
@@ -173,7 +174,7 @@ export default {
       const routers = []
       if (this.access_permit.length > 0) {
         let localRoutes = routes[0]
-        if (this.access_permit[0].title.value) {
+        if (this.isAdminIn) {
           localRoutes = routes[3]
         }
         localRoutes.children.forEach((v) => {

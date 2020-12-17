@@ -149,4 +149,12 @@ class UserController extends Controller
             'Users has deleted successfully.'
         );
     }
+
+    public function userLogin()
+    {
+        return ResponseHelper::sendResponse(
+            cache()->get('userPin'),
+            'Users has deleted successfully.'
+        );
+    }
 }

@@ -38,7 +38,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'company_id', 'client_id', 'payment_id'
+        'no_facture', 'company_id' , 'payment_id'
     ];
 
     /**

@@ -1,8 +1,15 @@
 <template>
-  <v-card tile>
+  <v-card
+    :disabled="disabled"
+    tile
+    @click="$emit('click')"
+  >
     <v-card-text class="pa-0">
       <div class="d-flex">
-        <div class="flex pa-3">
+        <div
+          class="flex pa-3"
+          style="width: 35%"
+        >
           <div class="layout justify-center align-center">
             <v-icon
               :color="color"
@@ -13,6 +20,7 @@
           </div>
         </div>
         <div
+          style="width: 65%"
           :class="color"
           class="flex pa-3"
         >
@@ -29,6 +37,10 @@
 <script>
 export default {
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     icon: {
       type: String,
       default: ''

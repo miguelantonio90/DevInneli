@@ -15,5 +15,8 @@ export default {
   },
   importArticles (dataFile) {
     return api.importData('article/import', dataFile)
+  },
+  refoundArticle (dataFile) {
+    return api.post('article/refound', dataFile)
   }
 }

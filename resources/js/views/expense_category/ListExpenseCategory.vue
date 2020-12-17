@@ -32,6 +32,7 @@ import NewExpenseCategory from './New'
 import EditExpenseCategory from './Edit'
 
 export default {
+  name: 'ListExpenseCategory',
   components: {
     NewExpenseCategory,
     EditExpenseCategory

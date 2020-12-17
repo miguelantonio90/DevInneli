@@ -4,6 +4,7 @@ const FETCHING_ARTICLES = 'FETCHING_ARTICLES'
 const SWITCH_ARTICLE_NEW_MODAL = 'SWITCH_ARTICLE_NEW_MODAL'
 const SWITCH_ARTICLE_EDIT_MODAL = 'SWITCH_ARTICLE_EDIT_MODAL'
 const SWITCH_ARTICLE_SHOW_MODAL = 'SWITCH_ARTICLE_SHOW_MODAL'
+const SWITCH_ARTICLE_REFOUND_MODAL = 'SWITCH_ARTICLE_REFOUND_MODAL'
 const SWITCH_ARTICLE_IMPORT_MODAL = 'SWITCH_ARTICLE_IMPORT_MODAL'
 const ARTICLE_CREATED = 'ARTICLE_CREATED'
 const ARTICLE_EDIT = 'ARTICLE_EDIT'
@@ -21,6 +22,7 @@ const state = {
   showTransfer: false,
   showEditModal: false,
   showShowModal: false,
+  showRefoundModal: false,
   articles: [],
   avatar: '',
   loading: false,
@@ -63,6 +65,12 @@ const state = {
     variants_shops: [],
     images: []
   },
+  refound: {
+    sale: {},
+    article: {},
+    cant: 0,
+    money: 0
+  },
   importArticle: {
     type: 'loyverse',
     file: ''
@@ -74,6 +82,9 @@ const state = {
 }
 
 const mutations = {
+  [SWITCH_ARTICLE_REFOUND_MODAL] (state, showModal) {
+    state.showRefoundModal = showModal
+  },
   [SWITCH_TRANSFER_MODAL] (state, showModal) {
     state.showTransfer = showModal
   },
@@ -203,6 +214,9 @@ const mutations = {
 const getters = {}
 
 const actions = {
+  toogleRefoundModal ({ commit }, showModal) {
+    commit(SWITCH_ARTICLE_REFOUND_MODAL, showModal)
+  },
   toogleTransferModal ({ commit }, showModal) {
     commit(SWITCH_TRANSFER_MODAL, showModal)
   },
@@ -248,6 +262,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/toogleImportModal', false, { root: true })
         dispatch('article/getArticles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async refoundArticle ({ commit, dispatch }, refound) {
+    commit(ENV_DATA_PROCESS, true)
+    // noinspection JSUnresolvedVariable
+    await article
+      .importArticles(refound)
+      .then(({ data }) => {
+        commit(SWITCH_ARTICLE_REFOUND_MODAL, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },

@@ -1,6 +1,9 @@
 import api from '../config/api'
 
 export default {
+  fetchUser () {
+    return api.post('user/userLogin')
+  },
   fetchUsers () {
     return api.get('user')
   },

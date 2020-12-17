@@ -1,7 +1,11 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="8">
+      <v-col
+        class="py-0"
+        cols="12"
+        md="8"
+      >
         <v-autocomplete
           v-model="sale.client"
           clearable
@@ -11,8 +15,6 @@
           :loading="isClientTableLoading"
           :disabled="!!isClientTableLoading"
           return-object
-          required
-          :rules="formRule.country"
           @input="updateStore"
         >
           <template v-slot:append-outer>
@@ -58,7 +60,11 @@
           </template>
         </v-autocomplete>
       </v-col>
-      <v-col cols="4">
+      <v-col
+        class="py-0"
+        cols="12"
+        md="4"
+      >
         <v-text-field
           v-model="sale.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
@@ -68,7 +74,11 @@
           @onchange="updateStore"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col
+        class="py-0"
+        cols="12"
+        md="6"
+      >
         <v-select
           v-model="sale.taxes"
           chips
@@ -101,7 +111,11 @@
           </template>
         </v-select>
       </v-col>
-      <v-col cols="6">
+      <v-col
+        class="py-0"
+        cols="12"
+        md="6"
+      >
         <v-select
           v-model="sale.discounts"
           chips
@@ -134,7 +148,11 @@
           </template>
         </v-select>
       </v-col>
-      <v-col cols="6">
+      <v-col
+        class="py-0"
+        cols="12"
+        md="6"
+      >
         <v-select
           v-model="sale.pay"
           clearable
@@ -148,7 +166,9 @@
       </v-col>
       <v-col
         v-if="sale.pay === 'counted'"
-        cols="6"
+        class="py-0"
+        cols="12"
+        md="6"
       >
         <v-select
           v-model="sale.payments"

@@ -5,7 +5,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.menu.sell_types_payment')
+            $vuetify.lang.t('$vuetify.menu.sell_user')
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -13,7 +13,7 @@
             <v-col
               class="py-0"
               cols="12"
-              md="4"
+              md="6"
             >
               <v-menu
                 ref="menu"
@@ -42,7 +42,7 @@
             <v-col
               class="py-0"
               cols="12"
-              md="7"
+              md="6"
             >
               <v-select
                 v-model="localShops"
@@ -58,6 +58,7 @@
                 required
                 multiple
                 :rules="formRule.country"
+                @change="changeShop"
               />
             </v-col>
           </v-row>
@@ -80,7 +81,7 @@
                   <v-col
                     class="py-0"
                     cols="12"
-                    :md="localSalesByPayments.length > 0?4:12"
+                    :md="localSalesByEmployer.length > 0?4:12"
                   >
                     <v-card
                       class="mx-auto"
@@ -88,14 +89,14 @@
                     >
                       <v-list dense>
                         <v-subheader>
-                          {{ localSalesByPayments.length > 0? $vuetify.lang.t('$vuetify.report.top5Payment'):
+                          {{ localSalesByEmployer.length > 0? $vuetify.lang.t('$vuetify.report.top5Category'):
                             $vuetify.lang.t('$vuetify.report.noTop5') }}
                         </v-subheader>
                         <v-list-item-group
                           color="primary"
                         >
                           <v-list-item
-                            v-for="(item, i) in localSalesByPayments.slice(0,5)"
+                            v-for="(item, i) in localSalesByEmployer.slice(0,5)"
                             :key="i"
                           >
                             <v-list-item-icon>
@@ -107,7 +108,7 @@
                               </v-chip>
                             </v-list-item-icon>
                             <v-list-item-content>
-                              <v-list-item-title v-text="`${$vuetify.lang.t('$vuetify.payment.' + item.name)}`" />
+                              <v-list-item-title v-text="item.name.firstName" />
                               <v-list-item-subtitle v-text="`${item.data.netPrice + ' ' + user.company.currency }` " />
                             </v-list-item-content>
                           </v-list-item>
@@ -116,7 +117,7 @@
                     </v-card>
                   </v-col>
                   <v-col
-                    v-if="localSalesByPayments.length > 0"
+                    v-if="localSalesByEmployer.length > 0"
                     class="py-0"
                     cols="12"
                     md="7"
@@ -141,7 +142,7 @@
                                           [$vuetify.lang.t('$vuetify.menu.vending'),])"
                   :headers="getTableColumns"
                   csv-filename="ProductBuys"
-                  :items="localSalesByPayments"
+                  :items="localSalesByEmployer"
                   :options="vBindOption"
                   :sort-by="['no_facture']"
                   :sort-desc="[false, true]"
@@ -152,23 +153,7 @@
                   :view-delete-button="false"
                   :is-loading="isTableLoading"
                   @rowClick="rowClick"
-                >
-                  <template v-slot:[`item.name`]="{ item }">
-                    {{ $vuetify.lang.t('$vuetify.payment.' + item.name) }}
-                  </template>
-                  <template v-slot:[`item.data.grossPrice`]="{ item }">
-                    {{ `${user.company.currency + ' ' + item.data.grossPrice}` }}
-                  </template>
-                  <template v-slot:[`item.data.netPrice`]="{ item }">
-                    {{ `${user.company.currency + ' ' + item.data.netPrice}` }}
-                  </template>
-                  <template v-slot:[`item.data.totalTax`]="{ item }">
-                    {{ `${user.company.currency + ' ' + item.data.totalTax}` }}
-                  </template>
-                  <template v-slot:[`item.data.totalDiscount`]="{ item }">
-                    {{ `${user.company.currency + ' ' + item.data.totalDiscount}` }}
-                  </template>
-                </app-data-table>
+                />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -183,7 +168,7 @@ import { Chart } from 'highcharts-vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'SalesPayment',
+  name: 'SalesEmployer',
   components: { AppLoading, highcharts: Chart },
   data () {
     return {
@@ -200,13 +185,12 @@ export default {
       formRule: this.$rules,
       dates: [],
       localShops: [],
-      localSalesByPayments: []
+      localSalesByEmployer: []
     }
   },
   computed: {
     ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapState('sale', ['salesByPayments', 'isTableLoading']),
-    ...mapState('payment', ['paymentsConst']),
+    ...mapState('sale', ['salesByEmployer', 'isTableLoading']),
     ...mapGetters('auth', ['user']),
     dateRangeText () {
       return this.dates.join(' ---> ')
@@ -215,12 +199,7 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'data.cantTransactions',
+          value: 'name.firstName',
           select_filter: true
         },
         {
@@ -229,8 +208,8 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.report.netPrice'),
-          value: 'data.netPrice',
+          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+          value: 'data.cantTransactions',
           select_filter: true
         },
         {
@@ -241,6 +220,11 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
           value: 'data.totalTax',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.report.netPrice'),
+          value: 'data.netPrice',
           select_filter: true
         }
       ]
@@ -257,39 +241,44 @@ export default {
       lastWeek = (i > 0) ? lastWeek + '-' + v : v
     })
     this.dates = [lastWeek, toDay]
-    await this.loadPaymentsConst()
     await this.getShops().then(() => {
       this.localShops = this.shops
     })
-    await this.getSalesByPayment({
-      shops: this.shops,
-      dates: this.dates
-    }).then(() => {
-      this.localSalesByPayments = this.salesByPayments.sort(function (a, b) {
-        if (a.data.netPrice > b.data.netPrice) return -1
-        if (a.data.netPrice < b.data.netPrice) return 1
-        return 0
-      })
-    })
-    await this.loadData()
+    await this.loadSalesByEmployer()
     this.loadingData = false
   },
   methods: {
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSalesByPayment']),
-    ...mapActions('payment', ['loadPaymentsConst']),
+    ...mapActions('sale', ['getSaleByEmployer']),
+    async changeShop () {
+      this.loadingData = true
+      console.log(this.localShops.length === 0)
+      if (this.localShops.length === 0) { this.localShops.push(this.shops[0]) } else { await this.loadSalesByEmployer() }
+      this.loadingData = false
+    },
+    async loadSalesByEmployer () {
+      await this.getSaleByEmployer({
+        shops: this.localShops,
+        dates: this.dates
+      }).then(() => {
+        this.localSalesByEmployer = this.salesByEmployer.sort(function (a, b) {
+          if (a.data.netPrice > b.data.netPrice) return -1
+          if (a.data.netPrice < b.data.netPrice) return 1
+          return 0
+        })
+      })
+      this.loadData()
+    },
     loadData: function () {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
-      this.localSalesByPayments.slice(0, 4).forEach((v) => {
-        if (v.name !== undefined) {
-          categories.push(this.paymentsConst.filter(pay => (pay.value === v.name))[0].name)
-          series.grossPrice.push(v.data.grossPrice)
-          series.totalDiscount.push(v.data.totalDiscount)
-          series.netPrice.push(v.data.netPrice)
-          series.totalCost.push(v.data.totalCost)
-          series.totalTax.push(v.data.totalTax)
-        }
+      this.localSalesByEmployer.slice(0, 4).forEach((v) => {
+        categories.push(v.name.firstName)
+        series.grossPrice.push(v.data.grossPrice)
+        series.totalDiscount.push(v.data.totalDiscount)
+        series.netPrice.push(v.data.netPrice)
+        series.totalCost.push(v.data.totalCost)
+        series.totalTax.push(v.data.totalTax)
       })
       this.chartOptions = {
         chart: {
@@ -297,6 +286,9 @@ export default {
         },
         title: {
           text: this.$vuetify.lang.t('$vuetify.report.barGraphics')
+        },
+        subtitle: {
+          text: 'Inneli.com'
         },
         xAxis: {
           categories: categories,

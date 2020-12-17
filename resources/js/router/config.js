@@ -281,6 +281,18 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/article/EditArticle')
+          },
+          {
+            path: '/article/type_of_order.list',
+            name: 'type_of_order',
+            access: 'type_of_order',
+            meta: {
+              title: 'type_of_order',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/type_order/ListTypeOfOrder')
           }
         ]
       },
@@ -342,6 +354,66 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/inventory/EditInventory')
+          },
+          {
+            path: '/finance/tax.list',
+            name: 'tax_list',
+            access: 'tax_list',
+            meta: {
+              title: 'tax_list',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/tax/ListTax')
+          },
+          {
+            path: '/finance/discount.list',
+            name: 'discount',
+            access: 'discount_list',
+            meta: {
+              title: 'discount',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/discount/ListDiscount')
+          },
+          {
+            path: '/finance/pay.list',
+            name: 'pay',
+            access: 'pay_list',
+            meta: {
+              title: 'pay',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/discount/ListDiscount')
+          },
+          {
+            path: '/finance/exchange_rate.list',
+            name: 'exchange_rate',
+            access: 'exchange_rate_list',
+            meta: {
+              title: 'exchange_rate',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/exchange_rate/ListExchangeRate')
+          },
+          {
+            path: '/finance/expense_category.list',
+            name: 'expense_category',
+            access: 'expense_category_list',
+            meta: {
+              title: 'expense_category',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/expense_category/ListExpenseCategory')
           }
         ]
       },
@@ -387,7 +459,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesEmployer')
           },
           {
             path: '/resume/sell_types_payment.list',
@@ -489,6 +561,7 @@ export const protectedRoute = [
       {
         path: '/setting',
         access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
+        name: 'setting',
         meta: {
           title: 'setting',
           icon: 'mdi-cog',
@@ -738,7 +811,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/sales_by/SalesEmployer')
           },
           {
             path: '/admin/resume/sell_types_payment.list',

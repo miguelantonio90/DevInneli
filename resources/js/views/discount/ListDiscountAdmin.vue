@@ -91,38 +91,8 @@ export default {
   },
   methods: {
     ...mapActions('discount', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getDiscounts',
-      'deleteDiscount'
-    ]),
-    editDiscountHandler ($event) {
-      this.openEditModal($event)
-    },
-    deleteDiscountHandler (taxId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.tax')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteDiscount(taxId)
-        })
-    }
+      'getDiscounts'
+    ])
   }
 }
 </script>

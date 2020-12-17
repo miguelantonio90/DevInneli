@@ -1,6 +1,7 @@
 import user from '../../api/user'
 
 const FETCHING_USERS = 'FETCHING_USERS'
+const FETCHING_USER = 'FETCHING_USER'
 const SWITCH_USER_NEW_MODAL = 'SWITCH_USER_NEW_MODAL'
 const SWITCH_USER_EDIT_MODAL = 'SWITCH_USER_EDIT_MODAL'
 const SWITCH_USER_SHOW_MODAL = 'SWITCH_USER_SHOW_MODAL'
@@ -19,6 +20,7 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   users: [],
+  userLogin: {},
   avatar: '',
   loading: false,
   saved: false,
@@ -65,6 +67,9 @@ const mutations = {
   },
   [FETCHING_USERS] (state, users) {
     state.users = users
+  },
+  [FETCHING_USER] (state, user) {
+    state.userLogin = user
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -150,9 +155,7 @@ const mutations = {
     })
   }
 }
-
 const getters = {}
-
 const actions = {
   toogleNewModal ({ commit }, showModal) {
     commit(SWITCH_USER_NEW_MODAL, showModal)
@@ -178,6 +181,20 @@ const actions = {
       .fetchUsers()
       .then(({ data }) => {
         commit(FETCHING_USERS, data.data)
+        commit(USER_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit(FAILED_USER, error)
+      })
+  },
+  async getUserLogin ({ commit }) {
+    commit(USER_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await user
+      .fetchUser()
+      .then(({ data }) => {
+        commit(FETCHING_USER, data.data)
         commit(USER_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => {

@@ -1,6 +1,41 @@
 <template>
   <v-container>
     <v-row>
+      <!-- mini statistic start -->
+      <v-col cols="3">
+        <mini-statistic
+          color="indigo"
+          icon="mdi-home"
+          :title="$vuetify.lang.t('$vuetify.company')"
+          :sub-title="companies.length.toString()"
+        />
+      </v-col>
+      <v-col cols="3">
+        <mini-statistic
+          color="red"
+          icon="mdi-shopping"
+          :title="$vuetify.lang.t('$vuetify.menu.shop')"
+          :sub-title="cantShops.toString()"
+        />
+      </v-col>
+      <v-col cols="3">
+        <mini-statistic
+          color="light-blue"
+          icon="mdi-account-star"
+          :title="$vuetify.lang.t('$vuetify.menu.user')"
+          :sub-title="cantEmployers.toString()"
+        />
+      </v-col>
+      <v-col cols="3">
+        <mini-statistic
+          color="purple"
+          icon="mdi-instagram"
+          :title="$vuetify.lang.t('$vuetify.menu.articles')"
+          :sub-title="cantArticles.toString()"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col
         class="py-0"
         cols="12"
@@ -75,9 +110,20 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import MiniStatistic from '../components/widgets/statistic/MiniStatistic'
 
 export default {
   name: 'AdminDashboard',
+  components: {
+    MiniStatistic
+  },
+  data () {
+    return {
+      cantArticles: 0,
+      cantShops: 0,
+      cantEmployers: 0
+    }
+  },
   computed: {
     ...mapState('company', [
       'companies',
@@ -112,6 +158,18 @@ export default {
           value: 'suppliers'
         }
       ]
+    }
+  },
+  watch: {
+    companies: function () {
+      this.cantEmployers = 0
+      this.cantShops = 0
+      this.cantArticles = 0
+      this.companies.forEach((v) => {
+        this.cantEmployers += v.employers.length
+        this.cantShops += v.shops.length
+        this.cantArticles += v.articles.length
+      })
     }
   },
   created () {

@@ -5,32 +5,28 @@
         class="py-0"
         cols="12"
       >
-        <new-type-order v-if="showNewModal" />
-        <edit-type-order v-if="showEditModal" />
+        <new-exchange-rate v-if="showNewModal" />
+        <edit-exchange-rate v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.menu.type_of_order')"
-          csv-filename="TypeOrder"
+          :title="$vuetify.lang.t('$vuetify.menu.exchange_rate_list')"
+          csv-filename="ExchangeRate"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
-          :items="typeOrders"
-          :manager="'type_of_order'"
-          :sort-by="['name']"
+          :items="changes"
+          :manager="'exchange_rate'"
+          :sort-by="['country']"
           :sort-desc="[false, true]"
-          :options="bindProps"
           multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="openEditModal($event)"
           @delete-row="deleteHandler($event)"
         >
-          <template v-slot:[`group.header`]="{items, isOpen, toggle}">
-            <th colspan="100%">
-              <v-icon
-                @click="toggle"
-              >
-                {{ isOpen ? 'mdi-minus' : 'mdi-plus' }}
-              </v-icon>
-              {{ $vuetify.lang.t('$vuetify.panel.shop').toUpperCase()+': '+ items[0].shopName }}
-            </th>
+          <template slot="subtitle">
+            <span style="color: darkred">
+              {{
+                `${$vuetify.lang.t('$vuetify.messages.info_exchange_rate')} ${user.company.currency}`
+              }}
+            </span>
           </template>
         </app-data-table>
       </v-col>
@@ -39,14 +35,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
-import NewTypeOrder from './New'
-import EditTypeOrder from './Edit'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import NewExchangeRate from './New'
+import EditExchangeRate from './Edit'
 
 export default {
+  name: 'ListExchangeRate',
   components: {
-    NewTypeOrder,
-    EditTypeOrder
+    NewExchangeRate,
+    EditExchangeRate
   },
   data () {
     return {
@@ -54,36 +51,28 @@ export default {
     }
   },
   computed: {
-    ...mapState('typeOrder', [
+    ...mapState('exchangeRate', [
       'showNewModal',
       'showEditModal',
       'showShowModal',
-      'typeOrders',
+      'changes',
       'isTableLoading'
     ]),
     ...mapGetters('auth', ['user']),
-    bindProps () {
-      return {
-        itemKey: Math.random().toString(),
-        groupBy: 'shopName'
-      }
-    },
     getTableColumns () {
       return [
         {
-          text: this.$vuetify.lang.t('$vuetify.name'),
-          value: 'name',
-          select_filter: true,
-          groupable: false
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopName',
+          text: this.$vuetify.lang.t('$vuetify.country'),
+          value: 'country',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.description'),
-          value: 'description'
+          text: this.$vuetify.lang.t('$vuetify.currency'),
+          value: 'currency'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.change'),
+          value: 'change'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.actions.actions'),
@@ -94,22 +83,21 @@ export default {
     }
   },
   created () {
-    this.getTypeOfOrders()
+    this.getChanges()
   },
   methods: {
-    ...mapActions('typeOrder', [
+    ...mapActions('exchangeRate', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getTypeOfOrders',
-      'setPrincipalTypeOrder',
-      'deleteTypeOrder'
+      'getChanges',
+      'deleteChange'
     ]),
     deleteHandler (id) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.type_of_order')
+            this.$vuetify.lang.t('$vuetify.menu.exchange_rate')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -125,13 +113,8 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.value) this.deleteTypeOrder(id)
+          if (result.value) this.deleteChange(id)
         })
-    },
-    setPrincipal (item) {
-      if (item.principal) {
-        this.setPrincipalTypeOrder(item)
-      }
     }
   }
 }

@@ -124,19 +124,11 @@ class LoginController extends Controller
         $user = UserManager::loginByPincode($request->all());
 
         if (isset($user[0])) {
-            $userPin = User::latest()->where('isLoginPin', '=', true)->get();
-            if (count($userPin) > 0) {
-                foreach ($userPin as $key => $userP) {
-                    $userP['isLoginPin'] = false;
-                    $userP->save();
-                }
-            }
             $this->guard()->login($user[0]);
-            $user[0]['isLoginPin'] = true;
             $user[0]->save();
             $token = $user[0]->createToken(config('services.passport.client_secret'))->accessToken;
             $user[0]['access_token'] = $token;
-            cacheAlias()->set('userPin', $user[0]);
+            cacheAlias()->put('userPin', $user[0]);
             return ResponseHelper::sendResponse($user[0], 'Success login.');
         } else {
             return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);

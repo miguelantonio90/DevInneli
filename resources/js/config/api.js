@@ -39,6 +39,7 @@ const importData = (resource, data) => {
     }
   })
 }
+
 export default {
   get,
   post,
