@@ -30,7 +30,9 @@
 </template>
 
 <script>
+/* eslint-disable vue/require-default-prop */
 export default {
+  name: 'LinearStatistic',
   props: {
     icon: String,
     title: String,

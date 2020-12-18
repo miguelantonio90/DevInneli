@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  name: 'MiniStatistic',
   props: {
     disabled: {
       type: Boolean,

@@ -661,7 +661,7 @@ export const protectedRoute = [
       },
       {
         path: '/admin/403',
-        name: 'Forbidden',
+        name: 'admin_forbidden',
         access: ['Forbidden'],
         meta: {
           title: 'access_denied',
@@ -673,7 +673,7 @@ export const protectedRoute = [
       },
       {
         path: '/admin/user/profile',
-        name: 'Profile',
+        name: 'admin_profile',
         access: ['profile'],
         meta: {
           title: 'profile',
@@ -696,7 +696,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/sales/vending.list',
-            name: 'vending',
+            name: 'admin_vending',
             access: 'vending_list',
             meta: {
               title: 'vending',
@@ -732,7 +732,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/articles/product.list',
-            name: 'product_list',
+            name: 'admin_product_list',
             access: 'article_list',
             meta: {
               title: 'product_list',
@@ -743,7 +743,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/articles/category.list',
-            name: 'category_list',
+            name: 'admin_category_list',
             access: 'category_list',
             meta: {
               title: 'category_list',
@@ -768,7 +768,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/finance/supplier.list',
-            name: 'supplier_list',
+            name: 'admin_supplier_list',
             access: 'supplier_list',
             meta: {
               title: 'supplier_list',
@@ -779,7 +779,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/finance/buy_list',
-            name: 'supply_product',
+            name: 'admin_supply_product',
             access: 'buy_list',
             meta: {
               title: 'supply_product',
@@ -804,7 +804,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/resume/sell_product.list',
-            name: 'sell_product',
+            name: 'admin_sell_product',
             access: 'sell_by_product',
             meta: {
               title: 'sell_product',
@@ -815,7 +815,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/resume/sell_category.list',
-            name: 'sell_category',
+            name: 'admin_sell_category',
             access: 'sell_by_category',
             meta: {
               title: 'sell_category',
@@ -826,7 +826,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/resume/sell_user.list',
-            name: 'sell_user',
+            name: 'admin_sell_user',
             access: 'sell_by_employer',
             meta: {
               title: 'sell_user',
@@ -837,7 +837,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/resume/sell_types_payment.list',
-            name: 'sell_types_payment',
+            name: 'admin_sell_types_payment',
             access: 'sell_by_payments',
             meta: {
               title: 'sell_types_payment',
@@ -861,7 +861,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/users/employer.list',
-            name: 'employer_list',
+            name: 'admin_employer_list',
             access: 'employer_list',
             meta: {
               title: 'employer_list',
@@ -886,7 +886,7 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/clients/client.list',
-            name: 'clients_list',
+            name: 'admin_clients_list',
             access: 'client_list',
             meta: {
               title: 'client_list',

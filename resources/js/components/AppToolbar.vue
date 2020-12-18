@@ -32,7 +32,7 @@
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
       <v-tooltip
-        v-if="showSale"
+        v-if="!isAdminIn"
         bottom
       >
         <template v-slot:activator="{ on, attrs }">
@@ -49,7 +49,7 @@
         ]) }}</span>
       </v-tooltip>
       <v-tooltip
-        v-if="showBuy"
+        v-if="!isAdminIn"
         bottom
       >
         <template v-slot:activator="{ on, attrs }">
@@ -101,7 +101,34 @@
           </v-btn>
         </template>
         <v-list
-          v-if="isManagerIn && isLoggedIn"
+          v-if="!isManagerIn && isAdminIn && isLoggedIn"
+          class="pa-0"
+        >
+          <v-list-item
+            v-for="(item, index) in adminMenus"
+            :key="index"
+            :disabled="item.disabled"
+            :href="item.href"
+            :target="item.target"
+            :to="!item.href ? { name: item.name } : null"
+            rel="noopener"
+            ripple="ripple"
+            @click="item.click"
+          >
+            <v-list-item-action v-if="item.icon">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{
+                  item.title
+                }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list
+          v-if="isManagerIn && !isAdminIn && isLoggedIn"
           class="pa-0"
         >
           <v-list-item
@@ -128,7 +155,7 @@
           </v-list-item>
         </v-list>
         <v-list
-          v-if="!isManagerIn && isLoggedIn"
+          v-if="!isManagerIn && !isAdminIn && isLoggedIn"
           class="pa-0"
         >
           <v-list-item
@@ -211,7 +238,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'user', 'access_permit', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },
@@ -233,10 +260,9 @@ export default {
     breadcrumbs () {
       const { matched } = this.$route
       return matched.map((route, index) => {
-        const to =
-                    index === matched.length - 1
-                      ? this.$route.path
-                      : route.path || route.redirect
+        const to = index === matched.length - 1
+          ? this.$route.path
+          : route.path || route.redirect
         const text = this.$vuetify.lang.t(
           '$vuetify.menu.' + route.meta.title
         )
@@ -276,6 +302,22 @@ export default {
           href: '#',
           title: this.$vuetify.lang.t('$vuetify.menu.turnOn'),
           click: this.handleProfileEmployee
+        }
+      ]
+    },
+    adminMenus () {
+      return [
+        {
+          icon: 'mdi-face',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.profile'),
+          click: this.handleProfileAdmin
+        },
+        {
+          icon: 'mdi-logout',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.logout'),
+          click: this.handleLogout
         }
       ]
     }
@@ -319,6 +361,9 @@ export default {
     },
     handleProfile () {
       this.$router.push({ name: 'Profile' })
+    },
+    handleProfileAdmin () {
+      this.$router.push({ name: 'admin_profile' })
     },
     handlePinLogin () {
       localStorage.removeTokenManager()
