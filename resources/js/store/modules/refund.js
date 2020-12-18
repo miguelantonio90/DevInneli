@@ -74,8 +74,8 @@ const mutations = {
     })
   },
   [REFUND_NEW] (state, { sale, article }) {
-    state.refound.sale = sale
-    state.refound.article = article
+    state.newRefund.sale = sale
+    state.newRefund.article = article
   },
   [REFUND_EDIT] (state, refundId) {
     state.editRefund = Object.assign({}, state.refunds

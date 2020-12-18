@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="toogleRefoundModal"
+    v-model="toogleNewModal"
     max-width="450"
     persistent
   >
@@ -21,7 +21,7 @@
               md="12"
             >
               <v-text-field-money
-                v-model="refound.cant"
+                v-model="newRefund.cant"
                 :label="$vuetify.lang.t('$vuetify.variants.cant')"
                 :rules="formRule.required"
                 required
@@ -40,7 +40,7 @@
               md="12"
             >
               <v-text-field-money
-                v-model="refound.money"
+                v-model="newRefund.money"
                 :label="$vuetify.lang.t('$vuetify.payment.cash')"
                 :rules="formRule.required"
                 required
@@ -62,7 +62,7 @@
         <v-btn
           class="mb-2"
           :disabled="isActionInProgress"
-          @click="toogleRefoundModal(false)"
+          @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -72,7 +72,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="handlerArticle"
+          @click="handlerRefund"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -94,17 +94,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'refound', 'isActionInProgress']),
+    ...mapState('refund', ['saved', 'newRefund', 'isActionInProgress']),
     disabledButon () {
-      return this.refound.cant > 0 || this.refound.money > 0
+      return this.newRefund.cant > 0 || this.newRefund.money > 0
     }
   },
   methods: {
-    ...mapActions('article', ['toogleRefoundModal', 'refoundArticle']),
-    async handlerArticle () {
+    ...mapActions('refund', ['toogleNewModal', 'createRefund']),
+    async handlerRefund () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.refoundArticle(this.refound).catch(() => {
+        await this.createRefund(this.newRefund).catch(() => {
           this.loading = false
         })
       }

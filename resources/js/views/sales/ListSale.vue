@@ -5,7 +5,7 @@
         class="py-0"
         cols="12"
       >
-        <refound v-if="showRefoundModal" />
+        <refound v-if="showNewModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
@@ -426,7 +426,6 @@ export default {
       this.updateSale(item)
     },
     refundArticle (sale, article) {
-      console.log(sale, article)
       this.openNewModal({ sale, article })
     },
     cancelProductPreform (item, art) {
