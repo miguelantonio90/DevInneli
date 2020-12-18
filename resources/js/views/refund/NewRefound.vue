@@ -86,7 +86,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'Refound',
+  name: 'NewRefound',
   data () {
     return {
       formValid: false,
@@ -102,9 +102,45 @@ export default {
   methods: {
     ...mapActions('refund', ['toogleNewModal', 'createRefund']),
     async handlerRefund () {
-      if (this.$refs.form.validate()) {
+      let totalCantRefund = 0
+      let totalMoneyRefund = 0
+      this.newRefund.article.refounds.forEach((v) => {
+        totalCantRefund += parseFloat(v.cant)
+        totalMoneyRefund += parseFloat(v.money)
+      })
+
+      if (this.newRefund.cant > this.newRefund.article.cant - totalCantRefund || this.newRefund.cant < 0) {
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else if (this.newRefund.money > this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund || this.newRefund.money < 0) {
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
+            [totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)]),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createRefund(this.newRefund).catch(() => {
+        await this.createRefund(this.newRefund).then(() => {
+          this.$emit('updateParent')
+        }).catch(() => {
           this.loading = false
         })
       }

@@ -199,6 +199,17 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/sales/EditSale')
+          },
+          {
+            path: '/sales/refund.list',
+            name: 'refund',
+            access: 'refund_list',
+            meta: {
+              title: 'refund',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/refund/ListRefund')
           }
         ]
       },
@@ -676,7 +687,7 @@ export const protectedRoute = [
         path: '/admin/sales',
         component: RouteWrapper,
         access: ['manager_vending'],
-        redirect: '/sales/vending.list',
+        redirect: '/admin/sales/vending.list',
         meta: {
           title: 'vending',
           icon: 'mdi-cash-usd',
@@ -685,6 +696,17 @@ export const protectedRoute = [
         children: [
           {
             path: '/admin/sales/vending.list',
+            name: 'vending',
+            access: 'vending_list',
+            meta: {
+              title: 'vending',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale.vue')
+          },
+          {
+            path: '/admin/sales/refund.list',
             name: 'vending',
             access: 'vending_list',
             meta: {

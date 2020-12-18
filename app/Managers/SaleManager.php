@@ -77,8 +77,10 @@ class SaleManager extends BaseManager
                     ->addSelect(['taxes.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->refounds = DB::table('refunds')
+                    ->join('users', 'users.id','=', 'refunds.created_by')
                     ->where('refunds.article_id', '=', $v->id)
                     ->where('refunds.sale_id', '=', $value->id)
+                    ->select('refunds.*','users.firstName as created_by')
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
                     ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
@@ -96,11 +98,23 @@ class SaleManager extends BaseManager
                     ->get();
                 $sum = 0;
                 $discount = 0;
+                $refund = 0;
+                $cantRefund = 0;
                 foreach ($sales[$key]['articles'][$k]->discount as $j => $i) {
                     $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
                 }
+                foreach ($sales[$key]['articles'][$k]->taxes as $j => $i) {
+                    if($i->type === 'added')
+                        $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
+                foreach ($sales[$key]['articles'][$k]->refounds as $s => $t) {
+                    $refund += $t->money;
+                    $cantRefund += $t->cant;
+                }
+                $sales[$key]['articles'][$k]->moneyRefund = $refund;
+                $sales[$key]['articles'][$k]->cantRefund = $cantRefund;
                 $totalCost += $v->cant * $v->cost;
-                $totalPrice += $v->cant * $v->price + $sum - $discount;
+                $totalPrice += $v->cant * $v->price + $sum - $discount - $refund;
                 $discount = 0;
                 foreach ($sales[$key]['taxes'] as $j => $i) {
                     $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;

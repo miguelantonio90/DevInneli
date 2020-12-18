@@ -5,6 +5,7 @@ const FETCHING_SALES_BY_CATEGORIES = 'FETCHING_SALES_BY_CATEGORIES'
 const FETCHING_SALES_BY_PAYMENT = 'FETCHING_SALES_BY_PAYMENT'
 const FETCHING_SALES_BY_PRODUCT = 'FETCHING_SALES_BY_PRODUCT'
 const FETCHING_SALES_BY_EMPLOYER = 'FETCHING_SALES_BY_EMPLOYER'
+const SWITCH_LOAD_DATA = 'SWITCH_LOAD_DATA'
 const SWITCH_SALE_NEW_MODAL = 'SWITCH_SALE_NEW_MODAL'
 const SWITCH_SALE_EDIT_MODAL = 'SWITCH_SALE_EDIT_MODAL'
 const SWITCH_SALE_SHOW_MODAL = 'SWITCH_SALE_SHOW_MODAL'
@@ -24,6 +25,7 @@ const state = {
   showShowModal: false,
   sales: [],
   avatar: '',
+  loadData: false,
   loading: false,
   saved: false,
   newSale: {
@@ -62,6 +64,9 @@ const state = {
 const mutations = {
   [SWITCH_SALE_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
+  },
+  [SWITCH_LOAD_DATA] (state, loadData) {
+    state.loadData = loadData
   },
   [SWITCH_SALE_EDIT_MODAL] (state, showModal) {
     state.showEditModal = showModal
@@ -179,6 +184,9 @@ const getters = {}
 const actions = {
   toogleNewModal ({ commit }, showModal) {
     commit(SWITCH_SALE_NEW_MODAL, showModal)
+  },
+  switchLoadData ({ commit }, loadData) {
+    commit(SWITCH_LOAD_DATA, loadData)
   },
   toogleEditModal ({ commit }, showModal) {
     commit(SWITCH_SALE_EDIT_MODAL, showModal)
