@@ -4,22 +4,32 @@ import localStorage from '../config/localStorage'
 import rules from '../config/rules'
 import Vuetify from '../plugins/vuetify'
 import Notifications from '../plugins/notifications'
+import CircleStatistic from './widgets/statistic/CircleStatistic'
+import LinearStatistic from './widgets/statistic/LinearStatistic'
+import MiniStatistic from './widgets/statistic/MiniStatistic'
+import VWidget from './VWidget'
+import PlainTable from './widgets/list/PlainTable'
 import AppDataTable from './core/app-data-table/AppDataTable'
-import AvatarPicker from '../components/core/AvatarPicker'
-import AppLoading from '../components/core/AppLoading'
-import MaterialCard from '../components/utils/MaterialCard'
-import VuePincode from '../components/core/VuePincode'
-import CheckOutDialog from '../components/sales/CheckOutDialog'
-import ProductCard from '../components/sales/ProductCard'
-import ProductList from '../components/sales/ProductList'
-import ShoppingCartTotals from '../components/sales/ShoppingCartTotals'
-import ShoppingCart from '../components/sales/ShoppingCart'
-import Coupons from '../components/sales/Coupons'
-import AppColorPicker from '../components/core/AppColorPicker'
-import AppDateTimePicker from '../components/core/AppDateTimePicker'
-import AppUploadMultipleImage from '../components/core/AppUploadMultipleImage'
+import AvatarPicker from './core/AvatarPicker'
+import AppLoading from './core/AppLoading'
+import MaterialCard from './utils/MaterialCard'
+import VuePincode from './core/VuePincode'
+import CheckOutDialog from './sales/CheckOutDialog'
+import ProductCard from './sales/ProductCard'
+import ProductList from './sales/ProductList'
+import ShoppingCartTotals from './sales/ShoppingCartTotals'
+import ShoppingCart from './sales/ShoppingCart'
+import Coupons from './sales/Coupons'
+import AppColorPicker from './core/AppColorPicker'
+import AppDateTimePicker from './core/AppDateTimePicker'
+import AppUploadMultipleImage from './core/AppUploadMultipleImage'
 
 const components = [
+  CircleStatistic,
+  LinearStatistic,
+  MiniStatistic,
+  VWidget,
+  PlainTable,
   AppDataTable,
   AvatarPicker,
   MaterialCard,
