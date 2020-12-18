@@ -498,24 +498,6 @@ class ArticleManager extends BaseManager
         }
     }
 
-    public function refound($data)
-    {
-        $refound = Refund::create([
-            'company_id' => (CompanyManager::getCompanyByAdmin())->id,
-            'cant'=>$data['cant'],
-            'money'=>$data['money'],
-            'sale_id'=>$data['sale']['id'],
-            'article_id'=>$data['article']['article_id']
-        ]);
-        $this->managerBy('new', $refound);
-        $article_shop = ArticlesShops::latest()
-            ->where('article_id', '=',$data['article']['id'])
-            ->where('shop_id', '=',$data['sale']['shop']['shop_id'])
-            ->get()[0];
-        $article_shop->stock += $data['cant'];
-        $this->managerBy('update', $article_shop);
-    }
-
 
 
 }

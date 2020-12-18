@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="toogleRefoundModal"
+    v-model="toogleNewModal"
     max-width="450"
     persistent
   >
@@ -21,7 +21,7 @@
               md="12"
             >
               <v-text-field-money
-                v-model="refound.cant"
+                v-model="newRefund.cant"
                 :label="$vuetify.lang.t('$vuetify.variants.cant')"
                 :rules="formRule.required"
                 required
@@ -40,7 +40,7 @@
               md="12"
             >
               <v-text-field-money
-                v-model="refound.money"
+                v-model="newRefund.money"
                 :label="$vuetify.lang.t('$vuetify.payment.cash')"
                 :rules="formRule.required"
                 required
@@ -62,7 +62,7 @@
         <v-btn
           class="mb-2"
           :disabled="isActionInProgress"
-          @click="toogleRefoundModal(false)"
+          @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
@@ -72,7 +72,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="handlerArticle"
+          @click="handlerRefund"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -86,7 +86,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'Refound',
+  name: 'NewRefound',
   data () {
     return {
       formValid: false,
@@ -94,17 +94,53 @@ export default {
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'refound', 'isActionInProgress']),
+    ...mapState('refund', ['saved', 'newRefund', 'isActionInProgress']),
     disabledButon () {
-      return this.refound.cant > 0 || this.refound.money > 0
+      return this.newRefund.cant > 0 || this.newRefund.money > 0
     }
   },
   methods: {
-    ...mapActions('article', ['toogleRefoundModal', 'refoundArticle']),
-    async handlerArticle () {
-      if (this.$refs.form.validate()) {
+    ...mapActions('refund', ['toogleNewModal', 'createRefund']),
+    async handlerRefund () {
+      let totalCantRefund = 0
+      let totalMoneyRefund = 0
+      this.newRefund.article.refounds.forEach((v) => {
+        totalCantRefund += parseFloat(v.cant)
+        totalMoneyRefund += parseFloat(v.money)
+      })
+
+      if (this.newRefund.cant > this.newRefund.article.cant - totalCantRefund || this.newRefund.cant < 0) {
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else if (this.newRefund.money > this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund || this.newRefund.money < 0) {
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
+            [totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)]),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else if (this.$refs.form.validate()) {
         this.loading = true
-        await this.refoundArticle(this.refound).catch(() => {
+        await this.createRefund(this.newRefund).then(() => {
+          this.$emit('updateParent')
+        }).catch(() => {
           this.loading = false
         })
       }

@@ -66,7 +66,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('article', 'ArticleController');
         Route::post('article/import', 'ArticleController@import');
-        Route::post('article/refound', 'ArticleController@refound');
 
         Route::resource('inventory', 'InventoryController');
 

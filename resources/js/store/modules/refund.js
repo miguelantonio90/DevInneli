@@ -69,13 +69,13 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.refunds.name')]
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.refund')]
       )
     })
   },
   [REFUND_NEW] (state, { sale, article }) {
-    state.refound.sale = sale
-    state.refound.article = article
+    state.newRefund.sale = sale
+    state.newRefund.article = article
   },
   [REFUND_EDIT] (state, refundId) {
     state.editRefund = Object.assign({}, state.refunds
@@ -97,7 +97,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.refunds.name')]
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.refund')]
       )
     })
   },
@@ -109,7 +109,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.refunds.name')]
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.refund')]
       )
     })
   },
@@ -126,7 +126,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(
-        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.refunds.name')]
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.refund')]
       )
     })
   }
@@ -160,6 +160,7 @@ const actions = {
         commit(FETCHING_REFUNDS, data.data)
         commit(REFUND_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('sale/switchLoadData', true)
       }).catch((error) => commit(FAILED_REFUND, error))
   },
   async createRefund ({ commit, dispatch }, newRefund) {

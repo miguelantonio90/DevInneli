@@ -7,6 +7,7 @@ use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
 use App\Managers\ImportManager;
+use App\Managers\RefoundManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,25 +17,18 @@ use Illuminate\Validation\ValidationException;
 class RefoundController extends Controller
 {
     /**
-     * @var ArticleManager
+     * @var RefoundManager
      */
-    private $articleManager;
-
-    /**
-     * @var ImportManager
-     */
-    private $importManger;
+    private $refundManager;
 
     /**
      * ArticleController constructor.
-     * @param ArticleManager $articleManager
-     * @param ImportManager $importManger
+     * @param RefoundManager $refundManager
      */
-    public function __construct(ArticleManager $articleManager, ImportManager $importManger)
+    public function __construct(RefoundManager $refundManager)
     {
         parent::__construct();
-        $this->articleManager = $articleManager;
-        $this->importManger = $importManger;
+        $this->refundManager = $refundManager;
     }
 
 
@@ -45,7 +39,7 @@ class RefoundController extends Controller
     public function index(Request $request)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->findAllByCompany(),
+            $this->refundManager->findAllByCompany(),
             'Articles retrieved successfully.'
         );
     }
@@ -62,8 +56,7 @@ class RefoundController extends Controller
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
-        $this->validator($data)->validate();
-        $user = $this->articleManager->new($data);
+        $user = $this->refundManager->new($data);
         return ResponseHelper::sendResponse(
             $user,
             'Article has created successfully.'
@@ -77,7 +70,8 @@ class RefoundController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255']
+            'cant' => ['required', 'double'],
+            'money' => ['required', 'double'],
         ]);
     }
 
@@ -91,9 +85,8 @@ class RefoundController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
         return ResponseHelper::sendResponse(
-            $this->articleManager->edit($id, $request->all()),
+            $this->refundManager->edit($id, $request->all()),
             'Article has updated successfully.'
         );
     }
@@ -108,7 +101,7 @@ class RefoundController extends Controller
     public function destroy($id)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->delete($id),
+            $this->refundManager->delete($id),
             'Article has deleted successfully.'
         );
     }
@@ -129,7 +122,7 @@ class RefoundController extends Controller
     public function refound(Request $request)
     {
         return ResponseHelper::sendResponse(
-            $this->articleManager->refound($request->all()),
+            $this->refundManager->refound($request->all()),
             'Article has updated successfully.'
         );
     }
