@@ -8,6 +8,7 @@ const SWITCH_ARTICLE_REFOUND_MODAL = 'SWITCH_ARTICLE_REFOUND_MODAL'
 const SWITCH_ARTICLE_IMPORT_MODAL = 'SWITCH_ARTICLE_IMPORT_MODAL'
 const ARTICLE_CREATED = 'ARTICLE_CREATED'
 const ARTICLE_EDIT = 'ARTICLE_EDIT'
+const ARTICLE_REFOUND = 'ARTICLE_REFOUND'
 const ARTICLE_UPDATED = 'ARTICLE_UPDATED'
 const ARTICLE_DELETE = 'ARTICLE_DELETE'
 const ARTICLE_TABLE_LOADING = 'ARTICLE_TABLE_LOADING'
@@ -150,6 +151,11 @@ const mutations = {
       .shift()
     )
   },
+  [ARTICLE_REFOUND] (state, { sale, article }) {
+    console.log(sale, article)
+    state.refound.sale = sale
+    state.refound.article = article
+  },
   [ARTICLE_UPDATED] (state) {
     state.showEditModal = false
     state.showTransfer = false
@@ -242,6 +248,10 @@ const actions = {
     commit(SWITCH_ARTICLE_SHOW_MODAL, true)
     commit(ARTICLE_EDIT, articleId)
   },
+  openRefoundModal ({ commit }, { sale, article }) {
+    commit(ARTICLE_REFOUND, { sale, article })
+    commit(SWITCH_ARTICLE_REFOUND_MODAL, true)
+  },
   async getArticles ({ commit, dispatch }) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
@@ -269,7 +279,7 @@ const actions = {
     commit(ENV_DATA_PROCESS, true)
     // noinspection JSUnresolvedVariable
     await article
-      .importArticles(refound)
+      .refoundArticle(refound)
       .then(({ data }) => {
         commit(SWITCH_ARTICLE_REFOUND_MODAL, false)
         this.dispatch('auth/updateAccess', data.access)

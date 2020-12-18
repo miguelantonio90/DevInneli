@@ -56,6 +56,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('category', 'CategoryController');
 
         Route::resource('payment', 'PaymentController');
+        Route::resource('refund', 'RefoundController');
 
         Route::resource('tax', 'TaxController');
 
@@ -65,6 +66,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('article', 'ArticleController');
         Route::post('article/import', 'ArticleController@import');
+        Route::post('article/refound', 'ArticleController@refound');
 
         Route::resource('inventory', 'InventoryController');
 

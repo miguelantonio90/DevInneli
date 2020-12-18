@@ -23,60 +23,66 @@
           @delete-row="deleteSaleHandler($event)"
         >
           <template v-slot:item.state="{ item }">
-            <template v-if="item.state !== 'preform'">
-              <v-autocomplete
-                v-model="item.state"
-                :disabled="item.state !== 'open'"
-                chips
-                :items="getLocalStates"
-                item-text="text"
-                item-value="value"
-                @input="changeState(item)"
-              >
-                <template v-slot:selection="data">
-                  <v-chip
-                    v-bind="data.attrs"
-                    :input-value="data.item.value"
-                    @click="data.select"
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <template v-if="item.state !== 'preform'">
+                  <v-autocomplete
+                    v-model="item.state"
+                    :disabled="item.state !== 'open'"
+                    chips
+                    :items="getLocalStates"
+                    item-text="text"
+                    item-value="value"
+                    v-bind="attrs"
+                    v-on="on"
+                    @input="changeState(item)"
                   >
-                    <i :style="'color: ' + data.item.color">
-                      <v-icon left>
-                        {{ data.item.icon }}
-                      </v-icon>
-                      {{ data.item.text }}</i>
+                    <template v-slot:selection="data">
+                      <v-chip
+                        v-bind="data.attrs"
+                        :input-value="data.item.value"
+                        @click="data.select"
+                      >
+                        <i :style="'color: ' + data.item.color">
+                          <v-icon left>
+                            {{ data.item.icon }}
+                          </v-icon>
+                          {{ data.item.text }}</i>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-item-content v-text="data.item" />
+                      </template>
+                      <template v-else>
+                        <v-list-item-icon>
+                          <v-icon
+                            left
+                            :style="'color: ' + data.item.color"
+                          >
+                            {{ data.item.icon }}
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            :style="'color: ' + data.item.color"
+                          >
+                            {{ data.item.text }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </template>
+                  </v-autocomplete>
+                </template>
+                <template v-else>
+                  <v-chip>
+                    <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+                    </i>
                   </v-chip>
                 </template>
-                <template v-slot:item="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item" />
-                  </template>
-                  <template v-else>
-                    <v-list-item-icon>
-                      <v-icon
-                        left
-                        :style="'color: ' + data.item.color"
-                      >
-                        {{ data.item.icon }}
-                      </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        :style="'color: ' + data.item.color"
-                      >
-                        {{ data.item.text }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
-            </template>
-            <template v-else>
-              <v-chip>
-                <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
-                </i>
-              </v-chip>
-            </template>
+              </template>
+            </v-tooltip>
           </template>
           <template v-slot:[`item.pay`]="{ item }">
             {{
@@ -313,7 +319,8 @@ export default {
       'sales',
       'isTableLoading'
     ]),
-    ...mapState('article', ['articles', 'showRefoundModal']),
+    ...mapState('article', ['articles']),
+    ...mapState('refund', ['showNewModal']),
     ...mapGetters('auth', ['user', 'access_permit']),
     getTableColumns () {
       return [
@@ -413,12 +420,14 @@ export default {
       'updateSale',
       'deleteSale'
     ]),
-    ...mapActions('article', ['getArticles', 'toogleRefoundModal']),
+    ...mapActions('article', ['getArticles']),
+    ...mapActions('refund', ['openNewModal']),
     changeState (item) {
       this.updateSale(item)
     },
-    refundArticle (item) {
-      this.toogleRefoundModal(true)
+    refundArticle (sale, article) {
+      console.log(sale, article)
+      this.openNewModal({ sale, article })
     },
     cancelProductPreform (item, art) {
       console.log(item, art)

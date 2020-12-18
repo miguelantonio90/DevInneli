@@ -12,32 +12,9 @@ use App\Variant;
 use Exception;
 use Illuminate\Auth\AuthManager;
 
-class ArticleManager extends BaseManager
+class RefoundManager extends BaseManager
 {
-    /**
-     * @var AuthManager
-     */
-    protected $authManager;
 
-    /**
-     * @var VariantManager
-     */
-    private $variantManager;
-
-
-    /**
-     * @var ShopManager
-     */
-    private $shopManager;
-
-    /**
-     * ArticleManager constructor.
-     * @param VariantManager $variantManager
-     */
-    public function __construct(VariantManager $variantManager)
-    {
-        $this->variantManager = $variantManager;
-    }
 
 
     /**
@@ -62,7 +39,7 @@ class ArticleManager extends BaseManager
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
-            $articles = Articles::latest()
+            $articles = Refund::latest()
                 ->where('company_id', '=', $company->id)
                 ->with('company')
                 ->with([

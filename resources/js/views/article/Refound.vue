@@ -6,11 +6,7 @@
   >
     <v-card>
       <v-card-title>
-        <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.discount'),
-          ])
-        }}</span>
+        <span class="headline">{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
       </v-card-title>
       <v-card-text>
         <v-form
@@ -108,7 +104,7 @@ export default {
     async handlerArticle () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.createDiscount(this.refound).catch(() => {
+        await this.refoundArticle(this.refound).catch(() => {
           this.loading = false
         })
       }

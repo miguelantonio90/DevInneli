@@ -186,7 +186,7 @@ export default {
           sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_employer')
         })
         this.access_permit.filter(permit => permit.title.name === 'manager_assistence')[0].title.value === true ? this.statistic.push({
-          icon: 'mdi-account-star',
+          icon: 'mdi-cards',
           sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_assistence'),
           goToClick: 'assistance'
         }) : this.statisticDeny.push({

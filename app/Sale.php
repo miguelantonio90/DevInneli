@@ -75,4 +75,9 @@ class Sale extends Model
     {
         return $this->belongsToMany(Discount::class, 'sales_discounts');
     }
+
+    public function refounds():HasMany
+    {
+        return $this->hasMany(SalesArticlesShops::class);
+    }
 }

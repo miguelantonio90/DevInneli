@@ -31,6 +31,7 @@ class SaleManager extends BaseManager
                 ->with('articles_shops')
                 ->with('taxes')
                 ->with('discounts')
+                ->with('refounds')
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
@@ -74,6 +75,10 @@ class SaleManager extends BaseManager
                     ->join('articles', 'articles.id', '=', 'article_tax.article_id')
                     ->where('articles.id', '=', $v->id)
                     ->addSelect(['taxes.*'])
+                    ->get();
+                $sales[$key]['articles'][$k]->refounds = DB::table('refunds')
+                    ->where('refunds.article_id', '=', $v->id)
+                    ->where('refunds.sale_id', '=', $value->id)
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
                     ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
