@@ -99,6 +99,14 @@ class SaleController extends Controller
         );
     }
 
+    public function saleByEmployer(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->saleManager->saleEmployer($request->all()),
+            'Sale by employer retrieved successfully.'
+        );
+    }
+
     /**
      * Remove the specified resource from storage.
      *

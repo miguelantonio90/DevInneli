@@ -2066,6 +2066,17 @@ const countries = {
     emoji: '🇶🇦',
     emojiU: 'U+1F1F6 U+1F1E6'
   },
+  RD: {
+    name: 'Republica Dominicana',
+    native: 'Republica Dominicana',
+    code: '262',
+    continent: 'AF',
+    capital: 'Saint-Denis',
+    currency: 'EUR',
+    languages: ['es'],
+    emoji: '🇩🇴',
+    emojiU: 'U+1F1F4 U+1F1E9'
+  },
   RE: {
     name: 'Réunion',
     native: 'La Réunion',
@@ -2849,10 +2860,22 @@ const getCurrencyToSelect = () => {
   return result
 }
 
+const getSector = () => {
+  let result = []
+  result =
+        [{ value: 'agricultural' }, { value: 'arts' }, { value: 'automotive' }, { value: 'construction' }, { value: 'consultancy' },
+          { value: 'drink' }, { value: 'education' }, { value: 'entertainment' }, { value: 'food' }, { value: 'health' }, { value: 'home' },
+          { value: 'hostelry' }, { value: 'industrial' }, { value: 'ironmongery' }, { value: 'rental' }, { value: 'restaurant' },
+          { value: 'service' }, { value: 'shops' }, { value: 'technologies' }, { value: 'tourism' }, { value: 'transport' },
+          { value: 'real_state' }, { value: 'others' }]
+  return result
+}
+
 export default {
   continents: continents,
   countries: countries,
   payments: payments,
+  getSector: getSector,
   getCountryToSelect: getCountryToSelect,
   getPaymentToSelect: getPaymentToSelect,
   getCurrencyToSelect: getCurrencyToSelect

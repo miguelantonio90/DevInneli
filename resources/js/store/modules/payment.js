@@ -83,6 +83,9 @@ const mutations = {
   [LOAD_PAYMENTS_CONST] (state) {
     state.paymentsConst = [
       {
+        name: this._vm.$language.t('$vuetify.payment.counted'),
+        value: 'counted'
+      }, {
         name: this._vm.$language.t('$vuetify.payment.cash'),
         value: 'cash'
       },

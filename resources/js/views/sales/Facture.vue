@@ -3,7 +3,9 @@
     <v-row>
       <v-col
         v-if="edit ? editSale.client:newSale.client"
-        cols="md-7"
+        class="py-0"
+        cols="12"
+        md="7"
       >
         <b>{{ $vuetify.lang.t('$vuetify.menu.client') }}</b>:<br>
         {{ edit ?
@@ -13,7 +15,9 @@
       <v-spacer />
       <v-col
         v-if="edit ? editSale.no_facture:newSale.no_facture"
-        cols="md-5"
+        class="py-0"
+        cols="12"
+        md="5"
       >
         <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
         {{ edit ? editSale.no_facture:newSale.no_facture }}

@@ -21,5 +21,8 @@ export default {
   },
   fetchSaleByProduct (filter) {
     return api.post('sale/product', filter)
+  },
+  fetchSaleByEmployer (filter) {
+    return api.post('sale/employer', filter)
   }
 }

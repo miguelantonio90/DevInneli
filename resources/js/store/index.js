@@ -17,6 +17,7 @@ import company from './modules/company'
 import category from './modules/category'
 import article from './modules/article'
 import statics from './modules/statics'
+import refund from './modules/refund'
 import settings from './modules/settings'
 import products from './modules/products'
 import shoppingCart from './modules/shoppingCart'
@@ -53,6 +54,7 @@ const store = new Vuex.Store({
     shop,
     category,
     client,
+    refund,
     supplier,
     article,
     company,

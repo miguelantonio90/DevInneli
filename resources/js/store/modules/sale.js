@@ -4,6 +4,7 @@ const FETCHING_SALES = 'FETCHING_SALES'
 const FETCHING_SALES_BY_CATEGORIES = 'FETCHING_SALES_BY_CATEGORIES'
 const FETCHING_SALES_BY_PAYMENT = 'FETCHING_SALES_BY_PAYMENT'
 const FETCHING_SALES_BY_PRODUCT = 'FETCHING_SALES_BY_PRODUCT'
+const FETCHING_SALES_BY_EMPLOYER = 'FETCHING_SALES_BY_EMPLOYER'
 const SWITCH_SALE_NEW_MODAL = 'SWITCH_SALE_NEW_MODAL'
 const SWITCH_SALE_EDIT_MODAL = 'SWITCH_SALE_EDIT_MODAL'
 const SWITCH_SALE_SHOW_MODAL = 'SWITCH_SALE_SHOW_MODAL'
@@ -54,7 +55,8 @@ const state = {
   isTableLoading: false,
   salesByCategories: [],
   salesByPayments: [],
-  salesByProducts: []
+  salesByProducts: [],
+  salesByEmployer: []
 }
 
 const mutations = {
@@ -166,6 +168,9 @@ const mutations = {
   },
   [FETCHING_SALES_BY_PRODUCT] (state, salesByProduct) {
     state.salesByProducts = salesByProduct
+  },
+  [FETCHING_SALES_BY_EMPLOYER] (state, salesByEmployer) {
+    state.salesByEmployer = salesByEmployer
   }
 }
 
@@ -228,6 +233,17 @@ const actions = {
       .fetchSaleByProduct(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_PRODUCT, data.data)
+        commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_SALE, error))
+  },
+  async getSaleByEmployer ({ commit }, filter) {
+    commit(SALE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await sale
+      .fetchSaleByEmployer(filter)
+      .then(({ data }) => {
+        commit(FETCHING_SALES_BY_EMPLOYER, data.data)
         commit(SALE_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))

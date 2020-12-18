@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Shop;
+use App\Tax;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -14,16 +15,24 @@ class ShopManager extends BaseManager
      */
     public function findAllByCompany()
     {
-        $company = CompanyManager::getCompanyByAdmin();
-        $created_by = cache()->get('userPin')['id'];
+        if (auth()->user()['isAdmin'] === 1) {
 
-        return Shop::where('company_id', '=', $company->id)
-            ->with([
-                'users' => function ($q) use ($created_by) {
-                    $q->where('users.id', '=', $created_by);
-                }
-            ])
-            ->get();
+            $shops = Shop::latest()
+                ->with('company')
+                ->get();
+        } else {
+            $company = CompanyManager::getCompanyByAdmin();
+            $created_by = cache()->get('userPin')['id'];
+
+            $shops = Shop::where('company_id', '=', $company->id)
+                ->with([
+                    'users' => function ($q) use ($created_by) {
+                        $q->where('users.id', '=', $created_by);
+                    }
+                ])
+                ->get();
+        }
+        return $shops;
     }
 
     /**

@@ -46,6 +46,18 @@ class UserController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getAll(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->userManager->findAllByCompany(),
+            'Users retrieved successfully.'
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
@@ -134,6 +146,14 @@ class UserController extends Controller
     {
         return ResponseHelper::sendResponse(
             $this->userManager->delete($id),
+            'Users has deleted successfully.'
+        );
+    }
+
+    public function userLogin()
+    {
+        return ResponseHelper::sendResponse(
+            cache()->get('userPin'),
             'Users has deleted successfully.'
         );
     }

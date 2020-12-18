@@ -16,6 +16,7 @@ class CreateCompaniesTable extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('country')->nullable();
+            $table->string('sector')->default('others');
             $table->string('currency')->nullable();
             $table->string('address')->nullable();
             $table->longText('logo')->nullable();

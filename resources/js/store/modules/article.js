@@ -4,9 +4,11 @@ const FETCHING_ARTICLES = 'FETCHING_ARTICLES'
 const SWITCH_ARTICLE_NEW_MODAL = 'SWITCH_ARTICLE_NEW_MODAL'
 const SWITCH_ARTICLE_EDIT_MODAL = 'SWITCH_ARTICLE_EDIT_MODAL'
 const SWITCH_ARTICLE_SHOW_MODAL = 'SWITCH_ARTICLE_SHOW_MODAL'
+const SWITCH_ARTICLE_REFOUND_MODAL = 'SWITCH_ARTICLE_REFOUND_MODAL'
 const SWITCH_ARTICLE_IMPORT_MODAL = 'SWITCH_ARTICLE_IMPORT_MODAL'
 const ARTICLE_CREATED = 'ARTICLE_CREATED'
 const ARTICLE_EDIT = 'ARTICLE_EDIT'
+const ARTICLE_REFOUND = 'ARTICLE_REFOUND'
 const ARTICLE_UPDATED = 'ARTICLE_UPDATED'
 const ARTICLE_DELETE = 'ARTICLE_DELETE'
 const ARTICLE_TABLE_LOADING = 'ARTICLE_TABLE_LOADING'
@@ -21,6 +23,7 @@ const state = {
   showTransfer: false,
   showEditModal: false,
   showShowModal: false,
+  showRefoundModal: false,
   articles: [],
   avatar: '',
   loading: false,
@@ -63,6 +66,12 @@ const state = {
     variants_shops: [],
     images: []
   },
+  refound: {
+    sale: {},
+    article: {},
+    cant: 0,
+    money: 0
+  },
   importArticle: {
     type: 'loyverse',
     file: ''
@@ -74,6 +83,9 @@ const state = {
 }
 
 const mutations = {
+  [SWITCH_ARTICLE_REFOUND_MODAL] (state, showModal) {
+    state.showRefoundModal = showModal
+  },
   [SWITCH_TRANSFER_MODAL] (state, showModal) {
     state.showTransfer = showModal
   },
@@ -139,6 +151,11 @@ const mutations = {
       .shift()
     )
   },
+  [ARTICLE_REFOUND] (state, { sale, article }) {
+    console.log(sale, article)
+    state.refound.sale = sale
+    state.refound.article = article
+  },
   [ARTICLE_UPDATED] (state) {
     state.showEditModal = false
     state.showTransfer = false
@@ -203,6 +220,9 @@ const mutations = {
 const getters = {}
 
 const actions = {
+  toogleRefoundModal ({ commit }, showModal) {
+    commit(SWITCH_ARTICLE_REFOUND_MODAL, showModal)
+  },
   toogleTransferModal ({ commit }, showModal) {
     commit(SWITCH_TRANSFER_MODAL, showModal)
   },
@@ -228,6 +248,10 @@ const actions = {
     commit(SWITCH_ARTICLE_SHOW_MODAL, true)
     commit(ARTICLE_EDIT, articleId)
   },
+  openRefoundModal ({ commit }, { sale, article }) {
+    commit(ARTICLE_REFOUND, { sale, article })
+    commit(SWITCH_ARTICLE_REFOUND_MODAL, true)
+  },
   async getArticles ({ commit, dispatch }) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
@@ -248,6 +272,16 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/toogleImportModal', false, { root: true })
         dispatch('article/getArticles', null, { root: true })
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async refoundArticle ({ commit, dispatch }, refound) {
+    commit(ENV_DATA_PROCESS, true)
+    // noinspection JSUnresolvedVariable
+    await article
+      .refoundArticle(refound)
+      .then(({ data }) => {
+        commit(SWITCH_ARTICLE_REFOUND_MODAL, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },

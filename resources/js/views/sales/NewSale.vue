@@ -522,6 +522,7 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
+          with: '15%',
           value: 'name',
           select_filter: true
         },

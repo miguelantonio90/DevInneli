@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('user', 'UserController');
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
+        Route::post('user/userLogin', 'UserController@userLogin')->name('users.userLogin');
 
         Route::resource('access', 'AccessController');
         Route::resource('keys', 'KeyPositionsController');
@@ -55,6 +56,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('category', 'CategoryController');
 
         Route::resource('payment', 'PaymentController');
+        Route::resource('refund', 'RefoundController');
 
         Route::resource('tax', 'TaxController');
 
@@ -64,6 +66,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('article', 'ArticleController');
         Route::post('article/import', 'ArticleController@import');
+        Route::post('article/refound', 'ArticleController@refound');
 
         Route::resource('inventory', 'InventoryController');
 
@@ -71,6 +74,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');
         Route::post('sale/payment', 'SaleController@salePayment')->name('salePayment');
         Route::post('sale/product', 'SaleController@saleByProduct')->name('saleByProduct');
+        Route::post('sale/employer', 'SaleController@saleByEmployer')->name('saleByEmployer');
 
         Route::resource('assistance', 'AssistanceController');
 

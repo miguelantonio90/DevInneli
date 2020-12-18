@@ -5,6 +5,7 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
+use App\Refund;
 use App\Shop;
 use App\User;
 use App\Variant;
@@ -45,9 +46,19 @@ class ArticleManager extends BaseManager
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $articles = Articles::latest()
+            $articles =  Articles::latest()
+                ->with('company')
+                ->with('category')
+                ->with('composites')
                 ->with('articlesShops')
-                ->with('categories')
+                ->with('variants')
+                ->with('tax')
+                ->with('variantValues')
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('article_images.default', 'desc');
+                    }
+                ])
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
@@ -485,6 +496,24 @@ class ArticleManager extends BaseManager
                 $this->variantManager->deleteArticlesShops($value->id);
             }
         }
+    }
+
+    public function refound($data)
+    {
+        $refound = Refund::create([
+            'company_id' => (CompanyManager::getCompanyByAdmin())->id,
+            'cant'=>$data['cant'],
+            'money'=>$data['money'],
+            'sale_id'=>$data['sale']['id'],
+            'article_id'=>$data['article']['article_id']
+        ]);
+        $this->managerBy('new', $refound);
+        $article_shop = ArticlesShops::latest()
+            ->where('article_id', '=',$data['article']['id'])
+            ->where('shop_id', '=',$data['sale']['shop']['shop_id'])
+            ->get()[0];
+        $article_shop->stock += $data['cant'];
+        $this->managerBy('update', $article_shop);
     }
 
 

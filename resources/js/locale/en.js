@@ -59,7 +59,9 @@ export default {
   menu: {
     setting: 'Setting',
     home: 'Home',
+    shops: 'Shops',
     dashboard: 'Dashboard',
+    admin_dashboard: 'Dashboard',
     access_denied: 'Access Deny',
     verify: 'Email Verify',
     welcome: 'Welcome',
@@ -231,6 +233,7 @@ export default {
       super_manager: 'CEO Manager'
     },
     access: {
+      just_yours: 'Just the user',
       manager_help: 'Define the actions',
       manager_article: 'Manager Articles',
       article_list: 'List Articles',
@@ -263,7 +266,7 @@ export default {
       buy_add: 'Create Buy',
       buy_edit: 'Edit Buy',
       buy_delete: 'Delete Buy',
-      manager_sell: 'Resume de Sales',
+      manager_sell: 'Resume of Sales',
       sell_by_product: 'Resume of Sales por Articles',
       sell_by_category: 'Resume of Sales por Category',
       sell_by_employer: 'Resume of Sales por Employers',
@@ -335,7 +338,7 @@ export default {
   },
   component: {
     select: 'Select Columns',
-    others: 'others',
+    others: 'Others',
     fieldColor: 'Please choose a color',
     select_all: 'Select All',
     select_one: 'Select',
@@ -419,6 +422,7 @@ export default {
   },
   payment: {
     name: 'Payment Method',
+    counted: 'Counted',
     cash: 'Cash',
     card: 'Card',
     check: 'Check',
@@ -478,13 +482,40 @@ export default {
     emptyArticle: 'This shop no have article. Please supply the shop'
   },
   report: {
-    top5: 'Top 5 elements',
+    top5Category: 'Top 5 Categories that sell the most',
+    top5Payment: 'Top 5 Payments that sell the most',
     netPrice: 'Net Sales',
     grossSale: 'Gross Sale',
     discountsSale: 'Discounts Sales',
     graphics: 'Graphic',
     barGraphics: 'Bar Graphic',
     margin: 'Margin'
+  },
+  sector: {
+    name: 'Sector',
+    arts: 'Arts',
+    rental: 'Rental',
+    food: 'Food',
+    drink: 'Drinks',
+    health: 'Health',
+    agricultural: 'Agricultural',
+    industrial: 'Industrial',
+    hostelry: 'Hostelry',
+    home: 'Home',
+    shops: 'Shops',
+    ironmongery: 'Ironmongery',
+    restaurant: 'Restaurants',
+    tourism: 'Tourism',
+    construction: 'Construction',
+    service: 'Services',
+    technologies: 'Technologies',
+    consultancy: 'Consultancy',
+    education: 'Education',
+    entertainment: 'Entertainment',
+    automotive: 'Automotive',
+    transport: 'Transport',
+    real_state: 'Real State',
+    others: 'Otros'
   },
   ...en
 }

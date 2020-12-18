@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapState('auth', ['isLoggedIn', 'userData']),
     ...mapGetters(['errors']),
-    ...mapGetters('auth', ['isManagerIn', 'pinSuccess', 'user']),
+    ...mapGetters('auth', ['isManagerIn', 'isAdminIn', 'pinSuccess', 'user']),
     getCompanyName () {
       return `${this.user.company.name}`
     }
@@ -80,7 +80,11 @@ export default {
       const email = this.user.email
       await this.sendLoginPincode({ email, pincode }).then(() => {
         if (this.pinSuccess) {
-          if (this.isLoggedIn && this.isManagerIn) {
+          if (this.isLoggedIn && this.isAdminIn) {
+            this.loading = false
+            this.$refs.pincodeInput.triggerSuccess()
+            this.$router.push({ name: '/admin/dashboard' })
+          } else if (this.isLoggedIn && this.isManagerIn) {
             this.loading = false
             this.$refs.pincodeInput.triggerSuccess()
             this.$router.push('/dashboard')

@@ -17,21 +17,13 @@ class UserManager extends BaseManager
      */
     public static function loginByPincode($login)
     {
-
         $company = CompanyManager::getCompanyByEmail($login['email']);
-
-        return User::where('pinCode', '=', $login['pincode'])
-            ->where('isAdmin', '=', '0')
+        $user = User::where('pinCode', '=', $login['pincode'])
             ->where('company_id', '=', $company->id)
             ->with('company')
-            ->with([
-                'position' => function ($q) use ($company) {
-                    $q->where('positions.company_id', '=', $company->id)
-                        ->where('positions.accessPin', '=', 1);
-                }
-            ])
             ->with('shops')
             ->get();
+        return $user;
     }
 
     /**
@@ -41,7 +33,11 @@ class UserManager extends BaseManager
     {
         if (auth()->user()['isAdmin'] === 1) {
             $users = User::latest()
+                ->where('isAdmin', '<>', '1')
                 ->with('company')
+                ->with('position')
+                ->with('shops')
+                ->orderBy('created_at', 'ASC')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
@@ -56,6 +52,7 @@ class UserManager extends BaseManager
                 ])
                 ->with('shops')
                 ->orderBy('created_at', 'ASC')
+                ->groupBy()
                 ->get();
         }
         foreach ($users as $k => $user) {

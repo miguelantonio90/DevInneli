@@ -98,86 +98,92 @@ class RegisterController extends Controller
             'country' => $data['country']['id'],
             'currency' => $data['country']['currency']
         ]);
+        $company->sector = $data['sector'];
+        $company->save();
         if ($company) {
             $key = KeyPosition::create([
                 'key' => 'CEO',
                 'access_permit' => json_encode([
                     [
-                        'title' => ['name' => 'manager_article', 'value' => false],
-                        'actions' => ['article_list' => true, 'article_add' => true, 'article_edit' => true, 'article_delete' => true, 'article_transport' => true]
+                        'title' => ['name' => 'dashboard', 'value' => true],
+                        'actions' => ['dashboard' => true]
+                    ],
+                    [
+                        'title' => ['name' => 'manager_article', 'value' => true],
+                            'actions' => ['just_yours' => false, 'article_list' => true, 'article_add' => true, 'article_edit' => true, 'article_delete' => true, 'article_transport' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_vending', 'value' => true],
-                        'actions' => ['vending_list' => true, 'vending_add' => true, 'vending_edit' => true, 'vending_delete' => true]
+                        'actions' => ['just_yours' => false, 'vending_list' => true, 'vending_add' => true, 'vending_edit' => true, 'vending_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_category', 'value' => true],
-                        'actions' => ['category_list' => true, 'category_add' => true, 'category_edit' => true, 'category_delete' => true]
+                        'actions' => ['just_yours' => false, 'category_list' => true, 'category_add' => true, 'category_edit' => true, 'category_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_mod', 'value' => true],
-                        'actions' => ['mod_list' => true, 'mod_add' => true, 'mod_edit' => true, 'mod_delete' => true]
+                        'actions' => ['just_yours' => false, 'mod_list' => true, 'mod_add' => true, 'mod_edit' => true, 'mod_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_supplier', 'value' => true],
-                        'actions' => ['supplier_list' => true, 'supplier_add' => true, 'supplier_edit' => true, 'supplier_delete' => true]
+                        'actions' => ['just_yours' => false, 'supplier_list' => true, 'supplier_add' => true, 'supplier_edit' => true, 'supplier_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_buy', 'value' => true],
-                        'actions' => ['buy_list' => true, 'buy_add' => true, 'buy_edit' => true, 'buy_delete' => true]
+                        'actions' => ['just_yours' => false, 'buy_list' => true, 'buy_add' => true, 'buy_edit' => true, 'buy_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_sell', 'value' => true],
                         'actions' =>
-                            ['sell_by_product' => true, 'sell_by_category' => true, 'sell_by_employer' => true, 'sell_by_payments' => true]
+                            ['just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true, 'sell_by_employer' => true, 'sell_by_payments' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => true],
-                        'actions' => ['employer_list' => true, 'employer_add' => true, 'employer_edit' => true, 'employer_delete' => true]
+                        'actions' => ['just_yours' => false, 'employer_list' => true, 'employer_add' => true, 'employer_edit' => true, 'employer_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_assistence', 'value' => true],
-                        'actions' => ['assistance_list' => true, 'assistance_add' => true, 'assistance_edit' => true, 'assistance_delete' => true]
+                        'actions' => ['just_yours' => false, 'assistance_list' => true, 'assistance_add' => true, 'assistance_edit' => true, 'assistance_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_client', 'value' => true],
-                        'actions' => ['client_list' => true, 'client_add' => true, 'client_edit' => true, 'client_delete' => true]
+                        'actions' => ['just_yours' => false, 'client_list' => true, 'client_add' => true, 'client_edit' => true, 'client_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_shop', 'value' => true],
-                        'actions' => ['shop_list' => true, 'shop_add' => true, 'shop_edit' => true, 'shop_delete' => true]
+                        'actions' => ['just_yours' => false, 'shop_list' => true, 'shop_add' => true, 'shop_edit' => true, 'shop_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_key', 'value' => true],
-                        'actions' => ['key_list' => true, 'key_add' => true, 'key_edit' => true, 'key_delete' => true]
+                        'actions' => ['just_yours' => false, 'key_list' => true, 'key_add' => true, 'key_edit' => true, 'key_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_access', 'value' => true],
-                        'actions' => ['access_list' => true, 'access_add' => true, 'access_edit' => true, 'access_delete' => true]
+                        'actions' => ['just_yours' => false, 'access_list' => true, 'access_add' => true, 'access_edit' => true, 'access_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_payment', 'value' => true],
-                        'actions' => ['payment_list' => true, 'payment_add' => true, 'payment_edit' => true, 'payment_delete' => true]
+                        'actions' => ['just_yours' => false, 'payment_list' => true, 'payment_add' => true, 'payment_edit' => true, 'payment_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_expense_category', 'value' => true],
-                        'actions' => ['expense_category_list' => true, 'expense_category_add' => true, 'expense_category_edit' => true, 'expense_category_delete' => true]
+                        'actions' => ['just_yours' => false, 'expense_category_list' => true, 'expense_category_add' => true, 'expense_category_edit' => true, 'expense_category_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_exchange_rate', 'value' => true],
-                        'actions' => ['exchange_rate_list' => true, 'exchange_rate_add' => true, 'exchange_rate_edit' => true, 'exchange_rate_delete' => true]
+                        'actions' => ['just_yours' => false, 'exchange_rate_list' => true, 'exchange_rate_add' => true, 'exchange_rate_edit' => true, 'exchange_rate_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_type_of_order', 'value' => true],
-                        'actions' => ['type_of_order_list' => true, 'type_of_order_add' => true, 'type_of_order_edit' => true, 'type_of_order_delete' => true]
+                        'actions' => ['just_yours' => false, 'type_of_order_list' => true, 'type_of_order_add' => true, 'type_of_order_edit' => true, 'type_of_order_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_tax', 'value' => true],
-                        'actions' => ['tax_list' => true, 'tax_add' => true, 'tax_edit' => true, 'tax_delete' => true]
+                        'actions' => ['just_yours' => false, 'tax_list' => true, 'tax_add' => true, 'tax_edit' => true, 'tax_delete' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_discount', 'value' => true],
-                        'actions' => ['discount_list' => true, 'discount_add' => true, 'discount_edit' => true, 'discount_delete' => true]
+                        'actions' => ['just_yours' => false, 'discount_list' => true, 'discount_add' => true, 'discount_edit' => true, 'discount_delete' => true]
                     ]
                 ]),
             ]);
@@ -202,77 +208,99 @@ class RegisterController extends Controller
                         'key' => 'Supervisor',
                         'access_permit' => json_encode([
                             [
+                                'title' => ['name' => 'dashboard', 'value' => true],
+                                'actions' => ['dashboard' => true]
+                            ],
+                            [
                                 'title' => ['name' => 'manager_article', 'value' => true],
-                                'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
+                                'actions' => ['article_list' => true, 'article_add' => false, 'article_edit' => false,
+                                    'article_delete' => false, 'article_transport' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_vending', 'value' => true],
-                                'actions' => ['vending_list' => true, 'vending_add' => false, 'vending_edit' => false, 'vending_delete' => false,]
+                                'actions' => ['vending_list' => true, 'vending_add' => false, 'vending_edit' => false,
+                                    'vending_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_category', 'value' => false],
-                                'actions' => ['category_list' => false, 'category_add' => false, 'category_edit' => false, 'category_delete' => false,]
+                                'actions' => ['category_list' => false, 'category_add' => false, 'category_edit' => false,
+                                    'category_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_mod', 'value' => false],
-                                'actions' => ['mod_list' => false, 'mod_add' => false, 'mod_edit' => false, 'mod_delete' => false]
+                                'actions' => ['mod_list' => false, 'mod_add' => false, 'mod_edit' => false,
+                                    'mod_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_supplier', 'value' => false],
-                                'actions' => ['supplier_list' => false, 'supplier_add' => false, 'supplier_edit' => false, 'supplier_delete' => false]
+                                'actions' => ['supplier_list' => false, 'supplier_add' => false, 'supplier_edit' => false,
+                                    'supplier_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_buy', 'value' => false],
-                                'actions' => ['buy_list' => false, 'buy_add' => false, 'buy_edit' => false, 'buy_delete' => false]
+                                'actions' => ['buy_list' => false, 'buy_add' => false, 'buy_edit' => false,
+                                    'buy_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_sell', 'value' => true],
                                 'actions' =>
-                                    ['sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false, 'sell_by_payments' => false]
+                                    ['sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false,
+                                        'sell_by_payments' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_employer', 'value' => false],
-                                'actions' => ['employer_list' => false, 'employer_add' => false, 'employer_edit' => false, 'employer_delete' => false]
+                                'actions' => ['employer_list' => false, 'employer_add' => false, 'employer_edit' => false,
+                                    'employer_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_assistence', 'value' => false],
-                                'actions' => ['assistance_list' => false, 'assistance_add' => false, 'assistance_edit' => false, 'assistance_delete' => false]
+                                'actions' => ['assistance_list' => false, 'assistance_add' => false,
+                                    'assistance_edit' => false, 'assistance_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_client', 'value' => false],
-                                'actions' => ['client_list' => false, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
+                                'actions' => ['client_list' => false, 'client_add' => false, 'client_edit' => false,
+                                    'client_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_shop', 'value' => true],
-                                'actions' => ['shop_list' => true, 'shop_add' => false, 'shop_edit' => false, 'shop_delete' => false]
+                                'actions' => ['shop_list' => true, 'shop_add' => false, 'shop_edit' => false,
+                                    'shop_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_access', 'value' => false],
-                                'actions' => ['access_list' => false, 'access_add' => false, 'access_edit' => false, 'access_delete' => false]
+                                'actions' => ['access_list' => false, 'access_add' => false, 'access_edit' => false,
+                                    'access_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_payment', 'value' => false],
-                                'actions' => ['payment_list' => false, 'payment_add' => false, 'payment_edit' => false, 'payment_delete' => false]
+                                'actions' => ['payment_list' => false, 'payment_add' => false, 'payment_edit' => false,
+                                    'payment_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_expense_category', 'value' => false],
-                                'actions' => ['expense_category_list' => false, 'expense_category_add' => false, 'expense_category_edit' => false, 'expense_category_delete' => false]
+                                'actions' => ['expense_category_list' => false, 'expense_category_add' => false,
+                                    'expense_category_edit' => false, 'expense_category_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_exchange_rate', 'value' => false],
-                                'actions' => ['exchange_rate_list' => false, 'exchange_rate_add' => false, 'exchange_rate_edit' => false, 'exchange_rate_delete' => false]
+                                'actions' => ['exchange_rate_list' => false, 'exchange_rate_add' => false,
+                                    'exchange_rate_edit' => false, 'exchange_rate_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_type_of_order', 'value' => false],
-                                'actions' => ['type_of_order_list' => false, 'type_of_order_add' => false, 'type_of_order_edit' => false, 'type_of_order_delete' => false]
+                                'actions' => ['type_of_order_list' => false, 'type_of_order_add' => false,
+                                    'type_of_order_edit' => false, 'type_of_order_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_tax', 'value' => true],
-                                'actions' => ['tax_list' => true, 'tax_add' => false, 'tax_edit' => false, 'tax_delete' => false]
+                                'actions' => ['tax_list' => true, 'tax_add' => false, 'tax_edit' => false,
+                                    'tax_delete' => false, 'just_yours' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_discount', 'value' => true],
-                                'actions' => ['discount_list' => true, 'discount_add' => false, 'discount_edit' => false, 'discount_delete' => false]
+                                'actions' => ['discount_list' => true, 'discount_add' => false, 'discount_edit' => false,
+                                    'discount_delete' => false, 'just_yours' => false]
                             ]
                         ]),
                     ]),
@@ -281,17 +309,22 @@ class RegisterController extends Controller
                         'key' => 'ATM',
                         'access_permit' => json_encode([
                             [
+                                'title' => ['name' => 'dashboard', 'value' => true],
+                                'actions' => ['dashboard' => true]
+                            ],
+                            [
                                 'title' => ['name' => 'manager_article', 'value' => false],
-                                'actions' => ['article_list' => true, 'article_add' => true, 'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
+                                'actions' => [ 'just_yours'=>true, 'article_list' => true, 'article_add' => true,
+                                    'article_edit' => false, 'article_delete' => false, 'article_transport' => false]
                             ],
                             [
 
                                 'title' => ['name' => 'manager_vending', 'value' => false],
-                                'actions' => ['vending_list' => true, 'vending_add' => false, 'vending_edit' => false, 'vending_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'vending_list' => true, 'vending_add' => false, 'vending_edit' => false, 'vending_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_category', 'value' => false],
-                                'actions' => ['category_list' => false, 'category_add' => false, 'category_edit' => false, 'category_delete' => false,]
+                                'actions' => [ 'just_yours'=>false, 'category_list' => false, 'category_add' => false, 'category_edit' => false, 'category_delete' => false,]
                             ],
                             [
                                 'title' => ['name' => 'manager_mod', 'value' => false],
@@ -303,56 +336,56 @@ class RegisterController extends Controller
                             ],
                             [
                                 'title' => ['name' => 'manager_buy', 'value' => false],
-                                'actions' => ['buy_list' => false, 'buy_add' => false, 'buy_edit' => false, 'buy_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'buy_list' => false, 'buy_add' => false, 'buy_edit' => false, 'buy_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_sell', 'value' => true],
                                 'actions' =>
-                                    ['sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false, 'sell_by_payments' => false]
+                                    [ 'just_yours'=>true, 'sell_by_product' => true, 'sell_by_category' => false, 'sell_by_employer' => false, 'sell_by_payments' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_employer', 'value' => false],
-                                'actions' => ['employer_list' => false, 'employer_add' => false, 'employer_edit' => false, 'employer_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'employer_list' => false, 'employer_add' => false, 'employer_edit' => false, 'employer_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_assistence', 'value' => false],
-                                'actions' => ['assistance_list' => false, 'assistance_add' => false, 'assistance_edit' => false, 'assistance_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'assistance_list' => false, 'assistance_add' => false, 'assistance_edit' => false, 'assistance_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_client', 'value' => false],
-                                'actions' => ['client_list' => false, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'client_list' => false, 'client_add' => false, 'client_edit' => false, 'client_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_shop', 'value' => false],
-                                'actions' => ['shop_list' => false, 'shop_add' => false, 'shop_edit' => false, 'shop_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'shop_list' => false, 'shop_add' => false, 'shop_edit' => false, 'shop_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_access', 'value' => false],
-                                'actions' => ['access_list' => false, 'access_add' => false, 'access_edit' => false, 'access_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'access_list' => false, 'access_add' => false, 'access_edit' => false, 'access_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_payment', 'value' => false],
-                                'actions' => ['payment_list' => false, 'payment_add' => false, 'payment_edit' => false, 'payment_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'payment_list' => false, 'payment_add' => false, 'payment_edit' => false, 'payment_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_expense_category', 'value' => false],
-                                'actions' => ['expense_category_list' => false, 'expense_category_add' => false, 'expense_category_edit' => false, 'expense_category_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'expense_category_list' => false, 'expense_category_add' => false, 'expense_category_edit' => false, 'expense_category_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_exchange_rate', 'value' => false],
-                                'actions' => ['exchange_rate_list' => false, 'exchange_rate_add' => false, 'exchange_rate_edit' => false, 'exchange_rate_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'exchange_rate_list' => false, 'exchange_rate_add' => false, 'exchange_rate_edit' => false, 'exchange_rate_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_type_of_order', 'value' => false],
-                                'actions' => ['type_of_order_list' => false, 'type_of_order_add' => false, 'type_of_order_edit' => false, 'type_of_order_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'type_of_order_list' => false, 'type_of_order_add' => false, 'type_of_order_edit' => false, 'type_of_order_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_tax', 'value' => false],
-                                'actions' => ['tax_list' => false, 'tax_add' => false, 'tax_edit' => false, 'tax_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'tax_list' => false, 'tax_add' => false, 'tax_edit' => false, 'tax_delete' => false]
                             ],
                             [
                                 'title' => ['name' => 'manager_discount', 'value' => false],
-                                'actions' => ['discount_list' => false, 'discount_add' => false, 'discount_edit' => false, 'discount_delete' => false]
+                                'actions' => [ 'just_yours'=>true, 'discount_list' => false, 'discount_add' => false, 'discount_edit' => false, 'discount_delete' => false]
                             ]
                         ]),
                     ])

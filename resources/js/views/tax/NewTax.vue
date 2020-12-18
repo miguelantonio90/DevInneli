@@ -21,6 +21,7 @@
         >
           <v-row>
             <v-col
+              class="py-0"
               cols="12"
               md="6"
             >
@@ -50,7 +51,11 @@
                 }"
               />
             </v-col>
-            <v-col md="12">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
               <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
               <v-radio-group
                 v-model="newTax.percent"
@@ -66,7 +71,11 @@
                 />
               </v-radio-group>
             </v-col>
-            <v-col md="6">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="newTax.type"
                 clearable

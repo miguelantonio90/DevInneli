@@ -38,7 +38,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'company_id', 'client_id', 'payment_id'
+        'no_facture', 'company_id' , 'payment_id'
     ];
 
     /**
@@ -74,5 +74,10 @@ class Sale extends Model
     public function discounts(): BelongsToMany
     {
         return $this->belongsToMany(Discount::class, 'sales_discounts');
+    }
+
+    public function refounds():HasMany
+    {
+        return $this->hasMany(SalesArticlesShops::class);
     }
 }

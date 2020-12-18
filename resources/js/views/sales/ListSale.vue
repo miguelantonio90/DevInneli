@@ -5,6 +5,7 @@
         class="py-0"
         cols="12"
       >
+        <refound v-if="showRefoundModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
@@ -22,64 +23,70 @@
           @delete-row="deleteSaleHandler($event)"
         >
           <template v-slot:item.state="{ item }">
-            <template v-if="item.state !== 'preform'">
-              <v-autocomplete
-                v-model="item.state"
-                :disabled="item.state !== 'open'"
-                chips
-                :items="getLocalStates"
-                item-text="text"
-                item-value="value"
-                @input="changeState(item)"
-              >
-                <template v-slot:selection="data">
-                  <v-chip
-                    v-bind="data.attrs"
-                    :input-value="data.item.value"
-                    @click="data.select"
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <template v-if="item.state !== 'preform'">
+                  <v-autocomplete
+                    v-model="item.state"
+                    :disabled="item.state !== 'open'"
+                    chips
+                    :items="getLocalStates"
+                    item-text="text"
+                    item-value="value"
+                    v-bind="attrs"
+                    v-on="on"
+                    @input="changeState(item)"
                   >
-                    <i :style="'color: ' + data.item.color">
-                      <v-icon left>
-                        {{ data.item.icon }}
-                      </v-icon>
-                      {{ data.item.text }}</i>
+                    <template v-slot:selection="data">
+                      <v-chip
+                        v-bind="data.attrs"
+                        :input-value="data.item.value"
+                        @click="data.select"
+                      >
+                        <i :style="'color: ' + data.item.color">
+                          <v-icon left>
+                            {{ data.item.icon }}
+                          </v-icon>
+                          {{ data.item.text }}</i>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-item-content v-text="data.item" />
+                      </template>
+                      <template v-else>
+                        <v-list-item-icon>
+                          <v-icon
+                            left
+                            :style="'color: ' + data.item.color"
+                          >
+                            {{ data.item.icon }}
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            :style="'color: ' + data.item.color"
+                          >
+                            {{ data.item.text }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </template>
+                  </v-autocomplete>
+                </template>
+                <template v-else>
+                  <v-chip>
+                    <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
+                    </i>
                   </v-chip>
                 </template>
-                <template v-slot:item="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item" />
-                  </template>
-                  <template v-else>
-                    <v-list-item-icon>
-                      <v-icon
-                        left
-                        :style="'color: ' + data.item.color"
-                      >
-                        {{ data.item.icon }}
-                      </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        :style="'color: ' + data.item.color"
-                      >
-                        {{ data.item.text }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
-            </template>
-            <template v-else>
-              <v-chip>
-                <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
-                </i>
-              </v-chip>
-            </template>
+              </template>
+            </v-tooltip>
           </template>
           <template v-slot:[`item.pay`]="{ item }">
             {{
-              item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : $vuetify.lang.t('$vuetify.pay.credit')
+              item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : item.pay === 'credit'? $vuetify.lang.t('$vuetify.pay.credit'):$vuetify.lang.t('$vuetify.no_defined')
             }}
           </template>
           <template v-slot:[`item.payments.name`]="{ item }">
@@ -236,22 +243,42 @@
                         </template>
                       </td>
                       <td>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <b><v-icon
-                              v-if="article.cant > 0"
-                              style="color: #ff752b"
-                              class="mr-2"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="refundArticle(item)"
-                            >
-                              mdi-undo
-                            </v-icon></b>
-                          </template>
-                          <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
-                        </v-tooltip>
+                        <template v-if="item.state !=='preform'">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <b><v-icon
+                                v-if="article.cant > 0"
+                                style="color: #ff752b"
+                                class="mr-2"
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="refundArticle(item, article)"
+                              >
+                                mdi-undo
+                              </v-icon></b>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                          </v-tooltip>
+                        </template>
+                        <template v-else>
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <b><v-icon
+                                v-if="article.cant > 0"
+                                style="color: #ff752b"
+                                class="mr-2"
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="cancelProductPreform(item, article)"
+                              >
+                                mdi-cancel
+                              </v-icon></b>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                          </v-tooltip>
+                        </template>
                       </td>
                     </tr>
                   </tbody>
@@ -264,11 +291,14 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import Refound from '../article/Refound'
 
 export default {
   name: 'ListSale',
+  components: { Refound },
   data () {
     return {
       localSales: [],
@@ -290,6 +320,7 @@ export default {
       'isTableLoading'
     ]),
     ...mapState('article', ['articles']),
+    ...mapState('refund', ['showNewModal']),
     ...mapGetters('auth', ['user', 'access_permit']),
     getTableColumns () {
       return [
@@ -306,11 +337,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.payment.name'),
           value: 'payments.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.client'),
-          value: 'client.firstName',
           select_filter: true
         },
         {
@@ -395,11 +421,16 @@ export default {
       'deleteSale'
     ]),
     ...mapActions('article', ['getArticles']),
+    ...mapActions('refund', ['openNewModal']),
     changeState (item) {
       this.updateSale(item)
     },
-    refundArticle (item) {
-      console.log(item)
+    refundArticle (sale, article) {
+      console.log(sale, article)
+      this.openNewModal({ sale, article })
+    },
+    cancelProductPreform (item, art) {
+      console.log(item, art)
     },
     total_pay (item) {
       let sum = 0

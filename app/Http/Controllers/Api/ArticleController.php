@@ -120,4 +120,17 @@ class ArticleController extends Controller
     {
         $this->importManger->importData($request->file);
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws ValidationException
+     */
+    public function refound(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->articleManager->refound($request->all()),
+            'Article has updated successfully.'
+        );
+    }
 }

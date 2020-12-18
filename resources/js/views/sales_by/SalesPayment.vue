@@ -5,12 +5,16 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.menu.sell_product')
+            $vuetify.lang.t('$vuetify.menu.sell_types_payment')
           }}</span>
         </v-card-title>
         <v-card-text>
           <v-row>
-            <v-col md="4">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="4"
+            >
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -35,13 +39,16 @@
                 />
               </v-menu>
             </v-col>
-            <v-col md="4">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="7"
+            >
               <v-select
                 v-model="localShops"
                 chips
                 rounded
                 solo
-                clearable
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
@@ -70,13 +77,20 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
-                  <v-col md="4">
+                  <v-col
+                    class="py-0"
+                    cols="12"
+                    :md="localSalesByPayments.length > 0?4:12"
+                  >
                     <v-card
                       class="mx-auto"
                       tile
                     >
                       <v-list dense>
-                        <v-subheader> {{ $vuetify.lang.t('$vuetify.report.top5') }}</v-subheader>
+                        <v-subheader>
+                          {{ localSalesByPayments.length > 0? $vuetify.lang.t('$vuetify.report.top5Payment'):
+                            $vuetify.lang.t('$vuetify.report.noTop5') }}
+                        </v-subheader>
                         <v-list-item-group
                           color="primary"
                         >
@@ -101,7 +115,12 @@
                       </v-list>
                     </v-card>
                   </v-col>
-                  <v-col md="7">
+                  <v-col
+                    v-if="localSalesByPayments.length > 0"
+                    class="py-0"
+                    cols="12"
+                    md="7"
+                  >
                     <highcharts :options="chartOptions" />
                   </v-col>
                 </v-row>

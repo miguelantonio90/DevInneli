@@ -5,8 +5,6 @@
         class="py-0"
         cols="12"
       >
-        <new-type-order v-if="showNewModal" />
-        <edit-type-order v-if="showEditModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.menu.type_of_order')"
           csv-filename="TypeOrder"
@@ -18,10 +16,26 @@
           :sort-desc="[false, true]"
           :options="bindProps"
           multi-sort
-          @create-row="toogleNewModal(true)"
-          @edit-row="openEditModal($event)"
-          @delete-row="deleteHandler($event)"
         >
+          <template v-slot:[`item.company.name`]="{ item }">
+            <template>
+              {{ item.company.name }}
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-avatar left>
+                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                    </v-avatar>
+                    {{ item.country }}
+                  </v-chip>
+                </template>
+                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+              </v-tooltip>
+            </template>
+          </template>
           <template v-slot:[`group.header`]="{items, isOpen, toggle}">
             <th colspan="100%">
               <v-icon
@@ -40,14 +54,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import NewTypeOrder from './New'
-import EditTypeOrder from './Edit'
 
 export default {
-  components: {
-    NewTypeOrder,
-    EditTypeOrder
-  },
+  name: 'ListAdmin',
   data () {
     return {
       search: ''
@@ -62,6 +71,7 @@ export default {
       'isTableLoading'
     ]),
     ...mapGetters('auth', ['user']),
+    ...mapGetters('statics', ['arrayCountry']),
     bindProps () {
       return {
         itemKey: Math.random().toString(),
@@ -71,6 +81,10 @@ export default {
     getTableColumns () {
       return [
         {
+          text: this.$vuetify.lang.t('$vuetify.company'),
+          value: 'company.name',
+          select_filter: true
+        }, {
           text: this.$vuetify.lang.t('$vuetify.name'),
           value: 'name',
           select_filter: true,
@@ -84,11 +98,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.description'),
           value: 'description'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
         }
       ]
     }

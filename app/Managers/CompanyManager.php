@@ -2,7 +2,12 @@
 
 namespace App\Managers;
 
+use App\Articles;
+use App\Client;
 use App\Company;
+use App\Shop;
+use App\Supplier;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -16,8 +21,23 @@ class CompanyManager
     public static function getCompanyByEmail(string $email)
     {
         return Company::where('email', '=', $email)
-            ->where('companies.faker', '<>', 1)
             ->firstOrFail();
+    }
+
+    public function getAllCompanies()
+    {
+      $companies = DB::table('companies')
+          ->where('faker', '<>', 1)
+          ->get();
+      foreach ($companies as $key=>$company)
+      {
+          $companies[$key]->shops = Shop::latest()->where('company_id','=',$company->id)->get();
+          $companies[$key]->employers = User::latest()->where('company_id','=',$company->id)->get();
+          $companies[$key]->clients = Client::latest()->where('company_id','=',$company->id)->get();
+          $companies[$key]->suppliers = Supplier::latest()->where('company_id','=',$company->id)->get();
+          $companies[$key]->articles = Articles::latest()->where('company_id','=',$company->id)->get();
+      }
+      return $companies;
     }
 
     /**

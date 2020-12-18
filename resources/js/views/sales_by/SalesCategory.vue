@@ -5,12 +5,16 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.menu.sell_product')
+            $vuetify.lang.t('$vuetify.menu.sell_category')
           }}</span>
         </v-card-title>
         <v-card-text>
-          <v-row cols="12">
-            <v-col md="6">
+          <v-row>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="5"
+            >
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -35,13 +39,16 @@
                 />
               </v-menu>
             </v-col>
-            <v-col md="6">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="7"
+            >
               <v-select
                 v-model="localShops"
                 chips
                 rounded
                 solo
-                clearable
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 item-text="name"
@@ -51,6 +58,7 @@
                 required
                 multiple
                 :rules="formRule.country"
+                @change="loadData"
               />
             </v-col>
           </v-row>
@@ -70,13 +78,20 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
-                  <v-col md="4">
+                  <v-col
+                    class="py-0"
+                    cols="12"
+                    :md="localSalesByCategories.length > 0?4:12"
+                  >
                     <v-card
                       class="mx-auto"
                       tile
                     >
                       <v-list dense>
-                        <v-subheader> {{ $vuetify.lang.t('$vuetify.report.top5') }}</v-subheader>
+                        <v-subheader>
+                          {{ localSalesByCategories.length > 0? $vuetify.lang.t('$vuetify.report.top5Category'):
+                            $vuetify.lang.t('$vuetify.report.noTop5') }}
+                        </v-subheader>
                         <v-list-item-group
                           color="primary"
                         >
@@ -101,7 +116,12 @@
                       </v-list>
                     </v-card>
                   </v-col>
-                  <v-col md="7">
+                  <v-col
+                    v-if="localSalesByCategories.length > 0"
+                    class="py-0"
+                    cols="12"
+                    md="7"
+                  >
                     <highcharts :options="chartOptions" />
                   </v-col>
                 </v-row>
@@ -239,22 +259,31 @@ export default {
     await this.getShops().then(() => {
       this.localShops = this.shops
     })
-    await this.getSalesByCategories({
-      shops: this.shops,
-      dates: this.dates
-    }).then(() => {
-      this.localSalesByCategories = this.salesByCategories.sort(function (a, b) {
-        if (a.data.netPrice > b.data.netPrice) return -1
-        if (a.data.netPrice < b.data.netPrice) return 1
-        return 0
-      })
-    })
     await this.loadData()
     this.loadingData = false
   },
   methods: {
     ...mapActions('shop', ['getShops']),
     ...mapActions('sale', ['getSalesByCategories']),
+    async changeShop () {
+      this.loadingData = true
+      console.log(this.localShops.length === 0)
+      if (this.localShops.length === 0) { this.localShops.push(this.shops[0]) } else { await this.loadSalesByCategories() }
+      this.loadingData = false
+    },
+    async loadSalesByCategories () {
+      await this.getSalesByCategories({
+        shops: this.localShops,
+        dates: this.dates
+      }).then(() => {
+        this.localSalesByCategories = this.salesByCategories.sort(function (a, b) {
+          if (a.data.netPrice > b.data.netPrice) return -1
+          if (a.data.netPrice < b.data.netPrice) return 1
+          return 0
+        })
+        this.loadData()
+      })
+    },
     loadData: function () {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
@@ -274,7 +303,7 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.report.barGraphics')
         },
         subtitle: {
-          text: 'Source: WorldClimate.com'
+          text: 'Inneli.com'
         },
         xAxis: {
           categories: categories,

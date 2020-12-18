@@ -20,6 +20,7 @@ const UPDATE_ACCESS = 'UPDATE_ACCESS'
 const state = {
   isLoggedIn: !!localStorage.getToken(),
   isManager: !!localStorage.getTokenManager(),
+  isAdmin: false,
   userData: [],
   userPin: {},
   pending: false,
@@ -37,7 +38,9 @@ const state = {
     username: '',
     email: '',
     password: '',
+    phone: '',
     password_confirmation: '',
+    sector: '',
     country: ''
   },
   formReset: {
@@ -68,6 +71,7 @@ const getters = {
   access_permit: (state) => state.access,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
+  isAdminIn: (state) => state.isAdmin,
   pinSuccess: (state) => state.pinSuccess
 }
 
@@ -85,7 +89,8 @@ const mutations = {
   [UPDATE_ACCESS] (state, access) {
     if (access !== undefined) {
       state.access = []
-      state.access = JSON.parse((access))
+      state.access = JSON.parse((atob(access[1])))
+      state.isAdmin = access[0]
     }
   },
   [LOGIN] (state) {
@@ -165,7 +170,9 @@ const mutations = {
       let msg = this._vm.$language.t('$vuetify.messages.login_failed')
       Object.keys(state.error.data.errors).forEach((v) => {
         if (v !== 'message') {
-          if (v === 'email') { msg = this._vm.$language.t('$vuetify.messages.login_failed_email') }
+          if (v === 'email') {
+            msg = this._vm.$language.t('$vuetify.messages.login_failed_email')
+          }
         }
       })
       this._vm.$Toast.fire({

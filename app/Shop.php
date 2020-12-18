@@ -5,6 +5,7 @@ namespace App;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -84,6 +85,11 @@ class Shop extends Model
     public function articlesShops(): HasMany
     {
         return $this->hasMany(ArticlesShops::class);
+    }
+
+    public function company():BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
 }

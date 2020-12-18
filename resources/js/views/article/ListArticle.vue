@@ -184,6 +184,11 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'shopsNames',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.menu.category'),
           value: 'category.name',
           select_filter: true
@@ -200,11 +205,6 @@ export default {
         }, {
           text: this.$vuetify.lang.t('$vuetify.articles.percent'),
           value: 'percent',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
           select_filter: true
         },
         {

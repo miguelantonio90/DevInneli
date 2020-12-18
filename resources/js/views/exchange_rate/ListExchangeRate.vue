@@ -40,6 +40,7 @@ import NewExchangeRate from './New'
 import EditExchangeRate from './Edit'
 
 export default {
+  name: 'ListExchangeRate',
   components: {
     NewExchangeRate,
     EditExchangeRate
