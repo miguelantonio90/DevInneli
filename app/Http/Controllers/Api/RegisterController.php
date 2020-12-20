@@ -413,7 +413,7 @@ class RegisterController extends Controller
      * @param $user
      * @return JsonResponse
      */
-    protected function registered(Request $request, $user)
+    protected function registered(Request $request, $user): JsonResponse
     {
         return response()->json([
             'token_type' => 'Bearer',
