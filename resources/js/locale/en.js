@@ -57,6 +57,7 @@ export default {
   system: 'System',
   import_csv: 'Getting your file',
   state: 'State',
+  to: 'To',
   // menu
   menu: {
     setting: 'Setting',

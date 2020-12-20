@@ -97,7 +97,7 @@ export default {
   async created () {
     this.formValid = false
     await this.getShops().then((s) => {
-      this.newSale.shop = this.shops[0]
+      this.newBox.shop = this.shops[0]
     })
   },
   methods: {

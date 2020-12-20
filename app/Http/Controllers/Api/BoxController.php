@@ -76,14 +76,16 @@ class BoxController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws \Exception
      */
     public function show($id)
     {
-//        return Category::latest()->where('isAdmin', '=', 0)->get($id);
+        return ResponseHelper::sendResponse(
+            $this->boxManager->getOpenClose($id),
+            'Categories has deleted successfully.'
+        );
     }
 
     /**
@@ -114,6 +116,18 @@ class BoxController extends Controller
         return ResponseHelper::sendResponse(
             $this->boxManager->delete($id),
             'Categories has deleted successfully.'
+        );
+    }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function sendOpenClose(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->boxManager->openClose($request->all()),
+            'OpenClose has deleted successfully.'
         );
     }
 }

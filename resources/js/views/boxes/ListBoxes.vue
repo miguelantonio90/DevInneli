@@ -7,6 +7,7 @@
       >
         <new-box v-if="showNewModal" />
         <edit-box v-if="showEditModal" />
+        <open-close-box v-if="opencloseBox" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.menu.boxes_list')"
           csv-filename="Boxes"
@@ -24,13 +25,20 @@
         >
           <template v-slot:[`item.state`]="{ item }">
             <v-icon
+              v-if="item.state === 'open'"
               class="mr-2"
               color="primary"
               small
-              v-bind="attrs"
-              v-on="on"
             >
               mdi-lock-open
+            </v-icon>
+            <v-icon
+              v-else
+              class="mr-2"
+              color="primary"
+              small
+            >
+              mdi-lock
             </v-icon>
             {{ $vuetify.lang.t('$vuetify.sale.state.' + item.state) }}
           </template>
@@ -44,12 +52,14 @@
 import { mapActions, mapState } from 'vuex'
 import NewBox from './NewBox'
 import EditBox from './EditBox'
+import OpenCloseBox from './OpenCloseBox'
 
 export default {
   name: 'ListBoxes',
   components: {
     NewBox,
-    EditBox
+    EditBox,
+    OpenCloseBox
   },
   data () {
     return {
@@ -58,6 +68,7 @@ export default {
   },
   computed: {
     ...mapState('boxes', [
+      'opencloseBox',
       'showNewModal',
       'showEditModal',
       'showShowModal',
@@ -76,7 +87,7 @@ export default {
           value: 'shop.name'
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          text: this.$vuetify.lang.t('$vuetify.state'),
           value: 'state'
         },
         {
@@ -94,7 +105,7 @@ export default {
     ...mapActions('boxes', [
       'toogleNewModal',
       'openEditModal',
-      'openShowModal',
+      'openCloseModal',
       'getBoxes',
       'deleteBox'
     ]),
@@ -102,7 +113,7 @@ export default {
       this.openEditModal($event)
     },
     openBox ($event) {
-      this.openEditModal($event)
+      this.openCloseModal($event)
     },
     deleteBoxesHandler (categoryId) {
       this.$Swal

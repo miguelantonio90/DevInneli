@@ -31,7 +31,7 @@ class Box extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'color', 'shop_id'
+        'name' , 'shop_id'
     ];
 
 

@@ -4,6 +4,8 @@ namespace App\Managers;
 
 use App\Articles;
 use App\Box;
+use App\OpenCloseBox;
+use Exception;
 
 class BoxManager extends BaseManager
 {
@@ -30,7 +32,7 @@ class BoxManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -52,7 +54,7 @@ class BoxManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -69,9 +71,72 @@ class BoxManager extends BaseManager
     }
 
     /**
+     * @param $data
+     * @return OpenCloseBox
+     * @throws Exception
+     */
+    public function openClose($data):OpenCloseBox
+    {
+        return $data['box']['state'] !== 'open'? $this->createOpenClose($data):$this->editOpenClose($data);
+    }
+
+    /**
+     * @param $boxId
+     * @return OpenCloseBox
+     */
+    public function getOpenClose($boxId):OpenCloseBox{
+        return OpenCloseBox::latest()
+            ->where('id','=',Box::findOrFail($boxId)->open_id)
+            ->with('box')
+            ->with('openTo')
+            ->get()[0];
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws Exception
+     */
+    public function createOpenClose($data)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $openClose = OpenCloseBox::create([
+            'box_id'=>$data['box']['id'],
+            'open_to'=>$data['openTo']['id'],
+            'open_money'=>$data['cashOpen'],
+        ]);
+        $openClose['company_id'] = $company->id;
+        $this->managerBy('new', $openClose);
+        $openClose->save();
+        $box = Box::latest()->where('id','=', $data['box']['id'])->get()[0];
+        $box->open_id = $openClose->id;
+        $box->state = 'open';
+        $box->save();
+        return $openClose;
+    }
+
+    /**
+     * @param $data
+     * @return OpenCloseBox
+     * @throws Exception
+     */
+    public function editOpenClose($data):OpenCloseBox
+    {
+        $openClose = OpenCloseBox::findOrFail($data['open_id']);
+        $openClose->close_money = $data['cashClose'];
+        $this->managerBy('edit', $openClose);
+        $openClose->save();
+        $box = Box::latest()->where('id','=', $data['box']['id'])->get()[0];
+        $box->open_id = null;
+        $box->state = 'close';
+        $box->save();
+        return $openClose;
+    }
+
+    /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

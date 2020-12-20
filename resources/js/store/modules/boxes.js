@@ -6,20 +6,19 @@ const SWITCH_BOX_EDIT_MODAL = 'SWITCH_BOX_EDIT_MODAL'
 const SWITCH_BOX_SHOW_MODAL = 'SWITCH_BOX_SHOW_MODAL'
 const BOX_CREATED = 'BOX_CREATED'
 const BOX_EDIT = 'BOX_EDIT'
-const BOX_OPEN = 'BOX_OPEN'
-const BOX_CLOSE = 'BOX_CLOSE'
-const BOX_REFOUND = 'BOX_REFOUND'
+const EDIT_OPEN_CLOSE = 'EDIT_OPEN_CLOSE'
+const BOX_OPEN_CLOSE = 'BOX_OPEN_CLOSE'
 const BOX_UPDATED = 'BOX_UPDATED'
 const BOX_DELETE = 'BOX_DELETE'
 const BOX_TABLE_LOADING = 'BOX_TABLE_LOADING'
 const FAILED_BOX = 'FAILED_BOX'
 const ENV_DATA_PROCESS = 'ENV_DATA_PROCESS'
 const SET_EDIT_BOX = 'SET_EDIT_BOX'
-const SWITCH_TRANSFER_MODAL = 'SWITCH_TRANSFER_MODAL'
+const SWITCH_OPEN_CLOSE_MODAL = 'SWITCH_OPEN_CLOSE_MODAL'
 
 const state = {
   showNewModal: false,
-  showTransfer: false,
+  opencloseBox: false,
   showEditModal: false,
   showShowModal: false,
   showRefoundModal: false,
@@ -50,10 +49,13 @@ const state = {
     name: '',
     shop: {}
   },
-  box: {
+  openClose: {
     id: '',
-    openMoney: 0.00,
-    closeMoney: 0.00
+    box: {},
+    cashOpen: 0.00,
+    cashClose: 0.00,
+    openTo: {},
+    closeBy: {}
   },
   showImportModal: false,
   isBoxTableLoading: false,
@@ -62,8 +64,8 @@ const state = {
 }
 
 const mutations = {
-  [SWITCH_TRANSFER_MODAL] (state, showModal) {
-    state.showTransfer = showModal
+  [SWITCH_OPEN_CLOSE_MODAL] (state, showModal) {
+    state.opencloseBox = showModal
   },
   [SWITCH_BOX_NEW_MODAL] (state, showModal) {
     state.showNewModal = showModal
@@ -86,7 +88,7 @@ const mutations = {
   },
   [BOX_CREATED] (state) {
     state.showNewModal = false
-    state.showTransfer = false
+    state.opencloseBox = false
     state.newBox = {
       name: '',
       shop: {}
@@ -99,27 +101,26 @@ const mutations = {
       )
     })
   },
-  [BOX_EDIT] (state, articleId) {
+  [BOX_EDIT] (state, boxId) {
     state.editBox = Object.assign({}, state.boxes
-      .filter(node => node.id === articleId)
+      .filter(node => node.id === boxId)
       .shift()
     )
   },
-  [BOX_OPEN] (state, articleId) {
-    state.editBox = Object.assign({}, state.boxes
-      .filter(node => node.id === articleId)
-      .shift()
-    )
+  [EDIT_OPEN_CLOSE] (state, data) {
+    state.openClose.id = data.id
+    state.openClose.cashOpen = data.open_money
+    state.openClose.openTo = data.open_to
   },
-  [BOX_CLOSE] (state, articleId) {
-    state.editBox = Object.assign({}, state.boxes
-      .filter(node => node.id === articleId)
+  [BOX_OPEN_CLOSE] (state, boxId) {
+    state.openClose.box = Object.assign({}, state.boxes
+      .filter(node => node.id === boxId)
       .shift()
     )
   },
   [BOX_UPDATED] (state) {
     state.showEditModal = false
-    state.showTransfer = false
+    state.opencloseBox = false
     state.editBox = {
       id: '',
       name: '',
@@ -163,8 +164,8 @@ const mutations = {
 const getters = {}
 
 const actions = {
-  toogleTransferModal ({ commit }, showModal) {
-    commit(SWITCH_TRANSFER_MODAL, showModal)
+  toogleOpenCloseModal ({ commit }, showModal) {
+    commit(SWITCH_OPEN_CLOSE_MODAL, showModal)
   },
   toogleNewModal ({ commit }, showModal) {
     commit(SWITCH_BOX_NEW_MODAL, showModal)
@@ -175,24 +176,22 @@ const actions = {
   toogleShowModal ({ commit }, showModal) {
     commit(SWITCH_BOX_SHOW_MODAL, showModal)
   },
-  openEditModal ({ commit }, articleId) {
-    commit(BOX_EDIT, articleId)
+  openEditModal ({ commit }, boxId) {
+    commit(BOX_EDIT, boxId)
     commit(SWITCH_BOX_EDIT_MODAL, true)
   },
-  openBoxModal ({ commit }, articleId) {
-    commit(BOX_EDIT, articleId)
-    commit(SWITCH_BOX_EDIT_MODAL, true)
-  },
-  closeBoxModal ({ commit }, articleId) {
-    commit(BOX_EDIT, articleId)
-    commit(SWITCH_BOX_EDIT_MODAL, true)
-  },
-  openShowModal ({ commit }, articleId) {
-    commit(SWITCH_BOX_SHOW_MODAL, true)
-    commit(BOX_EDIT, articleId)
-  },
-  openRefoundModal ({ commit }, { sale, article }) {
-    commit(BOX_REFOUND, { sale, article })
+  async openCloseModal ({ commit, state }, boxId) {
+    commit(BOX_OPEN_CLOSE, boxId)
+    if (state.openClose.box.state === 'open') {
+      await boxes
+        .fetchOpenClose(boxId)
+        .then(({ data }) => {
+          commit(EDIT_OPEN_CLOSE, data.data)
+          commit(BOX_TABLE_LOADING, false)
+          this.dispatch('auth/updateAccess', data.access)
+        }).catch((error) => commit(FAILED_BOX, error))
+    }
+    commit(SWITCH_OPEN_CLOSE_MODAL, true)
   },
   async getBoxes ({ commit, dispatch }) {
     commit(BOX_TABLE_LOADING, true)
@@ -226,6 +225,24 @@ const actions = {
     // const request = profile || state.editUser
     await boxes
       .sendUpdateRequest(request)
+      .then((response) => {
+        commit(BOX_UPDATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('boxes/getBoxes', null, { root: true })
+        this.dispatch('auth/updateAccess', response.access)
+      })
+      .catch((error) => {
+        commit(ENV_DATA_PROCESS, false)
+        commit(FAILED_BOX, error)
+      })
+  },
+  async openCloseBox ({ commit, dispatch }, boxesE) {
+    commit(ENV_DATA_PROCESS, true)
+    const request = boxesE || state.editBox
+
+    // const request = profile || state.editUser
+    await boxes
+      .sendOpenCloseBox(request)
       .then((response) => {
         commit(BOX_UPDATED)
         commit(ENV_DATA_PROCESS, false)

@@ -57,6 +57,7 @@ export default {
   system: 'Sistema',
   import_csv: 'Importando archivo',
   state: 'Estado',
+  to: 'A',
   // menu
   menu: {
     setting: 'Configuración',
@@ -206,6 +207,7 @@ export default {
     actions: 'Acciones',
     refund: 'Reembolsar',
     accept: 'Aceptar',
+    open: 'Abrir',
     search: 'Buscar',
     new: 'Nuevo',
     created: 'Crear',

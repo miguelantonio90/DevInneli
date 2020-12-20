@@ -31,8 +31,6 @@ class Refund extends Model
         'cant', 'money' , 'sale_id', 'article_id'
     ];
 
-
-
     public function article(): BelongsToMany
     {
         return $this->belongsToMany(Sale::class);
