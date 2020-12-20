@@ -337,7 +337,6 @@ export default {
       }
     },
     rowClick ($event) {
-      console.log($event)
     }
   }
 }
