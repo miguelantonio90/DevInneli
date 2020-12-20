@@ -148,6 +148,8 @@ export default {
           if (this.isLoggedIn) {
             this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
           }
+        }).catch(() => {
+          this.loading = false
         })
       }
     },

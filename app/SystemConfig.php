@@ -2,13 +2,12 @@
 
 namespace App;
 
-use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class KeyPosition
+ * Class SystemConfig
  * @package App
  * @method static latest()
  * @method static findOrFail(int $id)
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static where(string $string, string $string1)
  * @method static create(array $array)
  */
-class KeyPosition extends Model
+class SystemConfig extends Model
 {
     use Uuid, SoftDeletes;
 
@@ -25,5 +24,5 @@ class KeyPosition extends Model
     protected $keyType = 'string';
     protected $guarded = [];
 
-    protected $fillable = ['key', 'access_permit'];
+    protected $fillable = ['system_configs'];
 }

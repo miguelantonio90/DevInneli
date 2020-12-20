@@ -2,37 +2,42 @@
 
 namespace App;
 
-use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Refund
+ * Class Box
  * @package App
- * @method static latest()
  * @method static findOrFail($id)
+ * @method static latest()
  * @method find($id)
  * @method static create(array $array)
  * @method static select(string $string, $raw)
- * @method static where(string $string, string $string1, string $string2)
  */
-class Refund extends Model
+class Box extends Model
 {
-    use Uuid, SoftDeletes, SoftCascadeTrait;
+    use Uuid;
+    use SoftDeletes;
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'cant', 'money' , 'sale_id', 'article_id'
+        'name' , 'shop_id'
     ];
 
-    public function article(): BelongsToMany
+
+    public function shop(): BelongsTo
     {
-        return $this->belongsToMany(Sale::class);
+        return $this->belongsTo(Shop::class);
     }
+
 }

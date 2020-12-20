@@ -87,6 +87,11 @@ class Shop extends Model
         return $this->hasMany(ArticlesShops::class);
     }
 
+    public function boxes(): HasMany
+    {
+        return $this->hasMany(Box::class);
+    }
+
     public function company():BelongsTo
     {
         return $this->belongsTo(Company::class);

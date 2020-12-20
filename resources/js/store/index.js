@@ -28,6 +28,8 @@ import tax from './modules/tax'
 import discount from './modules/discount'
 import inventory from './modules/inventory'
 import sale from './modules/sale'
+import boxes from './modules/boxes'
+import openclose from './modules/openclose'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -46,6 +48,8 @@ const store = new Vuex.Store({
   modules: {
     app,
     auth,
+    boxes,
+    openclose,
     settings,
     user,
     assistance,
