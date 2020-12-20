@@ -83,15 +83,15 @@ export default {
   created () {
     window.focus()
     window.addEventListener('keypress', e => {
-      console.log(e.key)
-      if (!isNaN(e.key)) {
+      if (e.key === '0') {
+        this.clickPinButton(0)
+      } else if (!isNaN(e.key)) {
         this.$refs.btnPin.map((btn) => {
           if (btn.$el.innerText === e.key.toString()) {
             btn.$el.click()
           }
         })
-      }
-      if (e.key === 'Delete') {
+      } else if (e.key === 'Delete') {
         this.resetPincode()
       }
     })
