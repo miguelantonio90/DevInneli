@@ -267,7 +267,6 @@ export default {
     ...mapActions('sale', ['getSalesByCategories']),
     async changeShop () {
       this.loadingData = true
-      console.log(this.localShops.length === 0)
       if (this.localShops.length === 0) { this.localShops.push(this.shops[0]) } else { await this.loadSalesByCategories() }
       this.loadingData = false
     },

@@ -218,7 +218,6 @@ export default {
     onCountry (event) {
       this.formRegister.country = event.iso2
       this.countrySelect = event
-      console.log(this.countrySelect)
     },
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
@@ -244,7 +243,6 @@ export default {
     async registerUser () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        console.log(this.countrySelect.iso2)
         this.formRegister.country = this.arrayCountry.filter(count => count.id === this.countrySelect.iso2)[0]
         await setTimeout(() => {
           this.sendRegisterRequest(this.formRegister).then(() => {

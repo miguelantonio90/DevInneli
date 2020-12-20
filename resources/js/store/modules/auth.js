@@ -247,7 +247,6 @@ const actions = {
         router.push('/hi')
       })
       .catch(({ response }) => {
-        console.log(response)
         commit(FAILED_CATCH, response)
       })
   },

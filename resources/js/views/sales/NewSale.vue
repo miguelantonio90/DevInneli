@@ -609,8 +609,6 @@ export default {
           }
         })
       }
-      // console.log(this.localArticles)
-      console.log('asadasdsadsadsa')
     },
     validAddToLocalArticle (v, value, artS) {
       let inventory = 0

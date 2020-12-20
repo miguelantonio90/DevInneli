@@ -1,10 +1,13 @@
 import sale from '../../api/sale'
+import moment from 'moment'
 
 const FETCHING_SALES = 'FETCHING_SALES'
 const FETCHING_SALES_BY_CATEGORIES = 'FETCHING_SALES_BY_CATEGORIES'
 const FETCHING_SALES_BY_PAYMENT = 'FETCHING_SALES_BY_PAYMENT'
 const FETCHING_SALES_BY_PRODUCT = 'FETCHING_SALES_BY_PRODUCT'
 const FETCHING_SALES_BY_EMPLOYER = 'FETCHING_SALES_BY_EMPLOYER'
+const FETCHING_SALES_BY_LIMIT = 'FETCHING_SALES_BY_LIMIT'
+const FETCHING_SALES_TOTAL = 'FETCHING_SALES_TOTAL'
 const SWITCH_LOAD_DATA = 'SWITCH_LOAD_DATA'
 const SWITCH_SALE_NEW_MODAL = 'SWITCH_SALE_NEW_MODAL'
 const SWITCH_SALE_EDIT_MODAL = 'SWITCH_SALE_EDIT_MODAL'
@@ -58,7 +61,9 @@ const state = {
   salesByCategories: [],
   salesByPayments: [],
   salesByProducts: [],
-  salesByEmployer: []
+  salesByEmployer: [],
+  salesByLimit: [],
+  salesStatics: []
 }
 
 const mutations = {
@@ -176,6 +181,34 @@ const mutations = {
   },
   [FETCHING_SALES_BY_EMPLOYER] (state, salesByEmployer) {
     state.salesByEmployer = salesByEmployer
+  },
+  [FETCHING_SALES_BY_LIMIT] (state, salesByLimit) {
+    salesByLimit.map((value) => {
+      switch (value.state) {
+        case 'open':
+          value.status = this._vm.$language.t('$vuetify.sale.state.open')
+          value.color = 'green'
+          break
+        case 'accepted':
+          value.status = this._vm.$language.t('$vuetify.sale.state.accepted')
+          value.color = 'blue'
+          break
+        case 'cancelled':
+          value.status = this._vm.$language.t('$vuetify.sale.state.cancelled')
+          value.color = 'red'
+          break
+      }
+      value.timeString = moment(value.created_at).fromNow()
+      value.created.lastName = value.created.lastName !== null ? value.created.lastName : ''
+      value.client.lastName = value.client.lastName !== null ? value.client.lastName : ''
+      const createdName = value.created.firstName + ' ' + value.created.lastName
+      const clientName = value.client.firstName + ' ' + value.client.lastName
+      value.text = createdName + '' + this._vm.$language.t('$vuetify.dashboard.timeLineText') + ' ' + clientName
+    })
+    state.salesByLimit = salesByLimit
+  },
+  [FETCHING_SALES_TOTAL] (state, salesStatics) {
+    state.salesStatics = salesStatics
   }
 }
 
@@ -256,7 +289,35 @@ const actions = {
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async createSale ({ commit, dispatch }, newSale) {
+  async getSaleByLimit ({ commit }, filter) {
+    commit(SALE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await sale
+      .fetchSaleByLimit(filter)
+      .then(({ data }) => {
+        commit(FETCHING_SALES_BY_LIMIT, data.data)
+        commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_SALE, error))
+  },
+  async getSaleStatics ({
+    commit,
+    dispatch
+  }) {
+    commit(SALE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await sale
+      .fetchSaleStatics()
+      .then(({ data }) => {
+        commit(FETCHING_SALES_TOTAL, data.data)
+        commit(SALE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_SALE, error))
+  },
+  async createSale ({
+    commit,
+    dispatch
+  }, newSale) {
     commit(ENV_DATA_PROCESS, true)
     await sale
       .sendCreateRequest(newSale)
@@ -268,7 +329,10 @@ const actions = {
       })
       .catch((error) => commit(FAILED_SALE, error))
   },
-  async updateSale ({ commit, dispatch }, saleE) {
+  async updateSale ({
+    commit,
+    dispatch
+  }, saleE) {
     commit(ENV_DATA_PROCESS, true)
     const request = saleE || state.editSale
 
@@ -286,7 +350,11 @@ const actions = {
         commit(FAILED_SALE, error)
       })
   },
-  async deleteSale ({ commit, dispatch, state }, saleId) {
+  async deleteSale ({
+    commit,
+    dispatch,
+    state
+  }, saleId) {
     await sale
       .sendDeleteRequest(saleId)
       .then((data) => {

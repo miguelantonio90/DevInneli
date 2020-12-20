@@ -5,9 +5,6 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
-use App\Refund;
-use App\Shop;
-use App\User;
 use App\Variant;
 use Exception;
 use Illuminate\Auth\AuthManager;
@@ -32,7 +29,7 @@ class ArticleManager extends BaseManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -46,7 +43,7 @@ class ArticleManager extends BaseManager
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $articles =  Articles::latest()
+            $articles = Articles::latest()
                 ->with('company')
                 ->with('category')
                 ->with('composites')
@@ -114,8 +111,11 @@ class ArticleManager extends BaseManager
 
             if ($article['price'] == 0.00) {
                 $articles[$k]['percent'] = 0;
+            } elseif ($article['cost'] == 0.00) {
+                $articles[$k]['percent'] = 100;
             } else {
-                $articles[$k]['percent'] = round((100 * $article['cost']) / $article['price'],
+                $difference = $article['price'] - $article['cost'];
+                $articles[$k]['percent'] = round(($difference / $article['cost']) * 100,
                     2);
             }
         }
@@ -127,7 +127,7 @@ class ArticleManager extends BaseManager
      * @return mixed
      * @throws Exception
      */
-    public function new($data)
+    public function new($data): Articles
     {
         $shops = $data['shops'];
         $taxes = $data['tax'];
@@ -292,7 +292,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param Articles $article
+     * @param  Articles  $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void
@@ -394,7 +394,7 @@ class ArticleManager extends BaseManager
             }
         }
         foreach ($variants as $k => $v) {
-            if (array_key_exists('id',$v)) {
+            if (array_key_exists('id', $v)) {
                 $this->variantManager->editVariant($v);
             } else {
                 $this->variantManager->newVariant($v, $article->id);
@@ -497,7 +497,6 @@ class ArticleManager extends BaseManager
             }
         }
     }
-
 
 
 }

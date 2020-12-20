@@ -707,7 +707,7 @@ export const protectedRoute = [
           },
           {
             path: '/admin/sales/refund.list',
-            name: 'vending',
+            name: 'admin_refund',
             access: 'vending_list',
             meta: {
               title: 'vending',

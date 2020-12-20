@@ -2,88 +2,52 @@
   <div class="page-dashboard">
     <app-loading v-show="loadingData" />
     <v-container v-if="!loadingData">
-      <!--      <v-row>
-        <v-col
-          v-for="(st,i) in statistic"
-          v-show="statistic.length > 0"
-          :key="i"
-          style="margin-bottom: 15px"
-          class="py-0"
-          cols="6"
-          md="2"
-        >
-          <mini-statistic
-            color="indigo"
-            :icon="st.icon"
-            :sub-title="st.sub_title"
-            @click="goToClick(st.goToClick)"
-          />
-        </v-col>
-      </v-row>
-      <v-card v-if="statisticDeny.length > 0">
-        <v-card-subtitle>
-          {{ $vuetify.lang.t('$vuetify.sector.others') }}
-        </v-card-subtitle>
-        <v-card-text>
-          <v-row>
-            <v-col
-              v-for="(st,i) in statisticDeny"
-              v-show="statistic.length > 0"
-              :key="i"
-              style="margin-bottom: 15px"
-              class="py-0"
-              cols="6"
-              md="2"
-            >
-              <mini-statistic
-                disabled
-                color="red"
-                :icon="st.icon"
-                :sub-title="st.sub_title"
-              />
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>-->
       <v-row cols="12">
         <v-col md="3">
           <linear-statistic
             class="my-4"
-            title="Sales"
-            sub-title="Sales increase"
+            :title="$vuetify.lang.t('$vuetify.dashboard.sales')"
+            :sub-title="$vuetify.lang.t('$vuetify.dashboard.salesSub')"
+            :currency="user.company.currency"
+            :quantity="salesStatics.totalSales ? salesStatics.totalSales.toString():0"
             icon="mdi-trending-up"
             color="success"
-            :value="15"
+            :value="100"
           />
         </v-col>
         <v-col md="3">
           <linear-statistic
             class="my-4"
-            title="Orders"
-            sub-title="Increase"
+            :title="$vuetify.lang.t('$vuetify.dashboard.orders')"
+            :sub-title="$vuetify.lang.t('$vuetify.dashboard.ordersSub')"
+            :quantity="salesStatics.totalOrders ? salesStatics.totalOrders.toString(): 0"
             icon="mdi-trending-up"
             color="pink"
-            :value="30"
+            :value="100"
           />
         </v-col>
         <v-col md="3">
           <linear-statistic
             class="my-4"
-            title="Revenue"
-            sub-title="Revenue increase"
+            :title="$vuetify.lang.t('$vuetify.dashboard.revenue')"
+            :sub-title="$vuetify.lang.t('$vuetify.dashboard.revenueSub')"
+            :currency="user.company.currency"
+            :quantity="salesStatics.totalRevenue ? salesStatics.totalRevenue.toString(): 0"
             icon="mdi-trending-up"
             color="primary"
-            :value="50"
+            :value="100"
           />
         </v-col>
         <v-col md="3">
           <linear-statistic
             class="mt-4"
-            title="Cost"
-            sub-title="Cost reduce"
+            :title="$vuetify.lang.t('$vuetify.dashboard.expenses')"
+            :sub-title="$vuetify.lang.t('$vuetify.dashboard.expensesSub')"
+            :currency="user.company.currency"
+            :quantity="salesStatics.totalExpenses ? salesStatics.totalExpenses.toString(): 0"
             icon="mdi-trending-down"
             color="orange"
-            :value="25"
+            :value="100"
           />
         </v-col>
       </v-row>
@@ -95,51 +59,10 @@
           v-for="item in tabsData.tabName"
           :key="item.name"
         >
-          <span style="text-transform: capitalize">{{ item.name }}</span>
+          <span style="text-transform: uppercase">{{ item.name }}</span>
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <v-row>
-                <v-col md="6">
-                  <plain-table />
-                </v-col>
-                <v-col md="6">
-                  <v-widget
-                    title="Activities"
-                    content-bg="white"
-                  >
-                    <div slot="widget-content">
-                      <v-timeline
-                        align-top
-                        dense
-                      >
-                        <v-timeline-item
-                          v-for="(item, index) in activity"
-                          :key="index"
-                          :color="item.color"
-                          small
-                        >
-                          <v-row class="pt-1">
-                            <v-col cols="3">
-                              <strong>{{ item.timeString }}</strong>
-                            </v-col>
-                            <v-col>
-                              <strong>New Icon</strong>
-                              <div>{{ item.text }}</div>
-                            </v-col>
-                          </v-row>
-                        </v-timeline-item>
-                      </v-timeline>
-                    </div>
-                  </v-widget>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
         <v-tab-item>
           <v-card flat>
             <v-card-text>
@@ -148,13 +71,10 @@
                   v-for="(st,i) in statistic"
                   v-show="statistic.length > 0"
                   :key="i"
-                  style="margin-bottom: 15px"
-                  class="py-0"
-                  cols="6"
-                  md="2"
+                  md="3"
                 >
                   <mini-statistic
-                    color="indigo"
+                    color="primary"
                     :icon="st.icon"
                     :sub-title="st.sub_title"
                     @click="goToClick(st.goToClick)"
@@ -171,10 +91,7 @@
                       v-for="(st,i) in statisticDeny"
                       v-show="statistic.length > 0"
                       :key="i"
-                      style="margin-bottom: 15px"
-                      class="py-0"
-                      cols="6"
-                      md="2"
+                      md="3"
                     >
                       <mini-statistic
                         disabled
@@ -189,70 +106,169 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <v-row>
+                <v-col md="6">
+                  <plain-table
+                    v-if="articlesMerge.length > 0"
+                    :title="$vuetify.lang.t('$vuetify.dashboard.mergeTable')"
+                    :headers="columnHeaders"
+                    :items="articlesMerge"
+                  />
+                  <mini-statistic
+                    v-else
+                    color="primary"
+                    icon="mdi-shopping"
+                    :sub-title="$vuetify.lang.t('$vuetify.access.access.manager_article')"
+                    @click="goToClick('product_list')"
+                  />
+                </v-col>
+                <v-col md="6">
+                  <v-widget
+                    :title="$vuetify.lang.t('$vuetify.dashboard.timeLine')"
+                    content-bg="white"
+                  >
+                    <div slot="widget-content">
+                      <v-timeline
+                        v-if="salesByLimit.length > 0"
+                        align-top
+                        dense
+                      >
+                        <v-timeline-item
+                          v-for="(item, index) in salesByLimit"
+                          :key="index"
+                          :color="item.color"
+                          small
+                        >
+                          <v-row class="pt-1">
+                            <v-col cols="3">
+                              <strong>{{ item.timeString }}</strong>
+                            </v-col>
+                            <v-col>
+                              <strong :style="{color:item.color}">{{ item.status }}</strong>
+                              <div>{{ item.text }}</div>
+                            </v-col>
+                          </v-row>
+                        </v-timeline-item>
+                      </v-timeline>
+                      <mini-statistic
+                        v-else
+                        color="primary"
+                        icon="mdi-currency-usd"
+                        :sub-title="$vuetify.lang.t('$vuetify.access.access.manager_vending')"
+                        @click="goToClick('vending')"
+                      />
+                    </div>
+                  </v-widget>
+                </v-col>
+                <!--<v-col
+                  v-for="(item, index) in trending"
+                  :key="'c-trending' + index"
+                  cols="4"
+                >
+                  <circle-statistic
+                    :title="item.subheading"
+                    :sub-title="item.headline"
+                    :caption="item.caption"
+                    :icon="item.icon.label"
+                    :color="item.linear.color"
+                    :value="item.linear.value"
+                  />
+                </v-col>-->
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
       </v-tabs-items>
     </v-container>
   </div>
 </template>
 
 <script>
-import API from '../api'
 import Material from 'vuetify/es5/util/colors'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'PageDashboard',
-  data: () => ({
-    tab: null,
-    loadingData: false,
-    color: Material,
-    statistic: [],
-    statisticDeny: [],
-    localSalesByPayments: [],
-    localSalesByCategories: [],
-    tabName: [
-      { name: 'Informacion', icon: 'mdi-info', access: 'manager_access' },
-      { name: 'Accesos', icon: 'mdi-key', access: 'manager_access' }
-    ]
-  }),
-  computed: {
-    ...mapGetters('auth', ['user', 'access_permit']),
-    activity () {
-      return [
+  data () {
+    return {
+      tab: null,
+      timer: '',
+      loadingData: false,
+      color: Material,
+      statistic: [],
+      statisticDeny: [],
+      localSalesByPayments: [],
+      localSalesByCategories: [],
+      tabName: [
         {
-          avatar:
-              'https://s3.amazonaws.com/uifaces/faces/twitter/ludwiczakpawel/128.jpg',
-          timeString: 'Just now',
-          color: 'primary',
-          text: 'Michael finished  one task just now.'
+          name: this.$vuetify.lang.t('$vuetify.dashboard.access'),
+          icon: 'mdi-key',
+          access: 'manager_access'
         },
         {
-          avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/suprb/128.jpg',
-          timeString: '30 min ago',
-          color: 'teal',
-          text: 'Jim created a new  task.'
+          name: this.$vuetify.lang.t('$vuetify.dashboard.info'),
+          icon: 'mdi-info',
+          access: 'manager_access'
+        }
+      ],
+      trending: [
+        {
+          subheading: 'Email',
+          headline: '15+',
+          caption: 'email opens',
+          percent: 15,
+          icon: {
+            label: 'email',
+            color: 'info'
+          },
+          linear: {
+            value: 15,
+            color: 'info'
+          }
         },
         {
-          avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/suprb/128.jpg',
-          timeString: '1 hour ago',
-          color: 'indigo',
-          text: 'Li completed the PSD to html convert.'
+          subheading: 'Tasks',
+          headline: '90%',
+          caption: 'tasks completed.',
+          percent: 90,
+          icon: {
+            label: 'list',
+            color: 'primary'
+          },
+          linear: {
+            value: 90,
+            color: 'success'
+          }
         },
         {
-          avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/suprb/128.jpg',
-          timeString: '3 hour ago',
-          color: 'pink',
-          text: 'Michael upload a new pic.'
+          subheading: 'Issues',
+          headline: '100%',
+          caption: 'issues fixed.',
+          percent: 100,
+          icon: {
+            label: 'bug_report',
+            color: 'primary'
+          },
+          linear: {
+            value: 100,
+            color: 'error'
+          }
         }
       ]
-    },
-    siteTrafficData () {
-      return API.getMonthVisit
-    },
-    locationData () {
-      return API.getLocation
-    },
+    }
+  },
+  computed: {
+    ...mapState('sale', ['salesByLimit', 'salesStatics']),
+    ...mapState('article', ['articlesMerge']),
+    ...mapGetters('auth', ['user', 'access_permit']),
     tabsData () {
-      const result = { tabName: [], itemsTabs: [] }
+      const result = {
+        tabName: [],
+        itemsTabs: []
+      }
       this.tabName.forEach((v, i) => {
         const access = this.access_permit.filter(a => a.title.name === v.access)
         if (access.length > 0) {
@@ -263,6 +279,33 @@ export default {
         }
       })
       return result
+    },
+    columnHeaders () {
+      return [
+        {
+          text: '',
+          align: 'center',
+          sortable: false,
+          value: 'avatar'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.firstName'),
+          align: 'left',
+          value: 'name'
+        }, {
+          text: this.$vuetify.lang.t('$vuetify.articles.price'),
+          align: 'left',
+          value: 'price'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+          align: 'left',
+          value: 'cost'
+        }, {
+          text: this.$vuetify.lang.t('$vuetify.articles.percent'),
+          value: 'progress'
+        }
+      ]
     }
   },
   watch: {
@@ -274,12 +317,24 @@ export default {
     this.loadingData = true
     await this.getUserLogin()
     await this.completeStaticTic()
+    await this.getSaleByLimit(5)
+    await this.getArticlesMerge()
+    await this.getSaleStatics()
+    this.timer = await setTimeout(() => {
+      this.getSaleByLimit(5)
+      this.getArticlesMerge()
+      this.getSaleStatics()
+    }, 60000)
     this.loadingData = false
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   methods: {
     ...mapActions('user', ['getUserLogin']),
+    ...mapActions('sale', ['getSaleByLimit', 'getSaleStatics']),
+    ...mapActions('article', ['getArticlesMerge']),
     completeStaticTic () {
-      console.log(this.access_permit)
       this.statistic = []
       this.statisticDeny = []
       if (this.access_permit.length > 0) {

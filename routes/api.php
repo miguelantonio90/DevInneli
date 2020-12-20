@@ -74,6 +74,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('sale/payment', 'SaleController@salePayment')->name('salePayment');
         Route::post('sale/product', 'SaleController@saleByProduct')->name('saleByProduct');
         Route::post('sale/employer', 'SaleController@saleByEmployer')->name('saleByEmployer');
+        Route::get('sale/by_limit/{limit}', 'SaleController@findSalesByLimit')->name('saleByLimit');
+        Route::get('sale/sales/static', 'SaleController@getTotalSalesStatic')->name('saleStatics');
 
         Route::resource('assistance', 'AssistanceController');
 

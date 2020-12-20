@@ -513,7 +513,6 @@ export default {
       }
     },
     cancelProductPreform (item, art) {
-      console.log(item, art)
     },
     total_pay (item) {
       let sum = 0
