@@ -47,6 +47,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('keys', 'KeyPositionsController');
 
         Route::resource('shop', 'ShopController');
+        Route::resource('boxes', 'BoxController');
 
         Route::resource('company', 'CompanyController');
         Route::post('company/logo/{id}', 'CompanyController@updateLogo')->name('company.updateLogo');

@@ -146,6 +146,8 @@ export default {
           } else {
             this.loading = false
           }
+        }).catch(() => {
+          this.loading = false
         })
       }
     },

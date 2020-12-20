@@ -77,6 +77,38 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
+              v-if="accessOpen && item.state === 'open'"
+              class="mr-2"
+              small
+              color="primary"
+              v-bind="attrs"
+              v-on="on"
+              @click="openButtonClicked(item.id)"
+            >
+              mdi-lock
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_close') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="accessOpen && item.state !== 'open'"
+              class="mr-2"
+              color="primary"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="openButtonClicked(item.id)"
+            >
+              mdi-lock-open
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
               v-if="viewShowButton"
               class="mr-2"
               small
@@ -89,6 +121,7 @@
           </template>
           <span>{{ $vuetify.lang.t('$vuetify.actions.show') }}</span>
         </v-tooltip>
+
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -250,6 +283,7 @@ export default {
       accessNewButton: false,
       accessEditButton: false,
       accessTransportButton: false,
+      accessOpen: false,
       accessDeleteButton: true
     }
   },
@@ -337,10 +371,11 @@ export default {
       if (this.access_permit.length > 0 && this.manager !== '') {
         this.access_permit.forEach((v) => {
           if ('manager_' + this.manager === v.title.name && !Array.isArray(v.actions)) {
-            this.accessNewButton = this.viewNewButton && v.actions[this.manager + '_add']
-            this.accessEditButton = this.viewEditButton && v.actions[this.manager + '_edit']
-            this.accessDeleteButton = this.viewDeleteButton && v.actions[this.manager + '_delete']
-            this.accessTransportButton = this.viewTransferButton && v.actions[this.manager + '_transfer']
+            this.accessNewButton = this.viewNewButton && v.actions.create
+            this.accessEditButton = this.viewEditButton && v.actions.edit
+            this.accessDeleteButton = this.viewDeleteButton && v.actions.delete
+            this.accessTransportButton = this.viewTransferButton && v.actions.transfer
+            this.accessOpen = v.actions.boxes_open
           }
         })
       }
@@ -356,6 +391,9 @@ export default {
     },
     editButtonClicked (clickedRowId) {
       this.$emit('edit-row', clickedRowId)
+    },
+    openButtonClicked (clickedRowId) {
+      this.$emit('open-row', clickedRowId)
     },
     showButtonClicked (clickedRowId) {
       this.$emit('show-row', clickedRowId)

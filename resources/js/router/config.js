@@ -170,7 +170,7 @@ export const protectedRoute = [
           {
             path: '/sales/vending.list',
             name: 'vending',
-            access: 'vending_list',
+            access: 'list',
             meta: {
               title: 'vending',
               hiddenInMenu: false,
@@ -181,7 +181,7 @@ export const protectedRoute = [
           {
             path: '/sales/vending/new',
             name: 'vending_new',
-            access: 'vending_add',
+            access: 'create',
             meta: {
               title: 'vending_new',
               hiddenInMenu: true,
@@ -192,7 +192,7 @@ export const protectedRoute = [
           {
             path: '/sales/vending/edit',
             name: 'vending_edit',
-            access: 'vending_edit',
+            access: 'edit',
             meta: {
               title: 'vending_edit',
               hiddenInMenu: true,
@@ -203,13 +203,24 @@ export const protectedRoute = [
           {
             path: '/sales/refund.list',
             name: 'refund',
-            access: 'refund_list',
+            access: 'list',
             meta: {
               title: 'refund',
               hiddenInMenu: false,
               requiresAuth: true
             },
             component: () => import('../views/refund/ListRefund')
+          },
+          {
+            path: '/sales/boxes.list',
+            name: 'boxes',
+            access: 'list',
+            meta: {
+              title: 'boxes',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/boxes/ListBoxes')
           }
         ]
       },
@@ -228,7 +239,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.list',
             name: 'product_list',
-            access: 'article_list',
+            access: 'list',
             meta: {
               title: 'product_list',
               icon: 'mdi-database-plus',
@@ -239,7 +250,7 @@ export const protectedRoute = [
           {
             path: '/articles/category.list',
             name: 'category_list',
-            access: 'category_list',
+            access: 'list',
             meta: {
               title: 'category_list',
               icon: 'mdi-database-plus',
@@ -250,7 +261,7 @@ export const protectedRoute = [
           {
             path: '/articles/modifiers.list',
             name: 'modifiers_list',
-            access: 'mod_list',
+            access: 'list',
             meta: {
               title: 'modifiers_list',
               icon: 'mdi-database-plus',
@@ -272,7 +283,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.add',
             name: 'product_add',
-            access: 'article_add',
+            access: 'create',
             meta: {
               title: 'product_add',
               icon: 'mdi-database-plus',
@@ -284,7 +295,7 @@ export const protectedRoute = [
           {
             path: '/articles/product.edit',
             name: 'product_edit',
-            access: 'article_edit',
+            access: 'edit',
             meta: {
               title: 'product_edit',
               icon: 'mdi-database-plus',
@@ -296,7 +307,7 @@ export const protectedRoute = [
           {
             path: '/article/type_of_order.list',
             name: 'type_of_order',
-            access: 'type_of_order',
+            access: 'list',
             meta: {
               title: 'type_of_order',
               icon: 'mdi-car',
@@ -322,7 +333,7 @@ export const protectedRoute = [
           {
             path: '/finance/supplier.list',
             name: 'supplier_list',
-            access: 'supplier_list',
+            access: 'list',
             meta: {
               title: 'supplier_list',
               icon: 'mdi-car',
@@ -333,7 +344,7 @@ export const protectedRoute = [
           {
             path: '/finance/buy_list',
             name: 'supply_product',
-            access: 'buy_list',
+            access: 'list',
             meta: {
               title: 'supply_product',
               icon: 'mdi-database-plus',
@@ -345,7 +356,7 @@ export const protectedRoute = [
           {
             path: '/finance/buy.add',
             name: 'supply_add',
-            access: 'supplier_add',
+            access: 'create',
             meta: {
               title: 'supply_add',
               icon: 'mdi-database-plus',
@@ -357,7 +368,7 @@ export const protectedRoute = [
           {
             path: '/finance/supply.edit',
             name: 'supply_edit',
-            access: 'supplier_edit',
+            access: 'edit',
             meta: {
               title: 'supply_edit',
               icon: 'mdi-database-plus',
@@ -369,7 +380,7 @@ export const protectedRoute = [
           {
             path: '/finance/tax.list',
             name: 'tax_list',
-            access: 'tax_list',
+            access: 'list',
             meta: {
               title: 'tax_list',
               icon: 'mdi-car',
@@ -381,7 +392,7 @@ export const protectedRoute = [
           {
             path: '/finance/discount.list',
             name: 'discount',
-            access: 'discount_list',
+            access: 'list',
             meta: {
               title: 'discount',
               icon: 'mdi-car',
@@ -393,7 +404,7 @@ export const protectedRoute = [
           {
             path: '/finance/pay.list',
             name: 'pay',
-            access: 'pay_list',
+            access: 'list',
             meta: {
               title: 'pay',
               icon: 'mdi-car',
@@ -405,7 +416,7 @@ export const protectedRoute = [
           {
             path: '/finance/exchange_rate.list',
             name: 'exchange_rate',
-            access: 'exchange_rate_list',
+            access: 'list',
             meta: {
               title: 'exchange_rate',
               icon: 'mdi-car',
@@ -417,7 +428,7 @@ export const protectedRoute = [
           {
             path: '/finance/expense_category.list',
             name: 'expense_category',
-            access: 'expense_category_list',
+            access: 'list',
             meta: {
               title: 'expense_category',
               icon: 'mdi-car',
@@ -442,7 +453,7 @@ export const protectedRoute = [
           {
             path: '/resume/sell_product.list',
             name: 'sell_product',
-            access: 'sell_by_product',
+            access: 'product',
             meta: {
               title: 'sell_product',
               icon: 'mdi-database-plus',
@@ -499,7 +510,7 @@ export const protectedRoute = [
           {
             path: '/users/employer.list',
             name: 'employer_list',
-            access: 'employer_list',
+            access: 'list',
             meta: {
               title: 'employer_list',
               icon: 'mdi-database-plus',
@@ -510,7 +521,7 @@ export const protectedRoute = [
           {
             path: '/users/access.list',
             name: 'access',
-            access: 'access_list',
+            access: 'list',
             meta: {
               title: 'access',
               hiddenInMenu: true,
@@ -522,7 +533,7 @@ export const protectedRoute = [
           {
             path: '/users/access.add',
             name: 'access_new',
-            access: 'access_add',
+            access: 'create',
             meta: {
               title: 'access_new',
               hiddenInMenu: true,
@@ -534,7 +545,7 @@ export const protectedRoute = [
           {
             path: '/users/assistance.list',
             name: 'assistance',
-            access: 'assistance_list',
+            access: 'list',
             meta: {
               title: 'assistance',
               icon: 'mdi-clock',
@@ -559,7 +570,7 @@ export const protectedRoute = [
           {
             path: '/clients/client.list',
             name: 'clients_list',
-            access: 'client_list',
+            access: 'list',
             meta: {
               title: 'client_list',
               icon: 'mdi-database-plus',
@@ -697,7 +708,7 @@ export const protectedRoute = [
           {
             path: '/admin/sales/vending.list',
             name: 'vending',
-            access: 'vending_list',
+            access: 'list',
             meta: {
               title: 'vending',
               hiddenInMenu: false,
@@ -708,7 +719,7 @@ export const protectedRoute = [
           {
             path: '/admin/sales/refund.list',
             name: 'vending',
-            access: 'vending_list',
+            access: 'list',
             meta: {
               title: 'vending',
               hiddenInMenu: false,
@@ -733,7 +744,7 @@ export const protectedRoute = [
           {
             path: '/admin/articles/product.list',
             name: 'product_list',
-            access: 'article_list',
+            access: 'list',
             meta: {
               title: 'product_list',
               icon: 'mdi-database-plus',
@@ -744,7 +755,7 @@ export const protectedRoute = [
           {
             path: '/admin/articles/category.list',
             name: 'category_list',
-            access: 'category_list',
+            access: 'list',
             meta: {
               title: 'category_list',
               icon: 'mdi-database-plus',
@@ -769,7 +780,7 @@ export const protectedRoute = [
           {
             path: '/admin/finance/supplier.list',
             name: 'supplier_list',
-            access: 'supplier_list',
+            access: 'list',
             meta: {
               title: 'supplier_list',
               icon: 'mdi-car',
@@ -780,7 +791,7 @@ export const protectedRoute = [
           {
             path: '/admin/finance/buy_list',
             name: 'supply_product',
-            access: 'buy_list',
+            access: 'list',
             meta: {
               title: 'supply_product',
               icon: 'mdi-database-plus',
@@ -887,7 +898,7 @@ export const protectedRoute = [
           {
             path: '/admin/clients/client.list',
             name: 'clients_list',
-            access: 'client_list',
+            access: 'list',
             meta: {
               title: 'client_list',
               icon: 'mdi-database-plus',

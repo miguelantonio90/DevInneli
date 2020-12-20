@@ -90,6 +90,7 @@ const mutations = {
     if (access !== undefined) {
       state.access = []
       state.access = JSON.parse((atob(access[1])))
+      console.log(state.access)
       state.isAdmin = access[0]
     }
   },

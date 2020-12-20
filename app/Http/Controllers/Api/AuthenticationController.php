@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
+use function cache as cacheAlias;
 
 /**
  * @group Auth endpos

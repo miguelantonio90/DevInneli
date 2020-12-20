@@ -61,7 +61,7 @@
             v-text="'mdi-cart'"
           />
         </template>
-        <span>{{ $vuetify.lang.t('$vuetify.access.access.buy_add') }}</span>
+        <span>{{ $vuetify.lang.t('$vuetify.titles.newF', [$vuetify.lang.t('$vuetify.supply.name')]) }}</span>
       </v-tooltip>
       <v-menu
         v-if="showMenuLang"

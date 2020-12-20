@@ -2,7 +2,6 @@
 
 namespace App\Managers;
 
-use App\KeyPosition;
 use App\Position;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +31,7 @@ class AccessManager
         $pos = 0;
         $p = [];
         foreach ($positions as $k => $v) {
-            if (KeyPosition::findOrFail($v->key_position_id)->key !== 'CEO') {
+            if ($v->name !== 'CEO') {
                 $p[] = $v;
                 $p[$pos]->accessPin = $v->accessPin === 1;
                 $p[$pos]->accessEmail = $v->accessEmail === 1;
@@ -50,8 +49,7 @@ class AccessManager
     {
         $company = CompanyManager::getCompanyByAdmin();
         $p = Position::create([
-            'name' => $data['name'],
-            'key_position_id' => $data['key']['id']
+            'name' => $data['name']
         ]);
         $p->company_id = $company->id;
         $p->accessEmail = $data['accessEmail'];

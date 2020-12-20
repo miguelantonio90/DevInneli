@@ -15,6 +15,8 @@ class CreateRefundsTable extends BaseMigration
         Schema::create('refunds', function (Blueprint $table) {
             $table->decimal('cant')->default(0);
             $table->decimal('money')->default(0);
+            $table->string('motive')->default('others');
+            $table->string('description')->nullable();
             $table->foreignUuid('sale_id')->nullable()->references('id')->on('sales');
             $table->foreignUuid('article_id')->nullable()->references('id')->on('articles');
         });

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @method static create(array $array)
  * @method static findOrFail(int $id)
+ * @method static latest()
  * @method find($id)
  * @method static where(string $string, string $string1, string $email)
  */
