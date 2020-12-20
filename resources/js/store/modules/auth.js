@@ -89,13 +89,12 @@ const mutations = {
   [UPDATE_ACCESS] (state, access) {
     if (access !== undefined) {
       state.access = []
-      state.access = JSON.parse((atob(access[1])))
-      console.log(state.access)
+      state.access = access.length > 0 ? JSON.parse(atob(access[1])) : {}
       state.isAdmin = access[0]
     }
   },
-  [LOGIN] (state) {
-    state.pending = true
+  [LOGIN] (state, pending) {
+    state.pending = pending
   },
   [LOGIN_SUCCESS] (state) {
     state.isLoggedIn = true
@@ -123,6 +122,7 @@ const mutations = {
   },
   [LOGIN_FAILED] (state) {
     state.isLoggedIn = false
+    state.pending = false
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t('$vuetify.messages.login_failed')
@@ -199,11 +199,12 @@ const actions = {
       })
   },
   async sendLoginRequest ({ commit }, login) {
-    commit(LOGIN)
+    commit(LOGIN, true)
 
     return await auth
       .loginRequest(login)
       .then(({ data }) => {
+        commit(LOGIN, false)
         commit(LOGIN_SUCCESS)
         localStorage.saveToken(
           data.token_type + ' ' + data.access_token
@@ -248,7 +249,6 @@ const actions = {
         router.push('/hi')
       })
       .catch(({ response }) => {
-        console.log(response)
         commit(FAILED_CATCH, response)
       })
   },

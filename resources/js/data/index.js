@@ -2859,7 +2859,6 @@ const getCurrencyToSelect = () => {
   })
   return result
 }
-
 const getSector = () => {
   let result = []
   result =

@@ -83,7 +83,7 @@ export default {
           if (this.isLoggedIn && this.isAdminIn) {
             this.loading = false
             this.$refs.pincodeInput.triggerSuccess()
-            this.$router.push({ name: '/admin/dashboard' })
+            this.$router.push({ name: 'admin_dashboard' })
           } else if (this.isLoggedIn && this.isManagerIn) {
             this.loading = false
             this.$refs.pincodeInput.triggerSuccess()

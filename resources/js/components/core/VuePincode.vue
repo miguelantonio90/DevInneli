@@ -11,6 +11,8 @@
       <span :class="pincode.length >= 2 ? 'active' : ''" />
       <span :class="pincode.length >= 3 ? 'active' : ''" />
       <span :class="pincode.length >= 4 ? 'active' : ''" />
+      <span :class="pincode.length >= 5 ? 'active' : ''" />
+      <span :class="pincode.length >= 6 ? 'active' : ''" />
     </div>
     <div class="vue-pincode__numbers">
       <v-btn
@@ -73,7 +75,7 @@ export default {
   },
   watch: {
     pincode () {
-      if (this.pincodeLength === 4) {
+      if (this.pincodeLength === 6) {
         this.$emit('pincode', this.pincode)
       }
     }
@@ -81,14 +83,15 @@ export default {
   created () {
     window.focus()
     window.addEventListener('keypress', e => {
-      if (!isNaN(e.key)) {
+      if (e.key === '0') {
+        this.clickPinButton(0)
+      } else if (!isNaN(e.key)) {
         this.$refs.btnPin.map((btn) => {
           if (btn.$el.innerText === e.key.toString()) {
             btn.$el.click()
           }
         })
-      }
-      if (e.key === 'Delete') {
+      } else if (e.key === 'Delete') {
         this.resetPincode()
       }
     })
@@ -105,7 +108,7 @@ export default {
   },
   methods: {
     clickPinButton (pressedNumber) {
-      if (this.pincodeLength < 4) {
+      if (this.pincodeLength < 6) {
         this.pincode = this.pincode + pressedNumber
       }
     },

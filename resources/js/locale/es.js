@@ -481,5 +481,20 @@ export default {
     others: 'Otros'
 
   },
+  dashboard: {
+    sales: 'Ventas',
+    salesSub: 'Incremento de ventas',
+    expenses: 'Gastos',
+    expensesSub: 'Total de gastos',
+    revenue: 'Ingresos',
+    revenueSub: 'Incremento de ingresos',
+    orders: 'Órdenes',
+    ordersSub: 'Incremento de órdenes',
+    info: 'Información',
+    access: 'Accesos',
+    mergeTable: 'Margen de ganancias',
+    timeLine: 'Últimas facturas',
+    timeLineText: 'ha creado nueva venta para el cliente'
+  },
   ...es
 }

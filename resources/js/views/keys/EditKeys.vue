@@ -136,7 +136,6 @@ export default {
   },
   created () {
     this.access_permit = this.editKey.access_permit
-    console.log(this.access_permit)
   },
   methods: {
     ...mapActions('keys', ['updateKey', 'toogleEditModal']),

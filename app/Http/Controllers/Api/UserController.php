@@ -37,7 +37,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return ResponseHelper::sendResponse(
             $this->userManager->findAllByCompany(),
@@ -46,10 +46,10 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
-    public function getAll(Request $request)
+    public function getAll(Request $request): JsonResponse
     {
         return ResponseHelper::sendResponse(
             $this->userManager->findAllByCompany(),
@@ -64,7 +64,7 @@ class UserController extends Controller
      * @return Response
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
@@ -81,7 +81,7 @@ class UserController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'firstName' => ['required', 'string', 'max:255'],
@@ -107,6 +107,7 @@ class UserController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function update($id, Request $request)
     {
@@ -141,6 +142,7 @@ class UserController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws \Exception
      */
     public function destroy($id)
     {
@@ -150,11 +152,18 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse|Response
+     */
     public function userLogin()
     {
-        return ResponseHelper::sendResponse(
-            cache()->get('userPin'),
-            'Users has deleted successfully.'
-        );
+        try {
+            return ResponseHelper::sendResponse(
+                cache()->get('userPin'),
+                'Users has deleted successfully.'
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::sendError($e->getMessage(),null, $e->getCode());
+        }
     }
 }

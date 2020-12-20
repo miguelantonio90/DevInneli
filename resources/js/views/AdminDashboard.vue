@@ -110,13 +110,9 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import MiniStatistic from '../components/widgets/statistic/MiniStatistic'
 
 export default {
   name: 'AdminDashboard',
-  components: {
-    MiniStatistic
-  },
   data () {
     return {
       cantArticles: 0,

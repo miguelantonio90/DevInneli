@@ -1,6 +1,8 @@
 import article from '../../api/article'
+import util from '../../util'
 
 const FETCHING_ARTICLES = 'FETCHING_ARTICLES'
+const FETCHING_ARTICLES_MERGE = 'FETCHING_ARTICLES_MERGE'
 const SWITCH_ARTICLE_NEW_MODAL = 'SWITCH_ARTICLE_NEW_MODAL'
 const SWITCH_ARTICLE_EDIT_MODAL = 'SWITCH_ARTICLE_EDIT_MODAL'
 const SWITCH_ARTICLE_SHOW_MODAL = 'SWITCH_ARTICLE_SHOW_MODAL'
@@ -25,6 +27,7 @@ const state = {
   showShowModal: false,
   showRefoundModal: false,
   articles: [],
+  articlesMerge: [],
   avatar: '',
   loading: false,
   saved: false,
@@ -112,6 +115,18 @@ const mutations = {
       }
     })
   },
+  [FETCHING_ARTICLES_MERGE] (state, articles) {
+    const articlesMerge = articles.sort(util.compareValues('percent', 'desc')).slice(0, 5)
+    state.articlesMerge = articlesMerge.map((value) => {
+      return {
+        avatar: value.path ? value.path : null,
+        name: value.name,
+        price: value.price,
+        cost: value.cost,
+        progress: value.percent
+      }
+    })
+  },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
   },
@@ -152,7 +167,6 @@ const mutations = {
     )
   },
   [ARTICLE_REFOUND] (state, { sale, article }) {
-    console.log(sale, article)
     state.refound.sale = sale
     state.refound.article = article
   },
@@ -259,6 +273,17 @@ const actions = {
       .fetchArticles()
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
+        commit(ARTICLE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async getArticlesMerge ({ commit, dispatch }) {
+    commit(ARTICLE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await article
+      .fetchArticles()
+      .then(({ data }) => {
+        commit(FETCHING_ARTICLES_MERGE, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_ARTICLE, error))

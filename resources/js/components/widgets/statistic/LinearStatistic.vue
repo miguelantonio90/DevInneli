@@ -17,7 +17,7 @@
     </v-card-title>
     <v-card-text class="pt-2">
       <h3 class="headline">
-        {{ subTitle }}
+        {{ currency || `` }} {{ quantity }}
       </h3>
       <v-progress-linear
         :color="color"
@@ -30,17 +30,29 @@
 </template>
 
 <script>
+/* eslint-disable vue/require-default-prop */
 export default {
+  name: 'LinearStatistic',
   props: {
+    percent: {
+      type: Boolean,
+      default: false
+    },
     icon: String,
     title: String,
     subTitle: String,
-    value: Number,
+    currency: String,
+    quantity: [String, Number],
+    value: [String, Number],
     color: String
   },
   computed: {
     caption () {
-      return this.value + '% ' + this.subTitle
+      if (this.percent) {
+        return this.value + '% ' + this.subTitle
+      } else {
+        return this.subTitle
+      }
     }
   }
 }

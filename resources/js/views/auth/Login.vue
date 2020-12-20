@@ -85,8 +85,8 @@
               <span>{{ item.text }}</span>
             </v-tooltip>-->
             <v-btn
-              :disabled="!formValid || loading"
-              :loading="loading"
+              :disabled="!formValid || pending"
+              :loading="pending"
               block
               color="primary"
               @click="login"
@@ -124,27 +124,29 @@ export default {
   data () {
     return {
       formValid: false,
-      loading: false,
       hidePassword: true,
       formRule: this.$rules
     }
   },
   computed: {
-    ...mapState('auth', ['isLoggedIn', 'fromModel', 'socialIcons']),
+    ...mapState('auth', ['isLoggedIn', 'fromModel', 'socialIcons', 'pending']),
     ...mapGetters(['errors'])
+  },
+  created () {
+    window.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        this.login()
+      }
+    })
   },
   methods: {
     ...mapActions('auth', ['sendLoginRequest']),
     ...mapActions('company', ['getCompaniesByEmail']),
     login () {
       if (this.$refs.form.validate()) {
-        this.loading = true
         this.sendLoginRequest(this.fromModel).then(() => {
           if (this.isLoggedIn) {
-            this.loading = false
             this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
-          } else {
-            this.loading = false
           }
         }).catch(() => {
           this.loading = false
