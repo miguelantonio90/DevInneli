@@ -1,21 +1,20 @@
 <?php
 
-
 namespace App\Managers;
 
-
-use App\Articles;
 use App\ArticlesShops;
 use App\Sale;
 use App\SalesArticlesShops;
 use App\Tax;
 use App\User;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SaleManager extends BaseManager
 {
+    /**
+     * @return mixed
+     */
     public function findAllByCompany()
     {
         $sales = [];
@@ -37,27 +36,27 @@ class SaleManager extends BaseManager
         }
         foreach ($sales as $key => $value) {
             $sales[$key]['shop'] = DB::table('shops')
+                ->select('shops.*', 'shops.id as shop_id')
+                ->where('sales.id', '=', $value['id'])
                 ->join('articles_shops', 'shops.id', '=', 'articles_shops.shop_id')
                 ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                     'articles_shops.id')
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-                ->where('sales.id', '=', $value['id'])
-                ->select('shops.*', 'shops.id as shop_id')
                 ->first();
             $sales[$key]['articles'] = DB::table('articles')
-                ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
-                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                    'articles_shops.id')
-                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->select([
                     'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
                     'articles_shops.stock as inventory', 'articles.id as article_id'
                 ])
                 ->where('sales.id', '=', $value['id'])
+                ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
+                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
+                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->get();
             $payments = DB::table('payments')
-                ->join('sales', 'sales.payment_id', '=', 'payments.id')
                 ->where('sales.id', '=', $value['id'])
+                ->join('sales', 'sales.payment_id', '=', 'payments.id')
                 ->get();
             $sales[$key]['payments'] = count($payments) > 0 ? $payments[0] : null;
             $sales[$key]['client'] = DB::table('clients')
@@ -77,10 +76,10 @@ class SaleManager extends BaseManager
                     ->addSelect(['taxes.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->refounds = DB::table('refunds')
-                    ->join('users', 'users.id','=', 'refunds.created_by')
+                    ->join('users', 'users.id', '=', 'refunds.created_by')
                     ->where('refunds.article_id', '=', $v->id)
                     ->where('refunds.sale_id', '=', $value->id)
-                    ->select('refunds.*','users.firstName as created_by')
+                    ->select('refunds.*', 'users.firstName as created_by')
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
                     ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
@@ -104,8 +103,9 @@ class SaleManager extends BaseManager
                     $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
                 }
                 foreach ($sales[$key]['articles'][$k]->taxes as $j => $i) {
-                    if($i->type === 'added')
+                    if ($i->type === 'added') {
                         $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                    }
                 }
                 foreach ($sales[$key]['articles'][$k]->refounds as $s => $t) {
                     $refund += $t->money;
@@ -130,6 +130,54 @@ class SaleManager extends BaseManager
             $sales[$key]['totalPrice'] = round($totalPrice, 2);
         }
         return $sales;
+    }
+
+    /**
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function findSalesByLimit(int $limit)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $sales = Sale::latest()
+            ->where('company_id', '=', $company->id)
+            ->orderBy('created_at', 'ASC')
+            ->take($limit)
+            ->get();
+        foreach ($sales as $key => $value) {
+            $sales[$key]['created'] = DB::table('users')
+                ->where('users.id', '=', $value->created_by)
+                ->first();
+            $sales[$key]['client'] = DB::table('clients')
+                ->where('sales.id', '=', $value['id'])
+                ->join('sales', 'sales.client_id', '=', 'clients.id')
+                ->first();
+        }
+        return $sales;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTotalsStatic(): array
+    {
+        $sales = $this->findAllByCompany();
+        $count = 0;
+        $expenses = 0;
+        $salesCount = 0;
+        $response = [];
+        foreach ($sales as $key => $value) {
+            if ($value['state'] === 'accepted') {
+                $expenses += $value['totalCost'];
+                $salesCount += $value['totalPrice'];
+                $response['totalSales'] = $salesCount;
+                $response['totalExpenses'] = $expenses;
+                $response['totalRevenue'] = $salesCount - $expenses;
+                $response['totalOrders'] = ++$count;
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -249,6 +297,7 @@ class SaleManager extends BaseManager
         $sale->save();
         $this->removeSaleArticle($sale, $data['articles']);
         $this->updateSaleData($sale, $data, true);
+
         return $sale;
     }
 
@@ -326,12 +375,15 @@ class SaleManager extends BaseManager
             ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->where('articles.category_id', '=', $id)
             ->orderBy('articles.created_at')
-            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
-                'sales.created_at as sales_created_at', 'articles.name', 'sales_articles_shops.cant', 'sales.created_by',
+            ->select('articles.id as article_id', 'sales.id as sales_id',
+                'sales_articles_shops.id as sales_articles_shops_id',
+                'sales.created_at as sales_created_at', 'articles.name', 'sales_articles_shops.cant',
+                'sales.created_by',
                 'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
-            $articles->whereDate('sales_articles_shops.created_at', '>=', $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
+            $articles->whereDate('sales_articles_shops.created_at', '>=',
+                $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
         }
         if (array_key_exists('shops', $filter)) {
             foreach ($filter['shops'] as $key => $value) {
@@ -367,10 +419,14 @@ class SaleManager extends BaseManager
                 $totalDiscounts = $discount->percent ? $discount->value * $price / 100 : $price + $discount->value;
             }
         }
-        return ['cantArt' => count($articles), 'grossPrice' => round($grossPrice, 2), 'totalDiscount' => round($totalDiscounts, 2),
+        return [
+            'cantArt' => count($articles), 'grossPrice' => round($grossPrice, 2),
+            'totalDiscount' => round($totalDiscounts, 2),
             'netPrice' => round(($grossPrice + $totalTax - $totalDiscounts), 2), 'totalCost' => round($totalCost, 2),
-            'grossBenefit' => round(($grossPrice + $totalTax - $totalDiscounts) - $totalCost, 2), 'totalTax' => round($totalTax, 2),
-            'margin' => ($grossPrice === 0.00 || $grossPrice === 0) ? 0.00 : round(100 * $totalCost / $grossPrice, 2)];
+            'grossBenefit' => round(($grossPrice + $totalTax - $totalDiscounts) - $totalCost, 2),
+            'totalTax' => round($totalTax, 2),
+            'margin' => ($grossPrice === 0.00 || $grossPrice === 0) ? 0.00 : round(100 * $totalCost / $grossPrice, 2)
+        ];
     }
 
     /**
@@ -386,12 +442,14 @@ class SaleManager extends BaseManager
                 'articles_shops.id')
             ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->where('sales.created_by', '=', cache()->get('userPin')['id'])
-            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
+            ->select('articles.id as article_id', 'sales.id as sales_id',
+                'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales.created_at as sales_created_at',
                 'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost', 'sales.pay');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
-            $articles->whereDate('sales_articles_shops.created_at', '>=', $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
+            $articles->whereDate('sales_articles_shops.created_at', '>=',
+                $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
         }
         if (array_key_exists('shops', $filter)) {
             $shops = [];
@@ -441,7 +499,8 @@ class SaleManager extends BaseManager
             $result[$value->pay]['grossPrice'] += $price;
             $result[$value->pay]['totalDiscount'] += $totalDiscounts;
             $result[$value->pay]['totalTax'] += round($totalTax, 2);
-            $result[$value->pay]['netPrice'] = round($result[$value->pay]['grossPrice'] + $result[$value->pay]['totalTax'] - $result[$value->pay]['totalDiscount'], 2);
+            $result[$value->pay]['netPrice'] = round($result[$value->pay]['grossPrice'] + $result[$value->pay]['totalTax'] - $result[$value->pay]['totalDiscount'],
+                2);
         }
         $data = [];
         $pos = 0;
@@ -477,8 +536,10 @@ class SaleManager extends BaseManager
             ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
             ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
             ->whereIn('articles_shops.shop_id', $shops)
-            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
-                'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost', 'sales.pay')
+            ->select('articles.id as article_id', 'sales.id as sales_id',
+                'sales_articles_shops.id as sales_articles_shops_id',
+                'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price',
+                'sales_articles_shops.created_at', 'articles.cost', 'sales.pay')
             ->get();
         $result = [];
         $grossPrice = 0;
@@ -546,13 +607,15 @@ class SaleManager extends BaseManager
                 'articles_shops.id')
             ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->where('sales.created_by', '=', cache()->get('userPin')['id'])
-            ->select('articles.id as article_id', 'sales.id as sales_id', 'sales_articles_shops.id as sales_articles_shops_id',
+            ->select('articles.id as article_id', 'sales.id as sales_id',
+                'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales.created_by',
                 'sales_articles_shops.created_at', 'articles.cost', 'sales.pay');
 
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
-            $articles->whereDate('sales_articles_shops.created_at', '>=', $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
+            $articles->whereDate('sales_articles_shops.created_at', '>=',
+                $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
         }
         if (array_key_exists('shops', $filter)) {
             foreach ($filter['shops'] as $key => $value) {
@@ -601,7 +664,8 @@ class SaleManager extends BaseManager
             $result[$value->created_by]['grossPrice'] += $price;
             $result[$value->created_by]['totalDiscount'] += $totalDiscounts;
             $result[$value->created_by]['totalTax'] += round($totalTax, 2);
-            $result[$value->created_by]['netPrice'] = round($result[$value->created_by]['grossPrice'] + $result[$value->created_by]['totalTax'] - $result[$value->created_by]['totalDiscount'], 2);
+            $result[$value->created_by]['netPrice'] = round($result[$value->created_by]['grossPrice'] + $result[$value->created_by]['totalTax'] - $result[$value->created_by]['totalDiscount'],
+                2);
         }
         $data = [];
         $pos = 0;

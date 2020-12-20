@@ -24,5 +24,11 @@ export default {
   },
   fetchSaleByEmployer (filter) {
     return api.post('sale/employer', filter)
+  },
+  fetchSaleByLimit (filter) {
+    return api.get('sale/by_limit/' + filter)
+  },
+  fetchSaleStatics () {
+    return api.get('sale/sales/static')
   }
 }

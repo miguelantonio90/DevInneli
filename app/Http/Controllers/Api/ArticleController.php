@@ -58,7 +58,7 @@ class ArticleController extends Controller
      * @throws ValidationException
      * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
@@ -74,7 +74,7 @@ class ArticleController extends Controller
      * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255']
@@ -84,10 +84,11 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function update(Request $request, $id)
     {
@@ -104,6 +105,7 @@ class ArticleController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws \Exception
      */
     public function destroy($id)
     {
