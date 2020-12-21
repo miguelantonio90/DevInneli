@@ -274,12 +274,12 @@ export default {
       manager_assistence: 'Manager Assistance card',
       manager_tax: 'Manager Tax',
       manager_discount: 'Manager Discount',
+      manager_boxes: 'Manager Boxes',
       manager_client: 'Manager Clients',
       config: 'Setting',
       manager_shop: 'Manager Shop',
       manager_access: 'Manager Access permit',
       manager_payment: 'Manager Payments',
-      manager_boxes: 'Manager Boxes',
       manager_expense_category: 'Manager Expense Category',
       manager_exchange_rate: 'Manager Exchange Rate',
       manager_type_of_order: 'Manager Type of Order'

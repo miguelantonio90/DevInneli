@@ -77,8 +77,6 @@ import ListTaxAdmin from '../tax/ListTaxAdmin'
 import ListDiscount from '../discount/ListDiscount'
 import ListAccess from '../access/ListAccess'
 import ListAccessAdmin from '../access/ListAccessAdmin'
-import ListKeys from '../keys/ListKeys'
-import ListKeysAdmin from '../keys/ListKeysAdmin'
 import { mapGetters } from 'vuex'
 export default {
   name: 'General2',
@@ -91,9 +89,7 @@ export default {
     ListTax,
     ListDiscount,
     ListAccess,
-    ListKeys,
     ListShopAdmin,
-    ListKeysAdmin,
     ListAccessAdmin,
     ListPaymentAdmin,
     ExpenseCategoryAdmin,
@@ -107,7 +103,6 @@ export default {
       itemsTabs: [
         [
           { key: 'shop-list', content: 'shop-list' },
-          { key: 'list-keys', content: 'list-keys' },
           { key: 'list-access', content: 'list-access' },
           { key: 'list-payment', content: 'list-payment' },
           { key: 'expense-category', content: 'expense-category' },
@@ -118,7 +113,6 @@ export default {
         ],
         [
           { key: 'shop-list', content: 'list-shop-admin' },
-          { key: 'list-keys', content: 'list-keys-admin' },
           { key: 'list-access', content: 'list-access-admin' },
           { key: 'list-payment', content: 'list-payment-admin' },
           { key: 'expense-category', content: 'expense-category-admin' },
@@ -130,7 +124,6 @@ export default {
       ],
       tabName: [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping', access: 'manager_shop' },
-        { name: this.$vuetify.lang.t('$vuetify.menu.keys'), icon: 'mdi-key', access: 'manager_key' },
         { name: this.$vuetify.lang.t('$vuetify.menu.access'), icon: 'mdi-key', access: 'manager_access' },
         { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: 'mdi-cash-multiple', access: 'manager_payment' },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check', access: 'manager_expense_category' },

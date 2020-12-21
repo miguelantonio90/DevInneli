@@ -22,23 +22,7 @@
           <v-row justify="space-around">
             <v-col
               cols="12"
-              md="3"
-            >
-              <v-select
-                v-model="key"
-                :items="keys"
-                item-text="key"
-                :label="$vuetify.lang.t('$vuetify.access.key')"
-                requiered
-                disabled
-                return-object
-                :rules="formRule.key"
-                @change="updateAccessPermit"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
+              md="6"
             >
               <v-text-field
                 v-model="editAccess.name"
@@ -116,12 +100,17 @@
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content v-show="access.title.value">
-                    <v-switch
-                      v-for="(item,i) in access.actions"
-                      :key="i"
-                      v-model="access.actions[i]"
-                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
-                    />
+                    <v-row>
+                      <v-col
+                        v-for="(item,i) in access.actions"
+                        :key="i"
+                      >
+                        <v-switch
+                          v-model="access.actions[i]"
+                          :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
+                        />
+                      </v-col>
+                    </v-row>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-col>
@@ -171,15 +160,14 @@ export default {
     ...mapState('keys', ['keys'])
   },
   created () {
-    this.getKeys().then(() => {
-      this.key = this.keys.filter(k => k.id === this.editAccess.key_position_id)[0]
-    })
+    this.access_permit = []
     this.access_permit = JSON.parse(this.editAccess.access_permit)
+    console.log(this.access_permit)
   },
   methods: {
     ...mapActions('role', ['updateRole', 'toogleEditModal']),
-    ...mapActions('keys', ['getKeys']),
     updateAccessPermit () {
+      this.access_permit = []
       this.access_permit = JSON.parse(this.newAccess.key.access_permit)
     },
 

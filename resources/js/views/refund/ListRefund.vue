@@ -7,13 +7,14 @@
       >
         <edit-refound v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.menu.pay')"
-          csv-filename="Categories"
+          :title="$vuetify.lang.t('$vuetify.titles.list',
+                                  [$vuetify.lang.t('$vuetify.menu.refund'),])"
+          csv-filename="Refunds"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
           :items="refunds"
           :view-new-button="false"
-          :manager="'payment'"
+          :manager="'refunds'"
           :sort-by="['name']"
           :sort-desc="[false, true]"
           multi-sort

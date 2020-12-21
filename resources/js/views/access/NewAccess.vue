@@ -24,36 +24,6 @@
               cols="12"
               md="3"
             >
-              <v-select
-                v-model="newAccess.key"
-                :items="keys"
-                item-text="key"
-                :label="$vuetify.lang.t('$vuetify.access.key')"
-                requiered
-                return-object
-                :rules="formRule.key"
-                @change="updateAccessPermit"
-              >
-                <template v-slot:append-outer>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="$store.dispatch('keys/toogleNewModal',true)"
-                      >
-                        mdi-plus
-                      </v-icon>
-                    </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                  </v-tooltip>
-                </template>
-              </v-select>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
               <v-text-field
                 v-model="newAccess.name"
                 :label="$vuetify.lang.t('$vuetify.access.name')"
@@ -86,6 +56,7 @@
               <v-col
                 v-for="(access,j) in access_permit"
                 :key="j"
+                cols="12"
                 md="6"
               >
                 <v-expansion-panel>
@@ -130,12 +101,24 @@
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content v-show="access.title.value">
-                    <v-switch
-                      v-for="(item,i) in access.actions"
-                      :key="i"
-                      v-model="access.actions[i]"
-                      :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
-                    />
+                    <v-row>
+                      <v-col
+                        v-for="(item,i) in access.actions"
+                        :key="i"
+                      >
+                        <v-switch
+                          v-if="Object.keys(access.actions[i]) === 'list'"
+                          v-model="access.actions[i][Object.keys(access.actions[i])]"
+                          value="access.title.value"
+                          :label="$vuetify.lang.t('$vuetify.access.access.' + Object.keys(access.actions[i]))"
+                        />
+                        <v-switch
+                          v-else
+                          v-model="access.actions[i][Object.keys(access.actions[i])]"
+                          :label="$vuetify.lang.t('$vuetify.access.access.' + Object.keys(access.actions[i]))"
+                        />
+                      </v-col>
+                    </v-row>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-col>
@@ -184,23 +167,150 @@ export default {
     ...mapState('keys', ['saved', 'keys', 'isActionInProgress'])
   },
   created () {
-    this.getKeys().then(() => {
-      this.newAccess.key = this.keys[0]
-      this.access_permit = JSON.parse(this.keys[0].access_permit)
-    })
   },
   mounted () {
     this.formValid = false
+    this.access_permit = [
+      {
+        title: {
+          name: 'manager_article',
+          value: true
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+
+      },
+      {
+        title: { name: 'manager_refunds', value: false },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: { name: 'manager_boxes', value: false },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false, boxes_open: false, boxes_close: false }
+      },
+      {
+        title: { name: 'manager_vending', value: false },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_category',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_mod',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_supplier',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_buy',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_sell',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_employer',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_assistence',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_client',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_shop',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_access',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_payment',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_expense_category',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_exchange_rate',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_type_of_order',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_tax',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      },
+      {
+        title: {
+          name: 'manager_discount',
+          value: false
+        },
+        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+      }
+    ]
   },
   methods: {
     ...mapActions('role', ['createRole', 'toogleNewModal']),
-    ...mapActions('keys', ['getKeys']),
-    updateAccessPermit () {
-      this.access_permit = JSON.parse(this.newAccess.key.access_permit)
-    },
     async createNewRole () {
       if (this.$refs.form.validate()) {
         this.newAccess.access_permit = this.access_permit
+        console.log(this.access_permit)
         await this.createRole(this.newAccess)
       }
     }

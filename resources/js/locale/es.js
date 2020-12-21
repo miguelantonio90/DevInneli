@@ -278,6 +278,7 @@ export default {
       manager_assistence: 'Gestionar Tarjeta de asistencia',
       manager_tax: 'Gestionar Impuesto',
       manager_discount: 'Gestionar Descuento',
+      manager_boxes: 'Gestionar Cajas',
       manager_client: 'Gestionar Clientes',
       config: 'Configuración',
       manager_shop: 'Gestionar Tienda',
