@@ -145,7 +145,7 @@ export default {
     async openCloseBoxHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.openCloseBox(this.box)
+        await this.openCloseBox(this.openClose)
       }
     }
   }

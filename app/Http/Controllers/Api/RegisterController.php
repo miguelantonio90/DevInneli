@@ -113,7 +113,7 @@ class RegisterController extends Controller
                 ],
                 [
                     'title' => ['name' => 'manager_article', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
+                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'transport'=>true,
                         'edit' => true, 'delete' => true, 'transport' => true, 'import' => true, 'export' => true]
                 ],
                 [
@@ -128,7 +128,7 @@ class RegisterController extends Controller
                 ],
                 [
                     'title' => ['name' => 'manager_refunds', 'value' => true],
-                    'actions' => ['just_yours' => false, 'refunds_list' => true, 'create' => true, 'edit' => true,
+                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'edit' => true,
                         'delete' => true, 'import' => true, 'export' => true]
                 ],
                 [
@@ -155,8 +155,8 @@ class RegisterController extends Controller
                     'title' => ['name' => 'manager_sell', 'value' => true],
                     'actions' =>
                         ['just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
-                            'sell_by_employer' => true, 'sell_by_payments' => true, 'sell_by_import' => true,
-                            'sell_by_export' => true]
+                            'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
+                            'export' => true]
                 ],
                 [
                     'title' => ['name' => 'manager_employer', 'value' => true],
@@ -279,8 +279,8 @@ class RegisterController extends Controller
                         'title' => ['name' => 'manager_sell', 'value' => true],
                         'actions' =>
                             ['just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
-                                'sell_by_employer' => true, 'sell_by_payments' => true, 'sell_by_import' => true,
-                                'sell_by_export' => true]
+                                'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
+                                'export' => true]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
@@ -365,7 +365,7 @@ class RegisterController extends Controller
                     ],
                     [
                         'title' => ['name' => 'manager_refunds', 'value' => true],
-                        'actions' => ['just_yours' => false, 'refunds_list' => true, 'create' => true, 'edit' => false,
+                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'edit' => false,
                             'delete' => false, 'import' => false, 'export' => false]
                     ],
                     [
@@ -392,8 +392,8 @@ class RegisterController extends Controller
                         'title' => ['name' => 'manager_sell', 'value' => false],
                         'actions' =>
                             ['just_yours' => false, 'sell_by_product' => false, 'sell_by_category' => false,
-                                'sell_by_employer' => false, 'sell_by_payments' => false, 'sell_by_import' => false,
-                                'sell_by_export' => false]
+                                'sell_by_employer' => false, 'sell_by_payments' => false, 'import' => false,
+                                'export' => false]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
@@ -401,7 +401,7 @@ class RegisterController extends Controller
                             'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
                     ],
                     [
-                        'title' => ['name' => 'manager_assistence', 'value' => true],
+                            'title' => ['name' => 'manager_assistence', 'value' => true],
                         'actions' => ['just_yours' => true, 'list' => true, 'create' => false,
                             'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
                     ],

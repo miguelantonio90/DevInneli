@@ -378,6 +378,22 @@ export default {
           icon: 'mdi-close',
           sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_client')
         })
+        this.access_permit.filter(permit => permit.title.name === 'manager_boxes')[0].title.value === true ? this.statistic.push({
+          icon: 'mdi-database',
+          sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_boxes'),
+          goToClick: 'boxes'
+        }) : this.statisticDeny.push({
+          icon: 'mdi-close',
+          sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_boxes')
+        })
+        this.access_permit.filter(permit => permit.title.name === 'manager_refunds')[0].title.value === true ? this.statistic.push({
+          icon: 'mdi-undo',
+          sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_refunds'),
+          goToClick: 'refund'
+        }) : this.statisticDeny.push({
+          icon: 'mdi-close',
+          sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_refunds')
+        })
         this.access_permit.filter(permit => permit.title.name === 'manager_vending')[0].title.value === true ? this.statistic.push({
           icon: 'mdi-currency-usd',
           sub_title: this.$vuetify.lang.t('$vuetify.access.access.manager_vending'),

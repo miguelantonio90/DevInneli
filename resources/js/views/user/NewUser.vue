@@ -105,8 +105,8 @@
                   rules:formRule.pinCode
                 }"
                 :options="{
-                  inputMask: '#-#-#-#',
-                  outputMask: '####',
+                  inputMask: '#-#-#-#-#-#',
+                  outputMask: '######',
                   empty: null,
                   alphanumeric: false,
                 }"

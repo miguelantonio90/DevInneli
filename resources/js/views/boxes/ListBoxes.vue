@@ -20,26 +20,41 @@
           multi-sort
           @create-row="toogleNewModal(true)"
           @edit-row="editBoxesHandler($event)"
-          @open-row="openBox($event)"
           @delete-row="deleteBoxesHandler($event)"
         >
           <template v-slot:[`item.state`]="{ item }">
-            <v-icon
-              v-if="item.state === 'open'"
-              class="mr-2"
-              color="primary"
-              small
-            >
-              mdi-lock-open
-            </v-icon>
-            <v-icon
-              v-else
-              class="mr-2"
-              color="primary"
-              small
-            >
-              mdi-lock
-            </v-icon>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-if="item.state === 'open'"
+                  class="mr-2"
+                  small
+                  color="primary"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="openBox(item.id)"
+                >
+                  mdi-lock
+                </v-icon>
+              </template>
+              <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_close') }}</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-if="item.state !== 'open'"
+                  class="mr-2"
+                  color="primary"
+                  small
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="openBox(item.id)"
+                >
+                  mdi-lock-open
+                </v-icon>
+              </template>
+              <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
+            </v-tooltip>
             {{ $vuetify.lang.t('$vuetify.sale.state.' + item.state) }}
           </template>
         </app-data-table>

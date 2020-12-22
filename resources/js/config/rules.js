@@ -52,7 +52,7 @@ const pinCode = [
     !!v || language.t('$vuetify.rule.required', [
       language.t('$vuetify.pinCode')
     ]),
-  (v) => (v && v.length >= 7) || language.t('$vuetify.rule.pin.min', ['4'])
+  (v) => (v && v.length >= 7) || language.t('$vuetify.rule.pin.min', ['6'])
 ]
 const access = [
   (v) =>
