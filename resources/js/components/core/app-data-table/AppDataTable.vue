@@ -77,38 +77,6 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="accessOpen && item.state === 'open'"
-              class="mr-2"
-              small
-              color="primary"
-              v-bind="attrs"
-              v-on="on"
-              @click="openButtonClicked(item.id)"
-            >
-              mdi-lock
-            </v-icon>
-          </template>
-          <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_close') }}</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              v-if="accessOpen && item.state !== 'open'"
-              class="mr-2"
-              color="primary"
-              small
-              v-bind="attrs"
-              v-on="on"
-              @click="openButtonClicked(item.id)"
-            >
-              mdi-lock-open
-            </v-icon>
-          </template>
-          <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
               v-if="viewShowButton"
               class="mr-2"
               small
@@ -121,7 +89,6 @@
           </template>
           <span>{{ $vuetify.lang.t('$vuetify.actions.show') }}</span>
         </v-tooltip>
-
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
