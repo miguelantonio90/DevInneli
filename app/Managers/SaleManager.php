@@ -114,7 +114,8 @@ class SaleManager extends BaseManager
                 $sales[$key]['articles'][$k]->moneyRefund = $refund;
                 $sales[$key]['articles'][$k]->cantRefund = $cantRefund;
                 $totalCost += $v->cant * $v->cost;
-                $totalPrice += $v->cant * $v->price + $sum - $discount - $refund;
+                $sales[$key]['articles'][$k]->totalPrice = $v->cant * $v->price + $sum - $discount - $refund;
+                $totalPrice += $sales[$key]['articles'][$k]->totalPrice;
                 $discount = 0;
                 foreach ($sales[$key]['taxes'] as $j => $i) {
                     $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;

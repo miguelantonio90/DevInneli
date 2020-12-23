@@ -8,6 +8,7 @@
         <new-refound
           v-if="showNewModal"
         />
+        <print-facture v-if="showShowModal" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
@@ -24,6 +25,27 @@
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
         >
+          <template v-slot:item.no_facture="{ item }">
+            <template>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-if="item.state !== 'open'"
+                    class="mr-2"
+                    color="primary"
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="openShowModal(item.id)"
+                  >
+                    mdi-printer
+                  </v-icon>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
+              </v-tooltip>
+              {{ item.no_facture }}
+            </template>
+          </template>
           <template v-slot:item.state="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
@@ -360,10 +382,11 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import NewRefound from '../refund/NewRefound'
 import DetailRefund from '../refund/DetailRefund'
+import PrintFacture from './PrintFacture'
 
 export default {
   name: 'ListSale',
-  components: { DetailRefund, NewRefound },
+  components: { PrintFacture, DetailRefund, NewRefound },
   data () {
     return {
       localSales: [],
