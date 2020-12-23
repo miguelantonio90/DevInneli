@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
-use function cache as cacheAlias;
 
 /**
  * @group Auth endpos
@@ -37,6 +36,6 @@ class AuthenticationController extends Controller
         $user['position']->disabled = $position['key'] === 'super_manager';
         $user['company'] = $company;
         $user['position'] = $position;
-        return ResponseHelper::sendResponse($user,'');
+        return ResponseHelper::sendResponse($user, '');
     }
 }

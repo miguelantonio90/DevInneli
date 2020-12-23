@@ -21,7 +21,7 @@ class CompanyController extends Controller
 
     /**
      * CompanyController constructor.
-     * @param CompanyManager $compnayManager
+     * @param  CompanyManager  $compnayManager
      */
     public function __construct(CompanyManager $compnayManager)
     {

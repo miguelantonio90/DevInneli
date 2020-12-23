@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Company;
 use App\Http\Controllers\Controller;
-use App\KeyPosition;
 use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
@@ -56,7 +55,7 @@ class RegisterController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Application|JsonResponse|RedirectResponse|Response|Redirector
      * @throws ValidationException
      */
@@ -87,15 +86,17 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param array $data
+     * @param  array  $data
      * @return User|JsonResponse|Response
      */
     protected function create(array $data)
     {
+        $response = new User();
         $company = Company::create([
             'name' => $data['shopName'],
             'email' => $data['email'],
             'country' => $data['country']['id'],
+            'phone' => $data['phone'],
             'currency' => $data['country']['currency']
         ]);
         $company->sector = $data['sector'];
@@ -113,110 +114,153 @@ class RegisterController extends Controller
                 ],
                 [
                     'title' => ['name' => 'manager_article', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'transport'=>true,
-                        'edit' => true, 'delete' => true, 'transport' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true, 'transport' => true,
+                        'edit' => true, 'delete' => true, 'transport' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_vending', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_boxes', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'boxes_open' => true, 'boxes_close' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'boxes_open' => true, 'boxes_close' => true, 'import' => true,
+                        'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_refunds', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'edit' => true,
-                        'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true, 'edit' => true,
+                        'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_category', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_mod', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_supplier', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_buy', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_sell', 'value' => true],
                     'actions' =>
-                        ['just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
+                        [
+                            'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
                             'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
-                            'export' => true]
+                            'export' => true
+                        ]
                 ],
                 [
                     'title' => ['name' => 'manager_employer', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_assistence', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_client', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_shop', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_key', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_access', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_payment', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_expense_category', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_exchange_rate', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_type_of_order', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_tax', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_discount', 'value' => true],
-                    'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true]
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
                 ]
             ]);
             $position->save();
@@ -237,106 +281,149 @@ class RegisterController extends Controller
                     ],
                     [
                         'title' => ['name' => 'manager_article', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'transport' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'transport' => false, 'import' => false,
+                            'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_vending', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_boxes', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'boxes_open' => false, 'boxes_close' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'boxes_open' => false, 'boxes_close' => false,
+                            'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_refunds', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false, 'edit' => false,
-                            'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false, 'edit' => false,
+                            'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_category', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_mod', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => true,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => true,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_supplier', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_buy', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_sell', 'value' => true],
                         'actions' =>
-                            ['just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
+                            [
+                                'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
                                 'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
-                                'export' => true]
+                                'export' => true
+                            ]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_assistence', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_client', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_shop', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_access', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_payment', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_expense_category', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_exchange_rate', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_type_of_order', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_tax', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_discount', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
-                    ]]);
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
+                    ]
+                ]);
                 $supervisor->save();
                 $atm = new Position();
                 $atm->company_id = $company->id;
@@ -350,115 +437,158 @@ class RegisterController extends Controller
                     ],
                     [
                         'title' => ['name' => 'manager_article', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                            'edit' => false, 'delete' => false, 'transport' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => true,
+                            'edit' => false, 'delete' => false, 'transport' => false, 'import' => false,
+                            'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_vending', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => true,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_boxes', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'boxes_open' => true, 'boxes_close' => true, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'boxes_open' => true, 'boxes_close' => true,
+                            'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_refunds', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true, 'edit' => false,
-                            'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => true, 'edit' => false,
+                            'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_category', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_mod', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                            'edit' => true, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => true,
+                            'edit' => true, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_supplier', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_buy', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_sell', 'value' => false],
                         'actions' =>
-                            ['just_yours' => false, 'sell_by_product' => false, 'sell_by_category' => false,
+                            [
+                                'just_yours' => false, 'sell_by_product' => false, 'sell_by_category' => false,
                                 'sell_by_employer' => false, 'sell_by_payments' => false, 'import' => false,
-                                'export' => false]
+                                'export' => false
+                            ]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
-                        'actions' => ['just_yours' => true, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => true, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
-                            'title' => ['name' => 'manager_assistence', 'value' => true],
-                        'actions' => ['just_yours' => true, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'title' => ['name' => 'manager_assistence', 'value' => true],
+                        'actions' => [
+                            'just_yours' => true, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_client', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_shop', 'value' => false],
-                        'actions' => ['just_yours' => true, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => true, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_access', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_payment', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => true,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => true,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_expense_category', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_exchange_rate', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_type_of_order', 'value' => false],
-                        'actions' => ['just_yours' => false, 'list' => false, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_tax', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_discount', 'value' => true],
-                        'actions' => ['just_yours' => false, 'list' => true, 'create' => false,
-                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false]
-                    ]]);
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
+                    ]
+                ]);
                 $atm->save();
-                return $user;
+                $response = $user;
             }
-
         }
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @param $user
      * @return JsonResponse
      */

@@ -100,7 +100,7 @@ class LoginController extends Controller
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
-        cacheAlias()->put('userPin', User::latest()->where('id',$request->user()['id'])->get()[0]);
+        cacheAlias()->put('userPin', User::latest()->where('id', $request->user()['id'])->get()[0]);
 
         return response()->json([
             'token_type' => 'Bearer',

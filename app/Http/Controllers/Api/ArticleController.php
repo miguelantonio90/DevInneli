@@ -7,6 +7,7 @@ use App\Http\Helpers\ResponseHelper;
 use App\Managers\ArticleManager;
 use App\Managers\CompanyManager;
 use App\Managers\ImportManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,8 +28,8 @@ class ArticleController extends Controller
 
     /**
      * ArticleController constructor.
-     * @param ArticleManager $articleManager
-     * @param ImportManager $importManger
+     * @param  ArticleManager  $articleManager
+     * @param  ImportManager  $importManger
      */
     public function __construct(ArticleManager $articleManager, ImportManager $importManger)
     {
@@ -39,7 +40,7 @@ class ArticleController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
     public function index(Request $request)
@@ -53,10 +54,10 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(Request $request): Response
     {
@@ -71,7 +72,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
@@ -88,7 +89,7 @@ class ArticleController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -105,7 +106,7 @@ class ArticleController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -116,7 +117,8 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
+     * @throws Exception
      */
     public function import(Request $request)
     {

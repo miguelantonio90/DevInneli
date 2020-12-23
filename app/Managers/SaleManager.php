@@ -170,9 +170,9 @@ class SaleManager extends BaseManager
             if ($value['state'] === 'accepted') {
                 $expenses += $value['totalCost'];
                 $salesCount += $value['totalPrice'];
-                $response['totalSales'] = $salesCount;
-                $response['totalExpenses'] = $expenses;
-                $response['totalRevenue'] = $salesCount - $expenses;
+                $response['totalSales'] = round($salesCount,2);
+                $response['totalExpenses'] = round($expenses,2);
+                $response['totalRevenue'] = round(($salesCount - $expenses),2);
                 $response['totalOrders'] = ++$count;
             }
         }
