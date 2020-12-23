@@ -117,13 +117,20 @@
                     :headers="columnHeaders"
                     :items="articlesMerge"
                   />
-                  <mini-statistic
+                  <v-widget
                     v-else
-                    color="primary"
-                    icon="mdi-shopping"
-                    :sub-title="$vuetify.lang.t('$vuetify.access.access.manager_article')"
-                    @click="goToClick('product_list')"
-                  />
+                    :title="$vuetify.lang.t('$vuetify.dashboard.mergeTable')"
+                    content-bg="white"
+                  >
+                    <div slot="widget-content">
+                      <mini-statistic
+                        color="primary"
+                        icon="mdi-shopping"
+                        :sub-title="$vuetify.lang.t('$vuetify.access.access.manager_article')"
+                        @click="goToClick('product_list')"
+                      />
+                    </div>
+                  </v-widget>
                 </v-col>
                 <v-col md="6">
                   <v-widget

@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row cols="12">
       <!-- mini statistic start -->
-      <v-col cols="3">
+      <v-col md="3">
         <mini-statistic
           color="indigo"
           icon="mdi-home"
@@ -10,7 +10,7 @@
           :sub-title="companies.length.toString()"
         />
       </v-col>
-      <v-col cols="3">
+      <v-col md="3">
         <mini-statistic
           color="red"
           icon="mdi-shopping"
@@ -18,7 +18,7 @@
           :sub-title="cantShops.toString()"
         />
       </v-col>
-      <v-col cols="3">
+      <v-col md="3">
         <mini-statistic
           color="light-blue"
           icon="mdi-account-star"
@@ -26,7 +26,7 @@
           :sub-title="cantEmployers.toString()"
         />
       </v-col>
-      <v-col cols="3">
+      <v-col md="3">
         <mini-statistic
           color="purple"
           icon="mdi-instagram"
@@ -144,6 +144,10 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.currency'),
           value: 'currency'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.phone'),
+          value: 'phone'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.employee'),

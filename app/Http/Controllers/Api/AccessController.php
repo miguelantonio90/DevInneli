@@ -38,7 +38,7 @@ class AccessController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
     public function store(Request $request)
@@ -46,19 +46,6 @@ class AccessController extends Controller
         return ResponseHelper::sendResponse(
             $this->accessManager->new($request->all()),
             'Position has created successfully.');
-    }
-
-    /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'accessPin' => ['boolean'],
-            'accessEmail' => ['boolean'],
-        ]);
     }
 
     /**
@@ -85,9 +72,22 @@ class AccessController extends Controller
         $this->validator($request->all())->validate();
 
         return ResponseHelper::sendResponse(
-            $this->accessManager->edit($id,$request->all()),
+            $this->accessManager->edit($id, $request->all()),
             'Role has updated successfully.'
         );
+    }
+
+    /**
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'accessPin' => ['boolean'],
+            'accessEmail' => ['boolean'],
+        ]);
     }
 
     /**

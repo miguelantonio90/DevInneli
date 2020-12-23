@@ -26,6 +26,7 @@
         <span>{{ $vuetify.lang.t('$vuetify.have_pin') }}</span>
       </v-tooltip>
       <v-btn
+        v-if="!isMobile"
         icon
         @click="handleFullScreen()"
       >
@@ -234,7 +235,8 @@ export default {
   data () {
     return {
       showSale: false,
-      showBuy: false
+      showBuy: false,
+      isMobile: false
     }
   },
   computed: {
@@ -338,10 +340,22 @@ export default {
         ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
     })
   },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+  },
+  beforeDestroy () {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize, { passive: true })
+    }
+  },
   methods: {
     ...mapActions('auth', ['sendLogoutRequest', 'getUserData']),
     handleDrawerToggle () {
       this.$emit('side-icon-click')
+    },
+    onResize () {
+      this.isMobile = window.innerWidth < 600
     },
     handleFullScreen () {
       Util.toggleFullScreen()

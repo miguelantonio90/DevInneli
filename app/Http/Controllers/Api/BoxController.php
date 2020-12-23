@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\BoxManager;
 use App\Managers\CompanyManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -78,7 +79,7 @@ class BoxController extends Controller
     /**
      * @param $id
      * @return JsonResponse|Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function show($id)
     {

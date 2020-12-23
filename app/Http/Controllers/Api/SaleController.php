@@ -95,7 +95,8 @@ class SaleController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function getTotalSalesStatic(Request $request){
+    public function getTotalSalesStatic(Request $request)
+    {
         return ResponseHelper::sendResponse(
             $this->saleManager->getTotalsStatic(),
             'Sales statics retrieved successfully.'

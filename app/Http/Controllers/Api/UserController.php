@@ -7,6 +7,7 @@ use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\UserManager;
 use App\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -107,7 +108,7 @@ class UserController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($id, Request $request)
     {
@@ -142,7 +143,7 @@ class UserController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -162,8 +163,8 @@ class UserController extends Controller
                 cache()->get('userPin'),
                 'Users has deleted successfully.'
             );
-        } catch (\Exception $e) {
-            return ResponseHelper::sendError($e->getMessage(),null, $e->getCode());
+        } catch (Exception $e) {
+            return ResponseHelper::sendError($e->getMessage(), null, $e->getCode());
         }
     }
 }

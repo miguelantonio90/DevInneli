@@ -37,6 +37,10 @@ class ImportManager extends BaseManager
     }
 
 
+    /**
+     * @param $file
+     * @throws Exception
+     */
     public function importData($file)
     {
         $fileName = time() . '.' . $file->getClientOriginalExtension();
@@ -101,6 +105,7 @@ class ImportManager extends BaseManager
 
     /**
      * @param $variants
+     * @throws Exception
      */
     public function createVariantsFromImportFile($variants)
     {
@@ -114,6 +119,10 @@ class ImportManager extends BaseManager
         }
     }
 
+    /**
+     * @param $composites
+     * @param $company
+     */
     public function createCompositeFromImportFile($composites, $company)
     {
         foreach ($composites as $key => $value) {
@@ -162,6 +171,12 @@ class ImportManager extends BaseManager
         return $newArticle;
     }
 
+    /**
+     * @param $article
+     * @param $shopsInfo
+     * @param $jsonInfo
+     * @throws Exception
+     */
     public function insertArticleShopFromImportFile($article, $shopsInfo, $jsonInfo)
     {
         $shopData = explode(',', json_encode(str_replace(['"', 'variable'], '', $jsonInfo)));

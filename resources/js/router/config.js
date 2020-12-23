@@ -672,7 +672,7 @@ export const protectedRoute = [
       },
       {
         path: '/admin/403',
-        name: 'Forbidden',
+        name: 'admin_forbidden',
         access: ['Forbidden'],
         meta: {
           title: 'access_denied',
@@ -684,7 +684,7 @@ export const protectedRoute = [
       },
       {
         path: '/admin/user/profile',
-        name: 'Profile',
+        name: 'admin_profile',
         access: ['profile'],
         meta: {
           title: 'profile',
