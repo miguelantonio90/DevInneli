@@ -1,6 +1,57 @@
 <template>
   <v-container>
-    <div id="print">
+    <div
+      id="ticket"
+      class="ticket"
+    >
+      <img
+        v-show="user.company.logo"
+        class="profile mx-auto d-block"
+        :src="user.company.logo"
+        alt="Logotipo"
+      >
+      <p class="centrado">
+        TICKET DE VENTA<br>
+        <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
+        {{ edit ? editSale.no_facture:newSale.no_facture }}<br>
+        {{ new Date().toTimeString() }}
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>CANT</th>
+            <th>PRODUCTO</th>
+            <th>$$</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(art,i) in edit ? editSale.articles:newSale.articles"
+            :key="i"
+          >
+            <td>{{ art.cant }}</td>
+            <td>{{ art.name }}</td>
+            <td>
+              {{
+                `${user.company.currency + ' ' + parseFloat(art.totalPrice).toFixed(2)}`
+              }}
+            </td>
+          </tr>
+          <tr>
+            <td />
+            <td>TOTAL</td>
+            <td> <b>{{ `${getCurrency + ' ' + total}` }}</b></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="centrado">
+        ¡GRACIAS POR SU COMPRA!<br>{{ user.company.email }}
+      </p>
+    </div>
+    <div
+      id="receipt"
+      hidden
+    >
       <v-row>
         <v-col
           v-if="edit ? editSale.client:newSale.client"
@@ -133,7 +184,7 @@
         <v-btn
           class="mb-2"
           style="color: #009688!important"
-          @click="printFacture"
+          @click="a"
         >
           <v-icon>mdi-printer</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.print') }}
@@ -144,7 +195,9 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-
+// import { jsPDF } from 'jspdf'
+// import html2canvas from 'html2canvas'
+import printJS from 'print-js'
 export default {
   name: 'Facture',
   props: {
@@ -208,6 +261,9 @@ export default {
   },
   methods: {
     ...mapActions('discount', ['getDiscounts']),
+    a () {
+      printJS({ printable: 'ticket', type: 'html', targetStyles: ['*'] })
+    },
     updateData () {
       this.totalTax = 0
       this.totalDisc = 0
@@ -228,33 +284,64 @@ export default {
       this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
       this.total = parseFloat(this.total).toFixed(2)
       this.$emit('updateData')
-    },
-    printFacture () {
-      const prtHtml = document.getElementById('print').innerHTML
-      let stylesHtml = ''
-      for (const node of [...document.querySelectorAll('link, style')]) {
-        stylesHtml += node.outerHTML
-      }
-      const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
-      WinPrint.document.write(`<!DOCTYPE html>
-        <html>
-          <head>
-            ${stylesHtml}
-          </head>
-          <body>
-            ${prtHtml}
-          </body>
-        </html>`)
-      // WinPrint.document.close()
-      // WinPrint.focus()
-      WinPrint.print()
-      WinPrint.close()
-      console.log(prtHtml)
     }
   }
 }
 </script>
 
 <style scoped>
+
+.profile {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+* {
+    font-size: 12px;
+    font-family: 'Times New Roman';
+}
+
+td,
+th,
+tr,
+table {
+    border-top: 1px solid black;
+    border-collapse: collapse;
+}
+
+td.producto,
+th.producto {
+    width: 75px;
+    max-width: 75px;
+}
+
+td.cantidad,
+th.cantidad {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+td.precio,
+th.precio {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+.centrado {
+    text-align: center;
+    align-content: center;
+}
+
+.ticket {
+    width: 155px;
+    max-width: 155px;
+}
+
+img {
+    max-width: inherit;
+    width: inherit;
+}
 
 </style>
