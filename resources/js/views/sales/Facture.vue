@@ -284,50 +284,6 @@ export default {
       this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
       this.total = parseFloat(this.total).toFixed(2)
       this.$emit('updateData')
-    },
-    printFacture () {
-      /*
-      // eslint-disable-next-line new-cap
-      const pdf = new jsPDF('p', 'pt', 'a4')
-      const element = document.getElementById('print')
-      // const width = element.style.width
-      // const height = element.style.height
-      html2canvas(element).then(canvas => {
-        const image = canvas.toDataURL('image/png')
-        pdf.addImage(image, 'JPEG', 15, 40, 100, 200)
-        pdf.autoPrint()
-      })
-      const string = pdf.output('datauristring')
-      const embed = "<embed width='100%' height='100%' src='" + string + "'/>"
-      const x = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
-      x.document.open()
-      x.document.write(embed)
-      x.document.close()
-*/
-      /* // eslint-disable-next-line new-cap
-      const doc = new jsPDF()
-      doc.text('Hello world!', 10, 10)
-      doc.save('a4.pdf') */
-      const prtHtml = document.getElementById('receipt').innerHTML
-      let stylesHtml = ''
-      for (const node of [...document.querySelectorAll('link, style')]) {
-        stylesHtml += node.outerHTML
-      }
-      const WinPrint = window.open('', '', 'left=0,top=0,width=60%,height=75%,toolbar=0,scrollbars=0,status=0')
-      WinPrint.document.write(`<!DOCTYPE html>
-        <html>
-          <head>
-            ${stylesHtml}
-          </head>
-          <body>
-            ${prtHtml}
-          </body>
-        </html>`)
-      // WinPrint.document.close()
-      // WinPrint.focus()
-      WinPrint.print()
-      WinPrint.close()
-      console.log(prtHtml)
     }
   }
 }
