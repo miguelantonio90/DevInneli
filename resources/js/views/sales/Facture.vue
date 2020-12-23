@@ -1,108 +1,143 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col
-        v-if="edit ? editSale.client:newSale.client"
-        class="py-0"
-        cols="12"
-        md="7"
-      >
-        <b>{{ $vuetify.lang.t('$vuetify.menu.client') }}</b>:<br>
-        {{ edit ?
-          editSale.client.firstName+' '+ `${editSale.client.lastName!==null?editSale.client.lastName:''}`
-          :newSale.client.firstName+' '+ `${newSale.client.lastName!==null?newSale.client.lastName:''}` }}
-      </v-col>
-      <v-spacer />
-      <v-col
-        v-if="edit ? editSale.no_facture:newSale.no_facture"
-        class="py-0"
-        cols="12"
-        md="5"
-      >
-        <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
-        {{ edit ? editSale.no_facture:newSale.no_facture }}
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="7">
-        <b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b>
-      </v-col>
-      <v-col
-        v-if="sub_total > 0"
-        cols="5"
-      >
-        {{ `${getCurrency + ' ' + sub_total}` }}
-      </v-col>
-      <v-col v-else>
-        <v-tooltip
-          right
-          class="md-7"
+    <div id="print">
+      <v-row>
+        <v-col
+          v-if="edit ? editSale.client:newSale.client"
+          class="py-0"
+          cols="12"
+          md="7"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-            >
-              mdi-information-outline
-            </v-icon>
-          </template>
-          <span>
-            <b>{{ $vuetify.lang.t('$vuetify.messages.warning_tax_cost') }}</b>
-          </span>
-        </v-tooltip><span style="color: crimson; text-decoration: line-through;">
+          <b>{{ $vuetify.lang.t('$vuetify.menu.client') }}</b>:<br>
+          {{ edit ?
+            editSale.client.firstName+' '+ `${editSale.client.lastName!==null?editSale.client.lastName:''}`
+            :newSale.client.firstName+' '+ `${newSale.client.lastName!==null?newSale.client.lastName:''}` }}
+        </v-col>
+        <v-spacer />
+        <v-col
+          v-if="edit ? editSale.no_facture:newSale.no_facture"
+          class="py-0"
+          cols="12"
+          md="5"
+        >
+          <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
+          {{ edit ? editSale.no_facture:newSale.no_facture }}
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="7"
+        >
+          <b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b>
+        </v-col>
+        <v-col
+          v-if="sub_total > 0"
+          cols="12"
+          md="5"
+        >
           {{ `${getCurrency + ' ' + sub_total}` }}
-        </span>
-      </v-col>
-    </v-row>
-    <v-row v-if="taxes.length > 0" />
-    <v-row
-      v-for="tax in taxes"
-      :key="tax.name"
-    >
-      <v-col cols="7">
-        <b style="color: darkblue">{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b>
-      </v-col>
-      <v-col
-        v-if="tax.percent==='true'"
-        cols="5"
+        </v-col>
+        <v-col v-else>
+          <v-tooltip
+            right
+            cols="12"
+            md="5"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-information-outline
+              </v-icon>
+            </template>
+            <span>
+              <b>{{ $vuetify.lang.t('$vuetify.messages.warning_tax_cost') }}</b>
+            </span>
+          </v-tooltip><span style="color: crimson; text-decoration: line-through;">
+            {{ `${getCurrency + ' ' + sub_total}` }}
+          </span>
+        </v-col>
+      </v-row>
+      <v-row v-if="taxes.length > 0" />
+      <v-row
+        v-for="tax in taxes"
+        :key="tax.name"
       >
-        <i style="color: darkblue">{{ `${getCurrency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
-      </v-col>
-      <v-col
-        v-else
-        cols="5"
+        <v-col
+          cols="12"
+          md="7"
+        >
+          <b style="color: darkblue">{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b>
+        </v-col>
+        <v-col
+          v-if="tax.percent==='true'"
+          cols="12"
+          md="5"
+        >
+          <i style="color: darkblue">{{ `${getCurrency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
+        </v-col>
+        <v-col
+          v-else
+          cols="12"
+          md="5"
+        >
+          <i style="color: darkblue">{{ `${getCurrency + ' ' + tax.value}` }}</i>
+        </v-col>
+      </v-row>
+      <v-row
+        v-for="disc in localDiscounts"
+        :key="disc.name"
       >
-        <i style="color: darkblue">{{ `${getCurrency + ' ' + tax.value}` }}</i>
-      </v-col>
-    </v-row>
-    <v-row
-      v-for="disc in localDiscounts"
-      :key="disc.name"
-    >
-      <v-col cols="7">
-        <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
-      </v-col>
-      <v-col
-        v-if="disc.percent==='true'"
-        cols="5"
-      >
-        <i style="color: red">{{ `${getCurrency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
-      </v-col>
-      <v-col
-        v-else
-        cols="5"
-      >
-        <i style="color: red">{{ `${getCurrency + ' ' + disc.value}` }}</i>
-      </v-col>
-    </v-row>
+        <v-col
+          cols="12"
+          md="7"
+        >
+          <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
+        </v-col>
+        <v-col
+          v-if="disc.percent==='true'"
+          cols="12"
+          md="5"
+        >
+          <i style="color: red">{{ `${getCurrency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
+        </v-col>
+        <v-col
+          v-else
+          cols="12"
+          md="5"
+        >
+          <i style="color: red">{{ `${getCurrency + ' ' + disc.value}` }}</i>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="7"
+        >
+          <b style="text-transform: uppercase">{{ $vuetify.lang.t('$vuetify.pay.total') }}</b>
+        </v-col>
+        <v-col
+          cols="12"
+          md="5"
+        >
+          {{ `${getCurrency + ' ' + total}` }}
+        </v-col>
+      </v-row>
+    </div>
     <v-row>
-      <v-col cols="7">
-        <b style="text-transform: uppercase">{{ $vuetify.lang.t('$vuetify.pay.total') }}</b>
-      </v-col>
-      <v-col cols="5">
-        {{ `${getCurrency + ' ' + total}` }}
+      <v-col>
+        <v-btn
+          class="mb-2"
+          style="color: #009688!important"
+          @click="printFacture"
+        >
+          <v-icon>mdi-printer</v-icon>
+          {{ $vuetify.lang.t('$vuetify.actions.print') }}
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -193,6 +228,28 @@ export default {
       this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
       this.total = parseFloat(this.total).toFixed(2)
       this.$emit('updateData')
+    },
+    printFacture () {
+      const prtHtml = document.getElementById('print').innerHTML
+      let stylesHtml = ''
+      for (const node of [...document.querySelectorAll('link, style')]) {
+        stylesHtml += node.outerHTML
+      }
+      const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
+      WinPrint.document.write(`<!DOCTYPE html>
+        <html>
+          <head>
+            ${stylesHtml}
+          </head>
+          <body>
+            ${prtHtml}
+          </body>
+        </html>`)
+      // WinPrint.document.close()
+      // WinPrint.focus()
+      WinPrint.print()
+      WinPrint.close()
+      console.log(prtHtml)
     }
   }
 }
