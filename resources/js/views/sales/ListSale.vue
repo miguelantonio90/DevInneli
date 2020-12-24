@@ -57,6 +57,7 @@
                     :items="getLocalStates"
                     item-text="text"
                     item-value="value"
+                    :style="{'width':'160px'}"
                     v-bind="attrs"
                     v-on="on"
                     @input="changeState(item)"

@@ -29,7 +29,8 @@
           </v-avatar>
         </template>
         <template v-slot:item.progress="{ item }">
-          <v-progress-linear
+          <strong>{{ Math.ceil(item.progress) }}%</strong>
+          <!--<v-progress-linear
             :value="item.progress"
             height="25"
             :color="item.color"
@@ -37,7 +38,7 @@
             <template v-slot:default="{ value }">
               <strong>{{ Math.ceil(value) }}%</strong>
             </template>
-          </v-progress-linear>
+          </v-progress-linear>-->
         </template>
       </v-data-table>
       <v-divider />
