@@ -1,56 +1,7 @@
 <template>
   <v-container>
     <div
-      id="ticket"
-      class="ticket"
-    >
-      <img
-        v-show="user.company.logo"
-        class="profile mx-auto d-block"
-        :src="user.company.logo"
-        alt="Logotipo"
-      >
-      <p class="centrado">
-        TICKET DE VENTA<br>
-        <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
-        {{ edit ? editSale.no_facture:newSale.no_facture }}<br>
-        {{ new Date().toTimeString() }}
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>CANT</th>
-            <th>PRODUCTO</th>
-            <th>$$</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(art,i) in edit ? editSale.articles:newSale.articles"
-            :key="i"
-          >
-            <td>{{ art.cant }}</td>
-            <td>{{ art.name }}</td>
-            <td>
-              {{
-                `${user.company.currency + ' ' + parseFloat(art.totalPrice).toFixed(2)}`
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td />
-            <td>TOTAL</td>
-            <td> <b>{{ `${getCurrency + ' ' + total}` }}</b></td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="centrado">
-        ¡GRACIAS POR SU COMPRA!<br>{{ user.company.email }}
-      </p>
-    </div>
-    <div
       id="receipt"
-      hidden
     >
       <v-row>
         <v-col
@@ -179,24 +130,10 @@
         </v-col>
       </v-row>
     </div>
-    <v-row>
-      <v-col>
-        <v-btn
-          class="mb-2"
-          style="color: #009688!important"
-          @click="a"
-        >
-          <v-icon>mdi-printer</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.print') }}
-        </v-btn>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-// import { jsPDF } from 'jspdf'
-// import html2canvas from 'html2canvas'
 import printJS from 'print-js'
 export default {
   name: 'Facture',
@@ -216,6 +153,7 @@ export default {
   },
   data () {
     return {
+      toDay: '',
       taxes: [],
       localDiscounts: [],
       totalTax: 0,
@@ -226,7 +164,7 @@ export default {
   },
   computed: {
     ...mapState('sale', ['newSale', 'editSale']),
-    ...mapGetters('auth', ['user']),
+    ...mapGetters('auth', ['user', 'userPin']),
     ...mapState('discount', ['discounts']),
     getCurrency () {
       return this.currency
@@ -265,6 +203,12 @@ export default {
       printJS({ printable: 'ticket', type: 'html', targetStyles: ['*'] })
     },
     updateData () {
+      console.log(new Date().toLocaleDateString())
+      this.toDay = ''
+      new Date().toLocaleDateString().split('/').reverse().forEach((v, i) => {
+        this.toDay = (i > 0) ? this.toDay + '-' + v : v
+      })
+      this.toDay += ' ' + (new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds())
       this.totalTax = 0
       this.totalDisc = 0
       this.total = 0

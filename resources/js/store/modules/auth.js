@@ -91,6 +91,7 @@ const mutations = {
       state.access = []
       state.access = access.length > 0 ? JSON.parse(atob(access[1])) : {}
       state.isAdmin = access[0]
+      state.userPin = access[2]
     }
   },
   [LOGIN] (state, pending) {

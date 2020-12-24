@@ -38,6 +38,36 @@
                     <v-col
                       class="py-0"
                       cols="12"
+                      md="6"
+                    >
+                      <v-select
+                        v-model="newSale.box"
+                        clearable
+                        :rules="formRule.country"
+                        :items="boxes"
+                        :label="$vuetify.lang.t('$vuetify.payment.name')"
+                        item-text="name"
+                        return-object
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('payment/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col
+                      class="py-0"
+                      cols="12"
                       md="5"
                     >
                       <v-select
@@ -513,6 +543,7 @@ export default {
     ...mapState('sale', ['sales']),
     ...mapState('inventory', ['inventories']),
     ...mapGetters('auth', ['user']),
+    ...mapState('boxes', ['boxes', 'showNewModal']),
     getTableColumns () {
       return [
         {
@@ -582,9 +613,13 @@ export default {
     })
     this.newSale.no_facture = this.generateNF()
     await this.updateDataArticle()
+    await this.getBoxes().then(() => {
+      if (this.boxes.length > 0) { this.newSale.box = this.boxes[0] }
+    })
     this.loadingData = false
   },
   methods: {
+    ...mapActions('boxes', ['toogleNewModal', 'getBoxes']),
     ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),

@@ -82,6 +82,7 @@ export default {
     client: 'Cliente',
     client_list: 'Clientes',
     articles: 'Artículos',
+    article: 'Artículo',
     category: 'Categoría',
     expense_category: 'Categoría de Gasto',
     expense_category_list: 'Categoría de Gastos',
@@ -118,7 +119,8 @@ export default {
     finance: 'Finanzas',
     type_of_order: 'Tipo de Pedido',
     tax_list: 'Impuesto',
-    discount: 'Descuento'
+    discount: 'Descuento',
+    discounts: 'Descuentos'
   },
   // settings
   settings: {
@@ -346,6 +348,7 @@ export default {
     track_inventory: 'Seguir  inventario',
     itbis: 'ITBIS(18%)',
     tax: 'Impuesto',
+    taxes: 'Impuestos',
     lay: 'Propina de ley(10%)',
     composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos'
   },
@@ -436,6 +439,7 @@ export default {
     sale: 'Venta',
     selectArticle: 'Por favor seleccione el artículo',
     selectShop: 'Debe seleccionar una tienda',
+    ticket: 'TICKET DE VENTA',
     state: {
       open: 'En proceso',
       preform: 'Preforma',
@@ -446,6 +450,10 @@ export default {
     emptyArticle: 'Esta tienda no tiene artículos. Por favor abastezca la tienda'
   },
   report: {
+    contact_us: 'Contáctenos',
+    cant: 'CANT',
+    breakdown: 'Desglose',
+    sale_footer: '¡GRACIAS POR COMPRAR EN NUESTRA TIENDA!',
     top5Category: 'Las 5 Categorías que más venden',
     top5Payment: 'Los Métodos de Pago por los que más se vende',
     netPrice: 'Ventas Netas',
@@ -498,6 +506,9 @@ export default {
     mergeTable: 'Margen de ganancias',
     timeLine: 'Últimas facturas',
     timeLineText: 'ha creado nueva venta para el cliente'
+  },
+  boxes: {
+    init: 'Balance Inicial'
   },
   ...es
 }

@@ -82,6 +82,7 @@ export default {
     client: 'Client',
     client_list: 'Clients',
     articles: 'Articles',
+    article: 'Article',
     category: 'Category',
     expense_category: 'Expense Category',
     expense_category_list: 'Expense Category',
@@ -118,7 +119,8 @@ export default {
     finance: 'Finance',
     type_of_order: 'Type of Order',
     tax_list: 'Tax',
-    discount: 'Discount'
+    discount: 'Discount',
+    discounts: 'Discounts'
   },
   // settings
   settings: {
@@ -346,6 +348,7 @@ export default {
     track_inventory: 'Track inventory',
     itbis: 'ITBIS (18%)',
     tax: 'Tax',
+    taxes: 'Taxes',
     lay: 'Law tip (10%)',
     composite_text: 'Composite articles contain a certain number of other articles'
   },
@@ -436,6 +439,7 @@ export default {
     sale: 'Sale',
     selectArticle: 'Please select the article',
     selectShop: 'You must select a store',
+    ticket: 'TICKET SALE',
     state: {
       open: 'In process',
       preform: 'Preform',
@@ -446,6 +450,10 @@ export default {
     emptyArticle: 'This shop has no items. Please stock the store '
   },
   report: {
+    contact_us: 'Contact Us',
+    cant: 'CANT',
+    breakdown: 'Breakdown',
+    sale_footer: '¡THANK YOU FOR SHOPPING IN OUR STORE!',
     top5Category: 'The 5 Categories that sell the most',
     top5Payment: 'The Payment Methods that are sold the most',
     netPrice: 'Net Sales',
@@ -498,6 +506,9 @@ export default {
     mergeTable: 'Profit margin',
     timeLine: 'Last invoices',
     timeLineText: 'has created new sale for customer'
+  },
+  boxes: {
+    init: 'Balance Inicial'
   },
   ...en
 }

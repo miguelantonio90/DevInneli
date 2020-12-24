@@ -34,6 +34,7 @@ const state = {
   newSale: {
     no_facture: '',
     pay: '',
+    box: {},
     state: 'open',
     discounts: [],
     taxes: [],
@@ -46,6 +47,7 @@ const state = {
     id: '',
     no_facture: '',
     pay: '',
+    box: {},
     discounts: [],
     taxes: [],
     payments: {},
@@ -98,6 +100,7 @@ const mutations = {
     state.newSale = {
       no_facture: '',
       pay: '',
+      box: {},
       state: 'open',
       discounts: [],
       taxes: [],

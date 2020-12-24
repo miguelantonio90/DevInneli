@@ -29,7 +29,11 @@ class ResponseHelper
             'success' => true,
             'data' => $result,
             'message' => $message,
-            'access'=>cache()->get('userPin')?[cache()->get('userPin')->position['name']==='admin', base64_encode(cache()->get('userPin')->position['access_permit'])]:''
+            'access'=>cache()->get('userPin')?[
+                cache()->get('userPin')->position['name']==='admin',
+                base64_encode(cache()->get('userPin')->position['access_permit']),
+                ['name'=>cache()->get('userPin')->firstName . ' '. cache()->get('userPin')->lastName, 'email'=>cache()->get('userPin')->email]
+                ]:''
         ];
         return response()->json($response, 200);
     }

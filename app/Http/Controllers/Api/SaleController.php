@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class SaleController extends Controller
 {
@@ -47,10 +48,10 @@ class SaleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
-     * @throws Exception
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request): JsonResponse
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
