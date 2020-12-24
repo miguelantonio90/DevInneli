@@ -453,7 +453,7 @@ export const protectedRoute = [
           {
             path: '/resume/sell_product.list',
             name: 'sell_product',
-            access: 'product',
+            access: 'sell_by_product',
             meta: {
               title: 'sell_product',
               icon: 'mdi-database-plus',
