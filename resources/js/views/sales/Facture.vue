@@ -203,7 +203,6 @@ export default {
       printJS({ printable: 'ticket', type: 'html', targetStyles: ['*'] })
     },
     updateData () {
-      console.log(new Date().toLocaleDateString())
       this.toDay = ''
       new Date().toLocaleDateString().split('/').reverse().forEach((v, i) => {
         this.toDay = (i > 0) ? this.toDay + '-' + v : v

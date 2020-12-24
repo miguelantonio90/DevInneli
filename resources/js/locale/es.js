@@ -163,6 +163,8 @@ export default {
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_delete: 'No se podrá revertir esta acción!',
+    warning_preform: 'Usted creará una Preforma(PRE-FACTURA). ' +
+        'Esto no se contemplará como venta real hasta tanto no defina la Forma de Pago en la Sección de Datos Adicionales!',
     error_delete_shop: 'Debe existir al menos una tienda',
     error_delete_manager: 'Este usuario no puede ser eliminado',
     error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',

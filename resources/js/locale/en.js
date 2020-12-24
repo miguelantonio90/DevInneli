@@ -164,6 +164,8 @@ export default {
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
+    warning_preform: 'You will create a Preform (PRE-FACTURE)' +
+        'This will not be considered as a real sale until you define the Payment Method in the Additional Data Section',
     error_delete_shop: 'There must be at least one store',
     error_delete_manager: 'This user cannot be deleted',
     error_edit_manager: 'This user cannot be edited. Use the profile to edit it. ',

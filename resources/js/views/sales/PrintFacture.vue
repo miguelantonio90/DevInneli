@@ -12,11 +12,10 @@
           align="center"
         >
           <img
-            v-show="user.company.logo"
+            v-if="user.company.logo"
             style="margin-top: 15px"
             class="profile mx-auto d-block"
             :src="user.company.logo"
-            alt="Logotipo"
           >
           <p class="centrado">
             {{ $vuetify.lang.t('$vuetify.sale.ticket') }}<br>
@@ -190,20 +189,20 @@
           <v-row
             v-for="disc in editSale.discounts"
             v-else
-            :key="disc.name"
+            :key="disc.id"
           >
             <v-col
               cols="12"
               md="7"
             >
-              <b>{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
+              <b>{{ disc.name }}{{ disc.percent ? '('+disc.value +'%)':'' }}</b>
             </v-col>
             <v-col
               v-if="disc.percent==='true'"
               cols="12"
               md="5"
             >
-              <i>{{ `${user.company.currency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
+              <i>-{{ `${user.company.currency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }}</i>
             </v-col>
             <v-col
               v-else
@@ -277,9 +276,11 @@ export default {
   },
   computed: {
     ...mapState('sale', ['editSale']),
+    ...mapState('discount', ['discounts']),
     ...mapGetters('auth', ['user', 'userPin'])
   },
   async created () {
+    await this.getDiscounts()
     this.totalTax = 0
     this.totalDisc = 0
     this.total = 0
@@ -299,6 +300,7 @@ export default {
   },
   methods: {
     ...mapActions('sale', ['toogleShowModal']),
+    ...mapActions('discount', ['getDiscounts']),
     total_pay (item) {
       let sum = 0
       item.taxes.forEach((v) => {

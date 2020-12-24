@@ -38,7 +38,7 @@
                     <v-col
                       class="py-0"
                       cols="12"
-                      md="5"
+                      md="4"
                     >
                       <v-select
                         v-model="editSale.shop"
@@ -55,6 +55,37 @@
                         required
                         :rules="formRule.country"
                       />
+                    </v-col>
+                    <v-col
+                      class="py-0"
+                      cols="12"
+                      md="3"
+                    >
+                      <v-select
+                        v-model="editSale.box"
+                        disabled
+                        :rules="formRule.country"
+                        :items="localBoxes"
+                        required
+                        :label="$vuetify.lang.t('$vuetify.menu.box')"
+                        item-text="name"
+                        return-object
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('boxes/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
                     </v-col>
                     <v-col
                       class="py-0"
@@ -476,6 +507,7 @@
         </v-card>
       </v-dialog>
       <new-discount v-if="this.$store.state.discount.showNewModal" />
+      <new-box v-if="this.$store.state.boxes.showNewModal" />
     </v-container>
   </div>
 </template>
@@ -486,15 +518,17 @@ import ExtraData from './ExtraData'
 import AppLoading from '../../components/core/AppLoading'
 import Facture from './Facture'
 import NewDiscount from '../discount/NewDiscount'
+import NewBox from '../boxes/NewBox'
 
 export default {
   name: 'EditSale',
-  components: { NewDiscount, AppLoading, Facture, ExtraData },
+  components: { NewDiscount, AppLoading, Facture, ExtraData, NewBox },
   data () {
     return {
       loadingData: false,
       editedIndex: -1,
       localArticles: [],
+      localBoxes: [],
       localDiscounts: [],
       update: false,
       panel: [0, 1, 2],
@@ -520,6 +554,7 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('discount', ['discounts']),
     ...mapGetters('auth', ['user']),
+    ...mapState('boxes', ['boxes', 'showNewModal']),
     getTableColumns () {
       return [
         {
@@ -563,6 +598,10 @@ export default {
   watch: {
     discounts: function () {
       this.getLocalDiscounts()
+    },
+    boxes: function () {
+      console.log('asdasdas')
+      this.getLocalBoxes()
     }
   },
   async mounted () {
@@ -577,10 +616,12 @@ export default {
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
+    await this.getBoxes()
     await this.updateDataArticle()
     this.loadingData = false
   },
   methods: {
+    ...mapActions('boxes', ['toogleNewModal', 'getBoxes']),
     ...mapActions('sale', ['updateSale']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
@@ -658,6 +699,11 @@ export default {
           percent: v.percent
         })
       })
+    },
+    getLocalBoxes () {
+      this.localBoxes = []
+      this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.editSale.shop.id)
+      console.log(this.localBoxes)
     },
     calcTotal: function (item) {
       this.editedIndex = this.editSale.articles.indexOf(item)

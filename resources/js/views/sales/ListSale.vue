@@ -41,7 +41,7 @@
                     mdi-printer
                   </v-icon>
                 </template>
-                <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
+                <span>{{ $vuetify.lang.t('$vuetify.actions.print') }}</span>
               </v-tooltip>
               {{ item.no_facture }}
             </template>
