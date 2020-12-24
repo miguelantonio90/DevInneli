@@ -507,5 +507,8 @@ export default {
     timeLine: 'Last invoices',
     timeLineText: 'has created new sale for customer'
   },
+  boxes: {
+    init: 'Balance Inicial'
+  },
   ...en
 }

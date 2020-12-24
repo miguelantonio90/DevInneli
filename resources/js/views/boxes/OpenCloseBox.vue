@@ -38,7 +38,7 @@
               />
             </v-col>
             <v-col
-              v-if="openClose.box.state === 'close'"
+              v-if="openClose.box.state !== 'open'"
               class="py-0"
               cols="12"
               md="6"
@@ -58,11 +58,52 @@
                 }"
               />
             </v-col>
-            <v-col v-if="openClose.box.state !== 'close'">
-              {{ $vuetify.lang.t('$vuetify.actions.open') + ':' + openClose.cashOpen }}
+          </v-row>
+          <v-row v-if="openClose.box.state === 'open'">
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="openClose.openTo.firstName"
+                :label="$vuetify.lang.t('$vuetify.to') +':'"
+                readonly
+              />
             </v-col>
             <v-col
-              v-if="openClose.box.state === 'open'"
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="openClose.openTo.firstName"
+                :label="$vuetify.lang.t('$vuetify.to') +':'"
+                readonly
+              />
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="openClose.cashOpen"
+                :label="$vuetify.lang.t('$vuetify.boxes.boxes')"
+                :rules="formRule.required"
+                required
+                readonly
+                :properties="{
+                  clearable: true
+                }"
+                :options="{
+                  length: 15,
+                  precision: 2,
+                  empty: 0.00,
+                }"
+              />
+            </v-col>
+            <v-col
               class="py-0"
               cols="12"
               md="6"
@@ -121,27 +162,34 @@ export default {
   data () {
     return {
       formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules
+      formRule: this.$rules,
+      totalCount: 0,
+      totalCredit: 0,
+      totalCash: 0
     }
   },
   computed: {
     ...mapState('boxes', ['saved', 'openClose', 'isActionInProgress']),
+    ...mapState('sale', ['sales']),
     ...mapState('user', ['users'])
   },
   async created () {
+    console.log(this.openClose)
     this.formValid = false
     if (this.openClose.box.state !== 'open') {
       await this.getUsers().then((s) => {
         this.openClose.openTo = this.users[0]
+      })
+    } else {
+      this.getSales().then(() => {
+        this.sales.filter()
       })
     }
   },
   methods: {
     ...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
     ...mapActions('user', ['getUsers']),
+    ...mapActions('sale', ['getSales']),
     async openCloseBoxHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true

@@ -507,5 +507,8 @@ export default {
     timeLine: 'Últimas facturas',
     timeLineText: 'ha creado nueva venta para el cliente'
   },
+  boxes: {
+    init: 'Balance Inicial'
+  },
   ...es
 }
