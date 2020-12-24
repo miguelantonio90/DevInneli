@@ -18,7 +18,6 @@ class CreateSalesTable extends BaseMigration
             $table->string('state')->nullable();
             $table->date('reclamation')->nullable();
             $table->foreignUuid('client_id')->nullable()->references('id')->on('clients');
-            $table->foreignUuid('box_id')->nullable()->references('id')->on('boxes');
             $table->foreignUuid('payment_id')->nullable()->references('id')->on('payments');
         });
         parent::up($tableName, $company);
