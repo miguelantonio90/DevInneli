@@ -212,6 +212,7 @@ export default {
     refund: 'Refund',
     accept: 'Accept',
     open: 'Open',
+    open_to: 'Open To',
     search: 'Search',
     new: 'New',
     created: 'Create',
@@ -510,7 +511,8 @@ export default {
     timeLineText: 'has created new sale for customer'
   },
   boxes: {
-    init: 'Balance Inicial'
+    init: ' Initial Balance',
+    final: 'Final Balance'
   },
   ...en
 }

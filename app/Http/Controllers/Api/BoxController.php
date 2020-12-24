@@ -131,4 +131,16 @@ class BoxController extends Controller
             'OpenClose has deleted successfully.'
         );
     }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function getDetailOfBox(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->boxManager->getDetailOfBox($request->all()),
+            'OpenClose Data is loaded.'
+        );
+    }
 }

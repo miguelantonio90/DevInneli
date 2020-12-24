@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * Class Sale
@@ -84,5 +85,10 @@ class Sale extends Model
     public function refounds():HasMany
     {
         return $this->hasMany(SalesArticlesShops::class);
+    }
+
+    public function nameSa()
+    {
+        return 'A';
     }
 }

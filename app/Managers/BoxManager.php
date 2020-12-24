@@ -5,6 +5,7 @@ namespace App\Managers;
 use App\Articles;
 use App\Box;
 use App\OpenCloseBox;
+use App\Sale;
 use Exception;
 
 class BoxManager extends BaseManager
@@ -85,11 +86,26 @@ class BoxManager extends BaseManager
      * @return OpenCloseBox
      */
     public function getOpenClose($boxId):OpenCloseBox{
-        return OpenCloseBox::latest()
+        $openClose = OpenCloseBox::latest()
             ->where('id','=',Box::findOrFail($boxId)->open_id)
             ->with('box')
             ->with('openTo')
             ->get()[0];
+        $sales = Sale::latest()
+            ->where('created_at', '>=', $openClose->created_at)
+            ->where('box_id', '=', $openClose->box_id)
+            ->where('pay', '<>', null)
+            ->with('box')
+            ->with('articles_shops')
+            ->with('taxes')
+            ->with('discounts')
+            ->with('refounds')
+            ->orderBy('created_at', 'ASC')
+            ->get();
+        $managerSale = new SaleManager();
+         $openClose['sales'] = $managerSale->filterSale($sales);
+         return $openClose;
+
     }
 
     /**

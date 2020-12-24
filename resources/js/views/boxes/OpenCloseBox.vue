@@ -67,18 +67,7 @@
             >
               <v-text-field
                 v-model="openClose.openTo.firstName"
-                :label="$vuetify.lang.t('$vuetify.to') +':'"
-                readonly
-              />
-            </v-col>
-            <v-col
-              class="py-0"
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="openClose.openTo.firstName"
-                :label="$vuetify.lang.t('$vuetify.to') +':'"
+                :label="$vuetify.lang.t('$vuetify.actions.open_to') +':'"
                 readonly
               />
             </v-col>
@@ -89,7 +78,39 @@
             >
               <v-text-field
                 v-model="openClose.cashOpen"
-                :label="$vuetify.lang.t('$vuetify.boxes.boxes')"
+                :label="$vuetify.lang.t('$vuetify.boxes.init')"
+                :rules="formRule.required"
+                required
+                readonly
+                :properties="{
+                  clearable: true
+                }"
+                :options="{
+                  length: 15,
+                  precision: 2,
+                  empty: 0.00,
+                }"
+              />
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="openClose.cashOpen"
+                :label="$vuetify.lang.t('$vuetify.payment.counted')"
+                readonly
+              />
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="openClose.cashOpen"
+                :label="$vuetify.lang.t('$vuetify.payment.cash')"
                 :rules="formRule.required"
                 required
                 readonly
@@ -112,7 +133,30 @@
               <template :disabled="true">
                 <v-text-field-money
                   v-model="openClose.cashClose"
-                  :label="$vuetify.lang.t('$vuetify.variants.cant')"
+                  :label="$vuetify.lang.t('$vuetify.payment.credit')"
+                  :rules="formRule.required"
+                  required
+                  :properties="{
+                    clearable: true
+                  }"
+                  :options="{
+                    length: 15,
+                    precision: 2,
+                    empty: 0.00,
+                  }"
+                />
+              </template>
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+              :disabled="true"
+            >
+              <template :disabled="true">
+                <v-text-field-money
+                  v-model="openClose.cashClose"
+                  :label="$vuetify.lang.t('$vuetify.boxes.final')"
                   :rules="formRule.required"
                   required
                   :properties="{
@@ -180,16 +224,11 @@ export default {
       await this.getUsers().then((s) => {
         this.openClose.openTo = this.users[0]
       })
-    } else {
-      this.getSales().then(() => {
-        this.sales.filter()
-      })
     }
   },
   methods: {
     ...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
     ...mapActions('user', ['getUsers']),
-    ...mapActions('sale', ['getSales']),
     async openCloseBoxHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true

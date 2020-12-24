@@ -36,6 +36,11 @@ class SaleManager extends BaseManager
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
+        return $this->filterSale($sales);
+    }
+
+    public function filterSale($sales)
+    {
         foreach ($sales as $key => $value) {
             $sales[$key]['shop'] = DB::table('shops')
                 ->select('shops.*', 'shops.id as shop_id')
