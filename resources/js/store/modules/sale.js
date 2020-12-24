@@ -129,6 +129,7 @@ const mutations = {
       id: '',
       no_facture: '',
       pay: '',
+      box: {},
       discounts: [],
       taxes: [],
       payments: {},

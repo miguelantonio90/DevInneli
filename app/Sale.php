@@ -49,6 +49,11 @@ class Sale extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function box(): BelongsTo
+    {
+        return $this->belongsTo(Box::class);
+    }
+
     public function payments(): HasOne
     {
         return $this->hasOne(Payment::class);

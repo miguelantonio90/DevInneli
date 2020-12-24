@@ -38,37 +38,7 @@
                     <v-col
                       class="py-0"
                       cols="12"
-                      md="6"
-                    >
-                      <v-select
-                        v-model="newSale.box"
-                        clearable
-                        :rules="formRule.country"
-                        :items="boxes"
-                        :label="$vuetify.lang.t('$vuetify.payment.name')"
-                        item-text="name"
-                        return-object
-                      >
-                        <template v-slot:append-outer>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="$store.dispatch('payment/toogleNewModal',true)"
-                              >
-                                mdi-plus
-                              </v-icon>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </v-select>
-                    </v-col>
-                    <v-col
-                      class="py-0"
-                      cols="12"
-                      md="5"
+                      md="4"
                     >
                       <v-select
                         v-model="newSale.shop"
@@ -87,6 +57,37 @@
                         @input="updateDataArticle"
                         @change="updateDataArticle"
                       />
+                    </v-col>
+                    <v-col
+                      class="py-0"
+                      cols="12"
+                      md="3"
+                    >
+                      <v-select
+                        v-model="newSale.box"
+                        clearable
+                        :rules="formRule.country"
+                        :items="localBoxes"
+                        required
+                        :label="$vuetify.lang.t('$vuetify.menu.box')"
+                        item-text="name"
+                        return-object
+                      >
+                        <template v-slot:append-outer>
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$store.dispatch('boxes/toogleNewModal',true)"
+                              >
+                                mdi-plus
+                              </v-icon>
+                            </template>
+                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                          </v-tooltip>
+                        </template>
+                      </v-select>
                     </v-col>
                     <v-col
                       class="py-0"
@@ -442,7 +443,7 @@
               color="success"
               :disabled="!formValid || isActionInProgress"
               :loading="isActionInProgress"
-              @click="createNewSale('preform')"
+              @click="createPreform()"
             >
               <v-icon>mdi-calendar-clock</v-icon>
               {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
@@ -497,6 +498,7 @@
         </v-card>
       </v-dialog>
       <new-discount v-if="this.$store.state.discount.showNewModal" />
+      <new-box v-if="this.$store.state.boxes.showNewModal" />
     </v-container>
   </div>
 </template>
@@ -507,16 +509,18 @@ import ExtraData from './ExtraData'
 import AppLoading from '../../components/core/AppLoading'
 import Facture from './Facture'
 import NewDiscount from '../discount/NewDiscount'
+import NewBox from '../boxes/NewBox'
 
 export default {
   name: 'NewSale',
-  components: { NewDiscount, AppLoading, Facture, ExtraData },
+  components: { NewBox, NewDiscount, AppLoading, Facture, ExtraData },
   data () {
     return {
       loadingData: false,
       editedIndex: -1,
       localArticles: [],
       localDiscounts: [],
+      localBoxes: [],
       update: false,
       panel: [0, 1, 2],
       formValid: false,
@@ -594,6 +598,9 @@ export default {
     discounts: function () {
       this.getLocalDiscounts()
     },
+    boxes: function () {
+      this.getLocalBoxes()
+    },
     'newSale.no_facture': function () {
       if (this.sales.filter(art => art.no_facture === this.newSale.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newSale.no_facture).length > 0) {
         this.newSale.no_facture = this.generateNF()
@@ -612,10 +619,8 @@ export default {
       this.getLocalDiscounts()
     })
     this.newSale.no_facture = this.generateNF()
+    await this.getBoxes()
     await this.updateDataArticle()
-    await this.getBoxes().then(() => {
-      if (this.boxes.length > 0) { this.newSale.box = this.boxes[0] }
-    })
     this.loadingData = false
   },
   methods: {
@@ -629,6 +634,7 @@ export default {
       return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
     },
     async updateDataArticle () {
+      this.getLocalBoxes()
       this.localArticles = []
       this.newSale.articles = []
       if (this.newSale.shop) {
@@ -689,6 +695,13 @@ export default {
         })
       })
     },
+    getLocalBoxes () {
+      this.localBoxes = []
+      if (this.newSale.shop) {
+        this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newSale.shop.id)
+        if (this.localBoxes.length > 0) { this.newSale.box = this.localBoxes[0] }
+      }
+    },
     calcTotal: function (item) {
       this.editedIndex = this.newSale.articles.indexOf(item)
       this.newSale.articles[this.editedIndex].totalCost = parseFloat(this.newSale.articles[this.editedIndex].cost * this.newSale.articles[this.editedIndex].cant).toFixed(2)
@@ -732,6 +745,29 @@ export default {
     },
     closeInfoAdd () {
       this.showInfoAdd = false
+    },
+    createPreform () {
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+            this.$vuetify.lang.t('$vuetify.sale.sale')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_preform'
+          ),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'success'
+        })
+        .then((result) => {
+          if (result.isConfirmed) this.createNewSale('preform')
+        })
     },
     async createNewSale (state) {
       if (this.newSale.articles.length > 0) {

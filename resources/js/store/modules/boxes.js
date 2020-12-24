@@ -80,7 +80,6 @@ const mutations = {
     state.isTableLoading = isLoading
   },
   [FETCHING_BOXES] (state, boxes) {
-    console.log(boxes)
     state.boxes = boxes
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
@@ -199,7 +198,6 @@ const actions = {
     await boxes
       .fetchBoxes()
       .then(({ data }) => {
-        console.log(data.data)
         commit(FETCHING_BOXES, data.data)
         commit(BOX_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)

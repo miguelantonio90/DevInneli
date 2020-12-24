@@ -20,7 +20,7 @@ class CreateBoxesTable extends BaseMigration
 
         });
         parent::up($tableName, $company);
-        Schema::table('boxes', function($table) {
+        Schema::table('sales', function($table) {
             $table->foreignUuid('box_id')->nullable()->references('id')->on('boxes')
                 ->onDelete('cascade');
         });

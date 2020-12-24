@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\ArticlesShops;
+use App\Box;
 use App\Sale;
 use App\SalesArticlesShops;
 use App\Tax;
@@ -27,6 +28,7 @@ class SaleManager extends BaseManager
             $sales = Sale::latest()
                 ->where('company_id', '=', $company->id)
                 ->with('company')
+                ->with('box')
                 ->with('articles_shops')
                 ->with('taxes')
                 ->with('discounts')
@@ -188,12 +190,16 @@ class SaleManager extends BaseManager
      */
     public function new($data): Sale
     {
+        $this->validBoxToSale(['id'=>$data['box']['id']]);
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
             'company_id' => $data['company_id']
         ]);
         if (isset($data['payments']['id'])) {
             $sale->payment_id = $data['payments']['id'];
+        }
+        if (isset($data['box']['id'])) {
+            $sale->box_id = $data['box']['id'];
         }
         if (array_key_exists('pay', $data)) {
             $sale->pay = $data['pay'] ?: null;
@@ -680,6 +686,19 @@ class SaleManager extends BaseManager
             $pos++;
         }
         return $data;
+    }
+
+    public function validBoxToSale($data)
+    {
+        $box = Box::findOrFail($data['id']);
+        if($box->state ==='close'){
+            $bManager = new BoxManager();
+                $bManager->createOpenClose([
+                    'box'=>['id'=>$data['id']],
+                        'openTo'=>['id'=> cache()->get('userPin')['id']],
+                        'cashOpen'=>0
+                    ]);
+        }
     }
 
 }
