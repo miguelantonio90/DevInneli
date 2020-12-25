@@ -24,6 +24,10 @@ class CreateBoxesTable extends BaseMigration
             $table->foreignUuid('box_id')->nullable()->references('id')->on('boxes')
                 ->onDelete('cascade');
         });
+        Schema::table('refunds', function($table) {
+            $table->foreignUuid('box_id')->nullable()->references('id')->on('boxes')
+                ->onDelete('cascade');
+        });
     }
 
     /**

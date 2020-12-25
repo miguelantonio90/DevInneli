@@ -52,9 +52,10 @@ const state = {
   openClose: {
     id: '',
     box: {},
-    cashOpen: 0.00,
-    cashClose: 0.00,
-    openTo: {},
+    sales: [],
+    open_money: 0.00,
+    close_money: 0.00,
+    open_to: {},
     closeBy: {}
   },
   showImportModal: false,
@@ -107,9 +108,11 @@ const mutations = {
     )
   },
   [EDIT_OPEN_CLOSE] (state, data) {
-    state.openClose.id = data.id
-    state.openClose.cashOpen = data.open_money
-    state.openClose.openTo = data.open_to
+    // state.openClose.id = data.id
+    // state.openClose.open_money = data.open_money
+    // state.openClose.openTo = data.open_to
+    // state.openClose.sales = data.sales
+    state.openClose = data
   },
   [BOX_OPEN_CLOSE] (state, boxId) {
     state.openClose.box = Object.assign({}, state.boxes

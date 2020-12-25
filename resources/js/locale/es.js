@@ -431,6 +431,7 @@ export default {
     counted: 'Contado',
     credit: 'Crédito',
     pay: 'Pago',
+    pays: 'Pagos',
     extra_data: 'Datos adicionales',
     sub_total: 'Sub Total',
     total: 'Total'
@@ -511,6 +512,7 @@ export default {
     timeLineText: 'ha creado nueva venta para el cliente'
   },
   boxes: {
+    difference: 'Diferencia',
     init: 'Balance Inicial',
     final: 'Balance Final'
   },
