@@ -27,24 +27,46 @@
         >
           <template v-slot:item.no_facture="{ item }">
             <template>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-if="item.state !== 'open'"
-                    class="mr-2"
-                    color="primary"
-                    small
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="openShowModal(item.id)"
-                  >
-                    mdi-printer
-                  </v-icon>
-                </template>
-                <span>{{ $vuetify.lang.t('$vuetify.actions.print') }}</span>
-              </v-tooltip>
-              {{ item.no_facture }}
+              <div class="text-center">
+                <v-menu
+                  v-model="menu"
+                  bottom
+                  origin="center center"
+                  transition="scale-transition"
+                  :close-on-content-click="false"
+                  :nudge-width="200"
+                  offset-x
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      icon
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon dark>
+                        mdi-printer
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-text>
+                      <v-autocomplete
+                        v-model="printer"
+                        :items="getLocalPrinter"
+                        contenteditable="false"
+                        item-text="text"
+                        item-value="value"
+                        :style="{'width':'160px'}"
+                        @input="openPrintModal(item.id)"
+                      />
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </div>
             </template>
+            {{ item.no_facture }}
           </template>
           <template v-slot:item.state="{ item }">
             <v-tooltip top>
@@ -416,9 +438,15 @@ export default {
   components: { PrintFacture, DetailRefund, NewRefound },
   data () {
     return {
+      menu: false,
+
+      fav: true,
+      message: false,
+      hints: true,
       localSales: [],
       search: '',
       localAccess: {},
+      printer: {},
       vBindOption: {
         itemKey: 'no_facture',
         singleExpand: false,
@@ -503,6 +531,18 @@ export default {
           color: '#ff0000'
         }
       ]
+    },
+    getLocalPrinter () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.report.print_ticket'),
+          value: 'ticket'
+        }
+        // {
+        //   text: this.$vuetify.lang.t('$vuetify.report.print_letter'),
+        //   value: 'letter'
+        // }
+      ]
     }
   },
   watch: {
@@ -522,6 +562,7 @@ export default {
   },
   created () {
     this.loadInitData()
+    this.printer = this.getLocalPrinter[0]
   },
   methods: {
     ...mapActions('sale', [
@@ -581,6 +622,9 @@ export default {
     editSaleHandler ($event) {
       this.openEditModal($event)
       this.$router.push({ name: 'vending_edit' })
+    },
+    openPrintModal (id) {
+      this.openShowModal(id)
     },
     deleteSaleHandler (articleId) {
       this.$Swal

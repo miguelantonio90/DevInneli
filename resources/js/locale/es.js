@@ -456,6 +456,8 @@ export default {
   report: {
     contact_us: 'Contáctenos',
     cant: 'CANT',
+    print_ticket: 'Imprimir Ticket',
+    print_letter: 'Imprimir Carta',
     breakdown: 'Desglose',
     sale_footer: '¡GRACIAS POR COMPRAR EN NUESTRA TIENDA!',
     top5Category: 'Las 5 Categorías que más venden',
