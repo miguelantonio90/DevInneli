@@ -106,6 +106,10 @@ class BoxManager extends BaseManager
             ->get();
         $managerSale = new SaleManager();
          $openClose['sales'] = $managerSale->filterSale($sales);
+         $openClose['refunds'] = DB::table('refunds')
+             ->whereDate('refunds.created_at', '>=', $openClose->created_at)
+             ->where('refunds.box_id', '=', $openClose->box_id)
+             ->get();
          return $openClose;
 
     }

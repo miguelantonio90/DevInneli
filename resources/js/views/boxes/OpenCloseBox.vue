@@ -254,23 +254,27 @@ export default {
       })
     } else {
       this.openClose.sales.forEach((v) => {
-        if (v.pay === 'credit') {
-          this.totalCredit[0] += 1
-          this.totalCredit[1] += v.totalPrice
-        } else if (v.pay === 'counted' && v.payments.name !== 'cash') {
-          this.totalCount[0] += 1
-          this.totalCount[1] += v.totalPrice
-        } else {
-          this.totalCash[0] += 1
-          this.totalCash[1] += v.totalPrice
+        if (v.state === 'accepted') {
+          if (v.pay === 'credit') {
+            this.totalCredit[0] += 1
+            this.totalCredit[1] += v.totalPrice
+          } else if (v.pay === 'counted' && v.payments.name !== 'cash') {
+            this.totalCount[0] += 1
+            this.totalCount[1] += v.totalPrice
+          } else if (v.payments.name === 'cash') {
+            this.totalCash[0] += 1
+            this.totalCash[1] += v.totalPrice
+          }
         }
-        this.totalCash[0] += 1
-        this.totalRefunds[1] += this.getTotalRefunds(v.articles)
+      })
+      let totalR = 0
+      this.openClose.refunds.forEach((v) => {
+        totalR += v.money
       })
       this.totalCredit[3] = this.user.company.currency + ' ' + parseFloat(this.totalCredit[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCredit[0] + ')'
       this.totalCount[3] = this.user.company.currency + ' ' + parseFloat(this.totalCount[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCount[0] + ')'
       this.totalCash[3] = this.user.company.currency + ' +' + parseFloat(this.totalCash[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCash[0] + ')'
-      this.totalRefunds[3] = this.user.company.currency + ' -' + parseFloat(this.totalRefunds[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.variants.cant') + ': ' + this.totalRefunds[0] + ')'
+      this.totalRefunds[3] = this.user.company.currency + ' -' + parseFloat(totalR).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.variants.cant') + ': ' + this.openClose.refunds.length + ')'
       this.calcTotal()
     }
   },
@@ -285,15 +289,6 @@ export default {
         this.loading = true
         await this.openCloseBox(this.openClose)
       }
-    },
-    getTotalRefunds (articles) {
-      let totalR = 0
-      articles.forEach((article) => {
-        article.refounds.forEach((v) => {
-          totalR += v.money
-        })
-      })
-      return totalR
     }
   }
 }

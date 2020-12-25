@@ -703,8 +703,8 @@ class SaleManager extends BaseManager
             $bManager = new BoxManager();
                 $bManager->createOpenClose([
                     'box'=>['id'=>$data['id']],
-                        'openTo'=>['id'=> cache()->get('userPin')['id']],
-                        'cashOpen'=>0
+                        'open_to'=>['id'=> cache()->get('userPin')['id']],
+                        'open_money'=>0
                     ]);
         }
     }
