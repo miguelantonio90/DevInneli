@@ -130,11 +130,37 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
-            <v-chip>
-              {{ item.shop.name }}
-            </v-chip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  {{ item.shop.name }}
+                </v-chip>
+              </template>
+              <span>
+                {{ $vuetify.lang.t('$vuetify.menu.box')+'- ' + item.box.name }}</span>
+            </v-tooltip>
           </template>
           <template v-slot:[`item.totalPrice`]="{ item }">
+            <template v-if="item.totalRefund > 0">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <b><v-icon
+                    v-if="item.totalRefund > 0"
+                    style="color: red"
+                    class="mr-2"
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-information
+                  </v-icon></b>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
+              </v-tooltip>
+            </template>
             {{ `${user.company.currency + ' ' + item.totalPrice}` }}
           </template>
           <template v-slot:[`item.totalCost`]="{ item }">
