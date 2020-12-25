@@ -456,6 +456,8 @@ export default {
   report: {
     contact_us: 'Contact Us',
     cant: 'CANT',
+    print_ticket: 'Print Ticket',
+    print_letter: 'Print Letter',
     breakdown: 'Breakdown',
     sale_footer: '¡THANK YOU FOR SHOPPING IN OUR STORE!',
     top5Category: 'The 5 Categories that sell the most',

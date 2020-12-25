@@ -72,6 +72,7 @@ class SaleManager extends BaseManager
                 ->first();
             $totalCost = 0;
             $totalPrice = 0;
+            $totalRefund = 0;
             foreach ($sales[$key]['articles'] as $k => $v) {
                 $sales[$key]['articles'] [$k]->images = DB::table('article_images')
                     ->where('article_images.article_id', '=', $v->id)
@@ -132,9 +133,11 @@ class SaleManager extends BaseManager
                     $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
                 }
                 $totalPrice = $totalPrice + $sum - $discount;
+                $totalRefund += $refund;
 
             }
             $sales[$key]['totalCost'] = round($totalCost, 2);
+            $sales[$key]['totalRefund'] = round($totalRefund, 2);
             $sales[$key]['totalPrice'] = round($totalPrice, 2);
         }
         return $sales;
