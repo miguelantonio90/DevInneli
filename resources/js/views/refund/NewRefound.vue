@@ -18,7 +18,7 @@
           <v-row>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field-money
                 v-model="newRefund.cant"
@@ -37,7 +37,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field-money
                 v-model="newRefund.money"
@@ -53,6 +53,36 @@
                   empty: 0.00,
                 }"
               />
+            </v-col>
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-select
+                v-model="newRefund.box"
+                clearable
+                :rules="formRule.country"
+                :items="localBoxes"
+                required
+                :label="$vuetify.lang.t('$vuetify.menu.box')"
+                item-text="name"
+                return-object
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.dispatch('boxes/toogleNewModal',true)"
+                      >
+                        mdi-plus
+                      </v-icon>
+                    </template>
+                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                  </v-tooltip>
+                </template>
+              </v-select>
             </v-col>
           </v-row>
         </v-form>
@@ -79,28 +109,44 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <new-box v-if="this.$store.state.boxes.showNewModal" />
   </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import NewBox from '../boxes/NewBox'
 
 export default {
   name: 'NewRefound',
+  components: { NewBox },
   data () {
     return {
       formValid: false,
+      localBoxes: [],
       formRule: this.$rules
     }
   },
   computed: {
     ...mapState('refund', ['saved', 'newRefund', 'isActionInProgress']),
+    ...mapState('boxes', ['boxes', 'showNewModal']),
     disabledButon () {
       return this.newRefund.cant > 0 || this.newRefund.money > 0
     }
   },
+  watch: {
+
+    boxes: function () {
+      this.getLocalBoxes()
+    }
+  },
+  async created () {
+    console.log(this.newRefund)
+    await this.getBoxes()
+  },
   methods: {
     ...mapActions('refund', ['toogleNewModal', 'createRefund']),
+    ...mapActions('boxes', ['getBoxes']),
     async handlerRefund () {
       let totalCantRefund = 0
       let totalMoneyRefund = 0
@@ -143,6 +189,14 @@ export default {
         }).catch(() => {
           this.loading = false
         })
+      }
+    },
+
+    getLocalBoxes () {
+      this.localBoxes = []
+      if (this.newRefund.sale.shop) {
+        this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newRefund.sale.shop.id)
+        if (this.localBoxes.length > 0) { this.newRefund.box = this.localBoxes[0] }
       }
     }
   }

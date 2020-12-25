@@ -26,7 +26,7 @@
               md="6"
             >
               <v-select
-                v-model="openClose.openTo"
+                v-model="openClose.open_to"
                 style="margin-top: 15px"
                 :clearable="users.length > 1"
                 :items="users"
@@ -44,7 +44,7 @@
               md="6"
             >
               <v-text-field-money
-                v-model="openClose.cashOpen"
+                v-model="openClose.open_money"
                 :label="$vuetify.lang.t('$vuetify.variants.cant')"
                 :rules="formRule.required"
                 required
@@ -66,7 +66,7 @@
               md="6"
             >
               <v-text-field
-                v-model="openClose.openTo.firstName"
+                v-model="openClose.open_to.firstName"
                 :label="$vuetify.lang.t('$vuetify.actions.open_to') +':'"
                 readonly
               />
@@ -77,10 +77,9 @@
               md="6"
             >
               <v-text-field
-                v-model="openClose.cashOpen"
+                v-model="openClose.open_money"
                 :label="$vuetify.lang.t('$vuetify.boxes.init')"
                 :rules="formRule.required"
-                required
                 readonly
                 :properties="{
                   clearable: true
@@ -98,7 +97,7 @@
               md="6"
             >
               <v-text-field
-                v-model="openClose.cashOpen"
+                v-model="totalCount[3]"
                 :label="$vuetify.lang.t('$vuetify.payment.counted')"
                 readonly
               />
@@ -109,7 +108,7 @@
               md="6"
             >
               <v-text-field
-                v-model="openClose.cashOpen"
+                v-model="totalCash[3]"
                 :label="$vuetify.lang.t('$vuetify.payment.cash')"
                 :rules="formRule.required"
                 required
@@ -131,19 +130,28 @@
               :disabled="true"
             >
               <template :disabled="true">
-                <v-text-field-money
-                  v-model="openClose.cashClose"
+                <v-text-field
+                  v-model="totalCredit[3]"
                   :label="$vuetify.lang.t('$vuetify.payment.credit')"
                   :rules="formRule.required"
+                  readonly
                   required
-                  :properties="{
-                    clearable: true
-                  }"
-                  :options="{
-                    length: 15,
-                    precision: 2,
-                    empty: 0.00,
-                  }"
+                />
+              </template>
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+              :disabled="true"
+            >
+              <template :disabled="true">
+                <v-text-field
+                  v-model="totalRefunds[3]"
+                  :label="$vuetify.lang.t('$vuetify.menu.refund')"
+                  :rules="formRule.required"
+                  readonly
+                  required
                 />
               </template>
             </v-col>
@@ -155,7 +163,7 @@
             >
               <template :disabled="true">
                 <v-text-field-money
-                  v-model="openClose.cashClose"
+                  v-model="openClose.close_money"
                   :label="$vuetify.lang.t('$vuetify.boxes.final')"
                   :rules="formRule.required"
                   required
@@ -167,6 +175,23 @@
                     precision: 2,
                     empty: 0.00,
                   }"
+                  @input="calcTotal"
+                />
+              </template>
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+              :disabled="true"
+            >
+              <template :disabled="true">
+                <v-text-field
+                  v-model="total[1]"
+                  :append-icon="total[1]<0?'mdi-close-circle':'mdi-check-circle'"
+                  :label="$vuetify.lang.t('$vuetify.boxes.difference')"
+                  required
+                  readonly
                 />
               </template>
             </v-col>
@@ -199,7 +224,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'OpenCloseBox',
@@ -207,33 +232,67 @@ export default {
     return {
       formValid: false,
       formRule: this.$rules,
-      totalCount: 0,
-      totalCredit: 0,
-      totalCash: 0
+      totalCount: [0, 0, ''],
+      totalCredit: [0, 0, ''],
+      totalRefunds: [0, 0, ''],
+      totalCash: [0, 0, ''],
+      total: [0, 0, '']
     }
   },
   computed: {
     ...mapState('boxes', ['saved', 'openClose', 'isActionInProgress']),
     ...mapState('sale', ['sales']),
-    ...mapState('user', ['users'])
+    ...mapState('refund', ['refunds']),
+    ...mapState('user', ['users']),
+    ...mapGetters('auth', ['user'])
   },
   async created () {
-    console.log(this.openClose)
     this.formValid = false
     if (this.openClose.box.state !== 'open') {
       await this.getUsers().then((s) => {
-        this.openClose.openTo = this.users[0]
+        this.openClose.open_to = this.users[0]
       })
+    } else {
+      this.openClose.sales.forEach((v) => {
+        if (v.pay === 'credit') {
+          this.totalCredit[0] += 1
+          this.totalCredit[1] += v.totalPrice
+        } else if (v.pay === 'counted' && v.payments.name !== 'cash') {
+          this.totalCount[0] += 1
+          this.totalCount[1] += v.totalPrice
+        } else {
+          this.totalCash[0] += 1
+          this.totalCash[1] += v.totalPrice
+        }
+        this.totalCash[0] += 1
+        this.totalRefunds[1] += this.getTotalRefunds(v.articles)
+      })
+      this.totalCredit[3] = this.user.company.currency + ' ' + parseFloat(this.totalCredit[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCredit[0] + ')'
+      this.totalCount[3] = this.user.company.currency + ' ' + parseFloat(this.totalCount[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCount[0] + ')'
+      this.totalCash[3] = this.user.company.currency + ' +' + parseFloat(this.totalCash[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCash[0] + ')'
+      this.totalRefunds[3] = this.user.company.currency + ' -' + parseFloat(this.totalRefunds[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.variants.cant') + ': ' + this.totalRefunds[0] + ')'
     }
   },
   methods: {
     ...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
     ...mapActions('user', ['getUsers']),
+    calcTotal () {
+      this.total[1] = this.openClose.open_money + this.totalCash[1] - this.totalRefunds[1] - this.openClose.close_money
+    },
     async openCloseBoxHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
         await this.openCloseBox(this.openClose)
       }
+    },
+    getTotalRefunds (articles) {
+      let totalR = 0
+      articles.forEach((article) => {
+        article.refounds.forEach((v) => {
+          totalR += v.money
+        })
+      })
+      return totalR
     }
   }
 }

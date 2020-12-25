@@ -39,21 +39,23 @@ class RefoundManager extends BaseManager
      */
     public function new($data)
     {
-        $refound = Refund::create([
+        $refunds = Refund::create([
             'company_id' => (CompanyManager::getCompanyByAdmin())->id,
             'cant'=>$data['cant'],
             'money'=>$data['money'],
             'sale_id'=>$data['sale']['id'],
             'article_id'=>$data['article']['article_id']
         ]);
-        $this->managerBy('new', $refound);
+        $refunds['box_id']=$data['box']['id'];
+        $refunds->save();
+        $this->managerBy('new', $refunds);
         $article_shop = ArticlesShops::latest()
             ->where('article_id', '=',$data['article']['id'])
             ->where('shop_id', '=',$data['sale']['shop']['shop_id'])
             ->get()[0];
         $article_shop->stock += $data['cant'];
         $this->managerBy('update', $article_shop);
-        return $refound;
+        return $refunds;
     }
 
     /**

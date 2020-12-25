@@ -5,8 +5,10 @@ namespace App\Managers;
 use App\Articles;
 use App\Box;
 use App\OpenCloseBox;
+use App\Refund;
 use App\Sale;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class BoxManager extends BaseManager
 {
