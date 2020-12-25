@@ -203,10 +203,8 @@ const mutations = {
           break
       }
       value.timeString = moment(value.created_at).fromNow()
-      value.created.lastName = value.created.lastName !== null ? value.created.lastName : ''
-      value.client.lastName = value.client.lastName !== null ? value.client.lastName : ''
-      const createdName = value.created.firstName + ' ' + value.created.lastName
-      const clientName = value.client.firstName + ' ' + value.client.lastName
+      const createdName = value.created.firstName + ' ' + value.created.lastName !== null ? value.created.lastName : ''
+      const clientName = value.client ? value.client.firstName + ' ' + value.client.lastName ? value.client.lastName : '' : ''
       value.text = createdName + '' + this._vm.$language.t('$vuetify.dashboard.timeLineText') + ' ' + clientName
     })
     state.salesByLimit = salesByLimit
@@ -299,10 +297,14 @@ const actions = {
     await sale
       .fetchSaleByLimit(filter)
       .then(({ data }) => {
+        console.log(data)
         commit(FETCHING_SALES_BY_LIMIT, data.data)
         commit(SALE_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
-      }).catch((error) => commit(FAILED_SALE, error))
+      }).catch((error) => {
+        console.log(error)
+        commit(FAILED_SALE, error)
+      })
   },
   async getSaleStatics ({
     commit,

@@ -120,8 +120,8 @@ class BoxManager extends BaseManager
         $company = CompanyManager::getCompanyByAdmin();
         $openClose = OpenCloseBox::create([
             'box_id'=>$data['box']['id'],
-            'open_to'=>$data['openTo']['id'],
-            'open_money'=>$data['cashOpen'],
+            'open_to'=>$data['open_to']['id'],
+            'open_money'=>$data['open_money'],
         ]);
         $openClose['company_id'] = $company->id;
         $this->managerBy('new', $openClose);
@@ -140,12 +140,11 @@ class BoxManager extends BaseManager
      */
     public function editOpenClose($data):OpenCloseBox
     {
-        $openClose = OpenCloseBox::findOrFail($data['open_id']);
-        $openClose->close_money = $data['cashClose'];
+        $openClose = OpenCloseBox::findOrFail($data['id']);
+        $openClose->close_money = $data['close_money'];
         $this->managerBy('edit', $openClose);
         $openClose->save();
         $box = Box::latest()->where('id','=', $data['box']['id'])->get()[0];
-        $box->open_id = null;
         $box->state = 'close';
         $box->save();
         return $openClose;

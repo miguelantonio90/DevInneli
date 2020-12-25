@@ -271,6 +271,7 @@ export default {
       this.totalCount[3] = this.user.company.currency + ' ' + parseFloat(this.totalCount[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCount[0] + ')'
       this.totalCash[3] = this.user.company.currency + ' +' + parseFloat(this.totalCash[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.pay.pays') + ': ' + this.totalCash[0] + ')'
       this.totalRefunds[3] = this.user.company.currency + ' -' + parseFloat(this.totalRefunds[1]).toFixed(2) + ' (' + this.$vuetify.lang.t('$vuetify.variants.cant') + ': ' + this.totalRefunds[0] + ')'
+      this.calcTotal()
     }
   },
   methods: {
