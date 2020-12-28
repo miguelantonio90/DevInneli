@@ -342,7 +342,7 @@ export default {
     percent: 'Margen',
     sell_by: 'Vendido por',
     unit: 'Unidad',
-    p_v: 'P/Vol',
+    p_v: 'Peso/Volumen',
     ref: 'Referencia',
     inventory: 'Inventario',
     new_inventory: 'Nuevo Inventario',
@@ -455,7 +455,7 @@ export default {
   },
   report: {
     contact_us: 'Contáctenos',
-    cant: 'CANT',
+    cant: 'CANTIDAD',
     print_ticket: 'Imprimir Ticket',
     print_letter: 'Imprimir Carta',
     breakdown: 'Desglose',

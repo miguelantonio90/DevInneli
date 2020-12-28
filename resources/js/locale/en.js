@@ -342,7 +342,7 @@ export default {
     percent: 'Margin',
     sell_by: 'Sold by',
     unit: 'Unit',
-    p_v: 'P / Vol',
+    p_v: 'Weight/Volume',
     ref: 'Reference',
     inventory: 'Inventory',
     new_inventory: 'New Inventory',
@@ -448,14 +448,14 @@ export default {
       open: 'In process',
       preform: 'Preform',
       accepted: 'Accepted',
-      canceled: 'Canceled',
+      cancelled: 'Canceled',
       close: 'Closed'
     },
     emptyArticle: 'This shop has no items. Please stock the store '
   },
   report: {
     contact_us: 'Contact Us',
-    cant: 'CANT',
+    cant: 'QUANTIFY',
     print_ticket: 'Print Ticket',
     print_letter: 'Print Letter',
     breakdown: 'Breakdown',

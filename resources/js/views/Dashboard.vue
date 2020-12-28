@@ -3,7 +3,10 @@
     <app-loading v-show="loadingData" />
     <v-container v-if="!loadingData">
       <v-row cols="12">
-        <v-col md="3">
+        <v-col
+          cols="6"
+          md="3"
+        >
           <linear-statistic
             class="my-4"
             :title="$vuetify.lang.t('$vuetify.dashboard.sales')"
@@ -15,18 +18,24 @@
             :value="100"
           />
         </v-col>
-        <v-col md="3">
+        <v-col
+          cols="6"
+          md="3"
+        >
           <linear-statistic
             class="my-4"
             :title="$vuetify.lang.t('$vuetify.dashboard.orders')"
             :sub-title="$vuetify.lang.t('$vuetify.dashboard.ordersSub')"
             :quantity="salesStatics.totalOrders ? salesStatics.totalOrders.toString(): 0"
             icon="mdi-trending-up"
-            color="pink"
+            color="info"
             :value="100"
           />
         </v-col>
-        <v-col md="3">
+        <v-col
+          cols="6"
+          md="3"
+        >
           <linear-statistic
             class="my-4"
             :title="$vuetify.lang.t('$vuetify.dashboard.revenue')"
@@ -38,7 +47,10 @@
             :value="100"
           />
         </v-col>
-        <v-col md="3">
+        <v-col
+          cols="6"
+          md="3"
+        >
           <linear-statistic
             class="mt-4"
             :title="$vuetify.lang.t('$vuetify.dashboard.expenses')"
