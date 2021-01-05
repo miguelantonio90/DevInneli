@@ -15,9 +15,9 @@
         <app-data-table
           :view-show-filter="false"
           :view-edit-button="false"
-          :view-new-button="true"
-          :view-delete-button="true"
-          :title="$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(total).toFixed(2)"
+          :view-new-button="show"
+          :view-delete-button="show"
+          :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(total).toFixed(2): ''"
           csv-filename="Categories"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
@@ -29,15 +29,16 @@
           @create-row="addNewPayment"
           @delete-row="deletePaymentHandler($event)"
         >
-          <template v-slot:[`item.method.method`]="{ item }">
-            {{ $vuetify.lang.t('$vuetify.payment.' + item.method.method) }}
+          <template v-slot:[`item.method`]="{ item }">
+            {{ $vuetify.lang.t('$vuetify.payment.' + item.method) }}
           </template>
           <template v-slot:[`item.name`]="{ item }">
-            {{ $vuetify.lang.t('$vuetify.payment.' + item.method.name) }}
+            {{ $vuetify.lang.t('$vuetify.payment.' + item.name) }}
           </template>
 
           <template v-slot:[`item.cant`]="{ item }">
             <v-edit-dialog
+              v-if="!show"
               large
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
@@ -52,7 +53,6 @@
                 </div>
                 <v-text-field-money
                   v-model="cant"
-                  :rules="numberRules"
                   :label="$vuetify.lang.t('$vuetify.actions.edit')"
                   required
                   :properties="{
@@ -82,9 +82,19 @@ export default {
     NewPayment
   },
   props: {
+    paysShow: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     edit: {
       type: Boolean,
       default: false
+    },
+    show: {
+      type: Boolean,
+      default: true
     },
     total: {
       type: Number,
@@ -102,15 +112,6 @@ export default {
       cant: 0.00,
       totalPays: 0.00,
       pays: [],
-      numberRules: [
-        v => !!v || 'Input is required!',
-        v =>
-          v < this.maxLength ||
-                `${this.errorName} must be less than ${this.maxLength} numbers`,
-        v =>
-          v > this.minLength ||
-                `${this.errorName} must be greater than ${this.minLength} numbers`
-      ],
       maxLength: 100,
       minLength: 0,
       errorName: ''
@@ -126,7 +127,7 @@ export default {
     ]),
     ...mapState('sale', ['newSale', 'editSale']),
     getTableColumns () {
-      return [
+      const data = [
         {
           text: this.$vuetify.lang.t('$vuetify.pay.pay'),
           value: 'name',
@@ -134,31 +135,41 @@ export default {
         },
         {
           text: this.$vuetify.lang.t('$vuetify.payment.name'),
-          value: 'method.method',
+          value: 'method',
           select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.cant'),
           value: 'cant',
           sortable: false
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
         }
       ]
+      if (this.show) {
+        data.push(
+          {
+            text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+            value: 'actions',
+            sortable: false
+          })
+      }
+      return data
     }
   },
   watch: {
+    paysShow: function () {
+      return this.paysShow
+    },
     pays: function () {
       this.calcTotalPay()
-      this.updateStore()
+      if (this.show) {
+        this.updateStore()
+      }
     }
   },
   created () {
+    this.pays = []
     this.getPayments()
-    this.pays = this.edit ? this.editSale.pays : this.newSale.pays
+    this.pays = this.paysShow
   },
   methods: {
     ...mapActions('payment', [
@@ -218,7 +229,14 @@ export default {
         })
     },
     addToPayment (pay) {
-      this.pays.push(pay)
+      this.pays.push({
+        name: pay.method.name,
+        method: pay.method.method,
+        cant: pay.cant,
+        mora: pay.mora,
+        cantMora: pay.cantMora,
+        payment_id: pay.method.id
+      })
       this.toogleNewModal(false)
       this.calcTotalPay()
       this.updateStore()

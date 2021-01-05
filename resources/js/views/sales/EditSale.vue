@@ -401,7 +401,9 @@
                   <v-expansion-panel-content>
                     <extra-data
                       :edit="true"
-                      @updateData="update = true"
+                      :pays-show="editSale.pays"
+                      :total="total.toString()"
+                      @updateData="updateData"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -429,6 +431,10 @@
                       :edit="true"
                       :update="update"
                       :currency="user.company.currency || ''"
+                      :total="total.toString()"
+                      :sub-total="sub_total.toString()"
+                      :total-tax="totalTax.toString()"
+                      :total-disc="totalDisc.toString()"
                       @updateData="update = false"
                     />
                   </v-expansion-panel-content>
@@ -529,6 +535,10 @@ export default {
       editedIndex: -1,
       localArticles: [],
       localBoxes: [],
+      totalTax: 0,
+      totalDisc: 0,
+      sub_total: 0,
+      total: 0,
       localDiscounts: [],
       update: false,
       panel: [0, 1, 2],
@@ -602,6 +612,15 @@ export default {
     boxes: function () {
       console.log('asdasdas')
       this.getLocalBoxes()
+    },
+    'editSale.taxes' () {
+      this.updateData()
+    },
+    'editSale.articles' () {
+      this.updateData()
+    },
+    'editSale.discounts' () {
+      this.updateData()
     }
   },
   async mounted () {
@@ -712,6 +731,7 @@ export default {
       this.editSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
       this.total_pay(item)
       this.update = true
+      this.updateData()
     },
     total_pay (item) {
       let suma = 0
@@ -722,6 +742,7 @@ export default {
       }
       item.totalPrice = item.cant * item.price + suma - this.total_discount(item)
       this.update = true
+      this.updateData()
       return suma
     },
     total_discount (item) {
@@ -781,6 +802,25 @@ export default {
       this.localArticles = []
       this.editSale.articles = []
       this.$router.push({ name: 'vending' })
+    },
+    updateData () {
+      this.totalTax = 0
+      this.totalDisc = 0
+      this.total = 0
+      this.sub_total = 0
+      this.editSale.articles.forEach((v) => {
+        this.sub_total = parseFloat(v.totalPrice) + this.sub_total
+      })
+      this.taxes = this.edit ? this.editSale.taxes
+        : this.editSale.taxes.forEach((v) => {
+          this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+        })
+      this.editSale.discounts.forEach((v) => {
+        this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+      })
+      this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+      this.total = parseFloat(this.total).toFixed(2)
+      this.update = true
     }
   }
 }

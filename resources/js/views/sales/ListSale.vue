@@ -124,26 +124,6 @@
               </template>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.pay`]="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <span
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : item.pay === 'credit'? $vuetify.lang.t('$vuetify.pay.credit'):$vuetify.lang.t('$vuetify.no_defined')
-                }}</span>
-              </template>
-              <span>
-                {{ $vuetify.lang.t('$vuetify.payment.name') }}</span>
-              <template v-if="item.payments">
-                {{ item.payments.name }}
-              </template>
-              <template v-else>
-                <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
-              </template>
-            </v-tooltip>
-          </template>
           <template v-slot:[`item.shop.name`]="{ item }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -159,12 +139,11 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.totalPrice`]="{ item }">
-            <template v-if="item.totalRefund > 0">
+            <template>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <b><v-icon
-                    v-if="item.totalRefund > 0"
-                    style="color: red"
+                    :style="item.totalRefund > 0?'color: red': 'color:primary'"
                     class="mr-2"
                     small
                     v-bind="attrs"
@@ -173,7 +152,16 @@
                     mdi-information
                   </v-icon></b>
                 </template>
-                <span>{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
+                <template>
+                  <list-pay
+                    :show="false"
+                    :pays-show="item.pays"
+                    :currency="user.company.currency"
+                  />
+                </template>
+                <span
+                  v-if="item.totalRefund > 0"
+                >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
               </v-tooltip>
             </template>
             {{ `${user.company.currency + ' ' + item.totalPrice}` }}
@@ -426,10 +414,11 @@ import NewRefound from '../refund/NewRefound'
 import DetailRefund from '../refund/DetailRefund'
 import PrintFacture from './PrintFacture'
 import PrintFactureLetter from './PrintFactureLetter'
+import ListPay from '../pay/ListPay'
 
 export default {
   name: 'ListSale',
-  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound },
+  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay },
   data () {
     return {
       menu: false,
@@ -465,11 +454,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
           value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'pay',
           select_filter: true
         },
         {

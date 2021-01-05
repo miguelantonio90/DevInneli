@@ -153,6 +153,8 @@
         </v-select>
       </v-col>
       <list-pay
+        :edit="edit"
+        :pays-show="paysShow"
         :total="parseFloat(total)"
         :currency="user.company.currency"
       />
@@ -171,6 +173,12 @@ export default {
   name: 'ExtraData',
   components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
   props: {
+    paysShow: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     edit: {
       type: Boolean,
       default: false
@@ -219,6 +227,7 @@ export default {
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
+    console.log(this.paysShow)
     this.sale = this.edit ? this.editSale : this.newSale
   },
   methods: {
@@ -240,14 +249,12 @@ export default {
       if (this.edit) {
         this.editSale.client = this.sale.client
         this.editSale.taxes = this.sale.taxes
-        this.editSale.pay = this.sale.pay
         this.editSale.payments = this.sale.payments
         this.editSale.no_facture = this.sale.no_facture
         this.editSale.discounts = this.sale.discounts
       } else {
         this.newSale.client = this.sale.client
         this.newSale.taxes = this.sale.taxes
-        this.newSale.pay = this.sale.pay
         this.newSale.payments = this.sale.payments
         this.newSale.no_facture = this.sale.no_facture
         this.newSale.discounts = this.sale.discounts

@@ -66,6 +66,8 @@ class SaleManager extends BaseManager
                 ->where('sales.id', '=', $value['id'])
                 ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
                 ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
+                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name',
+                    'payments.method', 'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora')
                 ->get();
             $sales[$key]['client'] = DB::table('clients')
                 ->join('sales', 'sales.client_id', '=', 'clients.id')
@@ -204,9 +206,6 @@ class SaleManager extends BaseManager
             'no_facture' => $data['no_facture'],
             'company_id' => $data['company_id']
         ]);
-        if (isset($data['payments']['id'])) {
-            $sale->payment_id = $data['payments']['id'];
-        }
         if (isset($data['box']['id'])) {
             $sale->box_id = $data['box']['id'];
         }
@@ -242,7 +241,7 @@ class SaleManager extends BaseManager
         }
         foreach ($pays as $k => $pay) {
             $newPaySale = PaySale::create([
-                'payment_id' => $pay['method']['id'],
+                'payment_id' => $pay['payment_id'],
                 'sale_id' => $sale->id
             ]);
             $newPaySale['cant']=$pay['cant'];
