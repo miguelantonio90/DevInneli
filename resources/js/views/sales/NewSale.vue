@@ -66,8 +66,8 @@
                       <v-select
                         v-model="newSale.box"
                         clearable
-                        :rules="formRule.country"
                         :items="localBoxes"
+                        :rules="formRule.country"
                         required
                         :label="$vuetify.lang.t('$vuetify.menu.box')"
                         item-text="name"
@@ -392,7 +392,10 @@
                     </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <extra-data @updateData="update = true" />
+                    <extra-data
+                      :total="total.toString()"
+                      @updateData="updateData"
+                    />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-col>
@@ -419,6 +422,10 @@
                       :edit="false"
                       :update="update"
                       :currency="user.company.currency || ''"
+                      :total="total.toString()"
+                      :sub-total="sub_total.toString()"
+                      :total-tax="totalTax.toString()"
+                      :total-disc="totalDisc.toString()"
                       @updateData="update = false"
                     />
                   </v-expansion-panel-content>
@@ -437,7 +444,7 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <template v-if="!newSale.pay">
+          <template v-if="newSale.pays.length === 0">
             <v-btn
               class="mb-2"
               color="success"
@@ -451,7 +458,7 @@
           </template>
           <template v-else>
             <v-btn
-              v-show="newSale.pay"
+              v-show="newSale.pays.length !== 0"
               class="mb-2"
               color="success"
               :disabled="!formValid || isActionInProgress"
@@ -462,7 +469,7 @@
               {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
             </v-btn>
             <v-btn
-              v-show="newSale.pay"
+              v-show="newSale.pays.length !== 0"
               class="mb-2"
               color="primary"
               :disabled="!formValid || isActionInProgress"
@@ -521,6 +528,10 @@ export default {
       localArticles: [],
       localDiscounts: [],
       localBoxes: [],
+      totalTax: 0,
+      totalDisc: 0,
+      sub_total: 0,
+      total: 0,
       update: false,
       panel: [0, 1, 2],
       formValid: false,
@@ -605,6 +616,15 @@ export default {
       if (this.sales.filter(art => art.no_facture === this.newSale.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newSale.no_facture).length > 0) {
         this.newSale.no_facture = this.generateNF()
       }
+    },
+    'newSale.taxes' () {
+      this.updateData()
+    },
+    'newSale.articles' () {
+      this.updateData()
+    },
+    'newSale.discounts' () {
+      this.updateData()
     }
   },
   async created () {
@@ -654,7 +674,7 @@ export default {
     validAddToLocalArticle (v, value, artS) {
       let inventory = 0
       if (!value.track_inventory) {
-        this.addToLocalArticle(v, value, 0, [])
+        this.addToLocalArticle(v, value, 0, artS[0])
       } else {
         if (artS.length > 0) {
           inventory = artS[0].stock
@@ -710,6 +730,7 @@ export default {
       item.totalPrice = 0
       this.total_pay(item)
       this.update = true
+      this.updateData()
     },
     total_pay (item) {
       let suma = 0
@@ -719,6 +740,7 @@ export default {
         })
       }
       item.totalPrice = item.cant * item.price + suma - this.total_discount(item)
+      this.updateData()
       return suma
     },
     total_discount (item) {
@@ -770,19 +792,27 @@ export default {
         })
     },
     async createNewSale (state) {
-      if (this.newSale.articles.length > 0) {
-        if (this.$refs.form.validate()) {
-          this.loading = true
-          this.newSale.state = state
-          await this.createSale(this.newSale).then(() => {
-            this.$router.push({ name: 'vending' })
-          })
-        }
-      } else {
+      console.log(this.newSale)
+      if (!this.newSale.box) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_cant_article'
+          '$vuetify.messages.warning_no_box'
         ))
+      } else {
+        if (this.newSale.articles.length > 0) {
+          if (this.$refs.form.validate()) {
+            this.loading = true
+            this.newSale.state = state
+            await this.createSale(this.newSale).then(() => {
+              this.$router.push({ name: 'vending' })
+            })
+          }
+        } else {
+          this.loading = false
+          this.shopMessageError(this.$vuetify.lang.t(
+            '$vuetify.messages.warning_cant_article'
+          ))
+        }
       }
     },
     shopMessageError (message) {
@@ -803,6 +833,25 @@ export default {
       this.localArticles = []
       this.newSale.articles = []
       this.$router.push({ name: 'vending' })
+    },
+    updateData () {
+      this.totalTax = 0
+      this.totalDisc = 0
+      this.total = 0
+      this.sub_total = 0
+      this.newSale.articles.forEach((v) => {
+        this.sub_total = parseFloat(v.totalPrice) + this.sub_total
+      })
+      this.taxes = this.edit ? this.editSale.taxes
+        : this.newSale.taxes.forEach((v) => {
+          this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+        })
+      this.newSale.discounts.forEach((v) => {
+        this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+      })
+      this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+      this.total = parseFloat(this.total).toFixed(2)
+      this.update = true
     }
   }
 }

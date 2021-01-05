@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\ArticlesShops;
 use App\Box;
+use App\PaySale;
 use App\Sale;
 use App\SalesArticlesShops;
 use App\Tax;
@@ -61,11 +62,11 @@ class SaleManager extends BaseManager
                     'articles_shops.id')
                 ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->get();
-            $payments = DB::table('payments')
+            $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
-                ->join('sales', 'sales.payment_id', '=', 'payments.id')
+                ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
+                ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->get();
-            $sales[$key]['payments'] = count($payments) > 0 ? $payments[0] : null;
             $sales[$key]['client'] = DB::table('clients')
                 ->join('sales', 'sales.client_id', '=', 'clients.id')
                 ->where('sales.id', '=', $value['id'])
@@ -144,7 +145,7 @@ class SaleManager extends BaseManager
     }
 
     /**
-     * @param  int  $limit
+     * @param int $limit
      * @return mixed
      */
     public function findSalesByLimit(int $limit)
@@ -181,9 +182,9 @@ class SaleManager extends BaseManager
             if ($value['state'] === 'accepted') {
                 $expenses += $value['totalCost'];
                 $salesCount += $value['totalPrice'];
-                $response['totalSales'] = round($salesCount,2);
-                $response['totalExpenses'] = round($expenses,2);
-                $response['totalRevenue'] = round(($salesCount - $expenses),2);
+                $response['totalSales'] = round($salesCount, 2);
+                $response['totalExpenses'] = round($expenses, 2);
+                $response['totalRevenue'] = round(($salesCount - $expenses), 2);
                 $response['totalOrders'] = ++$count;
             }
         }
@@ -198,7 +199,7 @@ class SaleManager extends BaseManager
      */
     public function new($data): Sale
     {
-        $this->validBoxToSale(['id'=>$data['box']['id']]);
+        $this->validBoxToSale(['id' => $data['box']['id']]);
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
             'company_id' => $data['company_id']
@@ -208,9 +209,6 @@ class SaleManager extends BaseManager
         }
         if (isset($data['box']['id'])) {
             $sale->box_id = $data['box']['id'];
-        }
-        if (array_key_exists('pay', $data)) {
-            $sale->pay = $data['pay'] ?: null;
         }
         $sale->state = $data['state'] ?: null;
         if (isset($data['client']['id'])) {
@@ -230,6 +228,7 @@ class SaleManager extends BaseManager
     public function updateSaleData($sale, $data, $edit): void
     {
         $articles = $data['articles'];
+        $pays = $data['pays'];
         foreach ($articles as $key => $value) {
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
@@ -241,15 +240,31 @@ class SaleManager extends BaseManager
             }
             $articleShop->save();
         }
+        foreach ($pays as $k => $pay) {
+            $newPaySale = PaySale::create([
+                'payment_id' => $pay['method']['id'],
+                'sale_id' => $sale->id
+            ]);
+            $newPaySale['cant']=$pay['cant'];
+            if($pay['name']==='credit'){
+                $newPaySale['mora']=$pay['mora'];
+                $newPaySale['cantMora']=$pay['cantMora'];
+
+            }
+            $newPaySale->save();
+            $this->managerBy('new', $newPaySale);
+        }
         $taxes = [];
         foreach ($data['taxes'] as $k => $v) {
             $taxes[] = $v['id'];
         }
         $sale->taxes()->sync(Tax::find($taxes));
         $discounts = [];
+
         foreach ($data['discounts'] as $k => $v) {
             $discounts[] = $v['id'];
         }
+
         $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
     }
@@ -699,13 +714,13 @@ class SaleManager extends BaseManager
     public function validBoxToSale($data)
     {
         $box = Box::findOrFail($data['id']);
-        if($box->state ==='close'){
+        if ($box->state === 'close') {
             $bManager = new BoxManager();
-                $bManager->createOpenClose([
-                    'box'=>['id'=>$data['id']],
-                        'open_to'=>['id'=> cache()->get('userPin')['id']],
-                        'open_money'=>0
-                    ]);
+            $bManager->createOpenClose([
+                'box' => ['id' => $data['id']],
+                'open_to' => ['id' => cache()->get('userPin')['id']],
+                'open_money' => 0
+            ]);
         }
     }
 

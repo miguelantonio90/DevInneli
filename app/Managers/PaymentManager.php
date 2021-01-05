@@ -19,7 +19,6 @@ class PaymentManager extends BaseManager
         } else {
             $company = CompanyManager::getCompanyByAdmin();
             $payments = Payment::latest()
-                ->where('company_id', '=', $company->id)
                 ->get();
         }
         return $payments;

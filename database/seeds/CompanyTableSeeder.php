@@ -2,6 +2,7 @@
 
 use App\Company;
 use App\KeyPosition;
+use App\Payment;
 use App\Position;
 use App\User;
 use Faker\Generator as Faker;
@@ -35,7 +36,7 @@ class CompanyTableSeeder extends Seeder
             'email' => 'admin@admin.com',
             'logo' => '',
             'country' => $this->faker->countryCode,
-            'sector' =>'others',
+            'sector' => 'others',
             'currency' => $this->faker->currencyCode,
             'address' => $this->faker->address,
             'faker' => true,
@@ -143,5 +144,16 @@ class CompanyTableSeeder extends Seeder
             'company_id' => $company->id,
             'position_id' => $position->id,
         ]);
+
+        $payments = [['counted', 'cash'], ['counted', 'card'], ['counted', 'check'],
+            ['counted', 'deposit'], ['counted', 'wire_transfer'], ['counted', 'digital_transfer'],
+            ['counted', 'other'], ['credit', 'credit']];
+        foreach ($payments as $key=>$value)
+        {
+            Payment::create([
+                'name'=>$value[0],
+                'method'=>$value[1]]
+            );
+        }
     }
 }

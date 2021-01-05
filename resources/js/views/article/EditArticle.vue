@@ -440,6 +440,7 @@
                             md="12"
                           >
                             <variant
+                              :edit="true"
                               :ref-parent="ref"
                               :updated="updated"
                               :variants-parent="editArticle.variants"

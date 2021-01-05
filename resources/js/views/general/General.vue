@@ -104,7 +104,7 @@ export default {
         [
           { key: 'shop-list', content: 'shop-list' },
           { key: 'list-access', content: 'list-access' },
-          { key: 'list-payment', content: 'list-payment' },
+          // { key: 'list-payment', content: 'list-payment' },
           { key: 'expense-category', content: 'expense-category' },
           { key: 'exchange-rate', content: 'exchange-rate' },
           { key: 'type-of-order', content: 'type-of-order' },
@@ -114,7 +114,7 @@ export default {
         [
           { key: 'shop-list', content: 'list-shop-admin' },
           { key: 'list-access', content: 'list-access-admin' },
-          { key: 'list-payment', content: 'list-payment-admin' },
+          // { key: 'list-payment', content: 'list-payment-admin' },
           { key: 'expense-category', content: 'expense-category-admin' },
           { key: 'exchange-rate', content: 'exchange-rate' },
           { key: 'type-of-order', content: 'type-of-order-admin' },
@@ -125,7 +125,7 @@ export default {
       tabName: [
         { name: this.$vuetify.lang.t('$vuetify.menu.shop'), icon: 'mdi-shopping', access: 'manager_shop' },
         { name: this.$vuetify.lang.t('$vuetify.menu.access'), icon: 'mdi-key', access: 'manager_access' },
-        { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: 'mdi-cash-multiple', access: 'manager_payment' },
+        // { name: this.$vuetify.lang.t('$vuetify.menu.pay'), icon: 'mdi-cash-multiple', access: 'manager_payment' },
         { name: this.$vuetify.lang.t('$vuetify.menu.expense_category'), icon: 'mdi-marker-check', access: 'manager_expense_category' },
         { name: this.$vuetify.lang.t('$vuetify.menu.exchange_rate'), icon: 'mdi-bank', access: 'manager_exchange_rate' },
         { name: this.$vuetify.lang.t('$vuetify.menu.type_of_order'), icon: 'mdi-food', access: 'manager_type_of_order' },

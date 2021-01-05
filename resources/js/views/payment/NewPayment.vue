@@ -1,6 +1,5 @@
 <template>
   <v-dialog
-    v-model="toogleNewModal"
     max-width="450"
     persistent
   >

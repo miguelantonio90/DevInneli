@@ -57,7 +57,6 @@ const mutations = {
       Object.keys(data.payments).map((key) => {
         if (key === value.method) {
           value.enEs = data.payments[key].en + '(' + data.payments[key].es + ')'
-          value.method = data.payments[key]
         }
       })
     })

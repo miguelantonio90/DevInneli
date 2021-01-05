@@ -100,7 +100,11 @@ class ArticleManager extends BaseManager
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
                 if ($articles[$k]['variantValues'][$sh]['price'] == 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
-                } else {
+                }
+                else if ($articles[$k]['variantValues'][$sh]['cost'] == 0.00) {
+                    $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
+                }
+                else {
                     $articles[$k]['variantValues'][$sh]['percent'] =
                         round(
                             (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],

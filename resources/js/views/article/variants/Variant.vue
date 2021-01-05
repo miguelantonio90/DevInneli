@@ -234,11 +234,15 @@
 
 <script>
 /* eslint-disable vue/require-default-prop */
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Variant',
   props: {
+    edit: {
+      type: Boolean,
+      default: false
+    },
     isUpdated: {
       type: Boolean,
       default: true
@@ -280,6 +284,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['user']),
+    ...mapState('article', ['newArticle', 'editArticle']),
     formTitle () {
       return this.editedIndex === -1
         ? this.$vuetify.lang.t('$vuetify.titles.newF', [
@@ -450,8 +455,8 @@ export default {
             result.push({
               articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
               name: localValue.toString(),
-              price: localArticle.length > 0 ? localArticle[0].price : '0.00',
-              cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',
+              price: localArticle.length > 0 ? localArticle[0].price : this.edit ? this.editArticle.price : this.newArticle.price,
+              cost: localArticle.length > 0 ? localArticle[0].cost : this.edit ? this.editArticle.cost : this.newArticle.cost,
               ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
               barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
             })
@@ -466,8 +471,8 @@ export default {
               result.push({
                 articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
                 name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
-                price: localArticle.length > 0 ? localArticle[0].price : '0.00',
-                cost: localArticle.length > 0 ? localArticle[0].cost : '0.00',
+                price: localArticle.length > 0 ? localArticle[0].price : this.edit ? this.editArticle.price : this.newArticle.price,
+                cost: localArticle.length > 0 ? localArticle[0].cost : this.edit ? this.editArticle.cost : this.newArticle.cost,
                 ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
                 barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
               })

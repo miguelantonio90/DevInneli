@@ -4,21 +4,20 @@ namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Payment
+ * Class PaySale
+ * @package App
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
  * @method find($id)
  * @method static create(array $array)
  * @method static select(string $string, $raw)
- * @property mixed color
  */
-class Payment extends Model
+class PaySale extends Model
 {
     use Uuid, SoftDeletes;
 
@@ -32,16 +31,17 @@ class Payment extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'method'];
+    protected $fillable = ['payment_id', 'sale_id'];
 
-    public function company(): BelongsTo
+
+    public function sale(): HasMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->hasMany(Sale::class);
     }
 
-    public function inventories(): HasMany
-    {
-        return $this->hasMany(Inventory::class);
-    }
 
+    public function method(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
