@@ -40,6 +40,7 @@ class SaleManager extends BaseManager
 
     /**
      * @return array
+     * @throws Exception
      */
     public function getTotalsStatic(): array
     {
