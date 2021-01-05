@@ -47,7 +47,6 @@ const state = {
   editSale: {
     id: '',
     no_facture: '',
-    pay: '',
     box: {},
     discounts: [],
     taxes: [],
@@ -101,7 +100,6 @@ const mutations = {
     state.showNewModal = false
     state.newSale = {
       no_facture: '',
-      pay: '',
       pays: [],
       box: null,
       state: 'open',
@@ -131,7 +129,6 @@ const mutations = {
     state.editSale = {
       id: '',
       no_facture: '',
-      pay: '',
       pays: [],
       box: {},
       discounts: [],

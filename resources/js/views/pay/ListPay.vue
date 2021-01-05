@@ -38,7 +38,6 @@
 
           <template v-slot:[`item.cant`]="{ item }">
             <v-edit-dialog
-              v-if="!show"
               large
               persistent
               :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
@@ -237,6 +236,7 @@ export default {
         cantMora: pay.cantMora,
         payment_id: pay.method.id
       })
+      console.log(this.pays)
       this.toogleNewModal(false)
       this.calcTotalPay()
       this.updateStore()

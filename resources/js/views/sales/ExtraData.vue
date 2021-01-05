@@ -229,6 +229,7 @@ export default {
     })
     console.log(this.paysShow)
     this.sale = this.edit ? this.editSale : this.newSale
+    console.log(this.paysShow)
   },
   methods: {
     ...mapActions('client', ['getClients']),
