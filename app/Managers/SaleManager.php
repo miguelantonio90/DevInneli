@@ -15,11 +15,59 @@ use Illuminate\Support\Facades\DB;
 class SaleManager extends BaseManager
 {
     /**
+     * @param  int  $limit
      * @return mixed
+     */
+    public function findSalesByLimit(int $limit)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $sales = Sale::latest()
+            ->where('company_id', '=', $company->id)
+            ->orderBy('created_at', 'ASC')
+            ->take($limit)
+            ->get();
+        foreach ($sales as $key => $value) {
+            $sales[$key]['created'] = DB::table('users')
+                ->where('users.id', '=', $value->created_by)
+                ->first();
+            $sales[$key]['client'] = DB::table('clients')
+                ->where('sales.id', '=', $value['id'])
+                ->join('sales', 'sales.client_id', '=', 'clients.id')
+                ->first();
+        }
+        return $sales;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTotalsStatic(): array
+    {
+        $sales = $this->findAllByCompany();
+        $count = 0;
+        $expenses = 0;
+        $salesCount = 0;
+        $response = [];
+        foreach ($sales as $key => $value) {
+            if ($value['state'] === 'accepted') {
+                $expenses += $value['totalCost'];
+                $salesCount += $value['totalPrice'];
+                $response['totalSales'] = round($salesCount, 2);
+                $response['totalExpenses'] = round($expenses, 2);
+                $response['totalRevenue'] = round(($salesCount - $expenses), 2);
+                $response['totalOrders'] = ++$count;
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
      */
     public function findAllByCompany()
     {
-        $sales = [];
         if (auth()->user()['isAdmin'] === 1) {
             $sales = Sale::latest()
                 ->with('company')
@@ -28,6 +76,9 @@ class SaleManager extends BaseManager
             $company = CompanyManager::getCompanyByAdmin();
             $sales = Sale::latest()
                 ->where('company_id', '=', $company->id)
+                ->when($this->getAccessPermit()[2]->actions->just_yours === true, function ($query) {
+                    return $query->where('created_by', '=', cache()->get('userPin')['id']);
+                })
                 ->with('company')
                 ->with('box')
                 ->with('articles_shops')
@@ -38,6 +89,15 @@ class SaleManager extends BaseManager
                 ->get();
         }
         return $this->filterSale($sales);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAccessPermit()
+    {
+        return json_decode(cache()->get('userPin')->position['access_permit']);
     }
 
     public function filterSale($sales)
@@ -147,54 +207,6 @@ class SaleManager extends BaseManager
     }
 
     /**
-     * @param int $limit
-     * @return mixed
-     */
-    public function findSalesByLimit(int $limit)
-    {
-        $company = CompanyManager::getCompanyByAdmin();
-        $sales = Sale::latest()
-            ->where('company_id', '=', $company->id)
-            ->orderBy('created_at', 'ASC')
-            ->take($limit)
-            ->get();
-        foreach ($sales as $key => $value) {
-            $sales[$key]['created'] = DB::table('users')
-                ->where('users.id', '=', $value->created_by)
-                ->first();
-            $sales[$key]['client'] = DB::table('clients')
-                ->where('sales.id', '=', $value['id'])
-                ->join('sales', 'sales.client_id', '=', 'clients.id')
-                ->first();
-        }
-        return $sales;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTotalsStatic(): array
-    {
-        $sales = $this->findAllByCompany();
-        $count = 0;
-        $expenses = 0;
-        $salesCount = 0;
-        $response = [];
-        foreach ($sales as $key => $value) {
-            if ($value['state'] === 'accepted') {
-                $expenses += $value['totalCost'];
-                $salesCount += $value['totalPrice'];
-                $response['totalSales'] = round($salesCount, 2);
-                $response['totalExpenses'] = round($expenses, 2);
-                $response['totalRevenue'] = round(($salesCount - $expenses), 2);
-                $response['totalOrders'] = ++$count;
-            }
-        }
-
-        return $response;
-    }
-
-    /**
      * @param $data
      * @return Sale
      * @throws Exception
@@ -216,6 +228,23 @@ class SaleManager extends BaseManager
         $sale->save();
         $this->updateSaleData($sale, $data, false);
         return $sale;
+    }
+
+    /**
+     * @param $data
+     * @throws Exception
+     */
+    public function validBoxToSale($data)
+    {
+        $box = Box::findOrFail($data['id']);
+        if ($box->state === 'close') {
+            $bManager = new BoxManager();
+            $bManager->createOpenClose([
+                'box' => ['id' => $data['id']],
+                'open_to' => ['id' => cache()->get('userPin')['id']],
+                'open_money' => 0
+            ]);
+        }
     }
 
     /**
@@ -244,10 +273,10 @@ class SaleManager extends BaseManager
                 'payment_id' => $pay['payment_id'],
                 'sale_id' => $sale->id
             ]);
-            $newPaySale['cant']=$pay['cant'];
-            if($pay['name']==='credit'){
-                $newPaySale['mora']=$pay['mora'];
-                $newPaySale['cantMora']=$pay['cantMora'];
+            $newPaySale['cant'] = $pay['cant'];
+            if ($pay['name'] === 'credit') {
+                $newPaySale['mora'] = $pay['mora'];
+                $newPaySale['cantMora'] = $pay['cantMora'];
 
             }
             $newPaySale->save();
@@ -420,8 +449,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if (json_decode(cache()->get('userPin')->position['access_permit'])[6]->actions->just_yours
-            && json_decode(cache()->get('userPin')->position['access_permit'])[2]->actions->just_yours) {
+        if ($this->getAccessPermit()[6]->actions->just_yours
+            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();
@@ -466,15 +495,19 @@ class SaleManager extends BaseManager
     public function salePayment($filter): array
     {
         $articles = DB::table('articles')
-            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
-            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                'articles_shops.id')
-            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->where('sales.created_by', '=', cache()->get('userPin')['id'])
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales.created_at as sales_created_at',
-                'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost', 'sales.pay');
+                'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost',
+                'pay_sales.cant as cantPay',
+                'payments.name as pay')
+            ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+            ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                'articles_shops.id')
+            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+            ->leftJoin('pay_sales', 'pay_sales.sale_id', '=', 'sales.id')
+            ->leftJoin('payments', 'payments.id', '=', 'pay_sales.payment_id')
+            ->where('sales.created_by', '=', cache()->get('userPin')['id']);
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',
@@ -487,12 +520,11 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if (json_decode(cache()->get('userPin')->position['access_permit'])[6]->actions->just_yours
-            && json_decode(cache()->get('userPin')->position['access_permit'])[2]->actions->just_yours) {
+        if ($this->getAccessPermit()[6]->actions->just_yours
+            && $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
-        $articles = $articles->get();
-        $pos = 0;
+        $articles = $articles->get()->unique('name');
         $result = [];
         $grossPrice = 0;
         $totalTax = 0;
@@ -548,6 +580,7 @@ class SaleManager extends BaseManager
     /**
      * @param $filter
      * @return array
+     * @throws Exception
      */
     public function saleByProduct($filter): array
     {
@@ -556,19 +589,21 @@ class SaleManager extends BaseManager
         foreach ($filter['shops'] as $key => $value) {
             $shops[] = $value['id'];
         }
-        $pos = 0;
         $articles = DB::table('articles')
-            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
-            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                'articles_shops.id')
-            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
-            ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
-            ->whereIn('articles_shops.shop_id', $shops)
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price',
-                'sales_articles_shops.created_at', 'articles.cost', 'sales.pay')
+                'sales_articles_shops.created_at', 'articles.cost')
+            ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+            ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                'articles_shops.id')
+            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+            ->when($this->getAccessPermit()[9]->actions->just_yours === true, function ($query) {
+                return $query->where('sales.created_by', '=', cache()->get('userPin')['id']);
+            })
+            ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
+            ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
+            ->whereIn('articles_shops.shop_id', $shops)
             ->get();
         $result = [];
         $grossPrice = 0;
@@ -622,7 +657,6 @@ class SaleManager extends BaseManager
         return $data;
     }
 
-
     /**
      * @param $filter
      * @return array
@@ -631,15 +665,14 @@ class SaleManager extends BaseManager
     public function saleEmployer($filter): array
     {
         $articles = DB::table('articles')
-            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
-            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                'articles_shops.id')
-            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->where('sales.created_by', '=', cache()->get('userPin')['id'])
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price', 'sales.created_by',
-                'sales_articles_shops.created_at', 'articles.cost', 'sales.pay');
+                'sales_articles_shops.created_at', 'articles.cost')
+            ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+            ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                'articles_shops.id')
+            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id');
 
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
@@ -647,17 +680,17 @@ class SaleManager extends BaseManager
                 $dates[0])->whereDate('sales_articles_shops.created_at', '<=', $dates[1]);
         }
         if (array_key_exists('shops', $filter)) {
+            $shops = [];
             foreach ($filter['shops'] as $key => $value) {
                 $shops[] = $value['id'];
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if (json_decode(cache()->get('userPin')->position['access_permit'])[6]->actions->just_yours
-            && json_decode(cache()->get('userPin')->position['access_permit'])[2]->actions->just_yours) {
+        if ($this->getAccessPermit()[6]->actions->just_yours
+            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();
-        $pos = 0;
         $result = [];
         $grossPrice = 0;
         $totalTax = 0;
@@ -708,19 +741,6 @@ class SaleManager extends BaseManager
             $pos++;
         }
         return $data;
-    }
-
-    public function validBoxToSale($data)
-    {
-        $box = Box::findOrFail($data['id']);
-        if ($box->state === 'close') {
-            $bManager = new BoxManager();
-            $bManager->createOpenClose([
-                'box' => ['id' => $data['id']],
-                'open_to' => ['id' => cache()->get('userPin')['id']],
-                'open_money' => 0
-            ]);
-        }
     }
 
 }

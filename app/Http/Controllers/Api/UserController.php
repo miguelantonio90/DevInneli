@@ -59,13 +59,12 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         $data = $request->all();
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;

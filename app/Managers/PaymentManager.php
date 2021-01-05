@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Payment;
+use Exception;
 
 class PaymentManager extends BaseManager
 {
@@ -27,7 +28,7 @@ class PaymentManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -44,7 +45,7 @@ class PaymentManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -63,7 +64,7 @@ class PaymentManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

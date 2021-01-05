@@ -1,7 +1,6 @@
 <?php
 
 use App\Company;
-use App\KeyPosition;
 use App\Payment;
 use App\Position;
 use App\User;

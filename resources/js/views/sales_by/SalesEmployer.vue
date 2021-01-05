@@ -108,7 +108,9 @@
                               </v-chip>
                             </v-list-item-icon>
                             <v-list-item-content>
-                              <v-list-item-title v-text="item.name.firstName" />
+                              <v-list-item-title>
+                                {{ item.name.firstName + ' ' +item.name.lastName }}
+                              </v-list-item-title>
                               <v-list-item-subtitle v-text="`${item.data.netPrice + ' ' + user.company.currency }` " />
                             </v-list-item-content>
                           </v-list-item>
@@ -272,7 +274,7 @@ export default {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
       this.localSalesByEmployer.slice(0, 4).forEach((v) => {
-        categories.push(v.name.firstName)
+        categories.push(v.name.firstName + ' ' + v.name.lastName)
         series.grossPrice.push(v.data.grossPrice)
         series.totalDiscount.push(v.data.totalDiscount)
         series.netPrice.push(v.data.netPrice)

@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Client;
+use Exception;
 
 class ClientManager extends BaseManager
 {
@@ -40,32 +41,15 @@ class ClientManager extends BaseManager
     }
 
     /**
-     * @param $id
-     * @param $data
-     * @return mixed
-     */
-    public function edit($id, $data)
-    {
-        $client = Client::findOrFail($id);
-        if (isset($data['firstName'])) {
-            $client->firstName = $data['firstName'];
-        }
-        if (isset($data['email'])) {
-            $client->email = $data['email'];
-        }
-        return $this->updateData($client, $data, false);
-    }
-
-    /**
      * @param $client
      * @param $data
      * @param  bool  $new
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateData($client, $data, $new)
     {
-        $new? $this->managerBy('new', $client) : $this->managerBy('edit', $client);
+        $new ? $this->managerBy('new', $client) : $this->managerBy('edit', $client);
         if (isset($data['phone'])) {
             $client->phone = $data['phone'];
         }
@@ -100,11 +84,27 @@ class ClientManager extends BaseManager
         return $client;
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function edit($id, $data)
+    {
+        $client = Client::findOrFail($id);
+        if (isset($data['firstName'])) {
+            $client->firstName = $data['firstName'];
+        }
+        if (isset($data['email'])) {
+            $client->email = $data['email'];
+        }
+        return $this->updateData($client, $data, false);
+    }
 
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

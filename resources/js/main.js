@@ -12,17 +12,17 @@ import HighchartsVue from 'highcharts-vue'
 
 // Import the styles too, typically in App.vue or main.js
 import 'vue-swatches/dist/vue-swatches.css'
-import IdleVue from 'idle-vue'
+// import IdleVue from 'idle-vue'
 Vue.use(HighchartsVue)
 
-const eventsHub = new Vue()
+// const eventsHub = new Vue()
 
-Vue.use(IdleVue, {
+/* Vue.use(IdleVue, {
   eventEmitter: eventsHub,
   store,
   idleTime: 600000, // 10 min,
   startAtIdle: false
-})
+}) */
 
 Vue.config.productionTip = false
 

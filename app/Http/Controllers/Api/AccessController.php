@@ -25,9 +25,7 @@ class AccessController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * @return JsonResponse|Response
      */
     public function index()
     {
@@ -81,7 +79,7 @@ class AccessController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -91,10 +89,8 @@ class AccessController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
      */
     public function destroy($id)
     {

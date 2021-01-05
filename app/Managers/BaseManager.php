@@ -32,7 +32,7 @@ class BaseManager
     public function findCategoryByName($name)
     {
         $company = CompanyManager::getCompanyByAdmin();
-        return  Category::latest()
+        return Category::latest()
             ->where('company_id', '=', $company->id)
             ->where('name', '=', $name)
             ->get();
@@ -42,7 +42,7 @@ class BaseManager
     public function findShopByName($name)
     {
         $company = CompanyManager::getCompanyByAdmin();
-        return  Shop::latest()
+        return Shop::latest()
             ->where('company_id', '=', $company->id)
             ->where('name', '=', $name)
             ->get();

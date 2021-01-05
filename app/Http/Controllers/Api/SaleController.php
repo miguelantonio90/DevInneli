@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class SaleController extends Controller
 {
@@ -49,7 +48,7 @@ class SaleController extends Controller
      *
      * @param  Request  $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request): JsonResponse
     {
