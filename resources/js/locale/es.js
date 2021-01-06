@@ -524,5 +524,11 @@ export default {
     init: 'Balance Inicial',
     final: 'Balance Final'
   },
+  tour: {
+    buttonSkip: 'Omitir',
+    buttonPrevious: 'Anterior',
+    buttonNext: 'Siguiente',
+    buttonStop: 'Final'
+  },
   ...es
 }

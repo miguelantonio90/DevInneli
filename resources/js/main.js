@@ -2,18 +2,21 @@ import Vue from 'vue'
 import router from './router/'
 import store from './store/'
 import App from './App.vue'
+import VueTour from 'vue-tour'
+import IdleVue from 'idle-vue'
 import vuetify from './plugins/vuetify'
 import './plugins/vuetify-mask.js'
 import * as AppComponents from './components'
-import '@mdi/font/css/materialdesignicons.css'
 import './registerServiceWorker'
 import VueTelInputVuetify from 'vue-tel-input-vuetify'
 import HighchartsVue from 'highcharts-vue'
-
 // Import the styles too, typically in App.vue or main.js
+import '@mdi/font/css/materialdesignicons.css'
 import 'vue-swatches/dist/vue-swatches.css'
-import IdleVue from 'idle-vue'
+import 'vue-tour/dist/vue-tour.css'
+
 Vue.use(HighchartsVue)
+Vue.use(VueTour)
 
 const eventsHub = new Vue()
 

@@ -25,11 +25,12 @@
       temporary
     >
       <theme-settings />
-      <modal-idle
-        v-if="isIdle"
-        :dialog="!!isIdle"
-      />
     </v-navigation-drawer>
+    <modal-idle
+      v-if="isIdle"
+      :dialog="!!isIdle"
+    />
+    <app-tour name="myTour" />
   </v-app>
 </template>
 

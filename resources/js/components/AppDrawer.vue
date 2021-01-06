@@ -5,7 +5,6 @@
     :width="drawerWidth"
     app
     class="app--drawer"
-    expand-on-hover
   >
     <v-toolbar
       color="primary darken-1"
@@ -24,6 +23,7 @@
       <template v-for="(item, key) in computeMenu">
         <template v-if="item.children && item.children.length > 0">
           <v-list-group
+            :id="item.meta.title"
             :key="key"
             :prepend-icon="item.meta.icon"
             :to="item.path"
@@ -106,6 +106,7 @@
         <template v-else>
           <v-list-item
             v-show="!item.meta.hiddenInMenu"
+            :id="item.meta.title"
             :key="key"
             :to="item.path"
           >
@@ -203,6 +204,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted: function () {
+    this.$tours.myTour.start()
   },
   created () {
   },
