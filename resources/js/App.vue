@@ -1,5 +1,6 @@
 <template>
   <v-app :dark="true">
+    <app-tour name="myTour" />
     <router-view />
     <!-- theme setting -->
     <v-btn
@@ -30,7 +31,6 @@
       v-if="isIdle"
       :dialog="!!isIdle"
     />
-    <app-tour name="myTour" />
   </v-app>
 </template>
 

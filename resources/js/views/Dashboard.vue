@@ -2,7 +2,10 @@
   <div class="page-dashboard">
     <app-loading v-show="loadingData" />
     <v-container v-if="!loadingData">
-      <v-row cols="12">
+      <v-row
+        id="statistic_dashboard"
+        cols="12"
+      >
         <v-col
           cols="6"
           md="3"

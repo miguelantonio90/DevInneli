@@ -6,6 +6,7 @@
   >
     <v-app-bar-nav-icon
       v-if="showNavIcon"
+      id="navIcon"
       @click="handleDrawerToggle"
     />
     <v-spacer />
@@ -16,6 +17,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            id="mdi_lock"
             v-bind="attrs"
             class="mr-3"
             v-on="on"
@@ -27,6 +29,7 @@
       </v-tooltip>
       <v-btn
         v-if="!isMobile"
+        id="mdi_fullscreen"
         icon
         @click="handleFullScreen()"
       >
@@ -38,6 +41,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            id="mdi_currency_usd"
             v-bind="attrs"
             class="mr-3"
             v-on="on"
@@ -55,6 +59,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            id="mdi_cart"
             v-bind="attrs"
             class="mr-3"
             v-on="on"
@@ -72,6 +77,7 @@
         transition="scale-transition"
       />
       <v-select
+        id="menuLang"
         v-model="$vuetify.lang.current"
         :items="availableLanguages"
         class="mt-3"
@@ -90,6 +96,7 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn
+            id="menuUser"
             slot="activator"
             icon
             large

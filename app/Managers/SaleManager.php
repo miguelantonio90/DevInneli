@@ -125,7 +125,7 @@ class SaleManager extends BaseManager
                 ->get();
             $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
-                ->where('pay_sales.deleted_at', '=',null)
+                ->where('pay_sales.deleted_at', '=', null)
                 ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
                 ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name',
@@ -272,16 +272,15 @@ class SaleManager extends BaseManager
             $articleShop->save();
         }
         foreach ($pays as $k => $pay) {
-            if(!array_key_exists('id', $pay)) {
+            if (!array_key_exists('id', $pay)) {
                 $pSale = PaySale::create([
                     'payment_id' => $pay['payment_id'],
                     'sale_id' => $sale->id
                 ]);
-            }
-            else{
+            } else {
                 $pSale = PaySale::findOrFail($pay['id']);
             }
-                $pSale['cant'] = $pay['cant'];
+            $pSale['cant'] = $pay['cant'];
             if ($pay['name'] === 'credit') {
                 $pSale['mora'] = $pay['mora'];
                 $pSale['cantMora'] = $pay['cantMora'];
@@ -378,7 +377,8 @@ class SaleManager extends BaseManager
         foreach ($saleArtShopDB as $art => $value) {
             $exist = false;
             foreach ($articles as $k => $v) {
-                if (array_key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
+                if (array_key_exists('id',
+                    $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
                     $exist = true;
                 }
             }

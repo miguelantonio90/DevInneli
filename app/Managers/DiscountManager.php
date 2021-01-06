@@ -74,7 +74,7 @@ class DiscountManager extends BaseManager
      */
     public function delete($id)
     {
-        $discount =Discount::findOrFail($id);
+        $discount = Discount::findOrFail($id);
         $this->managerBy('delete', $discount);
         $discount->save();
         return $discount->delete();

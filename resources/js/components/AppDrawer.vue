@@ -6,19 +6,29 @@
     app
     class="app--drawer"
   >
-    <v-toolbar
-      color="primary darken-1"
-      dark
-    >
-      <img
-        :src="computeLogo"
-        alt="INNELI LOGO"
-        width="36"
-      >
-      <v-toolbar-title class="ml-0 pl-3">
-        <span class="hidden-sm-and-down">INNELI</span>
-      </v-toolbar-title>
-    </v-toolbar>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-toolbar
+          id="drawer-toolbar"
+          v-bind="attrs"
+          color="primary darken-1"
+          :style="{cursor:'pointer'}"
+          dark
+          v-on="on"
+          @click="initTour"
+        >
+          <img
+            :src="computeLogo"
+            alt="INNELI LOGO"
+            width="36"
+          >
+          <v-toolbar-title class="ml-0 pl-3">
+            <span class="hidden-sm-and-down">INNELI</span>
+          </v-toolbar-title>
+        </v-toolbar>
+      </template>
+      <span>Click para inciar guia</span>
+    </v-tooltip>
     <v-list class="pa-0">
       <template v-for="(item, key) in computeMenu">
         <template v-if="item.children && item.children.length > 0">
@@ -206,7 +216,7 @@ export default {
     }
   },
   mounted: function () {
-    this.$tours.myTour.start()
+
   },
   created () {
   },
@@ -225,6 +235,9 @@ export default {
         })
       }
       return countAccess > 0
+    },
+    initTour () {
+      this.$tours.myTour.start()
     }
   }
 }
