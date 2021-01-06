@@ -188,6 +188,7 @@ export default {
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta compra. Debe adicionar al menos un artículo.',
     warning_no_box: 'No puede adicionar esta compra. Debe Adicionar o  Seleccionar una caja.',
+    warning_difference_price: 'Existe una diferencia entre el precio total y el definido en los pagos de {0}. \n Por favor arregle la diferencia.',
     warning_tax_cost: 'Usted está pagando mas de impuesto que el propio costo del producto.',
     warning_value_tax: 'El valor del impuesto no puede ser nulo ni cero',
     warning_refund_Cant: 'Usted ha reembolsado {0} artículos, solo puede reembolsar entre 0.00 y {1}',

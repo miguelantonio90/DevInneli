@@ -794,33 +794,43 @@ export default {
         })
     },
     async createNewSale (state) {
-      console.log(this.newSale)
-      if (!this.newSale.box) {
+      let totalCalcP = 0.00
+      this.newSale.pays.forEach(v => {
+        totalCalcP += v.cant
+      })
+      if (parseFloat(this.total) - parseFloat(totalCalcP) !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_no_box'
+          '$vuetify.messages.warning_difference_price', [(totalCalcP - this.total + ' ' + this.user.company.currency).toString()]
         ))
       } else {
-        if (this.newSale.articles.length > 0) {
-          if (this.$refs.form.validate()) {
-            this.loading = true
-            this.newSale.state = state
-            await this.createSale(this.newSale).then(() => {
-              this.$router.push({ name: 'vending' })
-            })
-          }
-        } else {
+        if (!this.newSale.box) {
           this.loading = false
           this.shopMessageError(this.$vuetify.lang.t(
-            '$vuetify.messages.warning_cant_article'
+            '$vuetify.messages.warning_no_box'
           ))
+        } else {
+          if (this.newSale.articles.length > 0) {
+            if (this.$refs.form.validate()) {
+              this.loading = true
+              this.newSale.state = state
+              await this.createSale(this.newSale).then(() => {
+                this.$router.push({ name: 'vending' })
+              })
+            }
+          } else {
+            this.loading = false
+            this.shopMessageError(this.$vuetify.lang.t(
+              '$vuetify.messages.warning_cant_article'
+            ))
+          }
         }
       }
     },
     shopMessageError (message) {
       this.$Swal.fire({
         title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-          this.$vuetify.lang.t('$vuetify.menu.vending')
+          this.$vuetify.lang.t('$vuetify.sale.sale')
         ]),
         text: message,
         icon: 'warning',

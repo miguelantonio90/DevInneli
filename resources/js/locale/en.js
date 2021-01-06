@@ -189,6 +189,7 @@ export default {
     warning_price: 'You cannot add that item. If the price is higher than the cost, it will not give you profit ',
     warning_cant_article: 'You cannot add this sale. You must add at least one item. ',
     warning_no_box: 'You cannot add this sale. You must add or select a box. ',
+    warning_difference_price: 'There is a difference between the total price and the one defined in the payments of {0}. \n Please fix the difference. ',
     warning_tax_cost: 'You are paying more tax than the cost of the product itself.',
     warning_value_tax: 'The tax value cannot be null or zero',
     warning_refund_Cant: 'You have refunded {0} items, you can only refund between 0.00 and {1}',

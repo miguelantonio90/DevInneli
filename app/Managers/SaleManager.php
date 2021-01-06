@@ -125,6 +125,7 @@ class SaleManager extends BaseManager
                 ->get();
             $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
+                ->where('pay_sales.deleted_at', '=',null)
                 ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
                 ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name',
@@ -259,6 +260,7 @@ class SaleManager extends BaseManager
         $articles = $data['articles'];
         $pays = $data['pays'];
         foreach ($articles as $key => $value) {
+
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
@@ -270,18 +272,23 @@ class SaleManager extends BaseManager
             $articleShop->save();
         }
         foreach ($pays as $k => $pay) {
-            $newPaySale = PaySale::create([
-                'payment_id' => $pay['payment_id'],
-                'sale_id' => $sale->id
-            ]);
-            $newPaySale['cant'] = $pay['cant'];
+            if(!array_key_exists('id', $pay)) {
+                $pSale = PaySale::create([
+                    'payment_id' => $pay['payment_id'],
+                    'sale_id' => $sale->id
+                ]);
+            }
+            else{
+                $pSale = PaySale::findOrFail($pay['id']);
+            }
+                $pSale['cant'] = $pay['cant'];
             if ($pay['name'] === 'credit') {
-                $newPaySale['mora'] = $pay['mora'];
-                $newPaySale['cantMora'] = $pay['cantMora'];
+                $pSale['mora'] = $pay['mora'];
+                $pSale['cantMora'] = $pay['cantMora'];
 
             }
-            $newPaySale->save();
-            $this->managerBy('new', $newPaySale);
+            $pSale->save();
+            $this->managerBy('new', $pSale);
         }
         $taxes = [];
         foreach ($data['taxes'] as $k => $v) {
@@ -343,11 +350,7 @@ class SaleManager extends BaseManager
     {
         $sale = Sale::findOrFail($id);
         $sale->no_facture = $data['no_facture'];
-        $sale->pay = $data['pay'];
         $sale->state = $data['state'];
-        if (isset($data['payments']['payment_id'])) {
-            $sale->payment_id = $data['payments']['payment_id'];
-        }
         if (isset($data['client']['id'])) {
             $sale->client_id = $data['client']['id'];
         } else {
@@ -355,6 +358,7 @@ class SaleManager extends BaseManager
         }
         $sale->save();
         $this->removeSaleArticle($sale, $data['articles']);
+        $this->removePaySale($sale, $data['pays']);
         $this->updateSaleData($sale, $data, true);
 
         return $sale;
@@ -374,7 +378,7 @@ class SaleManager extends BaseManager
         foreach ($saleArtShopDB as $art => $value) {
             $exist = false;
             foreach ($articles as $k => $v) {
-                if (key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
+                if (array_key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
                     $exist = true;
                 }
             }
@@ -383,6 +387,34 @@ class SaleManager extends BaseManager
                 $artShop['stock'] -= $value['cant'];
                 $this->managerBy('edit', $artShop);
                 $artShop->save();
+            }
+        }
+    }
+
+    /**
+     * @param $sale
+     * @param $pays
+     * @throws Exception
+     */
+    private function removePaySale($sale, $pays): void
+    {
+        $paySale = PaySale::latest()
+            ->where('sale_id', '=', $sale->id)
+            ->with('method')
+            ->get();
+        foreach ($paySale as $art => $value) {
+            $exist = false;
+            foreach ($pays as $k => $v) {
+                if (array_key_exists('id', $v) && $v['id'] === $value->id) {
+                    $exist = true;
+                }
+            }
+            var_dump($exist);
+            if (!$exist) {
+                $payS = PaySale::findOrFail($value['id']);
+                $payS->delete();
+                $this->managerBy('delete', $payS);
+                $payS->save();
             }
         }
     }
@@ -521,8 +553,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[6]->actions->just_yours
-            && $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
+        if (($this->getAccessPermit()[6]->actions->just_yours
+                && $this->getAccessPermit()[2]->actions->just_yours) || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get()->unique('name');

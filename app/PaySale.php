@@ -42,6 +42,6 @@ class PaySale extends Model
 
     public function method(): HasMany
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Payment::class, 'id','payment_id');
     }
 }

@@ -453,7 +453,7 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <template v-if="!editSale.pay">
+          <template v-if="editSale.pays.length === 0">
             <v-btn
               class="mb-2"
               color="success"
