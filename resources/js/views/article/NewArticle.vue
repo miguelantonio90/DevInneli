@@ -382,9 +382,11 @@
                                     mdi-information-outline
                                   </v-icon>
                                 </template>
-                                <span>{{
-                                  $vuetify.lang.t('$vuetify.messages.warning_article_service')
-                                }}</span>
+                                <p>
+                                  {{
+                                    $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                                  }}
+                                </p>
                               </v-tooltip>
                             </div>
                           </template>
@@ -644,20 +646,15 @@ export default {
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapGetters('auth', ['user', 'userPin'])
   },
+  watch: {
+    'newArticle.price': function () {
+      if (this.variantData.length === 0) { this.updateDataShop() }
+    }
+  },
   created: async function () {
     this.loadingData = true
     await this.getShops().then(() => {
-      this.shops.forEach((shop) => {
-        this.shopData.push({
-          shop_id: shop.id,
-          shop_name: shop.name,
-          checked: true,
-          name: '',
-          price: '0.00',
-          stock: '0',
-          under_inventory: '0'
-        })
-      })
+      this.updateDataShop()
     })
     await this.getCategories()
     await this.getArticles().then(() => {
@@ -696,6 +693,20 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
+    updateDataShop () {
+      this.shopData = []
+      this.shops.forEach((shop) => {
+        this.shopData.push({
+          shop_id: shop.id,
+          shop_name: shop.name,
+          checked: true,
+          name: '',
+          price: parseFloat(this.newArticle.price).toFixed(2),
+          stock: '0',
+          under_inventory: '0'
+        })
+      })
+    },
     inputColor (color) {
       this.newArticle.color = color
     },

@@ -32,7 +32,7 @@ class Box extends Model
      * @var array
      */
     protected $fillable = [
-        'name' , 'shop_id'
+        'name', 'shop_id'
     ];
 
     public function shop(): BelongsTo

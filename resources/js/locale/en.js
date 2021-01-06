@@ -164,6 +164,7 @@ export default {
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
+    warning_excess_money: 'The defined amount to be charged is greater than or equal to the total price. Decrease the amounts already defined',
     warning_preform: 'You will create a Preform (PRE-FACTURE)' +
         'This will not be considered as a real sale until you define the Payment Method in the Additional Data Section',
     error_delete_shop: 'There must be at least one store',
@@ -182,17 +183,20 @@ export default {
     dont_add: 'This element is already added.',
     pin_failed: 'You don\'t have access. The PIN code is not valid ',
     login_failed: 'Invalid email or password.',
-    login_failed_email: 'This email is already in use.',
+    register_exist_email: 'This email is already in use.',
     login_failed_exist_email: 'This email is not registered.',
     warning_composite: 'If the article is composite, you must define the elements that compose it',
     warning_price: 'You cannot add that item. If the price is higher than the cost, it will not give you profit ',
-    warning_cant_article: 'You cannot add this purchase. You must add at least one item. ',
+    warning_cant_article: 'You cannot add this sale. You must add at least one item. ',
+    warning_no_box: 'You cannot add this sale. You must add or select a box. ',
+    warning_difference_price: 'There is a difference between the total price and the one defined in the payments of {0}. \n Please fix the difference. ',
     warning_tax_cost: 'You are paying more tax than the cost of the product itself.',
     warning_value_tax: 'The tax value cannot be null or zero',
     warning_refund_Cant: 'You have refunded {0} items, you can only refund between 0.00 and {1}',
     warning_refund_Money: 'You have refunded $' + '{0}, you can only refund between $ 0.00 and $' + '{1}',
     warning_refund_all: 'Unable to refund. You have refunded all money and items',
-    warning_article_service: 'If you do not select this field, the system will assume that you are creating a service and you will not be able to supply it (Make a purchase).',
+    warning_article_service: "If you do not select this field, the system will assume that you are creating a ' +\n'" +
+        "        'service and you will not be able to supply it (Make a purchase). If you select then you can add existence in store or shop",
     info_exchange_rate: 'The exchange rate is with respect to 1',
     idle_title: 'Session expired',
     idle_info: 'You have left this browser idle for 10 minutes.',
@@ -397,7 +401,9 @@ export default {
     deposit: 'Deposit',
     wire_transfer: 'Bank Transfer',
     digital_transfer: 'Digital Transfer',
-    other: 'Other'
+    other: 'Other',
+    pay_before: 'Pay before',
+    pay_delay: 'Pay for delay'
   },
   supplier: {
     name: 'Provider',

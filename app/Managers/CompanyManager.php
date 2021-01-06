@@ -24,22 +24,6 @@ class CompanyManager
             ->firstOrFail();
     }
 
-    public function getAllCompanies()
-    {
-      $companies = DB::table('companies')
-          ->where('faker', '<>', 1)
-          ->get();
-      foreach ($companies as $key=>$company)
-      {
-          $companies[$key]->shops = Shop::latest()->where('company_id','=',$company->id)->get();
-          $companies[$key]->employers = User::latest()->where('company_id','=',$company->id)->get();
-          $companies[$key]->clients = Client::latest()->where('company_id','=',$company->id)->get();
-          $companies[$key]->suppliers = Supplier::latest()->where('company_id','=',$company->id)->get();
-          $companies[$key]->articles = Articles::latest()->where('company_id','=',$company->id)->get();
-      }
-      return $companies;
-    }
-
     /**
      * @return Model|Builder|int|object
      */
@@ -49,6 +33,21 @@ class CompanyManager
             ->select('company_id as id')
             ->where('users.id', '=', auth()->id())
             ->first();
+    }
+
+    public function getAllCompanies()
+    {
+        $companies = DB::table('companies')
+            ->where('faker', '<>', 1)
+            ->get();
+        foreach ($companies as $key => $company) {
+            $companies[$key]->shops = Shop::latest()->where('company_id', '=', $company->id)->get();
+            $companies[$key]->employers = User::latest()->where('company_id', '=', $company->id)->get();
+            $companies[$key]->clients = Client::latest()->where('company_id', '=', $company->id)->get();
+            $companies[$key]->suppliers = Supplier::latest()->where('company_id', '=', $company->id)->get();
+            $companies[$key]->articles = Articles::latest()->where('company_id', '=', $company->id)->get();
+        }
+        return $companies;
     }
 
     /**

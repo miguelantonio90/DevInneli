@@ -34,7 +34,8 @@ const state = {
   newSale: {
     no_facture: '',
     pay: '',
-    box: {},
+    pays: [],
+    box: null,
     state: 'open',
     discounts: [],
     taxes: [],
@@ -46,10 +47,10 @@ const state = {
   editSale: {
     id: '',
     no_facture: '',
-    pay: '',
     box: {},
     discounts: [],
     taxes: [],
+    pays: [],
     payments: {},
     articles: [],
     articles_shops: [],
@@ -99,8 +100,8 @@ const mutations = {
     state.showNewModal = false
     state.newSale = {
       no_facture: '',
-      pay: '',
-      box: {},
+      pays: [],
+      box: null,
       state: 'open',
       discounts: [],
       taxes: [],
@@ -128,7 +129,7 @@ const mutations = {
     state.editSale = {
       id: '',
       no_facture: '',
-      pay: '',
+      pays: [],
       box: {},
       discounts: [],
       taxes: [],

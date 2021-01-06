@@ -8,7 +8,8 @@
         <new-refound
           v-if="showNewModal"
         />
-        <print-facture v-if="showShowModal" />
+        <print-facture v-if="showShowModal && printer==='ticket'" />
+        <print-facture-letter v-if="showShowModal && printer==='letter'" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
@@ -27,44 +28,36 @@
         >
           <template v-slot:item.no_facture="{ item }">
             <template>
-              <div class="text-center">
-                <v-menu
-                  v-model="menu"
-                  bottom
-                  origin="center center"
-                  transition="scale-transition"
-                  :close-on-content-click="false"
-                  :nudge-width="200"
-                  offset-x
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="primary"
-                      icon
-                      small
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon dark>
-                        mdi-printer
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-card-text>
-                      <v-autocomplete
-                        v-model="printer"
-                        :items="getLocalPrinter"
-                        contenteditable="false"
-                        item-text="text"
-                        item-value="value"
-                        :style="{'width':'160px'}"
-                        @input="openPrintModal(item.id)"
-                      />
-                    </v-card-text>
-                  </v-card>
-                </v-menu>
-              </div>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <b><v-icon
+                    style="color: red"
+                    class="mr-2"
+                    small
+                    v-bind="attrs"
+                    @click="openPrintModal('ticket', item.id)"
+                    v-on="on"
+                  >
+                    mdi-printer
+                  </v-icon></b>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.report.print_ticket') }}</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <b><v-icon
+                    style="color: red"
+                    class="mr-2"
+                    small
+                    v-bind="attrs"
+                    @click="openPrintModal('letter', item.id)"
+                    v-on="on"
+                  >
+                    mdi-printer-settings
+                  </v-icon></b>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.report.print_letter') }}</span>
+              </v-tooltip>
             </template>
             {{ item.no_facture }}
           </template>
@@ -131,26 +124,6 @@
               </template>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.pay`]="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <span
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.pay === 'counted' ? $vuetify.lang.t('$vuetify.pay.counted') : item.pay === 'credit'? $vuetify.lang.t('$vuetify.pay.credit'):$vuetify.lang.t('$vuetify.no_defined')
-                }}</span>
-              </template>
-              <span>
-                {{ $vuetify.lang.t('$vuetify.payment.name') }}</span>
-              <template v-if="item.payments">
-                {{ item.payments.name }}
-              </template>
-              <template v-else>
-                <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
-              </template>
-            </v-tooltip>
-          </template>
           <template v-slot:[`item.shop.name`]="{ item }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -166,12 +139,11 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.totalPrice`]="{ item }">
-            <template v-if="item.totalRefund > 0">
+            <template>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <b><v-icon
-                    v-if="item.totalRefund > 0"
-                    style="color: red"
+                    :style="item.totalRefund > 0?'color: red': 'color:primary'"
                     class="mr-2"
                     small
                     v-bind="attrs"
@@ -180,7 +152,16 @@
                     mdi-information
                   </v-icon></b>
                 </template>
-                <span>{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
+                <template>
+                  <list-pay
+                    :show="false"
+                    :pays-show="item.pays"
+                    :currency="user.company.currency"
+                  />
+                </template>
+                <span
+                  v-if="item.totalRefund > 0"
+                >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
               </v-tooltip>
             </template>
             {{ `${user.company.currency + ' ' + item.totalPrice}` }}
@@ -432,10 +413,12 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import NewRefound from '../refund/NewRefound'
 import DetailRefund from '../refund/DetailRefund'
 import PrintFacture from './PrintFacture'
+import PrintFactureLetter from './PrintFactureLetter'
+import ListPay from '../pay/ListPay'
 
 export default {
   name: 'ListSale',
-  components: { PrintFacture, DetailRefund, NewRefound },
+  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay },
   data () {
     return {
       menu: false,
@@ -446,7 +429,7 @@ export default {
       localSales: [],
       search: '',
       localAccess: {},
-      printer: {},
+      printer: '',
       vBindOption: {
         itemKey: 'no_facture',
         singleExpand: false,
@@ -471,11 +454,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
           value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'pay',
           select_filter: true
         },
         {
@@ -537,11 +515,11 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.report.print_ticket'),
           value: 'ticket'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.report.print_letter'),
+          value: 'letter'
         }
-        // {
-        //   text: this.$vuetify.lang.t('$vuetify.report.print_letter'),
-        //   value: 'letter'
-        // }
       ]
     }
   },
@@ -623,7 +601,8 @@ export default {
       this.openEditModal($event)
       this.$router.push({ name: 'vending_edit' })
     },
-    openPrintModal (id) {
+    openPrintModal (print, id) {
+      this.printer = print
       this.openShowModal(id)
     },
     deleteSaleHandler (articleId) {

@@ -91,7 +91,7 @@ export default {
           } else if (this.isLoggedIn && !this.isManagerIn) {
             this.loading = false
             this.$refs.pincodeInput.triggerSuccess()
-            this.$router.push({ name: 'vending' })
+            this.$router.push({ name: 'dashboard' })
           }
         } else {
           this.loading = false

@@ -3,16 +3,15 @@
 namespace App\Managers;
 
 use App\Position;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class AccessManager
 {
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getByCompany()
+    public function getByCompany(): array
     {
         if (auth()->user()['isAdmin'] === 1) {
             $positions = DB::table('positions')

@@ -3,9 +3,7 @@
 namespace App\Managers;
 
 use App\Shop;
-use App\Tax;
 use App\User;
-use Illuminate\Support\Facades\DB;
 use Exception;
 
 class ShopManager extends BaseManager

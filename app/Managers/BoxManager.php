@@ -5,7 +5,6 @@ namespace App\Managers;
 use App\Articles;
 use App\Box;
 use App\OpenCloseBox;
-use App\Refund;
 use App\Sale;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -78,18 +77,59 @@ class BoxManager extends BaseManager
      * @return OpenCloseBox
      * @throws Exception
      */
-    public function openClose($data):OpenCloseBox
+    public function openClose($data): OpenCloseBox
     {
-        return $data['box']['state'] !== 'open'? $this->createOpenClose($data):$this->editOpenClose($data);
+        return $data['box']['state'] !== 'open' ? $this->createOpenClose($data) : $this->editOpenClose($data);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws Exception
+     */
+    public function createOpenClose($data)
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $openClose = OpenCloseBox::create([
+            'box_id' => $data['box']['id'],
+            'open_to' => $data['open_to']['id'],
+            'open_money' => $data['open_money'],
+        ]);
+        $openClose['company_id'] = $company->id;
+        $this->managerBy('new', $openClose);
+        $openClose->save();
+        $box = Box::latest()->where('id', '=', $data['box']['id'])->get()[0];
+        $box->open_id = $openClose->id;
+        $box->state = 'open';
+        $box->save();
+        return $openClose;
+    }
+
+    /**
+     * @param $data
+     * @return OpenCloseBox
+     * @throws Exception
+     */
+    public function editOpenClose($data): OpenCloseBox
+    {
+        $openClose = OpenCloseBox::findOrFail($data['id']);
+        $openClose->close_money = $data['close_money'];
+        $this->managerBy('edit', $openClose);
+        $openClose->save();
+        $box = Box::latest()->where('id', '=', $data['box']['id'])->get()[0];
+        $box->state = 'close';
+        $box->save();
+        return $openClose;
     }
 
     /**
      * @param $boxId
      * @return OpenCloseBox
      */
-    public function getOpenClose($boxId):OpenCloseBox{
+    public function getOpenClose($boxId): OpenCloseBox
+    {
         $openClose = OpenCloseBox::latest()
-            ->where('id','=',Box::findOrFail($boxId)->open_id)
+            ->where('id', '=', Box::findOrFail($boxId)->open_id)
             ->with('box')
             ->with('openTo')
             ->get()[0];
@@ -105,53 +145,13 @@ class BoxManager extends BaseManager
             ->orderBy('created_at', 'ASC')
             ->get();
         $managerSale = new SaleManager();
-         $openClose['sales'] = $managerSale->filterSale($sales);
-         $openClose['refunds'] = DB::table('refunds')
-             ->whereDate('refunds.created_at', '>=', $openClose->created_at)
-             ->where('refunds.box_id', '=', $openClose->box_id)
-             ->get();
-         return $openClose;
-
-    }
-
-    /**
-     * @param $data
-     * @return mixed
-     * @throws Exception
-     */
-    public function createOpenClose($data)
-    {
-        $company = CompanyManager::getCompanyByAdmin();
-        $openClose = OpenCloseBox::create([
-            'box_id'=>$data['box']['id'],
-            'open_to'=>$data['open_to']['id'],
-            'open_money'=>$data['open_money'],
-        ]);
-        $openClose['company_id'] = $company->id;
-        $this->managerBy('new', $openClose);
-        $openClose->save();
-        $box = Box::latest()->where('id','=', $data['box']['id'])->get()[0];
-        $box->open_id = $openClose->id;
-        $box->state = 'open';
-        $box->save();
+        $openClose['sales'] = $managerSale->filterSale($sales);
+        $openClose['refunds'] = DB::table('refunds')
+            ->whereDate('refunds.created_at', '>=', $openClose->created_at)
+            ->where('refunds.box_id', '=', $openClose->box_id)
+            ->get();
         return $openClose;
-    }
 
-    /**
-     * @param $data
-     * @return OpenCloseBox
-     * @throws Exception
-     */
-    public function editOpenClose($data):OpenCloseBox
-    {
-        $openClose = OpenCloseBox::findOrFail($data['id']);
-        $openClose->close_money = $data['close_money'];
-        $this->managerBy('edit', $openClose);
-        $openClose->save();
-        $box = Box::latest()->where('id','=', $data['box']['id'])->get()[0];
-        $box->state = 'close';
-        $box->save();
-        return $openClose;
     }
 
     /**
@@ -172,8 +172,6 @@ class BoxManager extends BaseManager
         $this->managerBy('delete', $box);
         return $box->delete();
     }
-
-
 
 
 }

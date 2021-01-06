@@ -163,6 +163,7 @@ export default {
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_delete: 'No se podrá revertir esta acción!',
+    warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
     warning_preform: 'Usted creará una Preforma(PRE-FACTURA). ' +
         'Esto no se contemplará como venta real hasta tanto no defina la Forma de Pago en la Sección de Datos Adicionales!',
     error_delete_shop: 'Debe existir al menos una tienda',
@@ -180,18 +181,21 @@ export default {
     sure_delete: 'Está seguro de eliminar este elemento?',
     dont_add: 'Ya este elemento se encuentra adicinado.',
     pin_failed: 'No tienes acceso. El código PIN no es válido',
-    login_failed: 'Correo electrónico o contraseña no válidos.',
-    login_failed_email: 'Este correo electrónico ya está en uso.',
+    login_failed: 'Este correo electrónico no está registrado o contraseña no válida.',
+    register_exist_email: 'Este correo electrónico ya está en uso.',
     login_failed_exist_email: 'Este correo electrónico no está registrado.',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta compra. Debe adicionar al menos un artículo.',
+    warning_no_box: 'No puede adicionar esta compra. Debe Adicionar o  Seleccionar una caja.',
+    warning_difference_price: 'Existe una diferencia entre el precio total y el definido en los pagos de {0}. \n Por favor arregle la diferencia.',
     warning_tax_cost: 'Usted está pagando mas de impuesto que el propio costo del producto.',
     warning_value_tax: 'El valor del impuesto no puede ser nulo ni cero',
     warning_refund_Cant: 'Usted ha reembolsado {0} artículos, solo puede reembolsar entre 0.00 y {1}',
     warning_refund_Money: 'Usted ha reembolsado $' + '{0}, solo puede reembolsar entre $0.00 y $' + '{1}',
     warning_refund_all: 'No se puede reeembolsar. Usted ha reembolsado todo el dinero y los artículos',
-    warning_article_service: 'Si no selecciona este campo el sistema asumirá que está creando un servicio y no podrá abastecerlo(Realizar una compra).',
+    warning_article_service: 'Si no selecciona este campo el sistema asumirá que está creando un servicio ' +
+        'y no podrá abastecerlo(Realizar una compra). Si lo seleciona podrá ponerle una cantidad en el almacén o tienda',
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
@@ -397,7 +401,9 @@ export default {
     deposit: 'Depósito',
     wire_transfer: 'Transferencia Bancaria',
     digital_transfer: 'Transferencia Digital',
-    other: 'Otro'
+    other: 'Otro',
+    pay_before: 'Pagar antes de',
+    pay_delay: 'Pagar por demora'
   },
   supplier: {
     name: 'Proveedor',

@@ -34,11 +34,11 @@
           <b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b>
         </v-col>
         <v-col
-          v-if="sub_total > 0"
+          v-if="subTotal > 0"
           cols="12"
           md="5"
         >
-          {{ `${getCurrency + ' ' + sub_total}` }}
+          {{ `${getCurrency + ' ' + subTotal}` }}
         </v-col>
         <v-col v-else>
           <v-tooltip
@@ -60,13 +60,13 @@
               <b>{{ $vuetify.lang.t('$vuetify.messages.warning_tax_cost') }}</b>
             </span>
           </v-tooltip><span style="color: crimson; text-decoration: line-through;">
-            {{ `${getCurrency + ' ' + sub_total}` }}
+            {{ `${getCurrency + ' ' + subTotal}` }}
           </span>
         </v-col>
       </v-row>
       <v-row v-if="taxes.length > 0" />
       <v-row
-        v-for="tax in taxes"
+        v-for="tax in (edit ? editSale.taxes:newSale.taxes)"
         :key="tax.name"
       >
         <v-col
@@ -80,7 +80,7 @@
           cols="12"
           md="5"
         >
-          <i style="color: darkblue">{{ `${getCurrency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
+          <i style="color: darkblue">{{ `${getCurrency + ' ' + parseFloat(tax.value * subTotal / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
         </v-col>
         <v-col
           v-else
@@ -91,7 +91,7 @@
         </v-col>
       </v-row>
       <v-row
-        v-for="disc in localDiscounts"
+        v-for="disc in (edit ? editSale.discounts:newSale.discounts)"
         :key="disc.name"
       >
         <v-col
@@ -105,7 +105,7 @@
           cols="12"
           md="5"
         >
-          <i style="color: red">{{ `${getCurrency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
+          <i style="color: red">{{ `${getCurrency + ' ' + parseFloat(disc.value * subTotal / 100).toFixed(2)}` }} ({{ disc.value }}%)</i>
         </v-col>
         <v-col
           v-else
@@ -149,17 +149,28 @@ export default {
     currency: {
       type: String,
       default: ''
+    },
+    totalTax: {
+      type: String,
+      default: '0.00'
+    },
+    totalDisc: {
+      type: String,
+      default: '0.00'
+    },
+    subTotal: {
+      type: String,
+      default: '0.00'
+    },
+    total: {
+      type: String,
+      default: '0.00'
     }
   },
   data () {
     return {
-      toDay: '',
       taxes: [],
-      localDiscounts: [],
-      totalTax: 0,
-      totalDisc: 0,
-      sub_total: 0,
-      total: 0
+      localDiscounts: []
     }
   },
   computed: {
@@ -170,63 +181,13 @@ export default {
       return this.currency
     }
   },
-  watch: {
-    'newSale.taxes' () {
-      this.updateData()
-    },
-    'newSale.articles' () {
-      this.updateData()
-    },
-    'newSale.discounts' () {
-      this.updateData()
-    },
-    update () {
-      this.updateData()
-    },
-    'editSale.taxes' () {
-      this.updateData()
-    },
-    'editSale.articles' () {
-      this.updateData()
-    },
-    'editSale.discounts' () {
-      this.updateData()
-    }
-  },
   async created () {
-    await this.updateData()
     await this.getDiscounts()
   },
   methods: {
     ...mapActions('discount', ['getDiscounts']),
     a () {
       printJS({ printable: 'ticket', type: 'html', targetStyles: ['*'] })
-    },
-    updateData () {
-      this.toDay = ''
-      new Date().toLocaleDateString().split('/').reverse().forEach((v, i) => {
-        this.toDay = (i > 0) ? this.toDay + '-' + v : v
-      })
-      this.toDay += ' ' + (new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds())
-      this.totalTax = 0
-      this.totalDisc = 0
-      this.total = 0
-      this.sub_total = 0
-      const articles = this.edit ? this.editSale.articles : this.newSale.articles
-      articles.forEach((v) => {
-        this.sub_total = parseFloat(v.totalPrice) + this.sub_total
-      })
-      this.taxes = this.edit ? this.editSale.taxes : this.newSale.taxes
-      this.taxes.forEach((v) => {
-        this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
-      })
-      this.localDiscounts = this.edit ? this.editSale.discounts : this.newSale.discounts
-      this.localDiscounts.forEach((v) => {
-        this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
-      })
-      this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
-      this.total = parseFloat(this.total).toFixed(2)
-      this.$emit('updateData')
     }
   }
 }

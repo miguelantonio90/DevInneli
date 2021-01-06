@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <new-client v-if="$store.state.client.showNewModal" />
+    <new-tax v-if="$store.state.tax.showNewModal" />
+    <new-payment v-if="$store.state.payment.showNewModal" />
+    <new-discount v-if="this.$store.state.discount.showNewModal" />
     <v-row>
       <v-col
         class="py-0"
@@ -148,74 +152,40 @@
           </template>
         </v-select>
       </v-col>
-      <v-col
-        class="py-0"
-        cols="12"
-        md="6"
-      >
-        <v-select
-          v-model="sale.pay"
-          clearable
-          :items="getPay"
-          :label="$vuetify.lang.t('$vuetify.pay.pay')"
-          item-text="text"
-          item-value="value"
-          required
-          @input="updateStore"
-        />
-      </v-col>
-      <v-col
-        v-if="sale.pay === 'counted'"
-        class="py-0"
-        cols="12"
-        md="6"
-      >
-        <v-select
-          v-model="sale.payments"
-          clearable
-          :rules="formRule.country"
-          :items="payments"
-          :label="$vuetify.lang.t('$vuetify.payment.name')"
-          item-text="name"
-          return-object
-        >
-          <template v-slot:append-outer>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="$store.dispatch('payment/toogleNewModal',true)"
-                >
-                  mdi-plus
-                </v-icon>
-              </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-            </v-tooltip>
-          </template>
-        </v-select>
-      </v-col>
+      <list-pay
+        :edit="edit"
+        :pays-show="paysShow"
+        :total="parseFloat(total)"
+        :currency="user.company.currency"
+      />
     </v-row>
-    <new-client v-if="$store.state.client.showNewModal" />
-    <new-tax v-if="$store.state.tax.showNewModal" />
-    <new-payment v-if="$store.state.payment.showNewModal" />
-    <new-discount v-if="this.$store.state.discount.showNewModal" />
   </v-container>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import NewClient from '../client/NewClient'
 import NewTax from '../tax/NewTax'
 import NewPayment from '../payment/NewPayment'
 import NewDiscount from '../discount/NewDiscount'
+import ListPay from '../pay/ListPay'
 
 export default {
   name: 'ExtraData',
-  components: { NewPayment, NewTax, NewClient, NewDiscount },
+  components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
   props: {
+    paysShow: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     edit: {
       type: Boolean,
       default: false
+    },
+    total: {
+      type: String,
+      default: '0.00'
     }
   },
   data () {
@@ -231,6 +201,7 @@ export default {
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['newSale', 'editSale']),
     ...mapState('discount', ['discounts']),
+    ...mapGetters('auth', ['user']),
     getPay () {
       return [
         {
@@ -256,7 +227,9 @@ export default {
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
+    console.log(this.paysShow)
     this.sale = this.edit ? this.editSale : this.newSale
+    console.log(this.paysShow)
   },
   methods: {
     ...mapActions('client', ['getClients']),
@@ -277,14 +250,12 @@ export default {
       if (this.edit) {
         this.editSale.client = this.sale.client
         this.editSale.taxes = this.sale.taxes
-        this.editSale.pay = this.sale.pay
         this.editSale.payments = this.sale.payments
         this.editSale.no_facture = this.sale.no_facture
         this.editSale.discounts = this.sale.discounts
       } else {
         this.newSale.client = this.sale.client
         this.newSale.taxes = this.sale.taxes
-        this.newSale.pay = this.sale.pay
         this.newSale.payments = this.sale.payments
         this.newSale.no_facture = this.sale.no_facture
         this.newSale.discounts = this.sale.discounts

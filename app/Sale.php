@@ -87,7 +87,7 @@ class Sale extends Model
         return $this->hasMany(SalesArticlesShops::class);
     }
 
-    public function nameSa()
+    public function nameSa(): string
     {
         return 'A';
     }

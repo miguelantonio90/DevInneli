@@ -10,7 +10,7 @@ class CreatePaymentsTable extends BaseMigration
      * @param string $tableName
      * @param bool $company
      */
-    public function up(string $tableName = 'payments', bool $company = true): void
+    public function up(string $tableName = 'payments', bool $company = false): void
     {
         Schema::create($tableName, function (Blueprint $table) {
             $table->string('name');
