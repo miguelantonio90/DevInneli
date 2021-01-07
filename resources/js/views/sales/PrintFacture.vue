@@ -20,8 +20,10 @@
           <p class="centrado">
             {{ $vuetify.lang.t('$vuetify.sale.ticket') }}<br>
             <b><i>{{ editSale.shop.name }}</i></b><br>
-            <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:<br>
+            <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:
             {{ editSale.no_facture }}<br>
+            <b>{{ $vuetify.lang.t('$vuetify.articles.sell_by') + ': ' }}</b>
+            {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}<br>
             {{ new Date(editSale.updated_at).toUTCString() }}<br>
             {{ user.company.slogan ? user.company.slogan.toUpperCase(): '' }}
           </p>
