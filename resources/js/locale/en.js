@@ -527,5 +527,43 @@ export default {
     init: ' Initial Balance',
     final: 'Final Balance'
   },
+  tour: {
+    buttonSkip: 'Skip',
+    buttonPrevious: 'Previous',
+    buttonNext: 'Next',
+    buttonStop: 'End',
+    initGuide: 'Click to start guide'
+  },
+  tourMsg: {
+    step1: '<strong>INNELI</strong>!<br> Welcome to our system',
+    step2: '<strong>Menu</strong>!<br> Here we find the main functionalities by modules',
+    step3: '<strong> Configuration </strong><br> General <a href="/setting" style="color:#4fc08d">configuration</a> elements ',
+    step4: '<strong>Management of Articles</strong>!<br> ' +
+      '<a href="/articles/product.list" style="color:#4fc08d">Products</a><br>' +
+      '<a href="/articles/category.list" style="color:#4fc08d">Categories</a>',
+    step5: '<strong> Sales Management </strong>! <br>' +
+      '<a href="/sales/vending.list" style="color:#4fc08d">Sales </a><br>' +
+      '<a href="/sales/refund.list" style="color:#4fc08d">Refunds </a><br>' +
+      '<a href="/sales/boxes.list" style="color:#4fc08d">Boxes </a>',
+    step6: '<strong> Employee management </strong>! <br>' +
+      '<a href="/users/employer.list" style="color:#4fc08d">Employee</a> list  <br>' +
+      '<a href="/users/assistance.list" style="color:#4fc08d">Attendance</a> cards',
+    step7: '<strong> Management of <a href="/clients/client.list" style="color:#4fc08d"> clients </a> </strong>!',
+    step8: '<strong> Managing my finances </strong>! <br>' +
+      '<a href="/finance/supplier.list" style="color:#4fc08d">Suppliers </a> <br>' +
+      '<a href="/finance/buy_list" style="color:#4fc08d">Purchasing management </a>',
+    step9: '<strong>Summary</strong>!<br>Graphical summary of my sales',
+    step10: '<strong> Nav Icon </strong>! <br> Open and close the general menu',
+    step11: '<strong> Lock Icon </strong>! <br> Lock screen or app',
+    step12: '<strong> Full Screen Icon </strong>! <br> Open the application in full screen',
+    step13: '<strong> Sales </strong>! <br> Direct access to product sales',
+    step14: '<strong> Purchases </strong>! <br> Direct access to product purchases',
+    step15: '<strong> Language selector </strong>! <br> Language selector for display',
+    step16: '<strong> User Icon </strong>! <br>' +
+      '<a href="/user/profile" style="color:#4fc08d"> Profile </a> <br>' +
+      'Sing Out',
+    step17: '<strong> Theme Setting </strong>! <br> Select application colors, languages and styles',
+    step18: '<strong> General statistics </strong>! <br> Main company indicators'
+  },
   ...en
 }

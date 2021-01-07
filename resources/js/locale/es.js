@@ -527,5 +527,43 @@ export default {
     init: 'Balance Inicial',
     final: 'Balance Final'
   },
+  tour: {
+    buttonSkip: 'Omitir',
+    buttonPrevious: 'Anterior',
+    buttonNext: 'Siguiente',
+    buttonStop: 'Final',
+    initGuide: 'Click para iniciar guía'
+  },
+  tourMsg: {
+    step1: '<strong>INNELI</strong>!<br> Bienvenidos a nuestro sistema',
+    step2: '<strong>Menu</strong>!<br> Aquí encontramos las funcionalidades principales por módulos',
+    step3: '<strong>Configuración</strong>!<br> Elementos de <a href="/setting" style="color:#4fc08d">configuración</a>',
+    step4: '<strong>Gestión de Artículos</strong>!<br> ' +
+      '<a href="/articles/product.list" style="color:#4fc08d">Productos</a><br>' +
+      '<a href="/articles/category.list" style="color:#4fc08d">Categorías</a>',
+    step5: '<strong>Gestión  de Ventas</strong>!<br> ' +
+      '<a href="/sales/vending.list" style="color:#4fc08d">Ventas</a><br>' +
+      '<a href="/sales/refund.list" style="color:#4fc08d">Reembolsos</a><br>' +
+      '<a href="/sales/boxes.list" style="color:#4fc08d">Cajas</a>',
+    step6: '<strong>Gestión de empleados</strong>!<br> ' +
+      'Lista de <a href="/users/employer.list" style="color:#4fc08d">empleados</a><br>' +
+      'Tarjetas de <a href="/users/assistance.list" style="color:#4fc08d">asistencia</a>',
+    step7: '<strong>Gestión de <a href="/clients/client.list" style="color:#4fc08d">clientes</a></strong>!',
+    step8: '<strong>Gestión de mis finanzas</strong>!<br>' +
+      '<a href="/finance/supplier.list" style="color:#4fc08d">Proveedores</a><br>' +
+      '<a href="/finance/buy_list" style="color:#4fc08d">Gestión de compras</a>',
+    step9: '<strong>Resumen</strong>!<br>Resumen gráficos de mis ventas',
+    step10: '<strong>Nav Icon</strong>!<br>Abrir y cerrar el menu general',
+    step11: '<strong>Lock Icon</strong>!<br>Bloqueo de pantalla o aplicación',
+    step12: '<strong>Full Screen Icon</strong>!<br>Abrir la aplicación en pantalla completa',
+    step13: '<strong>Ventas</strong>!<br>Acceso directo a ventas de productos',
+    step14: '<strong>Compras</strong>!<br>Acceso directo a la compras de prodcutos',
+    step15: '<strong>Selector de idioma</strong>!<br>Selector de idioma para la visualiazación',
+    step16: '<strong>User Icon</strong>!<br>' +
+      '<a href="/finance/supplier.list" style="color:#4fc08d">Perfil</a><br>' +
+      'Cerrar sección',
+    step17: '<strong>Ajuste de Tema</strong>!<br>Selecionar colores, idiomas y estilos de la aplicación',
+    step18: '<strong>Estadísticas generales</strong>!<br> Principales indicadores de compañía'
+  },
   ...es
 }

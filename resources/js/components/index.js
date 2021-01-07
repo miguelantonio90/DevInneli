@@ -23,6 +23,7 @@ import Coupons from './sales/Coupons'
 import AppColorPicker from './core/AppColorPicker'
 import AppDateTimePicker from './core/AppDateTimePicker'
 import AppUploadMultipleImage from './core/AppUploadMultipleImage'
+import AppTour from './core/AppTour'
 
 const components = [
   CircleStatistic,
@@ -43,7 +44,8 @@ const components = [
   Coupons,
   AppColorPicker,
   AppDateTimePicker,
-  AppUploadMultipleImage
+  AppUploadMultipleImage,
+  AppTour
 ]
 
 // Installation of the library as a plugin

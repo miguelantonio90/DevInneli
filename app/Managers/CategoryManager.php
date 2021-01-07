@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\Category;
+use Exception;
 
 class CategoryManager extends BaseManager
 {
@@ -29,7 +30,7 @@ class CategoryManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -48,7 +49,7 @@ class CategoryManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -65,7 +66,7 @@ class CategoryManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {
