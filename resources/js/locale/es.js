@@ -38,6 +38,8 @@ export default {
   last_name: 'Apellidos',
   description: 'Descripción',
   address: 'Dirección',
+  slogan: 'Eslogan',
+  footer: 'Firma',
   city: 'Ciudad',
   country: 'País',
   currency: 'Moneda',
@@ -450,6 +452,7 @@ export default {
     selectArticle: 'Por favor seleccione el artículo',
     selectShop: 'Debe seleccionar una tienda',
     ticket: 'TICKET DE VENTA',
+    facture: 'Factura',
     state: {
       open: 'En proceso',
       preform: 'Preforma',

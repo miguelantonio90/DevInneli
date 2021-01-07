@@ -246,8 +246,32 @@
                   >
                     <v-text-field
                       v-model="userData.company.address"
+                      required
+                      :rules="formRule.required"
                       :label="
                         $vuetify.lang.t('$vuetify.address')
+                      "
+                    />
+                  </v-flex>
+                  <v-flex
+                    md12
+                    xs12
+                  >
+                    <v-text-field
+                      v-model="userData.company.slogan"
+                      :label="
+                        $vuetify.lang.t('$vuetify.slogan')
+                      "
+                    />
+                  </v-flex>
+                  <v-flex
+                    md12
+                    xs12
+                  >
+                    <v-text-field
+                      v-model="userData.company.footer"
+                      :label="
+                        $vuetify.lang.t('$vuetify.footer')
                       "
                     />
                   </v-flex>

@@ -204,6 +204,11 @@ class SaleManager extends BaseManager
             $sales[$key]['totalCost'] = round($totalCost, 2);
             $sales[$key]['totalRefund'] = round($totalRefund, 2);
             $sales[$key]['totalPrice'] = round($totalPrice, 2);
+            $sales[$key]['create'] = DB::table('users')
+                ->where('users.id', '=', $value['created_by'])
+                ->select('firstName', 'lastName')
+                ->get()[0]
+            ;
         }
         return $sales;
     }

@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->string('sector')->default('others');
             $table->string('currency')->nullable();
             $table->string('address')->nullable();
+            $table->string('slogan')->nullable();
             $table->longText('logo')->nullable();
             $table->string('faker')->default(0);
             $table->uuid('id')->primary();

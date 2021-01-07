@@ -37,6 +37,7 @@
       :items="itemsFiltered || []"
       :headers="headersChoosenObjs || []"
       :search="searchValueDebounced"
+      :hide-default-footer="hideFooter"
       v-on="$listeners"
       @click:row="handleClick"
     >
@@ -221,6 +222,10 @@ export default {
     viewShowFilter: {
       type: Boolean,
       default: true
+    },
+    hideFooter: {
+      type: Boolean,
+      default: false
     },
     hasCsvImport: {
       type: Boolean,

@@ -16,6 +16,7 @@
           :view-show-filter="false"
           :view-edit-button="false"
           :view-new-button="show"
+          :hide-footer="!show"
           :view-delete-button="show"
           :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(total).toFixed(2): ''"
           csv-filename="Categories"
