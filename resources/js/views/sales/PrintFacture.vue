@@ -107,7 +107,7 @@
                               :key="j"
                             >
                               <td>
-                                {{ $vuetify.lang.t('$vuetify.menu.tax') }}
+                                {{ $vuetify.lang.t('$vuetify.articles.tax') }}
                               </td>
                               <td>
                                 {{ tax.name }}{{ tax.percent ? '('+tax.value +'%) ':' ' }}
