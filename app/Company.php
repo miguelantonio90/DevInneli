@@ -30,7 +30,7 @@ class Company extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'name', 'email', 'phone', 'country', 'currency', 'address',
+        'name', 'email', 'phone', 'country', 'currency', 'address', 'slogan', 'footer'
     ];
 
     public function users()
