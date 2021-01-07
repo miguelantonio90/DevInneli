@@ -24,6 +24,8 @@
             {{ editSale.no_facture }}<br>
             <b>{{ $vuetify.lang.t('$vuetify.articles.sell_by') + ': ' }}</b>
             {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}<br>
+            <b>{{ $vuetify.lang.t('$vuetify.menu.box') + ': ' }}</b>
+            {{ editSale.box.name }}<br>
             {{ new Date(editSale.updated_at).toUTCString() }}<br>
             {{ user.company.slogan ? user.company.slogan.toUpperCase(): '' }}
           </p>
