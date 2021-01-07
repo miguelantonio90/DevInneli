@@ -63,7 +63,22 @@
                     </p>
                   </div>
                   <div class="date">
-                    {{ dateFormatCreated }}
+                    <p>
+                      {{ $vuetify.lang.t('$vuetify.menu.box') + ': ' }}
+                      {{ editSale.box.name }}
+                    </p>
+                  </div>
+                  <div class="date">
+                    <p>
+                      {{ $vuetify.lang.t('$vuetify.articles.sell_by') + ': ' }}
+                      {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}
+                    </p>
+                  </div>
+                  <div class="date">
+                    <p>
+                      {{ $vuetify.lang.t('$vuetify.date') + ': ' }}
+                      {{ dateFormatCreated }}
+                    </p>
                   </div>
                 </div>
               </div>

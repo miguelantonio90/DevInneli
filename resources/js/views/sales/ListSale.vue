@@ -46,7 +46,7 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <b><v-icon
-                    style="color: red"
+                    style="color: #1a5dd6"
                     class="mr-2"
                     small
                     v-bind="attrs"
