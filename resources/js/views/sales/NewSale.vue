@@ -643,7 +643,6 @@ export default {
     await this.getBoxes()
     await this.updateDataArticle()
     this.loadingData = false
-    console.log(this.newSale)
   },
   methods: {
     ...mapActions('boxes', ['toogleNewModal', 'getBoxes']),

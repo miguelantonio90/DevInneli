@@ -310,7 +310,6 @@ export default {
     async createNewRole () {
       if (this.$refs.form.validate()) {
         this.newAccess.access_permit = this.access_permit
-        console.log(this.access_permit)
         await this.createRole(this.newAccess)
       }
     }

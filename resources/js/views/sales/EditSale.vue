@@ -610,7 +610,6 @@ export default {
       this.getLocalDiscounts()
     },
     boxes: function () {
-      console.log('asdasdas')
       this.getLocalBoxes()
     },
     'editSale.taxes' () {
@@ -722,7 +721,6 @@ export default {
     getLocalBoxes () {
       this.localBoxes = []
       this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.editSale.shop.id)
-      console.log(this.localBoxes)
     },
     calcTotal: function (item) {
       this.editedIndex = this.editSale.articles.indexOf(item)

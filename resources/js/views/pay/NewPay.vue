@@ -256,7 +256,6 @@ export default {
       this.pay.method = this.localPayments[0]
     },
     formatDate (date) {
-      console.log(date)
       if (!date) return null
       const [year, month, day] = date.split('-')
       return `${day}/${month}/${year}`

@@ -279,7 +279,6 @@ export default {
   watch: {
     name: function () {
       this.hintText = ['', false]
-      console.log('asasa')
       if (this.article.variants.filter(art => art.name === this.name).length > 0) {
         if (this.article.variants.filter(art => art.name === this.name)[0] !== this.variantManager) {
           this.hintText = [this.$vuetify.lang.t('$vuetify.messages.warning_exist'), true]
@@ -311,7 +310,6 @@ export default {
       this.dialog = true
     },
     saveVariant () {
-      console.log(this.article.variants.filter(art => art.name === name).length > 1)
       if (this.newVariant) {
         this.article.variants.push({
           name: this.name,

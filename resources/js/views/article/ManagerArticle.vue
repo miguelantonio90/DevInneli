@@ -635,7 +635,6 @@ export default {
       }
     },
     updateDataShops () {
-      console.log('adasdasdasdsa')
       if (this.shops.length > 0) {
         this.article.articles_shops = []
         this.shops.forEach((shop) => {
