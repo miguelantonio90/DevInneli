@@ -298,12 +298,10 @@ const actions = {
     await sale
       .fetchSaleByLimit(filter)
       .then(({ data }) => {
-        console.log(data)
         commit(FETCHING_SALES_BY_LIMIT, data.data)
         commit(SALE_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => {
-        console.log(error)
         commit(FAILED_SALE, error)
       })
   },

@@ -141,7 +141,6 @@ export default {
     }
   },
   async created () {
-    console.log(this.newRefund)
     await this.getBoxes()
   },
   methods: {

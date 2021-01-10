@@ -227,9 +227,7 @@ export default {
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
-    console.log(this.paysShow)
     this.sale = this.edit ? this.editSale : this.newSale
-    console.log(this.paysShow)
   },
   methods: {
     ...mapActions('client', ['getClients']),

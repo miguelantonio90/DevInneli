@@ -166,6 +166,7 @@ export default {
   },
   computed: {
     ...mapState('article', [
+      'managerArticle',
       'showNewModal',
       'showTransfer',
       'showEditModal',
@@ -231,6 +232,7 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('shop', ['getShops']),
     createArticleHandler () {
+      this.$store.state.article.managerArticle = false
       this.$router.push({ name: 'product_add' })
     },
     transferHandler ($event) {
@@ -238,6 +240,7 @@ export default {
       this.toogleTransferModal(true)
     },
     editArticleHandler ($event) {
+      this.$store.state.article.managerArticle = true
       this.openEditModal($event)
       this.$router.push({ name: 'product_edit' })
     },

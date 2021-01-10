@@ -172,7 +172,6 @@ const mutations = {
       let msg = this._vm.$language.t('$vuetify.messages.login_failed')
       Object.keys(state.error.data.errors).forEach((v) => {
         if (v !== 'message') {
-          console.log(v)
           if (v === 'email') {
             if (state.error.data.errors[v][0] === 'The email has already been taken.') {
               msg = this._vm.$language.t('$vuetify.messages.register_exist_email')

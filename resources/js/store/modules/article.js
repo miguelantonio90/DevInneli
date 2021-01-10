@@ -31,8 +31,10 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
+  managerArticle: false,
   newArticle: {
     name: '',
+    um: '',
     price: 0.00,
     unit: 'unit',
     cost: 0.00,
@@ -40,18 +42,19 @@ const state = {
     barCode: '',
     variants: [],
     tax: [],
-    variantsValues: [],
+    variant_values: [],
     composite: false,
     track_inventory: false,
     category: [],
     color: '',
-    shops: [],
+    articles_shops: [],
     composites: [],
     images: []
   },
   editArticle: {
     id: '',
     name: '',
+    um: '',
     price: '',
     unit: '',
     cost: '',
@@ -59,13 +62,13 @@ const state = {
     barCode: '',
     variants: [],
     tax: [],
-    variants_values: [],
+    variant_values: [],
     composite: false,
     composites: [],
     track_inventory: false,
     category: [],
     color: '',
-    shops: [],
+    articles_shops: [],
     variants_shops: [],
     images: []
   },
@@ -111,6 +114,14 @@ const mutations = {
     state.articles = []
     articles.forEach((value) => {
       if (!value.parent_id) {
+        // if (value.variant_values.length > 0) {
+        //   value.articles_shops = []
+        //   value.variant_values.forEach(v => {
+        //     v.articles_shops.forEach(l => {
+        //       value.articles_shops.push(l)
+        //     })
+        //   })
+        // }
         state.articles.push(value)
       }
     })
@@ -135,6 +146,7 @@ const mutations = {
     state.showTransfer = false
     state.newArticle = {
       name: '',
+      um: '',
       price: 0.00,
       unit: 'unit',
       cost: '',
@@ -142,12 +154,12 @@ const mutations = {
       barCode: '',
       variants: [],
       tax: [],
-      variantsValues: [],
+      variant_values: [],
       composite: false,
       composites: [],
       track_inventory: false,
       category: [],
-      shops: [],
+      articles_shops: [],
       color: '',
       variants_shops: [],
       images: []
@@ -176,6 +188,7 @@ const mutations = {
     state.editArticle = {
       id: '',
       name: '',
+      um: '',
       price: '',
       unit: '',
       cost: '',
@@ -183,11 +196,11 @@ const mutations = {
       barCode: '',
       variants: [],
       tax: [],
-      variants_values: [],
+      variant_values: [],
       composite: false,
       track_inventory: false,
       category: [],
-      shops: [],
+      articles_shops: [],
       color: '',
       variants_shops: [],
       images: []

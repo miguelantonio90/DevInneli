@@ -1,92 +1,148 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="composite"
-    sort-by="name"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <h4> {{ $vuetify.lang.t('$vuetify.variants.total_cost') }} ${{ totalCost }}</h4>
-        <v-spacer />
-        <h4> {{ $vuetify.lang.t('$vuetify.variants.total_price') }} ${{ totalPrice }}</h4>
-      </v-toolbar>
-    </template>
-    <template v-slot:[`item.name`]="{ item }">
-      <v-chip
-        :key="JSON.stringify(item)"
+  <v-container>
+    <v-col
+      v-show="article.composite"
+      cols="12"
+      md="3"
+    >
+      <v-select
+        ref="selectArticle"
+        :items="localArticles"
+        :label="$vuetify.lang.t('$vuetify.rule.select')"
+        item-text="name"
+        chips
+        :loading="loading"
+        :disabled="!!loading"
+        return-object
+        @input="selectArticle"
       >
-        <v-avatar
-          v-if="item.color"
-          class="white--text"
-          :color="item.color"
-          left
-          v-text="item.name.slice(0, 1).toUpperCase()"
-        />
-        <v-avatar
-          v-else
-          left
-        >
-          <v-img :src="item.path" />
-        </v-avatar>
-        {{ item.name }}
-      </v-chip>
-    </template>
-    <template v-slot:[`item.cant`]="{ item }">
-      <v-edit-dialog
-        :return-value.sync="item.cant"
-        large
-        persistent
-        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-        @save="updateData(item)"
-      >
-        <div>{{ item.cant }}</div>
-        <template v-slot:input>
-          <div class="mt-4 title">
-            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-          </div>
-          <v-text-field
-            v-model="item.cant"
-            :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            single-line
-            counter
-            autofocus
-          />
+        <template v-slot:selection="data">
+          <v-chip
+            :key="JSON.stringify(data.item)"
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            :disabled="data.disabled"
+            @click:close="data.parent.selectItem(data.item)"
+          >
+            <v-avatar
+              v-if="data.item.color"
+              class="white&#45;&#45;text"
+              :color="data.item.color"
+              left
+              v-text="data.item.name.slice(0, 1).toUpperCase()"
+            />
+            <v-avatar
+              v-else
+              left
+            >
+              <v-img :src="data.item.path" />
+            </v-avatar>
+            {{ data.item.name }}
+          </v-chip>
         </template>
-      </v-edit-dialog>
-    </template>
-    <template v-slot:[`item.cost`]="{ item }">
-      {{ `${user.company.currency +' '+item.cost}` }}
-    </template>
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        small
-        @click="deleteItem(item)"
+      </v-select>
+    </v-col>
+    <v-col
+      cols="12"
+      md="12"
+    >
+      <v-data-table
+        :headers="getHeader"
+        :items="article.composites"
+        sort-by="name"
+        class="elevation-1"
       >
-        mdi-delete
-      </v-icon>
-    </template>
-  </v-data-table>
+        <template v-slot:top>
+          <v-toolbar flat>
+            <h4> {{ $vuetify.lang.t('$vuetify.variants.total_cost') }} {{ `${user.company.currency + ' ' + parseFloat(article.cost).toFixed(2)}` }}</h4>
+            <v-spacer />
+            <h4> {{ $vuetify.lang.t('$vuetify.variants.total_price') }} {{ `${user.company.currency + ' ' + parseFloat(article.price).toFixed(2)}` }}</h4>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.name`]="{ item }">
+          <v-chip
+            :key="JSON.stringify(item)"
+          >
+            <v-avatar
+              v-if="item.color"
+              class="white--text"
+              :color="item.color"
+              left
+              v-text="item.name.slice(0, 1).toUpperCase()"
+            />
+            <v-avatar
+              v-else
+              left
+            >
+              <v-img :src="item.path" />
+            </v-avatar>
+            {{ item.name }}
+          </v-chip>
+        </template>
+        <template v-slot:[`item.cant`]="{ item }">
+          <v-edit-dialog
+            :return-value.sync="item.cant"
+            large
+            persistent
+            :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+            :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+            @save="updateTotalCost"
+          >
+            <div>{{ item.cant }}</div>
+            <template v-slot:input>
+              <div class="mt-4 title">
+                {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              </div>
+              <v-text-field
+                v-model="item.cant"
+                :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                single-line
+                counter
+                autofocus
+              />
+            </template>
+          </v-edit-dialog>
+        </template>
+        <template v-slot:[`item.cost`]="{ item }">
+          {{ `${user.company.currency +' '+item.cost}` }}
+        </template>
+        <template v-slot:[`item.price`]="{ item }">
+          {{ `${user.company.currency +' '+item.price}` }}
+        </template>
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon
+            small
+            @click="deleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
+    </v-col>
+  </v-container>
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
 
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'CompositeList',
   props: {
-    compositeList: {
-      type: Array
+    article: {
+      type: Object,
+      default: function () {
+        return {}
+      }
     }
   },
   data: () => ({
+    localArticles: [],
+    loading: false,
     totalCost: 0.00,
     totalPrice: 0.00,
     dialog: false,
     headers: [],
-    composite: [],
     editedIndex: -1,
     editedItem: {
       name: '',
@@ -102,29 +158,10 @@ export default {
     }
   }),
   computed: {
+    ...mapState('article', ['articles']),
     ...mapGetters('auth', ['user']),
-    formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-    }
-  },
-  watch: {
-    dialog (val) {
-      val || this.close()
-    },
-    compositeList: function () {
-      this.composite = this.compositeList
-      this.updateTotalCost()
-    }
-  },
-  created () {
-    this.composite = this.compositeList
-    this.initialize()
-    this.updateTotalCost()
-  },
-
-  methods: {
-    initialize () {
-      this.headers = [
+    getHeader () {
+      return [
         {
           text: this.$vuetify.lang.t('$vuetify.variants.name'),
           value: 'name'
@@ -147,30 +184,59 @@ export default {
           sortable: false
         }
       ]
+    }
+  },
+  watch: {
+    dialog (val) {
+      val || this.close()
     },
-    updateData (item) {
-      this.composite[this.composite.indexOf(item)].composite_id = item.composite_id
-      this.composite[this.composite.indexOf(item)].cant = item.cant
-      this.composite[this.composite.indexOf(item)].cost = item.cant * item.cost
-      this.composite[this.composite.indexOf(item)].price = item.cant * item.price
+    compositeList: function () {
       this.updateTotalCost()
-      this.updateComposite()
-    },
+    }
+  },
+  async created () {
+    this.loading = true
+    await this.getArticles().then(() => {
+      this.articles.forEach((value) => {
+        this.ref = parseFloat(value.ref) > parseFloat(this.ref) ? value.ref : this.ref
+        if (!value.article_id) {
+          if (value.variant_values.length > 0) {
+            value.variant_values.forEach((v) => {
+              this.localArticles.push({
+                name: value.name + '(' + v.name + ')',
+                price: v.price,
+                cost: v.cost,
+                cant: '1',
+                composite_id: v.id
+              })
+            })
+          } else {
+            this.localArticles.push({
+              name: value.name,
+              price: value.price,
+              cost: value.cost,
+              cant: '1',
+              composite_id: value.id
+            })
+          }
+        }
+      })
+    })
+    this.updateTotalCost()
+    this.loading = false
+  },
+  methods: {
+    ...mapActions('article', ['getArticles']),
     updateTotalCost () {
-      this.totalCost = 0.00
-      this.totalPrice = 0.00
-      this.composite.forEach((comp) => {
-        this.totalCost += comp.cant * comp.cost
-        this.totalPrice += parseFloat(comp.price)
+      this.article.cost = 0.00
+      this.article.price = 0.00
+      this.article.composites.forEach((comp) => {
+        this.article.cost += comp.cant * comp.cost
+        this.article.price += comp.cant * comp.price
       })
     },
-    editItem (item) {
-      this.editedIndex = this.composite.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
     deleteItem (item) {
-      this.editedIndex = this.composite.indexOf(item)
+      this.editedIndex = this.article.composites.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.$Swal
         .fire({
@@ -190,13 +256,10 @@ export default {
         })
         .then((result) => {
           if (result.value) {
-            this.deleteItemConfirm()
+            this.article.composites.splice(this.editedIndex, 1)
+            this.updateTotalCost()
           }
         })
-    },
-    deleteItemConfirm () {
-      this.composite.splice(this.editedIndex, 1)
-      this.updateComposite()
     },
     close () {
       this.dialog = false
@@ -207,14 +270,26 @@ export default {
     },
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.composite[this.editedIndex], this.editedItem)
+        Object.assign(this.article.composite[this.editedIndex], this.editedItem)
       } else {
-        this.composite.push(this.editedItem)
+        this.article.composites.push(this.editedItem)
       }
       this.close()
     },
-    updateComposite () {
-      this.$emit('updateComposite', this.composite)
+    selectArticle (item) {
+      if (this.article.composites.filter(art => art.composite_id === item.composite_id).length === 0) {
+        this.article.composites.push({
+          name: item.name,
+          price: item.price,
+          cost: item.cost,
+          cant: '1',
+          composite_id: item.composite_id
+        })
+      } else {
+        this.showInfoAdd = true
+      }
+      this.selected = null
+      this.updateTotalCost()
     }
   }
 }

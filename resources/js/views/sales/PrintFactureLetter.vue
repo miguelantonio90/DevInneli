@@ -113,7 +113,7 @@
                       {{ article.cant }}
                     </td>
                     <td class="desc">
-                      <h3>{{ article.name }}</h3>
+                      <h3>{{ article.name }} {{ article.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(article.um).name) + ')':'' }}</h3>
                     </td>
                     <td class="price">
                       {{ user.company.currency +' ' + article.price }}
@@ -212,7 +212,7 @@
                       <template v-else>
                         <tr>
                           <td class="price">
-                            {{ $vuetify.lang.t('$vuetify.tax.name') }}
+                            {{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}
                           </td>
                           <td class="price">
                             <i>{{ user.company.currency + ' 00.00' }}</i>

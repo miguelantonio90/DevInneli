@@ -89,7 +89,7 @@
                     >
                       <v-list dense>
                         <v-subheader>
-                          {{ localSalesByProduct.length > 0? $vuetify.lang.t('$vuetify.report.top5Category'):
+                          {{ localSalesByProduct.length > 0? $vuetify.lang.t('$vuetify.report.top5Articles'):
                             $vuetify.lang.t('$vuetify.report.noTop5') }}
                         </v-subheader>
                         <v-list-item-group

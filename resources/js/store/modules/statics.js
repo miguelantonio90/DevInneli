@@ -8,6 +8,7 @@ const FAILED = 'FAILED'
 
 const state = {
   arrayCountry: data.getCountryToSelect(),
+  arrayUM: data.getUM(),
   arraySector: data.getSector(),
   arrayCurrency: data.getCurrencyToSelect(),
   payments: data.getPaymentToSelect(),

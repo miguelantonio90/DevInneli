@@ -237,7 +237,6 @@ export default {
         cantMora: pay.cantMora,
         payment_id: pay.method.id
       })
-      console.log(this.pays)
       this.toogleNewModal(false)
       this.calcTotalPay()
       this.updateStore()

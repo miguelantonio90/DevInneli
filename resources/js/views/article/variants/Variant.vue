@@ -1,331 +1,253 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="variantsValues"
-    sort-by="calories"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-chip
-          v-for="tag in variants"
-          :key="tag.name"
-          close
-          close-icon="mdi-delete"
-          color="success"
-          text-color="white"
-          @click:close="removeChips(tag)"
-        >
-          <v-icon
-            left
-            @click="editChips(tag)"
+  <v-container>
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{
+            $vuetify.lang.t(newVariant ? '$vuetify.titles.edit': '$vuetify.titles.newF', [
+              this.$vuetify.lang.t('$vuetify.variants.variant')
+            ])
+          }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <v-text-field
+                  v-model="name"
+                  :hint="hintText[0]"
+                  persistent-hint
+                  style="margin-top: 14px"
+                  :label="$vuetify.lang.t('$vuetify.variants.name')"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="8"
+                md="8"
+              >
+                <v-combobox
+                  v-model="select"
+                  multiple
+                  value=""
+                  :label="$vuetify.lang.t('$vuetify.variants.options')"
+                  chips
+                  deletable-chips
+                  class="tag-input"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            class="mb-2"
+            @click="closeDialog"
           >
-            mdi-pencil
-          </v-icon>
-          {{ tag.name }}
-        </v-chip>
-        <v-spacer />
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
+            <v-icon>mdi-close</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          </v-btn>
+          <v-btn
+            class="mb-2"
+            color="primary"
+            :disabled="select.length === 0 || name === '' || hintText[1]"
+            @click="saveVariant"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <template>
+      <v-chip
+        v-for="variant in article.variants"
+        :key="variant.name"
+        close
+        close-icon="mdi-delete"
+        color="success"
+        text-color="white"
+        @click:close="removeVariant(variant)"
+      >
+        <v-icon
+          left
+          @click="editVariant(variant)"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-              {{ $vuetify.lang.t('$vuetify.actions.newF') }}
-            </v-btn>
+          mdi-pencil
+        </v-icon>
+        {{ variant.name }}
+      </v-chip>
+    </template>
+    <app-data-table
+      :view-show-filter="false"
+      :view-edit-button="false"
+      :manager="'article'"
+      :headers="getHeader"
+      :items="article.variant_values"
+      @create-row="addVariant"
+      @delete-row="deleteVariantValue($event)"
+    >
+      <template v-slot:[`item.price`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.price"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+          @save="$emit('updateVariant')"
+        >
+          <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+            </div>
+            <v-text-field-money
+              v-model="item.price"
+              :label="$vuetify.lang.t('$vuetify.actions.edit')"
+              required
+              :properties="{
+                prefix: user.company.currency,
+                clearable: true
+              }"
+              :options="{
+                length: 15,
+                precision: 2,
+                empty: 0.00,
+              }"
+            />
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.name"
-                      style="margin-top: 14px"
-                      :label="$vuetify.lang.t('$vuetify.variants.name')"
-                    />
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="8"
-                  >
-                    <v-combobox
-                      v-model="select"
-                      multiple
-                      :label="$vuetify.lang.t('$vuetify.variants.options')"
-                      chips
-                      deletable-chips
-                      class="tag-input"
-                      @paste="updateTags"
-                    />
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                class="mb-2"
-                @click="close"
-              >
-                <v-icon>mdi-close</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
-              </v-btn>
-              <v-btn
-                class="mb-2"
-                color="primary"
-                @click="save"
-              >
-                <v-icon>mdi-check</v-icon>
-                {{ $vuetify.lang.t('$vuetify.actions.accept') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:[`item.price`]="{ item }">
-      <v-edit-dialog
-        :return-value.sync="item.price"
-        large
-        persistent
-        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-        @save="saveModalEdit"
-        @cancel="cancelModalEdit"
-        @open="openModalEdit"
-        @close="closeModalEdit"
-      >
-        <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
-        <template v-slot:input>
-          <div class="mt-4 title">
-            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-          </div>
-          <v-text-field-money
-            v-model="item.price"
-            :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            required
-            :properties="{
-              prefix: user.company.currency,
-              clearable: true
-            }"
-            :options="{
-              length: 15,
-              precision: 2,
-              empty: 0.00,
-            }"
-          />
-        </template>
-      </v-edit-dialog>
-    </template>
-    <template v-slot:[`item.cost`]="{ item }">
-      <v-edit-dialog
-        :return-value.sync="item.cost"
-        large
-        persistent
-        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-        @save="saveModalEdit"
-        @cancel="cancelModalEdit"
-        @open="openModalEdit"
-        @close="closeModalEdit"
-      >
-        <div>{{ `${user.company.currency + ' ' + item.cost}` }}</div>
-        <template v-slot:input>
-          <div class="mt-4 title">
-            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-          </div>
-          <v-text-field-money
-            v-model="item.cost"
-            :label="$vuetify.lang.t('$vuetify.actions.edit')"
-            required
-            :properties="{
-              prefix: user.company.currency,
-              clearable: true
-            }"
-            :options="{
-              length: 15,
-              precision: 2,
-              empty: 0.00,
-            }"
-          />
-        </template>
-      </v-edit-dialog>
-    </template>
-    <template v-slot:[`item.ref`]="{ item }">
-      <v-edit-dialog
-        :return-value.sync="item.ref"
-        large
-        persistent
-        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-        @save="saveModalEdit"
-        @cancel="cancelModalEdit"
-        @open="openModalEdit"
-        @close="closeModalEdit"
-      >
-        <div>{{ item.ref }}</div>
-        <template v-slot:input>
-          <div class="mt-4 title">
-            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-          </div>
-        </template>
-      </v-edit-dialog>
-    </template>
-    <template v-slot:[`item.barCode`]="{ item }">
-      <v-edit-dialog
-        :return-value.sync="item.barCode"
-        large
-        persistent
-        :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-        :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-        @save="saveModalEdit"
-        @cancel="cancelModalEdit"
-        @open="openModalEdit"
-        @close="closeModalEdit"
-      >
-        <div>{{ item.barCode }}</div>
-        <template v-slot:input>
-          <div class="mt-4 title">
-            {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-          </div>
-          <v-text-field-simplemask
-            v-model="item.barCode"
-            :label="$vuetify.lang.t('$vuetify.barCode')"
-            :properties="{
-              clearable: true,
-            }"
-            :options="{
-              inputMask: '##-####-####-###',
-              outputMask: '#############',
-              empty: 0,
-              alphanumeric: true,
-            }"
-            :focus="focus"
-            @focus="focus = false"
-          />
-        </template>
-      </v-edit-dialog>
-    </template>
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
-    </template>
-  </v-data-table>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:[`item.cost`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.cost"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+        >
+          <div>{{ `${user.company.currency + ' ' + item.cost}` }}</div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+            </div>
+            <v-text-field-money
+              v-model="item.cost"
+              :label="$vuetify.lang.t('$vuetify.actions.edit')"
+              required
+              :properties="{
+                prefix: user.company.currency,
+                clearable: true
+              }"
+              :options="{
+                length: 15,
+                precision: 2,
+                empty: 0.00,
+              }"
+            />
+          </template>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:[`item.ref`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.ref"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+        >
+          <div>{{ item.ref }}</div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+            </div>
+            <v-text-field
+              v-model="item.ref"
+              :label="$vuetify.lang.t('$vuetify.articles.ref')"
+              required
+              @keypress="numbers"
+            />
+          </template>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:[`item.barCode`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.barCode"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+        >
+          <div>{{ item.barCode }}</div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+            </div>
+            <v-text-field-simplemask
+              v-model="item.barCode"
+              :label="$vuetify.lang.t('$vuetify.barCode')"
+              :properties="{
+                clearable: true,
+              }"
+              :options="{
+                inputMask: '##-####-####-###',
+                outputMask: '#############',
+                empty: 0,
+                alphanumeric: true,
+              }"
+              :focus="focus"
+              @focus="focus = false"
+            />
+          </template>
+        </v-edit-dialog>
+      </template>
+    </app-data-table>
+  </v-container>
 </template>
 
 <script>
-/* eslint-disable vue/require-default-prop */
-import { mapGetters, mapState } from 'vuex'
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Variant',
   props: {
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    isUpdated: {
-      type: Boolean,
-      default: true
-    },
-    variantsParent: {
-      type: Array
-    },
-    variantsValuesParent: {
-      type: Array
-    },
-    refParent: {
-      type: Number
+    article: {
+      type: Object,
+      default: function () {
+        return {}
+      }
     }
   },
   data () {
     return {
-      ref: '10001',
-      barCode: 0,
+      cell: -1,
       focus: false,
-      updated: true,
-      variants: [],
-      variantsValues: [],
-      dialog: false,
-      headers: [],
+      ref: '10000',
+      name: '',
       editedIndex: -1,
-      formRule: this.$rules,
-      editedItem: {
+      variantManager: {
         name: '',
-        valueVariant: ''
+        value: []
       },
-      defaultItem: {
-        name: '',
-        valueVariant: ''
-      },
+      hintText: ['', false],
       select: [],
-      items: [],
-      search: '' // sync search
+      newVariant: true,
+      dialog: false
     }
   },
   computed: {
-    ...mapGetters('auth', ['user']),
-    ...mapState('article', ['newArticle', 'editArticle']),
-    formTitle () {
-      return this.editedIndex === -1
-        ? this.$vuetify.lang.t('$vuetify.titles.newF', [
-          this.$vuetify.lang.t('$vuetify.variants.variant')
-        ])
-        : this.$vuetify.lang.t('$vuetify.titles.edit', [
-          this.$vuetify.lang.t('$vuetify.variants.variant')
-        ])
-    }
-  },
-  watch: {
-    isUpdated: val => {
-      this.updated = val
-      if (this.updated === false) {
-        this.$emit('updateVariants', this.variants, this.variantsValues)
-      }
-    },
-    variantsValuesParent () {
-      this.variantsValues = this.variantsValuesParent
-    },
-    refParent () {
-      this.ref = this.refParent
-    },
-    variantsParent () {
-      this.variants = this.variantsParent
-    },
-    dialog (val) {
-      val || this.close()
-    }
-  },
-  created () {
-    this.ref = parseFloat(this.refParent) + 1
-    this.initialize()
-  },
-  mounted () {
-    this.variantsValues = this.variantsValuesParent
-    this.variants = this.variantsParent
-  },
-  methods: {
-    initialize () {
-      this.headers = [
+    ...mapGetters('auth', ['user', 'userPin']),
+    getHeader () {
+      return [
         {
           text: this.$vuetify.lang.t('$vuetify.variants.name'),
           value: 'name'
@@ -352,28 +274,118 @@ export default {
           sortable: false
         }
       ]
+    }
+  },
+  watch: {
+    name: function () {
+      this.hintText = ['', false]
+      if (this.article.variants.filter(art => art.name === this.name).length > 0) {
+        if (this.article.variants.filter(art => art.name === this.name)[0] !== this.variantManager) {
+          this.hintText = [this.$vuetify.lang.t('$vuetify.messages.warning_exist'), true]
+        }
+      }
+    }
+  },
+  created () {
+    this.ref = parseFloat(this.article.ref) + 1
+  },
+  methods: {
+    numbers (event) {
+      const regex = new RegExp('^\\d+(.\\d{1,2})?$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
     },
-    editChips (tag) {
-      this.editedItem = tag
-      this.editedIndex = this.variants.indexOf(tag)
-      this.select = tag.value
+    addVariant () {
+      this.variantManager = {
+        name: '',
+        value: []
+      }
+      this.newVariant = true
+      this.select = []
       this.dialog = true
     },
-    removeChips (tag) {
-      this.variants.splice(tag, 1)
+    saveVariant () {
+      if (this.newVariant) {
+        this.article.variants.push({
+          name: this.name,
+          value: this.select
+        })
+      } else {
+        this.article.variants[this.editedIndex] = {
+          name: this.name,
+          value: this.select
+        }
+      }
+      this.myComb()
+      this.closeDialog()
+    },
+    closeDialog () {
+      this.dialog = false
+      this.name = ''
+      this.select = []
+    },
+    myComb () {
+      const data = this.article.variants
+      let result = []
+      let localResult = []
+      data.forEach((value, index) => {
+        if (index === 0) {
+          value.value.forEach(localValue => {
+            const localArticle = this.article.variant_values.filter(sh => sh.name === localValue)
+            if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+            result.push({
+              articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+              name: localValue.toString(),
+              price: localArticle.length > 0 ? parseFloat(localArticle[0].price).toFixed(2) : parseFloat(this.article.price).toFixed(2),
+              cost: localArticle.length > 0 ? parseFloat(localArticle[0].cost).toFixed(2) : parseFloat(this.article.cost).toFixed(2),
+              ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
+              barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+            })
+            if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
+          })
+        } else {
+          value.value.forEach(localValue => {
+            localResult.forEach(v => {
+              const localArticle = this.article.variant_values.filter(sh => sh.name === localValue.toString() + '/' + v.name.toString() ||
+                              sh.name === v.name.toString() + '/' + localValue.toString())
+              if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+              result.push({
+                articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+                name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
+                price: localArticle.length > 0 ? parseFloat(localArticle[0].price).toFixed(2) : parseFloat(this.article.price).toFixed(2),
+                cost: localArticle.length > 0 ? parseFloat(localArticle[0].cost).toFixed(2) : parseFloat(this.article.cost).toFixed(),
+                ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
+                barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+              })
+              if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
+            })
+          })
+        }
+        localResult = result
+        if (index + 1 !== data.length) {
+          result = []
+        }
+      })
+      this.article.variant_values = result
+    },
+    removeVariant (tag) {
+      this.article.variants.splice(tag, 1)
       this.myComb()
     },
-    updateTags () {
-      this.$nextTick(() => {
-        this.select.push(...this.search.split(','))
-        this.$nextTick(() => {
-          this.search = ''
-        })
-      })
+    editVariant (variant) {
+      this.variantManager = variant
+      this.editedIndex = this.article.variants.indexOf(variant)
+      this.name = variant.name
+      this.select = variant.value
+      this.newVariant = false
+      this.dialog = true
     },
-    deleteItem (item) {
-      this.editedIndex = this.variantsValues.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+    deleteVariantValue (item) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -392,104 +404,15 @@ export default {
         })
         .then((result) => {
           if (result.value) {
-            this.deleteItemConfirm()
+            if (!item.id) {
+              this.article.variant_values.splice(item, 1)
+            }
+            if (this.article.variants.length === 1) {
+              this.article.variants[0].value.length === 1 ? this.removeVariant(this.article.variants[0])
+                : this.article.variants[0].value.splice(item.name, 1)
+            }
           }
         })
-    },
-    deleteItemConfirm () {
-      if (this.variants.length === 1 && this.variants[0].value.length === 1) {
-        this.removeChips(this.variants[0])
-      } else {
-        this.variantsValues.splice(this.editedIndex, 1)
-      }
-      this.updateVariants()
-    },
-    close () {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-    saveModalEdit () {
-      this.updateVariants()
-    },
-    openModalEdit () {
-      this.snack = true
-      this.snackColor = 'info'
-      this.snackText = 'Dialog opened'
-    },
-    cancelModalEdit () {
-      this.snack = true
-      this.snackColor = 'error'
-      this.snackText = 'Canceled'
-    },
-    closeModalEdit () {
-    },
-    save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.variants[this.editedIndex], {
-          name: this.editedItem.name,
-          value: this.select
-        })
-        this.select = []
-      } else {
-        this.variants.push({
-          name: this.editedItem.name,
-          value: this.select
-        })
-        this.select = []
-      }
-      this.myComb()
-      this.close()
-    },
-    myComb () {
-      const data = this.variants
-      let result = []
-      let localResult = []
-      data.forEach((value, index) => {
-        if (index === 0) {
-          value.value.forEach(localValue => {
-            const localArticle = this.variantsValues.filter(sh => sh.name === localValue)
-            if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
-            result.push({
-              articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
-              name: localValue.toString(),
-              price: localArticle.length > 0 ? localArticle[0].price : this.edit ? this.editArticle.price : this.newArticle.price,
-              cost: localArticle.length > 0 ? localArticle[0].cost : this.edit ? this.editArticle.cost : this.newArticle.cost,
-              ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
-              barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
-            })
-            if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
-          })
-        } else {
-          value.value.forEach(localValue => {
-            localResult.forEach(v => {
-              const localArticle = this.variantsValues.filter(sh => sh.name === localValue.toString() + '/' + v.name.toString() ||
-                                sh.name === v.name.toString() + '/' + localValue.toString())
-              if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
-              result.push({
-                articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
-                name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
-                price: localArticle.length > 0 ? localArticle[0].price : this.edit ? this.editArticle.price : this.newArticle.price,
-                cost: localArticle.length > 0 ? localArticle[0].cost : this.edit ? this.editArticle.cost : this.newArticle.cost,
-                ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
-                barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
-              })
-              if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
-            })
-          })
-        }
-        localResult = result
-        if (index + 1 !== data.length) {
-          result = []
-        }
-      })
-      this.variantsValues = result
-      this.updateVariants()
-    },
-    updateVariants () {
-      this.$emit('updateVariants', this.variants, this.variantsValues)
     }
   }
 }

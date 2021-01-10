@@ -14,7 +14,7 @@ class CreateArticlesTable extends BaseMigration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->string('name');
-            $table->boolean('unit')->default(false);
+            $table->json('um')->nullable();
             $table->decimal('price', 15, 2)->default(0);
             $table->decimal('cost', 15, 2)->default(0);
             $table->string('color')->nullable();

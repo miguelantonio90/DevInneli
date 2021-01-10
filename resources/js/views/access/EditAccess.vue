@@ -162,7 +162,6 @@ export default {
   created () {
     this.access_permit = []
     this.access_permit = JSON.parse(this.editAccess.access_permit)
-    console.log(this.access_permit)
   },
   methods: {
     ...mapActions('role', ['updateRole', 'toogleEditModal']),
