@@ -358,6 +358,7 @@ export default {
     track_inventory: 'Track inventory',
     itbis: 'ITBIS (18%)',
     tax: 'Tax',
+    tax_by_sale: 'Taxes by Sale',
     taxes: 'Taxes',
     lay: 'Law tip (10%)',
     composite_text: 'Composite articles contain a certain number of other articles'
@@ -471,6 +472,7 @@ export default {
     breakdown: 'Breakdown',
     sale_footer: '¡THANK YOU FOR SHOPPING IN OUR STORE!',
     top5Category: 'The 5 Categories that sell the most',
+    top5Articles: 'The 5 Articles that sell the most',
     top5Payment: 'The Payment Methods that are sold the most',
     netPrice: 'Net Sales',
     grossPrice: 'Gross Price',

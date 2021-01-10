@@ -358,6 +358,7 @@ export default {
     track_inventory: 'Seguir  inventario',
     itbis: 'ITBIS(18%)',
     tax: 'Impuesto',
+    tax_by_sale: 'Impuestos por Venta Total',
     taxes: 'Impuestos',
     lay: 'Propina de ley(10%)',
     composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos'
@@ -471,6 +472,7 @@ export default {
     breakdown: 'Desglose',
     sale_footer: '¡GRACIAS POR COMPRAR EN NUESTRA TIENDA!',
     top5Category: 'Las 5 Categorías que más venden',
+    top5Articles: 'Las 5 Artículos que más venden',
     top5Payment: 'Los Métodos de Pago por los que más se vende',
     netPrice: 'Ventas Netas',
     grossPrice: 'Precio bruto',

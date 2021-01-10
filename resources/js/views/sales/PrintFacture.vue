@@ -54,7 +54,7 @@
                 <tbody>
                   <tr>
                     <td>{{ art.cant }}</td>
-                    <td>{{ art.name }}</td>
+                    <td>{{ art.name }} {{ art.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(art.um).name) + ')':'' }}</td>
                     <td>
                       {{
                         `${user.company.currency + ' ' + parseFloat(art.cant*art.price).toFixed(2)}`
@@ -142,7 +142,7 @@
                 </td>
               </tr>
               <tr v-if="editSale.taxes.length === 0">
-                <td><b>{{ $vuetify.lang.t('$vuetify.articles.taxes') }}</b></td>
+                <td><b>{{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}</b></td>
                 <td style="text-align: right">
                   {{ user.company.currency + ' ' + parseFloat(0).toFixed(2) }}
                 </td>
@@ -152,7 +152,7 @@
                 v-else
                 :key="tax.name"
               >
-                <td><b>{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b></td>
+                <td><b>{{ $vuetify.lang.t('$vuetify.articles.tax') }}({{ tax.name }})</b></td>
                 <td
                   v-if="tax.percent==='true'"
                   style="text-align: right"
