@@ -2771,6 +2771,7 @@ const countries = {
     emojiU: 'U+1F1FF U+1F1FC'
   }
 }
+
 const payments = {
   cash: {
     name: 'Cash',
@@ -2870,6 +2871,59 @@ const getSector = () => {
   return result
 }
 
+const getUM = () => {
+  return [
+    { name: 'u', group: 'unit', presentation: 'u' },
+    { divider: true },
+    { name: 'mm', group: 'distance', presentation: 'mm' },
+    { name: 'cm', group: 'distance', presentation: 'cm' },
+    { name: 'pp', group: 'distance', presentation: '' },
+    { name: 'm', group: 'distance', presentation: 'm' },
+    { name: 'footer', group: 'distance', presentation: '' },
+    { name: 'yard', group: 'distance', presentation: '' },
+    { name: 'km', group: 'distance', presentation: 'km' },
+    { name: 'mll', group: 'distance', presentation: 'mll' },
+    { divider: true },
+    { name: 'c', group: 'temp', presentation: 'ºC' },
+    { name: 'k', group: 'temp', presentation: 'ºK' },
+    { name: 'f', group: 'temp', presentation: 'ºF' },
+    { divider: true },
+    { name: 's', group: 'time', presentation: 's' },
+    { name: 'mt', group: 'time', presentation: 'm' },
+    { name: 'h', group: 'time', presentation: 'h' },
+    { name: 'd', group: 'time', presentation: 'd' },
+    { divider: true },
+    { name: 'mg', group: 'ms', presentation: 'mg' },
+    { name: 'g', group: 'ms', presentation: 'g' },
+    { name: 'kg', group: 'ms', presentation: 'kg' },
+    { name: 'ton', group: 'ms', presentation: 't' },
+    { name: 'lb', group: 'ms', presentation: 'lb' },
+    { divider: true },
+    { name: 'm_s', group: 'velocity', presentation: 'm/s' },
+    { name: 'km_h', group: 'velocity', presentation: 'km/h' },
+    { name: 'ms2', group: 'velocity', presentation: 'm/s__2' },
+    { divider: true },
+    { name: 'm3', group: 'vol', presentation: 'm__3' },
+    { name: 'm2', group: 'vol', presentation: 'm__2' },
+    { name: 'gl', group: 'vol', presentation: 'gl' },
+    { name: 'l', group: 'vol', presentation: 'L' },
+    { divider: true },
+    { name: 'bit', group: 'digital', presentation: 'bit' },
+    { name: 'byte', group: 'digital', presentation: 'byte' },
+    { name: 'mega', group: 'digital', presentation: 'mega' },
+    { name: 'tr', group: 'digital', presentation: 'tr' },
+    { name: 'px', group: 'digital', presentation: 'px' },
+    { name: 'mPx', group: 'digital', presentation: 'mPx' },
+    { divider: true },
+    { name: 'mhz', group: 'other', presentation: 'mHz' },
+    { name: 'hz', group: 'other', presentation: 'Hz' },
+    { name: 'hom', group: 'other', presentation: 'W' },
+    { name: 'volt', group: 'other', presentation: 'V' },
+    { name: 'amp', group: 'other', presentation: 'A' },
+    { name: 'joule', group: 'other', presentation: 'J' }
+  ]
+}
+
 export default {
   continents: continents,
   countries: countries,
@@ -2877,5 +2931,6 @@ export default {
   getSector: getSector,
   getCountryToSelect: getCountryToSelect,
   getPaymentToSelect: getPaymentToSelect,
-  getCurrencyToSelect: getCurrencyToSelect
+  getCurrencyToSelect: getCurrencyToSelect,
+  getUM: getUM
 }

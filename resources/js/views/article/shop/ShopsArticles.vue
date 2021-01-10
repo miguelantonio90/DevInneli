@@ -1,11 +1,55 @@
 <template>
   <div>
+    <v-row>
+      <v-col
+        cols="12"
+        md="3"
+      >
+        <v-switch
+          v-show="!article.id"
+          v-if="!article.composite "
+          v-model="article.track_inventory"
+          :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+        >
+          <template v-slot:label>
+            <div>
+              {{
+                $vuetify.lang.t('$vuetify.articles.track_inventory') }}
+              <v-tooltip
+                right
+                class="md-6"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-information-outline
+                  </v-icon>
+                </template>
+                <p>
+                  {{
+                    $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                  }}
+                </p>
+              </v-tooltip>
+            </div>
+          </template>
+        </v-switch>
+      </v-col>
+    </v-row>
     <v-data-table
-      :headers="headers"
-      :items="shopData"
+      :headers="getHeader"
+      :items="article.articles_shops"
     >
       <template v-slot:[`item.checked`]="{ item }">
-        <v-simple-checkbox v-model="item.checked" />
+        <v-simple-checkbox
+          v-model="item.checked"
+        >
+          />
+        </v-simple-checkbox>
       </template>
       <template v-slot:[`item.price`]="{ item }">
         <v-edit-dialog
@@ -14,7 +58,6 @@
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-          @save="updateShopsData"
         >
           <div>{{ `${user.company.currency +' '+item.price}` }}</div>
           <template v-slot:input>
@@ -45,7 +88,6 @@
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-          @save="updateShopsData"
         >
           <div>{{ item.stock }}</div>
           <template v-slot:input>
@@ -75,7 +117,6 @@
           persistent
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-          @save="updateShopsData"
         >
           <div>{{ item.under_inventory }}</div>
           <template v-slot:input>
@@ -123,42 +164,27 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShopsArticles',
-  // eslint-disable-next-line vue/require-prop-types
-  props: ['variantsData', 'shopData', 'trackInventoryParent'],
+  props: {
+    article: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  },
   data () {
     return {
       snack: false,
       snackColor: '',
       snackText: '',
-      max25chars: v => v.length <= 25 || 'Input too long!',
-      pagination: {},
-      headers: [],
-      track_inventory: false
+      pagination: {}
     }
   },
   computed: {
-    ...mapGetters('auth', ['user'])
-  },
-  watch: {
-    variantsData: function () {
-      this.initialize()
-    },
-    trackInventoryParent: function () {
-      this.track_inventory = this.trackInventoryParent
-      this.initialize()
-    }
-  },
-  created () {
-    this.track_inventory = this.trackInventoryParent
-    this.initialize()
-  },
-  mounted () {
-    this.track_inventory = this.trackInventoryParent
-  },
-  methods: {
-    initialize () {
-      this.headers = []
-      this.headers = [
+    ...mapGetters('auth', ['user']),
+    getHeader () {
+      let headers = []
+      headers = [
         {
           text: this.$vuetify.lang.t('$vuetify.shop_article.enabled'),
           value: 'checked'
@@ -168,30 +194,30 @@ export default {
           value: 'shop_name'
         }
       ]
-      if (this.variantsData.length > 0) {
-        this.headers.push({
+      if (!this.article.composite && this.article.variant_values.length > 0) {
+        headers.push({
           text: this.$vuetify.lang.t('$vuetify.variants.variant'),
           value: 'name'
         })
       }
-      this.headers.push({
+      headers.push({
         text: this.$vuetify.lang.t('$vuetify.variants.price'),
         value: 'price'
       })
-      if (this.track_inventory) {
-        this.headers.push({
+      if (this.article.track_inventory) {
+        headers.push({
           text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
           value: 'stock'
         })
-        this.headers.push({
+        headers.push({
           text: this.$vuetify.lang.t('$vuetify.shop_article.under_inventory'),
           value: 'under_inventory'
         })
       }
-    },
-    updateShopsData () {
-      this.$emit('updateShopData', this.shopData)
+      return headers
     }
+  },
+  created () {
   }
 }
 </script>

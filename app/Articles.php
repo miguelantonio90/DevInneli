@@ -26,10 +26,7 @@ class Articles extends Model
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
-    protected $softCascade = [
-        'articlesShops',
-        'variants', 'images', 'variantValues'
-    ];
+    protected $softCascade = [ 'articlesShops', 'variants', 'images', 'variantValues' ];
     protected $keyType = 'string';
     protected $guarded = [];
 

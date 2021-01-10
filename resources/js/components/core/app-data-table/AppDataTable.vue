@@ -115,7 +115,7 @@
               small
               v-bind="attrs"
               v-on="on"
-              @click="deleteButtonClicked(item.id)"
+              @click="deleteButtonClicked(item.id?item.id: item)"
             >
               mdi-delete
             </v-icon>
@@ -212,6 +212,10 @@ export default {
       default: true
     },
     viewDeleteButton: {
+      type: Boolean,
+      default: true
+    },
+    removeById: {
       type: Boolean,
       default: true
     },

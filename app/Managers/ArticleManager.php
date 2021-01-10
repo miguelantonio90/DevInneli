@@ -21,12 +21,6 @@ class ArticleManager extends BaseManager
      */
     private $variantManager;
 
-
-    /**
-     * @var ShopManager
-     */
-    private $shopManager;
-
     /**
      * ArticleManager constructor.
      * @param  VariantManager  $variantManager
@@ -133,7 +127,7 @@ class ArticleManager extends BaseManager
      */
     public function new($data): Articles
     {
-        $shops = $data['shops'];
+        $shops = $data['articles_shops'];
         $taxes = $data['tax'];
         $article = $this->insertArticle($data);
         if ($data['composite'] === true) {
@@ -144,7 +138,7 @@ class ArticleManager extends BaseManager
                 foreach ($data['variants'] as $key => $value) {
                     $this->variantManager->newVariant($value, $article->id);
                 }
-                foreach ($data['variantsValues'] as $key => $value) {
+                foreach ($data['variant_values'] as $key => $value) {
                     $value['company_id'] = $data['company_id'];
                     $articleChildren = $this->insertArticle($value);
                     $this->updateData($articleChildren, $value);
@@ -160,14 +154,16 @@ class ArticleManager extends BaseManager
         }
 
         foreach ($shops as $key => $value) {
-            $artShop = ArticlesShops::create([
-                'article_id' => $article->id,
-                'shop_id' => $value['shop_id'],
-                'stock' => $value['stock'] ?: 0,
-                'price' => $value['price'],
-                'under_inventory' => $value['under_inventory'] ?: 0
-            ]);
-            $this->managerBy('new', $artShop);
+            if($value['checked']) {
+                $artShop = ArticlesShops::create([
+                    'article_id' => $article->id,
+                    'shop_id' => $value['shop_id'],
+                    'stock' => $value['stock'] ?: 0,
+                    'price' => $value['price'],
+                    'under_inventory' => $value['under_inventory'] ?: 0
+                ]);
+                $this->managerBy('new', $artShop);
+            }
         }
         $article->save();
         if (count($data['images']) > 0) {
@@ -228,7 +224,7 @@ class ArticleManager extends BaseManager
             $article->category_id = $data['category']['id'];
         }
         $article->save();
-        foreach ($data['shops'] as $key => $value) {
+        foreach ($data['articles_shops'] as $key => $value) {
             $artShop = ArticlesShops::create([
                 'article_id' => $article->id,
                 'shop_id' => $value['shop_id'],
@@ -282,8 +278,8 @@ class ArticleManager extends BaseManager
         if (isset($data['track_inventory'])) {
             $article->track_inventory = $data['track_inventory'];
         }
-        if (isset($data['unit'])) {
-            $article->unit = $data['unit'] === 'unit';
+        if (isset($data['um'])) {
+            $article->um = json_encode($data['um']);
         }
         if (isset($data['category']['id'])) {
             $article->category_id = $data['category']['id'];
@@ -347,6 +343,7 @@ class ArticleManager extends BaseManager
         }
         $this->managerBy('edit', $article);
         $this->updateTaxes($article, $taxes);
+        $this->updateData($article, $data);
         return $article;
     }
 
@@ -413,7 +410,7 @@ class ArticleManager extends BaseManager
      */
     public function updateChidrensArticles($article, $data): void
     {
-        $shops = $data['shops'];
+        $shops = $data['articles_shops'];
         $taxes = $data['tax'];
         $variantValues = $data['variant_values'];
         $variantsValue = Articles::latest()
@@ -492,7 +489,7 @@ class ArticleManager extends BaseManager
         foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($shopsArticles as $k => $v) {
-                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id']) {
+                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['checked']) {
                     $exist = true;
                 }
             }

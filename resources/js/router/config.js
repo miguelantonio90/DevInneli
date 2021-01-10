@@ -290,7 +290,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/NewArticle')
+            component: () => import('../views/article/ManagerArticle')
           },
           {
             path: '/articles/product.edit',
@@ -302,7 +302,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/article/EditArticle')
+            component: () => import('../views/article/ManagerArticle')
           },
           {
             path: '/article/type_of_order.list',
