@@ -5,6 +5,7 @@ namespace App;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -23,7 +24,7 @@ class Company extends Model
     protected $softCascade = [
         'users', 'positions', 'shops',
         'categories', 'articles', 'clients', 'discounts', 'inventories',
-        'payments', 'mark', 'suppliers'
+        'payments', 'mark', 'suppliers', 'modifiers'
     ];
     protected $dates = ['deleted_at'];
     protected $keyType = 'string';
@@ -33,58 +34,63 @@ class Company extends Model
         'name', 'email', 'phone', 'country', 'currency', 'address', 'slogan', 'footer'
     ];
 
-    public function users()
+    public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    public function positions()
+    public function positions(): HasMany
     {
         return $this->hasMany(Position::class);
     }
 
-    public function shops()
+    public function shops(): HasMany
     {
         return $this->hasMany(Shop::class);
     }
 
-    public function categories()
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
 
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Articles::class);
     }
 
-    public function clients()
+    public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
     }
 
-    public function discounts()
+    public function discounts(): HasMany
     {
         return $this->hasMany(Discount::class);
     }
 
-    public function inventories()
+    public function inventories(): HasMany
     {
         return $this->hasMany(Inventory::class);
     }
 
-    public function payments()
+    public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
-    public function mark()
+    public function mark(): HasMany
     {
         return $this->hasMany(Mark::class);
     }
 
-    public function suppliers()
+    public function suppliers(): HasMany
     {
         return $this->hasMany(Supplier::class);
+    }
+
+    public function modifiers(): HasMany
+    {
+        return $this->hasMany(Modifiers::class);
     }
 }

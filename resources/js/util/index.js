@@ -30,6 +30,24 @@ const compareValues = (key, order = 'asc') => {
   }
 }
 
+const serialMaker = () => {
+  let prefix = ''
+  let seq = 0
+  return {
+    set_prefix: function (p) {
+      prefix = String(p)
+    },
+    set_seq: function (s) {
+      seq = s
+    },
+    gensym: function () {
+      const result = prefix + seq
+      seq += 1
+      return result
+    }
+  }
+}
+
 const toggleFullScreen = () => {
   const doc = window.document
   const docEl = doc.documentElement
@@ -61,5 +79,6 @@ export default {
   randomElement,
   toggleFullScreen,
   kebab,
-  compareValues
+  compareValues,
+  serialMaker
 }

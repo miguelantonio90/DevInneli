@@ -90,6 +90,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::put('type/order/edit/{order}', 'TypeOfOrderController@setPrincipal')->name('order.set.principal');
 
+        Route::resource('modifiers', 'ModifiersController');
+
     });
 
 });

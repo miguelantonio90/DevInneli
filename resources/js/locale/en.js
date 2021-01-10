@@ -94,6 +94,7 @@ export default {
     boxes_list: 'Boxes',
     product_list: 'Products',
     modifiers_list: 'Modifiers',
+    modifiers: 'Modifier',
     discounts_list: 'List of Discounts',
     pay: 'Payment Methods',
     supplier: 'Suppliers',
@@ -420,6 +421,7 @@ export default {
   },
   tax: {
     name: 'Tax',
+    nameGeneral: 'General tax',
     value: 'Value',
     rate: 'Rate',
     percent: 'Percent',

@@ -267,7 +267,7 @@ export const protectedRoute = [
               icon: 'mdi-database-plus',
               requiresAuth: true
             },
-            component: () => import('../views/error/Deny')
+            component: () => import('../views/modifiers/ListModifiers')
           },
           {
             path: '/articles/discounts.list',

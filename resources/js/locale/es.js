@@ -93,7 +93,8 @@ export default {
     category_list: 'Categorías',
     boxes_list: 'Cajas',
     product_list: 'Productos',
-    modifiers_list: 'Modifiadores',
+    modifiers_list: 'Modificadores',
+    modifiers: 'Modificador',
     discounts_list: ' Listado de Descuentos',
     pay: 'Métodos de Pago',
     supplier: 'Proveedores',
@@ -420,6 +421,7 @@ export default {
   },
   tax: {
     name: 'Impuesto',
+    nameGeneral: 'Impuesto general',
     value: 'Valor',
     rate: 'Tasa',
     percent: 'Porciento',
