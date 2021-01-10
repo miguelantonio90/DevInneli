@@ -25,7 +25,7 @@ class Shop extends Model
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
-    protected $softCascade = ['shopTypeOfOrders', 'assistances', 'articlesShops', 'shopTypeOfOrders'];
+    protected $softCascade = ['shopTypeOfOrders', 'assistances', 'articlesShops', 'shopTypeOfOrders', 'modifiers'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -38,7 +38,12 @@ class Shop extends Model
 
     //
 
-    public static function createFirst($data, $company)
+    /**
+     * @param $data
+     * @param $company
+     * @return Shop
+     */
+    public static function createFirst($data, $company): Shop
     {
         $shop = new Shop();
         $shop->name = $data['shopName'];
@@ -50,7 +55,11 @@ class Shop extends Model
 
     }
 
-    public static function makeShop($properties)
+    /**
+     * @param $properties
+     * @return Shop
+     */
+    public static function makeShop($properties): Shop
     {
         $shop = new Shop();
         $shop->name = $properties['name'];
@@ -72,7 +81,7 @@ class Shop extends Model
         return $this->belongsToMany(TypeOfOrder::class);
     }
 
-    public function shopTypeOfOrders()
+    public function shopTypeOfOrders(): HasMany
     {
         return $this->hasMany(ShopTypeOfOrder::class);
     }
@@ -92,9 +101,13 @@ class Shop extends Model
         return $this->hasMany(Box::class);
     }
 
-    public function company():BelongsTo
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    public function modifiers(): BelongsToMany
+    {
+        return $this->belongsToMany(Modifiers::class);
+    }
 }

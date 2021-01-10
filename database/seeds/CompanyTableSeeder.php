@@ -15,7 +15,7 @@ class CompanyTableSeeder extends Seeder
 
     /**
      * CompanyTableSeeder constructor.
-     * @param Faker $faker
+     * @param  Faker  $faker
      */
     public function __construct(Faker $faker)
     {
@@ -78,7 +78,10 @@ class CompanyTableSeeder extends Seeder
                 [
                     'title' => ['name' => 'manager_sell', 'value' => true],
                     'actions' =>
-                        ['sell_by_product' => true, 'sell_by_category' => true, 'sell_by_employer' => true, 'sell_by_payments' => true]
+                        [
+                            'sell_by_product' => true, 'sell_by_category' => true, 'sell_by_employer' => true,
+                            'sell_by_payments' => true
+                        ]
                 ],
                 [
                     'title' => ['name' => 'manager_employer', 'value' => true],
@@ -144,14 +147,16 @@ class CompanyTableSeeder extends Seeder
             'position_id' => $position->id,
         ]);
 
-        $payments = [['counted', 'cash'], ['counted', 'card'], ['counted', 'check'],
+        $payments = [
+            ['counted', 'cash'], ['counted', 'card'], ['counted', 'check'],
             ['counted', 'deposit'], ['counted', 'wire_transfer'], ['counted', 'digital_transfer'],
-            ['counted', 'other'], ['credit', 'credit']];
-        foreach ($payments as $key=>$value)
-        {
+            ['counted', 'other'], ['credit', 'credit']
+        ];
+        foreach ($payments as $key => $value) {
             Payment::create([
-                'name'=>$value[0],
-                'method'=>$value[1]]
+                    'name' => $value[0],
+                    'method' => $value[1]
+                ]
             );
         }
     }

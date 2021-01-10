@@ -35,7 +35,7 @@ class TypeOfOrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse|Response
      */
     public function index()
     {
@@ -51,6 +51,7 @@ class TypeOfOrderController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function store(Request $request)
     {
@@ -66,7 +67,11 @@ class TypeOfOrderController extends Controller
         );
     }
 
-    protected function validator(array $data)
+    /**
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -89,6 +94,7 @@ class TypeOfOrderController extends Controller
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws \Exception
      */
     public function update(Request $request, $id)
     {
@@ -104,8 +110,9 @@ class TypeOfOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws \Exception
      */
     public function destroy($id)
     {

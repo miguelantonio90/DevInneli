@@ -90,7 +90,7 @@
           deletable-chips
           :items="taxes"
           multiple
-          :label="$vuetify.lang.t('$vuetify.tax.name')"
+          :label="$vuetify.lang.t('$vuetify.tax.nameGeneral')"
           item-text="name"
           :loading="isTaxLoading"
           :disabled="!!isTaxLoading"

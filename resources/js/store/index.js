@@ -30,6 +30,7 @@ import inventory from './modules/inventory'
 import sale from './modules/sale'
 import boxes from './modules/boxes'
 import openclose from './modules/openclose'
+import modifiers from './modules/modifiers'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -72,7 +73,8 @@ const store = new Vuex.Store({
     tax,
     discount,
     inventory,
-    sale
+    sale,
+    modifiers
   },
   plugins: [vuexLocal.plugin],
   getters: {

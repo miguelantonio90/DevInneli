@@ -11,9 +11,9 @@ use App\TypeOfOrder;
 class TypeOfOrderManager extends BaseManager
 {
     /**
-     * @return mixed
+     * @return array
      */
-    public function findAllByCompany()
+    public function findAllByCompany(): array
     {
         $company = CompanyManager::getCompanyByAdmin();
         if (auth()->user()['isAdmin'] === 1) {
