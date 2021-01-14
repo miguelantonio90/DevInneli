@@ -3,13 +3,12 @@
     <v-card-title v-if="title !== ''">
       {{ title }}
     </v-card-title>
-    <v-card-subtitle>
-      <slot name="subtitle" />
-    </v-card-subtitle>
-    <v-container fluid>
+    <v-container
+      v-if="viewShowFilter"
+      fluid
+    >
       <!-- SEARCH BAR -->
       <filter-header
-        v-if="viewShowFilter"
         :has-csv-export="hasCsvExport"
         :has-csv-import="hasCsvImport"
         :select-many-filters="selectManyFilters"

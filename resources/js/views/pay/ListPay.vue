@@ -1,90 +1,95 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col
-        cols="12"
-        md="5"
-      >
-        <facture
-          :edit="true"
-          :sale="sale"
-          :total-price="parseFloat(totalPrice).toFixed(2)"
-          :total-tax="parseFloat(totalTax).toFixed(2)"
-          :total-discount="parseFloat(totalDiscount).toFixed(2)"
-          :sub-total="parseFloat(subTotal).toFixed(2)"
-          :currency="currency || ''"
-          @updateData="update = false"
-        />
-      </v-col>
-      <v-col
-        class="py-0"
-        cols="12"
-        md="7"
-      >
-        <new-payment
-          v-if="showNewModal"
-          :pays="sale.pays"
-          :payments="payments"
-          :pending="totalPrice - totalPays"
-          @addPayment="addToPayment"
-        />
-        <app-data-table
-          :view-show-filter="false"
-          :view-edit-button="false"
-          :view-new-button="show"
-          :hide-footer="!show"
-          :view-delete-button="show"
-          :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
-          csv-filename="Categories"
-          :headers="getTableColumns"
-          :is-loading="isTableLoading"
-          :items="sale.pays"
-          :manager="'payment'"
-          :sort-by="['name']"
-          :sort-desc="[false, true]"
-          multi-sort
-          @create-row="addNewPayment"
-          @delete-row="deletePaymentHandler($event)"
-        >
-          <template v-slot:[`item.method`]="{ item }">
-            {{ $vuetify.lang.t('$vuetify.payment.' + item.method) }}
-          </template>
-          <template v-slot:[`item.name`]="{ item }">
-            {{ $vuetify.lang.t('$vuetify.payment.' + item.name) }}
-          </template>
-          <template v-slot:[`item.cant`]="{ item }">
-            <v-edit-dialog
-              large
-              persistent
-              :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-              :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-              @open="openEditCant(item)"
-              @save="saveEditCant(item)"
+    <new-payment
+      v-if="showNewModal"
+      :pays="sale.pays"
+      :payments="payments"
+      :pending="totalPrice - totalPays"
+      @addPayment="addToPayment"
+    />
+    <v-card>
+      <v-card-text>
+        <v-row>
+          <v-col
+            cols="12"
+            md="5"
+          >
+            <facture
+              :edit="true"
+              :sale="sale"
+              :total-price="parseFloat(totalPrice).toFixed(2)"
+              :total-tax="parseFloat(totalTax).toFixed(2)"
+              :total-discount="parseFloat(totalDiscount).toFixed(2)"
+              :sub-total="parseFloat(subTotal).toFixed(2)"
+              :currency="currency || ''"
+              @updateData="update = false"
+            />
+          </v-col>
+          <v-col
+            class="py-0"
+            cols="12"
+            md="7"
+          >
+            <app-data-table
+              style="margin-top: 10px"
+              :view-show-filter="false"
+              :view-edit-button="false"
+              :view-new-button="show"
+              :hide-footer="!show"
+              :view-delete-button="show"
+              :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
+              csv-filename="Categories"
+              :headers="getTableColumns"
+              :is-loading="isTableLoading"
+              :items="sale.pays"
+              :manager="'payment'"
+              :sort-by="['name']"
+              :sort-desc="[false, true]"
+              multi-sort
+              @create-row="addNewPayment"
+              @delete-row="deletePaymentHandler($event)"
             >
-              <div>{{ `${currency + ' ' + item.cant}` }}</div>
-              <template v-slot:input>
-                <div class="mt-4 title">
-                  {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-                </div>
-                <v-text-field-money
-                  v-model="cant"
-                  :label="$vuetify.lang.t('$vuetify.actions.edit')"
-                  required
-                  :properties="{
-                    clearable: true
-                  }"
-                  :options="{
-                    length: 15,
-                    precision: 2,
-                    empty: 0.00,
-                  }"
-                />
+              <template v-slot:[`item.method`]="{ item }">
+                {{ $vuetify.lang.t('$vuetify.payment.' + item.method) }}
               </template>
-            </v-edit-dialog>
-          </template>
-        </app-data-table>
-      </v-col>
-    </v-row>
+              <template v-slot:[`item.name`]="{ item }">
+                {{ $vuetify.lang.t('$vuetify.payment.' + item.name) }}
+              </template>
+              <template v-slot:[`item.cant`]="{ item }">
+                <v-edit-dialog
+                  large
+                  persistent
+                  :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                  :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+                  @open="openEditCant(item)"
+                  @save="saveEditCant(item)"
+                >
+                  <div>{{ `${currency + ' ' + item.cant}` }}</div>
+                  <template v-slot:input>
+                    <div class="mt-4 title">
+                      {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                    </div>
+                    <v-text-field-money
+                      v-model="cant"
+                      :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                      required
+                      :properties="{
+                        clearable: true
+                      }"
+                      :options="{
+                        length: 15,
+                        precision: 2,
+                        empty: 0.00,
+                      }"
+                    />
+                  </template>
+                </v-edit-dialog>
+              </template>
+            </app-data-table>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 <script>

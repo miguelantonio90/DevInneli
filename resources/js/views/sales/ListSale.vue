@@ -238,12 +238,6 @@
                         {{ $vuetify.lang.t('$vuetify.articles.price') }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.tax.name') }}
-                      </th>
-                      <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.menu.discount') }}
-                      </th>
-                      <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
                       </th>
                       <th class="text-left">
@@ -305,39 +299,10 @@
                       </td>
                       <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
                       <td>
-                        <template v-if="article.taxes.length > 0">
-                          <v-chip
-                            v-for="(lTax, i) of article.tax"
-                            :key="i"
-                            small
-                          >
-                            {{ lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)':'' }} +{{ `${user.company.currency}` }} {{ lTax.percent ? lTax.value*article.cant*article.price/100 : lTax.value }}
-                          </v-chip>
-                        </template>
-                        <template v-else>
-                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
-                        </template>
-                      </td>
-                      <td>
-                        <template v-if="article.discount.length > 0">
-                          <v-chip
-                            v-for="(lDiscount, i) of article.discount"
-                            :key="i"
-                            small
-                          >
-                            {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }} <i> -{{ `${user.company.currency}` }} {{ lDiscount.percent ? lDiscount.value*article.cant*article.price/100 : lDiscount.value }}</i>
-                          </v-chip>
-                        </template>
-                        <template v-else>
-                          <i>{{ $vuetify.lang.t('$vuetify.no_defined') }}</i>
-                        </template>
-                      </td>
-                      <td>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <b><v-icon
-                              v-if="article.moneyRefund > 0"
-                              style="color: red"
+                              :color="article.moneyRefund > 0 ? 'red':'primary'"
                               class="mr-2"
                               small
                               v-bind="attrs"
@@ -346,9 +311,18 @@
                               mdi-information
                             </v-icon></b>
                           </template>
-                          <span>{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
+                          <template>
+                            <detail-article-price
+                              v-if="article.taxes.length > 0 || article.discount.length > 0 || article.modifiers.length > 0"
+                              :article="article"
+                              :currency="user.company.currency"
+                            />
+                            <span
+                              v-if="article.moneyRefund > 0"
+                            >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
+                          </template>
                         </v-tooltip>
-                        <span>{{ `${user.company.currency + ' ' + total_pay(article)}` }}</span>
+                        <span>{{ `${user.company.currency + ' ' + article.totalPrice}` }}</span>
                       </td>
                       <td>
                         <template v-if="article.inventory > 0">
@@ -419,10 +393,11 @@ import DetailRefund from '../refund/DetailRefund'
 import PrintFacture from './PrintFacture'
 import PrintFactureLetter from './PrintFactureLetter'
 import ListPay from '../pay/ListPay'
+import DetailArticlePrice from './DetailArticlePrice'
 
 export default {
   name: 'ListSale',
-  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay },
+  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay, DetailArticlePrice },
   data () {
     return {
       menu: false,

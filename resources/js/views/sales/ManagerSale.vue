@@ -369,7 +369,7 @@
                         <template v-slot:[`item.totalPrice`]="{ item }">
                           <template>
                             <v-tooltip
-                              v-show="item.taxes.length > 0"
+                              v-show="item.taxes.length > 0 || item.discount.length > 0 || item.modifiers.length > 0"
                               bottom
                             >
                               <template v-slot:activator="{ on, attrs }">

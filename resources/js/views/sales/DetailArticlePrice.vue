@@ -37,7 +37,32 @@
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + tax.value}` }}</i>
+          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(tax.value).toFixed(2)}` }}</i>
+        </v-col>
+      </v-row>
+      <v-row
+        v-for="mod in article.modifiers"
+        :key="mod.name"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <b style="color: darkblue">{{ mod.name }}</b>
+        </v-col>
+        <v-col
+          v-if="mod.percent==='true'"
+          cols="12"
+          md="6"
+        >
+          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(mod.value * article.price / 100).toFixed(2)}` }} ({{ mod.value }}%)</i>
+        </v-col>
+        <v-col
+          v-else
+          cols="12"
+          md="6"
+        >
+          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(mod.value).toFixed(2)}` }}</i>
         </v-col>
       </v-row>
       <v-row
