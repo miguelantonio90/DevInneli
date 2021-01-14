@@ -22,6 +22,7 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
+  managerInventory: false,
   newInventory: {
     no_facture: '',
     pay: '',

@@ -109,18 +109,34 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="accessDeleteButton"
+              v-if="viewDiscountButton"
               class="mr-2"
-              color="error"
+              color="success"
               small
               v-bind="attrs"
               v-on="on"
-              @click="deleteButtonClicked(item.id?item.id: item)"
+              @click="discountButtonClicked(item)"
             >
-              mdi-delete
+              mdi-currency-usd-off
             </v-icon>
           </template>
-          <span>{{ $vuetify.lang.t('$vuetify.actions.delete') }}</span>
+          <span>{{ $vuetify.lang.t('$vuetify.access.access.manager_discount') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="viewModButton"
+              class="mr-2"
+              color="primary"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="modButtonClicked(item)"
+            >
+              mdi-table-edit
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.access.access.manager_mod') }}</span>
         </v-tooltip>
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -137,6 +153,22 @@
             </v-icon>
           </template>
           <span>{{ $vuetify.lang.t('$vuetify.actions.transfer') }}</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="accessDeleteButton"
+              class="mr-2"
+              color="error"
+              small
+              v-bind="attrs"
+              v-on="on"
+              @click="deleteButtonClicked(item.id?item.id: item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.actions.delete') }}</span>
         </v-tooltip>
       </template>
     </v-data-table>
@@ -202,6 +234,14 @@ export default {
     viewNewButton: {
       type: Boolean,
       default: true
+    },
+    viewModButton: {
+      type: Boolean,
+      default: false
+    },
+    viewDiscountButton: {
+      type: Boolean,
+      default: false
     },
     viewShowButton: {
       type: Boolean,
@@ -367,6 +407,12 @@ export default {
     },
     editButtonClicked (clickedRowId) {
       this.$emit('edit-row', clickedRowId)
+    },
+    modButtonClicked (clickedRowId) {
+      this.$emit('manager-modify-row', clickedRowId)
+    },
+    discountButtonClicked (clickedRowId) {
+      this.$emit('manager-discount-row', clickedRowId)
     },
     openButtonClicked (clickedRowId) {
       this.$emit('open-row', clickedRowId)

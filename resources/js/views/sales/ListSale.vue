@@ -155,7 +155,11 @@
                 <template>
                   <list-pay
                     :show="false"
-                    :pays-show="item.pays"
+                    :sale="item"
+                    :total-price="parseFloat(item.totalPrice).toFixed(2).toString()"
+                    :total-tax="parseFloat(item.totalTax).toFixed(2)"
+                    :total-discount="parseFloat(item.totalDiscount).toFixed(2)"
+                    :sub-total="parseFloat(item.subTotal).toFixed(2)"
                     :currency="user.company.currency"
                   />
                 </template>
@@ -462,16 +466,6 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.tax.name'),
-          value: 'taxes',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.discount'),
-          value: 'discounts',
-          select_filter: true
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
           value: 'totalPrice',
           select_filter: true
@@ -595,10 +589,30 @@ export default {
       return item.cant * item.price + sum - discount - item.moneyRefund
     },
     createSaleHandler () {
-      this.$router.push({ name: 'vending_new' })
+      if (this.articles.length === 0) {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+              this.$vuetify.lang.t('$vuetify.sale.sale')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_no_article'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+      } else {
+        this.$store.state.sale.managerSale = false
+        this.$router.push({ name: 'vending_new' })
+      }
     },
     editSaleHandler ($event) {
       this.openEditModal($event)
+      this.$store.state.sale.managerSale = true
       this.$router.push({ name: 'vending_edit' })
     },
     openPrintModal (print, id) {

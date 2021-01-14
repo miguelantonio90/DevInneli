@@ -86,6 +86,7 @@ class SaleManager extends BaseManager
                 ->with('taxes')
                 ->with('discounts')
                 ->with('refounds')
+                ->with('pay_sales')
                 ->orderBy('created_at', 'ASC')
                 ->get();
         }
@@ -136,6 +137,9 @@ class SaleManager extends BaseManager
                 ->where('sales.id', '=', $value['id'])
                 ->first();
             $totalCost = 0;
+            $subTotal = 0;
+            $totalTax = 0;
+            $totalDisc = 0;
             $totalPrice = 0;
             $totalRefund = 0;
             foreach ($sales[$key]['articles'] as $k => $v) {
@@ -188,20 +192,21 @@ class SaleManager extends BaseManager
                 $sales[$key]['articles'][$k]->cantRefund = $cantRefund;
                 $totalCost += $v->cant * $v->cost;
                 $sales[$key]['articles'][$k]->totalPrice = $v->cant * $v->price + $sum - $discount - $refund;
-                $totalPrice += $sales[$key]['articles'][$k]->totalPrice;
-                $discount = 0;
-                foreach ($sales[$key]['taxes'] as $j => $i) {
-                    $sum += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
-                }
-                $sum = 0;
-                foreach ($sales[$key]['discounts'] as $j => $i) {
-                    $discount += $i->percent ? $totalPrice * $i->value / 100 : $i->value;
-                }
-                $totalPrice = $totalPrice + $sum - $discount;
+                $subTotal += $sales[$key]['articles'][$k]->totalPrice;
                 $totalRefund += $refund;
 
             }
+            foreach ($sales[$key]['taxes'] as $j => $i) {
+                $totalTax += $i->percent ? $subTotal * $i->value / 100 : $i->value;
+            }
+            foreach ($sales[$key]['discounts'] as $j => $i) {
+                $totalDisc += $i->percent ? $subTotal * $i->value / 100 : $i->value;
+            }
+            $totalPrice = $subTotal + $totalTax - $totalDisc;
             $sales[$key]['totalCost'] = round($totalCost, 2);
+            $sales[$key]['totalTax'] = round($totalTax, 2);
+            $sales[$key]['totalDisc'] = round($totalDisc, 2);
+            $sales[$key]['subTotal'] = round($subTotal, 2);
             $sales[$key]['totalRefund'] = round($totalRefund, 2);
             $sales[$key]['totalPrice'] = round($totalPrice, 2);
             $sales[$key]['create'] = DB::table('users')

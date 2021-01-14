@@ -55,9 +55,9 @@ class Sale extends Model
         return $this->belongsTo(Box::class);
     }
 
-    public function payments(): HasOne
+    public function pay_sales(): HasMany
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasMany(PaySale::class);
     }
 
     public function client(): HasOne
@@ -85,10 +85,5 @@ class Sale extends Model
     public function refounds():HasMany
     {
         return $this->hasMany(SalesArticlesShops::class);
-    }
-
-    public function nameSa(): string
-    {
-        return 'A';
     }
 }

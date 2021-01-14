@@ -13,7 +13,6 @@
           return-object
           required
           :rules="formRule.country"
-          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -43,7 +42,6 @@
           return-object
           required
           :rules="formRule.country"
-          @input="updateStore"
         />
       </v-col>
       <v-col cols="6">
@@ -53,7 +51,6 @@
           required
           readonly
           :rules="formRule.required"
-          @onchange="updateStore"
         />
       </v-col>
       <v-col cols="6">
@@ -71,7 +68,6 @@
           return-object
           required
           :rules="formRule.country"
-          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -99,7 +95,6 @@
           item-value="value"
           required
           :rules="formRule.country"
-          @input="updateStore"
         />
       </v-col>
       <v-col
@@ -149,12 +144,17 @@ export default {
     edit: {
       type: Boolean,
       default: false
+    },
+    supply: {
+      type: Object,
+      default: function () {
+        return {}
+      }
     }
   },
   data () {
     return {
-      formRule: this.$rules,
-      supply: {}
+      formRule: this.$rules
     }
   },
   computed: {
@@ -191,7 +191,6 @@ export default {
     await this.getPayments()
     await this.getInventories()
     await this.getSales()
-    this.supply = this.edit ? this.editInventory : this.newInventory
     if (!this.edit) { this.supply.no_facture = this.generateNF() }
   },
   methods: {
@@ -220,7 +219,6 @@ export default {
         this.newInventory.shop = this.supply.shop
         this.newInventory.no_facture = this.supply.no_facture
       }
-      this.$emit('updateData')
     }
   }
 }
