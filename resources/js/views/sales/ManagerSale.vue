@@ -175,7 +175,6 @@
                     >
                       <v-select
                         v-model="sale.box"
-                        disabled
                         :rules="formRule.country"
                         :items="localBoxes"
                         required
@@ -807,7 +806,7 @@ export default {
       this.sale.pays.forEach(v => {
         totalCalcP += v.cant
       })
-      if (parseFloat(this.total) - parseFloat(totalCalcP) !== 0) {
+      if (parseFloat(totalCalcP) > 0 && parseFloat(this.totalPrice) - parseFloat(totalCalcP) !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
           '$vuetify.messages.warning_difference_price', [(totalCalcP - this.totalPrice + ' ' + this.user.company.currency).toString()]
