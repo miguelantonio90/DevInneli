@@ -135,9 +135,9 @@ class BoxManager extends BaseManager
             ->get()[0];
         $sales = Sale::latest()
             ->where('created_at', '>=', $openClose->created_at)
-            ->where('box_id', '=', $openClose->box_id)
-            ->where('pay', '<>', null)
+            ->where('state', '=', 'accepted')
             ->with('box')
+            ->with('pay_sales')
             ->with('articles_shops')
             ->with('taxes')
             ->with('discounts')
@@ -146,10 +146,27 @@ class BoxManager extends BaseManager
             ->get();
         $managerSale = new SaleManager();
         $openClose['sales'] = $managerSale->filterSale($sales);
-        $openClose['refunds'] = DB::table('refunds')
+        $openClose['payments'] = PaymentManager::findAllByCompany();
+        foreach ($openClose['sales'] as $k=>$sale){
+            foreach ($sale['pay_sales'] as $p=>$pay){
+                foreach ($openClose['payments'] as $ps=>$payment){
+                    if($pay['payment_id'] === $payment['id']){
+                        $payment['total']+= round($pay['cant'],2);
+                    }else{
+                        $payment['total']+= round(0,2);
+                    }
+                }
+            }
+        }
+
+        $refunds = DB::table('refunds')
             ->whereDate('refunds.created_at', '>=', $openClose->created_at)
             ->where('refunds.box_id', '=', $openClose->box_id)
             ->get();
+        $openClose['totalRefunds'] = 0.00;
+        foreach ($refunds as $r=>$refund){
+            $openClose['totalRefunds'] += $refund['cant'];
+        }
         return $openClose;
 
     }

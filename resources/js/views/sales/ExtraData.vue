@@ -8,7 +8,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="8"
+        md="3"
       >
         <v-autocomplete
           v-model="sale.client"
@@ -19,7 +19,6 @@
           :loading="isClientTableLoading"
           :disabled="!!isClientTableLoading"
           return-object
-          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -67,7 +66,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="4"
+        md="3"
       >
         <v-text-field
           v-model="sale.no_facture"
@@ -75,13 +74,12 @@
           required
           readonly
           :rules="formRule.required"
-          @onchange="updateStore"
         />
       </v-col>
       <v-col
         class="py-0"
         cols="12"
-        md="6"
+        md="3"
       >
         <v-select
           v-model="sale.taxes"
@@ -97,7 +95,6 @@
           return-object
           required
           :rules="formRule.country"
-          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -118,7 +115,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="6"
+        md="3"
       >
         <v-select
           v-model="sale.discounts"
@@ -127,14 +124,13 @@
           deletable-chips
           :items="localDiscounts"
           multiple
-          :label="$vuetify.lang.t('$vuetify.menu.discount')"
+          :label="$vuetify.lang.t('$vuetify.sale.discountGeneral')"
           item-text="name"
           :loading="isTaxLoading"
           :disabled="!!isTaxLoading"
           return-object
           required
           :rules="formRule.country"
-          @input="updateStore"
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
@@ -152,12 +148,20 @@
           </template>
         </v-select>
       </v-col>
-      <list-pay
-        :edit="edit"
-        :pays-show="paysShow"
-        :total="parseFloat(total)"
-        :currency="user.company.currency"
-      />
+      <v-col
+        cols="12"
+        md="12"
+      >
+        <list-pay
+          :edit="edit"
+          :sale="sale"
+          :total-price="parseFloat(totalPrice).toFixed(2)"
+          :total-tax="parseFloat(totalTax).toFixed(2)"
+          :total-discount="parseFloat(totalDiscount).toFixed(2)"
+          :sub-total="parseFloat(subTotal).toFixed(2)"
+          :currency="user.company.currency"
+        />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -173,17 +177,29 @@ export default {
   name: 'ExtraData',
   components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
   props: {
-    paysShow: {
-      type: Array,
-      default: function () {
-        return []
-      }
-    },
     edit: {
       type: Boolean,
       default: false
     },
-    total: {
+    sale: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
+    totalPrice: {
+      type: String,
+      default: '0.00'
+    },
+    totalTax: {
+      type: String,
+      default: '0.00'
+    },
+    totalDiscount: {
+      type: String,
+      default: '0.00'
+    },
+    subTotal: {
       type: String,
       default: '0.00'
     }
@@ -191,8 +207,7 @@ export default {
   data () {
     return {
       formRule: this.$rules,
-      localDiscounts: [],
-      sale: {}
+      localDiscounts: []
     }
   },
   computed: {
@@ -201,19 +216,7 @@ export default {
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['newSale', 'editSale']),
     ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user']),
-    getPay () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.counted'),
-          value: 'counted'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.credit'),
-          value: 'credit'
-        }
-      ]
-    }
+    ...mapGetters('auth', ['user'])
   },
   watch: {
     discounts: function () {
@@ -227,7 +230,6 @@ export default {
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
-    this.sale = this.edit ? this.editSale : this.newSale
   },
   methods: {
     ...mapActions('client', ['getClients']),
@@ -243,22 +245,6 @@ export default {
           percent: v.percent
         })
       })
-    },
-    updateStore () {
-      if (this.edit) {
-        this.editSale.client = this.sale.client
-        this.editSale.taxes = this.sale.taxes
-        this.editSale.payments = this.sale.payments
-        this.editSale.no_facture = this.sale.no_facture
-        this.editSale.discounts = this.sale.discounts
-      } else {
-        this.newSale.client = this.sale.client
-        this.newSale.taxes = this.sale.taxes
-        this.newSale.payments = this.sale.payments
-        this.newSale.no_facture = this.sale.no_facture
-        this.newSale.discounts = this.sale.discounts
-      }
-      this.$emit('updateData')
     }
   }
 }

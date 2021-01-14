@@ -233,6 +233,25 @@
                                   {{ $vuetify.lang.t('$vuetify.actions.accept') }}
                                 </v-btn>
                                 <v-spacer />
+
+                                <v-btn
+                                  class="mb-2"
+                                  :disabled="isActionInProgress"
+                                  @click="$router.push({name:'product_list'})"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                  {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                                </v-btn>
+                                <v-btn
+                                  class="mb-2"
+                                  color="primary"
+                                  :disabled="!formValid || isActionInProgress"
+                                  :loading="isActionInProgress"
+                                  @click="managerArticleHandler"
+                                >
+                                  <v-icon>mdi-check</v-icon>
+                                  {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                                </v-btn>
                               </v-card-actions>
                             </v-card>
                           </v-dialog>
@@ -327,8 +346,28 @@
                       :disabled="!formValid || isActionInProgress"
                       @click="step = 2"
                     >
-                      <v-icon>mdi-chevron-right</v-icon>
                       {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                    <v-spacer />
+
+                    <v-btn
+                      class="mb-2"
+                      :disabled="isActionInProgress"
+                      @click="$router.push({name:'product_list'})"
+                    >
+                      <v-icon>mdi-close</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                    </v-btn>
+                    <v-btn
+                      class="mb-2"
+                      color="primary"
+                      :disabled="!formValid || isActionInProgress"
+                      :loading="isActionInProgress"
+                      @click="managerArticleHandler"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                      <v-icon>mdi-check</v-icon>
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -361,18 +400,38 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
-                      color="primary"
-                      @click="step = 4"
+                      text
+                      @click="step = 1"
                     >
-                      <v-icon>mdi-chevron-right</v-icon>
-                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                      <v-icon>mdi-chevron-left</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
                     </v-btn>
+                    <v-btn
+                      color="primary"
+                      @click="step = 3"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                    <v-spacer />
 
                     <v-btn
-                      text
-                      @click="step = 2"
+                      class="mb-2"
+                      :disabled="isActionInProgress"
+                      @click="$router.push({name:'product_list'})"
                     >
-                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                      <v-icon>mdi-close</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                    </v-btn>
+                    <v-btn
+                      class="mb-2"
+                      color="primary"
+                      :disabled="!formValid || isActionInProgress"
+                      :loading="isActionInProgress"
+                      @click="managerArticleHandler"
+                    >
+                      <v-icon>mdi-check</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.save') }}
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -399,18 +458,38 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
-                      color="primary"
-                      @click="article.composite ? step = 4 : step = 5"
+                      text
+                      @click="article.composite ? step = 1 : step = 2"
                     >
-                      <v-icon>mdi-chevron-right</v-icon>
-                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                      <v-icon>mdi-chevron-left</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
                     </v-btn>
+                    <v-btn
+                      color="primary"
+                      @click="article.composite ? step = 3 : step = 4"
+                    >
+                      {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                    <v-spacer />
 
                     <v-btn
-                      text
-                      @click="article.composite ? step = 2 : step = 3"
+                      class="mb-2"
+                      :disabled="isActionInProgress"
+                      @click="$router.push({name:'product_list'})"
                     >
-                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                      <v-icon>mdi-close</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                    </v-btn>
+                    <v-btn
+                      class="mb-2"
+                      color="primary"
+                      :disabled="!formValid || isActionInProgress"
+                      :loading="isActionInProgress"
+                      @click="managerArticleHandler"
+                    >
+                      <v-icon>mdi-check</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.save') }}
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -481,6 +560,22 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
+                      text
+                      @click="article.composite ? step = 2 : step = 3"
+                    >
+                      <v-icon>mdi-chevron-left</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                      class="mb-2"
+                      :disabled="isActionInProgress"
+                      @click="$router.push({name:'product_list'})"
+                    >
+                      <v-icon>mdi-close</v-icon>
+                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                    </v-btn>
+                    <v-btn
                       class="mb-2"
                       color="primary"
                       :disabled="!formValid || isActionInProgress"
@@ -489,14 +584,6 @@
                     >
                       <v-icon>mdi-check</v-icon>
                       {{ $vuetify.lang.t('$vuetify.actions.save') }}
-                    </v-btn>
-                    <v-btn
-                      class="mb-2"
-                      :disabled="isActionInProgress"
-                      @click="$router.push({name:'product_list'})"
-                    >
-                      <v-icon>mdi-close</v-icon>
-                      {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -675,14 +762,21 @@ export default {
     },
     managerArticleHandler () {
       let valid = true
-      if (!this.validateRef() || !this.validateBarCode()) {
+      if (!this.article.category) {
         valid = false
+        this.showAlertMessage(this.$vuetify.lang.t(
+          '$vuetify.messages.warning_no_category'
+        ))
       } else {
-        if (this.article.composite) {
-          if (this.article.composite.length === 0) {
-            this.showAlertMessage(this.$vuetify.lang.t(
-              '$vuetify.messages.warning_composite'
-            ))
+        if (!this.validateRef() || !this.validateBarCode()) {
+          valid = false
+        } else {
+          if (this.article.composite) {
+            if (this.article.composite.length === 0) {
+              this.showAlertMessage(this.$vuetify.lang.t(
+                '$vuetify.messages.warning_composite'
+              ))
+            }
           }
         }
       }

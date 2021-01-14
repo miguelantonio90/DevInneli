@@ -31,6 +31,7 @@ const state = {
   loadData: false,
   loading: false,
   saved: false,
+  managerSale: false,
   newSale: {
     no_facture: '',
     pay: '',

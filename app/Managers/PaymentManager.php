@@ -13,16 +13,8 @@ class PaymentManager extends BaseManager
      */
     public static function findAllByCompany()
     {
-        if (auth()->user()['isAdmin'] === 1) {
-            $payments = Payment::latest()
-                ->with('company')
-                ->get();
-        } else {
-            $company = CompanyManager::getCompanyByAdmin();
-            $payments = Payment::latest()
-                ->get();
-        }
-        return $payments;
+
+        return Payment::latest()->get();
     }
 
     /**

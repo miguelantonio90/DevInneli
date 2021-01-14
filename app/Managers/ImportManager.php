@@ -161,7 +161,7 @@ class ImportManager extends BaseManager
             $newArticle->parent_id = $parentId;
         }
         $newArticle->company_id = $company->id;
-        $newArticle->unit = str_replace('"', '', $basicData[4]) === 'Y';
+        $newArticle->um = json_encode('{"name": "u", "group": "unit", "presentation": "u"}');
         $newArticle->track_inventory = str_replace('"', '', $basicData[16]) === 'Y';
         $newArticle->price = str_replace('"', '', $basicData[11]) ?: 0.00;
         $newArticle->cost = str_replace('"', '', $basicData[12]) ?: 0.00;

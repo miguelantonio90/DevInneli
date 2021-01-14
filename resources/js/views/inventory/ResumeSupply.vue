@@ -2,19 +2,19 @@
   <v-container>
     <v-row>
       <v-col
-        v-if="edit ? editInventory.supplier:newInventory.supplier"
+        v-if="inventory.supplier"
         cols="md-7"
       >
         <b>{{ $vuetify.lang.t('$vuetify.provider') }}</b>:
-        {{ edit ? editInventory.supplier.name:newInventory.supplier.name }}
+        {{ inventory.supplier.name }}
       </v-col>
       <v-spacer />
       <v-col
-        v-if="edit ? editInventory.no_facture:newInventory.no_facture"
+        v-if="inventory.no_facture"
         cols="md-5"
       >
         <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:
-        {{ edit ? editInventory.no_facture:newInventory.no_facture }}
+        {{ inventory.no_facture }}
       </v-col>
     </v-row>
     <v-row>
@@ -50,9 +50,9 @@
         </span>
       </v-col>
     </v-row>
-    <v-row v-if="taxes.length > 0" />
+    <v-row v-if="inventory.taxes.length > 0" />
     <v-row
-      v-for="tax in taxes"
+      v-for="tax in inventory.taxes"
       :key="tax.name"
     >
       <v-col cols="7">
@@ -95,6 +95,12 @@ export default {
       type: Boolean,
       default: false
     },
+    inventory: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
     currency: {
       type: String,
       default: ''
@@ -116,20 +122,16 @@ export default {
     }
   },
   watch: {
-    'newInventory.taxes' () {
+    'inventory.taxes' () {
       this.updateData()
     },
-    'newInventory.articles' () {
+    'inventory.articles' () {
       this.updateData()
     },
-    update () {
-      this.updateData()
-    },
-    'editInventory.taxes' () {
-      this.updateData()
-    },
-    'editInventory.articles' () {
-      this.updateData()
+    update: function (val) {
+      if (val) {
+        this.updateData()
+      }
     }
   },
   async created () {
@@ -140,12 +142,10 @@ export default {
       this.totalTax = 0
       this.total = 0
       this.sub_total = 0
-      const articles = this.edit ? this.editInventory.articles : this.newInventory.articles
-      articles.forEach((v) => {
+      this.inventory.articles.forEach((v) => {
         this.total = parseFloat(v.cant * v.cost) + this.total
       })
-      this.taxes = this.edit ? this.editInventory.taxes : this.newInventory.taxes
-      this.taxes.forEach((v) => {
+      this.inventory.taxes.forEach((v) => {
         this.totalTax += v.percent === 'true' ? this.total * v.value / 100 : v.value
       })
       this.sub_total = (this.total - parseFloat(this.totalTax)).toFixed(2)

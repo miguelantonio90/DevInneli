@@ -22,26 +22,33 @@ const state = {
   avatar: '',
   loading: false,
   saved: false,
+  managerInventory: false,
   newInventory: {
     no_facture: '',
     pay: '',
+    pays: [],
+    box: null,
+    state: 'open',
+    discounts: [],
     taxes: [],
-    payments: {},
+    payments: null,
     articles: [],
     shop: null,
-    supplier: null
+    client: null
   },
   editInventory: {
     id: '',
     no_facture: '',
-    pay: '',
+    box: {},
+    discounts: [],
     taxes: [],
+    pays: [],
     payments: {},
     articles: [],
     articles_shops: [],
     shop: {},
-    supplier: {},
-    supplier_id: ''
+    client: {},
+    client_id: ''
   },
   isInventoryTableLoading: false,
   isActionInProgress: false,

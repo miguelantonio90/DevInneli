@@ -1,14 +1,126 @@
 <template>
-  <div class="page-add-sales">
+  <div class="page-add-inventorys">
     <app-loading v-show="loadingData" />
+    <v-dialog
+      v-model="showDiscount"
+      max-width="400"
+      persistent
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ $vuetify.lang.t('$vuetify.access.access.manager_discount') }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-autocomplete
+            v-model="articleSelected.discount"
+            chips
+            multiple
+            :items="localDiscounts"
+            item-text="name"
+            return-object
+          >
+            <template v-slot:append-outer>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="$store.dispatch('discount/toogleNewModal',true)"
+                  >
+                    mdi-plus
+                  </v-icon>
+                </template>
+                <span>{{
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
+              </v-tooltip>
+            </template>
+          </v-autocomplete>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            class="mb-2"
+            @click="closeDiscount"
+          >
+            <v-icon>mdi-close</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          </v-btn>
+          <v-btn
+            class="mb-2"
+            color="primary"
+            @click="saveDiscount()"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="showModify"
+      max-width="400"
+      persistent
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ $vuetify.lang.t('$vuetify.access.access.manager_mod') }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-autocomplete
+            v-model="articleSelected.modifiers"
+            chips
+            multiple
+            :items="localModifiers"
+            item-text="name"
+            return-object
+          >
+            <template v-slot:append-outer>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="$store.dispatch('modifiers/toogleNewModal',true)"
+                  >
+                    mdi-plus
+                  </v-icon>
+                </template>
+                <span>{{
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
+              </v-tooltip>
+            </template>
+          </v-autocomplete>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            class="mb-2"
+            @click="closeModify"
+          >
+            <v-icon>mdi-close</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          </v-btn>
+          <v-btn
+            class="mb-2"
+            color="primary"
+            @click="saveModify()"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-container
       v-if="!loadingData"
     >
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
-              $vuetify.lang.t('$vuetify.sale.sale'),
+            $vuetify.lang.t(managerInventory? '$vuetify.titles.edit' : '$vuetify.titles.newF', [
+              $vuetify.lang.t('$vuetify.supply.name'),
             ])
           }}</span>
         </v-card-title>
@@ -41,53 +153,20 @@
                       md="4"
                     >
                       <v-select
-                        v-model="newSale.shop"
+                        v-model="inventory.shop"
                         chips
                         rounded
+                        disabled
                         solo
-                        :clearable="shops.length > 1"
+                        clearable
                         :items="shops"
                         :label="$vuetify.lang.t('$vuetify.menu.shop')"
                         item-text="name"
                         :loading="isShopLoading"
-                        :disabled="!!isShopLoading"
                         return-object
                         required
                         :rules="formRule.country"
-                        @input="updateDataArticle"
-                        @change="updateDataArticle"
                       />
-                    </v-col>
-                    <v-col
-                      class="py-0"
-                      cols="12"
-                      md="3"
-                    >
-                      <v-select
-                        v-model="newSale.box"
-                        clearable
-                        :items="localBoxes"
-                        :rules="formRule.country"
-                        required
-                        :label="$vuetify.lang.t('$vuetify.menu.box')"
-                        item-text="name"
-                        return-object
-                      >
-                        <template v-slot:append-outer>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="$store.dispatch('boxes/toogleNewModal',true)"
-                              >
-                                mdi-plus
-                              </v-icon>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </v-select>
                     </v-col>
                     <v-col
                       class="py-0"
@@ -96,8 +175,8 @@
                     >
                       <v-autocomplete
                         ref="selectArticle"
-                        :disabled="!newSale.shop"
-                        :hint="!newSale.shop ? $vuetify.lang.t('$vuetify.sale.selectShop') : localArticles.length > 0 ? $vuetify.lang.t('$vuetify.sale.selectArticle') : $vuetify.lang.t('$vuetify.sale.emptyArticle')"
+                        :disabled="!inventory.shop"
+                        :hint="!inventory.shop ? $vuetify.lang.t('$vuetify.sale.selectShop') : localArticles.length > 0 ? $vuetify.lang.t('$vuetify.sale.selectArticle') : $vuetify.lang.t('$vuetify.sale.emptyArticle')"
                         persistent-hint
                         chips
                         :label="$vuetify.lang.t('$vuetify.menu.articles')"
@@ -163,15 +242,18 @@
                         :view-show-filter="false"
                         :view-edit-button="false"
                         :view-new-button="false"
-                        :view-delete-button="true"
+                        :view-mod-button="true"
+                        :view-discount-button="true"
                         :headers="getTableColumns"
-                        :items="newSale.articles"
+                        :items="inventory.articles"
                         csv-filename="ProductBuys"
                         :sort-by="['name']"
                         :sort-desc="[false, true]"
                         multi-sort
                         :is-loading="isTableLoading"
                         @delete-row="deleteItem($event)"
+                        @manager-modify-row="showModifyArticle($event)"
+                        @manager-discount-row="showDiscountArticle($event)"
                       >
                         <template v-slot:[`item.name`]="{ item }">
                           <v-chip
@@ -200,7 +282,7 @@
                             persistent
                             :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
                             :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-                            @save="calcTotal(item)"
+                            @save="calcTotalArticle(item)"
                           >
                             <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
                             <template v-slot:input>
@@ -223,62 +305,6 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:[`item.discount`]="{ item }">
-                          <v-autocomplete
-                            v-model="item.discount"
-                            chips
-                            multiple
-                            :items="localDiscounts"
-                            item-text="name"
-                            return-object
-                            @input="total_pay(item)"
-                          >
-                            <template v-slot:append-outer>
-                              <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-icon
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    @click="$store.dispatch('discount/toogleNewModal',true)"
-                                  >
-                                    mdi-plus
-                                  </v-icon>
-                                </template>
-                                <span>{{
-                                  $vuetify.lang.t('$vuetify.titles.newAction')
-                                }}</span>
-                              </v-tooltip>
-                            </template>
-                          </v-autocomplete>
-                        </template>
-                        <template v-slot:[`item.modifiers`]="{ item }">
-                          <v-autocomplete
-                            v-model="item.modifiers"
-                            chips
-                            multiple
-                            :items="localModifiers"
-                            item-text="name"
-                            return-object
-                            @input="totalModifier(item)"
-                          >
-                            <template v-slot:append-outer>
-                              <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-icon
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    @click="$store.dispatch('modifiers/toogleNewModal',true)"
-                                  >
-                                    mdi-plus
-                                  </v-icon>
-                                </template>
-                                <span>{{
-                                  $vuetify.lang.t('$vuetify.titles.newAction')
-                                }}</span>
-                              </v-tooltip>
-                            </template>
-                          </v-autocomplete>
-                        </template>
                         <template v-slot:[`item.cant`]="{ item }">
                           <v-edit-dialog
                             :return-value.sync="item.cant"
@@ -286,7 +312,7 @@
                             persistent
                             :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
                             :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-                            @save="calcTotal(item)"
+                            @save="calcTotalArticle(item)"
                           >
                             <div>{{ item.cant }}</div>
                             <template v-slot:input>
@@ -311,10 +337,12 @@
                         </template>
                         <template v-slot:[`item.totalPrice`]="{ item }">
                           <template>
-                            <v-tooltip bottom>
+                            <v-tooltip
+                              v-show="item.taxes.length > 0 || item.discount.length > 0 || item.modifiers.length > 0"
+                              bottom
+                            >
                               <template v-slot:activator="{ on, attrs }">
                                 <b><v-icon
-                                  :style="item.totalRefund > 0?'color: red': 'color:primary'"
                                   class="mr-2"
                                   small
                                   v-bind="attrs"
@@ -324,79 +352,22 @@
                                 </v-icon></b>
                               </template>
                               <template>
-                                <td
-                                  :colspan="4"
-                                  style="padding: 0 0 0 0"
-                                >
-                                  <v-simple-table dense>
-                                    <template v-slot:default>
-                                      <thead>
-                                        <tr>
-                                          <th class="text-left">
-                                            {{ $vuetify.lang.t('$vuetify.tax.name') }}
-                                          </th>
-                                          <th class="text-left">
-                                            {{ $vuetify.lang.t('$vuetify.tax.value') }}
-                                          </th>
-                                          <th class="text-left">
-                                            {{ $vuetify.lang.t('$vuetify.tax.to_pay_tax') }}
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr
-                                          v-for="tax in item.taxes"
-                                          :key="tax.name"
-                                        >
-                                          <td style="color: #0d47a1">
-                                            {{ tax.name }}
-                                          </td>
-                                          <td style="color: #0d47a1">
-                                            {{ tax.percent ? tax.value + '%' : tax.value }}
-                                          </td>
-                                          <td style="color: #0d47a1">
-                                            {{ `${user.company.currency}` }} {{
-                                              tax.percent ? parseFloat(tax.value * item.cant * item.price / 100).toFixed(2) : parseFloat(tax.value).toFixed(2)
-                                            }}
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                      <tfoot>
-                                        <tr>
-                                          <td
-                                            style="margin-left: 10px"
-                                            colspan="2"
-                                            class="text-left"
-                                          >
-                                            <b style="color: #db0610">{{
-                                              $vuetify.lang.t('$vuetify.tax.total_pay_tax')
-                                            }}</b>
-                                          </td>
-                                          <td>
-                                            <b style="color: #db0610">
-                                              {{ `${user.company.currency}` }} {{
-                                                parseFloat(total_pay(item)).toFixed(2)
-                                              }}</b>
-                                          </td>
-                                        </tr>
-                                      </tfoot>
-                                    </template>
-                                  </v-simple-table>
-                                </td>
+                                <detail-article-price
+                                  :article="item"
+                                  :currency="user.company.currency"
+                                />
                               </template>
                               <span
                                 v-if="item.totalRefund > 0"
                               >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
                             </v-tooltip>
                           </template>
-                          {{
-                            `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2)}`
-                          }}
+                          {{ `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2)}` }}
                         </template>
                       </app-data-table>
                     </v-col>
                     <v-col
-                      v-show="newSale.articles.length > 0 "
+                      v-show="inventory.articles.length > 0 "
                       cols="12"
                       md="6"
                     />
@@ -404,9 +375,9 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
               <v-col
-                v-show="newSale.articles.length > 0"
+                v-show="inventory.articles.length > 0"
                 cols="12"
-                md="7"
+                md="12"
               >
                 <v-expansion-panel>
                   <v-expansion-panel-header>
@@ -419,41 +390,13 @@
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <extra-data
-                      :pays-show="newSale.pays"
-                      :total="total.toString()"
-                      @updateData="updateData"
-                    />
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-col>
-              <v-col
-                v-show="newSale.articles.length > 0"
-                cols="12"
-                md="5"
-              >
-                <v-expansion-panel
-                  v-show="newSale.articles.length > 0"
-                  cols="12"
-                  md="6"
-                >
-                  <v-expansion-panel-header>
-                    <div>
-                      <v-icon>mdi-database-plus</v-icon>
-                      <span style="text-transform: uppercase;font-weight: bold">
-                        {{ $vuetify.lang.t('$vuetify.menu.resume') }}
-                      </span>
-                    </div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <facture
-                      :edit="false"
-                      :update="update"
-                      :currency="user.company.currency || ''"
-                      :total="total.toString()"
-                      :sub-total="sub_total.toString()"
-                      :total-tax="totalTax.toString()"
-                      :total-disc="totalDisc.toString()"
-                      @updateData="update = false"
+                      :edit="managerInventory"
+                      :sale="inventory"
+                      :total-price="parseFloat(totalPrice).toFixed(2)"
+                      :total-tax="parseFloat(totalTax).toFixed(2)"
+                      :total-discount="parseFloat(totalDisc).toFixed(2)"
+                      :sub-total="parseFloat(subTotal).toFixed(2)"
+                      @updateData="calcTotalSale"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -471,42 +414,16 @@
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
-          <template v-if="newSale.pays.length === 0">
-            <v-btn
-              class="mb-2"
-              color="success"
-              :disabled="!formValid || isActionInProgress"
-              :loading="isActionInProgress"
-              @click="createPreform()"
-            >
-              <v-icon>mdi-calendar-clock</v-icon>
-              {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
-            </v-btn>
-          </template>
-          <template v-else>
-            <v-btn
-              v-show="newSale.pays.length !== 0"
-              class="mb-2"
-              color="success"
-              :disabled="!formValid || isActionInProgress"
-              :loading="isActionInProgress"
-              @click="createNewSale('open')"
-            >
-              <v-icon>mdi-check</v-icon>
-              {{ $vuetify.lang.t('$vuetify.sale.state.open') }}
-            </v-btn>
-            <v-btn
-              v-show="newSale.pays.length !== 0"
-              class="mb-2"
-              color="primary"
-              :disabled="!formValid || isActionInProgress"
-              :loading="isActionInProgress"
-              @click="createNewSale('accepted')"
-            >
-              <v-icon>mdi-check-all</v-icon>
-              {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
-            </v-btn>
-          </template>
+          <v-btn
+            class="mb-2"
+            color="primary"
+            :disabled="!formValid || isActionInProgress"
+            :loading="isActionInProgress"
+            @click="inventoryHandler('accepted')"
+          >
+            <v-icon>mdi-check</v-icon>
+            {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
+          </v-btn>
         </v-card-actions>
       </v-card>
       <v-dialog
@@ -532,7 +449,6 @@
         </v-card>
       </v-dialog>
       <new-discount v-if="this.$store.state.discount.showNewModal" />
-      <new-box v-if="this.$store.state.boxes.showNewModal" />
       <new-modifiers v-if="this.$store.state.modifiers.showNewModal" />
     </v-container>
   </div>
@@ -540,38 +456,38 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import ExtraData from './ExtraData'
-import AppLoading from '../../components/core/AppLoading'
-import Facture from './Facture'
+import ExtraData from '../sales/ExtraData'
 import NewDiscount from '../discount/NewDiscount'
 import NewModifiers from '../modifiers/NewModifiers'
-import NewBox from '../boxes/NewBox'
 import utils from '../../util'
+import DetailArticlePrice from '../sales/DetailArticlePrice'
 
 export default {
-  name: 'NewSale',
+  name: 'ManagerBuy',
   components: {
-    NewBox,
+    DetailArticlePrice,
     NewDiscount,
     NewModifiers,
-    AppLoading,
-    Facture,
     ExtraData
   },
   data () {
     return {
+      showDiscount: false,
+      showModify: false,
+      inventory: {},
+      articleSelected: {},
       loadingData: false,
       editedIndex: -1,
       localArticles: [],
       localDiscounts: [],
       localModifiers: [],
-      localBoxes: [],
-      totalTax: 0,
-      totalDisc: 0,
-      sub_total: 0,
-      total: 0,
       update: false,
       panel: [0, 1, 2],
+
+      totalTax: 0,
+      totalDisc: 0,
+      subTotal: 0,
+      totalPrice: 0,
       formValid: false,
       showInfoAdd: false,
       vBindOption: {
@@ -583,7 +499,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('sale', ['newSale', 'isActionInProgress']),
+    ...mapState('inventory', ['managerInventory', 'newInventory', 'editInventory', 'isActionInProgress']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -594,10 +510,9 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('discount', ['discounts']),
     ...mapState('modifiers', ['modifiers']),
-    ...mapState('sale', ['sales']),
+    ...mapState('inventory', ['inventories']),
     ...mapState('inventory', ['inventories']),
     ...mapGetters('auth', ['user']),
-    ...mapState('boxes', ['boxes', 'showNewModal']),
     getTableColumns () {
       return [
         {
@@ -619,16 +534,6 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.articles.price'),
           value: 'price',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.discount'),
-          value: 'discount',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.modifiers'),
-          value: 'modifiers',
           select_filter: true
         },
         {
@@ -656,73 +561,71 @@ export default {
     modifiers: function () {
       this.getLocalModifiers()
     },
-    boxes: function () {
-      this.getLocalBoxes()
-    },
-    'newSale.no_facture': function () {
-      if (this.sales.filter(art => art.no_facture === this.newSale.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newSale.no_facture).length > 0) {
-        this.newSale.no_facture = this.generateNF()
+    'inventory.no_facture': function () {
+      if (this.inventories.filter(art => art.no_facture === this.inventory.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.inventory.no_facture).length > 0) {
+        this.inventory.no_facture = this.generateNF()
       }
     },
-    'newSale.taxes' () {
-      this.updateData()
+    'inventory.taxes' () {
+      this.calcTotalSale()
     },
-    'newSale.articles' () {
-      this.updateData()
+    'inventory.articles' () {
+      this.calcTotalSale()
     },
-    'newSale.discounts' () {
-      this.updateData()
+    'inventory.discounts' () {
+      this.calcTotalSale()
     }
   },
   async created () {
     this.loadingData = true
+    this.inventory = !this.managerInventory ? this.newInventory : this.editInventory
+    console.log(this.inventory)
+    if (this.managerInventory) {
+      this.calcTotalSale()
+    }
     await this.getArticles()
     await this.getShops().then((s) => {
-      this.newSale.shop = this.shops[0]
+      if (!this.managerInventory) {
+        this.inventory.shop = this.shops[0]
+      }
     })
-    await this.getSales()
-    await this.getInventories()
     await this.getDiscounts().then(() => {
       this.getLocalDiscounts()
     })
     await this.getModifiers().then(() => {
       this.getLocalModifiers()
     })
-    this.newSale.no_facture = this.generateNF()
-    await this.getBoxes()
+    this.loadingData = false
     await this.updateDataArticle()
+    this.inventory.no_facture = this.generateNF()
     this.loadingData = false
   },
   methods: {
-    ...mapActions('boxes', ['toogleNewModal', 'getBoxes']),
     ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSales', 'createSale']),
+    ...mapActions('inventory', ['getSales', 'createSale']),
     ...mapActions('discount', ['getDiscounts']),
     ...mapActions('modifiers', ['getModifiers']),
     generateNF () {
-      // return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
       const seqer = utils.serialMaker()
       seqer.set_prefix('F' + new Date().getFullYear() + '-')
       seqer.set_seq(1000000)
       return seqer.gensym()
     },
     async updateDataArticle () {
-      this.getLocalBoxes()
       this.localArticles = []
-      this.newSale.articles = []
-      if (this.newSale.shop) {
+      if (this.inventory.shop) {
         await this.articles.forEach((value) => {
           if (value.variant_values.length > 0) {
             value.variant_values.forEach((v) => {
-              const artS = v.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+              const artS = v.articles_shops.filter(artS => artS.shop_id === this.inventory.shop.id)
               if (artS.length > 0) {
                 this.validAddToLocalArticle(v, value, artS)
               }
             })
           } else {
-            const artS = value.articles_shops.filter(artS => artS.shop_id === this.newSale.shop.id)
+            const artS = value.articles_shops.filter(artS => artS.shop_id === this.inventory.shop.id)
             if (artS.length > 0) {
               this.validAddToLocalArticle(value, value, artS)
             }
@@ -782,69 +685,19 @@ export default {
         })
       })
     },
-    getLocalBoxes () {
-      this.localBoxes = []
-      if (this.newSale.shop) {
-        this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newSale.shop.id)
-        if (this.localBoxes.length > 0) {
-          this.newSale.box = this.localBoxes[0]
-        }
-      }
-    },
-    calcTotal: function (item) {
-      this.editedIndex = this.newSale.articles.indexOf(item)
-      this.newSale.articles[this.editedIndex].totalCost = parseFloat(this.newSale.articles[this.editedIndex].cost * this.newSale.articles[this.editedIndex].cant).toFixed(2)
-      const total = parseFloat(this.newSale.articles[this.editedIndex].inventory) - parseFloat(this.newSale.articles[this.editedIndex].cant) || 0
-      this.newSale.articles[this.editedIndex].totalCant = parseFloat(total).toFixed(2)
-      item.totalPrice = 0
-      this.total_pay(item)
-      this.totalModifier(item)
-      this.update = true
-      this.updateData()
-    },
-    total_pay (item) {
-      let suma = 0
-      if (item.taxes.length > 0) {
-        item.taxes.forEach((v) => {
-          suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
-        })
-      }
-      item.totalPrice = item.cant * item.price + suma - this.total_discount(item)
-      this.updateData()
-      return suma
-    },
-    totalModifier (item) {
-      let suma = 0
-      if (item.modifiers.length > 0) {
-        item.modifiers.forEach((v) => {
-          suma += v.percent ? item.cant * item.price * v.value / 100 : v.value
-        })
-      }
-      item.totalPrice = item.cant * item.price + suma
-      this.updateData()
-      return suma
-    },
-    total_discount (item) {
-      let disc = 0
-      if (item.discount.length > 0) {
-        item.discount.forEach((v) => {
-          disc += v.percent ? item.cant * item.price * v.value / 100 : v.value
-        })
-      }
-      return disc
-    },
     selectArticle (item) {
       if (item) {
-        if (this.newSale.articles.filter(art => art.article_id === item.article_id).length === 0) {
-          this.newSale.articles.push(item)
+        if (this.inventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
+          this.inventory.articles.push(item)
+          this.calcTotalSale()
         } else {
           this.showInfoAdd = true
         }
       }
     },
     deleteItem (item) {
-      this.newSale.articles.splice(this.newSale.articles.indexOf(item), 1)
-      this.update = true
+      this.inventory.articles.splice(this.inventory.articles.indexOf(item), 1)
+      this.calcTotalSale()
     },
     closeInfoAdd () {
       this.showInfoAdd = false
@@ -853,7 +706,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-            this.$vuetify.lang.t('$vuetify.sale.sale')
+            this.$vuetify.lang.t('$vuetify.supply.name')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_preform'
@@ -872,44 +725,37 @@ export default {
           if (result.isConfirmed) this.createNewSale('preform')
         })
     },
-    async createNewSale (state) {
+    async inventoryHandler (state) {
       let totalCalcP = 0.00
-      this.newSale.pays.forEach(v => {
+      this.inventory.pays.forEach(v => {
         totalCalcP += v.cant
       })
       if (parseFloat(this.total) - parseFloat(totalCalcP) !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_difference_price', [(totalCalcP - this.total + ' ' + this.user.company.currency).toString()]
+          '$vuetify.messages.warning_difference_price', [(totalCalcP - this.totalPrice + ' ' + this.user.company.currency).toString()]
         ))
       } else {
-        if (!this.newSale.box) {
+        if (this.inventory.articles.length > 0) {
+          if (this.$refs.form.validate()) {
+            this.loading = true
+            this.inventory.state = state
+            await this.createSale(this.inventory).then(() => {
+              this.$router.push({ name: 'vending' })
+            })
+          }
+        } else {
           this.loading = false
           this.shopMessageError(this.$vuetify.lang.t(
-            '$vuetify.messages.warning_no_box'
+            '$vuetify.messages.warning_cant_article'
           ))
-        } else {
-          if (this.newSale.articles.length > 0) {
-            if (this.$refs.form.validate()) {
-              this.loading = true
-              this.newSale.state = state
-              await this.createSale(this.newSale).then(() => {
-                this.$router.push({ name: 'vending' })
-              })
-            }
-          } else {
-            this.loading = false
-            this.shopMessageError(this.$vuetify.lang.t(
-              '$vuetify.messages.warning_cant_article'
-            ))
-          }
         }
       }
     },
     shopMessageError (message) {
       this.$Swal.fire({
         title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-          this.$vuetify.lang.t('$vuetify.sale.sale')
+          this.$vuetify.lang.t('$vuetify.supply.name')
         ]),
         text: message,
         icon: 'warning',
@@ -922,32 +768,86 @@ export default {
     },
     handleClose () {
       this.localArticles = []
-      this.newSale.articles = []
+      this.inventory.articles = []
       this.$router.push({ name: 'vending' })
     },
-    updateData () {
+    calcTotalArticle: function (item) {
+      this.editedIndex = this.inventory.articles.indexOf(item)
+      this.inventory.articles[this.editedIndex].totalCost = parseFloat(this.inventory.articles[this.editedIndex].cost *
+              this.inventory.articles[this.editedIndex].cant).toFixed(2)
+      this.inventory.articles[this.editedIndex].totalCant = parseFloat(parseFloat(this.inventory.articles[this.editedIndex].inventory) -
+              parseFloat(this.inventory.articles[this.editedIndex].cant) || 0).toFixed(2)
+      item.totalPrice = item.cant * item.price + this.articleTotalPrice(item) - this.articleTotalDiscount(item) + this.totalModifier(item)
+      this.calcTotalSale()
+    },
+    articleTotalPrice (item) {
+      let tax = 0
+      if (item.taxes.length > 0) {
+        item.taxes.forEach((v) => {
+          tax += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        })
+      }
+      return tax
+    },
+    totalModifier (item) {
+      let modf = 0
+      if (item.modifiers.length > 0) {
+        item.modifiers.forEach((v) => {
+          modf += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        })
+      }
+      return modf
+    },
+    articleTotalDiscount (item) {
+      let disc = 0
+      if (item.discount.length > 0) {
+        item.discount.forEach((v) => {
+          disc += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        })
+      }
+      return disc
+    },
+    calcTotalSale () {
       this.totalTax = 0
       this.totalDisc = 0
-      this.total = 0
-      this.sub_total = 0
-      this.newSale.articles.forEach((v) => {
-        this.sub_total = parseFloat(v.totalPrice) + this.sub_total
+      this.totalPrice = 0
+      this.subTotal = 0
+      this.inventory.articles.forEach((v) => {
+        this.subTotal = parseFloat(v.totalPrice) + this.subTotal
       })
-      this.taxes = this.edit ? this.editSale.taxes
-        : this.newSale.taxes.forEach((v) => {
-          this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
-        })
-      this.newSale.discounts.forEach((v) => {
-        this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+      this.inventory.taxes.forEach((v) => {
+        this.totalTax += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
       })
-      this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
-      this.total = parseFloat(this.total).toFixed(2)
-      this.update = true
+      this.inventory.discounts.forEach((v) => {
+        this.totalDisc += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
+      })
+      this.totalPrice = (this.subTotal + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+      this.totalPrice = parseFloat(this.totalPrice).toFixed(2)
+    },
+    showModifyArticle ($event) {
+      this.showModify = true
+      this.articleSelected = $event
+    },
+    closeModify () {
+      this.showModify = false
+    },
+    saveModify () {
+      this.calcTotalArticle(this.articleSelected)
+      this.showModify = false
+    },
+    showDiscountArticle ($event) {
+      this.showDiscount = true
+      this.articleSelected = $event
+    },
+    closeDiscount () {
+      this.showDiscount = false
+    },
+    saveDiscount () {
+      this.calcTotalArticle(this.articleSelected)
+      this.showDiscount = false
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+  <style scoped />

@@ -8,121 +8,24 @@
         <new-refound
           v-if="showNewModal"
         />
-        <print-facture v-if="showShowModal && printer==='ticket'" />
-        <print-facture-letter v-if="showShowModal && printer==='letter'" />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.vending'),])"
+                                  [$vuetify.lang.t('$vuetify.supply.name'),])"
           :headers="getTableColumns"
-          csv-filename="SaleProducts"
+          csv-filename="BuyProducts"
           :manager="'vending'"
-          :items="localSales"
+          :items="localInventories"
           :options="vBindOption"
           :sort-by="['no_facture']"
           :sort-desc="[false, true]"
           multi-sort
           :is-loading="isTableLoading"
-          @create-row="createSaleHandler"
-          @edit-row="editSaleHandler($event)"
-          @delete-row="deleteSaleHandler($event)"
+          @create-row="createBuyHandler"
+          @edit-row="editBuyHandler($event)"
+          @delete-row="deleteBuyHandler($event)"
         >
           <template v-slot:item.no_facture="{ item }">
-            <template>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <b><v-icon
-                    style="color: red"
-                    class="mr-2"
-                    small
-                    v-bind="attrs"
-                    @click="openPrintModal('ticket', item.id)"
-                    v-on="on"
-                  >
-                    mdi-printer
-                  </v-icon></b>
-                </template>
-                <span>{{ $vuetify.lang.t('$vuetify.report.print_ticket') }}</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <b><v-icon
-                    style="color: #1a5dd6"
-                    class="mr-2"
-                    small
-                    v-bind="attrs"
-                    @click="openPrintModal('letter', item.id)"
-                    v-on="on"
-                  >
-                    mdi-printer-settings
-                  </v-icon></b>
-                </template>
-                <span>{{ $vuetify.lang.t('$vuetify.report.print_letter') }}</span>
-              </v-tooltip>
-            </template>
             {{ item.no_facture }}
-          </template>
-          <template v-slot:item.state="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <template v-if="item.state !== 'preform'">
-                  <v-autocomplete
-                    v-model="item.state"
-                    :disabled="item.state !== 'open'"
-                    chips
-                    :items="getLocalStates"
-                    item-text="text"
-                    item-value="value"
-                    :style="{'width':'160px'}"
-                    v-bind="attrs"
-                    v-on="on"
-                    @input="changeState(item)"
-                  >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.item.value"
-                        @click="data.select"
-                      >
-                        <i :style="'color: ' + data.item.color">
-                          <v-icon left>
-                            {{ data.item.icon }}
-                          </v-icon>
-                          {{ data.item.text }}</i>
-                      </v-chip>
-                    </template>
-                    <template v-slot:item="data">
-                      <template v-if="typeof data.item !== 'object'">
-                        <v-list-item-content v-text="data.item" />
-                      </template>
-                      <template v-else>
-                        <v-list-item-icon>
-                          <v-icon
-                            left
-                            :style="'color: ' + data.item.color"
-                          >
-                            {{ data.item.icon }}
-                          </v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title
-                            :style="'color: ' + data.item.color"
-                          >
-                            {{ data.item.text }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template>
-                    </template>
-                  </v-autocomplete>
-                </template>
-                <template v-else>
-                  <v-chip>
-                    <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
-                      {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
-                    </i>
-                  </v-chip>
-                </template>
-              </template>
-            </v-tooltip>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
             <v-tooltip bottom>
@@ -364,25 +267,20 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import NewRefound from '../refund/NewRefound'
 import DetailRefund from '../refund/DetailRefund'
-import PrintFacture from './PrintFacture'
-import PrintFactureLetter from './PrintFactureLetter'
 import ListPay from '../pay/ListPay'
-import DetailArticlePrice from './DetailArticlePrice'
 
 export default {
-  name: 'ListSale',
-  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay, DetailArticlePrice },
+  name: 'ListBuy',
+  components: { DetailRefund, NewRefound, ListPay },
   data () {
     return {
       menu: false,
-
       fav: true,
       message: false,
       hints: true,
-      localSales: [],
+      localInventories: [],
       search: '',
       localAccess: {},
-      printer: '',
       vBindOption: {
         itemKey: 'no_facture',
         singleExpand: false,
@@ -391,12 +289,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('sale', [
+    ...mapState('inventory', [
       'showNewModal',
       'showEditModal',
-      'loadData',
+      'loading',
       'showShowModal',
-      'sales',
+      'inventories',
       'isTableLoading'
     ]),
     ...mapState('article', ['articles']),
@@ -430,39 +328,17 @@ export default {
           sortable: false
         }
       ]
-    },
-    getLocalStates () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
-          value: 'open',
-          icon: 'mdi-star-half',
-          color: '#4caf50'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
-          value: 'accepted',
-          icon: 'mdi-star',
-          color: '#3f51b5'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
-          value: 'cancelled',
-          icon: 'mdi-star-off',
-          color: '#ff0000'
-        }
-      ]
     }
   },
   watch: {
-    sales: function () {
-      this.localSales = []
-      this.sales.forEach((value) => {
-        const sale = value
+    inventories: function () {
+      this.localInventories = []
+      this.inventories.forEach((value) => {
+        const inventory = value
         value.articles.forEach((v, i) => {
-          if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+          if (v.parent_id) { inventory.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
         })
-        this.localSales.push(sale)
+        this.localInventories.push(inventory)
       })
     },
     loadData: function () {
@@ -473,25 +349,20 @@ export default {
     this.loadInitData()
   },
   methods: {
-    ...mapActions('sale', [
+    ...mapActions('inventory', [
       'toogleNewModal',
       'openEditModal',
       'openShowModal',
-      'getSales',
-      'updateSale',
-      'switchLoadData',
-      'deleteSale'
+      'getInventories',
+      'updateInventory',
+      'deleteInventory'
     ]),
     ...mapActions('article', ['getArticles']),
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
-      this.localSales = []
-      await this.getSales()
+      this.localInventories = []
+      await this.getInventories()
       await this.getArticles()
-      this.switchLoadData(false)
-    },
-    changeState (item) {
-      this.updateSale(item)
     },
     refundArticle (sale, article) {
       if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
@@ -524,12 +395,12 @@ export default {
       })
       return item.cant * item.price + sum - discount - item.moneyRefund
     },
-    createSaleHandler () {
+    createBuyHandler () {
       if (this.articles.length === 0) {
         this.$Swal
           .fire({
             title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-              this.$vuetify.lang.t('$vuetify.sale.sale')
+              this.$vuetify.lang.t('$vuetify.supply.name')
             ]),
             text: this.$vuetify.lang.t(
               '$vuetify.messages.warning_no_article'
@@ -542,24 +413,20 @@ export default {
             confirmButtonColor: 'red'
           })
       } else {
-        this.$store.state.sale.managerSale = false
+        this.$store.state.inventory.managerInventory = false
         this.$router.push({ name: 'vending_new' })
       }
     },
-    editSaleHandler ($event) {
+    editBuyHandler ($event) {
       this.openEditModal($event)
-      this.$store.state.sale.managerSale = true
+      this.$store.state.inventory.managerInventory = true
       this.$router.push({ name: 'vending_edit' })
     },
-    openPrintModal (print, id) {
-      this.printer = print
-      this.openShowModal(id)
-    },
-    deleteSaleHandler (articleId) {
+    deleteBuyHandler (articleId) {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.sale.sale')
+            this.$vuetify.lang.t('$vuetify.supply.name')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -575,7 +442,7 @@ export default {
           confirmButtonColor: 'red'
         })
         .then((result) => {
-          if (result.isConfirmed) this.deleteSale(articleId)
+          if (result.isConfirmed) this.deleteInventory(articleId)
         })
     }
   }
