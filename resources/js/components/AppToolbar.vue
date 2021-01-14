@@ -391,9 +391,11 @@ export default {
       this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
     },
     handleSales () {
+      this.$store.state.sale.managerSale = false
       this.$router.push({ name: 'vending_new' }).catch(() => {})
     },
     handleBuy () {
+      this.$store.state.inventory.managerInventory = false
       this.$router.push({ name: 'supply_add' }).catch(() => {})
     }
   }

@@ -351,7 +351,7 @@ export const protectedRoute = [
               hiddenInMenu: false,
               requiresAuth: true
             },
-            component: () => import('../views/inventory/ListInventory')
+            component: () => import('../views/buy/ListBuy')
           },
           {
             path: '/finance/buy.add',
@@ -363,7 +363,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/inventory/ManagerInventory')
+            component: () => import('../views/buy/ManagerBuy')
           },
           {
             path: '/finance/supply.edit',
@@ -375,7 +375,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/inventory/ManagerInventory')
+            component: () => import('../views/buy/ManagerBuy')
           },
           {
             path: '/finance/tax.list',
