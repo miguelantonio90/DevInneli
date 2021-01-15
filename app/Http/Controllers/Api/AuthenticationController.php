@@ -29,7 +29,6 @@ class AuthenticationController extends Controller
     public function user()
     {
         $user = auth()->user();
-        dd($user);
         $company = Company::findOrFail($user['company_id']);
         $position = Position::findOrFail($user['position_id']);
         $user['position']->accessPin = $position['accessPin'] === 1;
