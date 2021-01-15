@@ -677,7 +677,7 @@ export default {
     ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSales', 'createSale', 'fetchSaleNumber']),
+    ...mapActions('sale', ['getSales', 'createSale', 'updateSale', 'fetchSaleNumber']),
     ...mapActions('discount', ['getDiscounts']),
     ...mapActions('modifiers', ['getModifiers']),
     generateNF () {
@@ -829,9 +829,15 @@ export default {
             if (this.$refs.form.validate()) {
               this.loading = true
               this.sale.state = state
-              await this.createSale(this.sale).then(() => {
-                this.$router.push({ name: 'vending' })
-              })
+              if (!this.managerSale) {
+                await this.createSale(this.sale).then(() => {
+                  this.$router.push({ name: 'vending' })
+                })
+              } else {
+                await this.updateSale(this.sale).then(() => {
+                  this.$router.push({ name: 'vending' })
+                })
+              }
             }
           } else {
             this.loading = false
