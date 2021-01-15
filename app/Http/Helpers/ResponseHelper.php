@@ -2,7 +2,6 @@
 
 namespace App\Http\Helpers;
 
-use Exception;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -19,10 +18,9 @@ class ResponseHelper
      *
      * @param $result
      * @param $message
-     * @return JsonResponse
-     * @throws Exception
+     * @return JsonResponse|Response
      */
-    public static function sendResponse($result, $message): JsonResponse
+    public static function sendResponse($result, $message)
     {
 
         $response = [

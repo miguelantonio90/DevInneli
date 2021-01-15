@@ -1,4 +1,4 @@
-<?php /** @noinspection SenselessProxyMethodInspection */
+<?php
 
 namespace App\Providers;
 
@@ -27,8 +27,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(): void
+    public function boot()
     {
+        //
+
         parent::boot();
     }
 
@@ -37,11 +39,13 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map(): void
+    public function map()
     {
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
+
+        //
     }
 
     /**
@@ -51,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes(): void
+    protected function mapApiRoutes()
     {
         Route::prefix('api')
             ->middleware('api')
@@ -66,7 +70,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes(): void
+    protected function mapWebRoutes()
     {
         Route::middleware('web')
             ->namespace($this->namespace)

@@ -7,9 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 /**
  * @group Auth endpos
@@ -27,8 +24,7 @@ class AuthenticationController extends Controller
     }
 
     /**
-     * @return JsonResponse|Response
-     * @throws Exception
+     * @return mixed
      */
     public function user()
     {
@@ -40,7 +36,6 @@ class AuthenticationController extends Controller
         $user['position']->disabled = $position['key'] === 'super_manager';
         $user['company'] = $company;
         $user['position'] = $position;
-
         return ResponseHelper::sendResponse($user, '');
     }
 }

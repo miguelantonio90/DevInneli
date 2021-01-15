@@ -2,16 +2,29 @@
 
 namespace App\Providers;
 
-use App\Passport\Client;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
-
-    public function register(): void
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
     {
         Passport::ignoreMigrations();
-        Passport::useClientModel(Client::class);
+        Passport::useClientModel('App\Passport\Client');
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
     }
 }

@@ -116,7 +116,7 @@ class RegisterController extends Controller
                     'title' => ['name' => 'manager_article', 'value' => true],
                     'actions' => [
                         'just_yours' => false, 'list' => true, 'create' => true, 'transport' => true,
-                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                        'edit' => true, 'delete' => true, 'transport' => true, 'import' => true, 'export' => true
                     ]
                 ],
                 [

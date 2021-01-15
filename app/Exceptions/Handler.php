@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 
 namespace App\Exceptions;
 
@@ -32,28 +32,27 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  Throwable  $e
+     * @param  Throwable  $exception
      * @return void
      *
      * @throws Exception
-     * @throws Throwable
      */
-    public function report(Throwable $e): void
+    public function report(Throwable $exception)
     {
-        parent::report($e);
+        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  Request  $request
-     * @param  Throwable  $e
+     * @param  Throwable  $exception
      * @return Response
      *
      * @throws Throwable
      */
-    public function render($request, Throwable $e): Response
+    public function render($request, Throwable $exception)
     {
-        return parent::render($request, $e);
+        return parent::render($request, $exception);
     }
 }
