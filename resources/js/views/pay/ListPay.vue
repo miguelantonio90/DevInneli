@@ -4,7 +4,7 @@
       v-if="showNewModal"
       :pays="sale.pays"
       :payments="payments"
-      :pending="totalPrice - totalPays"
+      :pending="totalCost - totalPays"
       @addPayment="addToPayment"
     />
     <v-card>
@@ -17,7 +17,7 @@
             <facture
               :edit="true"
               :sale="sale"
-              :total-price="parseFloat(totalPrice).toFixed(2)"
+              :total-cost="parseFloat(totalCost).toFixed(2)"
               :total-tax="parseFloat(totalTax).toFixed(2)"
               :total-discount="parseFloat(totalDiscount).toFixed(2)"
               :sub-total="parseFloat(subTotal).toFixed(2)"
@@ -37,10 +37,9 @@
               :view-new-button="show"
               :hide-footer="!show"
               :view-delete-button="show"
-              :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
+              :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalCost).toFixed(2): ''"
               csv-filename="Categories"
               :headers="getTableColumns"
-              :is-loading="isTableLoading"
               :items="sale.pays"
               :manager="'payment'"
               :sort-by="['name']"
@@ -64,7 +63,7 @@
                   @open="openEditCant(item)"
                   @save="saveEditCant(item)"
                 >
-                  <div>{{ `${currency + ' ' + item.cant}` }}</div>
+                  <div>{{ `${currency + ' ' + parseFloat(item.cant).toFixed(2)}` }}</div>
                   <template v-slot:input>
                     <div class="mt-4 title">
                       {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -108,7 +107,7 @@ export default {
       type: Boolean,
       default: false
     },
-    totalPrice: {
+    totalCost: {
       type: String,
       default: '0.00'
     },
@@ -203,7 +202,7 @@ export default {
       'deletePayment'
     ]),
     addNewPayment () {
-      if (this.totalPays < this.totalPrice) { this.toogleNewModal(true) } else {
+      if (this.totalPays < this.totalCost) { this.toogleNewModal(true) } else {
         this.$Swal
           .fire({
             title: this.$vuetify.lang.t('$vuetify.titles.new', [
@@ -260,10 +259,10 @@ export default {
       this.cant = item.cant
     },
     saveEditCant (item) {
-      if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalPrice) {
+      if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalCost) {
         item.cant = this.cant
       } else {
-        item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
+        item.cant = parseFloat((this.totalCost - this.totalPays).toString()) + parseFloat(item.cant)
       }
       item.cant = parseFloat((item.cant).toString()).toFixed(2)
       this.calcTotalPay()

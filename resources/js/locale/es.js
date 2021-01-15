@@ -53,6 +53,7 @@ export default {
   wait: 'Espere por favor...',
   phone_holder: 'Entre su número de teléfono',
   price: 'Precio',
+  cost: 'Costo',
   color: 'Color',
   principal: 'Principal',
   file: 'Archivo',

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use NunoMaduro\Collision\Provider;
 use PhpParser\Node\Scalar\String_;
 
 /**
@@ -63,6 +64,11 @@ class Sale extends Model
     public function client(): HasOne
     {
         return $this->hasOne(Client::class);
+    }
+
+    public function supplier(): HasOne
+    {
+        return $this->hasOne(Provider::class);
     }
 
     public function articles_shops(): HasMany

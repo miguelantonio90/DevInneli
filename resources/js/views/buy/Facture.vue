@@ -62,7 +62,7 @@
       </v-row>
       <v-row
         v-for="tax in sale.taxes"
-        :key="tax.id"
+        :key="tax.name"
       >
         <v-col
           cols="12"
@@ -87,13 +87,13 @@
       </v-row>
       <v-row
         v-for="disc in sale.discounts"
-        :key="disc.id"
+        :key="disc.name"
       >
         <v-col
           cols="12"
           md="6"
         >
-          <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ disc.name }})</b>
+          <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
         </v-col>
         <v-col
           v-if="disc.percent==='true'"
@@ -121,7 +121,7 @@
           cols="12"
           md="6"
         >
-          {{ `${getCurrency + ' ' + totalCost}` }}
+          {{ `${getCurrency + ' ' + totalPrice}` }}
         </v-col>
       </v-row>
     </v-card-text>
@@ -150,7 +150,7 @@ export default {
         return {}
       }
     },
-    totalCost: {
+    totalPrice: {
       type: String,
       default: '0.00'
     },

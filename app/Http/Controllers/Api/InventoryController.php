@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
-use App\Managers\InventoryManager;
+use App\Managers\BuyManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,15 +13,15 @@ use Illuminate\Http\Response;
 class InventoryController extends Controller
 {
     /**
-     * @var InventoryManager
+     * @var BuyManager
      */
     private $inventoryManager;
 
     /**
      * UserController constructor.
-     * @param  InventoryManager  $inventoryManager
+     * @param  BuyManager  $inventoryManager
      */
-    public function __construct(InventoryManager $inventoryManager)
+    public function __construct(BuyManager $inventoryManager)
     {
         parent::__construct();
 
