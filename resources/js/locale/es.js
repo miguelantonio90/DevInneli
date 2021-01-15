@@ -30,7 +30,7 @@ export default {
   noDefined: 'No definido',
   aboutMe: 'Acerca de mi',
   activeAccount:
-        'Hola, su cuenta se ha creada, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
+        'Hola, su cuenta se ha creado, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
   confirm_password: 'Confirmar Contraseña',
   confirm_pinCode: 'Confirmar Código',
   company: 'Compañía',
