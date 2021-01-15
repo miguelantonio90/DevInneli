@@ -12,11 +12,11 @@
     <v-spacer />
     <v-toolbar-items>
       <v-tooltip
-        v-if="showLockIcon"
         bottom
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            v-if="showLockIcon"
             id="mdi_lock"
             v-bind="attrs"
             class="mr-3"
@@ -41,6 +41,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            v-if="showSalesIcon"
             id="mdi_currency_usd"
             v-bind="attrs"
             class="mr-3"
@@ -59,6 +60,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon
+            v-if="showBuyIcon"
             id="mdi_cart"
             v-bind="attrs"
             class="mr-3"
