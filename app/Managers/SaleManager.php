@@ -104,7 +104,7 @@ class SaleManager extends BaseManager
             $sales = Sale::latest()
                 ->where('company_id', '=', $company->id)
                 ->where('type','=','sale')
-                ->when($this->getAccessPermit()[2]['actions']['just_yours'] === true, function ($query) {
+                ->when($this->getAccessPermit()[2]->actions->just_yours === true, function ($query) {
                     return $query->where('created_by', '=', cache()->get('userPin')['id']);
                 })
                 ->with('company')
@@ -118,15 +118,6 @@ class SaleManager extends BaseManager
                 ->get();
         }
         return $this->filterSale($sales);
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    private function getAccessPermit()
-    {
-        return json_decode(cache()->get('userPin')->position['access_permit']);
     }
 
     public function filterSale($sales)
@@ -242,6 +233,15 @@ class SaleManager extends BaseManager
                 ->get()[0];
         }
         return $sales;
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAccessPermit()
+    {
+        return json_decode(cache()->get('userPin')->position['access_permit']);
     }
 
     /**
@@ -518,8 +518,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[6]['actions']['just_yours']
-            || $this->getAccessPermit()[2]['actions']['just_yours'] || $this->getAccessPermit()[9]['actions']['just_yours']) {
+        if ($this->getAccessPermit()[6]->actions->just_yours
+            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();
@@ -589,10 +589,10 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[9]['actions']['just_yours']) {
+        if ($this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
-        } elseif ($this->getAccessPermit()[6]['actions']['just_yours']
-            && $this->getAccessPermit()[2]['actions']['just_yours']) {
+        } elseif ($this->getAccessPermit()[6]->actions->just_yours
+            && $this->getAccessPermit()[2]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get()->unique('name');
@@ -665,7 +665,7 @@ class SaleManager extends BaseManager
             ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->when($this->getAccessPermit()[9]['actions']['just_yours'] === true, function ($query) {
+            ->when($this->getAccessPermit()[9]->actions->just_yours === true, function ($query) {
                 return $query->where('sales.created_by', '=', cache()->get('userPin')['id']);
             })
             ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
@@ -749,8 +749,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[6]['actions']['just_yours']
-            || $this->getAccessPermit()[2]['actions']['just_yours'] || $this->getAccessPermit()[9]['actions']['just_yours']) {
+        if ($this->getAccessPermit()[6]->actions->just_yours
+            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();

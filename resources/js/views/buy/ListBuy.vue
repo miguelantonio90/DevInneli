@@ -111,7 +111,7 @@
                   <tbody>
                     <tr
                       v-for="article in item.articles"
-                      :key="article.name"
+                      :key="article.id"
                     >
                       <td>
                         <template v-if="article.refounds.length > 0">
@@ -159,29 +159,32 @@
                       </td>
                       <td>{{ `${user.company.currency + ' ' + article.cost}` }}</td>
                       <td>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <b><v-icon
-                              :color="article.moneyRefund > 0 ? 'red':'primary'"
-                              class="mr-2"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              mdi-information
-                            </v-icon></b>
-                          </template>
-                          <template>
-                            <detail-article-cost
-                              v-if="article.taxes.length > 0 || article.discount.length > 0"
-                              :article="article"
-                              :currency="user.company.currency"
-                            />
-                            <span
-                              v-if="article.moneyRefund > 0"
-                            >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
-                          </template>
-                        </v-tooltip>
+                        <template
+                          v-if="article.taxes.length > 0 || article.discount.length > 0"
+                        >
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <b><v-icon
+                                :color="article.moneyRefund > 0 ? 'red':'primary'"
+                                class="mr-2"
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information
+                              </v-icon></b>
+                            </template>
+                            <template>
+                              <detail-article-cost
+                                :article="article"
+                                :currency="user.company.currency"
+                              />
+                              <span
+                                v-if="article.moneyRefund > 0"
+                              >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
+                            </template>
+                          </v-tooltip>
+                        </template>
                         <span>{{ `${user.company.currency + ' ' + parseFloat(article.totalCost).toFixed(2)}` }}</span>
                       </td>
                       <td>
@@ -202,15 +205,14 @@
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
                               <b><v-icon
-                                v-if="article.cant > 0"
                                 style="color: #ff752b"
                                 class="mr-2"
                                 small
                                 v-bind="attrs"
                                 v-on="on"
-                                @click="cancelProductPreform(item, article)"
+                                @click="refundArticle(item, article)"
                               >
-                                mdi-cancel
+                                mdi-undo
                               </v-icon></b>
                             </template>
                             <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>

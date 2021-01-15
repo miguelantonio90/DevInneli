@@ -30,34 +30,10 @@
           <b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b>
         </v-col>
         <v-col
-          v-if="subTotal > 0"
           cols="12"
           md="6"
         >
           {{ `${getCurrency}` }} {{ subTotal }}
-        </v-col>
-        <v-col v-else>
-          <v-tooltip
-            right
-            cols="12"
-            md="6"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-information-outline
-              </v-icon>
-            </template>
-            <span>
-              <b>{{ $vuetify.lang.t('$vuetify.messages.warning_tax_cost') }}</b>
-            </span>
-          </v-tooltip><span style="color: crimson; text-decoration: line-through;">
-            {{ `${getCurrency + ' ' + sale.subTotal}` }}
-          </span>
         </v-col>
       </v-row>
       <v-row
@@ -121,7 +97,7 @@
           cols="12"
           md="6"
         >
-          {{ `${getCurrency + ' ' + totalCost}` }}
+          {{ `${getCurrency + ' ' + totalPrice}` }}
         </v-col>
       </v-row>
     </v-card-text>
@@ -150,7 +126,7 @@ export default {
         return {}
       }
     },
-    totalCost: {
+    totalPrice: {
       type: String,
       default: '0.00'
     },

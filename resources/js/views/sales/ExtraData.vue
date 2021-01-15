@@ -158,7 +158,7 @@
           :total-price="parseFloat(totalPrice).toFixed(2)"
           :total-tax="parseFloat(totalTax).toFixed(2)"
           :total-discount="parseFloat(totalDiscount).toFixed(2)"
-          :sub-total="parseFloat(subTotal).toFixed(2)"
+          :sub-total="subTotal? parseFloat(subTotal).toFixed(2): 0.00"
           :currency="user.company.currency"
         />
       </v-col>

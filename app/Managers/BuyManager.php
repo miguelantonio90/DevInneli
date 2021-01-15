@@ -257,7 +257,8 @@ class BuyManager extends BaseManager
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
                 ->first();
-            $articleShop->stock += $value['cant'];
+            $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
+            $articleShop['stock'] = $articleShop['stock'] - $oldCant + $value['cant'];
             $articleShop->save();
         }
         foreach ($pays as $k => $pay) {
@@ -291,6 +292,40 @@ class BuyManager extends BaseManager
 
         $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
+    }
+    /**
+     * @param $sale
+     * @param $articleShopId
+     * @param $data
+     * @return float
+     */
+    private function createSaleArticleShop($sale, $articleShopId, $data): float
+    {
+        $cant = 0;
+        $salesArtShop = SalesArticlesShops::latest()
+            ->where('sale_id', '=', $sale->id)
+            ->where('articles_shops_id', '=', $articleShopId)
+            ->get();
+        if (count($salesArtShop) === 0) {
+            $saleAS = SalesArticlesShops::create([
+                'sale_id' => $sale->id,
+                'articles_shops_id' => $articleShopId,
+                'cant' => $data['cant'],
+                'price' => $data['price']?:0.00
+            ]);
+        } else {
+            $saleAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
+            $cant = $saleAS['cant'];
+            $saleAS['cant'] = $data['cant'];
+            $saleAS['price'] = $data['price'];
+            $saleAS->save();
+        }
+        $discounts = [];
+        foreach ($data['discount'] as $key => $discount) {
+            $discounts[] = $discount['id'];
+        }
+        $saleAS->discount()->sync($discounts);
+        return $cant;
     }
 
     /**

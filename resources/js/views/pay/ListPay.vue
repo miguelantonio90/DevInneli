@@ -4,7 +4,7 @@
       v-if="showNewModal"
       :pays="sale.pays"
       :payments="payments"
-      :pending="totalCost - totalPays"
+      :pending="totalPrice - totalPays"
       @addPayment="addToPayment"
     />
     <v-card>
@@ -17,7 +17,7 @@
             <facture
               :edit="true"
               :sale="sale"
-              :total-cost="parseFloat(totalCost).toFixed(2)"
+              :total-price="parseFloat(totalPrice).toFixed(2)"
               :total-tax="parseFloat(totalTax).toFixed(2)"
               :total-discount="parseFloat(totalDiscount).toFixed(2)"
               :sub-total="parseFloat(subTotal).toFixed(2)"
@@ -37,7 +37,7 @@
               :view-new-button="show"
               :hide-footer="!show"
               :view-delete-button="show"
-              :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalCost).toFixed(2): ''"
+              :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
               csv-filename="Categories"
               :headers="getTableColumns"
               :items="sale.pays"
@@ -107,7 +107,7 @@ export default {
       type: Boolean,
       default: false
     },
-    totalCost: {
+    totalPrice: {
       type: String,
       default: '0.00'
     },
@@ -192,6 +192,7 @@ export default {
   },
   created () {
     this.getPayments()
+    this.calcTotalPay()
   },
   methods: {
     ...mapActions('payment', [
@@ -202,7 +203,7 @@ export default {
       'deletePayment'
     ]),
     addNewPayment () {
-      if (this.totalPays < this.totalCost) { this.toogleNewModal(true) } else {
+      if (this.totalPays < this.totalPrice) { this.toogleNewModal(true) } else {
         this.$Swal
           .fire({
             title: this.$vuetify.lang.t('$vuetify.titles.new', [
@@ -259,15 +260,16 @@ export default {
       this.cant = item.cant
     },
     saveEditCant (item) {
-      if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalCost) {
+      if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalPrice) {
         item.cant = this.cant
       } else {
-        item.cant = parseFloat((this.totalCost - this.totalPays).toString()) + parseFloat(item.cant)
+        item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
       }
       item.cant = parseFloat((item.cant).toString()).toFixed(2)
       this.calcTotalPay()
     },
     calcTotalPay () {
+      console.log('sadsadasdas')
       this.totalPays = 0.00
       this.sale.pays.forEach(v => {
         this.totalPays += parseFloat(v.cant)

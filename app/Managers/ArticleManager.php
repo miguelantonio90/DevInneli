@@ -23,7 +23,7 @@ class ArticleManager extends BaseManager
 
     /**
      * ArticleManager constructor.
-     * @param  VariantManager  $variantManager
+     * @param VariantManager $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -111,8 +111,7 @@ class ArticleManager extends BaseManager
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
-                $articles[$k]['percent'] = round(($difference / $article['cost']) * 100,
-                    2);
+                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] == 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100, 2);
             }
         }
         return $articles;
@@ -130,7 +129,7 @@ class ArticleManager extends BaseManager
             ->orderBy('ref', 'DESC')
             ->first();
 
-        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
+        return ($number && count($number->toArray()) > 0) ? (int)$number['ref'] : 1000;
     }
 
     /**
@@ -305,7 +304,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param  Articles  $article
+     * @param Articles $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void

@@ -247,11 +247,8 @@
                           </v-edit-dialog>
                         </template>
                         <template v-slot:[`item.totalCost`]="{ item }">
-                          <template>
-                            <v-tooltip
-                              v-show="item.taxes.length > 0 || item.discount.length > 0"
-                              bottom
-                            >
+                          <template v-if="item.taxes.length > 0 || item.discount.length > 0">
+                            <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
                                 <b><v-icon
                                   class="mr-2"
@@ -330,7 +327,7 @@
             color="primary"
             :disabled="!formValid || isActionInProgress || getDifference !== 0"
             :loading="isActionInProgress"
-            @click="inventoryHandler('accepted')"
+            @click="inventoryHandler()"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
@@ -461,7 +458,7 @@ export default {
     getDifference () {
       let totalCalcP = 0.00
       this.inventory.pays.forEach(v => {
-        totalCalcP += v.cant
+        totalCalcP += parseFloat(v.cant)
       })
       return parseFloat(this.totalCost) - parseFloat(totalCalcP)
     }
@@ -596,7 +593,7 @@ export default {
     closeInfoAdd () {
       this.showInfoAdd = false
     },
-    async inventoryHandler (state) {
+    async inventoryHandler () {
       if (this.getDifference !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
@@ -608,11 +605,11 @@ export default {
             this.loading = true
             if (!this.managerInventory) {
               await this.createInventory(this.inventory).then(() => {
-                this.$router.push({ name: 'buy_list' })
+                this.$router.push({ name: 'supply_product' })
               })
             } else {
               await this.updateInventory(this.inventory).then(() => {
-                this.$router.push({ name: 'buy_list' })
+                this.$router.push({ name: 'supply_product' })
               })
             }
           }
@@ -641,7 +638,7 @@ export default {
     handleClose () {
       this.localArticles = []
       this.inventory.articles = []
-      this.$router.push({ name: 'vending' })
+      this.$router.push({ name: 'supply_product' })
     },
     calcTotalArticle: function (item) {
       this.editedIndex = this.inventory.articles.indexOf(item)
@@ -676,7 +673,7 @@ export default {
       this.totalCost = 0
       this.subTotal = 0
       this.inventory.articles.forEach((v) => {
-        this.subTotal = parseFloat(v.cost) + this.subTotal
+        this.subTotal = parseFloat(v.cost) * parseFloat(v.cant) + this.subTotal
       })
       this.inventory.taxes.forEach((v) => {
         this.totalTax += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value

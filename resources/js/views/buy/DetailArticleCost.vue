@@ -12,7 +12,7 @@
           cols="12"
           md="6"
         >
-          {{ `${currency + ' ' + parseFloat(article.subTotal).toFixed(2)}` }}
+          {{ `${currency + ' ' + parseFloat(article.cant * article.cost).toFixed(2)}` }}
         </v-col>
       </v-row>
       <v-row
@@ -30,7 +30,7 @@
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(tax.value * article.subTotal / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
+          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(tax.value * article.cant * article.cost / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
         </v-col>
         <v-col
           v-else
@@ -55,7 +55,7 @@
           cols="12"
           md="6"
         >
-          <i style="color: red">-{{ `${currency + ' ' + parseFloat(disc.value * article.subTotal / 100).toFixed(2)}` }}</i>
+          <i style="color: red">-{{ `${currency + ' ' + parseFloat(disc.value * article.cant * article.cost / 100).toFixed(2)}` }}</i>
         </v-col>
         <v-col
           v-else

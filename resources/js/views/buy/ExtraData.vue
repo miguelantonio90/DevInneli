@@ -153,7 +153,7 @@
         <list-pay
           :edit="edit"
           :sale="sale"
-          :total-cost="parseFloat(totalCost).toFixed(2)"
+          :total-price="parseFloat(getTotalCost).toFixed(2)"
           :total-tax="parseFloat(totalTax).toFixed(2)"
           :total-discount="parseFloat(totalDiscount).toFixed(2)"
           :sub-total="parseFloat(subTotal).toFixed(2)"
@@ -214,7 +214,10 @@ export default {
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['newSale', 'editSale']),
     ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
+    getTotalCost () {
+      return this.totalCost
+    }
   },
   watch: {
     discounts: function () {
