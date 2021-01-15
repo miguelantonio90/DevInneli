@@ -32,14 +32,15 @@ class AuthenticationController extends Controller
      */
     public function user()
     {
-        $company = Company::findOrFail(auth()->user()['company_id']);
-        $position = Position::findOrFail(auth()->user()['position_id']);
-        auth()->user()['position']->accessPin = $position['accessPin'] === 1;
-        auth()->user()['position']->accessEmail = $position['accessEmail'] === 1;
-        auth()->user()['position']->disabled = $position['key'] === 'super_manager';
-        auth()->user()['company'] = $company;
-        auth()->user()['position'] = $position;
+        $user = auth()->user();
+        $company = Company::findOrFail($user['company_id']);
+        $position = Position::findOrFail($user['position_id']);
+        $user['position']->accessPin = $position['accessPin'] === 1;
+        $user['position']->accessEmail = $position['accessEmail'] === 1;
+        $user['position']->disabled = $position['key'] === 'super_manager';
+        $user['company'] = $company;
+        $user['position'] = $position;
 
-        return ResponseHelper::sendResponse(auth()->user(), '');
+        return ResponseHelper::sendResponse($user, '');
     }
 }
