@@ -19,10 +19,10 @@ class ResponseHelper
      *
      * @param $result
      * @param $message
-     * @return JsonResponse|Response
+     * @return JsonResponse
      * @throws Exception
      */
-    public static function sendResponse($result, $message)
+    public static function sendResponse($result, $message): JsonResponse
     {
 
         $response = [
@@ -38,7 +38,7 @@ class ResponseHelper
                 ]
             ] : ''
         ];
-        return response()->json($response);
+        return response()->json($response, 200);
     }
 
 
