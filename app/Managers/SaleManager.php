@@ -52,7 +52,11 @@ class SaleManager extends BaseManager
 
         if ($number && count($number->toArray()) > 0) {
             $lastNumber = explode('-', $number['no_facture']);
-            return (int) $lastNumber[1] + 1;
+            if ('F'.date('Y') === $lastNumber[0]) {
+                return (int) $lastNumber[1] + 1;
+            }
+
+            return 1000000;
         }
 
         return 1000000;

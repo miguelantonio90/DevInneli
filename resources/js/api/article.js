@@ -20,6 +20,6 @@ export default {
     return api.post('article/refound', dataFile)
   },
   fetchArticleNumber () {
-    return api.get('article/number')
+    return api.get('article/number/get')
   }
 }

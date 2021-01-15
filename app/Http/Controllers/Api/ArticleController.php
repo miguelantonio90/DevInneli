@@ -41,6 +41,7 @@ class ArticleController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -126,6 +127,7 @@ class ArticleController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function findArticleNumber()
     {

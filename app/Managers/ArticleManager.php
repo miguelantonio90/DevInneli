@@ -127,9 +127,10 @@ class ArticleManager extends BaseManager
         $number = Articles::select('ref')
             ->where('company_id', '=', $company->id)
             ->latest()
+            ->orderBy('ref', 'DESC')
             ->first();
 
-        return ($number && count($number) > 0) ? (int) $number['ref'] + 1 : 1000;
+        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
     }
 
     /**

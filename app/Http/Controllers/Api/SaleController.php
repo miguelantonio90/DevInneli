@@ -83,6 +83,7 @@ class SaleController extends Controller
      * @param  Request  $request
      * @param $limit
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function findSalesByLimit(Request $request, $limit)
     {
@@ -174,6 +175,7 @@ class SaleController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function findNumberFacture()
     {
