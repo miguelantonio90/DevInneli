@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="id">
     <div class="d-flex flex-row justify-space-between align-center">
       <div class="d-flex flex-row align-center">
         <v-text-field
@@ -248,6 +248,7 @@ export default {
     }
   },
   props: [
+    'id',
     'hasCsvImport',
     'hasCsvExport',
     'headersChoosen',
