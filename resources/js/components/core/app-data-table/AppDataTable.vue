@@ -9,6 +9,7 @@
     >
       <!-- SEARCH BAR -->
       <filter-header
+        :id="`filter_header_`+id"
         :has-csv-export="hasCsvExport"
         :has-csv-import="hasCsvImport"
         :select-many-filters="selectManyFilters"
@@ -30,6 +31,7 @@
       />
     </v-container>
     <v-data-table
+      :id="id"
       :class="getClassStyle"
       v-bind="options"
       :loading="isLoading"
@@ -47,6 +49,7 @@
         <v-toolbar flat>
           <v-spacer />
           <v-btn
+            :id="`btnAdd_`+id"
             class="mb-2"
             color="primary"
             @click="createButtonClicked(true)"
@@ -78,6 +81,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="viewShowButton"
+              :id="`btnShow_`+id"
               class="mr-2"
               small
               v-bind="attrs"
@@ -93,6 +97,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="accessEditButton"
+              :id="`btnEdit_`+id"
               class="mr-2"
               color="warning"
               small
@@ -109,6 +114,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="viewDiscountButton"
+              :id="`btnDiscount_`+id"
               class="mr-2"
               color="success"
               small
@@ -125,6 +131,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="viewModButton"
+              :id="`btnMod_`+id"
               class="mr-2"
               color="primary"
               small
@@ -141,6 +148,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="accessTransportButton"
+              :id="`btnTransport_`+id"
               class="mr-2"
               color="success"
               small
@@ -157,6 +165,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               v-if="accessDeleteButton"
+              :id="`btnDelete_`+id"
               class="mr-2"
               color="error"
               small
@@ -192,6 +201,11 @@ export default {
   components: { FilterHeader, ImportArticle },
   inheritAttrs: false,
   props: {
+    id: {
+      type: String,
+      default: '',
+      required: false
+    },
     title: {
       type: String,
       default: '',

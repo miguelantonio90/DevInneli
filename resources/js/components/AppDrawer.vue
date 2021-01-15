@@ -27,7 +27,7 @@
           </v-toolbar-title>
         </v-toolbar>
       </template>
-      <span>Click para inciar guia</span>
+      <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
     </v-tooltip>
     <v-list class="pa-0">
       <template v-for="(item, key) in computeMenu">
@@ -237,7 +237,7 @@ export default {
       return countAccess > 0
     },
     initTour () {
-      this.$tours.myTour.start()
+      this.$tours.App.start()
     }
   }
 }

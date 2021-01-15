@@ -5,12 +5,35 @@
         class="py-0"
         cols="12"
       >
+        <v-app-bar
+          flat
+          dense
+          color="rgba(0, 0, 0, 0)"
+        >
+          <v-spacer />
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="warning"
+                dark
+                v-bind="attrs"
+                icon
+                v-on="on"
+                @click="initTour"
+              >
+                <v-icon>mdi-help</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
+          </v-tooltip>
+        </v-app-bar>
         <new-refound
           v-if="showNewModal"
         />
         <print-facture v-if="showShowModal && printer==='ticket'" />
         <print-facture-letter v-if="showShowModal && printer==='letter'" />
         <app-data-table
+          :id="id"
           :title="$vuetify.lang.t('$vuetify.titles.list',
                                   [$vuetify.lang.t('$vuetify.menu.vending'),])"
           :headers="getTableColumns"
@@ -357,6 +380,10 @@
         </app-data-table>
       </v-col>
     </v-row>
+    <app-tour
+      name="SaleHelp"
+      :steps="stepsHelp"
+    />
   </v-container>
 </template>
 
@@ -374,6 +401,7 @@ export default {
   components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay, DetailArticlePrice },
   data () {
     return {
+      id: 'Sale',
       menu: false,
       fav: true,
       message: false,
@@ -451,6 +479,21 @@ export default {
           color: '#ff0000'
         }
       ]
+    },
+    stepsHelp () {
+      return [{
+        target: '#btnAdd_' + this.id,
+        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep1'),
+        params: {
+          placement: 'left'
+        }
+      }, {
+        target: '#filter_header_' + this.id,
+        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep2')
+      }, {
+        target: '#' + this.id + ' .v-data-table__wrapper',
+        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep3')
+      }]
     }
   },
   watch: {
@@ -508,8 +551,6 @@ export default {
       } else {
         this.openNewModal({ sale, article })
       }
-    },
-    cancelProductPreform (item, art) {
     },
     total_pay (item) {
       let sum = 0
@@ -575,6 +616,9 @@ export default {
         .then((result) => {
           if (result.isConfirmed) this.deleteSale(articleId)
         })
+    },
+    initTour () {
+      this.$tours.SaleHelp.start()
     }
   }
 }

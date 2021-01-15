@@ -60,6 +60,7 @@ export default {
   import_csv: 'Importing file',
   state: 'State',
   to: 'A',
+  guide: 'Click to start guide',
   // menu
   menu: {
     setting: 'Configuration',
@@ -624,6 +625,11 @@ export default {
     volt: 'Volt',
     amp: 'Ampere',
     joule: 'Joule'
+  },
+  helpSales: {
+    listStep1: '<strong> Add button </strong>! <br> Create new sale',
+    listStep2: '<strong> Filters </strong>! <br> Set search filters and download data',
+    listStep3: '<strong> List </strong>! <br> List of all sales created.'
   },
   ...en
 }
