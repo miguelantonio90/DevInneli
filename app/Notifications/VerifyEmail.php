@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SenselessMethodDuplicationInspection */
 
 namespace App\Notifications;
 

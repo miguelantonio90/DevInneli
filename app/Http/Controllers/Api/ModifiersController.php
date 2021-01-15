@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\ModifiersManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,7 +52,7 @@ class ModifiersController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -67,14 +68,14 @@ class ModifiersController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function show($id)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
-        //
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+        ]);
     }
 
     /**
@@ -84,7 +85,7 @@ class ModifiersController extends Controller
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -100,7 +101,7 @@ class ModifiersController extends Controller
      *
      * @param $id
      * @return JsonResponse|Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -108,16 +109,5 @@ class ModifiersController extends Controller
             $this->manager->delete($id),
             'Modifiers has deleted successfully.'
         );
-    }
-
-    /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-        ]);
     }
 }

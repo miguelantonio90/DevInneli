@@ -17,15 +17,15 @@ class AccessManager
             $positions = DB::table('positions')
                 ->join('companies', 'companies.id', '=', 'company_id')
                 ->where('companies.faker', '<>', 1)
-                ->where('companies.deleted_at', '=', null)
-                ->where('positions.deleted_at', '=', null)
+                ->whereNull('companies.deleted_at')
+                ->whereNull('positions.deleted_at')
                 ->select('positions.*', 'companies.country', 'companies.name as company_name');
         } else {
             $company = CompanyManager::getCompanyByAdmin();
             $positions = DB::table('positions')
                 ->where('company_id', '=', $company->id);
         }
-        $positions = $positions->where('deleted_at', '=', null)->get();
+        $positions = $positions->whereNull('deleted_at')->get();
         $pos = 0;
         $p = [];
         foreach ($positions as $k => $v) {

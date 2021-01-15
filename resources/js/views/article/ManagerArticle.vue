@@ -610,7 +610,6 @@ export default {
   components: { NewCategory, NewTax, CompositeList, Variant, ShopsArticles },
   data () {
     return {
-      ref: '10000',
       formValid: false,
       step: 1,
       updated: false,
@@ -626,12 +625,21 @@ export default {
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'managerArticle', 'newArticle', 'editArticle', 'articles', 'isActionInProgress']),
+    ...mapState('article', ['saved', 'managerArticle', 'articleNumber', 'newArticle', 'editArticle', 'articles', 'isActionInProgress']),
     ...mapState('statics', ['arrayUM']),
     ...mapState('category', ['categories', 'isCategoryLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
-    ...mapGetters('auth', ['user', 'userPin'])
+    ...mapGetters('auth', ['user', 'userPin']),
+    ...mapGetters('article', ['getNumberArticle']),
+    articleNumber: {
+      get () {
+        return this.getNumberArticle
+      },
+      set (newNumber) {
+        return newNumber
+      }
+    }
   },
   watch: {
     'article.price': function (newVal, oldV) {
@@ -661,7 +669,7 @@ export default {
       price: 0.00,
       unit: 'unit',
       cost: 0.00,
-      ref: '10001',
+      ref: this.articleNumber,
       barCode: '',
       variants: [],
       tax: [],
@@ -682,12 +690,13 @@ export default {
     })
     await this.getCategories()
     await this.getTaxes()
-    this.ref = parseFloat(this.ref) + 1
-    this.article.ref = this.ref
+    await this.fetchArticleNumber().then(() => {
+      this.article.ref = ++this.articleNumber
+    })
     this.loadingData = false
   },
   methods: {
-    ...mapActions('article', ['createArticle', 'updateArticle', 'toogleNewModal', 'getArticles']),
+    ...mapActions('article', ['createArticle', 'updateArticle', 'fetchArticleNumber', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
@@ -865,7 +874,7 @@ export default {
     async validCreate () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        !this.managerArticle ? this.createArticle(this.article) : this.updateArticle(this.article)
+        !this.managerArticle ? await this.createArticle(this.article) : await this.updateArticle(this.article)
         await this.$router.push({ name: 'product_list' })
         this.loading = false
       }

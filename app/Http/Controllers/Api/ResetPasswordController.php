@@ -37,14 +37,6 @@ class ResetPasswordController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * ResetPasswordController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      */
@@ -57,7 +49,7 @@ class ResetPasswordController extends Controller
      * @param $user
      * @param $password
      */
-    protected function resetPassword($user, $password)
+    protected function resetPassword($user, $password): void
     {
         $user->password = Hash::make($password);
         $user->save();
@@ -71,8 +63,7 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetResponse(Request $request, $response)
     {
-        $response = ['success' => true, 'message' => "Password reset successful"];
-        return response($response, 200);
+        return response(['success' => true, 'message' => "Password reset successful"]);
     }
 
     /**
@@ -82,7 +73,6 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        $response = ['success' => false, 'message' => "Token Invalid"];
-        return response($response, 200);
+        return response(['success' => false, 'message' => "Token Invalid"]);
     }
 }

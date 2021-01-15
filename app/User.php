@@ -8,7 +8,7 @@ use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -83,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public static function createFirst($data, $company, $position): User
     {
-        $user = new User();
+        $user = new self();
         $user->firstName = 'MANAGER';
         $user->password = Hash::make($data['password']);
         $user->email = $data['email'];
@@ -100,7 +100,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * @return BelongsTo
-     * TODO: Un usuario pertenece a una sola company
      */
     public function company(): BelongsTo
     {
@@ -126,7 +125,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @return HasMany
      */
-    public function assistances()
+    public function assistances(): HasMany
     {
         return $this->hasMany(Assistance::class);
     }
@@ -134,7 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      *
      */
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmail());
     }
@@ -142,7 +141,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @param  string  $token
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token): void
     {
         $this->notify(new MailResetPasswordNotification($token));
     }

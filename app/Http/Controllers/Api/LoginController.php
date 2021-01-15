@@ -100,7 +100,10 @@ class LoginController extends Controller
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
-        cacheAlias()->put('userPin', User::latest()->where('id', $request->user()['id'])->get()[0]);
+        try {
+            cacheAlias()->put('userPin', User::latest()->where('id', $request->user()['id'])->get()[0]);
+        } catch (Exception $e) {
+        }
 
         return response()->json([
             'token_type' => 'Bearer',
@@ -131,13 +134,13 @@ class LoginController extends Controller
             $user[0]['access_token'] = $token;
             cacheAlias()->put('userPin', $user[0]);
             return ResponseHelper::sendResponse($user[0], 'Success login.');
-        } else {
-            return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);
         }
+
+        return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);
 
     }
 
-    protected function validatePin(array $data)
+    protected function validatePin(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'email' => 'email|required|string',

@@ -21,19 +21,12 @@ class ImportManager extends BaseManager
     private $categoryManager;
 
     /**
-     * @var VariantManager
-     */
-    private $variantManager;
-
-    /**
      * ImportManager constructor.
      * @param  CategoryManager  $categoryManager
-     * @param  VariantManager  $variantManager
      */
-    public function __construct(CategoryManager $categoryManager, VariantManager $variantManager)
+    public function __construct(CategoryManager $categoryManager)
     {
         $this->categoryManager = $categoryManager;
-        $this->variantManager = $variantManager;
     }
 
 
@@ -41,7 +34,7 @@ class ImportManager extends BaseManager
      * @param $file
      * @throws Exception
      */
-    public function importData($file)
+    public function importData($file): void
     {
         $fileName = time().'.'.$file->getClientOriginalExtension();
         $file->move(public_path('upload'), $fileName);
@@ -193,7 +186,7 @@ class ImportManager extends BaseManager
      * @param $jsonInfo
      * @throws Exception
      */
-    public function insertArticleShopFromImportFile($article, $shopsInfo, $jsonInfo)
+    public function insertArticleShopFromImportFile($article, $shopsInfo, $jsonInfo): void
     {
         $shopData = explode(',', json_encode(str_replace(['"', 'variable'], '', $jsonInfo)));
         for ($i = 0, $iMax = count($shopData); $i < $iMax; $i += 3) {
@@ -222,7 +215,7 @@ class ImportManager extends BaseManager
      * @param $composites
      * @param $company
      */
-    public function createCompositeFromImportFile($composites, $company)
+    public function createCompositeFromImportFile($composites, $company): void
     {
         foreach ($composites as $key => $value) {
             $composite = Articles::latest()
@@ -242,7 +235,7 @@ class ImportManager extends BaseManager
      * @param $variants
      * @throws Exception
      */
-    public function createVariantsFromImportFile($variants)
+    public function createVariantsFromImportFile($variants): void
     {
         foreach ($variants as $key => $variant) {
             $v = Variant::create([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\SupplierManager;
+use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class SupplierController extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return ResponseHelper::sendResponse(
             $this->supplierManager->findAllByCompany(),
@@ -50,7 +51,7 @@ class SupplierController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
      */
     public function store(Request $request)
@@ -80,6 +81,7 @@ class SupplierController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -95,6 +97,7 @@ class SupplierController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {

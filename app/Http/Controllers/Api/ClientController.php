@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ClientManager;
 use App\Managers\CompanyManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,7 +36,8 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -49,7 +51,7 @@ class ClientController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
      */
     public function store(Request $request)
@@ -69,23 +71,12 @@ class ClientController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'firstName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
-     */
-    public function show($id)
-    {
-//        return Client::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -112,7 +103,7 @@ class ClientController extends Controller
      */
     public function updateAvatar(Request $request, $id)
     {
-        if (!empty($request)) {
+        if ($request !== null) {
             $app = (new Client())->find($id);
             $app->find($id);
             $app->avatar = $request->get('image');
@@ -121,12 +112,12 @@ class ClientController extends Controller
                 $app,
                 'Client avatar has updated successfully.'
             );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'Client avatar has not updated.'
-            );
         }
+
+        return ResponseHelper::sendError(
+            401,
+            'Client avatar has not updated.'
+        );
     }
 
     /**
@@ -134,6 +125,7 @@ class ClientController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {

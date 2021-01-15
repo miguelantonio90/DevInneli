@@ -1,8 +1,9 @@
-import article from '../../api/article'
+import apiArticle from '../../api/article'
 import util from '../../util'
 
 const FETCHING_ARTICLES = 'FETCHING_ARTICLES'
 const FETCHING_ARTICLES_MERGE = 'FETCHING_ARTICLES_MERGE'
+const FETCHING_ARTICLE_NUMBER = 'FETCHING_ARTICLE_NUMBER'
 const SWITCH_ARTICLE_NEW_MODAL = 'SWITCH_ARTICLE_NEW_MODAL'
 const SWITCH_ARTICLE_EDIT_MODAL = 'SWITCH_ARTICLE_EDIT_MODAL'
 const SWITCH_ARTICLE_SHOW_MODAL = 'SWITCH_ARTICLE_SHOW_MODAL'
@@ -85,7 +86,8 @@ const state = {
   showImportModal: false,
   isArticleTableLoading: false,
   isActionInProgress: false,
-  isTableLoading: false
+  isTableLoading: false,
+  articleNumber: ''
 }
 
 const mutations = {
@@ -114,17 +116,12 @@ const mutations = {
     state.articles = []
     articles.forEach((value) => {
       if (!value.parent_id) {
-        // if (value.variant_values.length > 0) {
-        //   value.articles_shops = []
-        //   value.variant_values.forEach(v => {
-        //     v.articles_shops.forEach(l => {
-        //       value.articles_shops.push(l)
-        //     })
-        //   })
-        // }
         state.articles.push(value)
       }
     })
+  },
+  [FETCHING_ARTICLE_NUMBER] (state, number) {
+    state.articleNumber = number
   },
   [FETCHING_ARTICLES_MERGE] (state, articles) {
     const articlesMerge = articles.sort(util.compareValues('percent', 'desc')).slice(0, 5)
@@ -244,7 +241,11 @@ const mutations = {
   }
 }
 
-const getters = {}
+const getters = {
+  getNumberArticle: (state) => {
+    return state.articleNumber
+  }
+}
 
 const actions = {
   toogleRefoundModal ({ commit }, showModal) {
@@ -282,7 +283,7 @@ const actions = {
   async getArticles ({ commit, dispatch }) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await article
+    await apiArticle
       .fetchArticles()
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
@@ -293,7 +294,7 @@ const actions = {
   async getArticlesMerge ({ commit, dispatch }) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await article
+    await apiArticle
       .fetchArticles()
       .then(({ data }) => {
         commit(FETCHING_ARTICLES_MERGE, data.data)
@@ -304,7 +305,7 @@ const actions = {
   async importArticles ({ commit, dispatch }, articlesData) {
     commit(ENV_DATA_PROCESS, true)
     // noinspection JSUnresolvedVariable
-    await article
+    await apiArticle
       .importArticles(articlesData)
       .then(({ data }) => {
         commit(ENV_DATA_PROCESS, false)
@@ -316,7 +317,7 @@ const actions = {
   async refoundArticle ({ commit, dispatch }, refound) {
     commit(ENV_DATA_PROCESS, true)
     // noinspection JSUnresolvedVariable
-    await article
+    await apiArticle
       .refoundArticle(refound)
       .then(({ data }) => {
         commit(SWITCH_ARTICLE_REFOUND_MODAL, false)
@@ -326,7 +327,7 @@ const actions = {
   async createArticle ({ commit, dispatch }, newArticle) {
     commit(ENV_DATA_PROCESS, true)
 
-    await article
+    await apiArticle
       .sendCreateRequest(newArticle)
       .then((data) => {
         commit(ARTICLE_CREATED)
@@ -341,7 +342,7 @@ const actions = {
     const request = articleE || state.editArticle
 
     // const request = profile || state.editUser
-    await article
+    await apiArticle
       .sendUpdateRequest(request)
       .then((response) => {
         commit(ARTICLE_UPDATED)
@@ -355,7 +356,7 @@ const actions = {
       })
   },
   async deleteArticle ({ commit, dispatch }, articleId) {
-    await article
+    await apiArticle
       .sendDeleteRequest(articleId)
       .then((response) => {
         commit(ARTICLE_DELETE)
@@ -363,6 +364,17 @@ const actions = {
         this.dispatch('auth/updateAccess', response.access)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async fetchArticleNumber ({
+    commit,
+    dispatch
+  }) {
+    await apiArticle
+      .fetchArticleNumber()
+      .then(({ data }) => {
+        commit(FETCHING_ARTICLE_NUMBER, data.data)
+        dispatch('auth/updateAccess', data.access, { root: true })
+      }).catch((error) => commit(FAILED_ARTICLE, error))
   }
 }
 

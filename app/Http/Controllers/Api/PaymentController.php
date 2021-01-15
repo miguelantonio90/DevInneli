@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\PaymentManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,14 +33,15 @@ class PaymentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     *  Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->paymentManager->findAllByCompany(),
+            $this->paymentManager::findAllByCompany(),
             'Payment retrieved successfully.'
         );
     }
@@ -48,7 +50,7 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
      */
     public function store(Request $request)
@@ -68,22 +70,11 @@ class PaymentController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
-     */
-    public function show($id)
-    {
-//        return Payment::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -93,6 +84,7 @@ class PaymentController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -108,6 +100,7 @@ class PaymentController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {

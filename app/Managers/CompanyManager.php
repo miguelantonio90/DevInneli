@@ -10,6 +10,7 @@ use App\Supplier;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class CompanyManager
@@ -35,7 +36,10 @@ class CompanyManager
             ->first();
     }
 
-    public function getAllCompanies()
+    /**
+     * @return Collection
+     */
+    public function getAllCompanies(): Collection
     {
         $companies = DB::table('companies')
             ->where('faker', '<>', 1)

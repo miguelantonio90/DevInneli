@@ -34,6 +34,7 @@ class SaleController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
@@ -94,6 +95,7 @@ class SaleController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function getTotalSalesStatic(Request $request)
     {
@@ -132,6 +134,7 @@ class SaleController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function saleByProduct(Request $request)
     {
@@ -166,6 +169,17 @@ class SaleController extends Controller
         return ResponseHelper::sendResponse(
             $this->saleManager->delete($id),
             'Sale has deleted successfully.'
+        );
+    }
+
+    /**
+     * @return JsonResponse|Response
+     */
+    public function findNumberFacture()
+    {
+        return ResponseHelper::sendResponse(
+            $this->saleManager->findFactureNumber(),
+            'New number sale retrieved successfully.'
         );
     }
 }

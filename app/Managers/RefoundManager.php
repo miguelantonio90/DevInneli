@@ -10,6 +10,9 @@ use App\Variant;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @method refound(array $all)
+ */
 class RefoundManager extends BaseManager
 {
 
@@ -92,10 +95,8 @@ class RefoundManager extends BaseManager
         foreach ($articleComposite as $key => $value) {
             $exist = false;
             foreach ($composites as $k => $v) {
-                if (isset($v['id'])) {
-                    if ($v['id'] === $value->id) {
-                        $exist = true;
-                    }
+                if (isset($v['id']) && $v['id'] === $value->id) {
+                    $exist = true;
                 }
             }
             if (!$exist) {
@@ -214,10 +215,8 @@ class RefoundManager extends BaseManager
         foreach ($variantsValue as $key => $value) {
             $exist = false;
             foreach ($variantValues as $k => $v) {
-                if (isset($v['id'])) {
-                    if ($v['id'] === $value['id']) {
-                        $exist = true;
-                    }
+                if (isset($v['id']) && $v['id'] === $value['id']) {
+                    $exist = true;
                 }
             }
             if (!$exist) {
@@ -241,7 +240,7 @@ class RefoundManager extends BaseManager
             $this->updateArticlesShops($articleChildren, $shops);
             $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
             foreach ($arrayShops as $l => $m) {
-                if ($m['articles_shop_id'] == "") {
+                if ($m['articles_shop_id'] === "") {
                     $this->variantManager->newArticleShop($m, $articleChildren);
                 } else {
                     $this->variantManager->updateArticleShop($m['articles_shop_id'], $m);

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\ExpenseCategoryManager;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -32,8 +34,8 @@ class ExpenseCategoryController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -47,8 +49,8 @@ class ExpenseCategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
-     * @throws ValidationException
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -67,7 +69,7 @@ class ExpenseCategoryController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -75,23 +77,13 @@ class ExpenseCategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return void
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -105,8 +97,9 @@ class ExpenseCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

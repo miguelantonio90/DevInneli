@@ -6,7 +6,7 @@ namespace App\Http\Helpers;
 
 class ArrayHelper
 {
-    public static function arrayIsset($array)
+    public static function arrayIsset($array): bool
     {
         $isset = true;
         foreach ($array as $item) {

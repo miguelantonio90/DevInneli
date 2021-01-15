@@ -6,6 +6,7 @@ namespace App\Managers;
 
 use App\Modifiers;
 use App\Shop;
+use Exception;
 
 class ModifiersManager extends BaseManager
 {
@@ -43,7 +44,7 @@ class ModifiersManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -68,7 +69,7 @@ class ModifiersManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -96,7 +97,7 @@ class ModifiersManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

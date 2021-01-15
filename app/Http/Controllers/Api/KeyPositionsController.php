@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\KeyPosition;
 use App\Managers\KeyPositionsManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,9 +31,8 @@ class KeyPositionsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -61,7 +61,7 @@ class KeyPositionsController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'key' => ['required', 'string', 'max:255'],
@@ -69,23 +69,12 @@ class KeyPositionsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     *  Update the specified resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
-     * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -100,8 +89,9 @@ class KeyPositionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

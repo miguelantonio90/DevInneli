@@ -11,7 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class RefoundController extends Controller
 {
@@ -47,8 +46,7 @@ class RefoundController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
-     * @throws ValidationException
+     * @return JsonResponse|Response
      * @throws Exception
      */
     public function store(Request $request)
@@ -68,7 +66,7 @@ class RefoundController extends Controller
      * @param  Request  $request
      * @param    $id
      * @return JsonResponse|Response
-     * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -83,6 +81,7 @@ class RefoundController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -95,7 +94,7 @@ class RefoundController extends Controller
     /**
      * @param  Request  $request
      */
-    public function import(Request $request)
+    public function import(Request $request): void
     {
         $this->importManger->importData($request->file);
     }
@@ -103,7 +102,7 @@ class RefoundController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
-     * @throws ValidationException
+     * @throws Exception
      */
     public function refound(Request $request)
     {
@@ -117,7 +116,7 @@ class RefoundController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'cant' => ['required', 'double'],

@@ -92,8 +92,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param    $id
-     * @return void
+     * @param $id
+     * @return mixed
      */
     public function show($id)
     {
@@ -120,7 +120,7 @@ class UserController extends Controller
 
     public function updateAvatar(Request $request, $id)
     {
-        if (!empty($request)) {
+        if ($request !== null) {
             $app = (new User())->find($id);
             $app->find($id);
             $app->avatar = $request->get('image');
@@ -129,12 +129,12 @@ class UserController extends Controller
                 $app,
                 'User avatar has updated successfully.'
             );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'User avatar has not updated.'
-            );
         }
+
+        return ResponseHelper::sendError(
+            401,
+            'User avatar has not updated.'
+        );
     }
 
     /**

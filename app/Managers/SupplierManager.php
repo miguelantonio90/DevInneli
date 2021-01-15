@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Supplier;
+use Exception;
 
 class SupplierManager extends BaseManager
 {
@@ -30,7 +31,7 @@ class SupplierManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -86,7 +87,7 @@ class SupplierManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -105,11 +106,11 @@ class SupplierManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {
-        $supplier  = Supplier::findOrFail($id);
+        $supplier = Supplier::findOrFail($id);
         $this->managerBy('delete', $supplier);
         return $supplier->delete();
     }

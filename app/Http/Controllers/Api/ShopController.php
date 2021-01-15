@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\ShopManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as Response;
+use Illuminate\Http\Response;
 
 class ShopController extends Controller
 {
@@ -36,7 +37,8 @@ class ShopController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -45,21 +47,12 @@ class ShopController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param $id
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -72,17 +65,18 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {
         $dlt = $this->shopManager->delete($id);
 
         if ($dlt[0]) {
-            return ResponseHelper::sendResponse($dlt[0], $dlt[1], $dlt[2]);
-        } else {
-            return ResponseHelper::sendError($dlt[1], $dlt[2], 402);
+            return ResponseHelper::sendResponse($dlt[0], $dlt[1]);
         }
+
+        return ResponseHelper::sendError($dlt[1], $dlt[2], 402);
     }
 }

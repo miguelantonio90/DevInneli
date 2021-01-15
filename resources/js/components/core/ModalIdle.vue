@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   props: {
     dialog: {
@@ -47,16 +47,11 @@ export default {
 
       if (this.time < 1) {
         clearInterval(timerId)
-        // Your logout function should be over here
-        console.log('logout user....')
-        this.sendLogoutRequest().then(() => {
-          this.$router.push('/auth/login')
-        })
+        // Your lock app function should be over here
+        console.log('lock user....')
+        this.$router.push('/lock/pin')
       }
     }, 1000)
-  },
-  methods: {
-    ...mapActions('auth', ['sendLogoutRequest'])
   }
 }
 </script>

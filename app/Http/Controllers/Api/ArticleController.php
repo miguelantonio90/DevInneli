@@ -40,10 +40,9 @@ class ArticleController extends Controller
 
 
     /**
-     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return ResponseHelper::sendResponse(
             $this->articleManager->findAllByCompany(),
@@ -120,8 +119,19 @@ class ArticleController extends Controller
      * @param  Request  $request
      * @throws Exception
      */
-    public function import(Request $request)
+    public function import(Request $request): void
     {
         $this->importManger->importData($request->file);
+    }
+
+    /**
+     * @return JsonResponse|Response
+     */
+    public function findArticleNumber()
+    {
+        return ResponseHelper::sendResponse(
+            $this->articleManager->findArticleNumber(),
+            'Article number retrieved successfully.'
+        );
     }
 }

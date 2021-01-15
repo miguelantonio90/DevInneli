@@ -18,5 +18,8 @@ export default {
   },
   refoundArticle (dataFile) {
     return api.post('article/refound', dataFile)
+  },
+  fetchArticleNumber () {
+    return api.get('article/number')
   }
 }

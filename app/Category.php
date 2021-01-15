@@ -5,6 +5,7 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -42,7 +43,7 @@ class Category extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Articles::class);
     }

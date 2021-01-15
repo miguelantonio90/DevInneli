@@ -6,11 +6,10 @@ use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * Class Sale
@@ -39,7 +38,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'company_id' , 'payment_id'
+        'no_facture', 'company_id', 'payment_id'
     ];
 
     /**
@@ -82,7 +81,7 @@ class Sale extends Model
         return $this->belongsToMany(Discount::class, 'sales_discounts');
     }
 
-    public function refounds():HasMany
+    public function refounds(): HasMany
     {
         return $this->hasMany(SalesArticlesShops::class);
     }

@@ -16,6 +16,7 @@
                   v-if="user.company.logo"
                   class="logo profile mx-auto d-block"
                   :src="user.company.logo"
+                  alt="LOGO"
                 >
               </figure>
               <div class="company-info">
@@ -83,11 +84,7 @@
                 </div>
               </div>
 
-              <table
-                border="0"
-                cellspacing="0"
-                cellpadding="0"
-              >
+              <table>
                 <thead>
                   <tr>
                     <th class="qty">
@@ -119,8 +116,8 @@
                       {{ user.company.currency +' ' + article.price }}
                       <table>
                         <thead>
-                          <th style="width: 60%; background-color: white; color: black; font-size: 100" />
-                          <th style="width: 40%; background-color: white; color: black; font-size: 100" />
+                          <th style="width: 60%; background-color: white; color: black; font-size: large" />
+                          <th style="width: 40%; background-color: white; color: black; font-size: large" />
                         </thead>
                         <tbody>
                           <tr
@@ -377,7 +374,7 @@ export default {
 }
 * {
     font-size: 10px;
-    font-family: 'Times New Roman';
+    font-family: 'Times New Roman',sans-serif;
 }
 
 td,
@@ -432,8 +429,7 @@ q, blockquote {
     quotes: none;
 }
 q:before, q:after, blockquote:before, blockquote:after {
-    content: "";
-    content: none;
+  content: none;
 }
 
 a img {
@@ -508,7 +504,7 @@ header figure img {
 header .company-info {
     float: right;
     color: #555555;
-    font-family: SourceSansPro;
+    font-family: SourceSansPro,sans-serif;
     line-height: 10px;
 }
 header .company-info .address, header .company-info .phone, header .company-info .email {
@@ -595,12 +591,12 @@ section table thead th:last-child {
     border-right: none;
 }
 section table tbody tr td {
-    border-bottom: 3px solid #555555;
+    border-bottom: 1px solid #555555;
 }
 section table tbody td {
     padding: 10px 10px;
     text-align: center;
-    border-right: 3px solid #555555;
+    border-right: 1px solid #555555;
 }
 section table tbody td:last-child {
     border-right: none;
@@ -622,7 +618,7 @@ section table.total {
     margin-bottom: 50px;
 }
 section table.total tbody tr td {
-    padding: 0px 10px 12px;
+    padding: 0 10px 12px;
     border: none;
     background-color: #ffffff;
     color: #555555;

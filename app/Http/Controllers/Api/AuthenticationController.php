@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @group Auth endpos
@@ -24,18 +27,19 @@ class AuthenticationController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function user()
     {
-        $user = auth()->user();
-        $company = Company::findOrFail($user['company_id']);
-        $position = Position::findOrFail($user['position_id']);
-        $user['position']->accessPin = $position['accessPin'] === 1;
-        $user['position']->accessEmail = $position['accessEmail'] === 1;
-        $user['position']->disabled = $position['key'] === 'super_manager';
-        $user['company'] = $company;
-        $user['position'] = $position;
-        return ResponseHelper::sendResponse($user, '');
+        $company = Company::findOrFail(auth()->user()['company_id']);
+        $position = Position::findOrFail(auth()->user()['position_id']);
+        auth()->user()['position']->accessPin = $position['accessPin'] === 1;
+        auth()->user()['position']->accessEmail = $position['accessEmail'] === 1;
+        auth()->user()['position']->disabled = $position['key'] === 'super_manager';
+        auth()->user()['company'] = $company;
+        auth()->user()['position'] = $position;
+
+        return ResponseHelper::sendResponse(auth()->user(), '');
     }
 }

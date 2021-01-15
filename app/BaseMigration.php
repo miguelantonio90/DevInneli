@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Schema;
 class BaseMigration extends Migration
 {
     /**
-     * @param string $tableName
-     * @param false|bool $company
+     * @param  string  $tableName
+     * @param  false|bool  $company
      */
     public function up(string $tableName, bool $company = false): void
     {

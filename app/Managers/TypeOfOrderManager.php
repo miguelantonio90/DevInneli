@@ -7,6 +7,7 @@ namespace App\Managers;
 use App\Shop;
 use App\ShopTypeOfOrder;
 use App\TypeOfOrder;
+use Exception;
 
 class TypeOfOrderManager extends BaseManager
 {
@@ -64,7 +65,7 @@ class TypeOfOrderManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -98,7 +99,7 @@ class TypeOfOrderManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -128,7 +129,7 @@ class TypeOfOrderManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

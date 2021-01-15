@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Notifications;
 
@@ -28,11 +28,10 @@ class MailResetPasswordNotification extends ResetPassword
 
     /**
      * Get the notification's delivery channels.
-     *
      * @param  mixed  $notifiable
-     * @return array
+     * @return string[]
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
@@ -43,7 +42,7 @@ class MailResetPasswordNotification extends ResetPassword
      * @param  mixed  $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         $hash = Crypt::encrypt($notifiable->getKey());
         $link = config('frontend.email_reset_url').$hash;
@@ -62,7 +61,7 @@ class MailResetPasswordNotification extends ResetPassword
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         return [
             //

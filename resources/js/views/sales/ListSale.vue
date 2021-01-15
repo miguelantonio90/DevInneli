@@ -287,7 +287,7 @@
                           </template>
                           <template>
                             <detail-article-price
-                              v-if="article.taxes.length > 0 || article.discount.length > 0 || article.modifiers.length > 0"
+                              v-if="article.taxes.length > 0 || article.discount.length > 0"
                               :article="article"
                               :currency="user.company.currency"
                             />
@@ -375,7 +375,6 @@ export default {
   data () {
     return {
       menu: false,
-
       fav: true,
       message: false,
       hints: true,
@@ -455,16 +454,6 @@ export default {
     }
   },
   watch: {
-    sales: function () {
-      this.localSales = []
-      this.sales.forEach((value) => {
-        const sale = value
-        value.articles.forEach((v, i) => {
-          if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
-        })
-        this.localSales.push(sale)
-      })
-    },
     loadData: function () {
       if (this.loadData === true) { this.loadInitData() }
     }
@@ -486,8 +475,17 @@ export default {
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
       this.localSales = []
-      await this.getSales()
-      await this.getArticles()
+      await this.getSales().then(() => {
+        this.getArticles().then(() => {
+          this.sales.forEach((value) => {
+            const sale = value
+            value.articles.forEach((v, i) => {
+              if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+            })
+            this.localSales.push(sale)
+          })
+        })
+      })
       this.switchLoadData(false)
     },
     changeState (item) {
