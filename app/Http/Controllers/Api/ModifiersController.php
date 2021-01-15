@@ -37,6 +37,7 @@ class ModifiersController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {

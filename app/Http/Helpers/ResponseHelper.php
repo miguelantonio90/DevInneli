@@ -37,7 +37,7 @@ class ResponseHelper
                 ]
             ] : ''
         ];
-        return response()->json($response, 200);
+        return response()->json($response);
     }
 
 

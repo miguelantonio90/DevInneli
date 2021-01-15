@@ -36,6 +36,7 @@ class DiscountController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {

@@ -48,6 +48,7 @@ class KeyPositionsController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {

@@ -37,6 +37,7 @@ class TypeOfOrderController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -119,6 +120,7 @@ class TypeOfOrderController extends Controller
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function setPrincipal(Request $request, $id)
     {

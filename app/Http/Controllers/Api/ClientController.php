@@ -53,6 +53,7 @@ class ClientController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -86,6 +87,7 @@ class ClientController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -100,6 +102,7 @@ class ClientController extends Controller
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function updateAvatar(Request $request, $id)
     {

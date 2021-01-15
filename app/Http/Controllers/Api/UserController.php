@@ -37,6 +37,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
@@ -49,6 +50,7 @@ class UserController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function getAll(Request $request): JsonResponse
     {
@@ -118,6 +120,12 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * @param  Request  $request
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
     public function updateAvatar(Request $request, $id)
     {
         if ($request !== null) {

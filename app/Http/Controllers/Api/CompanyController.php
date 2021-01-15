@@ -36,6 +36,7 @@ class CompanyController extends Controller
     /**
      * @param $email
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function companyByEmail($email)
     {
@@ -50,6 +51,7 @@ class CompanyController extends Controller
 
     /**
      *
+     * @throws Exception
      */
     public function index()
     {
@@ -67,6 +69,7 @@ class CompanyController extends Controller
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {

@@ -38,6 +38,7 @@ class SupplierController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
@@ -53,6 +54,7 @@ class SupplierController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {

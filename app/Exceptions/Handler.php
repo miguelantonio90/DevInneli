@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Exceptions;
 
@@ -36,19 +36,19 @@ class Handler extends ExceptionHandler
      * @return void
      *
      * @throws Exception
+     * @throws Throwable
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception):void
     {
         parent::report($exception);
     }
 
     /**
-     * Render an exception into an HTTP response.
+     * Render an exception into an HTTP response
      *
      * @param  Request  $request
      * @param  Throwable  $exception
-     * @return Response
-     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|Response
      * @throws Throwable
      */
     public function render($request, Throwable $exception)

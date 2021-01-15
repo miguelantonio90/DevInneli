@@ -14,7 +14,7 @@ class InputHelper
      * @param $items
      * @param $function
      */
-    public static function inputChecker($request, $items, $function)
+    public static function inputChecker($request, $items, $function): void
     {
         try {
             if (!empty($items)) {

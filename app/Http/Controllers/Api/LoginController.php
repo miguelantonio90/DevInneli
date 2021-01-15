@@ -93,7 +93,12 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-    protected function sendLoginResponse(Request $request)
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    protected function sendLoginResponse(Request $request): JsonResponse
     {
         $this->clearLoginAttempts($request);
 
@@ -131,13 +136,13 @@ class LoginController extends Controller
             $user[0]['access_token'] = $token;
             cacheAlias()->put('userPin', $user[0]);
             return ResponseHelper::sendResponse($user[0], 'Success login.');
-        } else {
-            return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);
         }
+
+        return ResponseHelper::sendError('Unauthenticated', 'Unauthenticated', 403);
 
     }
 
-    protected function validatePin(array $data)
+    protected function validatePin(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'email' => 'email|required|string',

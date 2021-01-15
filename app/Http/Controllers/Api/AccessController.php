@@ -27,6 +27,7 @@ class AccessController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -39,6 +40,7 @@ class AccessController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -82,6 +84,7 @@ class AccessController extends Controller
     /**
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\UserManager;
 use App\Position;
+use Exception;
 
 /**
  * @group Auth endpos
@@ -25,6 +26,7 @@ class AuthenticationController extends Controller
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function user()
     {

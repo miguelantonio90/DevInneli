@@ -27,6 +27,7 @@ class ShopController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {

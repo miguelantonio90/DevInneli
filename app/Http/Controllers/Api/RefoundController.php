@@ -33,6 +33,7 @@ class RefoundController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index(Request $request)
     {
