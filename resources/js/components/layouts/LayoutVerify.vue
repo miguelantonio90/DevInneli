@@ -9,6 +9,8 @@
     />
     <app-toolbar
       :show-nav-icon="false"
+      :show-lock-icon="false"
+      :show-buy-icon="false"
       :show-sales-icon="false"
       :show-menu-user="false"
       class="app--toolbar"
