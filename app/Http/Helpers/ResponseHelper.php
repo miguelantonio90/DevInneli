@@ -23,7 +23,7 @@ class ResponseHelper
     public static function sendResponse($result, $message)
     {
 
-        dd(cache()->get('userPin'));
+        dd(cache()->get('userPin')->position);
         $response = [
             'success' => true,
             'data' => $result,
