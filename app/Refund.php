@@ -5,7 +5,7 @@ namespace App;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -28,7 +28,7 @@ class Refund extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'cant', 'money' , 'sale_id', 'article_id'
+        'cant', 'money', 'sale_id', 'article_id'
     ];
 
     public function article(): BelongsToMany

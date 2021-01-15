@@ -32,17 +32,17 @@ class OpenCloseBox extends Model
      * @var array
      */
     protected $fillable = [
-        'box_id', 'open_to', 'close_by','open_money', 'close_money'
+        'box_id', 'open_to', 'close_by', 'open_money', 'close_money'
     ];
 
     public function box(): HasOne
     {
-        return $this->hasOne(Box::class,'open_id');
+        return $this->hasOne(Box::class, 'open_id');
     }
 
     public function openTo(): BelongsTo
     {
-        return $this->belongsTo(User::class,'open_to');
+        return $this->belongsTo(User::class, 'open_to');
     }
 
 

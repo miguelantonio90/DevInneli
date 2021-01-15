@@ -26,7 +26,7 @@ class Articles extends Model
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
-    protected $softCascade = [ 'articlesShops', 'variants', 'images', 'variantValues' ];
+    protected $softCascade = ['articlesShops', 'variants', 'images', 'variantValues'];
     protected $keyType = 'string';
     protected $guarded = [];
 
@@ -36,7 +36,7 @@ class Articles extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'company_id', 'category_id','created_by'
+        'name', 'company_id', 'category_id', 'created_by'
     ];
 
     public function company(): BelongsTo
@@ -61,7 +61,7 @@ class Articles extends Model
 
     public function variantValues(): HasMany
     {
-        return $this->hasMany(Articles::class, 'parent_id')
+        return $this->hasMany(__CLASS__, 'parent_id')
             ->with('articlesShops')
             ->with('tax');
     }

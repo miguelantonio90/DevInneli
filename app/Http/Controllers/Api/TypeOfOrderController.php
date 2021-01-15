@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\TypeOfOrderManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -36,6 +37,7 @@ class TypeOfOrderController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -51,7 +53,7 @@ class TypeOfOrderController extends Controller
      * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -80,21 +82,13 @@ class TypeOfOrderController extends Controller
     }
 
     /**
-     * @param $id
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -112,7 +106,7 @@ class TypeOfOrderController extends Controller
      *
      * @param $id
      * @return JsonResponse|Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -126,6 +120,7 @@ class TypeOfOrderController extends Controller
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function setPrincipal(Request $request, $id)
     {

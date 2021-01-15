@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\DiscountManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,6 +36,7 @@ class DiscountController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
@@ -50,6 +52,7 @@ class DiscountController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request): JsonResponse
     {
@@ -82,7 +85,7 @@ class DiscountController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -98,6 +101,7 @@ class DiscountController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {

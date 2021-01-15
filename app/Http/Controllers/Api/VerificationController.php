@@ -72,9 +72,8 @@ class VerificationController extends Controller
      */
     public function verify(Request $request)
     {
-
         try {
-            if (Crypt::decrypt($request->route('hash')) != $request->user()->getKey()) {
+            if (Crypt::decrypt($request->route('hash')) !== $request->user()->getKey()) {
                 abort(200, 'The link is wrong');
             }
         } catch (DecryptException $e) {

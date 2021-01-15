@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Http\Controllers\Api;
 
@@ -30,9 +30,8 @@ class AssistanceController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -65,7 +64,7 @@ class AssistanceController extends Controller
      * @param  array  $data
      * @return ValidatorAlias
      */
-    protected function validator(array $data)
+    protected function validator(array $data): ValidatorAlias
     {
         return Validator::make($data, [
             'datetimeEntry' => ['required'],
@@ -94,6 +93,7 @@ class AssistanceController extends Controller
     /**
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

@@ -5,6 +5,7 @@ namespace App\Managers;
 
 
 use App\ExchangeRate;
+use Exception;
 
 class ExchangeRateManger extends BaseManager
 {
@@ -30,7 +31,7 @@ class ExchangeRateManger extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -46,16 +47,16 @@ class ExchangeRateManger extends BaseManager
             $this->managerBy('new', $response);
             $response->save();
             return $response;
-        } else {
-            return ['success' => false, 'message' => 'exist'.$data['currencyId']];
         }
+
+        return ['success' => false, 'message' => 'exist'.$data['currencyId']];
     }
 
     /**
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -78,7 +79,7 @@ class ExchangeRateManger extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

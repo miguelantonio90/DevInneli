@@ -175,9 +175,9 @@
                     >
                       <v-select
                         v-model="sale.box"
-                        disabled
                         :rules="formRule.country"
                         :items="localBoxes"
+                        :disabled="managerSale"
                         required
                         :label="$vuetify.lang.t('$vuetify.menu.box')"
                         item-text="name"
@@ -368,7 +368,7 @@
                         <template v-slot:[`item.totalPrice`]="{ item }">
                           <template>
                             <v-tooltip
-                              v-show="item.taxes.length > 0 || item.discount.length > 0 || item.modifiers.length > 0"
+                              v-show="item.taxes.length > 0 || item.discount.length > 0 "
                               bottom
                             >
                               <template v-slot:activator="{ on, attrs }">
@@ -542,7 +542,6 @@ export default {
       localBoxes: [],
       update: false,
       panel: [0, 1, 2],
-
       totalTax: 0,
       totalDisc: 0,
       subTotal: 0,
@@ -558,7 +557,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('sale', ['managerSale', 'newSale', 'editSale', 'isActionInProgress']),
+    ...mapState('sale', ['managerSale', 'sales', 'saleNumber', 'newSale', 'editSale', 'isActionInProgress']),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -569,10 +568,18 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('discount', ['discounts']),
     ...mapState('modifiers', ['modifiers']),
-    ...mapState('sale', ['sales']),
     ...mapState('inventory', ['inventories']),
-    ...mapGetters('auth', ['user']),
     ...mapState('boxes', ['boxes', 'showNewModal']),
+    ...mapGetters('auth', ['user']),
+    ...mapGetters('sale', ['getNumberFacture']),
+    factureNumber: {
+      get () {
+        return this.getNumberFacture
+      },
+      set (newNumber) {
+        return newNumber
+      }
+    },
     getTableColumns () {
       return [
         {
@@ -624,11 +631,6 @@ export default {
     boxes: function () {
       this.getLocalBoxes()
     },
-    'sale.no_facture': function () {
-      if (this.sales.filter(art => art.no_facture === this.sale.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.sale.no_facture).length > 0) {
-        this.sale.no_facture = this.generateNF()
-      }
-    },
     'sale.taxes' () {
       this.calcTotalSale()
     },
@@ -642,12 +644,11 @@ export default {
   async created () {
     this.loadingData = true
     this.sale = !this.managerSale ? this.newSale : this.editSale
-    console.log(this.sale)
     if (this.managerSale) {
       this.calcTotalSale()
     }
     await this.getArticles()
-    await this.getShops().then((s) => {
+    await this.getShops().then(() => {
       if (!this.managerSale) {
         this.sale.shop = this.shops[0]
       }
@@ -662,7 +663,12 @@ export default {
     this.loadingData = false
     await this.getBoxes()
     await this.updateDataArticle()
-    this.sale.no_facture = this.generateNF()
+
+    if (!this.managerSale) {
+      await this.fetchSaleNumber().then(() => {
+        this.sale.no_facture = this.generateNF()
+      })
+    }
     this.loadingData = false
   },
   methods: {
@@ -670,13 +676,13 @@ export default {
     ...mapActions('inventory', ['getInventories']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSales', 'createSale']),
+    ...mapActions('sale', ['getSales', 'createSale', 'updateSale', 'fetchSaleNumber']),
     ...mapActions('discount', ['getDiscounts']),
     ...mapActions('modifiers', ['getModifiers']),
     generateNF () {
       const seqer = utils.serialMaker()
       seqer.set_prefix('F' + new Date().getFullYear() + '-')
-      seqer.set_seq(1000000)
+      seqer.set_seq(this.factureNumber)
       return seqer.gensym()
     },
     async updateDataArticle () {
@@ -806,7 +812,7 @@ export default {
       this.sale.pays.forEach(v => {
         totalCalcP += v.cant
       })
-      if (parseFloat(this.total) - parseFloat(totalCalcP) !== 0) {
+      if (parseFloat(totalCalcP) > 0 && parseFloat(this.totalPrice) - parseFloat(totalCalcP) !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
           '$vuetify.messages.warning_difference_price', [(totalCalcP - this.totalPrice + ' ' + this.user.company.currency).toString()]
@@ -822,9 +828,15 @@ export default {
             if (this.$refs.form.validate()) {
               this.loading = true
               this.sale.state = state
-              await this.createSale(this.sale).then(() => {
-                this.$router.push({ name: 'vending' })
-              })
+              if (!this.managerSale) {
+                await this.createSale(this.sale).then(() => {
+                  this.$router.push({ name: 'vending' })
+                })
+              } else {
+                await this.updateSale(this.sale).then(() => {
+                  this.$router.push({ name: 'vending' })
+                })
+              }
             }
           } else {
             this.loading = false

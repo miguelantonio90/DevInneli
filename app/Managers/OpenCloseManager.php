@@ -2,9 +2,9 @@
 
 namespace App\Managers;
 
-use App\Articles;
 use App\Box;
 use App\OpenCloseBox;
+use Exception;
 
 class OpenCloseManager extends BaseManager
 {
@@ -31,15 +31,15 @@ class OpenCloseManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
         $company = CompanyManager::getCompanyByAdmin();
         $openClose = OpenCloseBox::create([
-            'box_id'=>$data['box']['id'],
-            'open_to'=>$data['openTo']['id'],
-            'open_money'=>$data['cashOpen'],
+            'box_id' => $data['box']['id'],
+            'open_to' => $data['openTo']['id'],
+            'open_money' => $data['cashOpen'],
         ]);
         $openClose['company_id'] = $company->id;
         $this->managerBy('new', $openClose);
@@ -51,13 +51,11 @@ class OpenCloseManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
         $openClose = Box::findOrFail($id);
-        if (isset($data['name'])) {
-        }
         $openClose->close_by = $data['closeBy']['id'];
         $this->managerBy('edit', $openClose);
         $openClose->save();
@@ -67,7 +65,7 @@ class OpenCloseManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {
@@ -77,8 +75,6 @@ class OpenCloseManager extends BaseManager
         $this->managerBy('delete', $openClose);
         return $openClose->delete();
     }
-
-
 
 
 }

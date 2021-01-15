@@ -10,6 +10,7 @@ class ShopManager extends BaseManager
 {
     /**
      * @return mixed
+     * @throws Exception
      */
     public function findAllByCompany()
     {

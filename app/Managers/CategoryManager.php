@@ -39,7 +39,7 @@ class CategoryManager extends BaseManager
             'company_id' => $company->id,
             'name' => $data['name'],
         ]);
-        $category->color = isset($data['color']) ? $data['color'] : '#1FBC9C';
+        $category->color = $data['color'] ?? '#1FBC9C';
         $this->managerBy('new', $category);
         $category->save();
         return $category;
@@ -57,7 +57,7 @@ class CategoryManager extends BaseManager
         if (isset($data['name'])) {
             $category->name = $data['name'];
         }
-        $category->color = isset($data['color']) ? $data['color'] : '#1FBC9C';
+        $category->color = $data['color'] ?? '#1FBC9C';
         $this->managerBy('edit', $category);
         $category->save();
         return $category;

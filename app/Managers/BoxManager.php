@@ -147,13 +147,13 @@ class BoxManager extends BaseManager
         $managerSale = new SaleManager();
         $openClose['sales'] = $managerSale->filterSale($sales);
         $openClose['payments'] = PaymentManager::findAllByCompany();
-        foreach ($openClose['sales'] as $k=>$sale){
-            foreach ($sale['pay_sales'] as $p=>$pay){
-                foreach ($openClose['payments'] as $ps=>$payment){
-                    if($pay['payment_id'] === $payment['id']){
-                        $payment['total']+= round($pay['cant'],2);
-                    }else{
-                        $payment['total']+= round(0,2);
+        foreach ($openClose['sales'] as $k => $sale) {
+            foreach ($sale['pay_sales'] as $p => $pay) {
+                foreach ($openClose['payments'] as $ps => $payment) {
+                    if ($pay['payment_id'] === $payment['id']) {
+                        $payment['total'] += round($pay['cant'], 2);
+                    } else {
+                        $payment['total'] += round(0, 2);
                     }
                 }
             }
@@ -164,7 +164,7 @@ class BoxManager extends BaseManager
             ->where('refunds.box_id', '=', $openClose->box_id)
             ->get();
         $openClose['totalRefunds'] = 0.00;
-        foreach ($refunds as $r=>$refund){
+        foreach ($refunds as $r => $refund) {
             $openClose['totalRefunds'] += $refund['cant'];
         }
         return $openClose;

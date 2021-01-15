@@ -68,7 +68,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('supplier', 'SupplierController');
 
         Route::resource('article', 'ArticleController');
-        Route::post('article/import', 'ArticleController@import');
+        Route::post('article/import', 'ArticleController@import')->name('articleImport');
+        Route::get('article/number/get', 'ArticleController@findArticleNumber')->name('numberArticle');
 
         Route::resource('inventory', 'InventoryController');
 
@@ -79,6 +80,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('sale/employer', 'SaleController@saleByEmployer')->name('saleByEmployer');
         Route::get('sale/by_limit/{limit}', 'SaleController@findSalesByLimit')->name('saleByLimit');
         Route::get('sale/sales/static', 'SaleController@getTotalSalesStatic')->name('saleStatics');
+        Route::get('sale/number/facture', 'SaleController@findNumberFacture')->name('numberFacture');
 
         Route::resource('assistance', 'AssistanceController');
 

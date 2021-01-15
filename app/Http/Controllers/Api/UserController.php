@@ -37,6 +37,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
@@ -49,6 +50,7 @@ class UserController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function getAll(Request $request): JsonResponse
     {
@@ -92,8 +94,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param    $id
-     * @return void
+     * @param $id
+     * @return mixed
      */
     public function show($id)
     {
@@ -118,9 +120,15 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * @param  Request  $request
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
     public function updateAvatar(Request $request, $id)
     {
-        if (!empty($request)) {
+        if ($request !== null) {
             $app = (new User())->find($id);
             $app->find($id);
             $app->avatar = $request->get('image');
@@ -129,12 +137,12 @@ class UserController extends Controller
                 $app,
                 'User avatar has updated successfully.'
             );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'User avatar has not updated.'
-            );
         }
+
+        return ResponseHelper::sendError(
+            401,
+            'User avatar has not updated.'
+        );
     }
 
     /**

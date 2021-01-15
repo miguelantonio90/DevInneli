@@ -92,24 +92,22 @@ class ArticleManager extends BaseManager
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                if ($articles[$k]['variantValues'][$sh]['price'] == 0.00) {
+                if ($articles[$k]['variantValues'][$sh]['price'] === 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
+                } elseif ($articles[$k]['variantValues'][$sh]['cost'] === 0.00) {
+                    $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
                 } else {
-                    if ($articles[$k]['variantValues'][$sh]['cost'] == 0.00) {
-                        $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
-                    } else {
-                        $articles[$k]['variantValues'][$sh]['percent'] =
-                            round(
-                                (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
-                                2
-                            );
-                    }
+                    $articles[$k]['variantValues'][$sh]['percent'] =
+                        round(
+                            (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                            2
+                        );
                 }
             }
 
-            if ($article['price'] == 0.00) {
+            if ($article['price'] === 0.00) {
                 $articles[$k]['percent'] = 0;
-            } elseif ($article['cost'] == 0.00) {
+            } elseif ($article['cost'] === 0.00) {
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
@@ -118,6 +116,21 @@ class ArticleManager extends BaseManager
             }
         }
         return $articles;
+    }
+
+    /**
+     * @return int
+     */
+    public function findArticleNumber(): int
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $number = Articles::select('ref')
+            ->where('company_id', '=', $company->id)
+            ->latest()
+            ->orderBy('ref', 'DESC')
+            ->first();
+
+        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
     }
 
     /**
@@ -154,7 +167,7 @@ class ArticleManager extends BaseManager
         }
 
         foreach ($shops as $key => $value) {
-            if($value['checked']) {
+            if ($value['checked']) {
                 $artShop = ArticlesShops::create([
                     'article_id' => $article->id,
                     'shop_id' => $value['shop_id'],
@@ -360,10 +373,8 @@ class ArticleManager extends BaseManager
         foreach ($articleComposite as $key => $value) {
             $exist = false;
             foreach ($composites as $k => $v) {
-                if (isset($v['id'])) {
-                    if ($v['id'] === $value->id) {
-                        $exist = true;
-                    }
+                if (isset($v['id']) && $v['id'] === $value->id) {
+                    $exist = true;
                 }
             }
             if (!$exist) {
@@ -377,6 +388,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $variants
+     * @throws Exception
      */
     public function updateVariants($article, $variants): void
     {
@@ -419,10 +431,8 @@ class ArticleManager extends BaseManager
         foreach ($variantsValue as $key => $value) {
             $exist = false;
             foreach ($variantValues as $k => $v) {
-                if (isset($v['id'])) {
-                    if ($v['id'] === $value['id']) {
-                        $exist = true;
-                    }
+                if (isset($v['id']) && $v['id'] === $value['id']) {
+                    $exist = true;
                 }
             }
             if (!$exist) {
@@ -446,7 +456,7 @@ class ArticleManager extends BaseManager
             $this->updateArticlesShops($articleChildren, $shops);
             $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);
             foreach ($arrayShops as $l => $m) {
-                if ($m['articles_shop_id'] == "") {
+                if ($m['articles_shop_id'] === "") {
                     $this->variantManager->newArticleShop($m, $articleChildren);
                 } else {
                     $this->variantManager->updateArticleShop($m['articles_shop_id'], $m);
@@ -480,6 +490,7 @@ class ArticleManager extends BaseManager
     /**
      * @param $article
      * @param $shopsArticles
+     * @throws Exception
      */
     public function updateArticlesShops($article, $shopsArticles): void
     {
@@ -498,6 +509,4 @@ class ArticleManager extends BaseManager
             }
         }
     }
-
-
 }

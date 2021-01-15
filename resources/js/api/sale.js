@@ -30,5 +30,8 @@ export default {
   },
   fetchSaleStatics () {
     return api.get('sale/sales/static')
+  },
+  fetchSaleNumber () {
+    return api.get('sale/number/facture')
   }
 }

@@ -9,13 +9,13 @@
         <div
           id="ticket"
           class="ticket"
-          align="center"
         >
           <img
             v-if="user.company.logo"
             style="margin-top: 15px"
             class="profile mx-auto d-block"
             :src="user.company.logo"
+            alt="LOGO"
           >
           <p class="centrado">
             {{ $vuetify.lang.t('$vuetify.sale.ticket') }}<br>
@@ -327,7 +327,7 @@ export default {
 }
 * {
     font-size: 12px;
-    font-family: 'Times New Roman';
+    font-family: 'Times New Roman',sans-serif;
 }
 
 td,
@@ -363,7 +363,7 @@ th.precio {
     align-content: center;
 }
 
-.ticket {
+#ticket {
     padding-top: 5px;
     align-content: center;
     width: 75mm;

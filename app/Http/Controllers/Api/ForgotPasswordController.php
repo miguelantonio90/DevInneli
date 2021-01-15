@@ -23,14 +23,6 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
-    /**
-     * ForgotPasswordController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function sendPasswordResetLink(Request $request)
     {
         return $this->sendResetLinkEmail($request);

@@ -192,7 +192,7 @@ export default {
 }
 * {
     font-size: 12px;
-    font-family: 'Times New Roman';
+    font-family: 'Times New Roman',sans-serif;
 }
 
 td,

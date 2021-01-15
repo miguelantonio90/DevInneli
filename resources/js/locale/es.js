@@ -30,7 +30,7 @@ export default {
   noDefined: 'No definido',
   aboutMe: 'Acerca de mi',
   activeAccount:
-        'Hola, su cuenta se ha creada, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
+        'Hola, su cuenta se ha creado, pero aún no ha sido activada. Por favor, acceda al correo registrado, se le ha enviado un mensaje para la activación.',
   confirm_password: 'Confirmar Contraseña',
   confirm_pinCode: 'Confirmar Código',
   company: 'Compañía',
@@ -61,6 +61,7 @@ export default {
   import_csv: 'Importando archivo',
   state: 'Estado',
   to: 'A',
+  guide: 'Click para iniciar guía',
   // menu
   menu: {
     setting: 'Configuración',
@@ -626,6 +627,11 @@ export default {
     wat: 'Wat',
     amp: 'Ampere',
     joule: 'Joule'
+  },
+  helpSales: {
+    listStep1: '<strong>Botón Adicionar</strong>!<br> Crear nueva venta',
+    listStep2: '<strong>Filtros</strong>!<br> Establecer filtros de búsquedas y descargar datos',
+    listStep3: '<strong>Listado</strong>!<br> Lista las ventas creadas.'
   },
   ...es
 }

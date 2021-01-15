@@ -36,11 +36,12 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
         return ResponseHelper::sendResponse(
-            $this->categoryManager->findAllByCompany(),
+            $this->categoryManager::findAllByCompany(),
             'Categories retrieved successfully.'
         );
     }
@@ -49,8 +50,9 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -74,17 +76,6 @@ class CategoryController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
-     */
-    public function show($id)
-    {
-//        return Category::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\TaxManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,8 +36,9 @@ class TaxController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws Exception
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return ResponseHelper::sendResponse(
             $this->taxManager->findAllByCompany(),
@@ -48,8 +50,9 @@ class TaxController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -68,22 +71,11 @@ class TaxController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return void
-     */
-    public function show($id)
-    {
-//        return Tax::latest()->where('isAdmin', '=', 0)->get($id);
     }
 
     /**
@@ -93,6 +85,7 @@ class TaxController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -108,6 +101,7 @@ class TaxController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {

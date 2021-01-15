@@ -6,6 +6,7 @@ use App\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,11 +22,11 @@ class CompanyController extends Controller
 
     /**
      * CompanyController constructor.
-     * @param  CompanyManager  $compnayManager
+     * @param  CompanyManager  $companyManager
      */
-    public function __construct(CompanyManager $compnayManager)
+    public function __construct(CompanyManager $companyManager)
     {
-        $this->companyManager = $compnayManager;
+        $this->companyManager = $companyManager;
         parent::__construct();
 
         $this->middleware('auth');
@@ -35,6 +36,7 @@ class CompanyController extends Controller
     /**
      * @param $email
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function companyByEmail($email)
     {
@@ -49,6 +51,7 @@ class CompanyController extends Controller
 
     /**
      *
+     * @throws Exception
      */
     public function index()
     {
@@ -60,28 +63,13 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * @param $id
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -95,7 +83,7 @@ class CompanyController extends Controller
         );
     }
 
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -109,8 +97,9 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param    $id
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -122,7 +111,7 @@ class CompanyController extends Controller
 
     public function updateLogo(Request $request, $id)
     {
-        if (!empty($request)) {
+        if ($request !== null) {
             $app = (new Company())->find($id);
             $app->find($id);
             $app->logo = $request->get('image');
@@ -131,19 +120,19 @@ class CompanyController extends Controller
                 $app,
                 'Company logo has updated successfully.'
             );
-        } else {
-            return ResponseHelper::sendError(
-                401,
-                'Company logo has not updated.'
-            );
         }
+
+        return ResponseHelper::sendError(
+            401,
+            'Company logo has not updated.'
+        );
     }
 
     /**
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validEmail(array $data)
+    protected function validEmail(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255']

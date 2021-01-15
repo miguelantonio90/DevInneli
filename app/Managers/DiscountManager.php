@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Discount;
+use Exception;
 
 class DiscountManager extends BaseManager
 {
@@ -29,7 +30,7 @@ class DiscountManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
@@ -48,7 +49,7 @@ class DiscountManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -70,7 +71,7 @@ class DiscountManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

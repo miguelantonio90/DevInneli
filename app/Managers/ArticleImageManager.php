@@ -13,7 +13,7 @@ class ArticleImageManager
      * @param $articleId
      * @param $images
      */
-    public static function new($articleId, $images)
+    public static function new($articleId, $images): void
     {
         if ($articleId && count($images) > 0) {
             foreach ($images as $key => $image) {

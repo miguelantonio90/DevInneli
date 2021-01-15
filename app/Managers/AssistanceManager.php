@@ -89,8 +89,9 @@ class AssistanceManager extends BaseManager
             $assistance->company_id = (CompanyManager::getCompanyByAdmin())->id;
             $this->managerBy('edit', $assistance);
             $assistance->save();
-            return $assistance;
         }
+
+        return $assistance;
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMissingReturnTypeInspection */
 
 namespace App\Http\Controllers\Api;
 
@@ -35,12 +35,13 @@ class BoxController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
         return ResponseHelper::sendResponse(
-            $this->boxManager->findAllByCompany(),
+            $this->boxManager::findAllByCompany(),
             'Categories retrieved successfully.'
         );
     }
@@ -49,8 +50,9 @@ class BoxController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -69,7 +71,7 @@ class BoxController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -96,6 +98,7 @@ class BoxController extends Controller
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -111,6 +114,7 @@ class BoxController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -123,6 +127,7 @@ class BoxController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function sendOpenClose(Request $request)
     {
@@ -135,6 +140,7 @@ class BoxController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function getDetailOfBox(Request $request)
     {

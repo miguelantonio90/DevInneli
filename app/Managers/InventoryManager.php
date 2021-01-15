@@ -8,6 +8,7 @@ use App\ArticlesShops;
 use App\InventoriesArticlesShops;
 use App\Inventory;
 use App\Tax;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class InventoryManager extends BaseManager
@@ -36,7 +37,7 @@ class InventoryManager extends BaseManager
                     'articles_shops.id')
                 ->join('inventories', 'inventories.id', '=', 'inventories_articles_shops.inventory_id')
                 ->where('inventories.id', '=', $value['id'])
-                ->select('shops.*','shops.id as shop_id')
+                ->select('shops.*', 'shops.id as shop_id')
                 ->get()->first();
             $inventories[$key]['articles'] = DB::table('articles')
                 ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
@@ -74,13 +75,13 @@ class InventoryManager extends BaseManager
     /**
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new($data)
     {
         $inventory = Inventory::create([
             'no_facture' => $data['no_facture'],
-            'pay' => $data['pay'] ? $data['pay'] : null,
+            'pay' => $data['pay'] ?: null,
             'company_id' => $data['company_id']
         ]);
         if (isset($data['payments']['id'])) {
@@ -101,7 +102,7 @@ class InventoryManager extends BaseManager
      * @param $data
      * @param $edit
      */
-    public function updateInventoryData($inventory, $data, $edit)
+    public function updateInventoryData($inventory, $data, $edit): void
     {
         $articles = $data['articles'];
         foreach ($articles as $key => $value) {
@@ -161,7 +162,7 @@ class InventoryManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit($id, $data)
     {
@@ -194,7 +195,8 @@ class InventoryManager extends BaseManager
         foreach ($inventoryArtShopDB as $art => $value) {
             $exist = false;
             foreach ($articles as $k => $v) {
-                if (key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
+                if (array_key_exists('id',
+                    $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
                     $exist = true;
                 }
             }
@@ -209,7 +211,7 @@ class InventoryManager extends BaseManager
     /**
      * @param $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($id)
     {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\AccessManager;
 use App\Position;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,6 +27,7 @@ class AccessController extends Controller
 
     /**
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -38,6 +40,7 @@ class AccessController extends Controller
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -47,23 +50,13 @@ class AccessController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param    $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      *  Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param $id
      * @return JsonResponse|Response
      * @throws ValidationException
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -91,6 +84,7 @@ class AccessController extends Controller
     /**
      * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

@@ -10,17 +10,9 @@ use Illuminate\Support\Facades\Mail;
 class PingController extends Controller
 {
     /**
-     * PingController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'status' => 'ok',
@@ -32,7 +24,7 @@ class PingController extends Controller
     /**
      * @return JsonResponse
      */
-    public function sendMsg()
+    public function sendMsg(): JsonResponse
     {
         $data = ['link' => 'http://www.inneli.com'];
         Mail::send('emails.notification', $data, function ($message) {

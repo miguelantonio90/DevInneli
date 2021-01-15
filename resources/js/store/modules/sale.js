@@ -1,4 +1,4 @@
-import sale from '../../api/sale'
+import apiSale from '../../api/sale'
 import moment from 'moment'
 
 const FETCHING_SALES = 'FETCHING_SALES'
@@ -7,6 +7,7 @@ const FETCHING_SALES_BY_PAYMENT = 'FETCHING_SALES_BY_PAYMENT'
 const FETCHING_SALES_BY_PRODUCT = 'FETCHING_SALES_BY_PRODUCT'
 const FETCHING_SALES_BY_EMPLOYER = 'FETCHING_SALES_BY_EMPLOYER'
 const FETCHING_SALES_BY_LIMIT = 'FETCHING_SALES_BY_LIMIT'
+const FETCHING_SALES_NUMBER = 'FETCHING_SALES_NUMBER'
 const FETCHING_SALES_TOTAL = 'FETCHING_SALES_TOTAL'
 const SWITCH_LOAD_DATA = 'SWITCH_LOAD_DATA'
 const SWITCH_SALE_NEW_MODAL = 'SWITCH_SALE_NEW_MODAL'
@@ -67,7 +68,8 @@ const state = {
   salesByProducts: [],
   salesByEmployer: [],
   salesByLimit: [],
-  salesStatics: []
+  salesStatics: [],
+  saleNumber: ''
 }
 
 const mutations = {
@@ -188,6 +190,9 @@ const mutations = {
   [FETCHING_SALES_BY_EMPLOYER] (state, salesByEmployer) {
     state.salesByEmployer = salesByEmployer
   },
+  [FETCHING_SALES_NUMBER] (state, saleNumber) {
+    state.saleNumber = saleNumber
+  },
   [FETCHING_SALES_BY_LIMIT] (state, salesByLimit) {
     salesByLimit.map((value) => {
       switch (value.state) {
@@ -216,7 +221,11 @@ const mutations = {
   }
 }
 
-const getters = {}
+const getters = {
+  getNumberFacture: (state) => {
+    return state.saleNumber
+  }
+}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
@@ -238,70 +247,88 @@ const actions = {
     commit(SWITCH_SALE_SHOW_MODAL, true)
     commit(SALE_EDIT, saleId)
   },
-  async getSales ({ commit }) {
+  async getSales ({
+    commit,
+    dispatch
+  }) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSales()
       .then(({ data }) => {
         commit(FETCHING_SALES, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async getSalesByCategories ({ commit }, filter) {
+  async getSalesByCategories ({
+    commit,
+    dispatch
+  }, filter) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleByCategory(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_CATEGORIES, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async getSalesByPayment ({ commit }, filter) {
+  async getSalesByPayment ({
+    commit,
+    dispatch
+  }, filter) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleByPayment(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_PAYMENT, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async getSaleByProduct ({ commit }, filter) {
+  async getSaleByProduct ({
+    commit,
+    dispatch
+  }, filter) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleByProduct(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_PRODUCT, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async getSaleByEmployer ({ commit }, filter) {
+  async getSaleByEmployer ({
+    commit,
+    dispatch
+  }, filter) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleByEmployer(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_EMPLOYER, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
-  async getSaleByLimit ({ commit }, filter) {
+  async getSaleByLimit ({
+    commit,
+    dispatch
+  }, filter) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleByLimit(filter)
       .then(({ data }) => {
         commit(FETCHING_SALES_BY_LIMIT, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => {
         commit(FAILED_SALE, error)
       })
@@ -312,12 +339,12 @@ const actions = {
   }) {
     commit(SALE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
-    await sale
+    await apiSale
       .fetchSaleStatics()
       .then(({ data }) => {
         commit(FETCHING_SALES_TOTAL, data.data)
         commit(SALE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       }).catch((error) => commit(FAILED_SALE, error))
   },
   async createSale ({
@@ -325,13 +352,13 @@ const actions = {
     dispatch
   }, newSale) {
     commit(ENV_DATA_PROCESS, true)
-    await sale
+    await apiSale
       .sendCreateRequest(newSale)
       .then((data) => {
         commit(SALE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('sale/getSales', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       })
       .catch((error) => commit(FAILED_SALE, error))
   },
@@ -343,13 +370,13 @@ const actions = {
     const request = saleE || state.editSale
 
     // const request = profile || state.editUser
-    await sale
+    await apiSale
       .sendUpdateRequest(request)
       .then((data) => {
         commit(SALE_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('sale/getSales', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -361,14 +388,25 @@ const actions = {
     dispatch,
     state
   }, saleId) {
-    await sale
+    await apiSale
       .sendDeleteRequest(saleId)
       .then((data) => {
         commit(SALE_DELETE)
         dispatch('sale/getSales', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        dispatch('auth/updateAccess', data.access, { root: true })
       })
       .catch((error) => commit(FAILED_SALE, error))
+  },
+  async fetchSaleNumber ({
+    commit,
+    dispatch
+  }) {
+    await apiSale
+      .fetchSaleNumber()
+      .then(({ data }) => {
+        commit(FETCHING_SALES_NUMBER, data.data)
+        dispatch('auth/updateAccess', data.access, { root: true })
+      }).catch((error) => commit(FAILED_SALE, error))
   }
 }
 

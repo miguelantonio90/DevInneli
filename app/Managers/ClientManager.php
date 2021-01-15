@@ -29,6 +29,7 @@ class ClientManager extends BaseManager
     /**
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function new($data)
     {
@@ -88,6 +89,7 @@ class ClientManager extends BaseManager
      * @param $id
      * @param $data
      * @return mixed
+     * @throws Exception
      */
     public function edit($id, $data)
     {
