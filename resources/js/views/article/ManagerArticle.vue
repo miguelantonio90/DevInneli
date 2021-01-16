@@ -700,7 +700,7 @@ export default {
     ...mapActions('article', ['createArticle', 'updateArticle', 'fetchArticleNumber', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('tax', ['getTaxes']),
-    ...mapActions('shop', ['getShops']),00000
+    ...mapActions('shop', ['getShops'],
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
       const key = String.fromCharCode(
