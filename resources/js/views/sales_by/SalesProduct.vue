@@ -215,6 +215,7 @@ export default {
       const d2 = this.dates[1]
       console.log(this.dates)
       if (d1 > d2) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.dates = [d2, d1]
       }
       return this.dates.join(' ---> ')
