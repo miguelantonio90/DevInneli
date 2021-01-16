@@ -55,6 +55,7 @@
               />
             </v-col>
             <v-col
+              v-if="newRefund.sale.type==='sale'"
               cols="12"
               md="8"
             >
@@ -135,13 +136,14 @@ export default {
     }
   },
   watch: {
-
     boxes: function () {
       this.getLocalBoxes()
     }
   },
   async created () {
-    await this.getBoxes()
+    if (this.newRefund.sale.type === 'sale') {
+      await this.getBoxes()
+    }
   },
   methods: {
     ...mapActions('refund', ['toogleNewModal', 'createRefund']),
@@ -155,32 +157,11 @@ export default {
       })
 
       if (this.newRefund.cant > this.newRefund.article.cant - totalCantRefund || this.newRefund.cant < 0) {
-        this.$Swal.fire({
-          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
-          ]),
-          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]),
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
+        this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]))
       } else if (this.newRefund.money > this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund || this.newRefund.money < 0) {
-        this.$Swal.fire({
-          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
-          ]),
-          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
-            [totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)]),
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
+        this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
+          [totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)])
+        )
       } else if (this.$refs.form.validate()) {
         this.loading = true
         await this.createRefund(this.newRefund).then(() => {
@@ -190,13 +171,26 @@ export default {
         })
       }
     },
-
     getLocalBoxes () {
       this.localBoxes = []
       if (this.newRefund.sale.shop) {
         this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newRefund.sale.shop.id)
         if (this.localBoxes.length > 0) { this.newRefund.box = this.localBoxes[0] }
       }
+    },
+    showMessage (textMsg) {
+      this.$Swal.fire({
+        title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+          this.$vuetify.lang.t('$vuetify.menu.articles')
+        ]),
+        text: textMsg,
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonText: this.$vuetify.lang.t(
+          '$vuetify.actions.accept'
+        ),
+        confirmButtonColor: 'red'
+      })
     }
   }
 }

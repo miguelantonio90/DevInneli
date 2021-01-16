@@ -40,7 +40,6 @@
               :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
               csv-filename="Categories"
               :headers="getTableColumns"
-              :is-loading="isTableLoading"
               :items="sale.pays"
               :manager="'payment'"
               :sort-by="['name']"
@@ -64,7 +63,7 @@
                   @open="openEditCant(item)"
                   @save="saveEditCant(item)"
                 >
-                  <div>{{ `${currency + ' ' + item.cant}` }}</div>
+                  <div>{{ `${currency + ' ' + parseFloat(item.cant).toFixed(2)}` }}</div>
                   <template v-slot:input>
                     <div class="mt-4 title">
                       {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -193,6 +192,7 @@ export default {
   },
   created () {
     this.getPayments()
+    this.calcTotalPay()
   },
   methods: {
     ...mapActions('payment', [

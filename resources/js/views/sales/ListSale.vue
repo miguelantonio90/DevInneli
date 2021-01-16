@@ -5,28 +5,6 @@
         class="py-0"
         cols="12"
       >
-        <v-app-bar
-          flat
-          dense
-          color="rgba(0, 0, 0, 0)"
-        >
-          <v-spacer />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="warning"
-                dark
-                v-bind="attrs"
-                icon
-                v-on="on"
-                @click="initTour"
-              >
-                <v-icon>mdi-help</v-icon>
-              </v-btn>
-            </template>
-            <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
-          </v-tooltip>
-        </v-app-bar>
         <new-refound
           v-if="showNewModal"
         />
@@ -48,6 +26,7 @@
           @create-row="createSaleHandler"
           @edit-row="editSaleHandler($event)"
           @delete-row="deleteSaleHandler($event)"
+          @init-tour="initTour"
         >
           <template v-slot:item.no_facture="{ item }">
             <template>

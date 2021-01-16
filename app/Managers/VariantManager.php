@@ -65,7 +65,7 @@ class VariantManager extends BaseManager
             'article_id' => $article->id,
             'shop_id' => $data['shop_id'],
             'stock' => $data['stock'] ?: 0,
-            'price' => $data['price'],
+            'price' => $data['price'] ?:0,
             'under_inventory' => $data['under_inventory'] ?: 0
         ]);
         $this->managerBy('new', $artShop);

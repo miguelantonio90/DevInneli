@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <new-client v-if="$store.state.client.showNewModal" />
+    <new-supplier v-if="$store.state.supplier.showNewModal" />
     <new-tax v-if="$store.state.tax.showNewModal" />
     <new-payment v-if="$store.state.payment.showNewModal" />
     <new-discount v-if="this.$store.state.discount.showNewModal" />
@@ -11,13 +11,12 @@
         md="3"
       >
         <v-autocomplete
-          v-model="sale.client"
+          v-model="sale.supplier"
           clearable
-          :items="clients"
-          :label="$vuetify.lang.t('$vuetify.menu.client')"
+          :items="suppliers"
+          :label="$vuetify.lang.t('$vuetify.menu.supplier')"
           item-text="firstName"
-          :loading="isClientTableLoading"
-          :disabled="!!isClientTableLoading"
+          :loading="isSupplierTableLoading"
           return-object
         >
           <template v-slot:append-outer>
@@ -72,7 +71,6 @@
           v-model="sale.no_facture"
           :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
           required
-          readonly
           :rules="formRule.required"
         />
       </v-col>
@@ -155,10 +153,10 @@
         <list-pay
           :edit="edit"
           :sale="sale"
-          :total-price="parseFloat(totalPrice).toFixed(2)"
+          :total-price="parseFloat(getTotalCost).toFixed(2)"
           :total-tax="parseFloat(totalTax).toFixed(2)"
           :total-discount="parseFloat(totalDiscount).toFixed(2)"
-          :sub-total="subTotal? parseFloat(subTotal).toFixed(2): 0.00"
+          :sub-total="parseFloat(subTotal).toFixed(2)"
           :currency="user.company.currency"
         />
       </v-col>
@@ -167,15 +165,15 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import NewClient from '../client/NewClient'
 import NewTax from '../tax/NewTax'
 import NewPayment from '../payment/NewPayment'
 import NewDiscount from '../discount/NewDiscount'
 import ListPay from '../pay/ListPay'
+import NewSupplier from '../supplier/NewSupplier'
 
 export default {
   name: 'ExtraData',
-  components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
+  components: { NewSupplier, ListPay, NewPayment, NewTax, NewDiscount },
   props: {
     edit: {
       type: Boolean,
@@ -187,7 +185,7 @@ export default {
         return {}
       }
     },
-    totalPrice: {
+    totalCost: {
       type: String,
       default: '0.00'
     },
@@ -211,12 +209,15 @@ export default {
     }
   },
   computed: {
-    ...mapState('client', ['clients', 'isClientTableLoading']),
+    ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['newSale', 'editSale']),
     ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
+    getTotalCost () {
+      return this.totalCost
+    }
   },
   watch: {
     discounts: function () {
@@ -224,7 +225,7 @@ export default {
     }
   },
   async created () {
-    await this.getClients()
+    await this.getSuppliers()
     await this.getTaxes()
     await this.getPayments()
     await this.getDiscounts().then(() => {
@@ -232,7 +233,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('client', ['getClients']),
+    ...mapActions('supplier', ['getSuppliers']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('payment', ['getPayments']),
     ...mapActions('discount', ['getDiscounts']),

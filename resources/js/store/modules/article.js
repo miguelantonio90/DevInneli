@@ -116,6 +116,11 @@ const mutations = {
     state.articles = []
     articles.forEach((value) => {
       if (!value.parent_id) {
+        if (value.variants.length > 0) {
+          value.variants.forEach((k) => {
+            k.value = JSON.parse(k.value)
+          })
+        }
         state.articles.push(value)
       }
     })

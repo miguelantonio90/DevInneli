@@ -53,6 +53,7 @@ export default {
   wait: 'Please wait ...',
   phone_holder: 'Enter your phone number',
   price: 'Price',
+  cost: 'Cost',
   color: 'Color',
   main: 'Main',
   file: 'File',
@@ -209,7 +210,7 @@ export default {
     idle_info: 'You have left this browser idle for 10 minutes.',
     idle_counter: 'The session closes in {0} seconds',
     warning_ref: 'You cannot add that article. Reference {0} is already in use. ',
-    warning_barCode: 'You cannot add that item. Barcode {0} is already in use. ',
+    warning_barCode: 'You cannot add that item. Barcode {0} is used by {1} and {2}',
     info_import_category: 'If this file contains Categories, they will be imported to the system, but if you have already created any before importing,' +
       'and the names match, then the old ones will be kept, attaching the new items.',
     info_import_shop: 'If this file contains items related to stores, they will be imported into the system with the country where you were registered,' +
@@ -521,6 +522,8 @@ export default {
     salesSub: 'Sales increase',
     expenses: 'Expenses',
     expensesSub: 'Total expenses',
+    costs: 'Costs',
+    costsSub: 'Total costs',
     revenue: 'Income',
     revenueSub: 'Increase in revenue',
     orders: 'Orders',

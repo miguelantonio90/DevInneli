@@ -136,6 +136,7 @@ class BoxManager extends BaseManager
         $sales = Sale::latest()
             ->where('created_at', '>=', $openClose->created_at)
             ->where('state', '=', 'accepted')
+            ->where('type', '=', 'sale')
             ->with('box')
             ->with('pay_sales')
             ->with('articles_shops')

@@ -350,17 +350,16 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                              <v-text-field-integer
+                              <v-text-field-money
                                 v-model="item.cant"
                                 :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 :properties="{
                                   clearable: true,
                                 }"
                                 :options="{
-                                  inputMask: '#########',
-                                  outputMask: '#########',
-                                  empty: 1,
-                                  applyAfter: false,
+                                  length: 15,
+                                  precision: 2,
+                                  empty: 0.00,
                                 }"
                               />
                             </template>

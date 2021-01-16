@@ -1,7 +1,33 @@
 <template>
   <v-card>
-    <v-card-title v-if="title !== ''">
-      {{ title }}
+    <v-card-title>
+      <v-app-bar
+        flat
+        dense
+        color="rgba(0, 0, 0, 0)"
+      >
+        {{ title }}
+        <v-spacer />
+        <v-tooltip
+          v-if="viewTourButton"
+          bottom
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="teal darken-2"
+              dark
+              v-bind="attrs"
+              icon
+              medium
+              v-on="on"
+              @click="tourButtonClicked"
+            >
+              <v-icon>mdi-help</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
+        </v-tooltip>
+      </v-app-bar>
     </v-card-title>
     <v-container
       v-if="viewShowFilter"
@@ -244,6 +270,10 @@ export default {
       type: String,
       default: ''
     },
+    viewTourButton: {
+      type: Boolean,
+      default: true
+    },
     viewNewButton: {
       type: Boolean,
       default: true
@@ -411,6 +441,9 @@ export default {
     },
     createButtonClicked () {
       this.$emit('create-row')
+    },
+    tourButtonClicked () {
+      this.$emit('init-tour')
     },
     handleClick (row) {
       this.$emit('rowClick', row)

@@ -56,8 +56,8 @@
         >
           <linear-statistic
             class="mt-4"
-            :title="$vuetify.lang.t('$vuetify.dashboard.expenses')"
-            :sub-title="$vuetify.lang.t('$vuetify.dashboard.expensesSub')"
+            :title="$vuetify.lang.t('$vuetify.dashboard.costs')"
+            :sub-title="$vuetify.lang.t('$vuetify.dashboard.costsSub')"
             :currency="user.company.currency"
             :quantity="salesStatics.totalExpenses ? salesStatics.totalExpenses.toString(): 0"
             icon="mdi-trending-down"

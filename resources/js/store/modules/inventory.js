@@ -47,8 +47,8 @@ const state = {
     articles: [],
     articles_shops: [],
     shop: {},
-    client: {},
-    client_id: ''
+    supplier: {},
+    supplier_id: ''
   },
   isInventoryTableLoading: false,
   isActionInProgress: false,
@@ -84,11 +84,15 @@ const mutations = {
     state.newInventory = {
       no_facture: '',
       pay: '',
+      pays: [],
+      box: null,
+      state: 'open',
+      discounts: [],
       taxes: [],
-      payments: {},
+      payments: null,
       articles: [],
-      shop: {},
-      supplier: {}
+      shop: null,
+      client: null
     }
     state.saved = true
     this._vm.$Toast.fire({
@@ -109,12 +113,16 @@ const mutations = {
     state.editInventory = {
       id: '',
       no_facture: '',
-      pay: '',
+      box: {},
+      discounts: [],
       taxes: [],
+      pays: [],
       payments: {},
       articles: [],
+      articles_shops: [],
       shop: {},
-      supplier: {}
+      supplier: {},
+      supplier_id: ''
     }
     state.saved = true
     this._vm.$Toast.fire({

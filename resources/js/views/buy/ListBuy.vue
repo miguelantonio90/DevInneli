@@ -24,24 +24,10 @@
           @edit-row="editBuyHandler($event)"
           @delete-row="deleteBuyHandler($event)"
         >
-          <template v-slot:item.no_facture="{ item }">
-            {{ item.no_facture }}
-          </template>
           <template v-slot:[`item.shop.name`]="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  {{ item.shop.name }}
-                </v-chip>
-              </template>
-              <span>
-                {{ $vuetify.lang.t('$vuetify.menu.box')+'- ' + item.box.name }}</span>
-            </v-tooltip>
+            {{ item.shop.name }}
           </template>
-          <template v-slot:[`item.totalPrice`]="{ item }">
+          <template v-slot:[`item.totalCost`]="{ item }">
             <template>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -59,7 +45,7 @@
                   <list-pay
                     :show="false"
                     :sale="item"
-                    :total-price="parseFloat(item.totalPrice).toFixed(2).toString()"
+                    :total-cost="parseFloat(item.totalCost).toFixed(2).toString()"
                     :total-tax="parseFloat(item.totalTax).toFixed(2)"
                     :total-discount="parseFloat(item.totalDiscount).toFixed(2)"
                     :sub-total="parseFloat(item.subTotal).toFixed(2)"
@@ -71,9 +57,6 @@
                 >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
               </v-tooltip>
             </template>
-            {{ `${user.company.currency + ' ' + item.totalPrice}` }}
-          </template>
-          <template v-slot:[`item.totalCost`]="{ item }">
             {{ `${user.company.currency + ' ' + item.totalCost}` }}
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
@@ -112,10 +95,10 @@
                         {{ $vuetify.lang.t('$vuetify.variants.cant') }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.price') }}
+                        {{ $vuetify.lang.t('$vuetify.articles.cost') }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.variants.total_price') }}
+                        {{ $vuetify.lang.t('$vuetify.variants.total_cost') }}
                       </th>
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
@@ -128,7 +111,7 @@
                   <tbody>
                     <tr
                       v-for="article in item.articles"
-                      :key="article.name"
+                      :key="article.id"
                     >
                       <td>
                         <template v-if="article.refounds.length > 0">
@@ -174,32 +157,35 @@
                         </v-tooltip>
                         {{ article.cant }}
                       </td>
-                      <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + article.cost}` }}</td>
                       <td>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <b><v-icon
-                              :color="article.moneyRefund > 0 ? 'red':'primary'"
-                              class="mr-2"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              mdi-information
-                            </v-icon></b>
-                          </template>
-                          <template>
-                            <detail-article-price
-                              v-if="article.taxes.length > 0 || article.discount.length > 0 || article.modifiers.length > 0"
-                              :article="article"
-                              :currency="user.company.currency"
-                            />
-                            <span
-                              v-if="article.moneyRefund > 0"
-                            >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
-                          </template>
-                        </v-tooltip>
-                        <span>{{ `${user.company.currency + ' ' + article.totalPrice}` }}</span>
+                        <template
+                          v-if="article.taxes.length > 0 || article.discount.length > 0"
+                        >
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <b><v-icon
+                                :color="article.moneyRefund > 0 ? 'red':'primary'"
+                                class="mr-2"
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information
+                              </v-icon></b>
+                            </template>
+                            <template>
+                              <detail-article-cost
+                                :article="article"
+                                :currency="user.company.currency"
+                              />
+                              <span
+                                v-if="article.moneyRefund > 0"
+                              >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
+                            </template>
+                          </v-tooltip>
+                        </template>
+                        <span>{{ `${user.company.currency + ' ' + parseFloat(article.totalCost).toFixed(2)}` }}</span>
                       </td>
                       <td>
                         <template v-if="article.inventory > 0">
@@ -215,7 +201,7 @@
                         </template>
                       </td>
                       <td>
-                        <template v-if="item.state !=='preform'">
+                        <template>
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
                               <b><v-icon
@@ -227,24 +213,6 @@
                                 @click="refundArticle(item, article)"
                               >
                                 mdi-undo
-                              </v-icon></b>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
-                          </v-tooltip>
-                        </template>
-                        <template v-else>
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                              <b><v-icon
-                                v-if="article.cant > 0"
-                                style="color: #ff752b"
-                                class="mr-2"
-                                small
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="cancelProductPreform(item, article)"
-                              >
-                                mdi-cancel
                               </v-icon></b>
                             </template>
                             <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
@@ -268,10 +236,10 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import NewRefound from '../refund/NewRefound'
 import DetailRefund from '../refund/DetailRefund'
 import ListPay from '../pay/ListPay'
-
+import DetailArticleCost from './DetailArticleCost'
 export default {
   name: 'ListBuy',
-  components: { DetailRefund, NewRefound, ListPay },
+  components: { DetailRefund, NewRefound, ListPay, DetailArticleCost },
   data () {
     return {
       menu: false,
@@ -308,13 +276,8 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.state'),
-          value: 'state',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
-          value: 'totalPrice',
+          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+          value: 'totalCost',
           select_filter: true
         },
         {
@@ -361,8 +324,8 @@ export default {
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
       this.localInventories = []
-      await this.getInventories()
       await this.getArticles()
+      await this.getInventories()
     },
     refundArticle (sale, article) {
       if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
@@ -387,13 +350,13 @@ export default {
     total_pay (item) {
       let sum = 0
       item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        sum += v.percent ? item.cant * item.cost * v.value / 100 : v.value
       })
       let discount = 0
       item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+        discount += v.percent ? item.cant * item.cost * v.value / 100 : v.value
       })
-      return item.cant * item.price + sum - discount - item.moneyRefund
+      return item.cant * item.cost + sum - discount - item.moneyRefund
     },
     createBuyHandler () {
       if (this.articles.length === 0) {
@@ -414,13 +377,13 @@ export default {
           })
       } else {
         this.$store.state.inventory.managerInventory = false
-        this.$router.push({ name: 'vending_new' })
+        this.$router.push({ name: 'supply_add' })
       }
     },
     editBuyHandler ($event) {
       this.openEditModal($event)
       this.$store.state.inventory.managerInventory = true
-      this.$router.push({ name: 'vending_edit' })
+      this.$router.push({ name: 'supply_edit' })
     },
     deleteBuyHandler (articleId) {
       this.$Swal

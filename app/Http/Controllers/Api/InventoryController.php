@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
-use App\Managers\InventoryManager;
-use Exception;
+use App\Managers\BuyManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,15 +13,15 @@ use Illuminate\Http\Response;
 class InventoryController extends Controller
 {
     /**
-     * @var InventoryManager
+     * @var BuyManager
      */
     private $inventoryManager;
 
     /**
      * UserController constructor.
-     * @param  InventoryManager  $inventoryManager
+     * @param  BuyManager  $inventoryManager
      */
-    public function __construct(InventoryManager $inventoryManager)
+    public function __construct(BuyManager $inventoryManager)
     {
         parent::__construct();
 
@@ -31,8 +30,9 @@ class InventoryController extends Controller
     }
 
     /**
-     * @return JsonResponse|Response
-     * @throws Exception
+     * Display a listing of the resource.
+     *
+     * @return JsonResponse
      */
     public function index()
     {
@@ -46,8 +46,7 @@ class InventoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return JsonResponse|Response
-     * @throws Exception
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -67,7 +66,6 @@ class InventoryController extends Controller
      * @param  Request  $request
      * @param    $id
      * @return JsonResponse|Response
-     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -83,7 +81,6 @@ class InventoryController extends Controller
      *
      * @param    $id
      * @return JsonResponse|Response|void
-     * @throws Exception
      */
     public function destroy($id)
     {

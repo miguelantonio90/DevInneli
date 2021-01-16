@@ -209,11 +209,8 @@ export default {
   methods: {
     ...mapActions('auth', ['sendRegisterRequest']),
     customFilter (item, queryText, itemText) {
-      const textOne = this.$vuetify.lang.t('$vuetify.sector.' + item.value.toLowerCase())
-      const textTwo = this.$vuetify.lang.t('$vuetify.sector.' + item.value.toLowerCase())
-      const searchText = queryText.toLowerCase()
-      return textOne.indexOf(searchText) > -1 ||
-              textTwo.indexOf(searchText) > -1
+      console.log(item)
+      return this.$vuetify.lang.t('$vuetify.sector.' + item.value).toLowerCase().indexOf(queryText.toLowerCase()) > -1
     },
     onCountry (event) {
       this.formRegister.country = event.iso2

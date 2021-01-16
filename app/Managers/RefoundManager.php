@@ -45,14 +45,19 @@ class RefoundManager extends BaseManager
             'sale_id' => $data['sale']['id'],
             'article_id' => $data['article']['article_id']
         ]);
-        $refunds['box_id'] = $data['box']['id'];
-        $refunds->save();
         $this->managerBy('new', $refunds);
         $article_shop = ArticlesShops::latest()
             ->where('article_id', '=', $data['article']['id'])
             ->where('shop_id', '=', $data['sale']['shop']['shop_id'])
             ->get()[0];
-        $article_shop->stock += $data['cant'];
+        if($data['sale']['type'] === 'sale'){
+            $article_shop->stock += $data['cant'];
+            $refunds['box_id'] = $data['box']['id'];
+        }else{
+            $article_shop->stock -= $data['cant'];
+        }
+        $refunds->save();
+        $article_shop->save();
         $this->managerBy('update', $article_shop);
         return $refunds;
     }

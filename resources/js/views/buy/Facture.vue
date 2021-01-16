@@ -30,15 +30,39 @@
           <b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b>
         </v-col>
         <v-col
+          v-if="subTotal > 0"
           cols="12"
           md="6"
         >
           {{ `${getCurrency}` }} {{ subTotal }}
         </v-col>
+        <v-col v-else>
+          <v-tooltip
+            right
+            cols="12"
+            md="6"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-information-outline
+              </v-icon>
+            </template>
+            <span>
+              <b>{{ $vuetify.lang.t('$vuetify.messages.warning_tax_cost') }}</b>
+            </span>
+          </v-tooltip><span style="color: crimson; text-decoration: line-through;">
+            {{ `${getCurrency + ' ' + sale.subTotal}` }}
+          </span>
+        </v-col>
       </v-row>
       <v-row
         v-for="tax in sale.taxes"
-        :key="tax.id"
+        :key="tax.name"
       >
         <v-col
           cols="12"
@@ -63,13 +87,13 @@
       </v-row>
       <v-row
         v-for="disc in sale.discounts"
-        :key="disc.id"
+        :key="disc.name"
       >
         <v-col
           cols="12"
           md="6"
         >
-          <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ disc.name }})</b>
+          <b style="color: red">{{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discounts.filter(discount=>discount.id === disc.id)[0].name }})</b>
         </v-col>
         <v-col
           v-if="disc.percent==='true'"
@@ -168,7 +192,7 @@ export default {
 }
 * {
     font-size: 12px;
-    font-family: 'Times New Roman',sans-serif;
+    font-family: 'Times New Roman';
 }
 
 td,
