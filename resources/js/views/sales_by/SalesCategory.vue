@@ -25,18 +25,35 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="dateRangeText"
                     prepend-icon="mdi-calendar"
                     readonly
+                    v-bind="attrs"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="dates"
                   range
-                />
+                >
+                  <v-spacer />
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="menu = false"
+                  >
+                    {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="saveDates"
+                  >
+                    {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+                  </v-btn>
+                </v-date-picker>
               </v-menu>
             </v-col>
             <v-col
@@ -193,6 +210,12 @@ export default {
     ...mapState('sale', ['salesByCategories', 'isTableLoading']),
     ...mapGetters('auth', ['user']),
     dateRangeText () {
+      const d1 = this.dates[0]
+      const d2 = this.dates[1]
+      console.log(this.dates)
+      if (d1 > d2) {
+        this.dates = [d2, d1]
+      }
       return this.dates.join(' ---> ')
     },
     getTableColumns () {
@@ -265,6 +288,10 @@ export default {
   methods: {
     ...mapActions('shop', ['getShops']),
     ...mapActions('sale', ['getSalesByCategories']),
+    saveDates () {
+      this.$refs.menu.save(this.dates)
+      this.loadSalesByCategories()
+    },
     async changeShop () {
       this.loadingData = true
       if (this.localShops.length === 0) { this.localShops.push(this.shops[0]) } else { await this.loadSalesByCategories() }

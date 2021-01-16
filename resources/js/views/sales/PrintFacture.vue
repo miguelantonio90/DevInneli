@@ -138,60 +138,52 @@
               <tr>
                 <td><b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b></td>
                 <td style="text-align: right">
-                  {{ `${user.company.currency + ' ' + sub_total}` }}
+                  {{ `${user.company.currency + ' ' + parseFloat(sub_total).toFixed(2)}` }}
                 </td>
               </tr>
-              <tr v-if="editSale.taxes.length === 0">
-                <td><b>{{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}</b></td>
-                <td style="text-align: right">
-                  {{ user.company.currency + ' ' + parseFloat(0).toFixed(2) }}
-                </td>
-              </tr>
-              <tr
-                v-for="tax in editSale.taxes"
-                v-else
-                :key="tax.name"
-              >
-                <td><b>{{ $vuetify.lang.t('$vuetify.articles.tax') }}({{ tax.name }})</b></td>
-                <td
-                  v-if="tax.percent==='true'"
-                  style="text-align: right"
+              <template v-if="editSale.taxes.length !== 0">
+                {{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}
+                <tr
+                  v-for="tax in editSale.taxes"
+                  :key="tax.name"
                 >
-                  <i>{{ `${user.company.currency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)
-                  </i>
-                </td>
-                <td
-                  v-else
-                  style="text-align: right"
+                  <td><b>{{ $vuetify.lang.t('$vuetify.articles.tax') }}({{ tax.name }})</b></td>
+                  <td
+                    v-if="tax.percent==='true'"
+                    style="text-align: right"
+                  >
+                    <i>{{ `${user.company.currency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)
+                    </i>
+                  </td>
+                  <td
+                    v-else
+                    style="text-align: right"
+                  >
+                    <i>{{ `${user.company.currency + ' ' + tax.value}` }}</i>
+                  </td>
+                </tr>
+              </template>
+              <template>
+                {{ $vuetify.lang.t('$vuetify.sale.discountGeneral') }}
+                <tr
+                  v-for="disc in editSale.discounts"
+                  :key="disc.id"
                 >
-                  <i>{{ `${user.company.currency + ' ' + tax.value}` }}</i>
-                </td>
-              </tr>
-              <tr v-if="editSale.discounts.length === 0">
-                <td><b>{{ $vuetify.lang.t('$vuetify.menu.discounts') }}</b></td>
-                <td style="text-align: right">
-                  {{ user.company.currency + ' ' +parseFloat(0).toFixed(2) }}
-                </td>
-              </tr>
-              <tr
-                v-for="disc in editSale.discounts"
-                v-else
-                :key="disc.id"
-              >
-                <td><b>{{ disc.name }}{{ disc.percent ? '('+disc.value +'%)':'' }}</b></td>
-                <td
-                  v-if="disc.percent==='true'"
-                  style="text-align: right"
-                >
-                  <i>-{{ `${user.company.currency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }}</i>
-                </td>
-                <td
-                  v-else
-                  style="text-align: right"
-                >
-                  <i>{{ `${user.company.currency + ' ' + disc.value}` }}</i>
-                </td>
-              </tr>
+                  <td><b>{{ disc.name }}{{ disc.percent ? '('+disc.value +'%)':'' }}</b></td>
+                  <td
+                    v-if="disc.percent==='true'"
+                    style="text-align: right"
+                  >
+                    <i>-{{ `${user.company.currency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }}</i>
+                  </td>
+                  <td
+                    v-else
+                    style="text-align: right"
+                  >
+                    <i>{{ `${user.company.currency + ' ' + disc.value}` }}</i>
+                  </td>
+                </tr>
+              </template>
               <tr>
                 <td>
                   {{ $vuetify.lang.t('$vuetify.pay.total') }}

@@ -269,7 +269,6 @@ export default {
       this.calcTotalPay()
     },
     calcTotalPay () {
-      console.log('sadsadasdas')
       this.totalPays = 0.00
       this.sale.pays.forEach(v => {
         this.totalPays += parseFloat(v.cant)

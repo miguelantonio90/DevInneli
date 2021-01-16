@@ -209,7 +209,7 @@ export default {
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
     idle_counter: 'La sesión se cierra en {0} segundos',
     warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
-    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} ya está en uso.',
+    warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} se está usando por {1} y {2}.',
     info_import_category: 'Si este archivo contiene Categorías, serán importadas al sistema, pero si usted ya ha creado alguna antes de importar, ' +
        'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
     info_import_shop: 'Si este archivo contiene artículos relacionado con tiendas, las mismas serán importadas al sistema  con el país donde usted fue registrado, ' +
@@ -459,7 +459,7 @@ export default {
     sale: 'Venta',
     selectArticle: 'Por favor seleccione el artículo',
     selectShop: 'Debe seleccionar una tienda',
-    discountGeneral: 'Descuento general',
+    discountGeneral: 'Descuento Total por venta',
     ticket: 'TICKET DE VENTA',
     facture: 'Factura',
     state: {
@@ -522,6 +522,8 @@ export default {
     salesSub: 'Incremento de ventas',
     expenses: 'Gastos',
     expensesSub: 'Total de gastos',
+    costs: 'Costos',
+    costsSub: 'Total de costos',
     revenue: 'Ingresos',
     revenueSub: 'Incremento de ingresos',
     orders: 'Órdenes',

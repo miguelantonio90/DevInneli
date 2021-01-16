@@ -103,6 +103,9 @@
                   <thead>
                     <tr>
                       <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.articles.ref') }}
+                      </th>
+                      <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.firstName') }}
                       </th>
                       <th class="text-left">
@@ -124,6 +127,7 @@
                       v-for="dessert in item.variant_values"
                       :key="dessert.ref"
                     >
+                      <td>{{ dessert.ref }}</td>
                       <td>{{ dessert.name }}</td>
                       <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
                       <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
@@ -179,6 +183,11 @@ export default {
     ...mapGetters('auth', ['user']),
     getTableColumns () {
       return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.articles.ref'),
+          value: 'ref',
+          select_filter: true
+        },
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
           value: 'name',

@@ -501,6 +501,8 @@ class SaleManager extends BaseManager
                 'articles_shops.id')
             ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->where('articles.category_id', '=', $id)
+            ->where('sales.type','=','sale')
+            ->where('sales.state','=','accepted')
             ->orderBy('articles.created_at')
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
@@ -576,7 +578,9 @@ class SaleManager extends BaseManager
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->leftJoin('pay_sales', 'pay_sales.sale_id', '=', 'sales.id')
             ->leftJoin('payments', 'payments.id', '=', 'pay_sales.payment_id')
-            ->where('sales.created_by', '=', cache()->get('userPin')['id']);
+            ->where('sales.created_by', '=', cache()->get('userPin')['id'])
+            ->where('sales.type','=','sale')
+            ->where('sales.state','=','accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',
@@ -660,7 +664,7 @@ class SaleManager extends BaseManager
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
                 'articles.name', 'sales_articles_shops.cant', 'sales_articles_shops.price',
-                'sales_articles_shops.created_at', 'articles.cost')
+                'sales_articles_shops.created_at', 'articles.cost', 'sales.created_at')
             ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
             ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                 'articles_shops.id')
@@ -669,8 +673,10 @@ class SaleManager extends BaseManager
                 return $query->where('sales.created_by', '=', cache()->get('userPin')['id']);
             })
             ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
-            ->whereDate('sales_articles_shops.created_at', '<=', $dates[1])
+            ->whereDate('sales_articles_shops.updated_at', '<=', $dates[1])
             ->whereIn('articles_shops.shop_id', $shops)
+            ->where('sales.type','=','sale')
+            ->where('sales.state','=','accepted')
             ->get();
         $result = [];
         $totalTax = 0;
@@ -735,8 +741,9 @@ class SaleManager extends BaseManager
             ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
             ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                 'articles_shops.id')
-            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id');
-
+            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+            ->where('sales.type','=','sale')
+            ->where('sales.state','=','accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',

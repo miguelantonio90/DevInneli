@@ -80,6 +80,7 @@
                             :disabled="isActionInProgress"
                             :items="arrayUM"
                             :label="$vuetify.lang.t('$vuetify.um.name')"
+                            :filter="customFilter"
                             item-text="name"
                             auto-select-first
                             return-object
@@ -699,7 +700,7 @@ export default {
     ...mapActions('article', ['createArticle', 'updateArticle', 'fetchArticleNumber', 'toogleNewModal', 'getArticles']),
     ...mapActions('category', ['getCategories']),
     ...mapActions('tax', ['getTaxes']),
-    ...mapActions('shop', ['getShops']),
+    ...mapActions('shop', ['getShops']),00000
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
       const key = String.fromCharCode(
@@ -771,6 +772,7 @@ export default {
     },
     managerArticleHandler () {
       let valid = true
+      console.log(this.article)
       if (!this.article.category) {
         valid = false
         this.showAlertMessage(this.$vuetify.lang.t(
@@ -794,32 +796,29 @@ export default {
     validateBarCode () {
       let valid = true
       this.article.variant_values.forEach((value) => {
-        if (valid) {
-          const localArt = this.articles.filter(art => art.barCode === value.barCode && art.barCode !== '' && art.barCode !== 0)
-          if (localArt.length > 0) {
-            if (localArt[0].id !== value.id) {
+        if (value.barCode) {
+          const compareBarCode = this.articles.filter(art => art.barCode === value.barCode)
+          if (compareBarCode.length > 0) {
+            if (compareBarCode[0].id !== value.id) {
               valid = false
-              if (!valid) {
-                this.showAlertMessage(this.$vuetify.lang.t(
-                  '$vuetify.messages.warning_barCode', [value.barCode]
-                ))
-              }
+              this.showAlertMessage(this.$vuetify.lang.t('$vuetify.messages.warning_barCode', [value.barCode], [compareBarCode[0].name], [value.name]
+              ))
+            } else if (this.article.barCode === compareBarCode[0].barCode && valid) {
+              valid = false
+              this.showAlertMessage(this.$vuetify.lang.t('$vuetify.messages.warning_barCode', [value.barCode], [compareBarCode[0].name], [this.article.name]
+              ))
             }
           }
         }
       })
-      if (this.article.variant_values.filter(vd => vd.barCode === this.article.barCode).length > 0) {
-        valid = false
-        this.showAlertMessage(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_barCode', [this.article.barCode]
-        ))
-      } else {
-        const localArt = this.articles.filter(art => art.barCode === this.article.barCode && art.id !== this.article.id && art.barCode !== '' && art.barCode !== 0)
-        if (localArt.length > 0) {
-          valid = false
-          this.showAlertMessage(this.$vuetify.lang.t(
-            '$vuetify.messages.warning_barCode', [this.article.barCode]
-          ))
+      if (this.article.barCode && valid) {
+        const existBarCode = this.articles.filter(art => art.barCode === this.article.barCode)
+        if (existBarCode.length > 0) {
+          if (this.article.barCode === existBarCode[0].barCode && this.article.id !== existBarCode[0].id) {
+            valid = false
+            this.showAlertMessage(this.$vuetify.lang.t('$vuetify.messages.warning_barCode', [this.article.barCode], [existBarCode[0].name], [this.article.name]
+            ))
+          }
         }
       }
       return valid
