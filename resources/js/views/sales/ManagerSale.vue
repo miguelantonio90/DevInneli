@@ -273,6 +273,7 @@
                         :view-show-filter="false"
                         :view-edit-button="false"
                         :view-new-button="false"
+                        :view-tour-button="false"
                         :view-mod-button="true"
                         :view-discount-button="true"
                         :headers="getTableColumns"

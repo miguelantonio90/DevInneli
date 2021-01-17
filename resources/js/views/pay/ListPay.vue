@@ -36,6 +36,7 @@
               :view-show-filter="false"
               :view-edit-button="false"
               :view-new-button="show"
+              :view-tour-button="!show"
               :hide-footer="!show"
               :view-delete-button="show"
               :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
@@ -86,34 +87,10 @@
                 </v-edit-dialog>
               </template>
               <template v-slot:[`item.cant_pay`]="{ item }">
-                <v-edit-dialog
-                  large
-                  persistent
-                  :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                  :save-text="$vuetify.lang.t('$vuetify.actions.save')"
-                  @open="openEditCant(item)"
-                  @save="saveEditCant(item)"
-                >
-                  <div>{{ `${currency + ' ' + parseFloat(item.cant_pay).toFixed(2)}` }}</div>
-                  <template v-slot:input>
-                    <div class="mt-4 title">
-                      {{ $vuetify.lang.t('$vuetify.actions.edit') }}
-                    </div>
-                    <v-text-field-money
-                      v-model="cant"
-                      :label="$vuetify.lang.t('$vuetify.actions.edit')"
-                      required
-                      :properties="{
-                        clearable: true
-                      }"
-                      :options="{
-                        length: 15,
-                        precision: 2,
-                        empty: 0.00,
-                      }"
-                    />
-                  </template>
-                </v-edit-dialog>
+                <div>{{ `${item.method ==='cash'? item.currency.currency: '' }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}</div>
+              </template>
+              <template v-slot:[`item.cant_back`]="{ item }">
+                <div>{{ `${item.cant_back? currency:'' }` }} {{ parseFloat(item.cant_back).toFixed(2) }}</div>
               </template>
             </app-data-table>
           </v-col>
@@ -189,11 +166,6 @@ export default {
     ]),
     getTableColumns () {
       const data = [
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'name',
-          select_filter: true
-        },
         {
           text: this.$vuetify.lang.t('$vuetify.payment.name'),
           value: 'method',
@@ -310,6 +282,7 @@ export default {
         item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
       }
       item.cant = parseFloat((item.cant).toString()).toFixed(2)
+      item.cant_back = item.currency.id !== '' ? item.cant_pay * item.currency.change - item.cant : item.cant_pay - item.cant
       this.calcTotalPay()
     },
     calcTotalPay () {
