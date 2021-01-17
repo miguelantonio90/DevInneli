@@ -701,6 +701,9 @@ export default {
     ...mapActions('category', ['getCategories']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('shop', ['getShops']),
+    customFilter (item, queryText, itemText) {
+      return this.$vuetify.lang.t('$vuetify.um.' + item.name).toLowerCase().indexOf(queryText.toLowerCase()) > -1
+    },
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
       const key = String.fromCharCode(

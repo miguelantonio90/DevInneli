@@ -209,7 +209,6 @@ export default {
   methods: {
     ...mapActions('auth', ['sendRegisterRequest']),
     customFilter (item, queryText, itemText) {
-      console.log(item)
       return this.$vuetify.lang.t('$vuetify.sector.' + item.value).toLowerCase().indexOf(queryText.toLowerCase()) > -1
     },
     onCountry (event) {

@@ -19,6 +19,9 @@ class CreatePaySalesTable extends BaseMigration
             $table->decimal('cant')->default(0.00);
             $table->date('mora')->nullable();
             $table->decimal('cantMora')->nullable();
+            $table->string('currency_id')->nullable()->references('id')->on('exchange_rates');
+            $table->decimal('cant_pay')->nullable();
+            $table->decimal('cant_back')->nullable();
 
         });
         parent::up($tableName, $company);

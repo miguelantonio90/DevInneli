@@ -4,6 +4,7 @@
       v-if="showNewModal"
       :pays="sale.pays"
       :payments="payments"
+      :currency="currency"
       :pending="totalPrice - totalPays"
       @addPayment="addToPayment"
     />
@@ -12,7 +13,7 @@
         <v-row>
           <v-col
             cols="12"
-            md="5"
+            md="4"
           >
             <facture
               :edit="true"
@@ -28,7 +29,7 @@
           <v-col
             class="py-0"
             cols="12"
-            md="7"
+            md="8"
           >
             <app-data-table
               style="margin-top: 10px"
@@ -64,6 +65,36 @@
                   @save="saveEditCant(item)"
                 >
                   <div>{{ `${currency + ' ' + parseFloat(item.cant).toFixed(2)}` }}</div>
+                  <template v-slot:input>
+                    <div class="mt-4 title">
+                      {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                    </div>
+                    <v-text-field-money
+                      v-model="cant"
+                      :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                      required
+                      :properties="{
+                        clearable: true
+                      }"
+                      :options="{
+                        length: 15,
+                        precision: 2,
+                        empty: 0.00,
+                      }"
+                    />
+                  </template>
+                </v-edit-dialog>
+              </template>
+              <template v-slot:[`item.cant_pay`]="{ item }">
+                <v-edit-dialog
+                  large
+                  persistent
+                  :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+                  :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+                  @open="openEditCant(item)"
+                  @save="saveEditCant(item)"
+                >
+                  <div>{{ `${currency + ' ' + parseFloat(item.cant_pay).toFixed(2)}` }}</div>
                   <template v-slot:input>
                     <div class="mt-4 title">
                       {{ $vuetify.lang.t('$vuetify.actions.edit') }}
@@ -169,8 +200,18 @@ export default {
           select_filter: true
         },
         {
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_pay'),
+          value: 'cant_pay',
+          sortable: false
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.variants.cant'),
           value: 'cant',
+          sortable: false
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_back'),
+          value: 'cant_back',
           sortable: false
         }
       ]
@@ -251,7 +292,10 @@ export default {
         cant: pay.cant,
         mora: pay.mora,
         cantMora: pay.cantMora,
-        payment_id: pay.method.id
+        payment_id: pay.method.id,
+        cant_pay: pay.cant_pay,
+        currency: pay.currency,
+        cant_back: pay.cant_back
       })
       this.toogleNewModal(false)
       this.calcTotalPay()
