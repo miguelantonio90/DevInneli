@@ -25,7 +25,7 @@
               cols="12"
               md="6"
             >
-              <v-select
+              <v-autocomplete
                 v-model="pay.name"
                 :items="getPay"
                 :label="$vuetify.lang.t('$vuetify.pay.pay')"
@@ -42,10 +42,10 @@
             >
               <v-autocomplete
                 v-model="pay.method"
-                chips
                 :label="$vuetify.lang.t('$vuetify.payment.name')"
                 :rules="formRule.required"
                 :items="localPayments"
+                :filter="customFilter"
                 item-value="method"
                 return-object
               >
@@ -73,11 +73,13 @@
             >
               <v-text-field-money
                 v-model="pay.cant"
+                style="margin-top: 8"
                 :label="$vuetify.lang.t('$vuetify.variants.cant')"
                 :rules="formRule.required"
                 :value="pending"
                 required
                 :properties="{
+                  prefix: currency,
                   clearable: true
                 }"
                 :options="{
@@ -132,6 +134,79 @@
                 :value="pending"
                 required
                 :properties="{
+                  prefix: currency,
+                  clearable: true
+                }"
+                :options="{
+                  length: 15,
+                  precision: 2,
+                  empty: 0.00,
+                }"
+              />
+            </v-col>
+            <v-col
+              v-if="pay.method.method === 'cash'"
+              class="py-0"
+              cols="12"
+              md="6"
+              no-gutters
+            >
+              <template>
+                <v-row no-gutters>
+                  <v-col
+                    v-if="currencies.length > 0"
+                    cols="3"
+                  >
+                    <v-autocomplete
+                      v-model="pay.currency"
+                      style="margin-top: 15"
+                      :items="currencies"
+                      :label="$vuetify.lang.t('$vuetify.currency')"
+                      item-text="currency"
+                      auto-select-first
+                      return-object
+                      required
+                      @change="calcDifference"
+                    />
+                  </v-col>
+                  <v-col
+                    :cols="currencies.length > 0 ? 9 : 12"
+                  >
+                    <v-text-field-money
+                      v-model="pay.cant_pay"
+                      :label="$vuetify.lang.t('$vuetify.payment.cant_pay')"
+                      :rules="formRule.required"
+                      :value="pending"
+                      required
+                      :properties="{
+                        prefix: currencies.length === 0?currency:'',
+                        clearable: true
+                      }"
+                      :options="{
+                        length: 15,
+                        precision: 2,
+                        empty: 0.00,
+                      }"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </v-col>
+            <v-col
+              v-if="pay.method.method === 'cash'"
+              class="py-0"
+              cols="12"
+              md="6"
+            >
+              <v-text-field-money
+                v-model="pay.cant_back"
+                :label="$vuetify.lang.t('$vuetify.payment.cant_back')"
+                :rules="formRule.required"
+                :value="pending"
+                required
+                readonly
+                :properties="{
+                  prefix: currency,
                   clearable: true
                 }"
                 :options="{
@@ -183,19 +258,27 @@ export default {
     pending: {
       type: Number,
       default: 0.00
+    },
+    currency: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       menu2: false,
       formValid: false,
+      currencies: [],
       pay: {
         name: 'counted',
         method: '',
         cant: '',
         delay: 0.00,
         mora: new Date().toISOString().substr(0, 10),
-        cantMora: 0.00
+        cantMora: 0.00,
+        cant_pay: 0.00,
+        currency: {},
+        cant_back: 0.00
       },
       localPayments: [],
       formRule: this.$rules
@@ -203,6 +286,7 @@ export default {
   },
   computed: {
     ...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
+    ...mapState('exchangeRate', ['saved', 'changes']),
     computedDateFormatted () {
       return this.formatDate(this.pay.mora)
     },
@@ -225,16 +309,45 @@ export default {
     },
     'pay.name': function (val) {
       this.updateMethod()
+    },
+    'pay.cant_pay': function () {
+      this.calcDifference()
+    },
+    changes: function () {
+      if (this.changes.length > 0) {
+        this.currencies = []
+        this.currencies.push({
+          currency: this.currency,
+          change: 1,
+          id: ''
+        })
+        this.changes.forEach((v) => {
+          this.currencies.push({
+            currency: v.currency,
+            change: v.change,
+            id: v.id
+          })
+        })
+        this.pay.currency = this.currencies[0]
+      }
     }
   },
   mounted () {
     this.formValid = false
     this.pay.name = 'counted'
     this.pay.cant = this.pending
+    this.getChanges()
     this.updateMethod()
   },
   methods: {
     ...mapActions('payment', ['createPayment', 'toogleNewModal']),
+    ...mapActions('exchangeRate', ['getChanges']),
+    customFilter (item, queryText, itemText) {
+      return this.$vuetify.lang.t('$vuetify.payment.' + item.method).toLowerCase().indexOf(queryText.toLowerCase()) > -1
+    },
+    calcDifference () {
+      this.pay.cant_back = this.currencies.length > 0 ? this.pay.cant_pay * this.pay.currency.change - this.pay.cant : this.pay.cant_pay - this.pay.cant
+    },
     lettersNumbers (event) {
       const regex = new RegExp('^[a-zA-Z0-9 ]+$')
       const key = String.fromCharCode(

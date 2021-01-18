@@ -412,7 +412,10 @@ export default {
     digital_transfer: 'Digital Transfer',
     other: 'Other',
     pay_before: 'Pay before',
-    pay_delay: 'Pay for delay'
+    pay_delay: 'Pay for delay',
+    cant_pay: 'Pay',
+    cant_charge: 'Charge',
+    cant_back: 'Return'
   },
   supplier: {
     name: 'Provider',

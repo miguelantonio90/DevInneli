@@ -4,6 +4,8 @@ namespace App\Managers;
 
 use App\ArticlesShops;
 use App\Box;
+use App\ExchangeRate;
+use App\Payment;
 use App\PaySale;
 use App\Sale;
 use App\SalesArticlesShops;
@@ -147,8 +149,9 @@ class SaleManager extends BaseManager
                 ->whereNull('pay_sales.deleted_at')
                 ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
                 ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
-                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name',
-                    'payments.method', 'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora')
+                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
+                    'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
+                    'pay_sales.currency_id', 'pay_sales.cant_back')
                 ->get();
             $sales[$key]['client'] = DB::table('clients')
                 ->join('sales', 'sales.client_id', '=', 'clients.id')
@@ -160,6 +163,9 @@ class SaleManager extends BaseManager
             $totalDisc = 0;
             $totalPrice = 0;
             $totalRefund = 0;
+            foreach ($sales[$key]['pays'] as $p=>$pay){
+                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id):'';
+            }
             foreach ($sales[$key]['articles'] as $k => $v) {
                 $sales[$key]['articles'][$k]->images = DB::table('article_images')
                     ->where('article_images.article_id', '=', $v->id)
@@ -318,6 +324,11 @@ class SaleManager extends BaseManager
                 $pSale = PaySale::findOrFail($pay['id']);
             }
             $pSale['cant'] = $pay['cant'];
+            if ($pay['method'] === 'cash') {
+                $pSale['currency_id'] = $pay['currency']['id'] ? $pay['currency']['id'] : '';
+                $pSale['cant_pay'] = $pay['cant_pay'];
+                $pSale['cant_back'] = $pay['cant_back'];
+            }
             if ($pay['name'] === 'credit') {
                 $pSale['mora'] = $pay['mora'];
                 $pSale['cantMora'] = $pay['cantMora'];

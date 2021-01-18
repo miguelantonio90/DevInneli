@@ -273,6 +273,7 @@
                         :view-show-filter="false"
                         :view-edit-button="false"
                         :view-new-button="false"
+                        :view-tour-button="false"
                         :view-mod-button="true"
                         :view-discount-button="true"
                         :headers="getTableColumns"
@@ -619,6 +620,14 @@ export default {
           sortable: false
         }
       ]
+    },
+    getDifferencePay () {
+      let totalCalcP = 0.00
+      this.sale.pays.forEach(v => {
+        totalCalcP += parseFloat(v.cant)
+      })
+      console.log(totalCalcP)
+      return parseFloat(this.totalPrice) - parseFloat(totalCalcP)
     }
   },
   watch: {
@@ -808,14 +817,10 @@ export default {
         })
     },
     async saleHandler (state) {
-      let totalCalcP = 0.00
-      this.sale.pays.forEach(v => {
-        totalCalcP += v.cant
-      })
-      if (parseFloat(totalCalcP) > 0 && parseFloat(this.totalPrice) - parseFloat(totalCalcP) !== 0) {
+      if (parseFloat(this.getDifferencePay) !== 0) {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_difference_price', [(totalCalcP - this.totalPrice + ' ' + this.user.company.currency).toString()]
+          '$vuetify.messages.warning_difference_price', [(-this.getDifferencePay + this.user.company.currency).toString()]
         ))
       } else {
         if (!this.sale.box) {

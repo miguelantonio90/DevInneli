@@ -217,6 +217,49 @@
               </tr>
             </tbody>
           </table>
+          <table
+            v-if="editSale.pays.filter(pay=>pay.method === 'cash').length > 0"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th class="cantidad">
+                  {{ $vuetify.lang.t('$vuetify.payment.cant_pay').toUpperCase() }}
+                </th>
+                <th class="producto">
+                  {{ $vuetify.lang.t('$vuetify.payment.cant_charge').toUpperCase() }}
+                </th>
+                <th class="precio">
+                  {{ $vuetify.lang.t('$vuetify.payment.cant_back') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(pay, h) in editSale.pays.filter(pay=>pay.method === 'cash')"
+                :key="h"
+              >
+                <td
+                  class="cantidad"
+                  style="text-align: center"
+                >
+                  {{ `${pay.method ==='cash'? pay.currency.currency: '' }` }} {{ parseFloat(pay.cant_pay).toFixed(2) }}
+                </td>
+                <td
+                  class="producto"
+                  style="text-align: center"
+                >
+                  <div>{{ `${user.company.currency + ' ' + parseFloat(pay.cant).toFixed(2)}` }}</div>
+                </td>
+                <td
+                  class="price"
+                  style="text-align: center"
+                >
+                  {{ `${pay.cant_back? user.company.currency:'' }` }} {{ parseFloat(pay.cant_back).toFixed(2) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <p class="centrado">
             <i> {{ user.company.footer ? user.company.footer.toUpperCase(): '' }}</i><br>
             {{ $vuetify.lang.t('$vuetify.report.contact_us') +': '+ user.company.email }}

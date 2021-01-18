@@ -141,7 +141,7 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.totalPrice`]="{ item }">
-            <template>
+            <template v-if="item.state !== 'preform'">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <b><v-icon
@@ -171,9 +171,6 @@
               </v-tooltip>
             </template>
             {{ `${user.company.currency + ' ' + item.totalPrice}` }}
-          </template>
-          <template v-slot:[`item.totalCost`]="{ item }">
-            {{ `${user.company.currency + ' ' + item.totalCost}` }}
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
             <v-btn
@@ -275,29 +272,32 @@
                       </td>
                       <td>{{ `${user.company.currency + ' ' + article.price}` }}</td>
                       <td>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <b><v-icon
-                              :color="article.moneyRefund > 0 ? 'red':'primary'"
-                              class="mr-2"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              mdi-information
-                            </v-icon></b>
-                          </template>
-                          <template>
-                            <detail-article-price
-                              v-if="article.taxes.length > 0 || article.discount.length > 0"
-                              :article="article"
-                              :currency="user.company.currency"
-                            />
-                            <span
-                              v-if="article.moneyRefund > 0"
-                            >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
-                          </template>
-                        </v-tooltip>
+                        <template
+                          v-if="article.taxes.length > 0 || article.discount.length > 0"
+                        >
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <b><v-icon
+                                :color="article.moneyRefund > 0 ? 'red':'primary'"
+                                class="mr-2"
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information
+                              </v-icon></b>
+                            </template>
+                            <template>
+                              <detail-article-price
+                                :article="article"
+                                :currency="user.company.currency"
+                              />
+                              <span
+                                v-if="article.moneyRefund > 0"
+                              >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + article.moneyRefund}` }}</span>
+                            </template>
+                          </v-tooltip>
+                        </template>
                         <span>{{ `${user.company.currency + ' ' + article.totalPrice}` }}</span>
                       </td>
                       <td>

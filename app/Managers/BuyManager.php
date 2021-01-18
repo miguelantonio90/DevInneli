@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\ArticlesShops;
 use App\Box;
+use App\ExchangeRate;
 use App\PaySale;
 use App\Sale;
 use App\SalesArticlesShops;
@@ -129,12 +130,16 @@ class BuyManager extends BaseManager
                 ->get();
             $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
-                ->where('pay_sales.deleted_at', '=', null)
+                ->whereNull('pay_sales.deleted_at')
                 ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
                 ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
-                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name',
-                    'payments.method', 'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora')
+                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
+                    'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
+                    'pay_sales.currency_id', 'pay_sales.cant_back')
                 ->get();
+            foreach ($sales[$key]['pays'] as $p=>$pay){
+                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id):'';
+            }
             $sales[$key]['supplier'] = DB::table('suppliers')
                 ->join('sales', 'sales.provider_id', '=', 'suppliers.id')
                 ->where('sales.id', '=', $value['id'])

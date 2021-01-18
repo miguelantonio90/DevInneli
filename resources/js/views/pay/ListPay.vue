@@ -4,6 +4,7 @@
       v-if="showNewModal"
       :pays="sale.pays"
       :payments="payments"
+      :currency="currency"
       :pending="totalPrice - totalPays"
       @addPayment="addToPayment"
     />
@@ -12,7 +13,7 @@
         <v-row>
           <v-col
             cols="12"
-            md="5"
+            md="4"
           >
             <facture
               :edit="true"
@@ -28,13 +29,14 @@
           <v-col
             class="py-0"
             cols="12"
-            md="7"
+            md="8"
           >
             <app-data-table
               style="margin-top: 10px"
               :view-show-filter="false"
               :view-edit-button="false"
               :view-new-button="show"
+              :view-tour-button="show"
               :hide-footer="!show"
               :view-delete-button="show"
               :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
@@ -83,6 +85,22 @@
                     />
                   </template>
                 </v-edit-dialog>
+              </template>
+              <template v-slot:[`item.cant_pay`]="{ item }">
+                <div v-if="item.method ==='cash'">
+                  {{ `${item.method ==='cash'? item.currency.currency: '' }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}
+                </div>
+                <div v-else>
+                  --
+                </div>
+              </template>
+              <template v-slot:[`item.cant_back`]="{ item }">
+                <div v-if="item.method ==='cash'">
+                  {{ `${item.cant_back? currency:'' }` }} {{ parseFloat(item.cant_back).toFixed(2) }}
+                </div>
+                <div v-else>
+                  --
+                </div>
               </template>
             </app-data-table>
           </v-col>
@@ -159,18 +177,23 @@ export default {
     getTableColumns () {
       const data = [
         {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'name',
-          select_filter: true
-        },
-        {
           text: this.$vuetify.lang.t('$vuetify.payment.name'),
           value: 'method',
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_pay'),
+          value: 'cant_pay',
+          sortable: false
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_charge'),
           value: 'cant',
+          sortable: false
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_back'),
+          value: 'cant_back',
           sortable: false
         }
       ]
@@ -251,7 +274,10 @@ export default {
         cant: pay.cant,
         mora: pay.mora,
         cantMora: pay.cantMora,
-        payment_id: pay.method.id
+        payment_id: pay.method.id,
+        cant_pay: pay.cant_pay,
+        currency: pay.currency,
+        cant_back: pay.cant_back
       })
       this.toogleNewModal(false)
       this.calcTotalPay()
@@ -266,6 +292,7 @@ export default {
         item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
       }
       item.cant = parseFloat((item.cant).toString()).toFixed(2)
+      item.cant_back = item.currency.id !== '' ? item.cant_pay * item.currency.change - item.cant : item.cant_pay - item.cant
       this.calcTotalPay()
     },
     calcTotalPay () {
