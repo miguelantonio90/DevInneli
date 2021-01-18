@@ -36,7 +36,7 @@
               :view-show-filter="false"
               :view-edit-button="false"
               :view-new-button="show"
-              :view-tour-button="!show"
+              :view-tour-button="show"
               :hide-footer="!show"
               :view-delete-button="show"
               :title="show ?$vuetify.lang.t('$vuetify.variants.total_price') +': '+ currency+' ' + parseFloat(totalPrice).toFixed(2): ''"
@@ -87,10 +87,20 @@
                 </v-edit-dialog>
               </template>
               <template v-slot:[`item.cant_pay`]="{ item }">
-                <div>{{ `${item.method ==='cash'? item.currency.currency: '' }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}</div>
+                <div v-if="item.method ==='cash'">
+                  {{ `${item.method ==='cash'? item.currency.currency: '' }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}
+                </div>
+                <div v-else>
+                  --
+                </div>
               </template>
               <template v-slot:[`item.cant_back`]="{ item }">
-                <div>{{ `${item.cant_back? currency:'' }` }} {{ parseFloat(item.cant_back).toFixed(2) }}</div>
+                <div v-if="item.method ==='cash'">
+                  {{ `${item.cant_back? currency:'' }` }} {{ parseFloat(item.cant_back).toFixed(2) }}
+                </div>
+                <div v-else>
+                  --
+                </div>
               </template>
             </app-data-table>
           </v-col>

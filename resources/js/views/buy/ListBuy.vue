@@ -45,9 +45,9 @@
                   <list-pay
                     :show="false"
                     :sale="item"
-                    :total-cost="parseFloat(item.totalCost).toFixed(2).toString()"
+                    :total-price="parseFloat(item.totalCost).toFixed(2).toString()"
                     :total-tax="parseFloat(item.totalTax).toFixed(2)"
-                    :total-discount="parseFloat(item.totalDiscount).toFixed(2)"
+                    :total-discount="parseFloat(item.totalDisc).toFixed(2)"
                     :sub-total="parseFloat(item.subTotal).toFixed(2)"
                     :currency="user.company.currency"
                   />
