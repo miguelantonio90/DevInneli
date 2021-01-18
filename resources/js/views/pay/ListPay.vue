@@ -187,7 +187,7 @@ export default {
           sortable: false
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+          text: this.$vuetify.lang.t('$vuetify.payment.cant_charge'),
           value: 'cant',
           sortable: false
         },

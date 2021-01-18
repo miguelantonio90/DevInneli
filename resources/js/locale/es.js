@@ -414,6 +414,7 @@ export default {
     pay_before: 'Pagar antes de',
     pay_delay: 'Pagar por demora',
     cant_pay: 'Pagado',
+    cant_charge: 'Cobrar',
     cant_back: 'Devolver'
   },
   supplier: {
