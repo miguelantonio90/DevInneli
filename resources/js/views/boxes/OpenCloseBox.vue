@@ -99,7 +99,7 @@
               md="6"
             >
               <v-text-field
-                :value="payment.total?parseFloat(payment.total).toFixed(2):0"
+                :value="payment.total ? parseFloat(payment.total).toFixed(2) : 0"
                 :label="$vuetify.lang.t('$vuetify.payment.' + payment.method)"
                 readonly
                 :prefix="user.company.currency"
@@ -113,7 +113,7 @@
             >
               <template :disabled="true">
                 <v-text-field
-                  :value="openClose.totalRefunds?parseFloat(openClose.totalRefunds).toFixed(2):0"
+                  :value="openClose.totalRefunds ? parseFloat(openClose.totalRefunds).toFixed(2) : 0"
                   :label="$vuetify.lang.t('$vuetify.menu.refund')"
                   :rules="formRule.required"
                   readonly
@@ -154,7 +154,7 @@
             >
               <template :disabled="true">
                 <v-text-field
-                  :value="total[1]?parseFloat(total[1]).toFixed(2):0"
+                  :value="total[1] ? parseFloat(total[1]).toFixed(2) : 0"
                   :append-icon="total[1]<0?'mdi-close-circle':'mdi-check-circle'"
                   :label="$vuetify.lang.t('$vuetify.boxes.difference')"
                   :color="total[1] < 0 ? 'danger':'primary'"
