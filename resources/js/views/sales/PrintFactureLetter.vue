@@ -103,8 +103,8 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(article, i) in editSale.articles"
-                    :key="i"
+                    v-for="article in editSale.articles"
+                    :key="article.ref"
                   >
                     <td class="qty">
                       {{ article.cant }}
@@ -134,8 +134,8 @@
                             </td>
                           </tr>
                           <tr
-                            v-for="(lTax, j) of article.taxes"
-                            :key="j"
+                            v-for="lTax of article.taxes"
+                            :key="lTax.name"
                           >
                             <td>
                               {{ $vuetify.lang.t('$vuetify.articles.tax') +'(' +lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)) ':') ' }}
@@ -161,8 +161,8 @@
                   <table class="total">
                     <tbody>
                       <tr
-                        v-for="(pay, h) in editSale.pays"
-                        :key="h"
+                        v-for="pay in editSale.pays"
+                        :key="pay.id"
                         class="total"
                       >
                         <td
@@ -194,8 +194,8 @@
                       </tr>
                       <template v-if="editSale.taxes.length > 0">
                         <tr
-                          v-for="(tax, s) in editSale.taxes"
-                          :key="s"
+                          v-for="tax in editSale.taxes"
+                          :key="tax.id"
                           class="total"
                         >
                           <td class="price">
@@ -218,8 +218,8 @@
                       </template>
                       <template v-if="editSale.discounts.length > 0">
                         <tr
-                          v-for="(discount, s) in editSale.discounts"
-                          :key="s"
+                          v-for="discount in editSale.discounts"
+                          :key="discount.id"
                           class="total"
                         >
                           <td

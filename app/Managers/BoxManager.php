@@ -9,6 +9,9 @@ use App\Sale;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @method getDetailOfBox(array $all)
+ */
 class BoxManager extends BaseManager
 {
     /**
@@ -129,10 +132,10 @@ class BoxManager extends BaseManager
     public function getOpenClose($boxId): OpenCloseBox
     {
         $openClose = OpenCloseBox::latest()
-            ->where('id', '=', Box::findOrFail($boxId)->open_id)
+            ->where('id', '=', (Box::findOrFail($boxId))->open_id)
             ->with('box')
             ->with('openTo')
-            ->get()[0];
+            ->first();
         $sales = Sale::latest()
             ->where('created_at', '>=', $openClose->created_at)
             ->where('state', '=', 'accepted')
@@ -145,9 +148,11 @@ class BoxManager extends BaseManager
             ->with('refounds')
             ->orderBy('created_at', 'ASC')
             ->get();
+
         $managerSale = new SaleManager();
         $openClose['sales'] = $managerSale->filterSale($sales);
         $openClose['payments'] = PaymentManager::findAllByCompany();
+
         foreach ($openClose['sales'] as $k => $sale) {
             foreach ($sale['pay_sales'] as $p => $pay) {
                 foreach ($openClose['payments'] as $ps => $payment) {
@@ -164,10 +169,13 @@ class BoxManager extends BaseManager
             ->whereDate('refunds.created_at', '>=', $openClose->created_at)
             ->where('refunds.box_id', '=', $openClose->box_id)
             ->get();
+
         $openClose['totalRefunds'] = 0.00;
+
         foreach ($refunds as $r => $refund) {
-            $openClose['totalRefunds'] += $refund['cant'];
+            $openClose['totalRefunds'] += $refund->cant;
         }
+        
         return $openClose;
 
     }

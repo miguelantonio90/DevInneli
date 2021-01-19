@@ -30,21 +30,21 @@
     >
       <theme-settings />
     </v-navigation-drawer>
-    <modal-idle
+    <!--<modal-idle
       v-if="isIdle"
       :dialog="!!isIdle"
-    />
+    />-->
   </v-app>
 </template>
 
 <script>
 import ThemeSettings from './components/ThemeSettings'
-import ModalIdle from './components/core/ModalIdle'
+/* import ModalIdle from './components/core/ModalIdle' */
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    ThemeSettings, ModalIdle
+    ThemeSettings/*, ModalIdle */
   },
   data () {
     return {
