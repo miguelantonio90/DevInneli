@@ -8,7 +8,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="6"
       >
         <v-autocomplete
           v-model="sale.client"
@@ -115,7 +115,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="4"
       >
         <v-select
           v-model="sale.discounts"

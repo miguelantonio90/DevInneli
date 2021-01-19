@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\BuyManager;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,7 +33,8 @@ class InventoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -46,7 +48,8 @@ class InventoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -64,8 +67,9 @@ class InventoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param    $id
+     * @param $id
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -79,8 +83,9 @@ class InventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param    $id
-     * @return JsonResponse|Response|void
+     * @param $id
+     * @return JsonResponse|Response
+     * @throws Exception
      */
     public function destroy($id)
     {

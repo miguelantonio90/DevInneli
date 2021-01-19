@@ -511,7 +511,7 @@ export default {
     ...mapActions('discount', ['getDiscounts']),
     generateNF () {
       const seqer = utils.serialMaker()
-      seqer.set_prefix('F' + new Date().getFullYear() + '-')
+      seqer.set_prefix('C' + new Date().getFullYear() + '-')
       seqer.set_seq(1000000)
       return seqer.gensym()
     },

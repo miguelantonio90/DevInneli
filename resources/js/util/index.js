@@ -1,12 +1,12 @@
-const randomElement = (arr = []) => {
+export const randomElement = (arr = []) => {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-const kebab = (str) => {
+export const kebab = (str) => {
   return (str || '').replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
 }
 
-const compareValues = (key, order = 'asc') => {
+export const compareValues = (key, order = 'asc') => {
   return function innerSort (a, b) {
     // eslint-disable-next-line no-prototype-builtins
     if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
@@ -30,7 +30,7 @@ const compareValues = (key, order = 'asc') => {
   }
 }
 
-const serialMaker = () => {
+export const serialMaker = () => {
   let prefix = ''
   let seq = 0
   return {
@@ -47,8 +47,14 @@ const serialMaker = () => {
     }
   }
 }
+export const fullName = (firstName, lastName) => {
+  firstName = firstName != null ? firstName : ''
+  lastName = lastName != null ? lastName : ''
 
-const toggleFullScreen = () => {
+  return firstName + ' ' + lastName
+}
+
+export const toggleFullScreen = () => {
   const doc = window.document
   const docEl = doc.documentElement
 
@@ -80,5 +86,6 @@ export default {
   toggleFullScreen,
   kebab,
   compareValues,
-  serialMaker
+  serialMaker,
+  fullName
 }

@@ -3,12 +3,12 @@
     <new-supplier v-if="$store.state.supplier.showNewModal" />
     <new-tax v-if="$store.state.tax.showNewModal" />
     <new-payment v-if="$store.state.payment.showNewModal" />
-    <new-discount v-if="this.$store.state.discount.showNewModal" />
+    <new-discount v-if="$store.state.discount.showNewModal" />
     <v-row>
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="6"
       >
         <v-autocomplete
           v-model="sale.supplier"
@@ -25,7 +25,7 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('client/toogleNewModal',true)"
+                  @click="$store.dispatch('supplier/toogleNewModal',true)"
                 >
                   mdi-plus
                 </v-icon>
@@ -113,7 +113,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="4"
       >
         <v-select
           v-model="sale.discounts"

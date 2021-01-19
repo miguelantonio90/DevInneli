@@ -1,5 +1,6 @@
 import apiSale from '../../api/sale'
 import moment from 'moment'
+import { fullName } from '../../util'
 
 const FETCHING_SALES = 'FETCHING_SALES'
 const FETCHING_SALES_BY_CATEGORIES = 'FETCHING_SALES_BY_CATEGORIES'
@@ -210,9 +211,9 @@ const mutations = {
           break
       }
       value.timeString = moment(value.created_at).fromNow()
-      const createdName = value.created.firstName + ' ' + value.created.lastName !== null ? value.created.lastName : ''
-      const clientName = value.client ? value.client.firstName + ' ' + value.client.lastName ? value.client.lastName : '' : ''
-      value.text = createdName + '' + this._vm.$language.t('$vuetify.dashboard.timeLineText') + ' ' + clientName
+      const createdName = fullName(value.created.firstName, value.created.lastName)
+      const clientName = value.client ? fullName(value.client.firstName, value.client.lastName) : ''
+      value.text = createdName + ' ' + this._vm.$language.t('$vuetify.dashboard.timeLineText') + ' ' + clientName
     })
     state.salesByLimit = salesByLimit
   },
