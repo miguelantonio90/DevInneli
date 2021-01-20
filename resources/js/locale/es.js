@@ -195,6 +195,7 @@ export default {
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta Venta. Debe adicionar al menos un artículo.',
     warning_no_article: 'No puede adicionar Venta. Debe adicionar al menos un artículo en el sistema.',
+    warning_exist_refunds: 'No puede editar esta Venta. Ya posee reembolsos, por favor cámbiele el estado a Cancelada o cree una nueva.',
     warning_no_box: 'No puede adicionar esta compra. Debe Adicionar o  Seleccionar una caja.',
     warning_difference_price: 'Existe una diferencia entre el precio total y el definido en los pagos de {0}. \n Por favor arregle la diferencia.',
     warning_tax_cost: 'Usted está pagando mas de impuesto que el propio costo del producto.',
@@ -637,6 +638,13 @@ export default {
     listStep1: '<strong>Botón Adicionar</strong>!<br> Crear nueva venta',
     listStep2: '<strong>Filtros</strong>!<br> Establecer filtros de búsquedas y descargar datos',
     listStep3: '<strong>Listado</strong>!<br> Lista las ventas creadas.'
+  },
+  helpSaleManager: {
+    selectShop: 'Aquí selecciona la Tienda en que se realiza la venta',
+    selectBox: 'Aquí selecciona la Caja por donde se venderá. Si está cerrada, automáticamente se ' +
+        'abrirá para el usuario autenticado con $0.00',
+    addBox: 'Aquí adiciona una nueva Caja',
+    selectArticle: 'Aquí selecciona los artículos que se venderá'
   },
   ...es
 }

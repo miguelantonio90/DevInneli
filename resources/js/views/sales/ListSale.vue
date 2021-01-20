@@ -140,8 +140,11 @@
                 {{ $vuetify.lang.t('$vuetify.menu.box')+'- ' + item.box.name }}</span>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.totalPrice`]="{ item }">
-            <template v-if="item.state !== 'preform'">
+          <template
+            v-slot:[`item.totalPrice`]="{ item }"
+            style="text-align: right"
+          >
+            <template v-if="item.discounts.length > 0 || item.taxes.length > 0">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <b><v-icon
@@ -170,7 +173,7 @@
                 >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
               </v-tooltip>
             </template>
-            {{ `${user.company.currency + ' ' + item.totalPrice}` }}
+            {{ `${user.company.currency + ' ' + parseFloat(item.totalPrice).toFixed(2)}` }}
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
             <v-btn
@@ -216,9 +219,11 @@
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.new_inventory') }}
                       </th>
-                      <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.actions.actions') }}
-                      </th>
+                      <template v-if="item.state === 'accepted'">
+                        <th class="text-left">
+                          {{ $vuetify.lang.t('$vuetify.actions.actions') }}
+                        </th>
+                      </template>
                     </tr>
                   </thead>
                   <tbody>
@@ -313,43 +318,45 @@
                           </i>
                         </template>
                       </td>
-                      <td>
-                        <template v-if="item.state !=='preform'">
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                              <b><v-icon
-                                style="color: #ff752b"
-                                class="mr-2"
-                                small
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="refundArticle(item, article)"
-                              >
-                                mdi-undo
-                              </v-icon></b>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
-                          </v-tooltip>
-                        </template>
-                        <template v-else>
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                              <b><v-icon
-                                v-if="article.cant > 0"
-                                style="color: #ff752b"
-                                class="mr-2"
-                                small
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="cancelProductPreform(item, article)"
-                              >
-                                mdi-cancel
-                              </v-icon></b>
-                            </template>
-                            <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
-                          </v-tooltip>
-                        </template>
-                      </td>
+                      <template v-if="item.state === 'accepted'">
+                        <td>
+                          <template v-if="item.state ==='accepted'">
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <b><v-icon
+                                  style="color: #ff752b"
+                                  class="mr-2"
+                                  small
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="refundArticle(item, article)"
+                                >
+                                  mdi-undo
+                                </v-icon></b>
+                              </template>
+                              <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                            </v-tooltip>
+                          </template>
+                          <template v-else>
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <b><v-icon
+                                  v-if="article.cant > 0"
+                                  style="color: #ff752b"
+                                  class="mr-2"
+                                  small
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="cancelProductPreform(item, article)"
+                                >
+                                  mdi-cancel
+                                </v-icon></b>
+                              </template>
+                              <span>{{ $vuetify.lang.t('$vuetify.actions.refund') }}</span>
+                            </v-tooltip>
+                          </template>
+                        </td>
+                      </template>
                     </tr>
                   </tbody>
                 </template>
@@ -398,6 +405,7 @@ export default {
   },
   computed: {
     ...mapState('sale', [
+      'editSale',
       'showNewModal',
       'showEditModal',
       'loadData',
@@ -566,8 +574,26 @@ export default {
     },
     editSaleHandler ($event) {
       this.openEditModal($event)
-      this.$store.state.sale.managerSale = true
-      this.$router.push({ name: 'vending_edit' })
+      if (this.editSale.refounds.length > 0) {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+              this.$vuetify.lang.t('$vuetify.sale.sale')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_exist_refunds'
+            ),
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.accept'
+            ),
+            confirmButtonColor: 'red'
+          })
+      } else {
+        this.$store.state.sale.managerSale = true
+        this.$router.push({ name: 'vending_edit' })
+      }
     },
     openPrintModal (print, id) {
       this.printer = print

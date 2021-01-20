@@ -118,11 +118,36 @@
     >
       <v-card>
         <v-card-title>
-          <span class="headline">{{
-            $vuetify.lang.t(managerSale? '$vuetify.titles.edit' : '$vuetify.titles.newF', [
-              $vuetify.lang.t('$vuetify.sale.sale'),
-            ])
-          }}</span>
+          <v-app-bar
+            flat
+            dense
+            color="rgba(0, 0, 0, 0)"
+          >
+            {{
+              $vuetify.lang.t(managerSale? '$vuetify.titles.edit' : '$vuetify.titles.newF', [
+                $vuetify.lang.t('$vuetify.sale.sale'),
+              ])
+            }}
+            <v-spacer />
+            <v-tooltip
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="teal darken-2"
+                  dark
+                  v-bind="attrs"
+                  icon
+                  medium
+                  v-on="on"
+                  @click="showHelp"
+                >
+                  <v-icon>mdi-help</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
+            </v-tooltip>
+          </v-app-bar>
         </v-card-title>
         <v-card-text>
           <v-form
@@ -153,6 +178,7 @@
                       md="4"
                     >
                       <v-select
+                        id="slc_shop"
                         v-model="sale.shop"
                         chips
                         rounded
@@ -174,6 +200,7 @@
                       md="3"
                     >
                       <v-select
+                        id="slc_box"
                         v-model="sale.box"
                         :rules="formRule.country"
                         :items="localBoxes"
@@ -184,9 +211,12 @@
                         return-object
                       >
                         <template v-slot:append-outer>
-                          <v-tooltip bottom>
+                          <v-tooltip
+                            bottom
+                          >
                             <template v-slot:activator="{ on, attrs }">
                               <v-icon
+                                id="btn_add_box"
                                 v-bind="attrs"
                                 v-on="on"
                                 @click="$store.dispatch('boxes/toogleNewModal',true)"
@@ -205,6 +235,7 @@
                       md="5"
                     >
                       <v-autocomplete
+                        id="slc_article"
                         ref="selectArticle"
                         :disabled="!sale.shop"
                         :hint="!sale.shop ? $vuetify.lang.t('$vuetify.sale.selectShop') : localArticles.length > 0 ? $vuetify.lang.t('$vuetify.sale.selectArticle') : $vuetify.lang.t('$vuetify.sale.emptyArticle')"
@@ -459,7 +490,7 @@
           </template>
           <template v-else>
             <v-btn
-              v-show="sale.state === 'open'"
+              v-show="(sale.state === 'preform' && sale.pays.length > 0) || sale.state === 'open'"
               class="mb-2"
               color="success"
               :disabled="!formValid || isActionInProgress"
@@ -508,6 +539,10 @@
       <new-box v-if="this.$store.state.boxes.showNewModal" />
       <new-modifiers v-if="this.$store.state.modifiers.showNewModal" />
     </v-container>
+    <app-tour
+      name="saleManager"
+      :steps="stepsHelp"
+    />
   </div>
 </template>
 
@@ -620,6 +655,33 @@ export default {
           sortable: false
         }
       ]
+    },
+    stepsHelp () {
+      return [{
+        target: '#slc_shop',
+        content: this.$vuetify.lang.t('$vuetify.helpSaleManager.selectShop'),
+        params: {
+          placement: 'top'
+        }
+      }, {
+        target: '#slc_box',
+        content: this.$vuetify.lang.t('$vuetify.helpSaleManager.selectBox'),
+        params: {
+          placement: 'top'
+        }
+      }, {
+        target: '#btn_add_box',
+        content: this.$vuetify.lang.t('$vuetify.helpSaleManager.addBox'),
+        params: {
+          placement: 'top'
+        }
+      }, {
+        target: '#slc_article',
+        content: this.$vuetify.lang.t('$vuetify.helpSaleManager.selectArticle'),
+        params: {
+          placement: 'left'
+        }
+      }]
     },
     getDifferencePay () {
       let totalCalcP = 0.00
@@ -817,7 +879,7 @@ export default {
         })
     },
     async saleHandler (state) {
-      if (parseFloat(this.getDifferencePay) !== 0) {
+      if (parseFloat(this.getDifferencePay) !== 0 && this.sale.state === 'accepted') {
         this.loading = false
         this.shopMessageError(this.$vuetify.lang.t(
           '$vuetify.messages.warning_difference_price', [(-this.getDifferencePay + this.user.company.currency).toString()]
@@ -945,6 +1007,10 @@ export default {
     saveDiscount () {
       this.calcTotalArticle(this.articleSelected)
       this.showDiscount = false
+    },
+    showHelp () {
+      console.log('aaa')
+      this.$tours.saleManager.start()
     }
   }
 }
