@@ -50,6 +50,7 @@ class SaleManager extends BaseManager
         $company = CompanyManager::getCompanyByAdmin();
         $number = Sale::select('no_facture')
             ->where('company_id', '=', $company->id)
+            ->where('type','=', 'sale')
             ->latest()
             ->first();
 

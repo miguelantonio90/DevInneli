@@ -196,6 +196,7 @@ export default {
     warning_price: 'You cannot add that item. If the price is higher than the cost, it will not give you profit ',
     warning_cant_article: 'You cannot add this sale. You must add at least one item. ',
     warning_no_article: 'You cannot add Sale. You must add at least one article in the system. ',
+    warning_exist_refunds: 'You cannot edit this Sale. This sale have refunds, please change state to Cancel o create a new Sale. ',
     warning_no_box: 'You cannot add this sale. You must add or select a box. ',
     warning_difference_price: 'There is a difference between the total price and the one defined in the payments of {0}. \n Please fix the difference. ',
     warning_tax_cost: 'You are paying more tax than the cost of the product itself.',
@@ -636,6 +637,12 @@ export default {
     listStep1: '<strong> Add button </strong>! <br> Create new sale',
     listStep2: '<strong> Filters </strong>! <br> Set search filters and download data',
     listStep3: '<strong> List </strong>! <br> List of all sales created.'
+  },
+  helpSaleManager: {
+    selectShop: 'Select Shop',
+    selectBox: 'Select the Box where you sell. If the box is closed, then the system will open it with $0.00',
+    addBox: 'Add a new Box',
+    selectArticle: 'Select all articles that you will sell'
   },
   ...en
 }
