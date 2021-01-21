@@ -5,7 +5,6 @@ namespace App\Managers;
 use App\ArticlesShops;
 use App\Box;
 use App\ExchangeRate;
-use App\Payment;
 use App\PaySale;
 use App\Sale;
 use App\SalesArticlesShops;
@@ -26,7 +25,7 @@ class SaleManager extends BaseManager
         $company = CompanyManager::getCompanyByAdmin();
         $sales = Sale::latest()
             ->where('company_id', '=', $company->id)
-            ->where('type','=','sale')
+            ->where('type', '=', 'sale')
             ->orderBy('created_at', 'ASC')
             ->take($limit)
             ->get();
@@ -36,7 +35,7 @@ class SaleManager extends BaseManager
                 ->first();
             $sales[$key]['client'] = DB::table('clients')
                 ->where('sales.id', '=', $value['id'])
-                ->join('sales', 'sales.client_id', '=', 'clients.id')
+                ->leftJoin('sales', 'sales.client_id', '=', 'clients.id')
                 ->first();
         }
         return $sales;
@@ -50,7 +49,7 @@ class SaleManager extends BaseManager
         $company = CompanyManager::getCompanyByAdmin();
         $number = Sale::select('no_facture')
             ->where('company_id', '=', $company->id)
-            ->where('type','=', 'sale')
+            ->where('type', '=', 'sale')
             ->latest()
             ->first();
 
@@ -101,13 +100,13 @@ class SaleManager extends BaseManager
         if (auth()->user()['isAdmin'] === 1) {
             $sales = Sale::latest()
                 ->with('company')
-                ->where('type','=','sale')
+                ->where('type', '=', 'sale')
                 ->get();
         } else {
             $sales = Sale::latest()
                 ->where('company_id', '=', $company->id)
-                ->where('type','=','sale')
-                ->when($this->getAccessPermit()[2]->actions->just_yours === true, function ($query) {
+                ->where('type', '=', 'sale')
+                ->when($this->getAccessPermit()[2]['actions']['just_yours'] === true, function ($query) {
                     return $query->where('created_by', '=', cache()->get('userPin')['id']);
                 })
                 ->with('company')
@@ -129,10 +128,10 @@ class SaleManager extends BaseManager
             $sales[$key]['shop'] = DB::table('shops')
                 ->select('shops.*', 'shops.id as shop_id')
                 ->where('sales.id', '=', $value['id'])
-                ->join('articles_shops', 'shops.id', '=', 'articles_shops.shop_id')
-                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                ->leftJoin('articles_shops', 'shops.id', '=', 'articles_shops.shop_id')
+                ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                     'articles_shops.id')
-                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->first();
             $sales[$key]['articles'] = DB::table('articles')
                 ->select([
@@ -140,58 +139,57 @@ class SaleManager extends BaseManager
                     'articles_shops.stock as inventory', 'articles.id as article_id'
                 ])
                 ->where('sales.id', '=', $value['id'])
-                ->join('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
-                ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                ->leftJoin('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
+                ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                     'articles_shops.id')
-                ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                 ->get();
             $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
                 ->whereNull('pay_sales.deleted_at')
-                ->join('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
-                ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
+                ->leftJoin('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
+                ->leftJoin('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
                     'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
                     'pay_sales.currency_id', 'pay_sales.cant_back')
                 ->get();
             $sales[$key]['client'] = DB::table('clients')
-                ->join('sales', 'sales.client_id', '=', 'clients.id')
+                ->leftJoin('sales', 'sales.client_id', '=', 'clients.id')
                 ->where('sales.id', '=', $value['id'])
                 ->first();
             $totalCost = 0;
             $subTotal = 0;
             $totalTax = 0;
             $totalDisc = 0;
-            $totalPrice = 0;
             $totalRefund = 0;
-            foreach ($sales[$key]['pays'] as $p=>$pay){
-                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id):'';
+            foreach ($sales[$key]['pays'] as $p => $pay) {
+                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id) : '';
             }
             foreach ($sales[$key]['articles'] as $k => $v) {
                 $sales[$key]['articles'][$k]->images = DB::table('article_images')
                     ->where('article_images.article_id', '=', $v->id)
                     ->get();
                 $sales[$key]['articles'][$k]->taxes = DB::table('taxes')
-                    ->join('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
-                    ->join('articles', 'articles.id', '=', 'article_tax.article_id')
+                    ->leftJoin('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
+                    ->leftJoin('articles', 'articles.id', '=', 'article_tax.article_id')
                     ->where('articles.id', '=', $v->id)
                     ->addSelect(['taxes.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->refounds = DB::table('refunds')
-                    ->join('users', 'users.id', '=', 'refunds.created_by')
+                    ->leftJoin('users', 'users.id', '=', 'refunds.created_by')
                     ->where('refunds.article_id', '=', $v->id)
                     ->where('refunds.sale_id', '=', $value->id)
                     ->select('refunds.*', 'users.firstName as created_by')
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
-                    ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
+                    ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
                         'discounts.id')
-                    ->join('sales_articles_shops', 'sales_articles_shops.id', '=',
+                    ->leftJoin('sales_articles_shops', 'sales_articles_shops.id', '=',
                         'sales_articles_shop_discounts.sales_articles_shops_id')
-                    ->join('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
-                    ->join('articles', 'articles.id', '=', 'articles_shops.article_id')
-                    ->join('shops', 'shops.id', '=', 'articles_shops.shop_id')
-                    ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->leftJoin('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->leftJoin('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->leftJoin('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
                     ->where('articles.id', '=', $v->id)
                     ->where('shops.id', '=', $sales[$key]['shop']->shop_id)
                     ->where('sales.id', '=', $sales[$key]['id'])
@@ -237,7 +235,7 @@ class SaleManager extends BaseManager
             $sales[$key]['create'] = DB::table('users')
                 ->where('users.id', '=', $value['created_by'])
                 ->select('firstName', 'lastName')
-                ->get()[0];
+                ->first();
         }
         return $sales;
     }
@@ -248,7 +246,7 @@ class SaleManager extends BaseManager
      */
     private function getAccessPermit()
     {
-        return json_decode(cache()->get('userPin')->position['access_permit']);
+        return json_decode(cache()->get('userPin')->position['access_permit'], true);
     }
 
     /**
@@ -324,9 +322,10 @@ class SaleManager extends BaseManager
             } else {
                 $pSale = PaySale::findOrFail($pay['id']);
             }
+
             $pSale['cant'] = $pay['cant'];
             if ($pay['method'] === 'cash') {
-                $pSale['currency_id'] = $pay['currency']['id'] ? $pay['currency']['id'] : '';
+                $pSale['currency_id'] = count($pay['currency']) > 0 ? $pay['currency']['id'] : '';
                 $pSale['cant_pay'] = $pay['cant_pay'];
                 $pSale['cant_back'] = $pay['cant_back'];
             }
@@ -508,19 +507,19 @@ class SaleManager extends BaseManager
     {
         $shops = [];
         $articles = DB::table('articles')
-            ->join('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
-            ->join('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
-                'articles_shops.id')
-            ->join('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->where('articles.category_id', '=', $id)
-            ->where('sales.type','=','sale')
-            ->where('sales.state','=','accepted')
-            ->orderBy('articles.created_at')
             ->select('articles.id as article_id', 'sales.id as sales_id',
                 'sales_articles_shops.id as sales_articles_shops_id',
                 'sales.created_at as sales_created_at', 'articles.name', 'sales_articles_shops.cant',
                 'sales.created_by',
-                'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost');
+                'sales_articles_shops.price', 'sales_articles_shops.created_at', 'articles.cost')
+            ->leftJoin('articles_shops', 'articles.id', '=', 'articles_shops.article_id')
+            ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                'articles_shops.id')
+            ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+            ->where('articles.category_id', '=', $id)
+            ->where('sales.type', '=', 'sale')
+            ->where('sales.state', '=', 'accepted')
+            ->orderBy('articles.created_at');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',
@@ -532,8 +531,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[6]->actions->just_yours
-            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
+        if ($this->getAccessPermit()[6]['actions']['just_yours']
+            || $this->getAccessPermit()[2]['actions']['just_yours'] || $this->getAccessPermit()[9]['actions']['just_yours']) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();
@@ -546,14 +545,14 @@ class SaleManager extends BaseManager
             $grossPrice += $price;
             $totalCost += $value->cost;
             $taxes = DB::table('taxes')
-                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->leftJoin('article_tax', 'article_tax.tax_id', 'taxes.id')
                 ->where('article_tax.article_id', '=', $value->article_id)
                 ->get();
             foreach ($taxes as $k => $tax) {
                 $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
             }
             $discounts = DB::table('discounts')
-                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
                 ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
                 ->get();
             foreach ($discounts as $k => $discount) {
@@ -591,8 +590,8 @@ class SaleManager extends BaseManager
             ->leftJoin('pay_sales', 'pay_sales.sale_id', '=', 'sales.id')
             ->leftJoin('payments', 'payments.id', '=', 'pay_sales.payment_id')
             ->where('sales.created_by', '=', cache()->get('userPin')['id'])
-            ->where('sales.type','=','sale')
-            ->where('sales.state','=','accepted');
+            ->where('sales.type', '=', 'sale')
+            ->where('sales.state', '=', 'accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',
@@ -605,10 +604,10 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[9]->actions->just_yours) {
+        if ($this->getAccessPermit()[9]['actions']['just_yours']) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
-        } elseif ($this->getAccessPermit()[6]->actions->just_yours
-            && $this->getAccessPermit()[2]->actions->just_yours) {
+        } elseif ($this->getAccessPermit()[6]['actions']['just_yours']
+            && $this->getAccessPermit()[2]['actions']['just_yours']) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get()->unique('name');
@@ -618,14 +617,14 @@ class SaleManager extends BaseManager
         foreach ($articles as $key => $value) {
             $price = $value->price * $value->cant;
             $taxes = DB::table('taxes')
-                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->leftJoin('article_tax', 'article_tax.tax_id', 'taxes.id')
                 ->where('article_tax.article_id', '=', $value->article_id)
                 ->get();
             foreach ($taxes as $k => $tax) {
                 $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
             }
             $discounts = DB::table('discounts')
-                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
                 ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
                 ->get();
             foreach ($discounts as $k => $discount) {
@@ -681,14 +680,14 @@ class SaleManager extends BaseManager
             ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->when($this->getAccessPermit()[9]->actions->just_yours === true, function ($query) {
+            ->when($this->getAccessPermit()[9]['actions']['just_yours'] === true, function ($query) {
                 return $query->where('sales.created_by', '=', cache()->get('userPin')['id']);
             })
             ->whereDate('sales_articles_shops.created_at', '>=', $dates[0])
             ->whereDate('sales_articles_shops.updated_at', '<=', $dates[1])
             ->whereIn('articles_shops.shop_id', $shops)
-            ->where('sales.type','=','sale')
-            ->where('sales.state','=','accepted')
+            ->where('sales.type', '=', 'sale')
+            ->where('sales.state', '=', 'accepted')
             ->get();
         $result = [];
         $totalTax = 0;
@@ -696,14 +695,14 @@ class SaleManager extends BaseManager
         foreach ($articles as $key => $value) {
             $price = $value->price * $value->cant;
             $taxes = DB::table('taxes')
-                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->leftJoin('article_tax', 'article_tax.tax_id', 'taxes.id')
                 ->where('article_tax.article_id', '=', $value->article_id)
                 ->get();
             foreach ($taxes as $k => $tax) {
                 $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
             }
             $discounts = DB::table('discounts')
-                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
                 ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
                 ->get();
             foreach ($discounts as $k => $discount) {
@@ -754,8 +753,8 @@ class SaleManager extends BaseManager
             ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
-            ->where('sales.type','=','sale')
-            ->where('sales.state','=','accepted');
+            ->where('sales.type', '=', 'sale')
+            ->where('sales.state', '=', 'accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
             $articles->whereDate('sales_articles_shops.created_at', '>=',
@@ -768,8 +767,8 @@ class SaleManager extends BaseManager
             }
             $articles = $articles->whereIn('articles_shops.shop_id', $shops);
         }
-        if ($this->getAccessPermit()[6]->actions->just_yours
-            || $this->getAccessPermit()[2]->actions->just_yours || $this->getAccessPermit()[9]->actions->just_yours) {
+        if ($this->getAccessPermit()[6]['actions']['just_yours']
+            || $this->getAccessPermit()[2]['actions']['just_yours'] || $this->getAccessPermit()[9]['actions']['just_yours']) {
             $articles = $articles->where('sales.created_by', '=', cache()->get('userPin')['id']);
         }
         $articles = $articles->get();
@@ -779,14 +778,14 @@ class SaleManager extends BaseManager
         foreach ($articles as $key => $value) {
             $price = $value->price * $value->cant;
             $taxes = DB::table('taxes')
-                ->join('article_tax', 'article_tax.tax_id', 'taxes.id')
+                ->leftJoin('article_tax', 'article_tax.tax_id', 'taxes.id')
                 ->where('article_tax.article_id', '=', $value->article_id)
                 ->get();
             foreach ($taxes as $k => $tax) {
                 $totalTax = $tax->percent ? $tax->value * $price / 100 : $price + $tax->value;
             }
             $discounts = DB::table('discounts')
-                ->join('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
+                ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', 'discounts.id')
                 ->where('sales_articles_shop_discounts.sales_articles_shops_id', '=', $value->sales_articles_shops_id)
                 ->get();
             foreach ($discounts as $k => $discount) {

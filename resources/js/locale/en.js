@@ -477,7 +477,7 @@ export default {
   },
   report: {
     contact_us: 'Contact Us',
-    cant: 'QUANTIFY',
+    cant: 'Cant',
     print_ticket: 'Print Ticket',
     print_letter: 'Print Letter',
     breakdown: 'Breakdown',

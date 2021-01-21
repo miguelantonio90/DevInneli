@@ -477,7 +477,7 @@ export default {
   },
   report: {
     contact_us: 'Contáctenos',
-    cant: 'CANTIDAD',
+    cant: 'Cant',
     print_ticket: 'Imprimir Ticket',
     print_letter: 'Imprimir Carta',
     breakdown: 'Desglose',

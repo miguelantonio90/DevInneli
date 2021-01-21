@@ -154,6 +154,7 @@ class ArticleManager extends BaseManager
                     $articleChildren = $this->insertArticle($value);
                     $this->updateData($articleChildren, $value);
                     $articleChildren->parent_id = $article->id;
+                    $articleChildren->category_id = $article->category_id;
                     $this->updateTaxes($article, $taxes);
                     $articleChildren->save();
                     $arrayShops = $this->getShopsByVariantValue($shops, $articleChildren);

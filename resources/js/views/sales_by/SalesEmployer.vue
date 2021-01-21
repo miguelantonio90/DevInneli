@@ -185,6 +185,7 @@
 import AppLoading from '../../components/core/AppLoading'
 import { Chart } from 'highcharts-vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { fullName } from '../../util'
 
 export default {
   name: 'SalesEmployer',
@@ -302,7 +303,7 @@ export default {
       const categories = []
       const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
       this.localSalesByEmployer.slice(0, 4).forEach((v) => {
-        categories.push(v.name.firstName + ' ' + v.name.lastName)
+        categories.push(fullName(v.name.firstName, v.name.lastName))
         series.grossPrice.push(v.data.grossPrice)
         series.totalDiscount.push(v.data.totalDiscount)
         series.netPrice.push(v.data.netPrice)

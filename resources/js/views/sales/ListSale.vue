@@ -574,26 +574,8 @@ export default {
     },
     editSaleHandler ($event) {
       this.openEditModal($event)
-      if (this.editSale.refounds.length > 0) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-              this.$vuetify.lang.t('$vuetify.sale.sale')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_exist_refunds'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      } else {
-        this.$store.state.sale.managerSale = true
-        this.$router.push({ name: 'vending_edit' })
-      }
+      this.$store.state.sale.managerSale = true
+      this.$router.push({ name: 'vending_edit' })
     },
     openPrintModal (print, id) {
       this.printer = print
