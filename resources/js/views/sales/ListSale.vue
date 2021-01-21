@@ -484,6 +484,15 @@ export default {
     }
   },
   watch: {
+    sales: function () {
+      this.sales.forEach((value) => {
+        const sale = value
+        value.articles.forEach((v, i) => {
+          if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+        })
+        this.localSales.push(sale)
+      })
+    },
     loadData: function () {
       if (this.loadData === true) { this.loadInitData() }
     }
@@ -505,17 +514,8 @@ export default {
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
       this.localSales = []
-      await this.getSales().then(() => {
-        this.getArticles().then(() => {
-          this.sales.forEach((value) => {
-            const sale = value
-            value.articles.forEach((v, i) => {
-              if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
-            })
-            this.localSales.push(sale)
-          })
-        })
-      })
+      await this.getArticles()
+      await this.getSales()
       this.switchLoadData(false)
     },
     changeState (item) {
@@ -574,26 +574,8 @@ export default {
     },
     editSaleHandler ($event) {
       this.openEditModal($event)
-      if (this.editSale.refounds.length > 0) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-              this.$vuetify.lang.t('$vuetify.sale.sale')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_exist_refunds'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      } else {
-        this.$store.state.sale.managerSale = true
-        this.$router.push({ name: 'vending_edit' })
-      }
+      this.$store.state.sale.managerSale = true
+      this.$router.push({ name: 'vending_edit' })
     },
     openPrintModal (print, id) {
       this.printer = print

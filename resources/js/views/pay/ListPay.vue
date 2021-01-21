@@ -263,7 +263,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(() => {
           this.sale.pays.splice(this.sale.pays.indexOf(item), 1)
         })
     },

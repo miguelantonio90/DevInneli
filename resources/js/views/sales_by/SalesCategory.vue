@@ -283,7 +283,7 @@ export default {
     await this.getShops().then(() => {
       this.localShops = this.shops
     })
-    await this.loadData()
+    await this.loadSalesByCategories()
     this.loadingData = false
   },
   methods: {

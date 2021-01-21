@@ -243,7 +243,7 @@
                   class="cantidad"
                   style="text-align: center"
                 >
-                  {{ `${pay.method ==='cash'? pay.currency.currency: '' }` }} {{ parseFloat(pay.cant_pay).toFixed(2) }}
+                  {{ `${pay.method ==='cash'? pay.currency.currency || user.company.currency :'' }` }} {{ parseFloat(pay.cant_pay).toFixed(2) }}
                 </td>
                 <td
                   class="producto"
