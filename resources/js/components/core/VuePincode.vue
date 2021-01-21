@@ -74,7 +74,7 @@ export default {
     }
   },
   watch: {
-    pincode () {
+    pincode: function () {
       if (this.pincodeLength === 6) {
         this.$emit('pincode', this.pincode)
       }

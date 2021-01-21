@@ -201,7 +201,7 @@ export default {
     }
   },
   watch: {
-    access_permit () {
+    access_permit: function () {
       this.localAccess = []
       const keys = Object.keys(this.access_permit)
       keys.forEach((v) => {

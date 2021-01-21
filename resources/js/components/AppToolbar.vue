@@ -334,7 +334,7 @@ export default {
     }
   },
   watch: {
-    access_permit () {
+    access_permit: function () {
       this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
         ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
       this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
