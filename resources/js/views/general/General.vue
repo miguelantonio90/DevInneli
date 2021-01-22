@@ -151,7 +151,7 @@ export default {
     }
   },
   watch: {
-    access_permit () {
+    access_permit: function () {
       return this.access_permit
     }
   },

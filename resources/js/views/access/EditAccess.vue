@@ -19,10 +19,12 @@
           class="my-10"
           lazy-validation
         >
-          <v-row justify="space-around">
+          <v-row
+            cols="12"
+            justify="space-around"
+          >
             <v-col
-              cols="12"
-              md="6"
+              md="4"
             >
               <v-text-field
                 v-model="editAccess.name"
@@ -31,18 +33,19 @@
                 :rules="formRule.position"
               />
             </v-col>
-            <v-checkbox
-              v-model="editAccess.accessEmail"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
-            />
-            <v-checkbox
-              v-model="editAccess.accessPin"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessPin')"
-            />
+            <v-col md="4">
+              <v-checkbox
+                v-model="editAccess.accessEmail"
+                :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
+              />
+            </v-col>
+            <v-col md="4">
+              <v-checkbox
+                v-model="editAccess.accessPin"
+                :label="$vuetify.lang.t('$vuetify.access.accessPin')"
+              />
+            </v-col>
             <v-col
-              cols="12"
               md="12"
             >
               <v-text-field
@@ -56,6 +59,7 @@
               <v-col
                 v-for="(access,j) in access_permit"
                 :key="j"
+                cols="12"
                 md="6"
               >
                 <v-expansion-panel>
@@ -106,7 +110,7 @@
                         :key="i"
                       >
                         <v-switch
-                          v-model="access.actions[i]"
+                          v-model="item[i]"
                           :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
                         />
                       </v-col>

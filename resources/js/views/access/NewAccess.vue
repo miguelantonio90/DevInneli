@@ -19,10 +19,12 @@
           class="my-10"
           lazy-validation
         >
-          <v-row justify="space-around">
+          <v-row
+            cols="12"
+            justify="space-around"
+          >
             <v-col
-              cols="12"
-              md="3"
+              md="4"
             >
               <v-text-field
                 v-model="newAccess.name"
@@ -31,18 +33,19 @@
                 :rules="formRule.position"
               />
             </v-col>
-            <v-checkbox
-              v-model="newAccess.accessEmail"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
-            />
-            <v-checkbox
-              v-model="newAccess.accessPin"
-              class="md-3"
-              :label="$vuetify.lang.t('$vuetify.access.accessPin')"
-            />
+            <v-col md="4">
+              <v-checkbox
+                v-model="newAccess.accessEmail"
+                :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
+              />
+            </v-col>
+            <v-col md="4">
+              <v-checkbox
+                v-model="newAccess.accessPin"
+                :label="$vuetify.lang.t('$vuetify.access.accessPin')"
+              />
+            </v-col>
             <v-col
-              cols="12"
               md="12"
             >
               <v-text-field
@@ -107,15 +110,8 @@
                         :key="i"
                       >
                         <v-switch
-                          v-if="Object.keys(access.actions[i]) === 'list'"
-                          v-model="access.actions[i][Object.keys(access.actions[i])]"
-                          value="access.title.value"
-                          :label="$vuetify.lang.t('$vuetify.access.access.' + Object.keys(access.actions[i]))"
-                        />
-                        <v-switch
-                          v-else
-                          v-model="access.actions[i][Object.keys(access.actions[i])]"
-                          :label="$vuetify.lang.t('$vuetify.access.access.' + Object.keys(access.actions[i]))"
+                          v-model="item[i]"
+                          :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
                         />
                       </v-col>
                     </v-row>
@@ -167,8 +163,6 @@ export default {
     ...mapState('keys', ['saved', 'keys', 'isActionInProgress'])
   },
   created () {
-  },
-  mounted () {
     this.formValid = false
     this.access_permit = [
       {

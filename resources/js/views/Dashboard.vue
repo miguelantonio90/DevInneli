@@ -331,7 +331,7 @@ export default {
     }
   },
   watch: {
-    access_permit () {
+    access_permit: function () {
       this.completeStaticTic()
     }
   },

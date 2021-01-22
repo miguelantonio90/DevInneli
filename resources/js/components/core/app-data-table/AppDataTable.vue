@@ -375,10 +375,10 @@ export default {
     }
   },
   watch: {
-    access_permit () {
+    access_permit: function () {
       this.showButtons()
     },
-    manager () {
+    manager: function () {
       this.showButtons()
     },
     searchValue: debounce(function (newVal) {
