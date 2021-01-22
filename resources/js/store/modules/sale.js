@@ -91,11 +91,7 @@ const mutations = {
   },
   [FETCHING_SALES] (state, sales) {
     state.sales = []
-    sales.forEach((value) => {
-      if (!value.parent_id) {
-        state.sales.push(value)
-      }
-    })
+    state.sales = sales
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress

@@ -176,10 +176,24 @@ class SaleManager extends BaseManager
                     ->addSelect(['taxes.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->refounds = DB::table('refunds')
-                    ->leftJoin('users', 'users.id', '=', 'refunds.created_by')
+                    ->join('users', 'users.id', '=', 'refunds.created_by')
                     ->where('refunds.article_id', '=', $v->id)
                     ->where('refunds.sale_id', '=', $value->id)
                     ->select('refunds.*', 'users.firstName as created_by')
+                    ->get();
+                $sales[$key]['articles'][$k]->modifiers = DB::table('modifiers')
+                    ->leftJoin('sales_articles_shop_modifiers', 'sales_articles_shop_modifiers.modifier_id', '=',
+                        'modifiers.id')
+                    ->leftJoin('sales_articles_shops', 'sales_articles_shops.id', '=',
+                        'sales_articles_shop_modifiers.sales_articles_shops_id')
+                    ->leftJoin('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->leftJoin('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->leftJoin('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $sales[$key]['shop']->shop_id)
+                    ->where('sales.id', '=', $sales[$key]['id'])
+                    ->addSelect(['modifiers.*'])
                     ->get();
                 $sales[$key]['articles'][$k]->discount = DB::table('discounts')
                     ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
@@ -201,6 +215,9 @@ class SaleManager extends BaseManager
                 $cantRefund = 0;
                 foreach ($sales[$key]['articles'][$k]->discount as $j => $i) {
                     $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
+                foreach ($sales[$key]['articles'][$k]->modifiers as $j => $i) {
+                    $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
                 }
                 foreach ($sales[$key]['articles'][$k]->taxes as $j => $i) {
                     if ($i->type === 'added') {
@@ -384,6 +401,11 @@ class SaleManager extends BaseManager
             $discounts[] = $discount['id'];
         }
         $saleAS->discount()->sync($discounts);
+        $modifiers = [];
+        foreach ($data['modifiers'] as $key => $modifier) {
+            $modifiers[] = $modifier['id'];
+        }
+        $saleAS->modifier()->sync($modifiers);
         return $cant;
     }
 

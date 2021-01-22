@@ -90,6 +90,6 @@ class Sale extends Model
 
     public function refounds(): HasMany
     {
-        return $this->hasMany(SalesArticlesShops::class);
+        return $this->hasMany(Refund::class);
     }
 }
