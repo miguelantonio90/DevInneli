@@ -276,6 +276,11 @@ class BuyManager extends BaseManager
                 $pSale = PaySale::findOrFail($pay['id']);
             }
             $pSale['cant'] = $pay['cant'];
+            if ($pay['method'] === 'cash') {
+                $pSale['currency_id'] = $pay['currency']['id'] ? $pay['currency']['id'] : '';
+                $pSale['cant_pay'] = $pay['cant_pay'];
+                $pSale['cant_back'] = $pay['cant_back'];
+            }
             if ($pay['name'] === 'credit') {
                 $pSale['mora'] = $pay['mora'];
                 $pSale['cantMora'] = $pay['cantMora'];

@@ -64,67 +64,60 @@
             {{ item.no_facture }}
           </template>
           <template v-slot:item.state="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <template v-if="item.state !== 'preform'">
-                  <v-autocomplete
-                    v-model="item.state"
-                    :disabled="item.state !== 'open'"
-                    chips
-                    :items="getLocalStates"
-                    item-text="text"
-                    item-value="value"
-                    :style="{'width':'160px'}"
-                    v-bind="attrs"
-                    v-on="on"
-                    @input="changeState(item)"
+            <template v-if="item.state !== 'preform' && item.state !== 'cancelled'">
+              <v-autocomplete
+                v-model="item.state"
+                chips
+                :items="getLocalStates(item)"
+                item-text="text"
+                item-value="value"
+                :style="{'width':'160px'}"
+                @input="changeState(item)"
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.item.value"
+                    @click="data.select"
                   >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.item.value"
-                        @click="data.select"
-                      >
-                        <i :style="'color: ' + data.item.color">
-                          <v-icon left>
-                            {{ data.item.icon }}
-                          </v-icon>
-                          {{ data.item.text }}</i>
-                      </v-chip>
-                    </template>
-                    <template v-slot:item="data">
-                      <template v-if="typeof data.item !== 'object'">
-                        <v-list-item-content v-text="data.item" />
-                      </template>
-                      <template v-else>
-                        <v-list-item-icon>
-                          <v-icon
-                            left
-                            :style="'color: ' + data.item.color"
-                          >
-                            {{ data.item.icon }}
-                          </v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title
-                            :style="'color: ' + data.item.color"
-                          >
-                            {{ data.item.text }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template>
-                    </template>
-                  </v-autocomplete>
-                </template>
-                <template v-else>
-                  <v-chip>
-                    <i style="color: #0288d1"> <v-icon>mdi-calendar-clock</v-icon>
-                      {{ $vuetify.lang.t('$vuetify.sale.state.preform') }}
-                    </i>
+                    <i :style="'color: ' + data.item.color">
+                      <v-icon left>
+                        {{ data.item.icon }}
+                      </v-icon>
+                      {{ data.item.text }}</i>
                   </v-chip>
                 </template>
-              </template>
-            </v-tooltip>
+                <template v-slot:item="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-item-content v-text="data.item" />
+                  </template>
+                  <template v-else>
+                    <v-list-item-icon>
+                      <v-icon
+                        left
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.icon }}
+                      </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        :style="'color: ' + data.item.color"
+                      >
+                        {{ data.item.text }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+            </template>
+            <template v-else>
+              <v-chip>
+                <i :style="item.state === 'cancelled'?'color: #ff0000':'color: #0288d1'"> <v-icon :style="item.state === 'cancelled'?'color: #ff0000':'color: #0288d1'">{{ item.state === 'cancelled' ? 'mdi-star-off' :'mdi-calendar-clock' }}</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.sale.state.' + item.state) }}
+                </i>
+              </v-chip>
+            </template>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
             <v-tooltip bottom>
@@ -445,28 +438,6 @@ export default {
         }
       ]
     },
-    getLocalStates () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
-          value: 'open',
-          icon: 'mdi-star-half',
-          color: '#4caf50'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
-          value: 'accepted',
-          icon: 'mdi-star',
-          color: '#3f51b5'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
-          value: 'cancelled',
-          icon: 'mdi-star-off',
-          color: '#ff0000'
-        }
-      ]
-    },
     stepsHelp () {
       return [{
         target: '#btnAdd_' + this.id,
@@ -485,6 +456,7 @@ export default {
   },
   watch: {
     sales: function () {
+      this.localSales = []
       this.sales.forEach((value) => {
         const sale = value
         value.articles.forEach((v, i) => {
@@ -518,23 +490,40 @@ export default {
       await this.getSales()
       this.switchLoadData(false)
     },
+    getLocalStates (item) {
+      return item.state === 'open' ? [{
+        text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
+        value: 'open',
+        icon: 'mdi-star-half',
+        color: '#4caf50'
+      },
+      {
+        text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+        value: 'cancelled',
+        icon: 'mdi-star-off',
+        color: '#ff0000'
+      }] : [
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
+          value: 'accepted',
+          icon: 'mdi-star',
+          color: '#3f51b5'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+          value: 'cancelled',
+          icon: 'mdi-star-off',
+          color: '#ff0000'
+        }]
+    },
     changeState (item) {
       this.updateSale(item)
     },
     refundArticle (sale, article) {
       if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
-        this.$Swal.fire({
-          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
-          ]),
-          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'),
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
+        this.showMessage(this.$vuetify.lang.t('$vuetify.actions.refund', [
+          this.$vuetify.lang.t('$vuetify.menu.articles')
+        ]), this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'))
       } else {
         this.openNewModal({ sale, article })
       }
@@ -573,9 +562,21 @@ export default {
       }
     },
     editSaleHandler ($event) {
-      this.openEditModal($event)
-      this.$store.state.sale.managerSale = true
-      this.$router.push({ name: 'vending_edit' })
+      let show = true
+      console.log($event)
+      if (this.sales.filter(sl => sl.id === $event)[0].state === 'accepted') {
+        if (this.sales.filter(sl => sl.id === $event)[0].refounds.length > 0) {
+          show = false
+          this.showMessage(this.$vuetify.lang.t('$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.sale.sale')
+          ]), this.$vuetify.lang.t('$vuetify.messages.warning_exist_refunds'))
+        }
+      }
+      if (show) {
+        this.openEditModal($event)
+        this.$store.state.sale.managerSale = true
+        this.$router.push({ name: 'vending_edit' })
+      }
     },
     openPrintModal (print, id) {
       this.printer = print
@@ -603,6 +604,18 @@ export default {
         .then((result) => {
           if (result.isConfirmed) this.deleteSale(articleId)
         })
+    },
+    showMessage (title, msg) {
+      this.$Swal.fire({
+        title: title,
+        text: msg,
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonText: this.$vuetify.lang.t(
+          '$vuetify.actions.accept'
+        ),
+        confirmButtonColor: 'red'
+      })
     },
     initTour () {
       this.$tours.SaleHelp.start()

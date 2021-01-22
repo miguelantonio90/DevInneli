@@ -88,7 +88,7 @@
               </template>
               <template v-slot:[`item.cant_pay`]="{ item }">
                 <div v-if="item.method ==='cash'">
-                  {{ `${item.method ==='cash'? item.currency.currency || currency:'' }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}
+                  {{ `${ item.currency.currency ? item.currency.currency : currency }` }} {{ parseFloat(item.cant_pay).toFixed(2) }}
                 </div>
                 <div v-else>
                   --
