@@ -343,10 +343,10 @@ export const protectedRoute = [
           },
           {
             path: '/finance/buy_list',
-            name: 'supply_product',
+            name: 'buy_product',
             access: 'list',
             meta: {
-              title: 'supply_product',
+              title: 'buy_product',
               icon: 'mdi-database-plus',
               hiddenInMenu: false,
               requiresAuth: true
@@ -376,6 +376,18 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/buy/ManagerBuy')
+          },
+          {
+            path: '/finance/supply_list',
+            name: 'supply_product',
+            access: 'list',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/supply/ListSupply')
           },
           {
             path: '/finance/tax.list',

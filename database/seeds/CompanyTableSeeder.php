@@ -3,6 +3,7 @@
 use App\Company;
 use App\Payment;
 use App\Position;
+use App\SupplyState;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Seeder;
@@ -156,6 +157,16 @@ class CompanyTableSeeder extends Seeder
             Payment::create([
                     'name' => $value[0],
                     'method' => $value[1]
+                ]
+            );
+        }
+
+        $supplyState = [
+            ['requested', 'process','accepted','ship', 'received', 'cancelled']
+        ];
+        foreach ($supplyState as $key => $value) {
+            SupplyState::create([
+                    'name' => $value[0]
                 ]
             );
         }

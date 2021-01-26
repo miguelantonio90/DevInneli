@@ -72,6 +72,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::get('article/number/get', 'ArticleController@findArticleNumber')->name('numberArticle');
 
         Route::resource('inventory', 'InventoryController');
+        Route::resource('supply', 'SupplyController');
 
         Route::resource('sale', 'SaleController');
         Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');
