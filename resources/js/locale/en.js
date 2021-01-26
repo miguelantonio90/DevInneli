@@ -117,9 +117,13 @@ export default {
     product_add: 'New Article',
     product_edit: 'Edit Article',
     assistance: 'Assistance card',
-    supply_product: 'Purchases',
-    supply_productS: 'Purchase',
-    supply_add: 'New Purchase',
+    buy_product: 'Purchases',
+    buy_productS: 'Purchase',
+    buy_add: 'New Purchase',
+    buy_edit: 'Edit Purchase',
+    supply_product: 'Order Request',
+    supply_productS: 'Orders Request',
+    supply_add: 'Orders Request',
     supply_edit: 'Edit Purchase',
     finance: 'Finance',
     type_of_order: 'Type of Order',
@@ -242,7 +246,9 @@ export default {
     apply: 'Apply',
     transfer: 'Transfer',
     next: 'Next',
-    back: 'Back'
+    back: 'Back',
+    yes: 'Yes',
+    no: 'No'
   },
   titles: {
     list: 'List of {0}',
@@ -398,8 +404,8 @@ export default {
     color_shape: 'Color',
     image: 'Image'
   },
-  supply_product: {
-    supply: 'Supply'
+  buy_product: {
+    supply: 'Supplier'
   },
   payment: {
     name: 'Payment Method',
