@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Client;
+use App\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\SupplierManager;
+use App\Notifications\InvitationSupplier;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+//use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -62,7 +69,19 @@ class SupplierController extends Controller
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $supplier = $this->supplierManager->new($data);
+        $info =
+            ['client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name];
+        if($data['sendEmail']){
+            Mail::send( 'emails.invitation-supplier',$info,
+//                function ($message, $supplier){
+                function ($message) use ($supplier){
+                $message->subject('INNELI');
+                $message->from('no-reply@inneli.com');
+                $message->to($supplier->email);
+            });
 
+
+        }
         return ResponseHelper::sendResponse(
             $supplier,
             'Supplier has created successfully.'

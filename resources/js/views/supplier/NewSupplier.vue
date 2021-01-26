@@ -184,6 +184,7 @@ export default {
   components: { NewExpenseCategory },
   data () {
     return {
+      showModal: false,
       formValid: false,
       hidePinCode1: true,
       hidePinCode2: true,
@@ -252,10 +253,31 @@ export default {
         return false
       }
     },
-    async createNewClient () {
+    createNewClient () {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createSupplier(this.newSupplier)
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.new', [
+              this.$vuetify.lang.t('$vuetify.supplier.name')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_requested_provider'
+            ),
+            icon: 'info',
+            showCancelButton: true,
+            cancelButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.no'
+            ),
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.yes'
+            ),
+            confirmButtonColor: 'primary'
+          })
+          .then((result) => {
+            this.loading = true
+            this.newSupplier.sendEmail = result.value
+            this.createSupplier(this.newSupplier)
+          })
       }
     }
   }

@@ -117,10 +117,14 @@ export default {
     product_add: 'Nuevo Artículo',
     product_edit: 'Editar Artículo',
     assistance: 'Tarjeta de asistencia',
-    supply_product: 'Compras',
-    supply_productS: 'Compra',
-    supply_add: 'Nueva Compra',
-    supply_edit: 'Editar Compra',
+    buy_product: 'Compras',
+    buy_productS: 'Compra',
+    buy_add: 'Nueva Compra',
+    buy_edit: 'Editar Compra',
+    supply_product: 'Pedidos',
+    supply_productS: 'Pedido',
+    supply_add: 'Pedido',
+    supply_edit: 'Editar Pedido',
     finance: 'Finanzas',
     type_of_order: 'Tipo de Pedido',
     tax_list: 'Impuesto',
@@ -168,6 +172,7 @@ export default {
   messages: {
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
+    warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
     warning_delete: 'No se podrá revertir esta acción!',
     warning_exist: 'Ya existe una variante con ese nombre!',
     warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
@@ -243,7 +248,9 @@ export default {
     apply: 'Aplicar',
     transfer: 'Transferir',
     next: 'Siguiente',
-    back: 'Atrás'
+    back: 'Atrás',
+    yes: 'Si',
+    no: 'No'
   },
   titles: {
     list: 'Lista de {0}',
@@ -399,7 +406,7 @@ export default {
     color_shape: 'Color',
     image: 'Imagen'
   },
-  supply_product: {
+  buy_product: {
     supply: 'Supply'
   },
   payment: {

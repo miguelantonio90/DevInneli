@@ -28,6 +28,7 @@ import tax from './modules/tax'
 import discount from './modules/discount'
 import inventory from './modules/inventory'
 import sale from './modules/sale'
+import supply from './modules/supply'
 import boxes from './modules/boxes'
 import openclose from './modules/openclose'
 import modifiers from './modules/modifiers'
@@ -74,6 +75,7 @@ const store = new Vuex.Store({
     discount,
     inventory,
     sale,
+    supply,
     modifiers
   },
   plugins: [vuexLocal.plugin],
