@@ -26,38 +26,49 @@
             {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}<br>
             <b>{{ $vuetify.lang.t('$vuetify.menu.box') + ': ' }}</b>
             {{ editSale.box.name }}<br>
+            <b>{{ $vuetify.lang.t('$vuetify.menu.coin') + ': ' }}</b>
+            {{ user.company.currency }}<br>
             {{ new Date(editSale.updated_at).toUTCString() }}<br>
             {{ user.company.slogan ? user.company.slogan.toUpperCase(): '' }}
           </p>
-          <div style="width: 100%">
+          <div style="width: 100%; margin-bottom: 20px">
+            <v-col
+              style="width: 100%;padding: inherit"
+              cols="12"
+              md="12"
+            >
+              <table style="width: 100%; border-bottom-style: dashed;border-top-style:dashed ">
+                <tr>
+                  <th class="cantidad">
+                    {{ $vuetify.lang.t('$vuetify.report.cant').toUpperCase() }}
+                  </th>
+                  <th class="producto">
+                    {{ $vuetify.lang.t('$vuetify.menu.article').toUpperCase() }}
+                  </th>
+                  <th class="precio">
+                    $$
+                  </th>
+                </tr>
+              </table>
+              <p style="margin-top: 15px; text-align: center;margin-bottom: 10px;">
+                ***********************************
+              </p>
+            </v-col>
             <v-col
               v-for="(art,i) in editSale.articles"
               :key="i"
-              style="width: 100%"
+              style="width: 100%;padding: inherit"
               cols="12"
               md="12"
             >
               <table style="width: 100%">
-                <thead>
-                  <tr>
-                    <th class="cantidad">
-                      {{ $vuetify.lang.t('$vuetify.report.cant').toUpperCase() }}
-                    </th>
-                    <th class="producto">
-                      {{ $vuetify.lang.t('$vuetify.menu.article').toUpperCase() }}
-                    </th>
-                    <th class="precio">
-                      $$
-                    </th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <td>{{ art.cant }}</td>
                     <td>{{ art.name }} {{ art.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(art.um).name) + ')':'' }}</td>
                     <td>
                       {{
-                        `${user.company.currency + ' ' + parseFloat(art.cant*art.price).toFixed(2)}`
+                        `${ parseFloat(art.cant*art.price).toFixed(2)}`
                       }}
                     </td>
                   </tr>
@@ -82,8 +93,7 @@
                                 {{ lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%) ':' ' }}
                               </td>
                               <td>
-                                <i> -{{ `${user.company.currency}` }}
-                                  {{ lDiscount.percent ? parseFloat(lDiscount.value*art.cant*art.price/100).toFixed(2) : parseFloat(lDiscount.value).toFixed(2) }}
+                                <i> -{{ lDiscount.percent ? parseFloat(lDiscount.value*art.cant*art.price/100).toFixed(2) : parseFloat(lDiscount.value).toFixed(2) }}
                                 </i>
                               </td>
                             </tr>
@@ -113,8 +123,7 @@
                                 {{ tax.name }}{{ tax.percent ? '('+tax.value +'%) ':' ' }}
                               </td>
                               <td>
-                                <i> +{{ `${user.company.currency}` }}
-                                  {{ tax.percent ? parseFloat(tax.value*art.cant*art.price/100).toFixed(2) : parseFloat(tax.value).toFixed(2) }}
+                                <i> +{{ tax.percent ? parseFloat(tax.value*art.cant*art.price/100).toFixed(2) : parseFloat(tax.value).toFixed(2) }}
                                 </i>
                               </td>
                             </tr>
@@ -126,23 +135,25 @@
                   <tr>
                     <td />
                     <td>{{ $vuetify.lang.t('$vuetify.pay.total').toUpperCase() }}</td>
-                    <td> <b>{{ `${user.company.currency + ' ' + parseFloat(total_pay(art)).toFixed(2)}` }}</b></td>
+                    <td> <b>{{ parseFloat(total_pay(art)).toFixed(2) }}</b></td>
                   </tr>
                 </tbody>
               </table>
             </v-col>
           </div>
           <b style="margin-top: 10px">{{ $vuetify.lang.t('$vuetify.report.breakdown').toUpperCase() }}</b>
-          <table style="width: 100%">
+          <table style="width: 100%; margin-bottom: 10px">
             <tbody>
               <tr>
                 <td><b>{{ $vuetify.lang.t('$vuetify.pay.sub_total') }}</b></td>
                 <td style="text-align: right">
-                  {{ `${user.company.currency + ' ' + parseFloat(sub_total).toFixed(2)}` }}
+                  {{ parseFloat(sub_total).toFixed(2) }}
                 </td>
               </tr>
               <template v-if="editSale.taxes.length !== 0">
-                {{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}
+                <!--<p style="font-style: italic;font-family: cursive;">
+                  {{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}
+                </p>-->
                 <tr
                   v-for="tax in editSale.taxes"
                   :key="tax.name"
@@ -152,19 +163,21 @@
                     v-if="tax.percent==='true'"
                     style="text-align: right"
                   >
-                    <i>{{ `${user.company.currency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} ({{ tax.value }}%)
+                    <i>{{ parseFloat(tax.value * sub_total / 100).toFixed(2) }} ({{ tax.value }}%)
                     </i>
                   </td>
                   <td
                     v-else
                     style="text-align: right"
                   >
-                    <i>{{ `${user.company.currency + ' ' + tax.value}` }}</i>
+                    <i>{{ tax.value }}</i>
                   </td>
                 </tr>
               </template>
               <template>
-                {{ $vuetify.lang.t('$vuetify.sale.discountGeneral') }}
+                <!-- <p style="font-style:italic;font-family: cursive;">
+                  {{ $vuetify.lang.t('$vuetify.sale.discountGeneral') }}
+                </p>-->
                 <tr
                   v-for="disc in editSale.discounts"
                   :key="disc.id"
@@ -174,21 +187,23 @@
                     v-if="disc.percent==='true'"
                     style="text-align: right"
                   >
-                    <i>-{{ `${user.company.currency + ' ' + parseFloat(disc.value * sub_total / 100).toFixed(2)}` }}</i>
+                    <i>-{{ parseFloat(disc.value * sub_total / 100).toFixed(2) }}</i>
                   </td>
                   <td
                     v-else
                     style="text-align: right"
                   >
-                    <i>{{ `${user.company.currency + ' ' + disc.value}` }}</i>
+                    <i>{{ disc.value }}</i>
                   </td>
                 </tr>
               </template>
               <tr>
                 <td>
-                  {{ $vuetify.lang.t('$vuetify.pay.total') }}
+                  <p style="text-transform: uppercase;">
+                    <b>{{ $vuetify.lang.t('$vuetify.pay.total') }}: </b>
+                  </p>
                 </td>
-                <td style="text-align: right">
+                <td style="text-align: right;font-size: large;text-decoration: underline;}">
                   {{ `${user.company.currency + ' ' + total}` }}
                 </td>
               </tr>
@@ -249,7 +264,7 @@
                   class="producto"
                   style="text-align: center"
                 >
-                  <div>{{ `${user.company.currency + ' ' + parseFloat(pay.cant).toFixed(2)}` }}</div>
+                  <div>{{ parseFloat(pay.cant).toFixed(2) }}</div>
                 </td>
                 <td
                   class="price"
@@ -362,15 +377,15 @@ export default {
 }
 * {
     font-size: 12px;
-    font-family: 'Times New Roman',sans-serif;
+    font-family: 'DejaVu Sans', serif;
 }
 
 td,
 th,
 tr,
 table {
-    border-top: 1px solid black;
-    border-collapse: collapse;
+  border-collapse: collapse;
+  margin: 0 auto;
 }
 
 td.producto,
@@ -381,15 +396,15 @@ th.producto {
 
 td.cantidad,
 th.cantidad {
-    width: 40px;
-    max-width: 40px;
+    width: 50px;
+    max-width: 50px;
     word-break: break-all;
 }
 
 td.precio,
 th.precio {
-    width: 40px;
-    max-width: 40px;
+    width: 50px;
+    max-width: 50px;
     word-break: break-all;
 }
 
