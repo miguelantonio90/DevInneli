@@ -2,6 +2,7 @@ import supplier from '../../api/supplier'
 import data from '../../data'
 
 const FETCHING_SUPPLIERS = 'FETCHING_SUPPLIERS'
+const FETCHING_CLIENT_SUPPLIERS = 'FETCHING_CLIENT_SUPPLIERS'
 const SWITCH_SUPPLIER_NEW_MODAL = 'SWITCH_SUPPLIER_NEW_MODAL'
 const SWITCH_SUPPLIER_EDIT_MODAL = 'SWITCH_SUPPLIER_EDIT_MODAL'
 const SWITCH_SUPPLIER_SHOW_MODAL = 'SWITCH_SUPPLIER_SHOW_MODAL'
@@ -20,6 +21,7 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   suppliers: [],
+  clientSuppliers: [],
   loading: false,
   saved: false,
   newSupplier: {
@@ -74,6 +76,18 @@ const mutations = {
     })
 
     state.suppliers = suppliers
+  },
+  [FETCHING_CLIENT_SUPPLIERS] (state, suppliers) {
+    suppliers.map((value) => {
+      Object.keys(data.countries).map((key) => {
+        if (key === value.country) {
+          value.nameCountry = data.countries[key].name + '(' + data.countries[key].native + ')'
+          value.countryFlag = data.countries[key].emoji
+        }
+      })
+    })
+
+    state.clientSuppliers = suppliers
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -179,6 +193,17 @@ const actions = {
       .fetchSuppliers()
       .then(({ data }) => {
         commit(FETCHING_SUPPLIERS, data.data)
+        commit(SUPPLIER_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data.access)
+      }).catch((error) => commit(FAILED_SUPPLIER, error))
+  },
+  async getClientSupplier ({ commit }) {
+    commit(SUPPLIER_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await supplier
+      .fetchClientSupplier()
+      .then(({ data }) => {
+        commit(FETCHING_CLIENT_SUPPLIERS, data.data)
         commit(SUPPLIER_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data.access)
       }).catch((error) => commit(FAILED_SUPPLIER, error))

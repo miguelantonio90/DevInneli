@@ -198,8 +198,12 @@ export default {
     warning_no_category: 'You need select a Category',
     warning_composite: 'If the article is composite, you must define the elements that compose it',
     warning_price: 'You cannot add that item. If the price is higher than the cost, it will not give you profit ',
-    warning_cant_article: 'You cannot add this sale. You must add at least one item. ',
-    warning_no_article: 'You cannot add Sale. You must add at least one article in the system. ',
+    warning_cant_article: "You can't do this action. You must add at least one item. ",
+    warning_no_article: "You can't do this action. You must add at least one article in the system.",
+    warning_no_clients_supplier: "You can't do this action. You need have a Supplier registered in system.",
+    warning_supply_state: "You can't do this action. Supplier init the process, please Cancel the supply.",
+    warning_supply_state_cancelled: "You can't do this action. Supply has been cancelled, is not important edited.",
+    warning_supply_delete: "You can't do this action. You need Cancel this supply first, and then you can delete.",
     warning_exist_refunds: 'You cannot edit this Sale. This sale have refunds, please change state to Cancel o create a new Sale. ',
     warning_no_box: 'You cannot add this sale. You must add or select a box. ',
     warning_difference_price: 'There is a difference between the total price and the one defined in the payments of {0}. \n Please fix the difference. ',
@@ -649,6 +653,17 @@ export default {
     selectBox: 'Select the Box where you sell. If the box is closed, then the system will open it with $0.00',
     addBox: 'Add a new Box',
     selectArticle: 'Select all articles that you will sell'
+  },
+  supply_state: {
+    state: {
+      state: 'State',
+      requested: 'Requested',
+      accepted: 'accepted',
+      process: 'Process',
+      ship: 'Ship',
+      received: 'Received',
+      cancelled: 'Cancelled'
+    }
   },
   ...en
 }

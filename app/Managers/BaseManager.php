@@ -5,7 +5,9 @@ namespace App\Managers;
 
 
 use App\Category;
+use App\Notification;
 use App\Shop;
+use Exception as Exception;
 
 class BaseManager
 {
@@ -13,7 +15,7 @@ class BaseManager
     /**
      * @param $action
      * @param $object
-     * @throws \Exception
+     * @throws Exception
      */
     public function managerBy($action, $object): void
     {

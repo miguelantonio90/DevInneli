@@ -42,7 +42,7 @@
               <v-avatar left>
                 <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
               </v-avatar>
-              {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+              {{ data.item.name }}
             </v-chip>
           </template>
           <template v-slot:item="data">
@@ -52,7 +52,7 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+                  {{ data.item.name }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
                   {{ `${data.item.email }` }}

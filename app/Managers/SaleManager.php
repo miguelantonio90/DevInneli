@@ -312,9 +312,10 @@ class SaleManager extends BaseManager
      * @param $sale
      * @param $data
      * @param $edit
+     * @return Sale
      * @throws Exception
      */
-    public function updateSaleData($sale, $data, $edit): void
+    public function updateSaleData($sale, $data, $edit): Sale
     {
         $articles = $data['articles'];
         $pays = $data['pays'];
@@ -360,13 +361,12 @@ class SaleManager extends BaseManager
         }
         $sale->taxes()->sync(Tax::find($taxes));
         $discounts = [];
-
         foreach ($data['discounts'] as $k => $v) {
             $discounts[] = $v['id'];
         }
-
         $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
+        return $sale;
     }
 
     /**
@@ -402,10 +402,12 @@ class SaleManager extends BaseManager
         }
         $saleAS->discount()->sync($discounts);
         $modifiers = [];
-        foreach ($data['modifiers'] as $key => $modifier) {
-            $modifiers[] = $modifier['id'];
+        if(array_key_exists('modifiers', $data)) {
+            foreach ($data['modifiers'] as $key => $modifier) {
+                $modifiers[] = $modifier['id'];
+            }
+            $saleAS->modifier()->sync($modifiers);
         }
-        $saleAS->modifier()->sync($modifiers);
         return $cant;
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Managers;
 
+use App\Client;
 use App\Supplier;
+use App\User;
 use Exception;
 
 class SupplierManager extends BaseManager
@@ -79,6 +81,10 @@ class SupplierManager extends BaseManager
             $supplier->note = $data['note'];
         }
         $supplier->save();
+        $user = User::latest()->where('email','=',$supplier->email)->get();
+        $user[0]->isSupplier = count($user) > 0;
+        $user[0]->save();
+        $this->managerBy('edit', $user[0]);
         return $supplier;
 
     }
@@ -115,4 +121,20 @@ class SupplierManager extends BaseManager
         return $supplier->delete();
     }
 
+    public function getSupplierClients(){
+
+        $suppliers = $this->findAllByCompany();
+        $users = [];
+        foreach ($suppliers as $k=> $supplier){
+            $user = User::latest()->where('email','=',$supplier->email)->get();
+            if(count($user) > 0) {
+                if($user[0]->isSupplier){
+                    $users []  = $supplier;
+                }
+            }
+        }
+        return $users;
+
+
+    }
 }

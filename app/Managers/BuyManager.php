@@ -242,7 +242,7 @@ class BuyManager extends BaseManager
             $sale->provider_id = $data['supplier']['id'];
         }
         $sale->save();
-        $this->updateSaleData($sale, $data, false);
+        $this->updateSaleData($sale->id, $data, false);
         return $sale;
     }
 
@@ -252,12 +252,12 @@ class BuyManager extends BaseManager
      * @param $edit
      * @throws Exception
      */
-    public function updateSaleData($sale, $data, $edit): void
+    public function updateSaleData($saleId, $data, $edit): void
     {
+        $sale = Sale::findOrFail($saleId);
         $articles = $data['articles'];
         $pays = $data['pays'];
         foreach ($articles as $key => $value) {
-
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
@@ -355,9 +355,9 @@ class BuyManager extends BaseManager
             $sale->provider_id = null;
         }
         $sale->save();
-        $this->removeSaleArticle($sale, $data['articles']);
-        $this->removePaySale($sale, $data['pays']);
-        $this->updateSaleData($sale, $data, true);
+        $this->removeSaleArticle($sale->id, $data['articles']);
+        $this->removePaySale($sale->id, $data['pays']);
+        $this->updateSaleData($sale->edit, $data, true);
 
         return $sale;
     }
@@ -367,10 +367,10 @@ class BuyManager extends BaseManager
      * @param $articles
      * @throws Exception
      */
-    private function removeSaleArticle($sale, $articles): void
+    public function removeSaleArticle($saleId, $articles): void
     {
         $saleArtShopDB = SalesArticlesShops::latest()
-            ->where('sale_id', '=', $sale->id)
+            ->where('sale_id', '=', $saleId)
             ->with('articles_shops')
             ->get();
         foreach ($saleArtShopDB as $art => $value) {
@@ -391,14 +391,14 @@ class BuyManager extends BaseManager
     }
 
     /**
-     * @param $sale
+     * @param $saleId
      * @param $pays
      * @throws Exception
      */
-    private function removePaySale($sale, $pays): void
+    public function removePaySale($saleId, $pays): void
     {
         $paySale = PaySale::latest()
-            ->where('sale_id', '=', $sale->id)
+            ->where('sale_id', '=', $saleId)
             ->with('method')
             ->get();
         foreach ($paySale as $art => $value) {

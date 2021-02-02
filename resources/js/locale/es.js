@@ -199,7 +199,11 @@ export default {
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
     warning_cant_article: 'No puede adicionar esta Venta. Debe adicionar al menos un artículo.',
-    warning_no_article: 'No puede adicionar Venta. Debe adicionar al menos un artículo en el sistema.',
+    warning_no_article: 'No puede  realizar esta operación. Debe adicionar al menos un artículo en el sistema.',
+    warning_no_clients_supplier: 'No puede realizar esta operación. Debe adicionar al menos un Proveedor que esté registrado en el sistema.',
+    warning_supply_state: 'No puede realizar esta operación. Se ha iniciado el proceso por parte del proveedor, por favor cancele el pedido si no lo desea.',
+    warning_supply_state_cancelled: 'No puede realizar esta operación. Este pedido ha sido cancelado, no tiene sentido editarlo.',
+    warning_supply_delete: 'No puede realizar esta operación. Primero debe Cancelar el pedido, y entonces puede eliminarlo.',
     warning_exist_refunds: 'No puede editar esta Venta. Ya posee reembolsos, por favor cámbiele el estado a Cancelada o cree una nueva.',
     warning_no_box: 'No puede adicionar esta compra. Debe Adicionar o  Seleccionar una caja.',
     warning_difference_price: 'Existe una diferencia entre el precio total y el definido en los pagos de {0}. \n Por favor arregle la diferencia.',
@@ -652,6 +656,17 @@ export default {
         'abrirá para el usuario autenticado con $0.00',
     addBox: 'Aquí adiciona una nueva Caja',
     selectArticle: 'Aquí selecciona los artículos que se venderá'
+  },
+  supply_state: {
+    state: {
+      name: 'Estado',
+      requested: 'Solicitada',
+      accepted: 'Aceptado',
+      process: 'En Proceso',
+      ship: 'Enviado',
+      received: 'Recibida',
+      cancelled: 'Cancelada'
+    }
   },
   ...es
 }

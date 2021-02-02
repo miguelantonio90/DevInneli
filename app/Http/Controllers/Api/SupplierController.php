@@ -127,4 +127,16 @@ class SupplierController extends Controller
             'Supplier has deleted successfully.'
         );
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+    public function getSupplierClients(Request $request){
+        return ResponseHelper::sendResponse(
+            $this->supplierManager->getSupplierClients(),
+            'Supplier has deleted successfully.'
+        );
+    }
 }

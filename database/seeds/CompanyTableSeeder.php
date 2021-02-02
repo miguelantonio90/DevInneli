@@ -162,7 +162,12 @@ class CompanyTableSeeder extends Seeder
         }
 
         $supplyState = [
-            ['requested', 'process','accepted','ship', 'received', 'cancelled']
+            ['requested'],
+            ['accepted'],
+            ['process'],
+            ['ship'],
+            ['received'],
+            ['cancelled'],
         ];
         foreach ($supplyState as $key => $value) {
             SupplyState::create([

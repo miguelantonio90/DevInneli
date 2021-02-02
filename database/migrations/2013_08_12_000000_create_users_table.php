@@ -24,6 +24,7 @@ class CreateUsersTable extends BaseMigration
             $table->string('country')->nullable();
             $table->boolean('isAdmin')->default(0);
             $table->boolean('isManager')->default(0);
+            $table->boolean('isSupplier')->default(0);
             $table->longText('avatar')->nullable();
             $table->boolean('isLoginPin')->nullable()->default(false);
             $table->rememberToken();

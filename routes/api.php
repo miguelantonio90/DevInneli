@@ -66,6 +66,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('discount', 'DiscountController');
 
         Route::resource('supplier', 'SupplierController');
+        Route::post('supplier/getClients', 'SupplierController@getSupplierClients')->name('getSupplierClients');
 
         Route::resource('article', 'ArticleController');
         Route::post('article/import', 'ArticleController@import')->name('articleImport');

@@ -4,6 +4,9 @@ export default {
   fetchSuppliers () {
     return api.get('supplier')
   },
+  fetchClientSupplier () {
+    return api.post('supplier/getClients')
+  },
   sendCreateRequest (supplier) {
     return api.post('supplier', supplier)
   },

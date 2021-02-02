@@ -354,7 +354,7 @@ export const protectedRoute = [
             component: () => import('../views/buy/ListBuy')
           },
           {
-            path: '/finance/buy.add',
+            path: '/finance/supply.add',
             name: 'supply_add',
             access: 'create',
             meta: {
@@ -363,7 +363,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/buy/ManagerBuy')
+            component: () => import('../views/supply/ManagerSupply')
           },
           {
             path: '/finance/supply.edit',
@@ -375,7 +375,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/buy/ManagerBuy')
+            component: () => import('../views/supply/ManagerSupply')
           },
           {
             path: '/finance/supply_list',

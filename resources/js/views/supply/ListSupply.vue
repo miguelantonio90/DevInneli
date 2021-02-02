@@ -10,24 +10,69 @@
         />
         <app-data-table
           :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.supply_product'),])"
+                                  [$vuetify.lang.t('$vuetify.menu.supply_product')])"
           :headers="getTableColumns"
-          csv-filename="BuyProducts"
+          csv-filename="SupplyProducts"
           :manager="'vending'"
-          :items="localInventories"
+          :items="localSupplies"
           :options="vBindOption"
           :sort-by="['no_facture']"
           :sort-desc="[false, true]"
           multi-sort
           :is-loading="isTableLoading"
-          @create-row="createBuyHandler"
-          @edit-row="editBuyHandler($event)"
-          @delete-row="deleteBuyHandler($event)"
+          @create-row="createSupplyHandler"
+          @edit-row="editSupplyHandler($event)"
+          @delete-row="deleteSupplyHandler($event)"
         >
-          <template v-slot:[`item.shop.name`]="{ item }">
-            {{ item.shop.name }}
+          <template v-slot:[`item.state.name`]="{ item }">
+            <template v-if="item.state.name !== 'cancelled'">
+              <v-autocomplete
+                v-model="item.state"
+                chips
+                item-text="name"
+                :items="item.state.next"
+                :style="{'width':'160px'}"
+                auto-select-first
+                return-object
+                @input="changeStateHandler(item)"
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.item.value"
+                    @click="data.select"
+                  >
+                    <i>
+                      {{ $vuetify.lang.t('$vuetify.supply_state.state.' + data.item.name) }}</i>
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-item-content v-text="$vuetify.lang.t('$vuetify.supply_state.state.' + data.item.name)" />
+                  </template>
+                  <template v-else>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ $vuetify.lang.t('$vuetify.supply_state.state.' + data.item.name) }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+            </template>
+            <template v-else>
+              <v-chip>
+                {{ $vuetify.lang.t('$vuetify.supply_state.state.' + item.state.name) }}
+              </v-chip>
+            </template>
           </template>
-          <template v-slot:[`item.totalCost`]="{ item }">
+          <template v-slot:[`item.to`]="{ item }">
+            {{ item.to.name }} <br>({{ item.to.email }})
+          </template>
+          <template v-slot:[`item.sale.shop.name`]="{ item }">
+            {{ item.sale.shop.name }}
+          </template>
+          <template v-slot:[`item.sale.totalCost`]="{ item }">
             <template>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -45,23 +90,23 @@
                   <list-pay
                     :show="false"
                     :sale="item"
-                    :total-price="parseFloat(item.totalCost).toFixed(2).toString()"
-                    :total-tax="parseFloat(item.totalTax).toFixed(2)"
-                    :total-discount="parseFloat(item.totalDisc).toFixed(2)"
-                    :sub-total="parseFloat(item.subTotal).toFixed(2)"
+                    :total-price="parseFloat(item.sale.totalCost).toFixed(2).toString()"
+                    :total-tax="parseFloat(item.sale.totalTax).toFixed(2)"
+                    :total-discount="parseFloat(item.sale.totalDisc).toFixed(2)"
+                    :sub-total="parseFloat(item.sale.subTotal).toFixed(2)"
                     :currency="user.company.currency"
                   />
                 </template>
                 <span
                   v-if="item.totalRefund > 0"
-                >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.totalRefund}` }}</span>
+                >{{ $vuetify.lang.t('$vuetify.menu.refund')+': '+ `${user.company.currency + ' ' + item.sale.totalRefund}` }}</span>
               </v-tooltip>
             </template>
-            {{ `${user.company.currency + ' ' + item.totalCost}` }}
+            {{ `${user.company.currency + ' ' + parseFloat(item.sale.totalCost).toFixed(2)}` }}
           </template>
           <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
             <v-btn
-              v-if="item.articles.length > 0"
+              v-if="item.sale.articles.length > 0"
               color="primary"
               fab
               x-small
@@ -110,7 +155,7 @@
                   </thead>
                   <tbody>
                     <tr
-                      v-for="article in item.articles"
+                      v-for="article in item.sale.articles"
                       :key="article.id"
                     >
                       <td>
@@ -246,7 +291,7 @@ export default {
       fav: true,
       message: false,
       hints: true,
-      localInventories: [],
+      localSupplies: [],
       search: '',
       localAccess: {},
       vBindOption: {
@@ -257,32 +302,36 @@ export default {
     }
   },
   computed: {
-    ...mapState('supply', [
-      'showNewModal',
-      'showEditModal',
-      'loading',
-      'showShowModal',
-      'inventories',
-      'isTableLoading'
-    ]),
+    ...mapState('supply', ['showNewModal', 'showEditModal', 'loading', 'showShowModal', 'supplies', 'isTableLoading']),
+    ...mapState('supplier', ['clientSuppliers']),
     ...mapState('article', ['articles']),
     ...mapState('refund', ['showNewModal']),
     ...mapGetters('auth', ['user', 'access_permit']),
     getTableColumns () {
       return [
         {
+          text: this.$vuetify.lang.t('$vuetify.supply_state.state.name'),
+          value: 'state.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.to'),
+          value: 'to',
+          select_filter: true
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'no_facture',
+          value: 'sale.no_facture',
           select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
+          value: 'sale.totalCost',
           select_filter: true
         },
         {
           text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name',
+          value: 'sale.shop.name',
           select_filter: true
         },
         {
@@ -294,14 +343,16 @@ export default {
     }
   },
   watch: {
-    inventories: function () {
-      this.localInventories = []
-      this.inventories.forEach((value) => {
+    supplies: function () {
+      this.localSupplies = []
+      this.supplies.forEach((value) => {
         const supply = value
-        value.articles.forEach((v, i) => {
-          if (v.parent_id) { supply.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+        value.sale.articles.forEach((v, i) => {
+          if (v.parent_id) {
+            supply.sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')'
+          }
         })
-        this.localInventories.push(supply)
+        this.localSupplies.push(supply)
       })
     },
     loadData: function () {
@@ -309,6 +360,7 @@ export default {
     }
   },
   created () {
+    this.getClientSupplier()
     this.loadInitData()
   },
   methods: {
@@ -320,10 +372,11 @@ export default {
       'updateSupply',
       'deleteSupply'
     ]),
+    ...mapActions('supplier', ['getClientSupplier']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
-      this.localInventories = []
+      this.localSupplies = []
       await this.getArticles()
       await this.getSupplies()
     },
@@ -358,54 +411,82 @@ export default {
       })
       return item.cant * item.cost + sum - discount - item.moneyRefund
     },
-    createBuyHandler () {
+    createSupplyHandler () {
       if (this.articles.length === 0) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-              this.$vuetify.lang.t('$vuetify.supply.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_no_article'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
+        this.showMessage(true, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_no_article'
+        ))
+      } else if (this.clientSuppliers.length === 0) {
+        this.showMessage(true, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_no_clients_supplier'
+        ))
       } else {
-        this.$store.state.supply.managerInventory = false
+        this.$store.state.supply.managerSupply = false
         this.$router.push({ name: 'supply_add' })
       }
     },
-    editBuyHandler ($event) {
-      this.openEditModal($event)
-      this.$store.state.supply.managerSupply = true
-      this.$router.push({ name: 'supply_edit' })
+    editSupplyHandler ($event) {
+      const supply = this.supplies.filter(sp => sp.id === $event)[0]
+      if (supply.state.name === 'cancelled') {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_state_cancelled'
+        ))
+      } else if (supply.state.name !== 'requested') {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_state'
+        ))
+      } else {
+        this.openEditModal($event)
+        this.$store.state.supply.managerSupply = true
+        this.$router.push({ name: 'supply_edit' })
+      }
     },
-    deleteBuyHandler (articleId) {
+    deleteSupplyHandler ($event) {
+      const supply = this.supplies.filter(sp => sp.id === $event)[0]
+      if (supply.state.name === 'cancelled') {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+              this.$vuetify.lang.t('$vuetify.supply.name')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_delete'
+            ),
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.cancel'
+            ),
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.delete'
+            ),
+            confirmButtonColor: 'red'
+          })
+          .then((result) => {
+            if (result.isConfirmed) this.deleteSupply($event)
+          })
+      } else {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_delete'
+        ))
+      }
+    },
+    changeStateHandler (item) {
+      this.updateSupply(item)
+    },
+    showMessage (newM, txt) {
       this.$Swal
         .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.supply.name')
+          title: this.$vuetify.lang.t(newM ? '$vuetify.titles.new' : '$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.supply_productS')
           ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
+          text: txt,
           icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
+          showCancelButton: false,
           confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
+            '$vuetify.actions.accept'
           ),
           confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.isConfirmed) this.deleteSupply(articleId)
         })
     }
   }

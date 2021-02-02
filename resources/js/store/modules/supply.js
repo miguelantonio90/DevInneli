@@ -114,7 +114,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.supply.supply')]
+        '$vuetify.messages.success_add', [this._vm.$language.t('$vuetify.menu.supply_productS')]
       )
     })
   },
@@ -142,7 +142,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.supply.supply')]
+        '$vuetify.messages.success_up', [this._vm.$language.t('$vuetify.menu.supply_productS')]
       )
     })
   },
@@ -154,7 +154,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'success',
       title: this._vm.$language.t(
-        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.supply.supply')]
+        '$vuetify.messages.success_del', [this._vm.$language.t('$vuetify.menu.supply_productS')]
       )
     })
   },
@@ -171,7 +171,7 @@ const mutations = {
     this._vm.$Toast.fire({
       icon: 'error',
       title: this._vm.$language.t(
-        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.supply.supply')]
+        '$vuetify.messages.failed_catch', [this._vm.$language.t('$vuetify.menu.supply_productS')]
       )
     })
   },
