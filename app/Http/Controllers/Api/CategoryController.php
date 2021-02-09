@@ -47,6 +47,20 @@ class CategoryController extends Controller
     }
 
     /**
+     * Display a listing of the resource by shop.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getCategoriesShop(Request $request): JsonResponse
+    {
+        return ResponseHelper::sendResponse(
+            $this->categoryManager::getCategoriesShop($request),
+            'Categories retrieved successfully.'
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  Request  $request

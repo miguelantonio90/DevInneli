@@ -304,6 +304,7 @@
                       :total-discount="parseFloat(totalDisc).toFixed(2)"
                       :sub-total="parseFloat(subTotal).toFixed(2)"
                       @updateData="calcTotalSupply"
+                      @generateNF="generateNF"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -412,6 +413,15 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('discount', ['discounts']),
     ...mapGetters('auth', ['user']),
+    ...mapGetters('supply', ['getNumberFacture']),
+    factureNumber: {
+      get () {
+        return this.getNumberFacture
+      },
+      set (newNumber) {
+        return newNumber
+      }
+    },
     getTableColumns () {
       return [
         {
@@ -465,8 +475,10 @@ export default {
       this.getLocalDiscounts()
     },
     'supply.no_facture': function () {
-      if (this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0) {
-        this.supply.no_facture = this.generateNF()
+      if (this.supply.no_facture !== '') {
+        if (this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0) {
+          this.supply.no_facture = this.generateNF()
+        }
       }
     },
     'supply.taxes' () {
@@ -496,20 +508,20 @@ export default {
     })
     this.loadingData = false
     await this.updateDataArticle()
-    this.supply.no_facture = this.generateNF()
     this.loadingData = false
   },
   methods: {
     ...mapActions('supply', ['getSupplies']),
     ...mapActions('article', ['getArticles']),
     ...mapActions('shop', ['getShops']),
-    ...mapActions('supply', ['getSupplies', 'createSupply', 'updateSupply']),
+    ...mapActions('supply', ['getSupplies', 'createSupply', 'updateSupply', 'fetchSupplyNumber']),
     ...mapActions('discount', ['getDiscounts']),
     generateNF () {
+      this.fetchSupplyNumber(this.supply.supplier.company_id)
       const seqer = utils.serialMaker()
       seqer.set_prefix('C' + new Date().getFullYear() + '-')
       seqer.set_seq(1000000)
-      return seqer.gensym()
+      this.supply.no_facture = seqer.gensym()
     },
     async updateDataArticle () {
       this.localArticles = []

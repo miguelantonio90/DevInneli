@@ -5,18 +5,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuppliesTable extends BaseMigration
+class CreateOnlineConfigsTable extends BaseMigration
 {
     /**
      * @param string $tableName
      * @param bool $company
      */
-    public function up(string $tableName = 'supplies', bool $company = true): void
+    public function up(string $tableName = 'online_configs', bool $company = true): void
     {
         Schema::create($tableName, function (Blueprint $table) {
-            $table->foreignUuid('state_id')->references('id')->on('supply_states');
-            $table->foreignUuid('sale_id')->references('id')->on('sales');
-            $table->foreignUuid('to_company')->references('id')->on('companies');
+            $table->string('template')->default('shipit');
+            $table->foreignUuid('shop_id')->nullable()->references('id')->on('shops');
         });
         parent::up($tableName, $company);
     }
@@ -28,6 +27,6 @@ class CreateSuppliesTable extends BaseMigration
      */
     public function down()
     {
-        Schema::dropIfExists('supplies');
+        Schema::dropIfExists('online_configs');
     }
 }

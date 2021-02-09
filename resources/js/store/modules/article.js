@@ -293,7 +293,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ARTICLES, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async getArticlesMerge ({ commit, dispatch }) {
@@ -304,7 +304,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_ARTICLES_MERGE, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async importArticles ({ commit, dispatch }, articlesData) {
@@ -316,7 +316,7 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/toogleImportModal', false, { root: true })
         dispatch('article/getArticles', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async refoundArticle ({ commit, dispatch }, refound) {
@@ -326,7 +326,7 @@ const actions = {
       .refoundArticle(refound)
       .then(({ data }) => {
         commit(SWITCH_ARTICLE_REFOUND_MODAL, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async createArticle ({ commit, dispatch }, newArticle) {
@@ -338,7 +338,7 @@ const actions = {
         commit(ARTICLE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('article/getArticles', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_ARTICLE, error))
   },

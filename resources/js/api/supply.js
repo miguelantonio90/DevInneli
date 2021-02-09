@@ -32,6 +32,6 @@ export default {
     return api.get('supply/supplys/static')
   },
   fetchSupplyNumber () {
-    return api.get('supply/number/facture')
+    return api.post('supply/number/facture')
   }
 }

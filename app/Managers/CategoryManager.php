@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\Category;
+use App\Shop;
 use Exception;
 
 class CategoryManager extends BaseManager
@@ -23,8 +24,17 @@ class CategoryManager extends BaseManager
                 ->where('company_id', '=', $company->id)
                 ->get();
         }
-
         return $categories;
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public static function getCategoriesShop($data)
+    {
+        var_dump($data);
+        return Shop::latest()->where('name', '=', $data['shopName'])->get();
     }
 
     /**

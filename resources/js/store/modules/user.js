@@ -196,7 +196,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_USER, data.data)
         commit(USER_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => {
         commit(ENV_DATA_PROCESS, false)
         commit(FAILED_USER, error)
@@ -211,7 +211,7 @@ const actions = {
         commit(USER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -228,7 +228,7 @@ const actions = {
         commit(USER_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('user/getUsers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -241,7 +241,7 @@ const actions = {
       .then((data) => {
         commit(USER_DELETE)
         dispatch('user/getUsers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_USER, error))
   },

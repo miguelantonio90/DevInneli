@@ -35,7 +35,7 @@ class Supply extends Model
      * @var array
      */
     protected $fillable = [
-        'company_id' , 'sale_id', 'state_id'
+        'company_id' , 'sale_id', 'state_id', 'to_company'
     ];
     /**
      * @return BelongsTo

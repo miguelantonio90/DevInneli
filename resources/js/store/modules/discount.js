@@ -147,7 +147,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_DISCOUNTS, data.data)
         commit(DISCOUNTS_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         return data
       }).catch((error) => commit(FAILED_DISCOUNTS, error))
   },
@@ -160,7 +160,7 @@ const actions = {
         commit(DISCOUNTS_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('discount/getDiscounts', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   },
@@ -172,7 +172,7 @@ const actions = {
         commit(DISCOUNTS_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('discount/getDiscounts', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   },
@@ -182,7 +182,7 @@ const actions = {
       .then((data) => {
         commit(DISCOUNTS_DELETE)
         dispatch('discount/getDiscounts', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_DISCOUNTS, error))
   }

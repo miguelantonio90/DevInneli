@@ -4,6 +4,9 @@ export default {
   fetchCategories () {
     return api.get('category')
   },
+  getCategoriesShop (data) {
+    return api.post('category/shops', data)
+  },
   sendCreateRequest (category) {
     return api.post('category', category)
   },

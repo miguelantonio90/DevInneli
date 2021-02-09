@@ -11,6 +11,39 @@
     />
     <v-spacer />
     <v-toolbar-items>
+      <v-menu
+        offset-y
+        origin="center center"
+        transition="scale-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            slot="activator"
+            icon
+            text
+            v-on="on"
+          >
+            <template
+              v-if="notifications.length > 0"
+            >
+              <v-badge
+                :content="notifications.length"
+                :value="notifications.length"
+                color="pink"
+                overlap
+              >
+                <v-icon>mdi-bell</v-icon>
+              </v-badge>
+            </template>
+            <template v-else>
+              <v-icon>mdi-bell</v-icon>
+            </template>
+          </v-btn>
+        </template>
+        <list-notifications
+          v-if="notifications.length > 0"
+        />
+      </v-menu>
       <v-tooltip
         bottom
       >
@@ -27,106 +60,6 @@
         </template>
         <span>{{ $vuetify.lang.t('$vuetify.have_pin') }}</span>
       </v-tooltip>
-
-      <v-menu
-        v-if="showMenuUser"
-        offset-y
-        origin="center center"
-        transition="scale-transition"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            slot="activator"
-            icon
-            large
-            text
-            v-on="on"
-          >
-            <v-icon>mdi-bell</v-icon>
-          </v-btn>
-        </template>
-        <v-list
-          v-if="!isManagerIn && isAdminIn && isLoggedIn"
-          class="pa-0"
-        >
-          <v-list-item
-            v-for="(item, index) in adminMenus"
-            :key="index"
-            :disabled="item.disabled"
-            :href="item.href"
-            :target="item.target"
-            :to="!item.href ? { name: item.name } : null"
-            rel="noopener"
-            ripple="ripple"
-            @click="item.click"
-          >
-            <v-list-item-action v-if="item.icon">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{
-                  item.title
-                }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-list
-          v-if="isManagerIn && !isAdminIn && isLoggedIn"
-          class="pa-0"
-        >
-          <v-list-item
-            v-for="(item, index) in profileMenus"
-            :key="index"
-            :disabled="item.disabled"
-            :href="item.href"
-            :target="item.target"
-            :to="!item.href ? { name: item.name } : null"
-            rel="noopener"
-            ripple="ripple"
-            @click="item.click"
-          >
-            <v-list-item-action v-if="item.icon">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{
-                  item.title
-                }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-list
-          v-if="!isManagerIn && !isAdminIn && isLoggedIn"
-          class="pa-0"
-        >
-          <v-list-item
-            v-for="(item, index) in employeeMenus"
-            :key="index"
-            :disabled="item.disabled"
-            :href="item.href"
-            :target="item.target"
-            :to="!item.href ? { name: item.name } : null"
-            rel="noopener"
-            ripple="ripple"
-            @click="item.click"
-          >
-            <v-list-item-action v-if="item.icon">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{
-                  item.title
-                }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
       <v-btn
         v-if="!isMobile"
         id="mdi_fullscreen"
@@ -310,11 +243,13 @@
 </template>
 <script>
 import Util from '../util'
+import ListNotifications from '../views/notifications/ListNotifications'
 import { mapActions, mapGetters } from 'vuex'
 import localStorage from '../config/localStorage'
 
 export default {
   name: 'AppToolbar',
+  components: { ListNotifications },
   props: {
     showNavIcon: {
       type: Boolean,
@@ -349,7 +284,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn', 'notifications']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },

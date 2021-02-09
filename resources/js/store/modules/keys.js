@@ -428,7 +428,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_KEY, data.data)
         commit(KEY_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch(error => commit(FAILED_KEY, error))
   },
@@ -444,7 +444,7 @@ const actions = {
         commit(KEY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('keys/getKeys', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch(error => commit(FAILED_KEY, error))
   },
@@ -457,7 +457,7 @@ const actions = {
         commit(KEY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('keys/getKeys', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch(error => commit(FAILED_KEY, error))
   },
@@ -467,7 +467,7 @@ const actions = {
       .then((data) => {
         commit(KEY_DELETE)
         this.dispatch('keys/getKeys')
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch(error => commit(FAILED_KEY, error))
   }

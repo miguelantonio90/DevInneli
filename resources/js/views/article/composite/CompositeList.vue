@@ -189,9 +189,6 @@ export default {
   watch: {
     dialog (val) {
       val || this.close()
-    },
-    compositeList: function () {
-      this.updateTotalCost()
     }
   },
   async created () {
@@ -228,12 +225,14 @@ export default {
   methods: {
     ...mapActions('article', ['getArticles']),
     updateTotalCost () {
-      this.article.cost = 0.00
-      this.article.price = 0.00
-      this.article.composites.forEach((comp) => {
-        this.article.cost += comp.cant * comp.cost
-        this.article.price += comp.cant * comp.price
-      })
+      if (this.article.composite) {
+        this.article.cost = 0.00
+        this.article.price = 0.00
+        this.article.composites.forEach((comp) => {
+          this.article.cost += comp.cant * comp.cost
+          this.article.price += comp.cant * comp.price
+        })
+      }
     },
     deleteItem (item) {
       this.editedIndex = this.article.composites.indexOf(item)

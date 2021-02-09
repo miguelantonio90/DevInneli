@@ -16,6 +16,7 @@ const IN_PROCESS_RESET = 'IN_PROCESS_RESET'
 const IS_MANAGER = 'IS_MANAGER'
 const FAILED_CATCH = 'FAILED_CATCH'
 const UPDATE_ACCESS = 'UPDATE_ACCESS'
+const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
@@ -29,6 +30,7 @@ const state = {
   successForgot: false,
   successReset: false,
   access: [],
+  notification: [],
   fromModel: {
     email: '',
     password: ''
@@ -69,6 +71,7 @@ const getters = {
   user: (state) => state.userData,
   userPin: (state) => state.userPin,
   access_permit: (state) => state.access,
+  notifications: (state) => state.notification,
   isLoggedIn: (state) => state.isLoggedIn,
   isManagerIn: (state) => state.isManager,
   isAdminIn: (state) => state.isAdmin,
@@ -92,6 +95,12 @@ const mutations = {
       state.access = access.length > 0 ? JSON.parse(atob(access[1])) : {}
       state.isAdmin = access[0]
       state.userPin = access[2]
+    }
+  },
+  [UPDATE_NOTIFICATION] (state, notifications) {
+    if (notifications !== undefined) {
+      state.notification = []
+      state.notification = notifications
     }
   },
   [LOGIN] (state, pending) {
@@ -194,7 +203,7 @@ const actions = {
       .getUserData()
       .then(({ data }) => {
         commit(SET_USER_DATA, data.data)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch(({ response }) => {
         commit(FAILED_CATCH, response)
@@ -225,6 +234,7 @@ const actions = {
       .then(({ data }) => {
         commit(PIN_SUCCESS, data.data)
         commit(UPDATE_ACCESS, data.access)
+        commit(UPDATE_NOTIFICATION, data.notifications)
         if (data.success && data.data.isManager) {
           commit(IS_MANAGER, true)
           localStorage.saveTokenManager(data.data.access_token)
@@ -305,8 +315,20 @@ const actions = {
         }
       })
   },
-  async updateAccess ({ commit }, access) {
-    commit(UPDATE_ACCESS, access)
+  async updateAccess ({ commit }, data) {
+    commit(UPDATE_ACCESS, data.access)
+    commit(UPDATE_NOTIFICATION, data.notifications)
+  },
+  async readNotification ({ commit }, idNotification) {
+    await auth
+      .readNotification(idNotification)
+      .then(({ data }) => {
+        this.dispatch('auth/updateAccess', data)
+      })
+      .catch(({ response }) => {
+        commit(FAILED_CATCH, response)
+        localStorage.removeToken()
+      })
   }
 }
 

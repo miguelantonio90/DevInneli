@@ -149,7 +149,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CATEGORIES, data.data)
         commit(CATEGORY_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         return data
       }).catch((error) => commit(FAILED_CATEGORY, error))
   },
@@ -162,9 +162,21 @@ const actions = {
         commit(CATEGORY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
+  },
+  async getCategoriesShop ({ commit }, data) {
+    commit(CATEGORY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await category
+      .getCategoriesShop(data)
+      .then(({ data }) => {
+        commit(FETCHING_CATEGORIES, data.data)
+        commit(CATEGORY_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
+        return data
+      }).catch((error) => commit(FAILED_CATEGORY, error))
   },
   async updateCategory ({ commit, dispatch }, editCategory) {
     commit(ENV_DATA_PROCESS, true)
@@ -174,7 +186,7 @@ const actions = {
         commit(CATEGORY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('category/getCategories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
   },
@@ -184,7 +196,7 @@ const actions = {
       .then((data) => {
         commit(CATEGORY_DELETE)
         dispatch('category/getCategories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CATEGORY, error))
   }

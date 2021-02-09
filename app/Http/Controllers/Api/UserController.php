@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\UserManager;
+use App\Notification;
 use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -173,5 +174,16 @@ class UserController extends Controller
         } catch (Exception $e) {
             return ResponseHelper::sendError($e->getMessage(), null, $e->getCode());
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public  function readNotification(Request $request, $id){
+        $notif = Notification::findOrFail($id);
+        $notif->read = true;
+        $notif->save();
+        return ResponseHelper::sendResponse([],'Notification is read.');
     }
 }

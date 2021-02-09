@@ -6,12 +6,16 @@
       color="primary"
       dark
     >
-<!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />-->
+      <!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />-->
 
       <v-toolbar-title
         style="width: 350px"
       >
-        <a href="/" class="white--text" style="text-decoration: none"><v-icon>mdi-truck</v-icon>&nbsp;ShipIT</a>
+        <a
+          href="/"
+          class="white--text"
+          style="text-decoration: none"
+        ><v-icon>mdi-truck</v-icon>&nbsp;ShipIT</a>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -25,7 +29,10 @@
       <v-btn icon>
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>
-      <v-btn v-on="on" icon>
+      <v-btn
+        icon
+        v-on="on"
+      >
         <v-badge
           content="2"
           value="2"
@@ -35,7 +42,11 @@
           <v-icon>mdi-bell</v-icon>
         </v-badge>
       </v-btn>
-      <v-btn v-on="on" href="/cart" icon>
+      <v-btn
+        href="/cart"
+        icon
+        v-on="on"
+      >
         <v-badge
           content="2"
           value="2"
@@ -52,10 +63,10 @@
         color="primary"
         horizontal
       >
-        <a href="/" class="v-btn">
-          <span>Home</span>
-        </a>
-        <v-menu open-on-hover offset-y>
+        <v-menu
+          open-on-hover
+          offset-y
+        >
           <template v-slot:activator="{ on }">
             <v-btn v-on="on">
               <span>Shop</span>
@@ -66,19 +77,20 @@
             max-width="344"
             outlined
           >
-
+            12
             <v-list-item
               v-for="(item, index) in items"
               :key="index"
-              @click=""
               href="/shop"
             >
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
-
           </v-card>
         </v-menu>
-        <a href="/product" class="v-btn">
+        <a
+          href="/product"
+          class="v-btn"
+        >
           <span>Product</span>
         </a>
         <v-btn href="/blog">
@@ -86,7 +98,7 @@
         </v-btn>
       </v-bottom-navigation>
     </v-content>
-      <router-view/>
+    <router-view />
     <v-footer
       :padless="true"
     >
@@ -101,34 +113,41 @@
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">mdi-home</v-icon>
+            <v-icon size="24px">
+              mdi-home
+            </v-icon>
           </v-btn>
           <v-btn
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">mdi-email</v-icon>
+            <v-icon size="24px">
+              mdi-email
+            </v-icon>
           </v-btn>
           <v-btn
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">mdi-calendar</v-icon>
+            <v-icon size="24px">
+              mdi-calendar
+            </v-icon>
           </v-btn>
-           <v-btn
+          <v-btn
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">mdi-delete</v-icon>
+            <v-icon size="24px">
+              mdi-delete
+            </v-icon>
           </v-btn>
-
         </v-card-text>
 
         <v-card-text class="white--text pt-0">
           Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-text class="white--text">
           {{ new Date().getFullYear() }} — <strong>ShipIT</strong>
@@ -138,18 +157,34 @@
   </v-app>
 </template>
 <script>
-    export default {
-        data () {
-            return {
-                items: [
-                    { title: 'T-Shirts' },
-                    { title: 'Jackets' },
-                    { title: 'Shirts' },
-                    { title: 'Jeans' },
-                    { title: 'Shoes' },
-                ],
-                activeBtn: 1,
-            }
-        },
+
+import { mapActions, mapState } from 'vuex'
+export default {
+  data () {
+    return {
+      items: [
+        { title: 'T-Shirts' },
+        { title: 'Jackets' },
+        { title: 'Shirts' },
+        { title: 'Jeans' },
+        { title: 'Shoes' }
+      ],
+      activeBtn: 1
     }
+  },
+  computed: {
+    ...mapState('category', [
+      'categories',
+      'isTableLoading'
+    ])
+  },
+  created () {
+    this.getShopData(this.$route.params)
+  },
+  methods: {
+    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
+    ...mapActions('shop', ['getShopData'])
+
+  }
+}
 </script>

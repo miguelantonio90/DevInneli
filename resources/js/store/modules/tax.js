@@ -155,7 +155,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_TAXES, data.data)
         commit(TAXES_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         return data
       }).catch((error) => commit(FAILED_TAXES, error))
   },
@@ -168,7 +168,7 @@ const actions = {
         commit(TAXES_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('tax/getTaxes', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_TAXES, error))
   },
@@ -180,7 +180,7 @@ const actions = {
         commit(TAXES_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('tax/getTaxes', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_TAXES, error))
   },
@@ -190,7 +190,7 @@ const actions = {
       .then((data) => {
         commit(TAXES_DELETE)
         dispatch('tax/getTaxes', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_TAXES, error))
   }

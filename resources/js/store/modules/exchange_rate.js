@@ -144,7 +144,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CHANGE, data.data)
         commit(CHANGE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         return data
       }).catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -157,7 +157,7 @@ const actions = {
         commit(CHANGE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -170,7 +170,7 @@ const actions = {
         commit(CHANGE_UPDATE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   },
@@ -183,7 +183,7 @@ const actions = {
         commit(CHANGE_DELETE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('exchangeRate/getChanges', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_CHANGE, error))
   }

@@ -37,8 +37,13 @@ const verifyRequest = (hash) => {
 const verifyMailForgot = (email) => {
   return api.post('password/reset/link', { email: email })
 }
+
 const resetPassword = (hash, newData) => {
   return api.post('password/reset/new/' + hash, newData)
+}
+
+const readNotification = (idNotification) => {
+  return api.post('user/read/notification/' + idNotification)
 }
 
 export default {
@@ -50,5 +55,6 @@ export default {
   verifyRequest,
   verifyResendRequest,
   verifyMailForgot,
-  resetPassword
+  resetPassword,
+  readNotification
 }

@@ -61,10 +61,12 @@ export default {
   import_csv: 'Importing file',
   state: 'State',
   to: 'A',
+  fromData: 'Realize By',
   guide: 'Click to start guide',
   // menu
   menu: {
     setting: 'Configuration',
+    shop_online: 'Online Shop',
     home: 'Home',
     shops: 'Shops',
     shop: 'Store',
@@ -409,7 +411,9 @@ export default {
     image: 'Image'
   },
   buy_product: {
-    supply: 'Supplier'
+    supply: 'Supplier',
+    emit: 'Supply Emit',
+    received: 'Supply Received'
   },
   payment: {
     name: 'Payment Method',
@@ -664,6 +668,13 @@ export default {
       received: 'Received',
       cancelled: 'Cancelled'
     }
+  },
+  online: {
+    template: 'Template'
+  },
+  notifications: {
+    supplier_is_register: 'Your Supllier {0} is register in INNELI. You can make Orders using the system',
+    solicited_supply: 'Client {0} has registered a supply'
   },
   ...en
 }

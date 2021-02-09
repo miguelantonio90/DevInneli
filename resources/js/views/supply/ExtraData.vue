@@ -19,6 +19,7 @@
           :loading="isSupplierTableLoading"
           auto-select-first
           return-object
+          @input="$emit('generateNF')"
         >
           <template v-slot:selection="data">
             <v-chip

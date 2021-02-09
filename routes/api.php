@@ -42,11 +42,13 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('user', 'UserController');
         Route::post('user/avatar/{id}', 'UserController@updateAvatar')->name('users.updateAvatar');
         Route::post('user/userLogin', 'UserController@userLogin')->name('users.userLogin');
+        Route::post('user/read/notification/{id}', 'UserController@readNotification')->name('readNotification');
 
         Route::resource('access', 'AccessController');
         Route::resource('keys', 'KeyPositionsController');
 
         Route::resource('shop', 'ShopController');
+        Route::post('shop/data', 'ShopController@getShopData')->name('getShopData');
         Route::resource('boxes', 'BoxController');
         Route::post('boxes/sendOpenCloseBox', 'BoxController@sendOpenClose')->name('boxes.sendOpenClose');
         Route::post('boxes/getOpenClose', 'BoxController@getOpenClose')->name('boxes.getOpenClose');
@@ -57,6 +59,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('client', 'ClientController');
 
         Route::resource('category', 'CategoryController');
+        Route::post('category/shops', 'CategoryController@getCategoriesShop')->name('getCategoriesShop');
 
         Route::resource('payment', 'PaymentController');
         Route::resource('refund', 'RefoundController');
@@ -74,6 +77,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('inventory', 'InventoryController');
         Route::resource('supply', 'SupplyController');
+        Route::post('supply/number/facture', 'SupplyController@findNumberFacture')->name('numberFacture');
 
         Route::resource('sale', 'SaleController');
         Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');

@@ -2,6 +2,7 @@
 
 namespace App\Managers;
 
+use App\ArticlesShops;
 use App\Shop;
 use App\User;
 use Exception;
@@ -32,6 +33,23 @@ class ShopManager extends BaseManager
                 ->get();
         }
         return $shops;
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws Exception
+     */
+    public static function getShopData($data)
+    {
+        $shop = Shop::latest()
+            ->where('name', '=', str_replace('_', ' ', $data['shopName']))
+            ->with('articlesShops')
+            ->first();
+        $ArticlesShops = ArticlesShops::latest()->where('shop_id', '=', $shop->id)
+            ->with('article')
+            ->get();
+        return ['shop' => $shop, 'articles' => $ArticlesShops];
     }
 
     /**

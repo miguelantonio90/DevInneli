@@ -61,10 +61,12 @@ export default {
   import_csv: 'Importando archivo',
   state: 'Estado',
   to: 'A',
+  fromData: 'Realizado por',
   guide: 'Click para iniciar guía',
   // menu
   menu: {
     setting: 'Configuración',
+    shop_online: 'Tienda Online',
     home: 'Inicio',
     shops: 'Tiendas',
     shop: 'Tienda',
@@ -468,7 +470,9 @@ export default {
     total: 'Total'
   },
   supply: {
-    name: 'Compra'
+    name: 'Compra',
+    emit: 'Pedidos Emitidos',
+    received: 'Pedidos Recibidos'
   },
   sale: {
     sale: 'Venta',
@@ -667,6 +671,13 @@ export default {
       received: 'Recibida',
       cancelled: 'Cancelada'
     }
+  },
+  online: {
+    template: 'Plantilla'
+  },
+  notifications: {
+    supplier_is_register: 'El proveedor {0} se ha registrado en el sistema. Usted puede realizar sus pedidos usando INNELI',
+    solicited_supply: 'El cliente {0} ha registrado un pedido para usted.'
   },
   ...es
 }

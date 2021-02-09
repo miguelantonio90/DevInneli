@@ -29,6 +29,7 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   supplies: [],
+  received: [],
   avatar: '',
   loadData: false,
   loading: false,
@@ -91,7 +92,9 @@ const mutations = {
   },
   [FETCHING_SUPPLIES] (state, supplies) {
     state.supplies = []
-    state.supplies = supplies
+    state.received = []
+    state.supplies = supplies[0]
+    state.received = supplies[1]
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -380,11 +383,7 @@ const actions = {
         commit(FAILED_SUPPLY, error)
       })
   },
-  async deleteSupply ({
-    commit,
-    dispatch,
-    state
-  }, supplyId) {
+  async deleteSupply ({ commit, dispatch, state }, supplyId) {
     await apiSupply
       .sendDeleteRequest(supplyId)
       .then((data) => {
@@ -394,12 +393,9 @@ const actions = {
       })
       .catch((error) => commit(FAILED_SUPPLY, error))
   },
-  async fetchSupplyNumber ({
-    commit,
-    dispatch
-  }) {
+  async fetchSupplyNumber ({ commit, dispatch }, idProvider) {
     await apiSupply
-      .fetchSupplyNumber()
+      .fetchSupplyNumber(idProvider)
       .then(({ data }) => {
         commit(FETCHING_SUPPLIES_NUMBER, data.data)
         dispatch('auth/updateAccess', data.access, { root: true })

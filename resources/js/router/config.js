@@ -77,7 +77,6 @@ export const publicRoute = [
     meta: {
       title: 'Not Found'
     },
-
     children: [],
     component: () => import('../views/error/NotFound')
   },
@@ -90,6 +89,51 @@ export const publicRoute = [
     },
     children: [],
     component: () => import('../views/error/Error')
+  },
+  {
+    path: '/shop/:compName/:shopName',
+    props: true,
+    name: 'shop',
+    access: ['dashboard'],
+    meta: {
+      title: 'dashboard',
+      group: 'apps',
+      icon: 'mdi-view-dashboard',
+      requiresAuth: true
+    },
+    component: () => import('../views/shops-templates/shipit/components/Layout'),
+    children: [
+      {
+        path: '/',
+        component: () => import('../views/shops-templates/shipit/components/Home'),
+        name: 'Home'
+      },
+      {
+        path: '/shop',
+        component: () => import('../views/shops-templates/shipit/components/Shop'),
+        name: 'Shop'
+      },
+      {
+        path: '/product',
+        component: () => import('../views/shops-templates/shipit/components/Product'),
+        name: 'Product'
+      },
+      {
+        path: '/blog',
+        component: () => import('../views/shops-templates/shipit/components/Blog'),
+        name: 'Blog'
+      },
+      {
+        path: '/post',
+        component: () => import('../views/shops-templates/shipit/components/Post'),
+        name: 'Post'
+      },
+      {
+        path: '/cart',
+        component: () => import('../views/shops-templates/shipit/components/Cart'),
+        name: 'Cart'
+      }
+    ]
   },
   {
     path: '/password/reset/:hash',
@@ -603,6 +647,18 @@ export const protectedRoute = [
         },
         children: [],
         component: () => import('../views/general/General')
+      },
+      {
+        path: 'online/setting',
+        access: ['manager_shop'],
+        name: 'shop_online',
+        meta: {
+          title: 'shop_online',
+          icon: 'mdi-briefcase-upload',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/shop/Online-Config')
       }
     ]
   },

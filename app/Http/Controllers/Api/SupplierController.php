@@ -15,6 +15,7 @@ use Illuminate\Contracts\Validation\Validator as ValidatorAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+
 //use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -30,7 +31,7 @@ class SupplierController extends Controller
 
     /**
      * SupplierController constructor.
-     * @param  SupplierManager  $supplierManager
+     * @param SupplierManager $supplierManager
      */
     public function __construct(SupplierManager $supplierManager)
     {
@@ -58,7 +59,7 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse|Response
      * @throws ValidationException
      * @throws Exception
@@ -71,14 +72,15 @@ class SupplierController extends Controller
         $supplier = $this->supplierManager->new($data);
         $info =
             ['client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name];
-        if($data['sendEmail']){
-            Mail::send( 'emails.invitation-supplier',$info,
-//                function ($message, $supplier){
-                function ($message) use ($supplier){
-                $message->subject('INNELI');
-                $message->from('no-reply@inneli.com');
-                $message->to($supplier->email);
-            });
+        if (array_key_exists('sendEmail', $data)) {
+            if ($data['sendEmail']) {
+                Mail::send('emails.invitation-supplier', $info,
+                    function ($message) use ($supplier) {
+                        $message->subject('INNELI');
+                        $message->from('no-reply@inneli.com');
+                        $message->to($supplier->email);
+                    });
+            }
 
 
         }
@@ -98,7 +100,7 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
@@ -133,7 +135,8 @@ class SupplierController extends Controller
      * @return JsonResponse|Response
      * @throws Exception
      */
-    public function getSupplierClients(Request $request){
+    public function getSupplierClients(Request $request)
+    {
         return ResponseHelper::sendResponse(
             $this->supplierManager->getSupplierClients(),
             'Supplier has deleted successfully.'

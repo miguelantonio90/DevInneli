@@ -684,7 +684,10 @@ export default {
       images: []
     }
     this.loadingData = true
+    console.log(this.managerArticle)
     this.article = this.managerArticle ? this.editArticle : this.newArticle
+    this.article.cost = parseFloat(this.article.cost).toFixed(2)
+    this.article.price = parseFloat(this.article.price).toFixed(2)
     this.article.um = !this.managerArticle ? this.arrayUM[0] : this.editArticle.um ? JSON.parse(this.editArticle.um) : this.arrayUM[0]
     await this.getShops().then(() => {
       this.updateDataShops()

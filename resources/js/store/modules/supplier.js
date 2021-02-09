@@ -194,7 +194,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SUPPLIERS, data.data)
         commit(SUPPLIER_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_SUPPLIER, error))
   },
   async getClientSupplier ({ commit }) {
@@ -205,7 +205,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_CLIENT_SUPPLIERS, data.data)
         commit(SUPPLIER_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_SUPPLIER, error))
   },
   async createSupplier ({ commit, dispatch }, newSupplier) {
@@ -217,7 +217,7 @@ const actions = {
         commit(SUPPLIER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('supplier/getSuppliers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
@@ -230,7 +230,7 @@ const actions = {
         commit(SUPPLIER_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('supplier/getSuppliers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },
@@ -243,7 +243,7 @@ const actions = {
         commit(ENV_DATA_PROCESS, false)
         commit(SUPPLIER_DELETE)
         dispatch('supplier/getSuppliers', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SUPPLIER, error))
   },

@@ -148,7 +148,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING, data.data)
         commit(ORDER_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         return data
       }).catch((error) => commit(FAILED_ORDER, error))
   },
@@ -161,7 +161,7 @@ const actions = {
         commit(ORDER_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -174,7 +174,7 @@ const actions = {
         commit(ORDER_UPDATE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -187,7 +187,7 @@ const actions = {
         commit(ORDER_DELETE)
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   },
@@ -199,7 +199,7 @@ const actions = {
       .then((data) => {
         commit(ENV_DATA_PROCESS, false)
         dispatch('typeOrder/getTypeOfOrders', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_ORDER, error))
   }

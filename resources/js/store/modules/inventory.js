@@ -190,7 +190,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_INVENTORIES, data.data)
         commit(INVENTORY_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_INVENTORY, error))
   },
   async createInventory ({ commit, dispatch }, newInventory) {
@@ -202,7 +202,7 @@ const actions = {
         commit(INVENTORY_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('inventory/getInventories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_INVENTORY, error))
   },
@@ -217,7 +217,7 @@ const actions = {
         commit(INVENTORY_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('inventory/getInventories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => {
         commit(ENV_DATA_PROCESS, false)
@@ -230,7 +230,7 @@ const actions = {
       .then((data) => {
         commit(INVENTORY_DELETE)
         dispatch('inventory/getInventories', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_INVENTORY, error))
   }

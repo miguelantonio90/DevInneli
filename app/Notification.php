@@ -26,7 +26,7 @@ class Notification extends Model
     protected $keyType = 'string';
     protected $guarded = [];
     protected $fillable = [
-        'to', 'action', 'element', 'type', 'read'
-    ];
+        'company_id', 'params', 'msg', 'type', 'read'
+    ];////the params will be divided by ','
 
 }

@@ -190,7 +190,7 @@ const actions = {
         .then(({ data }) => {
           commit(EDIT_OPEN_CLOSE, data.data)
           commit(BOX_TABLE_LOADING, false)
-          this.dispatch('auth/updateAccess', data.access)
+          this.dispatch('auth/updateAccess', data)
         }).catch((error) => commit(FAILED_BOX, error))
     }
     commit(SWITCH_OPEN_CLOSE_MODAL, true)
@@ -203,7 +203,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_BOXES, data.data)
         commit(BOX_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_BOX, error))
   },
   async createBox ({ commit, dispatch }, newBox) {
@@ -215,7 +215,7 @@ const actions = {
         commit(BOX_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('boxes/getBoxes', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_BOX, error))
   },

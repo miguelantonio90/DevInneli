@@ -142,7 +142,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_OPEN_CLOSES, data.data)
         commit(OPEN_CLOSE_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_OPEN_CLOSE, error))
   },
   async createOpenClose ({ commit, dispatch }, newOpenClose) {
@@ -154,7 +154,7 @@ const actions = {
         commit(OPEN_CLOSE_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('openclose/getOpenCloses', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_OPEN_CLOSE, error))
   },
@@ -165,7 +165,7 @@ const actions = {
         commit(OPEN_CLOSE_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('openclose/getOpenCloses', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_OPEN_CLOSE, error))
   }

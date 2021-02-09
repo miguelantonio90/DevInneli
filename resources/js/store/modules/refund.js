@@ -161,7 +161,7 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_REFUNDS, data.data)
         commit(REFUND_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
         this.dispatch('sale/switchLoadData', true)
       }).catch((error) => commit(FAILED_REFUND, error))
   },
@@ -174,7 +174,7 @@ const actions = {
         commit(REFUND_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('refund/getRefunds', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_REFUND, error))
   },

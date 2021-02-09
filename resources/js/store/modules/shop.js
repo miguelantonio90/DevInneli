@@ -2,6 +2,7 @@ import shop from '../../api/shop'
 import data from '../../data'
 
 const FETCHING_SHOPS = 'FETCHING_SHOPS'
+const FETCHING_SHOPS_DATA = 'FETCHING_SHOPS_DATA'
 const SWITCH_SHOP_NEW_MODAL = 'SWITCH_SHOP_NEW_MODAL'
 const SWITCH_SHOP_EDIT_MODAL = 'SWITCH_SHOP_EDIT_MODAL'
 const SWITCH_SHOP_SHOW_MODAL = 'SWITCH_SHOP_SHOW_MODAL'
@@ -18,6 +19,7 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   shops: [],
+  shopData: [],
   saved: false,
   newShop: {
     name: '',
@@ -67,6 +69,15 @@ const mutations = {
     })
 
     state.shops = shops
+  },
+  [FETCHING_SHOPS_DATA] (state, dataS) {
+    Object.keys(data.countries).map((key) => {
+      if (key === dataS.shop.country) {
+        dataS.shop.nameCountry = data.countries[key].name + '(' + data.countries[key].native + ')'
+        dataS.shop.countryFlag = data.countries[key].emoji
+      }
+    })
+    state.shopData = dataS
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
     state.isActionInProgress = isActionInProgress
@@ -166,7 +177,18 @@ const actions = {
       .then(({ data }) => {
         commit(FETCHING_SHOPS, data.data)
         commit(SHOP_TABLE_LOADING, false)
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
+      }).catch((error) => commit(FAILED_SHOP, error))
+  },
+  async getShopData ({ commit }, data) {
+    commit(SHOP_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await shop
+      .getShopData(data)
+      .then(({ data }) => {
+        commit(FETCHING_SHOPS_DATA, data.data)
+        commit(SHOP_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_SHOP, error))
   },
   async createShop ({ commit, dispatch }, newShop) {
@@ -178,7 +200,7 @@ const actions = {
         commit(SHOP_CREATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   },
@@ -191,7 +213,7 @@ const actions = {
         commit(SHOP_UPDATED)
         commit(ENV_DATA_PROCESS, false)
         dispatch('shop/getShops', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   },
@@ -201,7 +223,7 @@ const actions = {
       .then((data) => {
         commit(SHOP_DELETE)
         dispatch('shop/getShops', null, { root: true })
-        this.dispatch('auth/updateAccess', data.access)
+        this.dispatch('auth/updateAccess', data)
       })
       .catch((error) => commit(FAILED_SHOP, error))
   }
