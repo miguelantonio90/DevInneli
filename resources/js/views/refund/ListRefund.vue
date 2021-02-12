@@ -30,90 +30,90 @@
 import { mapActions, mapState } from 'vuex'
 import EditRefound from './EditRefound'
 export default {
-  name: 'ListPayment',
-  components: {
-    EditRefound
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('refund', [
-      'showEditModal',
-      'refunds',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.name'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'cant',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.cash'),
-          value: 'money'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.date'),
-          value: 'created_at'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.created_by'),
-          value: 'created_by'
-        }
-      ]
-    }
-  },
-  created () {
-    this.getRefunds()
-  },
-  methods: {
-    ...mapActions('refund', [
-      'toogleNewModal',
-      'openEditModal',
-      'getRefunds',
-      'deleteRefund'
-    ]),
-    editPaymentHandler ($event) {
-      this.openEditModal($event)
-    },
-    deletePaymentHandler (id) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.pay')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteRefund(id)
-        })
-    }
-  }
+	name: 'ListPayment',
+	components: {
+		EditRefound
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('refund', [
+			'showEditModal',
+			'refunds',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+					value: 'facture',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.name'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+					value: 'cant',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.cash'),
+					value: 'money'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.date'),
+					value: 'created_at'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.created_by'),
+					value: 'created_by'
+				}
+			]
+		}
+	},
+	created () {
+		this.getRefunds()
+	},
+	methods: {
+		...mapActions('refund', [
+			'toogleNewModal',
+			'openEditModal',
+			'getRefunds',
+			'deleteRefund'
+		]),
+		editPaymentHandler ($event) {
+			this.openEditModal($event)
+		},
+		deletePaymentHandler (id) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.pay')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteRefund(id)
+				})
+		}
+	}
 }
 </script>
 

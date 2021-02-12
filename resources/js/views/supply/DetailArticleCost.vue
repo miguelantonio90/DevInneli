@@ -84,19 +84,19 @@
 </template>
 <script>
 export default {
-  name: 'DetailArticleCost',
-  props: {
-    article: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  }
+	name: 'DetailArticleCost',
+	props: {
+		article: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	}
 }
 </script>
 

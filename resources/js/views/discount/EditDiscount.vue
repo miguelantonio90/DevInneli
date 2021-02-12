@@ -97,26 +97,26 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditDiscount',
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('discount', ['saved', 'editDiscount', 'isActionInProgress'])
-  },
-  methods: {
-    ...mapActions('discount', ['updateDiscount', 'toogleEditModal']),
-    async updateDiscountHandler () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateDiscount(this.editDiscount)
-      }
-    }
-  }
+	name: 'EditDiscount',
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('discount', ['saved', 'editDiscount', 'isActionInProgress'])
+	},
+	methods: {
+		...mapActions('discount', ['updateDiscount', 'toogleEditModal']),
+		async updateDiscountHandler () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.updateDiscount(this.editDiscount)
+			}
+		}
+	}
 }
 </script>
 

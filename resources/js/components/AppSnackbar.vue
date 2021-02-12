@@ -27,53 +27,53 @@
 
 <script>
 export default {
-  name: 'AppSnackbar',
-  props: {
-    color: {
-      type: String,
-      default: ''
-    },
-    mode: {
-      type: String,
-      default: ''
-    },
-    showSnackbar: Boolean,
-    text: {
-      type: String,
-      default: ''
-    },
-    timeout: {
-      type: Number,
-      default: -1
-    },
-    x: {
-      type: String,
-      default: null
-    },
-    y: {
-      type: String,
-      default: 'top'
-    }
-  },
-  data () {
-    return {
-      snackbar: false
-    }
-  },
-  computed: {},
-  watch: {
-    showSnackbar: {
-      handler (val) {
-        this.snackbar = val
-      },
-      immediate: true
-    }
-  },
-  methods: {
-    handleSnackbar () {
-      this.snackbar = !this.snackbar
-    }
-  }
+	name: 'AppSnackbar',
+	props: {
+		color: {
+			type: String,
+			default: ''
+		},
+		mode: {
+			type: String,
+			default: ''
+		},
+		showSnackbar: Boolean,
+		text: {
+			type: String,
+			default: ''
+		},
+		timeout: {
+			type: Number,
+			default: -1
+		},
+		x: {
+			type: String,
+			default: null
+		},
+		y: {
+			type: String,
+			default: 'top'
+		}
+	},
+	data () {
+		return {
+			snackbar: false
+		}
+	},
+	computed: {},
+	watch: {
+		showSnackbar: {
+			handler (val) {
+				this.snackbar = val
+			},
+			immediate: true
+		}
+	},
+	methods: {
+		handleSnackbar () {
+			this.snackbar = !this.snackbar
+		}
+	}
 }
 </script>
 

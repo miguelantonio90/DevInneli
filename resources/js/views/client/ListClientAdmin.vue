@@ -69,53 +69,53 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('client', [
-      'clients',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.lastName'),
-          value: 'lastName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.email'),
-          value: 'email'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'nameCountry',
-          select_filter: true
-        }
-      ]
-    }
-  },
-  created () {
-    this.getClients()
-  },
-  methods: {
-    ...mapActions('client', [
-      'getClients'
-    ])
-  }
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('client', [
+			'clients',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'firstName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.lastName'),
+					value: 'lastName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.email'),
+					value: 'email'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'nameCountry',
+					select_filter: true
+				}
+			]
+		}
+	},
+	created () {
+		this.getClients()
+	},
+	methods: {
+		...mapActions('client', [
+			'getClients'
+		])
+	}
 }
 </script>
 

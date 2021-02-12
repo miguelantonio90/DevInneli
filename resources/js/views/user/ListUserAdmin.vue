@@ -79,66 +79,66 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('user', [
-      'showShowModal',
-      'users',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.lastName'),
-          value: 'lastName'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'country'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.email'),
-          value: 'email'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.position'),
-          value: 'position.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
-          select_filter_many: true
-        }
-      ]
-    }
-  },
-  created () {
-    this.getUsers()
-  },
-  methods: {
-    ...mapActions('user', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getUsers',
-      'deleteUser'
-    ])
-  }
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('user', [
+			'showShowModal',
+			'users',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'firstName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.lastName'),
+					value: 'lastName'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'country'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.email'),
+					value: 'email'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.position'),
+					value: 'position.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shopsNames',
+					select_filter_many: true
+				}
+			]
+		}
+	},
+	created () {
+		this.getUsers()
+	},
+	methods: {
+		...mapActions('user', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getUsers',
+			'deleteUser'
+		])
+	}
 }
 </script>
 

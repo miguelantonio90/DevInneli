@@ -9,21 +9,21 @@ import localStorage from '../config/localStorage'
 Vue.use(Vuetify)
 
 export default new Vuetify({
-  lang: {
-    locales: {
-      es,
-      en
-    },
-    current:
+	lang: {
+		locales: {
+			es,
+			en
+		},
+		current:
       localStorage.getLanguage() ||
       window.navigator.language.split('-')[0]
-  },
-  theme: {
-    options: {
-      customProperties: true
-    },
-    themes: {
-      /* light: {
+	},
+	theme: {
+		options: {
+			customProperties: true
+		},
+		themes: {
+			/* light: {
         primary: '#ee44aa',
         secondary: '#424242',
         accent: '#82B1FF',
@@ -32,6 +32,6 @@ export default new Vuetify({
         success: '#4CAF50',
         warning: '#FFC107'
       } */
-    }
-  }
+		}
+	}
 })

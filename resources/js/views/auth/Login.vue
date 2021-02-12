@@ -120,42 +120,42 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'PageLogin',
-  data () {
-    return {
-      formValid: false,
-      hidePassword: true,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('auth', ['isLoggedIn', 'fromModel', 'socialIcons', 'pending']),
-    ...mapGetters(['errors'])
-  },
-  created () {
-    window.addEventListener('keypress', e => {
-      if (e.key === 'Enter') {
-        this.login()
-      }
-    })
-  },
-  methods: {
-    ...mapActions('auth', ['sendLoginRequest']),
-    ...mapActions('company', ['getCompaniesByEmail']),
-    login () {
-      if (this.$refs.form.validate()) {
-        this.sendLoginRequest(this.fromModel).then(() => {
-          if (this.isLoggedIn) {
-            this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
-          }
-        }).catch(() => {
-          this.loading = false
-        })
-      }
-    },
-    handleSocialLogin () {
-    }
-  }
+	name: 'PageLogin',
+	data () {
+		return {
+			formValid: false,
+			hidePassword: true,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('auth', ['isLoggedIn', 'fromModel', 'socialIcons', 'pending']),
+		...mapGetters(['errors'])
+	},
+	created () {
+		window.addEventListener('keypress', e => {
+			if (e.key === 'Enter') {
+				this.login()
+			}
+		})
+	},
+	methods: {
+		...mapActions('auth', ['sendLoginRequest']),
+		...mapActions('company', ['getCompaniesByEmail']),
+		login () {
+			if (this.$refs.form.validate()) {
+				this.sendLoginRequest(this.fromModel).then(() => {
+					if (this.isLoggedIn) {
+						this.$router.push({ name: 'pinlogin', params: { email: this.fromModel.email } })
+					}
+				}).catch(() => {
+					this.loading = false
+				})
+			}
+		},
+		handleSocialLogin () {
+		}
+	}
 }
 </script>
 

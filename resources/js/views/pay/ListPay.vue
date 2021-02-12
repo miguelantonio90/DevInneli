@@ -115,193 +115,193 @@ import { mapActions, mapState } from 'vuex'
 import NewPayment from './NewPay'
 import Facture from '../sales/Facture'
 export default {
-  name: 'ListPay',
-  components: {
-    NewPayment,
-    Facture
-  },
-  props: {
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    totalPrice: {
-      type: String,
-      default: '0.00'
-    },
-    totalTax: {
-      type: String,
-      default: '0.00'
-    },
-    totalDiscount: {
-      type: String,
-      default: '0.00'
-    },
-    subTotal: {
-      type: String,
-      default: '0.00'
-    },
-    sale: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    show: {
-      type: Boolean,
-      default: true
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      search: '',
-      cant: 0.00,
-      totalPays: 0.00,
-      maxLength: 100,
-      minLength: 0,
-      errorName: ''
-    }
-  },
-  computed: {
-    ...mapState('payment', [
-      'payments',
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      const data = [
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.name'),
-          value: 'method',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.cant_pay'),
-          value: 'cant_pay',
-          sortable: false
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.cant_charge'),
-          value: 'cant',
-          sortable: false
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.cant_back'),
-          value: 'cant_back',
-          sortable: false
-        }
-      ]
-      if (this.show) {
-        data.push(
-          {
-            text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-            value: 'actions',
-            sortable: false
-          })
-      }
-      return data
-    }
-  },
-  watch: {
-    'sale.pays': function () {
-      this.calcTotalPay()
-    }
-  },
-  created () {
-    this.getPayments()
-    this.calcTotalPay()
-  },
-  methods: {
-    ...mapActions('payment', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getPayments',
-      'deletePayment'
-    ]),
-    addNewPayment () {
-      if (this.totalPays < this.totalPrice) { this.toogleNewModal(true) } else {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.payment.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_excess_money'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      }
-    },
-    deletePaymentHandler (item) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.pay')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then(() => {
-          this.sale.pays.splice(this.sale.pays.indexOf(item), 1)
-        })
-    },
-    addToPayment (pay) {
-      this.sale.pays.push({
-        name: pay.method.name,
-        method: pay.method.method,
-        cant: pay.cant,
-        mora: pay.mora,
-        cantMora: pay.cantMora,
-        payment_id: pay.method.id,
-        cant_pay: pay.cant_pay,
-        currency: pay.currency,
-        cant_back: pay.cant_back
-      })
-      this.toogleNewModal(false)
-      this.calcTotalPay()
-    },
-    openEditCant (item) {
-      this.cant = item.cant
-    },
-    saveEditCant (item) {
-      if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalPrice) {
-        item.cant = this.cant
-      } else {
-        item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
-      }
-      item.cant = parseFloat((item.cant).toString()).toFixed(2)
-      item.cant_back = item.currency.id !== '' ? item.cant_pay * item.currency.change - item.cant : item.cant_pay - item.cant
-      this.calcTotalPay()
-    },
-    calcTotalPay () {
-      this.totalPays = 0.00
-      this.sale.pays.forEach(v => {
-        this.totalPays += parseFloat(v.cant)
-      })
-    }
-  }
+	name: 'ListPay',
+	components: {
+		NewPayment,
+		Facture
+	},
+	props: {
+		edit: {
+			type: Boolean,
+			default: false
+		},
+		totalPrice: {
+			type: String,
+			default: '0.00'
+		},
+		totalTax: {
+			type: String,
+			default: '0.00'
+		},
+		totalDiscount: {
+			type: String,
+			default: '0.00'
+		},
+		subTotal: {
+			type: String,
+			default: '0.00'
+		},
+		sale: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		show: {
+			type: Boolean,
+			default: true
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			search: '',
+			cant: 0.00,
+			totalPays: 0.00,
+			maxLength: 100,
+			minLength: 0,
+			errorName: ''
+		}
+	},
+	computed: {
+		...mapState('payment', [
+			'payments',
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			const data = [
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.name'),
+					value: 'method',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.cant_pay'),
+					value: 'cant_pay',
+					sortable: false
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.cant_charge'),
+					value: 'cant',
+					sortable: false
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.cant_back'),
+					value: 'cant_back',
+					sortable: false
+				}
+			]
+			if (this.show) {
+				data.push(
+					{
+						text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+						value: 'actions',
+						sortable: false
+					})
+			}
+			return data
+		}
+	},
+	watch: {
+		'sale.pays': function () {
+			this.calcTotalPay()
+		}
+	},
+	created () {
+		this.getPayments()
+		this.calcTotalPay()
+	},
+	methods: {
+		...mapActions('payment', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getPayments',
+			'deletePayment'
+		]),
+		addNewPayment () {
+			if (this.totalPays < this.totalPrice) { this.toogleNewModal(true) } else {
+				this.$Swal
+					.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.new', [
+							this.$vuetify.lang.t('$vuetify.payment.name')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_excess_money'
+						),
+						icon: 'warning',
+						showCancelButton: false,
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.accept'
+						),
+						confirmButtonColor: 'red'
+					})
+			}
+		},
+		deletePaymentHandler (item) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.pay')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then(() => {
+					this.sale.pays.splice(this.sale.pays.indexOf(item), 1)
+				})
+		},
+		addToPayment (pay) {
+			this.sale.pays.push({
+				name: pay.method.name,
+				method: pay.method.method,
+				cant: pay.cant,
+				mora: pay.mora,
+				cantMora: pay.cantMora,
+				payment_id: pay.method.id,
+				cant_pay: pay.cant_pay,
+				currency: pay.currency,
+				cant_back: pay.cant_back
+			})
+			this.toogleNewModal(false)
+			this.calcTotalPay()
+		},
+		openEditCant (item) {
+			this.cant = item.cant
+		},
+		saveEditCant (item) {
+			if (this.totalPays - item.cant + parseFloat(this.cant) <= this.totalPrice) {
+				item.cant = this.cant
+			} else {
+				item.cant = parseFloat((this.totalPrice - this.totalPays).toString()) + parseFloat(item.cant)
+			}
+			item.cant = parseFloat((item.cant).toString()).toFixed(2)
+			item.cant_back = item.currency.id !== '' ? item.cant_pay * item.currency.change - item.cant : item.cant_pay - item.cant
+			this.calcTotalPay()
+		},
+		calcTotalPay () {
+			this.totalPays = 0.00
+			this.sale.pays.forEach(v => {
+				this.totalPays += parseFloat(v.cant)
+			})
+		}
+	}
 }
 </script>
 

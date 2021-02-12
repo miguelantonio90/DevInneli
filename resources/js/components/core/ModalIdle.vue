@@ -23,36 +23,36 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  props: {
-    dialog: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data () {
-    return {
-      time: 10000
-    }
-  },
-  computed: {
-    ...mapState('auth', ['userData']),
-    second () {
-      return this.time / 1000
-    }
-  },
-  created () {
-    const timerId = setInterval(() => {
-      this.time -= 1000
-      if (!this.$store.state.idleVue.isIdle) clearInterval(timerId)
+	props: {
+		dialog: {
+			type: Boolean,
+			default: false
+		}
+	},
+	data () {
+		return {
+			time: 10000
+		}
+	},
+	computed: {
+		...mapState('auth', ['userData']),
+		second () {
+			return this.time / 1000
+		}
+	},
+	created () {
+		const timerId = setInterval(() => {
+			this.time -= 1000
+			if (!this.$store.state.idleVue.isIdle) clearInterval(timerId)
 
-      if (this.time < 1) {
-        clearInterval(timerId)
-        // Your lock app function should be over here
-        console.log('lock user....')
-        this.$router.push('/lock/pin')
-      }
-    }, 1000)
-  }
+			if (this.time < 1) {
+				clearInterval(timerId)
+				// Your lock app function should be over here
+				console.log('lock user....')
+				this.$router.push('/lock/pin')
+			}
+		}, 1000)
+	}
 }
 </script>
 

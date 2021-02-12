@@ -156,90 +156,90 @@ import { protectedRoute as routes } from '../router/config'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'AppDrawer',
-  components: {},
-  props: {
-    expanded: {
-      type: Boolean,
-      default: true
-    },
-    showDrawer: Boolean
-  },
-  data () {
-    return {
-      mini: false,
-      localAccess: [],
-      drawerWidth: 256,
-      drawer: true,
-      scrollSettings: {
-        maxScrollbarLength: 160
-      }
-    }
-  },
-  computed: {
-    ...mapGetters('auth', ['isAdminIn', 'access_permit']),
-    computeLogo () {
-      return '/assets/logo_bar.ico'
-    },
-    computeMenu () {
-      const routers = []
-      if (this.access_permit.length > 0) {
-        let localRoutes = routes[0]
-        if (this.isAdminIn) {
-          localRoutes = routes[3]
-        }
-        localRoutes.children.forEach((v) => {
-          if (this.showInMenu(v.access)) { routers.push(v) }
-        })
-        routers.forEach((a) => {
-          a.children.forEach((c) => {
-            c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
-          })
-        })
-      }
-      return routers
-    }
-  },
-  watch: {
-    access_permit: function () {
-      this.localAccess = []
-      const keys = Object.keys(this.access_permit)
-      keys.forEach((v) => {
-        this.localAccess.push(this.access_permit[v])
-      })
-    },
-    showDrawer: {
-      handler (val) {
-        this.drawer = val
-      },
-      immediate: true
-    }
-  },
-  mounted: function () {
+	name: 'AppDrawer',
+	components: {},
+	props: {
+		expanded: {
+			type: Boolean,
+			default: true
+		},
+		showDrawer: Boolean
+	},
+	data () {
+		return {
+			mini: false,
+			localAccess: [],
+			drawerWidth: 256,
+			drawer: true,
+			scrollSettings: {
+				maxScrollbarLength: 160
+			}
+		}
+	},
+	computed: {
+		...mapGetters('auth', ['isAdminIn', 'access_permit']),
+		computeLogo () {
+			return '/assets/logo_bar.ico'
+		},
+		computeMenu () {
+			const routers = []
+			if (this.access_permit.length > 0) {
+				let localRoutes = routes[0]
+				if (this.isAdminIn) {
+					localRoutes = routes[3]
+				}
+				localRoutes.children.forEach((v) => {
+					if (this.showInMenu(v.access)) { routers.push(v) }
+				})
+				routers.forEach((a) => {
+					a.children.forEach((c) => {
+						c.meta.hiddenInMenu = (this.localAccess.filter(a => a.actions[c.access]).length > 0) ? c.meta.hiddenInMenu : true
+					})
+				})
+			}
+			return routers
+		}
+	},
+	watch: {
+		access_permit: function () {
+			this.localAccess = []
+			const keys = Object.keys(this.access_permit)
+			keys.forEach((v) => {
+				this.localAccess.push(this.access_permit[v])
+			})
+		},
+		showDrawer: {
+			handler (val) {
+				this.drawer = val
+			},
+			immediate: true
+		}
+	},
+	mounted: function () {
 
-  },
-  created () {
-  },
-  methods: {
-    handleDrawerCollapse () {
-      this.drawerWidth = this.drawerWidth === 256 ? 64 : 256
-    },
-    showInMenu (permit) {
-      let countAccess = 0
-      if (this.localAccess.length > 0) {
-        permit.forEach((v) => {
-          const exist = this.localAccess.filter(a => a.title.name === v && a.title.value === true)
-          if (exist.length > 0) {
-            countAccess++
-          }
-        })
-      }
-      return countAccess > 0
-    },
-    initTour () {
-      this.$tours.App.start()
-    }
-  }
+	},
+	created () {
+	},
+	methods: {
+		handleDrawerCollapse () {
+			this.drawerWidth = this.drawerWidth === 256 ? 64 : 256
+		},
+		showInMenu (permit) {
+			let countAccess = 0
+			if (this.localAccess.length > 0) {
+				permit.forEach((v) => {
+					const exist = this.localAccess.filter(a => a.title.name === v && a.title.value === true)
+					if (exist.length > 0) {
+						countAccess++
+					}
+				})
+			}
+			return countAccess > 0
+		},
+		initTour () {
+			this.$tours.App.start()
+		}
+	}
 }
 </script>
 

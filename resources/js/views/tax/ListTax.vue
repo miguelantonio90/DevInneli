@@ -39,85 +39,85 @@ import NewTax from './NewTax'
 import EditTax from './EditTax'
 
 export default {
-  name: 'ListTax',
-  components: {
-    EditTax,
-    NewTax
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('tax', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'taxes',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.value'),
-          value: 'value'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.rate'),
-          value: 'percent'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getTaxes()
-  },
-  methods: {
-    ...mapActions('tax', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getTaxes',
-      'deleteTax'
-    ]),
-    editTaxHandler ($event) {
-      this.openEditModal($event)
-    },
-    deleteTaxHandler (taxId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.articles.tax')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteTax(taxId)
-        })
-    }
-  }
+	name: 'ListTax',
+	components: {
+		EditTax,
+		NewTax
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('tax', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'taxes',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.value'),
+					value: 'value'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.rate'),
+					value: 'percent'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getTaxes()
+	},
+	methods: {
+		...mapActions('tax', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getTaxes',
+			'deleteTax'
+		]),
+		editTaxHandler ($event) {
+			this.openEditModal($event)
+		},
+		deleteTaxHandler (taxId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.articles.tax')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteTax(taxId)
+				})
+		}
+	}
 }
 </script>
 

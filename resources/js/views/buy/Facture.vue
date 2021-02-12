@@ -130,56 +130,56 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
-  name: 'Facture',
-  props: {
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    update: {
-      type: Boolean,
-      default: false
-    },
-    currency: {
-      type: String,
-      default: ''
-    },
-    sale: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    totalPrice: {
-      type: String,
-      default: '0.00'
-    },
-    totalTax: {
-      type: String,
-      default: '0.00'
-    },
-    totalDiscount: {
-      type: String,
-      default: '0.00'
-    },
-    subTotal: {
-      type: String,
-      default: '0.00'
-    }
-  },
-  computed: {
-    ...mapGetters('auth', ['user', 'userPin']),
-    ...mapState('discount', ['discounts']),
-    getCurrency () {
-      return this.currency
-    }
-  },
-  async created () {
-    await this.getDiscounts()
-  },
-  methods: {
-    ...mapActions('discount', ['getDiscounts'])
-  }
+	name: 'Facture',
+	props: {
+		edit: {
+			type: Boolean,
+			default: false
+		},
+		update: {
+			type: Boolean,
+			default: false
+		},
+		currency: {
+			type: String,
+			default: ''
+		},
+		sale: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		totalPrice: {
+			type: String,
+			default: '0.00'
+		},
+		totalTax: {
+			type: String,
+			default: '0.00'
+		},
+		totalDiscount: {
+			type: String,
+			default: '0.00'
+		},
+		subTotal: {
+			type: String,
+			default: '0.00'
+		}
+	},
+	computed: {
+		...mapGetters('auth', ['user', 'userPin']),
+		...mapState('discount', ['discounts']),
+		getCurrency () {
+			return this.currency
+		}
+	},
+	async created () {
+		await this.getDiscounts()
+	},
+	methods: {
+		...mapActions('discount', ['getDiscounts'])
+	}
 }
 </script>
 

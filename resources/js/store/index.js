@@ -36,82 +36,82 @@ import modifiers from './modules/modifiers'
 Vue.use(Vuex, VueAxios, axios)
 
 const vuexLocal = new VuexPersistence({
-  key: 'inneli',
-  storage: window.localStorage,
-  modules: ['app']
+	key: 'inneli',
+	storage: window.localStorage,
+	modules: ['app']
 })
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  state: {
-    errors: {}
-  },
-  modules: {
-    app,
-    auth,
-    boxes,
-    openclose,
-    settings,
-    user,
-    assistance,
-    role,
-    keys,
-    shop,
-    category,
-    client,
-    refund,
-    supplier,
-    article,
-    company,
-    products,
-    shoppingCart,
-    expenseCategory,
-    exchangeRate,
-    statics,
-    payment,
-    typeOrder,
-    tax,
-    discount,
-    inventory,
-    sale,
-    supply,
-    modifiers
-  },
-  plugins: [vuexLocal.plugin],
-  getters: {
-    errors: (state) => state.errors
-  },
-  mutations: {
-    SET_ERRORS (state, response) {
-      if (response) {
-        state.errors = response.data ? {
-          status: response.status,
-          message: response.data.message
-        } : {
-          status: false,
-          message: response.message
-        }
+	state: {
+		errors: {}
+	},
+	modules: {
+		app,
+		auth,
+		boxes,
+		openclose,
+		settings,
+		user,
+		assistance,
+		role,
+		keys,
+		shop,
+		category,
+		client,
+		refund,
+		supplier,
+		article,
+		company,
+		products,
+		shoppingCart,
+		expenseCategory,
+		exchangeRate,
+		statics,
+		payment,
+		typeOrder,
+		tax,
+		discount,
+		inventory,
+		sale,
+		supply,
+		modifiers
+	},
+	plugins: [vuexLocal.plugin],
+	getters: {
+		errors: (state) => state.errors
+	},
+	mutations: {
+		SET_ERRORS (state, response) {
+			if (response) {
+				state.errors = response.data ? {
+					status: response.status,
+					message: response.data.message
+				} : {
+					status: false,
+					message: response.message
+				}
 
-        this._vm.$Toast.fire({
-          icon: 'error',
-          title: state.errors.message
-        })
-      } else {
-        state.errors = {
-          status: 'failed',
-          message: 'Failed: Connections refused.'
-        }
-        this._vm.$Toast.fire({
-          icon: 'error',
-          title: state.errors.message
-        })
-      }
-    },
-    CLEAR_ERRORS (state) {
-      state.errors = []
-    }
-  }
+				this._vm.$Toast.fire({
+					icon: 'error',
+					title: state.errors.message
+				})
+			} else {
+				state.errors = {
+					status: 'failed',
+					message: 'Failed: Connections refused.'
+				}
+				this._vm.$Toast.fire({
+					icon: 'error',
+					title: state.errors.message
+				})
+			}
+		},
+		CLEAR_ERRORS (state) {
+			state.errors = []
+		}
+	}
 })
 
 export default store

@@ -179,72 +179,72 @@ import { mapActions, mapState } from 'vuex'
 import NewExpenseCategory from '../expense_category/New'
 
 export default {
-  components: { NewExpenseCategory },
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('supplier', ['saved', 'editSupplier', 'isActionInProgress']),
-    ...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        defaultCountry: this.editSupplier.country ? this.editSupplier.country : 'US',
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  created () {
-    this.getExpenseCategories()
-  },
-  methods: {
-    ...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
-    ...mapActions('expenseCategory', ['getExpenseCategories']),
-    onCountry (event) {
-      this.editSupplier.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.editSupplier.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    async updateSupplierHandler () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateSupplier(this.editSupplier)
-      }
-    }
-  }
+	components: { NewExpenseCategory },
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('supplier', ['saved', 'editSupplier', 'isActionInProgress']),
+		...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				defaultCountry: this.editSupplier.country ? this.editSupplier.country : 'US',
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+		this.getExpenseCategories()
+	},
+	methods: {
+		...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
+		...mapActions('expenseCategory', ['getExpenseCategories']),
+		onCountry (event) {
+			this.editSupplier.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.editSupplier.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		async updateSupplierHandler () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.updateSupplier(this.editSupplier)
+			}
+		}
+	}
 }
 </script>
 

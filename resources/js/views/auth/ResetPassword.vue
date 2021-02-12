@@ -98,30 +98,30 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'ResetPassword',
-  data () {
-    return {
-      formValid: false,
-      hidePassword1: true,
-      hidePassword2: true,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('auth', ['formReset', 'successReset', 'loadingReset'])
-  },
-  methods: {
-    ...mapActions('auth', ['sendResetPassword']),
-    async changePassword () {
-      const data = {
-        token: this.$route.params.hash,
-        email: this.formReset.email,
-        password: this.formReset.password,
-        password_confirmation: this.formReset.password_confirmation
-      }
-      await this.sendResetPassword(data)
-    }
-  }
+	name: 'ResetPassword',
+	data () {
+		return {
+			formValid: false,
+			hidePassword1: true,
+			hidePassword2: true,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('auth', ['formReset', 'successReset', 'loadingReset'])
+	},
+	methods: {
+		...mapActions('auth', ['sendResetPassword']),
+		async changePassword () {
+			const data = {
+				token: this.$route.params.hash,
+				email: this.formReset.email,
+				password: this.formReset.password,
+				password_confirmation: this.formReset.password_confirmation
+			}
+			await this.sendResetPassword(data)
+		}
+	}
 }
 </script>
 

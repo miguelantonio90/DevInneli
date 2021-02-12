@@ -3,18 +3,13 @@
 namespace App\Managers;
 
 use App\Articles;
-use App\ArticlesShops;
-use App\Box;
 use App\Company;
 use App\ExchangeRate;
 use App\Notification;
-use App\PaySale;
 use App\Sale;
-use App\SalesArticlesShops;
 use App\Supplier;
 use App\Supply;
 use App\SupplyState;
-use App\Tax;
 use App\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +23,7 @@ class SupplyManager extends BaseManager
 
     /**
      * SupplyManager constructor.
-     * @param BuyManager $buyManager
+     * @param  BuyManager  $buyManager
      */
     public function __construct(BuyManager $buyManager)
     {
@@ -39,17 +34,9 @@ class SupplyManager extends BaseManager
      * @return mixed
      * @throws Exception
      */
-    private function getAccessPermit()
+    public function findAllByCompany(): array
     {
-        return json_decode(cache()->get('userPin')->position['access_permit']);
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    public function findAllByCompany()
-    {
+        $received = [];
         if (auth()->user()['isAdmin'] === 1) {
             $supplies = Supply::latest()
                 ->with('company')
@@ -80,28 +67,39 @@ class SupplyManager extends BaseManager
                 ->with('state')
                 ->orderBy('created_at', 'ASC')
                 ->get();
+
+            foreach ($received as $key => $supply) {
+                $supply['from'] = DB::table('companies')
+                    ->leftJoin('users', 'users.company_id', '=', 'companies.id')
+                    ->leftJoin('suppliers', 'suppliers.email', '=', 'users.email')
+                    ->leftJoin('sales', 'sales.provider_id', '=', 'suppliers.id')
+                    ->where('sales.id', '=', $supply['sale']['id'])
+                    ->select('companies.*')
+                    ->first();
+
+                $supply = $this->supplyExtraData($supply);
+            }
         }
         foreach ($supplies as $key => $supply) {
             $supply['to'] = DB::table('companies')
-                ->join('users', 'users.company_id', '=', 'companies.id')
-                ->join('suppliers', 'suppliers.email', '=', 'users.email')
-                ->join('sales', 'sales.provider_id', '=', 'suppliers.id')
-                ->where('sales.id', '=', $supply['sale']['id'])
-                ->select('companies.*')
-                ->first();
-            $supply = $this->supplyExtraData($supply);
-        }
-        foreach ($received as $key => $supply) {
-            $supply['from'] = DB::table('companies')
-                ->join('users', 'users.company_id', '=', 'companies.id')
-                ->join('suppliers', 'suppliers.email', '=', 'users.email')
-                ->join('sales', 'sales.provider_id', '=', 'suppliers.id')
+                ->leftJoin('users', 'users.company_id', '=', 'companies.id')
+                ->leftJoin('suppliers', 'suppliers.email', '=', 'users.email')
+                ->leftJoin('sales', 'sales.provider_id', '=', 'suppliers.id')
                 ->where('sales.id', '=', $supply['sale']['id'])
                 ->select('companies.*')
                 ->first();
             $supply = $this->supplyExtraData($supply);
         }
         return [$supplies, $received];
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAccessPermit()
+    {
+        return json_decode(cache()->get('userPin')->position['access_permit']);
     }
 
     /**
@@ -119,6 +117,7 @@ class SupplyManager extends BaseManager
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->first();
+
         $supply['sale']['articles'] = DB::table('articles')
             ->select([
                 'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
@@ -148,26 +147,31 @@ class SupplyManager extends BaseManager
         $totalTax = 0;
         $totalDisc = 0;
         $totalRefund = 0;
+
         foreach ($supply['sale']['pays'] as $p => $pay) {
             $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id) : '';
         }
         foreach ($supply['sale']['articles'] as $k => $v) {
-            $v->name = $v->parent_id !== '' ? Articles::findOrFail($v->parent_id)->name . '(' . $v->name . ')' : $v->name;
+
+            $v->name = $v->parent_id !== null ? Articles::findOrFail($v->parent_id)->name.'('.$v->name.')' : $v->name;
             $supply['sale']['articles'][$k]->images = DB::table('article_images')
                 ->where('article_images.article_id', '=', $v->id)
                 ->get();
+
             $supply['sale']['articles'][$k]->taxes = DB::table('taxes')
                 ->leftJoin('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
                 ->leftJoin('articles', 'articles.id', '=', 'article_tax.article_id')
                 ->where('articles.id', '=', $v->id)
                 ->addSelect(['taxes.*'])
                 ->get();
+
             $supply['sale']['articles'][$k]->refounds = DB::table('refunds')
-                ->join('users', 'users.id', '=', 'refunds.created_by')
+                ->leftJoin('users', 'users.id', '=', 'refunds.created_by')
                 ->where('refunds.article_id', '=', $v->id)
                 ->where('refunds.sale_id', '=', $supply['sale_id'])
                 ->select('refunds.*', 'users.firstName as created_by')
                 ->get();
+
             $supply['sale']['articles'][$k]->modifiers = DB::table('modifiers')
                 ->leftJoin('sales_articles_shop_modifiers', 'sales_articles_shop_modifiers.modifier_id', '=',
                     'modifiers.id')
@@ -182,6 +186,7 @@ class SupplyManager extends BaseManager
                 ->where('sales.id', '=', $supply['sale']['id'])
                 ->addSelect(['modifiers.*'])
                 ->get();
+
             $supply['sale']['articles'][$k]->discount = DB::table('discounts')
                 ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
                     'discounts.id')
@@ -245,6 +250,74 @@ class SupplyManager extends BaseManager
     }
 
     /**
+     * @param $supply
+     * @return array|null
+     */
+    public function nextState($supply): ?array
+    {
+        if (property_exists('to', $supply)) {
+            if (User::findOrFail(auth()->id())->email === $supply['to']->email) {
+                if ($supply['state']['name'] === 'requested') {
+                    return [
+                        SupplyState::latest()->where('name', '=', 'requested')->first(),
+                        SupplyState::latest()->where('name', '=', 'accepted')->first(),
+                        SupplyState::latest()->where('name', '=', 'process')->first(),
+                        SupplyState::latest()->where('name', '=', 'ship')->first(),
+                        SupplyState::latest()->where('name', '=', 'received')->first(),
+                        SupplyState::latest()->where('name', '=', 'cancelled')->first(),
+                    ];
+                } else {
+                    if ($supply['state']['name'] === 'accepted') {
+                        return [
+                            SupplyState::latest()->where('name', '=', 'accepted')->first(),
+                            SupplyState::latest()->where('name', '=', 'process')->first(),
+                            SupplyState::latest()->where('name', '=', 'ship')->first(),
+                            SupplyState::latest()->where('name', '=', 'received')->first(),
+                            SupplyState::latest()->where('name', '=', 'cancelled')->first(),
+                        ];
+                    } else {
+                        if ($supply['state']['name'] === 'process') {
+                            return [
+                                SupplyState::latest()->where('name', '=', 'process')->first(),
+                                SupplyState::latest()->where('name', '=', 'ship')->first(),
+                                SupplyState::latest()->where('name', '=', 'received')->first(),
+                                SupplyState::latest()->where('name', '=', 'cancelled')->first(),
+                            ];
+                        } else {
+                            if ($supply['state']['name'] === 'ship') {
+                                return [
+                                    SupplyState::latest()->where('name', '=', 'ship')->first(),
+                                    SupplyState::latest()->where('name', '=', 'received')->first()
+                                ];
+                            } else {
+                                return [SupplyState::latest()->where('name', '=', $supply['state']['name'])->first()];
+                            }
+                        }
+                    }
+                }
+            } else {
+                if ($supply['state']['name'] !== 'received') {
+                    return [
+                        SupplyState::latest()->where('name', '=', $supply['state']['name'])->first(),
+                        SupplyState::latest()->where('name', '=', 'cancelled')->first()
+                    ];
+                }
+            }
+        } else {
+
+            if ($supply['state']['name'] === 'requested') {
+                return [
+                    SupplyState::latest()->where('name', '=', 'requested')->first(),
+                    SupplyState::latest()->where('name', '=', 'cancelled')->first()
+                ];
+
+            } else {
+                return [SupplyState::latest()->where('name', '=', 'cancelled')->first()];
+            }
+        }
+    }
+
+    /**
      * @param $data
      * @return Sale
      * @throws Exception
@@ -305,63 +378,10 @@ class SupplyManager extends BaseManager
     }
 
     /**
-     * @param $supply
-     * @return array|null
+     * @param $data
+     * @return int
      */
-    public function nextState($supply): ?array
-    {
-        if (property_exists('to', $supply))
-            if (User::findOrFail(auth()->id())->email === $supply['to']->email) {
-                if ($supply['state']['name'] === 'requested') {
-                    return [
-                        SupplyState::latest()->where('name', '=', 'requested')->first(),
-                        SupplyState::latest()->where('name', '=', 'accepted')->first(),
-                        SupplyState::latest()->where('name', '=', 'process')->first(),
-                        SupplyState::latest()->where('name', '=', 'ship')->first(),
-                        SupplyState::latest()->where('name', '=', 'received')->first(),
-                        SupplyState::latest()->where('name', '=', 'cancelled')->first(),
-                    ];
-                } else if ($supply['state']['name'] === 'accepted') {
-                    return [
-                        SupplyState::latest()->where('name', '=', 'accepted')->first(),
-                        SupplyState::latest()->where('name', '=', 'process')->first(),
-                        SupplyState::latest()->where('name', '=', 'ship')->first(),
-                        SupplyState::latest()->where('name', '=', 'received')->first(),
-                        SupplyState::latest()->where('name', '=', 'cancelled')->first(),
-                    ];
-                } else if ($supply['state']['name'] === 'process') {
-                    return [
-                        SupplyState::latest()->where('name', '=', 'process')->first(),
-                        SupplyState::latest()->where('name', '=', 'ship')->first(),
-                        SupplyState::latest()->where('name', '=', 'received')->first(),
-                        SupplyState::latest()->where('name', '=', 'cancelled')->first(),];
-                } else if ($supply['state']['name'] === 'ship') {
-                    return [
-                        SupplyState::latest()->where('name', '=', 'ship')->first(),
-                        SupplyState::latest()->where('name', '=', 'received')->first()];
-                } else {
-                    return [SupplyState::latest()->where('name', '=', $supply['state']['name'])->first()];
-                }
-            } else {
-                if ($supply['state']['name'] !== 'received')
-                    return [SupplyState::latest()->where('name', '=', $supply['state']['name'])->first(),
-                        SupplyState::latest()->where('name', '=', 'cancelled')->first()];
-            }
-        else {
-
-            if ($supply['state']['name'] === 'requested') {
-                return [
-                    SupplyState::latest()->where('name', '=', 'requested')->first(),
-                    SupplyState::latest()->where('name', '=', 'cancelled')->first()
-                ];
-
-            } else {
-                return [SupplyState::latest()->where('name', '=', 'cancelled')->first()];
-            }
-        }
-    }
-
-    public function findFactureNumber($data)
+    public function findFactureNumber($data): int
     {
         $number = Sale::select('no_facture')
             ->where('company_id', '=', $data)
@@ -371,8 +391,8 @@ class SupplyManager extends BaseManager
 
         if ($number && count($number->toArray()) > 0) {
             $lastNumber = explode('-', $number['no_facture']);
-            if ('F' . date('Y') === $lastNumber[0]) {
-                return (int)$lastNumber[1] + 1;
+            if ('F'.date('Y') === $lastNumber[0]) {
+                return (int) $lastNumber[1] + 1;
             }
 
             return 1000000;

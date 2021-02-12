@@ -60,29 +60,29 @@
 
 <script>
 export default {
-  name: 'ShoppingCard',
-  data () {
-    return {
-      checkoutDialog: false
-    }
-  },
+	name: 'ShoppingCard',
+	data () {
+		return {
+			checkoutDialog: false
+		}
+	},
 
-  computed: {
-    items () { return this.$store.getters.cartItems },
-    item_count () { return this.$store.getters.cartItemCount }
-  },
+	computed: {
+		items () { return this.$store.getters.cartItems },
+		item_count () { return this.$store.getters.cartItemCount }
+	},
 
-  methods: {
+	methods: {
 
-    removeItem (item) {
-      this.$store.dispatch('removeItemFromCart', item)
-    },
+		removeItem (item) {
+			this.$store.dispatch('removeItemFromCart', item)
+		},
 
-    checkout () {
-      this.checkoutDialog = true
-    }
+		checkout () {
+			this.checkoutDialog = true
+		}
 
-  }
+	}
 
 }
 </script>

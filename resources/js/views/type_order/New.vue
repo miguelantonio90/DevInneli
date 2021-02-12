@@ -104,35 +104,35 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('typeOrder', ['newOrder', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  created () {
-    this.formValid = false
-    this.getShops().then(() => {
-      this.newOrder.shops = this.shops
-    })
-  },
-  methods: {
-    ...mapActions('typeOrder', ['createTypeOrder', 'toogleNewModal']),
-    ...mapActions('shop', ['getShops']),
-    setOrders (shops) {
-      this.newOrder.shops = shops
-    },
-    async handleSubmit () {
-      if (this.$refs.form.validate()) {
-        await this.createTypeOrder(this.newOrder)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('typeOrder', ['newOrder', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	created () {
+		this.formValid = false
+		this.getShops().then(() => {
+			this.newOrder.shops = this.shops
+		})
+	},
+	methods: {
+		...mapActions('typeOrder', ['createTypeOrder', 'toogleNewModal']),
+		...mapActions('shop', ['getShops']),
+		setOrders (shops) {
+			this.newOrder.shops = shops
+		},
+		async handleSubmit () {
+			if (this.$refs.form.validate()) {
+				await this.createTypeOrder(this.newOrder)
+			}
+		}
+	}
 }
 </script>
 

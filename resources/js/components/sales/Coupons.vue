@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'Coupons'
+	name: 'Coupons'
 }
 </script>

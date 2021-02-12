@@ -123,30 +123,30 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditKeys',
-  data () {
-    return {
-      formValid: false,
-      access_permit: [],
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('keys', ['saved', 'editKey', 'isActionInProgress'])
-  },
-  created () {
-    this.access_permit = this.editKey.access_permit
-  },
-  methods: {
-    ...mapActions('keys', ['updateKey', 'toogleEditModal']),
+	name: 'EditKeys',
+	data () {
+		return {
+			formValid: false,
+			access_permit: [],
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('keys', ['saved', 'editKey', 'isActionInProgress'])
+	},
+	created () {
+		this.access_permit = this.editKey.access_permit
+	},
+	methods: {
+		...mapActions('keys', ['updateKey', 'toogleEditModal']),
 
-    async updateKeyHandler () {
-      if (this.$refs.form.validate()) {
-        this.editKey.access_permit = this.access_permit
-        await this.updateKey(this.editKey)
-      }
-    }
-  }
+		async updateKeyHandler () {
+			if (this.$refs.form.validate()) {
+				this.editKey.access_permit = this.access_permit
+				await this.updateKey(this.editKey)
+			}
+		}
+	}
 }
 </script>
 

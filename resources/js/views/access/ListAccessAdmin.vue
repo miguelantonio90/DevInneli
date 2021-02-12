@@ -84,78 +84,78 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListAccessAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('role', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'roles',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [{
-        text: this.$vuetify.lang.t('$vuetify.company'),
-        value: 'company_name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.name'),
-        value: 'name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.accessPin'),
-        value: 'accessPin'
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.accessEmail'),
-        value: 'accessEmail'
-      }
-      ]
-    }
-  },
-  created () {
-    this.getRoles()
-  },
-  methods: {
-    ...mapActions('role', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getRoles',
-      'deleteRole'
-    ]),
-    deleteRoleHandler (roleId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.access')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteRole(roleId)
-        })
-    }
-  }
+	name: 'ListAccessAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('role', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'roles',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [{
+				text: this.$vuetify.lang.t('$vuetify.company'),
+				value: 'company_name',
+				select_filter: true
+			},
+			{
+				text: this.$vuetify.lang.t('$vuetify.access.name'),
+				value: 'name',
+				select_filter: true
+			},
+			{
+				text: this.$vuetify.lang.t('$vuetify.access.accessPin'),
+				value: 'accessPin'
+			},
+			{
+				text: this.$vuetify.lang.t('$vuetify.access.accessEmail'),
+				value: 'accessEmail'
+			}
+			]
+		}
+	},
+	created () {
+		this.getRoles()
+	},
+	methods: {
+		...mapActions('role', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getRoles',
+			'deleteRole'
+		]),
+		deleteRoleHandler (roleId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.access')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteRole(roleId)
+				})
+		}
+	}
 }
 </script>
 

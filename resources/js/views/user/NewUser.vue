@@ -212,100 +212,100 @@ import NewAccess from '../access/NewAccess'
 import NewShop from '../shop/NewShop'
 
 export default {
-  name: 'NewUser',
-  components: { NewAccess, NewShop },
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('user', ['saved', 'newUser', 'isActionInProgress']),
-    ...mapState('role', ['roles', 'isAccessLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    getAvatar () {
-      return `${this.newUser.avatar ||
+	name: 'NewUser',
+	components: { NewAccess, NewShop },
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('user', ['saved', 'newUser', 'isActionInProgress']),
+		...mapState('role', ['roles', 'isAccessLoading']),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		getAvatar () {
+			return `${this.newUser.avatar ||
           '/assets/avatar/avatar-undefined.jpg'}`
-    },
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  created () {
-    this.formValid = false
-    this.getRoles()
-    this.getShops().then(() => {
-      this.newUser.shops = this.shops
-    })
-  },
-  methods: {
-    ...mapActions('user', ['createUser', 'toogleNewModal']),
-    ...mapActions('role', ['createRole', 'getRoles']),
-    ...mapActions('shop', ['getShops']),
-    onCountry (event) {
-      this.newUser.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onChangeImage (file) {
-      this.newUser.avatar = `data:${file.type};base64,${file.base64}`
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.newUser.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    setOrders (shops) {
-      this.newUser.shops = shops
-    },
-    async createNewUser () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createUser(this.newUser)
-      }
-    }
-  }
+		},
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+		this.formValid = false
+		this.getRoles()
+		this.getShops().then(() => {
+			this.newUser.shops = this.shops
+		})
+	},
+	methods: {
+		...mapActions('user', ['createUser', 'toogleNewModal']),
+		...mapActions('role', ['createRole', 'getRoles']),
+		...mapActions('shop', ['getShops']),
+		onCountry (event) {
+			this.newUser.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onChangeImage (file) {
+			this.newUser.avatar = `data:${file.type};base64,${file.base64}`
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.newUser.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		setOrders (shops) {
+			this.newUser.shops = shops
+		},
+		async createNewUser () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createUser(this.newUser)
+			}
+		}
+	}
 }
 </script>
 

@@ -23,7 +23,7 @@ class ArticleManager extends BaseManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @param  VariantManager  $variantManager
      */
     public function __construct(VariantManager $variantManager)
     {
@@ -92,15 +92,15 @@ class ArticleManager extends BaseManager
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                if (round($articles[$k]['variantValues'][$sh]['price'],2) === 0.00) {
+                if (round($articles[$k]['variantValues'][$sh]['price'], 2) === 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
-                } elseif (round($articles[$k]['variantValues'][$sh]['cost'],2) === 0.00) {
+                } elseif (round($articles[$k]['variantValues'][$sh]['cost'], 2) === 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
                 } else {
-                    $articles[$k]['variantValues'][$sh]['percent'] =  round(
-                            (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
-                            2
-                        );
+                    $articles[$k]['variantValues'][$sh]['percent'] = round(
+                        (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                        2
+                    );
                 }
             }
 
@@ -110,7 +110,8 @@ class ArticleManager extends BaseManager
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
-                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] == 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100, 2);
+                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] == 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100,
+                    2);
             }
         }
         return $articles;
@@ -128,7 +129,7 @@ class ArticleManager extends BaseManager
             ->orderBy('ref', 'DESC')
             ->first();
 
-        return ($number && count($number->toArray()) > 0) ? (int)$number['ref'] : 1000;
+        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
     }
 
     /**
@@ -304,7 +305,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param Articles $article
+     * @param  Articles  $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void
@@ -498,7 +499,7 @@ class ArticleManager extends BaseManager
         foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($shopsArticles as $k => $v) {
-                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['checked'] && $v['articles_shop_id'] !=='') {
+                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['checked'] && $v['articles_shop_id'] !== '') {
                     $exist = true;
                 }
             }

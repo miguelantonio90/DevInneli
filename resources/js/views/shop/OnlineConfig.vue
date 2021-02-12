@@ -47,7 +47,7 @@
       <v-row>
         <v-col
           v-for="n in templateView[0]"
-          :key="n"
+          :key="n.src.toString()"
           class="d-flex child-flex"
           cols="6"
         >
@@ -79,30 +79,30 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'OnlineConfig',
-  data () {
-    return {
-      formRule: this.$rules,
-      shop: {},
-      templateView: [[{
-        src: require('../shops-templates/shipit/assets/template/1.jpg')
-      }, {
-        src: require('../shops-templates/shipit/assets/template/2.jpg')
-      }]],
-      templates: [{
-        name: '1'
-      }]
-    }
-  },
-  computed: {
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  async created () {
-    await this.getShops()
-  },
-  methods: {
-    ...mapActions('shop', ['getShops'])
-  }
+	name: 'OnlineConfig',
+	data () {
+		return {
+			formRule: this.$rules,
+			shop: {},
+			templateView: [[{
+				src: require('../shops-templates/shipit/assets/template/1.jpg')
+			}, {
+				src: require('../shops-templates/shipit/assets/template/2.jpg')
+			}]],
+			templates: [{
+				name: '1'
+			}]
+		}
+	},
+	computed: {
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	async created () {
+		await this.getShops()
+	},
+	methods: {
+		...mapActions('shop', ['getShops'])
+	}
 }
 </script>
 

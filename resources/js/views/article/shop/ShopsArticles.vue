@@ -163,62 +163,62 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'ShopsArticles',
-  props: {
-    article: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    }
-  },
-  data () {
-    return {
-      snack: false,
-      snackColor: '',
-      snackText: '',
-      pagination: {}
-    }
-  },
-  computed: {
-    ...mapGetters('auth', ['user']),
-    getHeader () {
-      let headers = []
-      headers = [
-        {
-          text: this.$vuetify.lang.t('$vuetify.shop_article.enabled'),
-          value: 'checked'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop_name'
-        }
-      ]
-      if (!this.article.composite && this.article.variant_values.length > 0) {
-        headers.push({
-          text: this.$vuetify.lang.t('$vuetify.variants.variant'),
-          value: 'name'
-        })
-      }
-      headers.push({
-        text: this.$vuetify.lang.t('$vuetify.variants.price'),
-        value: 'price'
-      })
-      if (this.article.track_inventory) {
-        headers.push({
-          text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
-          value: 'stock'
-        })
-        headers.push({
-          text: this.$vuetify.lang.t('$vuetify.shop_article.under_inventory'),
-          value: 'under_inventory'
-        })
-      }
-      return headers
-    }
-  },
-  created () {
-  }
+	name: 'ShopsArticles',
+	props: {
+		article: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		}
+	},
+	data () {
+		return {
+			snack: false,
+			snackColor: '',
+			snackText: '',
+			pagination: {}
+		}
+	},
+	computed: {
+		...mapGetters('auth', ['user']),
+		getHeader () {
+			let headers = []
+			headers = [
+				{
+					text: this.$vuetify.lang.t('$vuetify.shop_article.enabled'),
+					value: 'checked'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop_name'
+				}
+			]
+			if (!this.article.composite && this.article.variant_values.length > 0) {
+				headers.push({
+					text: this.$vuetify.lang.t('$vuetify.variants.variant'),
+					value: 'name'
+				})
+			}
+			headers.push({
+				text: this.$vuetify.lang.t('$vuetify.variants.price'),
+				value: 'price'
+			})
+			if (this.article.track_inventory) {
+				headers.push({
+					text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
+					value: 'stock'
+				})
+				headers.push({
+					text: this.$vuetify.lang.t('$vuetify.shop_article.under_inventory'),
+					value: 'under_inventory'
+				})
+			}
+			return headers
+		}
+	},
+	created () {
+	}
 }
 </script>
 <style scoped>

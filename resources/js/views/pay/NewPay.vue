@@ -248,138 +248,138 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewPayment',
-  props: {
-    payments: {
-      type: Array,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: []
-    },
-    pending: {
-      type: Number,
-      default: 0.00
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      menu2: false,
-      formValid: false,
-      currencies: [],
-      pay: {
-        name: 'counted',
-        method: '',
-        cant: '',
-        delay: 0.00,
-        mora: new Date().toISOString().substr(0, 10),
-        cantMora: 0.00,
-        cant_pay: 0.00,
-        currency: {},
-        cant_back: 0.00
-      },
-      localPayments: [],
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
-    ...mapState('exchangeRate', ['saved', 'changes']),
-    computedDateFormatted () {
-      return this.formatDate(this.pay.mora)
-    },
-    getPay () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.counted'),
-          value: 'counted'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.credit'),
-          value: 'credit'
-        }
-      ]
-    }
-  },
-  watch: {
-    'pay.cant': function (val) {
-      if (parseFloat(val).toFixed(2) > parseFloat(this.pending).toFixed(2)) { this.pay.cant = parseFloat(this.pending).toFixed(2) }
-    },
-    'pay.name': function (val) {
-      this.updateMethod()
-    },
-    'pay.cant_pay': function () {
-      this.calcDifference()
-    },
-    changes: function () {
-      if (this.changes.length > 0) {
-        this.currencies = []
-        this.currencies.push({
-          currency: this.currency,
-          change: 1,
-          id: ''
-        })
-        this.changes.forEach((v) => {
-          this.currencies.push({
-            currency: v.currency,
-            change: v.change,
-            id: v.id
-          })
-        })
-        this.pay.currency = this.currencies[0]
-      }
-    }
-  },
-  mounted () {
-    this.formValid = false
-    this.pay.name = 'counted'
-    this.pay.cant = this.pending
-    this.getChanges()
-    this.updateMethod()
-  },
-  methods: {
-    ...mapActions('payment', ['createPayment', 'toogleNewModal']),
-    ...mapActions('exchangeRate', ['getChanges']),
-    customFilter (item, queryText, itemText) {
-      return this.$vuetify.lang.t('$vuetify.payment.' + item.method).toLowerCase().indexOf(queryText.toLowerCase()) > -1
-    },
-    calcDifference () {
-      this.pay.cant_back = this.currencies.length > 0 ? this.pay.cant_pay * this.pay.currency.change - this.pay.cant : this.pay.cant_pay - this.pay.cant
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async createNewPayment () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createPayment(this.newPayment)
-      }
-    },
-    updateMethod () {
-      this.localPayments = this.payments.filter(p => p.name === this.pay.name)
-      this.pay.method = this.localPayments[0]
-    },
-    formatDate (date) {
-      if (!date) return null
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    parseDate (date) {
-      if (!date) return null
+	name: 'NewPayment',
+	props: {
+		payments: {
+			type: Array,
+			// eslint-disable-next-line vue/require-valid-default-prop
+			default: []
+		},
+		pending: {
+			type: Number,
+			default: 0.00
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			menu2: false,
+			formValid: false,
+			currencies: [],
+			pay: {
+				name: 'counted',
+				method: '',
+				cant: '',
+				delay: 0.00,
+				mora: new Date().toISOString().substr(0, 10),
+				cantMora: 0.00,
+				cant_pay: 0.00,
+				currency: {},
+				cant_back: 0.00
+			},
+			localPayments: [],
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
+		...mapState('exchangeRate', ['saved', 'changes']),
+		computedDateFormatted () {
+			return this.formatDate(this.pay.mora)
+		},
+		getPay () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.pay.counted'),
+					value: 'counted'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.pay.credit'),
+					value: 'credit'
+				}
+			]
+		}
+	},
+	watch: {
+		'pay.cant': function (val) {
+			if (parseFloat(val).toFixed(2) > parseFloat(this.pending).toFixed(2)) { this.pay.cant = parseFloat(this.pending).toFixed(2) }
+		},
+		'pay.name': function (val) {
+			this.updateMethod()
+		},
+		'pay.cant_pay': function () {
+			this.calcDifference()
+		},
+		changes: function () {
+			if (this.changes.length > 0) {
+				this.currencies = []
+				this.currencies.push({
+					currency: this.currency,
+					change: 1,
+					id: ''
+				})
+				this.changes.forEach((v) => {
+					this.currencies.push({
+						currency: v.currency,
+						change: v.change,
+						id: v.id
+					})
+				})
+				this.pay.currency = this.currencies[0]
+			}
+		}
+	},
+	mounted () {
+		this.formValid = false
+		this.pay.name = 'counted'
+		this.pay.cant = this.pending
+		this.getChanges()
+		this.updateMethod()
+	},
+	methods: {
+		...mapActions('payment', ['createPayment', 'toogleNewModal']),
+		...mapActions('exchangeRate', ['getChanges']),
+		customFilter (item, queryText, itemText) {
+			return this.$vuetify.lang.t('$vuetify.payment.' + item.method).toLowerCase().indexOf(queryText.toLowerCase()) > -1
+		},
+		calcDifference () {
+			this.pay.cant_back = this.currencies.length > 0 ? this.pay.cant_pay * this.pay.currency.change - this.pay.cant : this.pay.cant_pay - this.pay.cant
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async createNewPayment () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createPayment(this.newPayment)
+			}
+		},
+		updateMethod () {
+			this.localPayments = this.payments.filter(p => p.name === this.pay.name)
+			this.pay.method = this.localPayments[0]
+		},
+		formatDate (date) {
+			if (!date) return null
+			const [year, month, day] = date.split('-')
+			return `${day}/${month}/${year}`
+		},
+		parseDate (date) {
+			if (!date) return null
 
-      const [month, day, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
-  }
+			const [month, day, year] = date.split('/')
+			return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+		}
+	}
 }
 </script>
 

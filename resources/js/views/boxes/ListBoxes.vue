@@ -70,90 +70,90 @@ import EditBox from './EditBox'
 import OpenCloseBox from './OpenCloseBox'
 
 export default {
-  name: 'ListBoxes',
-  components: {
-    NewBox,
-    EditBox,
-    OpenCloseBox
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('boxes', [
-      'opencloseBox',
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'boxes',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.state'),
-          value: 'state'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  async created () {
-    await this.getBoxes()
-  },
-  methods: {
-    ...mapActions('boxes', [
-      'toogleNewModal',
-      'openEditModal',
-      'openCloseModal',
-      'getBoxes',
-      'deleteBox'
-    ]),
-    editBoxesHandler ($event) {
-      this.openEditModal($event)
-    },
-    openBox ($event) {
-      this.openCloseModal($event)
-    },
-    deleteBoxesHandler (categoryId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.category')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteBox(categoryId)
-        })
-    }
-  }
+	name: 'ListBoxes',
+	components: {
+		NewBox,
+		EditBox,
+		OpenCloseBox
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('boxes', [
+			'opencloseBox',
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'boxes',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.state'),
+					value: 'state'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	async created () {
+		await this.getBoxes()
+	},
+	methods: {
+		...mapActions('boxes', [
+			'toogleNewModal',
+			'openEditModal',
+			'openCloseModal',
+			'getBoxes',
+			'deleteBox'
+		]),
+		editBoxesHandler ($event) {
+			this.openEditModal($event)
+		},
+		openBox ($event) {
+			this.openCloseModal($event)
+		},
+		deleteBoxesHandler (categoryId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.category')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteBox(categoryId)
+				})
+		}
+	}
 }
 </script>
 

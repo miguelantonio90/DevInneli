@@ -119,76 +119,76 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      errorPhone: null,
-      formValid: false,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('shop', ['saved', 'editShop', 'isActionInProgress']),
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        defaultCountry: this.editShop.country ? this.editShop.country : 'US',
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  methods: {
-    ...mapActions('shop', ['updateShop', 'toogleEditModal']),
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.editShop.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onCountry (event) {
-      this.editShop.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async editShopAction () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateShop(this.editShop)
-      }
-    }
-  }
+	data () {
+		return {
+			errorPhone: null,
+			formValid: false,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('shop', ['saved', 'editShop', 'isActionInProgress']),
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				defaultCountry: this.editShop.country ? this.editShop.country : 'US',
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	methods: {
+		...mapActions('shop', ['updateShop', 'toogleEditModal']),
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.editShop.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onCountry (event) {
+			this.editShop.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async editShopAction () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.updateShop(this.editShop)
+			}
+		}
+	}
 }
 </script>
 

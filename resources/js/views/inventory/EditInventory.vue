@@ -247,188 +247,188 @@ import ResumeSupply from './ResumeSupply'
 import AppLoading from '../../components/core/AppLoading'
 
 export default {
-  name: 'EditInventory',
-  components: { AppLoading, ResumeSupply, DetailSupplier },
-  data () {
-    return {
-      loadingData: false,
-      editedIndex: -1,
-      localArticles: [],
-      formValid: false,
-      update: false,
-      panel: [0, 1, 2],
-      showInfoAdd: false
-    }
-  },
-  computed: {
-    ...mapState('inventory', ['editInventory', 'isActionInProgress']),
-    ...mapState('article', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'articles',
-      'isTableLoading'
-    ]),
-    ...mapGetters('auth', ['user']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.ref'),
-          value: 'ref',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
-          value: 'inventory',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.price'),
-          value: 'price',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
-          value: 'cost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'cant',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
-          value: 'totalPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  async created () {
-    this.loadingData = true
-    this.formValid = false
-    await this.getArticles().then(() => {
-      this.articles.forEach((value) => {
-        if (value.track_inventory) {
-          if (!value.parent_id) {
-            let inventory = 0
-            if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
-                if (v.articles_shops.length > 0) {
-                  v.articles_shops.forEach((k) => {
-                    inventory += k.stock ? parseFloat(k.stock) : 0
-                  })
-                }
-                this.localArticles.push({
-                  ref: value.ref,
-                  name: value.name + '(' + v.name + ')',
-                  price: v.price ? v.price : 0,
-                  cost: v.cost ? v.cost : 0,
-                  inventory: inventory || 0,
-                  cant: 1,
-                  totalCost: v.cost,
-                  totalPrice: v.price,
-                  article_id: v.id
-                })
-              })
-            } else {
-              if (value.articles_shops.length > 0) {
-                value.articles_shops.forEach((k) => {
-                  inventory += k.stock ? parseFloat(k.stock) : 0
-                })
-              }
-              this.localArticles.push({
-                ref: value.ref,
-                name: value.name,
-                price: value.price ? value.price : 0,
-                cost: value.cost ? value.cost : 0,
-                inventory: inventory || 0,
-                cant: 1,
-                totalCost: value.cost,
-                totalPrice: value.price,
-                article_id: value.id
-              })
-            }
-          }
-        }
-      })
-    })
-    await this.editInventory.articles.forEach((article) => {
-      const invData = this.editInventory.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
-      article.totalPrice = invData.cant * article.price
-      article.totalCost = invData.cant * invData.cost
-    })
-    this.loadingData = false
-  },
-  methods: {
-    ...mapActions('inventory', ['updateInventory']),
-    ...mapActions('article', ['getArticles']),
-    selectArticle (item) {
-      if (item) {
-        if (this.editInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
-          this.editInventory.articles.push(item)
-        } else {
-          this.showInfoAdd = true
-        }
-      }
-    },
-    deleteItem (item) {
-      this.editInventory.articles.splice(this.editInventory.articles.indexOf(item), 1)
-      this.update = true
-    },
-    calcTotal: function (item) {
-      this.editedIndex = this.editInventory.articles.indexOf(item)
-      this.editInventory.articles[this.editedIndex].totalPrice = parseFloat(this.editInventory.articles[this.editedIndex].price * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
-      this.editInventory.articles[this.editedIndex].totalCost = parseFloat(this.editInventory.articles[this.editedIndex].cost * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
-      this.update = true
-    },
-    closeInfoAdd () {
-      this.showInfoAdd = false
-    },
-    async HandlerEditInventory () {
-      if (this.editInventory.articles.length > 0) {
-        if (this.$refs.form.validate()) {
-          this.loading = true
-          await this.updateInventory(this.editInventory)
-          await this.$router.push({ name: 'supply_product' })
-        }
-      } else {
-        this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_cant_article'
-        ))
-      }
-    },
-    shopMessageError (message) {
-      this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.titles.edit', [
-          this.$vuetify.lang.t('$vuetify.menu.supply_productS')
-        ]),
-        text: message,
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonText: this.$vuetify.lang.t(
-          '$vuetify.actions.accept'
-        ),
-        confirmButtonColor: 'red'
-      })
-    }
-  }
+	name: 'EditInventory',
+	components: { AppLoading, ResumeSupply, DetailSupplier },
+	data () {
+		return {
+			loadingData: false,
+			editedIndex: -1,
+			localArticles: [],
+			formValid: false,
+			update: false,
+			panel: [0, 1, 2],
+			showInfoAdd: false
+		}
+	},
+	computed: {
+		...mapState('inventory', ['editInventory', 'isActionInProgress']),
+		...mapState('article', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'articles',
+			'isTableLoading'
+		]),
+		...mapGetters('auth', ['user']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.ref'),
+					value: 'ref',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
+					value: 'inventory',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.price'),
+					value: 'price',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+					value: 'cost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+					value: 'cant',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+					value: 'totalPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					value: 'totalCost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	async created () {
+		this.loadingData = true
+		this.formValid = false
+		await this.getArticles().then(() => {
+			this.articles.forEach((value) => {
+				if (value.track_inventory) {
+					if (!value.parent_id) {
+						let inventory = 0
+						if (value.variant_values.length > 0) {
+							value.variant_values.forEach((v) => {
+								if (v.articles_shops.length > 0) {
+									v.articles_shops.forEach((k) => {
+										inventory += k.stock ? parseFloat(k.stock) : 0
+									})
+								}
+								this.localArticles.push({
+									ref: value.ref,
+									name: value.name + '(' + v.name + ')',
+									price: v.price ? v.price : 0,
+									cost: v.cost ? v.cost : 0,
+									inventory: inventory || 0,
+									cant: 1,
+									totalCost: v.cost,
+									totalPrice: v.price,
+									article_id: v.id
+								})
+							})
+						} else {
+							if (value.articles_shops.length > 0) {
+								value.articles_shops.forEach((k) => {
+									inventory += k.stock ? parseFloat(k.stock) : 0
+								})
+							}
+							this.localArticles.push({
+								ref: value.ref,
+								name: value.name,
+								price: value.price ? value.price : 0,
+								cost: value.cost ? value.cost : 0,
+								inventory: inventory || 0,
+								cant: 1,
+								totalCost: value.cost,
+								totalPrice: value.price,
+								article_id: value.id
+							})
+						}
+					}
+				}
+			})
+		})
+		await this.editInventory.articles.forEach((article) => {
+			const invData = this.editInventory.articles_shops.filter(arSh => arSh.articles_shops.article_id === article.id)[0]
+			article.totalPrice = invData.cant * article.price
+			article.totalCost = invData.cant * invData.cost
+		})
+		this.loadingData = false
+	},
+	methods: {
+		...mapActions('inventory', ['updateInventory']),
+		...mapActions('article', ['getArticles']),
+		selectArticle (item) {
+			if (item) {
+				if (this.editInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
+					this.editInventory.articles.push(item)
+				} else {
+					this.showInfoAdd = true
+				}
+			}
+		},
+		deleteItem (item) {
+			this.editInventory.articles.splice(this.editInventory.articles.indexOf(item), 1)
+			this.update = true
+		},
+		calcTotal: function (item) {
+			this.editedIndex = this.editInventory.articles.indexOf(item)
+			this.editInventory.articles[this.editedIndex].totalPrice = parseFloat(this.editInventory.articles[this.editedIndex].price * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
+			this.editInventory.articles[this.editedIndex].totalCost = parseFloat(this.editInventory.articles[this.editedIndex].cost * this.editInventory.articles[this.editedIndex].cant).toFixed(2)
+			this.update = true
+		},
+		closeInfoAdd () {
+			this.showInfoAdd = false
+		},
+		async HandlerEditInventory () {
+			if (this.editInventory.articles.length > 0) {
+				if (this.$refs.form.validate()) {
+					this.loading = true
+					await this.updateInventory(this.editInventory)
+					await this.$router.push({ name: 'supply_product' })
+				}
+			} else {
+				this.shopMessageError(this.$vuetify.lang.t(
+					'$vuetify.messages.warning_cant_article'
+				))
+			}
+		},
+		shopMessageError (message) {
+			this.$Swal.fire({
+				title: this.$vuetify.lang.t('$vuetify.titles.edit', [
+					this.$vuetify.lang.t('$vuetify.menu.supply_productS')
+				]),
+				text: message,
+				icon: 'warning',
+				showCancelButton: false,
+				confirmButtonText: this.$vuetify.lang.t(
+					'$vuetify.actions.accept'
+				),
+				confirmButtonColor: 'red'
+			})
+		}
+	}
 }
 </script>
 

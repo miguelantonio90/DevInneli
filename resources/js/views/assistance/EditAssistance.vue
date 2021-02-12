@@ -143,60 +143,60 @@ import { mapActions, mapState } from 'vuex'
 import { differenceInHours } from 'date-fns'
 
 export default {
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('assistance', ['saved', 'editAssistance', 'isActionInProgress']),
-    ...mapState('user', ['users', 'isUserTableLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    datetimeEntry: {
-      get () {
-        return new Date(this.editAssistance.datetimeEntry)
-      },
-      set (val) {
-        this.editAssistance.datetimeEntry = val
-      }
-    },
-    datetimeExit: {
-      get () {
-        return new Date(this.editAssistance.datetimeExit)
-      },
-      set (val) {
-        this.editAssistance.datetimeExit = val
-      }
-    },
-    getTotalHours () {
-      return `${this.editAssistance.datetimeEntry === '' ||
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('assistance', ['saved', 'editAssistance', 'isActionInProgress']),
+		...mapState('user', ['users', 'isUserTableLoading']),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		datetimeEntry: {
+			get () {
+				return new Date(this.editAssistance.datetimeEntry)
+			},
+			set (val) {
+				this.editAssistance.datetimeEntry = val
+			}
+		},
+		datetimeExit: {
+			get () {
+				return new Date(this.editAssistance.datetimeExit)
+			},
+			set (val) {
+				this.editAssistance.datetimeExit = val
+			}
+		},
+		getTotalHours () {
+			return `${this.editAssistance.datetimeEntry === '' ||
       this.editAssistance.datetimeExit === ''
-          ? 0 : differenceInHours(
-              new Date(this.editAssistance.datetimeExit),
-              new Date(this.editAssistance.datetimeEntry)
-          )}`
-    }
-  },
-  created () {
-    this.getUsers()
-    this.getShops()
-  },
-  mounted () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('assistance', ['updateAssistance', 'toogleEditModal']),
-    ...mapActions('shop', ['getShops']),
-    ...mapActions('user', ['getUsers']),
+				? 0 : differenceInHours(
+					new Date(this.editAssistance.datetimeExit),
+					new Date(this.editAssistance.datetimeEntry)
+				)}`
+		}
+	},
+	created () {
+		this.getUsers()
+		this.getShops()
+	},
+	mounted () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('assistance', ['updateAssistance', 'toogleEditModal']),
+		...mapActions('shop', ['getShops']),
+		...mapActions('user', ['getUsers']),
 
-    async updateAssistanceHandler () {
-      if (this.$refs.form.validate()) {
-        this.editAssistance.totalHours = this.getTotalHours
-        await this.updateAssistance(this.editAssistance)
-      }
-    }
-  }
+		async updateAssistanceHandler () {
+			if (this.$refs.form.validate()) {
+				this.editAssistance.totalHours = this.getTotalHours
+				await this.updateAssistance(this.editAssistance)
+			}
+		}
+	}
 }
 </script>
 

@@ -80,49 +80,49 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewBox',
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('boxes', ['saved', 'newBox', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  async created () {
-    this.formValid = false
-    await this.getShops().then((s) => {
-      this.newBox.shop = this.shops[0]
-    })
-  },
-  methods: {
-    ...mapActions('boxes', ['createBox', 'toogleNewModal']),
-    ...mapActions('shop', ['getShops']),
-    inputColor (color) {
-      this.newBox.color = color
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async createNewBox () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createBox(this.newBox)
-      }
-    }
-  }
+	name: 'NewBox',
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('boxes', ['saved', 'newBox', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	async created () {
+		this.formValid = false
+		await this.getShops().then((s) => {
+			this.newBox.shop = this.shops[0]
+		})
+	},
+	methods: {
+		...mapActions('boxes', ['createBox', 'toogleNewModal']),
+		...mapActions('shop', ['getShops']),
+		inputColor (color) {
+			this.newBox.color = color
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async createNewBox () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createBox(this.newBox)
+			}
+		}
+	}
 }
 </script>
 

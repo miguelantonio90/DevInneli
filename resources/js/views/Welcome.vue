@@ -72,20 +72,20 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Welcome',
-  computed: {
-    ...mapState('auth', ['isLoggedIn', 'userData']),
-    ...mapGetters(['errors'])
-  },
-  mounted () {
-    this.getUserData()
-  },
-  created () {
-    this.getUserData()
-  },
-  methods: {
-    ...mapActions('auth', ['getUserData'])
-  }
+	name: 'Welcome',
+	computed: {
+		...mapState('auth', ['isLoggedIn', 'userData']),
+		...mapGetters(['errors'])
+	},
+	mounted () {
+		this.getUserData()
+	},
+	created () {
+		this.getUserData()
+	},
+	methods: {
+		...mapActions('auth', ['getUserData'])
+	}
 }
 </script>
 

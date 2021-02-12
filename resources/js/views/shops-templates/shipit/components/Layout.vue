@@ -160,31 +160,31 @@
 
 import { mapActions, mapState } from 'vuex'
 export default {
-  data () {
-    return {
-      items: [
-        { title: 'T-Shirts' },
-        { title: 'Jackets' },
-        { title: 'Shirts' },
-        { title: 'Jeans' },
-        { title: 'Shoes' }
-      ],
-      activeBtn: 1
-    }
-  },
-  computed: {
-    ...mapState('category', [
-      'categories',
-      'isTableLoading'
-    ])
-  },
-  created () {
-    this.getShopData(this.$route.params)
-  },
-  methods: {
-    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
-    ...mapActions('shop', ['getShopData'])
+	data () {
+		return {
+			items: [
+				{ title: 'T-Shirts' },
+				{ title: 'Jackets' },
+				{ title: 'Shirts' },
+				{ title: 'Jeans' },
+				{ title: 'Shoes' }
+			],
+			activeBtn: 1
+		}
+	},
+	computed: {
+		...mapState('category', [
+			'categories',
+			'isTableLoading'
+		])
+	},
+	created () {
+		this.getShopData(this.$route.params)
+	},
+	methods: {
+		...mapActions('category', ['getCategories', 'getCategoriesShop']),
+		...mapActions('shop', ['getShopData'])
 
-  }
+	}
 }
 </script>

@@ -119,80 +119,80 @@ import { mapActions, mapState } from 'vuex'
 import NewBox from '../boxes/NewBox'
 
 export default {
-  name: 'NewRefound',
-  components: { NewBox },
-  data () {
-    return {
-      formValid: false,
-      localBoxes: [],
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('refund', ['saved', 'newRefund', 'isActionInProgress']),
-    ...mapState('boxes', ['boxes', 'showNewModal']),
-    disabledButon () {
-      return this.newRefund.cant > 0 || this.newRefund.money > 0
-    }
-  },
-  watch: {
-    boxes: function () {
-      this.getLocalBoxes()
-    }
-  },
-  async created () {
-    if (this.newRefund.sale.type === 'sale') {
-      await this.getBoxes()
-    }
-  },
-  methods: {
-    ...mapActions('refund', ['toogleNewModal', 'createRefund']),
-    ...mapActions('boxes', ['getBoxes']),
-    async handlerRefund () {
-      let totalCantRefund = 0
-      let totalMoneyRefund = 0
-      this.newRefund.article.refounds.forEach((v) => {
-        totalCantRefund += parseFloat(v.cant)
-        totalMoneyRefund += parseFloat(v.money)
-      })
+	name: 'NewRefound',
+	components: { NewBox },
+	data () {
+		return {
+			formValid: false,
+			localBoxes: [],
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('refund', ['saved', 'newRefund', 'isActionInProgress']),
+		...mapState('boxes', ['boxes', 'showNewModal']),
+		disabledButon () {
+			return this.newRefund.cant > 0 || this.newRefund.money > 0
+		}
+	},
+	watch: {
+		boxes: function () {
+			this.getLocalBoxes()
+		}
+	},
+	async created () {
+		if (this.newRefund.sale.type === 'sale') {
+			await this.getBoxes()
+		}
+	},
+	methods: {
+		...mapActions('refund', ['toogleNewModal', 'createRefund']),
+		...mapActions('boxes', ['getBoxes']),
+		async handlerRefund () {
+			let totalCantRefund = 0
+			let totalMoneyRefund = 0
+			this.newRefund.article.refounds.forEach((v) => {
+				totalCantRefund += parseFloat(v.cant)
+				totalMoneyRefund += parseFloat(v.money)
+			})
 
-      if (this.newRefund.cant > this.newRefund.article.cant - totalCantRefund || this.newRefund.cant < 0) {
-        this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]))
-      } else if (this.newRefund.money > this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund || this.newRefund.money < 0) {
-        this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
-          [totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)])
-        )
-      } else if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createRefund(this.newRefund).then(() => {
-          this.$emit('updateParent')
-        }).catch(() => {
-          this.loading = false
-        })
-      }
-    },
-    getLocalBoxes () {
-      this.localBoxes = []
-      if (this.newRefund.sale.shop) {
-        this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newRefund.sale.shop.id)
-        if (this.localBoxes.length > 0) { this.newRefund.box = this.localBoxes[0] }
-      }
-    },
-    showMessage (textMsg) {
-      this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-          this.$vuetify.lang.t('$vuetify.menu.articles')
-        ]),
-        text: textMsg,
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonText: this.$vuetify.lang.t(
-          '$vuetify.actions.accept'
-        ),
-        confirmButtonColor: 'red'
-      })
-    }
-  }
+			if (this.newRefund.cant > this.newRefund.article.cant - totalCantRefund || this.newRefund.cant < 0) {
+				this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Cant', [totalCantRefund], [parseFloat(this.newRefund.article.cant - totalCantRefund).toFixed(2)]))
+			} else if (this.newRefund.money > this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund || this.newRefund.money < 0) {
+				this.showMessage(this.$vuetify.lang.t('$vuetify.messages.warning_refund_Money',
+					[totalMoneyRefund], [parseFloat(this.newRefund.article.cant * this.newRefund.article.price - totalMoneyRefund).toFixed(2)])
+				)
+			} else if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createRefund(this.newRefund).then(() => {
+					this.$emit('updateParent')
+				}).catch(() => {
+					this.loading = false
+				})
+			}
+		},
+		getLocalBoxes () {
+			this.localBoxes = []
+			if (this.newRefund.sale.shop) {
+				this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.newRefund.sale.shop.id)
+				if (this.localBoxes.length > 0) { this.newRefund.box = this.localBoxes[0] }
+			}
+		},
+		showMessage (textMsg) {
+			this.$Swal.fire({
+				title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+					this.$vuetify.lang.t('$vuetify.menu.articles')
+				]),
+				text: textMsg,
+				icon: 'warning',
+				showCancelButton: false,
+				confirmButtonText: this.$vuetify.lang.t(
+					'$vuetify.actions.accept'
+				),
+				confirmButtonColor: 'red'
+			})
+		}
+	}
 }
 </script>
 

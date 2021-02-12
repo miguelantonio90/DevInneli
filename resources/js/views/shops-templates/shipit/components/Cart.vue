@@ -34,10 +34,9 @@
                   <td>
                     <v-list-item
                       key="1"
-                      @click=""
                     >
                       <v-list-item-avatar>
-                        <v-img :src="require('../assets/img/shop/1.jpg')" />
+                        <v-img src="../assets/shop/img/shop/1.jpg" />
                       </v-list-item-avatar>
 
                       <v-list-item-content>
@@ -65,10 +64,9 @@
                   <td>
                     <v-list-item
                       key="1"
-                      @click=""
                     >
                       <v-list-item-avatar>
-                        <v-img :src="require('../assets/img/shop/2.jpg')" />
+                        <v-img src="../assets/shop/img/shop/2.jpg" />
                       </v-list-item-avatar>
 
                       <v-list-item-content>
@@ -183,8 +181,7 @@
                 </p>
               </v-col>
             </v-row>
-          </v-col>
-          <v-col class="col-12 col-md-4 col-sm-12">
+
             <v-row>
               <v-col
                 class="col-12 col-sm-3 pr-4"
@@ -231,25 +228,25 @@
 </template>
 <script>
 export default {
-  data: () => ({
-    rating: 4.5,
-    breadcrums: [
-      {
-        text: 'Home',
-        disabled: false,
-        href: 'breadcrumbs_home'
-      },
-      {
-        text: 'Clothing',
-        disabled: false,
-        href: 'breadcrumbs_clothing'
-      },
-      {
-        text: 'T-Shirts',
-        disabled: true,
-        href: 'breadcrumbs_shirts'
-      }
-    ]
-  })
+	data: () => ({
+		rating: 4.5,
+		breadcrums: [
+			{
+				text: 'Home',
+				disabled: false,
+				href: 'breadcrumbs_home'
+			},
+			{
+				text: 'Clothing',
+				disabled: false,
+				href: 'breadcrumbs_clothing'
+			},
+			{
+				text: 'T-Shirts',
+				disabled: true,
+				href: 'breadcrumbs_shirts'
+			}
+		]
+	})
 }
 </script>

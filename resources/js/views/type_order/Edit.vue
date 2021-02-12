@@ -103,30 +103,30 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('typeOrder', ['editOrder', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  created () {
-    this.formValid = false
-    this.getShops()
-  },
-  methods: {
-    ...mapActions('typeOrder', ['updateTypeOrder', 'toogleEditModal']),
-    ...mapActions('shop', ['getShops']),
-    async handleSubmit () {
-      if (this.$refs.form.validate()) {
-        await this.updateTypeOrder(this.editOrder)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('typeOrder', ['editOrder', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	created () {
+		this.formValid = false
+		this.getShops()
+	},
+	methods: {
+		...mapActions('typeOrder', ['updateTypeOrder', 'toogleEditModal']),
+		...mapActions('shop', ['getShops']),
+		async handleSubmit () {
+			if (this.$refs.form.validate()) {
+				await this.updateTypeOrder(this.editOrder)
+			}
+		}
+	}
 }
 </script>
 

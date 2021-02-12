@@ -238,177 +238,177 @@ import DetailRefund from '../refund/DetailRefund'
 import ListPay from '../pay/ListPay'
 import DetailArticleCost from './DetailArticleCost'
 export default {
-  name: 'ListBuy',
-  components: { DetailRefund, NewRefound, ListPay, DetailArticleCost },
-  data () {
-    return {
-      menu: false,
-      fav: true,
-      message: false,
-      hints: true,
-      localInventories: [],
-      search: '',
-      localAccess: {},
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('inventory', [
-      'showNewModal',
-      'showEditModal',
-      'loading',
-      'showShowModal',
-      'inventories',
-      'isTableLoading'
-    ]),
-    ...mapState('article', ['articles']),
-    ...mapState('refund', ['showNewModal']),
-    ...mapGetters('auth', ['user', 'access_permit']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  watch: {
-    inventories: function () {
-      this.localInventories = []
-      this.inventories.forEach((value) => {
-        const inventory = value
-        value.articles.forEach((v, i) => {
-          if (v.parent_id) { inventory.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
-        })
-        this.localInventories.push(inventory)
-      })
-    },
-    loadData: function () {
-      if (this.loadData === true) { this.loadInitData() }
-    }
-  },
-  created () {
-    this.loadInitData()
-  },
-  methods: {
-    ...mapActions('inventory', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getInventories',
-      'updateInventory',
-      'deleteInventory'
-    ]),
-    ...mapActions('article', ['getArticles']),
-    ...mapActions('refund', ['openNewModal']),
-    async loadInitData () {
-      this.localInventories = []
-      await this.getArticles()
-      await this.getInventories()
-    },
-    refundArticle (sale, article) {
-      if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
-        this.$Swal.fire({
-          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
-          ]),
-          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'),
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
-      } else {
-        this.openNewModal({ sale, article })
-      }
-    },
-    cancelProductPreform (item, art) {
-    },
-    total_pay (item) {
-      let sum = 0
-      item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-      })
-      let discount = 0
-      item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-      })
-      return item.cant * item.cost + sum - discount - item.moneyRefund
-    },
-    createBuyHandler () {
-      if (this.articles.length === 0) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-              this.$vuetify.lang.t('$vuetify.supply.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_no_article'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      } else {
-        this.$store.state.inventory.managerInventory = false
-        this.$router.push({ name: 'supply_add' })
-      }
-    },
-    editBuyHandler ($event) {
-      this.openEditModal($event)
-      this.$store.state.inventory.managerInventory = true
-      this.$router.push({ name: 'supply_edit' })
-    },
-    deleteBuyHandler (articleId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.supply.name')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.isConfirmed) this.deleteInventory(articleId)
-        })
-    }
-  }
+	name: 'ListBuy',
+	components: { DetailRefund, NewRefound, ListPay, DetailArticleCost },
+	data () {
+		return {
+			menu: false,
+			fav: true,
+			message: false,
+			hints: true,
+			localInventories: [],
+			search: '',
+			localAccess: {},
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('inventory', [
+			'showNewModal',
+			'showEditModal',
+			'loading',
+			'showShowModal',
+			'inventories',
+			'isTableLoading'
+		]),
+		...mapState('article', ['articles']),
+		...mapState('refund', ['showNewModal']),
+		...mapGetters('auth', ['user', 'access_permit']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+					value: 'no_facture',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					value: 'totalCost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	watch: {
+		inventories: function () {
+			this.localInventories = []
+			this.inventories.forEach((value) => {
+				const inventory = value
+				value.articles.forEach((v, i) => {
+					if (v.parent_id) { inventory.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+				})
+				this.localInventories.push(inventory)
+			})
+		},
+		loadData: function () {
+			if (this.loadData === true) { this.loadInitData() }
+		}
+	},
+	created () {
+		this.loadInitData()
+	},
+	methods: {
+		...mapActions('inventory', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getInventories',
+			'updateInventory',
+			'deleteInventory'
+		]),
+		...mapActions('article', ['getArticles']),
+		...mapActions('refund', ['openNewModal']),
+		async loadInitData () {
+			this.localInventories = []
+			await this.getArticles()
+			await this.getInventories()
+		},
+		refundArticle (sale, article) {
+			if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
+				this.$Swal.fire({
+					title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+						this.$vuetify.lang.t('$vuetify.menu.articles')
+					]),
+					text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'),
+					icon: 'warning',
+					showCancelButton: false,
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.accept'
+					),
+					confirmButtonColor: 'red'
+				})
+			} else {
+				this.openNewModal({ sale, article })
+			}
+		},
+		cancelProductPreform (item, art) {
+		},
+		total_pay (item) {
+			let sum = 0
+			item.taxes.forEach((v) => {
+				sum += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+			})
+			let discount = 0
+			item.discount.forEach((v) => {
+				discount += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+			})
+			return item.cant * item.cost + sum - discount - item.moneyRefund
+		},
+		createBuyHandler () {
+			if (this.articles.length === 0) {
+				this.$Swal
+					.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+							this.$vuetify.lang.t('$vuetify.supply.name')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_no_article'
+						),
+						icon: 'warning',
+						showCancelButton: false,
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.accept'
+						),
+						confirmButtonColor: 'red'
+					})
+			} else {
+				this.$store.state.inventory.managerInventory = false
+				this.$router.push({ name: 'supply_add' })
+			}
+		},
+		editBuyHandler ($event) {
+			this.openEditModal($event)
+			this.$store.state.inventory.managerInventory = true
+			this.$router.push({ name: 'supply_edit' })
+		},
+		deleteBuyHandler (articleId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.supply.name')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.isConfirmed) this.deleteInventory(articleId)
+				})
+		}
+	}
 }
 </script>
 

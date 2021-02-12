@@ -55,44 +55,44 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListCategoryAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('category', [
-      'categories',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.color'),
-          value: 'color'
-        }
-      ]
-    }
-  },
-  created () {
-    this.getCategories()
-  },
-  methods: {
-    ...mapActions('category', [
-      'getCategories'
-    ])
-  }
+	name: 'ListCategoryAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('category', [
+			'categories',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.color'),
+					value: 'color'
+				}
+			]
+		}
+	},
+	created () {
+		this.getCategories()
+	},
+	methods: {
+		...mapActions('category', [
+			'getCategories'
+		])
+	}
 }
 </script>
 

@@ -40,15 +40,15 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 export default {
-  name: 'CircleStatistic',
-  props: {
-    icon: String,
-    title: String,
-    subTitle: String,
-    caption: String,
-    value: Number,
-    color: String
-  }
+	name: 'CircleStatistic',
+	props: {
+		icon: String,
+		title: String,
+		subTitle: String,
+		caption: String,
+		value: Number,
+		color: String
+	}
 }
 </script>
 

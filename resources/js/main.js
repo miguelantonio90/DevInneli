@@ -21,22 +21,22 @@ Vue.use(VueTour)
 const eventsHub = new Vue()
 
 Vue.use(IdleVue, {
-  eventEmitter: eventsHub,
-  store,
-  idleTime: 600000, // 10 min,
-  startAtIdle: false
+	eventEmitter: eventsHub,
+	store,
+	idleTime: 600000, // 10 min,
+	startAtIdle: false
 })
 
 Vue.config.productionTip = false
 
 Vue.use(VueTelInputVuetify, {
-  vuetify
+	vuetify
 })
 Vue.use({ install: AppComponents.install })
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: (h) => h(App)
+	router,
+	store,
+	vuetify,
+	render: (h) => h(App)
 }).$mount('#app')

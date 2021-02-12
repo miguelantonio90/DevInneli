@@ -164,92 +164,95 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Register',
-  data () {
-    return {
-      errorPhone: null,
-      countrySelect: null,
-      loading: false,
-      formValid: false,
-      hidePassword1: true,
-      hidePassword2: true,
-      formRule: this.$rules,
-      passwordConfirmation: [
-        (v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
-          this.$vuetify.lang.t('$vuetify.confirm_password')
-        ]),
-        (v) => (!!v && v) === this.formRegister.password ||
-            this.$vuetify.lang.t(
-              '$vuetify.rule.match',
-              [this.$vuetify.lang.t('$vuetify.password')],
-              [this.$vuetify.lang.t('$vuetify.confirm_password')]
-            )
-      ]
-    }
-  },
-  computed: {
-    ...mapState('auth', ['isLoggedIn', 'formRegister']),
-    ...mapGetters(['errors']),
-    ...mapState('statics', ['arrayCountry', 'arraySector']),
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['sendRegisterRequest']),
-    customFilter (item, queryText, itemText) {
-      return this.$vuetify.lang.t('$vuetify.sector.' + item.value).toLowerCase().indexOf(queryText.toLowerCase()) > -1
-    },
-    onCountry (event) {
-      this.formRegister.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.formRegister.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    async registerUser () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        this.formRegister.country = this.arrayCountry.filter(count => count.id === this.countrySelect.iso2)[0]
-        await setTimeout(() => {
-          this.sendRegisterRequest(this.formRegister).then(() => {
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        }, 1000)
-      }
-    }
-  }
+	name: 'Register',
+	data () {
+		return {
+			errorPhone: null,
+			countrySelect: null,
+			loading: false,
+			formValid: false,
+			hidePassword1: true,
+			hidePassword2: true,
+			formRule: this.$rules,
+			passwordConfirmation: [
+				(v) => !!v || this.$vuetify.lang.t('$vuetify.rule.required', [
+					this.$vuetify.lang.t('$vuetify.confirm_password')
+				]),
+				(v) => (!!v && v) === this.formRegister.password ||
+            this.$vuetify.lang.t('$vuetify.rule.match', [this.$vuetify.lang.t('$vuetify.password')], [this.$vuetify.lang.t('$vuetify.confirm_password')])
+			]
+		}
+	},
+	computed: {
+		...mapState('auth', ['isLoggedIn', 'formRegister']),
+		...mapGetters(['errors']),
+		...mapState('statics', ['arrayCountry', 'arraySector']),
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+	  const data = JSON.parse(atob(this.$route.params.hash))
+		if (data) {
+		  this.formRegister.shopName = data.name
+		  this.formRegister.email = data.email
+		}
+	},
+	methods: {
+		...mapActions('auth', ['sendRegisterRequest']),
+		customFilter (item, queryText, itemText) {
+			return this.$vuetify.lang.t('$vuetify.sector.' + item.value).toLowerCase().indexOf(queryText.toLowerCase()) > -1
+		},
+		onCountry (event) {
+			this.formRegister.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.formRegister.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		async registerUser () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				this.formRegister.country = this.arrayCountry.filter(count => count.id === this.countrySelect.iso2)[0]
+				await setTimeout(() => {
+					this.sendRegisterRequest(this.formRegister).then(() => {
+						this.loading = false
+					}).catch(() => {
+						this.loading = false
+					})
+				}, 1000)
+			}
+		}
+	}
 }
 </script>
 

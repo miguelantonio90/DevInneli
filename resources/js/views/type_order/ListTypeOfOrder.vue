@@ -44,97 +44,97 @@ import NewTypeOrder from './New'
 import EditTypeOrder from './Edit'
 
 export default {
-  name: 'ListTypeOfOrder',
-  components: {
-    NewTypeOrder,
-    EditTypeOrder
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('typeOrder', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'typeOrders',
-      'isTableLoading'
-    ]),
-    ...mapGetters('auth', ['user']),
-    bindProps () {
-      return {
-        itemKey: Math.random().toString(),
-        groupBy: 'shopName'
-      }
-    },
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.name'),
-          value: 'name',
-          select_filter: true,
-          groupable: false
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.description'),
-          value: 'description'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getTypeOfOrders()
-  },
-  methods: {
-    ...mapActions('typeOrder', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getTypeOfOrders',
-      'setPrincipalTypeOrder',
-      'deleteTypeOrder'
-    ]),
-    deleteHandler (id) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.type_of_order')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteTypeOrder(id)
-        })
-    },
-    setPrincipal (item) {
-      if (item.principal) {
-        this.setPrincipalTypeOrder(item)
-      }
-    }
-  }
+	name: 'ListTypeOfOrder',
+	components: {
+		NewTypeOrder,
+		EditTypeOrder
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('typeOrder', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'typeOrders',
+			'isTableLoading'
+		]),
+		...mapGetters('auth', ['user']),
+		bindProps () {
+			return {
+				itemKey: Math.random().toString(),
+				groupBy: 'shopName'
+			}
+		},
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.name'),
+					value: 'name',
+					select_filter: true,
+					groupable: false
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shopName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.description'),
+					value: 'description'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getTypeOfOrders()
+	},
+	methods: {
+		...mapActions('typeOrder', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getTypeOfOrders',
+			'setPrincipalTypeOrder',
+			'deleteTypeOrder'
+		]),
+		deleteHandler (id) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.type_of_order')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteTypeOrder(id)
+				})
+		},
+		setPrincipal (item) {
+			if (item.principal) {
+				this.setPrincipalTypeOrder(item)
+			}
+		}
+	}
 }
 </script>
 

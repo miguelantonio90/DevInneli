@@ -131,78 +131,78 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'NewTax',
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('tax', ['saved', 'newTax', 'isActionInProgress']),
-    ...mapGetters('auth', ['user']),
-    getTypeTax () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
-          value: 'included'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
-          value: 'added'
-        }
-      ]
-    }
-  },
-  created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('tax', ['createTax', 'toogleNewModal']),
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async validCreate () {
-      this.loading = true
-      await this.createTax(this.newTax).catch(() => {
-        this.loading = false
-      })
-    },
-    createNewTaxHandler () {
-      if (this.$refs.form.validate()) {
-        if (!this.newTax.value || this.newTax.value <= 0) {
-          this.$Swal.fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.articles.tax')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_value_tax'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-            .then((result) => {
-            })
-        } else {
-          this.validCreate()
-        }
-      }
-    }
-  }
+	name: 'NewTax',
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('tax', ['saved', 'newTax', 'isActionInProgress']),
+		...mapGetters('auth', ['user']),
+		getTypeTax () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
+					value: 'included'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
+					value: 'added'
+				}
+			]
+		}
+	},
+	created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('tax', ['createTax', 'toogleNewModal']),
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async validCreate () {
+			this.loading = true
+			await this.createTax(this.newTax).catch(() => {
+				this.loading = false
+			})
+		},
+		createNewTaxHandler () {
+			if (this.$refs.form.validate()) {
+				if (!this.newTax.value || this.newTax.value <= 0) {
+					this.$Swal.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.new', [
+							this.$vuetify.lang.t('$vuetify.articles.tax')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_value_tax'
+						),
+						icon: 'warning',
+						showCancelButton: false,
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.accept'
+						),
+						confirmButtonColor: 'red'
+					})
+						.then((result) => {
+						})
+				} else {
+					this.validCreate()
+				}
+			}
+		}
+	}
 }
 </script>
 

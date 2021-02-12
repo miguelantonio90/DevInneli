@@ -5,7 +5,6 @@ namespace App\Managers;
 
 
 use App\Category;
-use App\Notification;
 use App\Shop;
 use Exception as Exception;
 

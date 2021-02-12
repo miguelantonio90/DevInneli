@@ -174,79 +174,79 @@ import NewDiscount from '../discount/NewDiscount'
 import ListPay from '../pay/ListPay'
 
 export default {
-  name: 'ExtraData',
-  components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
-  props: {
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    sale: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    totalPrice: {
-      type: String,
-      default: '0.00'
-    },
-    totalTax: {
-      type: String,
-      default: '0.00'
-    },
-    totalDiscount: {
-      type: String,
-      default: '0.00'
-    },
-    subTotal: {
-      type: String,
-      default: '0.00'
-    }
-  },
-  data () {
-    return {
-      formRule: this.$rules,
-      localDiscounts: []
-    }
-  },
-  computed: {
-    ...mapState('client', ['clients', 'isClientTableLoading']),
-    ...mapState('tax', ['taxes', 'isTaxLoading']),
-    ...mapState('payment', ['payments', 'isPaymentLoading']),
-    ...mapState('sale', ['newSale', 'editSale']),
-    ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user'])
-  },
-  watch: {
-    discounts: function () {
-      this.getLocalDiscounts()
-    }
-  },
-  async created () {
-    await this.getClients()
-    await this.getTaxes()
-    await this.getPayments()
-    await this.getDiscounts().then(() => {
-      this.getLocalDiscounts()
-    })
-  },
-  methods: {
-    ...mapActions('client', ['getClients']),
-    ...mapActions('tax', ['getTaxes']),
-    ...mapActions('payment', ['getPayments']),
-    ...mapActions('discount', ['getDiscounts']),
-    getLocalDiscounts () {
-      this.discounts.forEach((v) => {
-        this.localDiscounts.push({
-          id: v.id,
-          name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
-          value: v.value,
-          percent: v.percent
-        })
-      })
-    }
-  }
+	name: 'ExtraData',
+	components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
+	props: {
+		edit: {
+			type: Boolean,
+			default: false
+		},
+		sale: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		totalPrice: {
+			type: String,
+			default: '0.00'
+		},
+		totalTax: {
+			type: String,
+			default: '0.00'
+		},
+		totalDiscount: {
+			type: String,
+			default: '0.00'
+		},
+		subTotal: {
+			type: String,
+			default: '0.00'
+		}
+	},
+	data () {
+		return {
+			formRule: this.$rules,
+			localDiscounts: []
+		}
+	},
+	computed: {
+		...mapState('client', ['clients', 'isClientTableLoading']),
+		...mapState('tax', ['taxes', 'isTaxLoading']),
+		...mapState('payment', ['payments', 'isPaymentLoading']),
+		...mapState('sale', ['newSale', 'editSale']),
+		...mapState('discount', ['discounts']),
+		...mapGetters('auth', ['user'])
+	},
+	watch: {
+		discounts: function () {
+			this.getLocalDiscounts()
+		}
+	},
+	async created () {
+		await this.getClients()
+		await this.getTaxes()
+		await this.getPayments()
+		await this.getDiscounts().then(() => {
+			this.getLocalDiscounts()
+		})
+	},
+	methods: {
+		...mapActions('client', ['getClients']),
+		...mapActions('tax', ['getTaxes']),
+		...mapActions('payment', ['getPayments']),
+		...mapActions('discount', ['getDiscounts']),
+		getLocalDiscounts () {
+			this.discounts.forEach((v) => {
+				this.localDiscounts.push({
+					id: v.id,
+					name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
+					value: v.value,
+					percent: v.percent
+				})
+			})
+		}
+	}
 }
 </script>
 

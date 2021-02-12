@@ -69,61 +69,61 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListShopAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('shop', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'shops',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name',
-          select_filter: true
-        }, {
-          text: this.$vuetify.lang.t('$vuetify.name'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'nameCountry',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.phone'),
-          value: 'phone'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getShops()
-  },
-  methods: {
-    ...mapActions('shop', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getShops',
-      'deleteShop'
-    ])
-  }
+	name: 'ListShopAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('shop', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'shops',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name',
+					select_filter: true
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.name'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'nameCountry',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.phone'),
+					value: 'phone'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getShops()
+	},
+	methods: {
+		...mapActions('shop', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getShops',
+			'deleteShop'
+		])
+	}
 }
 </script>
 

@@ -60,25 +60,25 @@
 </template>
 <script>
 export default {
-  name: 'DetailRefund',
-  props: {
-    article: {
-      type: Object,
-      default: () => {}
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      localArticle: {}
-    }
-  },
-  mounted () {
-    this.localArticle = this.article
-  }
+	name: 'DetailRefund',
+	props: {
+		article: {
+			type: Object,
+			default: () => {}
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			localArticle: {}
+		}
+	},
+	mounted () {
+		this.localArticle = this.article
+	}
 }
 </script>
 

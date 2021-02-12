@@ -51,48 +51,48 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListTaxAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('tax', [
-      'taxes',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name',
-          select_filter: true
-        }, {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.value'),
-          value: 'value'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.rate'),
-          value: 'percent'
-        }
-      ]
-    }
-  },
-  created () {
-    this.getTaxes()
-  },
-  methods: {
-    ...mapActions('tax', [
-      'getTaxes'
-    ])
-  }
+	name: 'ListTaxAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('tax', [
+			'taxes',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name',
+					select_filter: true
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.value'),
+					value: 'value'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.rate'),
+					value: 'percent'
+				}
+			]
+		}
+	},
+	created () {
+		this.getTaxes()
+	},
+	methods: {
+		...mapActions('tax', [
+			'getTaxes'
+		])
+	}
 }
 </script>
 

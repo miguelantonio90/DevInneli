@@ -2,7 +2,6 @@
 
 namespace App\Managers;
 
-use App\Client;
 use App\Company;
 use App\Notification;
 use App\Supplier;
@@ -11,26 +10,6 @@ use Exception;
 
 class SupplierManager extends BaseManager
 {
-
-    /**
-     * @return mixed
-     */
-    public function findAllByCompany()
-    {
-        if (auth()->user()['isAdmin'] === 1) {
-            $suppliers = Supplier::latest()
-                ->with('company')
-                ->get();
-        } else {
-            $company = CompanyManager::getCompanyByAdmin();
-            $suppliers = Supplier::latest()
-                ->where('company_id', '=', $company->id)
-                ->with('expanse')
-                ->get();
-        }
-
-        return $suppliers;
-    }
 
     /**
      * @param $data
@@ -150,5 +129,25 @@ class SupplierManager extends BaseManager
         return $users;
 
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function findAllByCompany()
+    {
+        if (auth()->user()['isAdmin'] === 1) {
+            $suppliers = Supplier::latest()
+                ->with('company')
+                ->get();
+        } else {
+            $company = CompanyManager::getCompanyByAdmin();
+            $suppliers = Supplier::latest()
+                ->where('company_id', '=', $company->id)
+                ->with('expanse')
+                ->get();
+        }
+
+        return $suppliers;
     }
 }

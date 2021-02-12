@@ -14,42 +14,42 @@
 
 <script>
 export default {
-  name: 'AvatarPicker',
-  props: {
-    imageSrc: {
-      type: String,
-      default: ''
+	name: 'AvatarPicker',
+	props: {
+		imageSrc: {
+			type: String,
+			default: ''
 
-    },
-    imageStyle: {
-      type: Object,
-      default: null
-    }
-  },
-  data () {
-    return {
-      src: this.imageSrc
-    }
-  },
-  methods: {
-    onChange (event) {
-      if (event.target.files && event.target.files[0]) {
-        const file = event.target.files[0]
-        const reader = new FileReader()
-        reader.addEventListener('load', (e) => {
-          this.src = e.target.result
-          const [, base64] = this.src.split(',')
-          this.$emit('input', {
-            size: file.size,
-            type: file.type,
-            name: file.name,
-            base64: base64
-          })
-        })
-        reader.readAsDataURL(file)
-      }
-    }
-  }
+		},
+		imageStyle: {
+			type: Object,
+			default: null
+		}
+	},
+	data () {
+		return {
+			src: this.imageSrc
+		}
+	},
+	methods: {
+		onChange (event) {
+			if (event.target.files && event.target.files[0]) {
+				const file = event.target.files[0]
+				const reader = new FileReader()
+				reader.addEventListener('load', (e) => {
+					this.src = e.target.result
+					const [, base64] = this.src.split(',')
+					this.$emit('input', {
+						size: file.size,
+						type: file.type,
+						name: file.name,
+						base64: base64
+					})
+				})
+				reader.readAsDataURL(file)
+			}
+		}
+	}
 }
 </script>
 

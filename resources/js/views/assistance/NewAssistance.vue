@@ -143,44 +143,44 @@ import { mapActions, mapState } from 'vuex'
 import { differenceInHours } from 'date-fns'
 
 export default {
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('assistance', ['saved', 'newAssistance', 'isActionInProgress']),
-    ...mapState('user', ['users', 'isUserTableLoading']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    getTotalHours () {
-      return `${this.newAssistance.datetimeEntry === '' ||
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('assistance', ['saved', 'newAssistance', 'isActionInProgress']),
+		...mapState('user', ['users', 'isUserTableLoading']),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		getTotalHours () {
+			return `${this.newAssistance.datetimeEntry === '' ||
       this.newAssistance.datetimeExit === ''
-          ? 0 : differenceInHours(
-              new Date(this.newAssistance.datetimeExit),
-              new Date(this.newAssistance.datetimeEntry)
-          )}`
-    }
-  },
-  created () {
-    this.getUsers()
-    this.getShops()
-  },
-  mounted () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('assistance', ['createAssistance', 'toogleNewModal']),
-    ...mapActions('shop', ['getShops']),
-    ...mapActions('user', ['getUsers']),
+				? 0 : differenceInHours(
+					new Date(this.newAssistance.datetimeExit),
+					new Date(this.newAssistance.datetimeEntry)
+				)}`
+		}
+	},
+	created () {
+		this.getUsers()
+		this.getShops()
+	},
+	mounted () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('assistance', ['createAssistance', 'toogleNewModal']),
+		...mapActions('shop', ['getShops']),
+		...mapActions('user', ['getUsers']),
 
-    async createNewAssistance () {
-      if (this.$refs.form.validate()) {
-        this.newAssistance.totalHours = this.getTotalHours
-        await this.createAssistance(this.newAssistance)
-      }
-    }
-  }
+		async createNewAssistance () {
+			if (this.$refs.form.validate()) {
+				this.newAssistance.totalHours = this.getTotalHours
+				await this.createAssistance(this.newAssistance)
+			}
+		}
+	}
 }
 </script>
 

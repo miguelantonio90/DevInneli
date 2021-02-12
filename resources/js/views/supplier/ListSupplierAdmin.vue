@@ -59,52 +59,52 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListSupplierAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('supplier', [
-      'suppliers',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.email'),
-          value: 'email'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'nameCountry',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.phone'),
-          value: 'phone',
-          select_filter: true
-        }
-      ]
-    }
-  },
-  created () {
-    this.getSuppliers()
-  },
-  methods: {
-    ...mapActions('supplier', ['getSuppliers'])
-  }
+	name: 'ListSupplierAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('supplier', [
+			'suppliers',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.email'),
+					value: 'email'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'nameCountry',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.phone'),
+					value: 'phone',
+					select_filter: true
+				}
+			]
+		}
+	},
+	created () {
+		this.getSuppliers()
+	},
+	methods: {
+		...mapActions('supplier', ['getSuppliers'])
+	}
 }
 </script>
 

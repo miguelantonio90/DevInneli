@@ -105,28 +105,28 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('exchangeRate', ['editChange', 'isActionInProgress']),
-    ...mapState('statics', ['arrayCurrency', 'isCountryLoading'])
-  },
-  created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
-    async handleSubmit () {
-      if (this.$refs.form.validate()) {
-        await this.updateChange(this.editChange)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('exchangeRate', ['editChange', 'isActionInProgress']),
+		...mapState('statics', ['arrayCurrency', 'isCountryLoading'])
+	},
+	created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('exchangeRate', ['updateChange', 'toogleEditModal']),
+		async handleSubmit () {
+			if (this.$refs.form.validate()) {
+				await this.updateChange(this.editChange)
+			}
+		}
+	}
 }
 </script>
 
