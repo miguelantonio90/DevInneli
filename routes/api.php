@@ -49,6 +49,9 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('shop', 'ShopController');
         Route::post('shop/data', 'ShopController@getShopData')->name('getShopData');
+        Route::post('shop/no_config', 'ShopController@getShopNoConfig')->name('getShopNoConfig');
+
+        Route::resource('online', 'ConfigController');
         Route::resource('boxes', 'BoxController');
         Route::post('boxes/sendOpenCloseBox', 'BoxController@sendOpenClose')->name('boxes.sendOpenClose');
         Route::post('boxes/getOpenClose', 'BoxController@getOpenClose')->name('boxes.getOpenClose');

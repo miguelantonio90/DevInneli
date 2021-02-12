@@ -4,6 +4,9 @@ export default {
   fetchShops () {
     return api.get('shop')
   },
+  getShopsNoConfig () {
+    return api.post('shop/no_config')
+  },
   getShopData (data) {
     return api.post('shop/data', data)
   },

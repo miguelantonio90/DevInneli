@@ -2,6 +2,7 @@ import shop from '../../api/shop'
 import data from '../../data'
 
 const FETCHING_SHOPS = 'FETCHING_SHOPS'
+const FETCHING_SHOPS_NO_CONFIG = 'FETCHING_SHOPS_NO_CONFIG'
 const FETCHING_SHOPS_DATA = 'FETCHING_SHOPS_DATA'
 const SWITCH_SHOP_NEW_MODAL = 'SWITCH_SHOP_NEW_MODAL'
 const SWITCH_SHOP_EDIT_MODAL = 'SWITCH_SHOP_EDIT_MODAL'
@@ -19,6 +20,7 @@ const state = {
   showEditModal: false,
   showShowModal: false,
   shops: [],
+  shopsNoConfig: [],
   shopData: [],
   saved: false,
   newShop: {
@@ -69,6 +71,18 @@ const mutations = {
     })
 
     state.shops = shops
+  },
+  [FETCHING_SHOPS_NO_CONFIG] (state, shops) {
+    shops.map((value) => {
+      Object.keys(data.countries).map((key) => {
+        if (key === value.country) {
+          value.nameCountry = data.countries[key].name + '(' + data.countries[key].native + ')'
+          value.countryFlag = data.countries[key].emoji
+        }
+      })
+    })
+
+    state.shopsNoConfig = shops
   },
   [FETCHING_SHOPS_DATA] (state, dataS) {
     Object.keys(data.countries).map((key) => {
@@ -176,6 +190,17 @@ const actions = {
       .fetchShops()
       .then(({ data }) => {
         commit(FETCHING_SHOPS, data.data)
+        commit(SHOP_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
+      }).catch((error) => commit(FAILED_SHOP, error))
+  },
+  async getShopsNoConfig ({ commit }) {
+    commit(SHOP_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await shop
+      .getShopsNoConfig()
+      .then(({ data }) => {
+        commit(FETCHING_SHOPS_NO_CONFIG, data.data)
         commit(SHOP_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data)
       }).catch((error) => commit(FAILED_SHOP, error))

@@ -649,7 +649,7 @@ export const protectedRoute = [
         component: () => import('../views/general/General')
       },
       {
-        path: 'online/setting',
+        path: '/online/setting',
         access: ['manager_shop'],
         name: 'shop_online',
         meta: {
@@ -658,7 +658,33 @@ export const protectedRoute = [
           requiresAuth: true
         },
         children: [],
-        component: () => import('../views/shop/Online-Config')
+        component: () => import('../views/online-config/ListOnlineConfig')
+      },
+      {
+        path: '/online/config.add',
+        name: 'config_add',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
+      },
+      {
+        path: '/online/config.edit',
+        name: 'config_edit',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
       }
     ]
   },

@@ -32,6 +32,7 @@ import supply from './modules/supply'
 import boxes from './modules/boxes'
 import openclose from './modules/openclose'
 import modifiers from './modules/modifiers'
+import online from './modules/online_config'
 
 Vue.use(Vuex, VueAxios, axios)
 
@@ -76,6 +77,7 @@ const store = new Vuex.Store({
     inventory,
     sale,
     supply,
+    online,
     modifiers
   },
   plugins: [vuexLocal.plugin],

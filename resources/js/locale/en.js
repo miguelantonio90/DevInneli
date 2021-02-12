@@ -67,6 +67,7 @@ export default {
   menu: {
     setting: 'Configuration',
     shop_online: 'Online Shop',
+    config_add: 'Shop Online Configuration',
     home: 'Home',
     shops: 'Shops',
     shop: 'Store',

@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\ArticlesShops;
+use App\OnlineConfig;
 use App\Shop;
 use App\User;
 use Exception;
@@ -16,7 +17,6 @@ class ShopManager extends BaseManager
     public function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-
             $shops = Shop::latest()
                 ->with('company')
                 ->get();
@@ -50,6 +50,29 @@ class ShopManager extends BaseManager
             ->with('article')
             ->get();
         return ['shop' => $shop, 'articles' => $ArticlesShops];
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public static function getShopNoConfig()
+    {
+        $company = CompanyManager::getCompanyByAdmin();
+        $created_by = cache()->get('userPin')['id'];
+        $shops = Shop::where('company_id', '=', $company->id)
+            ->with([
+                'users' => function ($q) use ($created_by) {
+                    $q->where('users.id', '=', $created_by);
+                }
+            ])
+            ->get();
+        $result = [];
+        foreach ($shops as $key => $shop) {
+            if (count(OnlineConfig::latest()->where('shop_id', '=', $shop->id)->get()) === 0)
+                $result[] = $shop;
+        }
+        return $result;
     }
 
     /**

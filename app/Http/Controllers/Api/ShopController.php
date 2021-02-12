@@ -50,6 +50,19 @@ class ShopController extends Controller
     }
 
     /**
+     * Display a listing of the resource by shop.
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getShopNoConfig(): JsonResponse
+    {
+        return ResponseHelper::sendResponse(
+            $this->shopManager::getShopNoConfig(),
+            'Categories retrieved successfully.'
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
