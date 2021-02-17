@@ -151,163 +151,163 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      formValid: false,
-      access_permit: [],
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('role', ['saved', 'newAccess', 'isActionInProgress']),
-    ...mapState('keys', ['saved', 'keys', 'isActionInProgress'])
-  },
-  created () {
-    this.formValid = false
-    this.access_permit = [
-      {
-        title: {
-          name: 'manager_article',
-          value: true
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+	data () {
+		return {
+			formValid: false,
+			access_permit: [],
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('role', ['saved', 'newAccess', 'isActionInProgress']),
+		...mapState('keys', ['saved', 'keys', 'isActionInProgress'])
+	},
+	created () {
+		this.formValid = false
+		this.access_permit = [
+			{
+				title: {
+					name: 'manager_article',
+					value: true
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
 
-      },
-      {
-        title: { name: 'manager_refunds', value: false },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: { name: 'manager_boxes', value: false },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false, boxes_open: false, boxes_close: false }
-      },
-      {
-        title: { name: 'manager_vending', value: false },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_category',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_mod',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_supplier',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_buy',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_sell',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_employer',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_assistence',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_client',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_shop',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_access',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_payment',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_expense_category',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_exchange_rate',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_type_of_order',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_tax',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      },
-      {
-        title: {
-          name: 'manager_discount',
-          value: false
-        },
-        actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
-      }
-    ]
-  },
-  methods: {
-    ...mapActions('role', ['createRole', 'toogleNewModal']),
-    async createNewRole () {
-      if (this.$refs.form.validate()) {
-        this.newAccess.access_permit = this.access_permit
-        await this.createRole(this.newAccess)
-      }
-    }
-  }
+			},
+			{
+				title: { name: 'manager_refunds', value: false },
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: { name: 'manager_boxes', value: false },
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false, boxes_open: false, boxes_close: false }
+			},
+			{
+				title: { name: 'manager_vending', value: false },
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_category',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_mod',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_supplier',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_buy',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_sell',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_employer',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_assistence',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_client',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_shop',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_access',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_payment',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_expense_category',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_exchange_rate',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_type_of_order',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_tax',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			},
+			{
+				title: {
+					name: 'manager_discount',
+					value: false
+				},
+				actions: { list: true, create: false, edit: false, delete: false, import: false, export: false }
+			}
+		]
+	},
+	methods: {
+		...mapActions('role', ['createRole', 'toogleNewModal']),
+		async createNewRole () {
+			if (this.$refs.form.validate()) {
+				this.newAccess.access_permit = this.access_permit
+				await this.createRole(this.newAccess)
+			}
+		}
+	}
 }
 </script>
 

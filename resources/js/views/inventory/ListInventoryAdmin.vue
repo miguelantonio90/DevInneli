@@ -139,88 +139,88 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListInventoryAdmin',
-  data () {
-    return {
-      localInventories: [],
-      search: '',
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('inventory', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'inventories',
-      'isTableLoading'
-    ]),
-    ...mapGetters('auth', ['user']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'pay',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.name'),
-          value: 'payments.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.supplier.name'),
-          value: 'supplier.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
-          value: 'totalPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getInventories()
-  },
-  methods: {
-    ...mapActions('inventory', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getInventories',
-      'deleteInventory'
-    ])
-  }
+	name: 'ListInventoryAdmin',
+	data () {
+		return {
+			localInventories: [],
+			search: '',
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('inventory', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'inventories',
+			'isTableLoading'
+		]),
+		...mapGetters('auth', ['user']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+					value: 'no_facture',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.pay.pay'),
+					value: 'pay',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.name'),
+					value: 'payments.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.supplier.name'),
+					value: 'supplier.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					value: 'totalCost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+					value: 'totalPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getInventories()
+	},
+	methods: {
+		...mapActions('inventory', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getInventories',
+			'deleteInventory'
+		])
+	}
 }
 </script>
 

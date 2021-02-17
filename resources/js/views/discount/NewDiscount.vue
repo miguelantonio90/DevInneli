@@ -97,43 +97,43 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewDiscount',
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('discount', ['saved', 'newDiscount', 'isActionInProgress'])
-  },
-  created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('discount', ['createDiscount', 'toogleNewModal']),
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async createNewDiscount () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createDiscount(this.newDiscount).catch(() => {
-          this.loading = false
-        })
-      }
-    }
-  }
+	name: 'NewDiscount',
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('discount', ['saved', 'newDiscount', 'isActionInProgress'])
+	},
+	created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('discount', ['createDiscount', 'toogleNewModal']),
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async createNewDiscount () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createDiscount(this.newDiscount).catch(() => {
+					this.loading = false
+				})
+			}
+		}
+	}
 }
 </script>
 

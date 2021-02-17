@@ -78,27 +78,27 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditPayment',
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
-    ...mapState('statics', ['payments'])
-  },
-  methods: {
-    ...mapActions('payment', ['updatePayment', 'toogleEditModal']),
-    async updatePaymentHandler () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updatePayment(this.editPayment)
-      }
-    }
-  }
+	name: 'EditPayment',
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
+		...mapState('statics', ['payments'])
+	},
+	methods: {
+		...mapActions('payment', ['updatePayment', 'toogleEditModal']),
+		async updatePaymentHandler () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.updatePayment(this.editPayment)
+			}
+		}
+	}
 }
 </script>
 

@@ -109,38 +109,38 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'EditTax',
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('tax', ['saved', 'editTax', 'isActionInProgress']),
-    getTypeTax () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
-          value: 'included'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
-          value: 'added'
-        }
-      ]
-    }
-  },
-  methods: {
-    ...mapActions('tax', ['updateTax', 'toogleEditModal']),
-    async updateTaxHandler () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.updateTax(this.editTax)
-      }
-    }
-  }
+	name: 'EditTax',
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('tax', ['saved', 'editTax', 'isActionInProgress']),
+		getTypeTax () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.include_tax'),
+					value: 'included'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.added_tax'),
+					value: 'added'
+				}
+			]
+		}
+	},
+	methods: {
+		...mapActions('tax', ['updateTax', 'toogleEditModal']),
+		async updateTaxHandler () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.updateTax(this.editTax)
+			}
+		}
+	}
 }
 </script>
 

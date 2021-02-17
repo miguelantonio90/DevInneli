@@ -376,251 +376,251 @@ import ListPay from '../pay/ListPay'
 import DetailArticlePrice from './DetailArticlePrice'
 
 export default {
-  name: 'ListSale',
-  components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay, DetailArticlePrice },
-  data () {
-    return {
-      id: 'Sale',
-      menu: false,
-      fav: true,
-      message: false,
-      hints: true,
-      localSales: [],
-      search: '',
-      localAccess: {},
-      printer: '',
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('sale', [
-      'editSale',
-      'showNewModal',
-      'showEditModal',
-      'loadData',
-      'showShowModal',
-      'sales',
-      'isTableLoading'
-    ]),
-    ...mapState('article', ['articles']),
-    ...mapState('refund', ['showNewModal']),
-    ...mapGetters('auth', ['user', 'access_permit']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.state'),
-          value: 'state',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
-          value: 'totalPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    },
-    stepsHelp () {
-      return [{
-        target: '#btnAdd_' + this.id,
-        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep1'),
-        params: {
-          placement: 'left'
-        }
-      }, {
-        target: '#filter_header_' + this.id,
-        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep2')
-      }, {
-        target: '#' + this.id + ' .v-data-table__wrapper',
-        content: this.$vuetify.lang.t('$vuetify.helpSales.listStep3')
-      }]
-    }
-  },
-  watch: {
-    sales: function () {
-      this.localSales = []
-      this.sales.forEach((value) => {
-        const sale = value
-        value.articles.forEach((v, i) => {
-          if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
-        })
-        this.localSales.push(sale)
-      })
-    },
-    loadData: function () {
-      if (this.loadData === true) { this.loadInitData() }
-    }
-  },
-  created () {
-    this.loadInitData()
-  },
-  methods: {
-    ...mapActions('sale', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getSales',
-      'updateSale',
-      'switchLoadData',
-      'deleteSale'
-    ]),
-    ...mapActions('article', ['getArticles']),
-    ...mapActions('refund', ['openNewModal']),
-    async loadInitData () {
-      this.localSales = []
-      await this.getArticles()
-      await this.getSales()
-      this.switchLoadData(false)
-    },
-    getLocalStates (item) {
-      return item.state === 'open' ? [{
-        text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
-        value: 'open',
-        icon: 'mdi-star-half',
-        color: '#4caf50'
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
-        value: 'cancelled',
-        icon: 'mdi-star-off',
-        color: '#ff0000'
-      }] : [
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
-          value: 'accepted',
-          icon: 'mdi-star',
-          color: '#3f51b5'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
-          value: 'cancelled',
-          icon: 'mdi-star-off',
-          color: '#ff0000'
-        }]
-    },
-    changeState (item) {
-      this.updateSale(item)
-    },
-    refundArticle (sale, article) {
-      if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
-        this.showMessage(this.$vuetify.lang.t('$vuetify.actions.refund', [
-          this.$vuetify.lang.t('$vuetify.menu.articles')
-        ]), this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'))
-      } else {
-        this.openNewModal({ sale, article })
-      }
-    },
-    total_pay (item) {
-      let sum = 0
-      item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
-      let discount = 0
-      item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
-      return item.cant * item.price + sum - discount - item.moneyRefund
-    },
-    createSaleHandler () {
-      if (this.articles.length === 0) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-              this.$vuetify.lang.t('$vuetify.sale.sale')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_no_article'
-            ),
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-      } else {
-        this.$store.state.sale.managerSale = false
-        this.$router.push({ name: 'vending_new' })
-      }
-    },
-    editSaleHandler ($event) {
-      let show = true
-      console.log($event)
-      if (this.sales.filter(sl => sl.id === $event)[0].state === 'accepted') {
-        if (this.sales.filter(sl => sl.id === $event)[0].refounds.length > 0) {
-          show = false
-          this.showMessage(this.$vuetify.lang.t('$vuetify.titles.edit', [
-            this.$vuetify.lang.t('$vuetify.sale.sale')
-          ]), this.$vuetify.lang.t('$vuetify.messages.warning_exist_refunds'))
-        }
-      }
-      if (show) {
-        this.openEditModal($event)
-        this.$store.state.sale.managerSale = true
-        this.$router.push({ name: 'vending_edit' })
-      }
-    },
-    openPrintModal (print, id) {
-      this.printer = print
-      this.openShowModal(id)
-    },
-    deleteSaleHandler (articleId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.sale.sale')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.isConfirmed) this.deleteSale(articleId)
-        })
-    },
-    showMessage (title, msg) {
-      this.$Swal.fire({
-        title: title,
-        text: msg,
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonText: this.$vuetify.lang.t(
-          '$vuetify.actions.accept'
-        ),
-        confirmButtonColor: 'red'
-      })
-    },
-    initTour () {
-      this.$tours.SaleHelp.start()
-    }
-  }
+	name: 'ListSale',
+	components: { PrintFactureLetter, PrintFacture, DetailRefund, NewRefound, ListPay, DetailArticlePrice },
+	data () {
+		return {
+			id: 'Sale',
+			menu: false,
+			fav: true,
+			message: false,
+			hints: true,
+			localSales: [],
+			search: '',
+			localAccess: {},
+			printer: '',
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('sale', [
+			'editSale',
+			'showNewModal',
+			'showEditModal',
+			'loadData',
+			'showShowModal',
+			'sales',
+			'isTableLoading'
+		]),
+		...mapState('article', ['articles']),
+		...mapState('refund', ['showNewModal']),
+		...mapGetters('auth', ['user', 'access_permit']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+					value: 'no_facture',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.state'),
+					value: 'state',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+					value: 'totalPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		},
+		stepsHelp () {
+			return [{
+				target: '#btnAdd_' + this.id,
+				content: this.$vuetify.lang.t('$vuetify.helpSales.listStep1'),
+				params: {
+					placement: 'left'
+				}
+			}, {
+				target: '#filter_header_' + this.id,
+				content: this.$vuetify.lang.t('$vuetify.helpSales.listStep2')
+			}, {
+				target: '#' + this.id + ' .v-data-table__wrapper',
+				content: this.$vuetify.lang.t('$vuetify.helpSales.listStep3')
+			}]
+		}
+	},
+	watch: {
+		sales: function () {
+			this.localSales = []
+			this.sales.forEach((value) => {
+				const sale = value
+				value.articles.forEach((v, i) => {
+					if (v.parent_id) { sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')' }
+				})
+				this.localSales.push(sale)
+			})
+		},
+		loadData: function () {
+			if (this.loadData === true) { this.loadInitData() }
+		}
+	},
+	created () {
+		this.loadInitData()
+	},
+	methods: {
+		...mapActions('sale', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getSales',
+			'updateSale',
+			'switchLoadData',
+			'deleteSale'
+		]),
+		...mapActions('article', ['getArticles']),
+		...mapActions('refund', ['openNewModal']),
+		async loadInitData () {
+			this.localSales = []
+			await this.getArticles()
+			await this.getSales()
+			this.switchLoadData(false)
+		},
+		getLocalStates (item) {
+			return item.state === 'open' ? [{
+				text: this.$vuetify.lang.t('$vuetify.sale.state.open'),
+				value: 'open',
+				icon: 'mdi-star-half',
+				color: '#4caf50'
+			},
+			{
+				text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+				value: 'cancelled',
+				icon: 'mdi-star-off',
+				color: '#ff0000'
+			}] : [
+				{
+					text: this.$vuetify.lang.t('$vuetify.sale.state.accepted'),
+					value: 'accepted',
+					icon: 'mdi-star',
+					color: '#3f51b5'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.sale.state.cancelled'),
+					value: 'cancelled',
+					icon: 'mdi-star-off',
+					color: '#ff0000'
+				}]
+		},
+		changeState (item) {
+			this.updateSale(item)
+		},
+		refundArticle (sale, article) {
+			if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
+				this.showMessage(this.$vuetify.lang.t('$vuetify.actions.refund', [
+					this.$vuetify.lang.t('$vuetify.menu.articles')
+				]), this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'))
+			} else {
+				this.openNewModal({ sale, article })
+			}
+		},
+		total_pay (item) {
+			let sum = 0
+			item.taxes.forEach((v) => {
+				sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
+			})
+			let discount = 0
+			item.discount.forEach((v) => {
+				discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+			})
+			return item.cant * item.price + sum - discount - item.moneyRefund
+		},
+		createSaleHandler () {
+			if (this.articles.length === 0) {
+				this.$Swal
+					.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+							this.$vuetify.lang.t('$vuetify.sale.sale')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_no_article'
+						),
+						icon: 'warning',
+						showCancelButton: false,
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.accept'
+						),
+						confirmButtonColor: 'red'
+					})
+			} else {
+				this.$store.state.sale.managerSale = false
+				this.$router.push({ name: 'vending_new' })
+			}
+		},
+		editSaleHandler ($event) {
+			let show = true
+			console.log($event)
+			if (this.sales.filter(sl => sl.id === $event)[0].state === 'accepted') {
+				if (this.sales.filter(sl => sl.id === $event)[0].refounds.length > 0) {
+					show = false
+					this.showMessage(this.$vuetify.lang.t('$vuetify.titles.edit', [
+						this.$vuetify.lang.t('$vuetify.sale.sale')
+					]), this.$vuetify.lang.t('$vuetify.messages.warning_exist_refunds'))
+				}
+			}
+			if (show) {
+				this.openEditModal($event)
+				this.$store.state.sale.managerSale = true
+				this.$router.push({ name: 'vending_edit' })
+			}
+		},
+		openPrintModal (print, id) {
+			this.printer = print
+			this.openShowModal(id)
+		},
+		deleteSaleHandler (articleId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.sale.sale')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.isConfirmed) this.deleteSale(articleId)
+				})
+		},
+		showMessage (title, msg) {
+			this.$Swal.fire({
+				title: title,
+				text: msg,
+				icon: 'warning',
+				showCancelButton: false,
+				confirmButtonText: this.$vuetify.lang.t(
+					'$vuetify.actions.accept'
+				),
+				confirmButtonColor: 'red'
+			})
+		},
+		initTour () {
+			this.$tours.SaleHelp.start()
+		}
+	}
 }
 </script>
 

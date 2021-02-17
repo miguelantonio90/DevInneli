@@ -166,88 +166,88 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'AdminArticle',
-  data () {
-    return {
-      localArticles: [],
-      search: '',
-      vBindOption: {
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('article', [
-      'showNewModal',
-      'showTransfer',
-      'showEditModal',
-      'showShowModal',
-      'articles',
-      'isTableLoading'
-    ]),
-    ...mapState('category', ['categories', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user']),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'company.country'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.category'),
-          value: 'category.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.price'),
-          value: 'price',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
-          value: 'cost',
-          select_filter: true
-        }, {
-          text: this.$vuetify.lang.t('$vuetify.articles.percent'),
-          value: 'percent',
-          select_filter: true
-        }
-      ]
-    }
-  },
-  created () {
-    this.getArticles()
-  },
-  methods: {
-    ...mapActions('article', [
-      'toogleNewModal',
-      'toogleTransferModal',
-      'openEditModal',
-      'openTransferModal',
-      'openShowModal',
-      'getArticles',
-      'deleteArticle'
-    ]),
-    ...mapActions('category', ['getCategories']),
-    ...mapActions('shop', ['getShops'])
-  }
+	name: 'AdminArticle',
+	data () {
+		return {
+			localArticles: [],
+			search: '',
+			vBindOption: {
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('article', [
+			'showNewModal',
+			'showTransfer',
+			'showEditModal',
+			'showShowModal',
+			'articles',
+			'isTableLoading'
+		]),
+		...mapState('category', ['categories', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		...mapGetters('auth', ['user']),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'company.country'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shopsNames',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.category'),
+					value: 'category.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.price'),
+					value: 'price',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+					value: 'cost',
+					select_filter: true
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.articles.percent'),
+					value: 'percent',
+					select_filter: true
+				}
+			]
+		}
+	},
+	created () {
+		this.getArticles()
+	},
+	methods: {
+		...mapActions('article', [
+			'toogleNewModal',
+			'toogleTransferModal',
+			'openEditModal',
+			'openTransferModal',
+			'openShowModal',
+			'getArticles',
+			'deleteArticle'
+		]),
+		...mapActions('category', ['getCategories']),
+		...mapActions('shop', ['getShops'])
+	}
 }
 </script>
 

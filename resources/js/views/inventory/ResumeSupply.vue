@@ -85,74 +85,74 @@
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ResumeSupply',
-  props: {
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    update: {
-      type: Boolean,
-      default: false
-    },
-    inventory: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      taxes: [],
-      totalTax: 0,
-      sub_total: 0,
-      total: 0
-    }
-  },
-  computed: {
-    ...mapState('inventory', ['newInventory', 'editInventory']),
-    ...mapGetters('auth', ['user']),
-    getCurrency () {
-      return this.currency
-    }
-  },
-  watch: {
-    'inventory.taxes' () {
-      this.updateData()
-    },
-    'inventory.articles' () {
-      this.updateData()
-    },
-    update: function (val) {
-      if (val) {
-        this.updateData()
-      }
-    }
-  },
-  async created () {
-    await this.updateData()
-  },
-  methods: {
-    updateData () {
-      this.totalTax = 0
-      this.total = 0
-      this.sub_total = 0
-      this.inventory.articles.forEach((v) => {
-        this.total = parseFloat(v.cant * v.cost) + this.total
-      })
-      this.inventory.taxes.forEach((v) => {
-        this.totalTax += v.percent === 'true' ? this.total * v.value / 100 : v.value
-      })
-      this.sub_total = (this.total - parseFloat(this.totalTax)).toFixed(2)
-      this.total = parseFloat(this.total).toFixed(2)
-      this.$emit('updateData')
-    }
-  }
+	name: 'ResumeSupply',
+	props: {
+		edit: {
+			type: Boolean,
+			default: false
+		},
+		update: {
+			type: Boolean,
+			default: false
+		},
+		inventory: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			taxes: [],
+			totalTax: 0,
+			sub_total: 0,
+			total: 0
+		}
+	},
+	computed: {
+		...mapState('inventory', ['newInventory', 'editInventory']),
+		...mapGetters('auth', ['user']),
+		getCurrency () {
+			return this.currency
+		}
+	},
+	watch: {
+		'inventory.taxes' () {
+			this.updateData()
+		},
+		'inventory.articles' () {
+			this.updateData()
+		},
+		update: function (val) {
+			if (val) {
+				this.updateData()
+			}
+		}
+	},
+	async created () {
+		await this.updateData()
+	},
+	methods: {
+		updateData () {
+			this.totalTax = 0
+			this.total = 0
+			this.sub_total = 0
+			this.inventory.articles.forEach((v) => {
+				this.total = parseFloat(v.cant * v.cost) + this.total
+			})
+			this.inventory.taxes.forEach((v) => {
+				this.totalTax += v.percent === 'true' ? this.total * v.value / 100 : v.value
+			})
+			this.sub_total = (this.total - parseFloat(this.totalTax)).toFixed(2)
+			this.total = parseFloat(this.total).toFixed(2)
+			this.$emit('updateData')
+		}
+	}
 }
 </script>
 

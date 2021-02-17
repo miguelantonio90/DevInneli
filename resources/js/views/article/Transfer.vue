@@ -67,21 +67,21 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'Transfer',
-  data () {
-    return {}
-  },
-  computed: {
-    ...mapState('article', ['editArticle', 'isActionInProgress']),
-    ...mapState('shop', ['shops'])
-  },
-  created () {
-    this.getShops()
-  },
-  methods: {
-    ...mapActions('article', ['toogleTransferModal']),
-    ...mapActions('shop', ['getShops'])
-  }
+	name: 'Transfer',
+	data () {
+		return {}
+	},
+	computed: {
+		...mapState('article', ['editArticle', 'isActionInProgress']),
+		...mapState('shop', ['shops'])
+	},
+	created () {
+		this.getShops()
+	},
+	methods: {
+		...mapActions('article', ['toogleTransferModal']),
+		...mapActions('shop', ['getShops'])
+	}
 }
 </script>
 

@@ -181,106 +181,106 @@ import { mapActions, mapState } from 'vuex'
 import NewExpenseCategory from '../expense_category/New'
 
 export default {
-  components: { NewExpenseCategory },
-  data () {
-    return {
-      showModal: false,
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('supplier', ['saved', 'newSupplier', 'isActionInProgress']),
-    ...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  created () {
-    this.formValid = false
-    this.getExpenseCategories()
-  },
-  methods: {
-    ...mapActions('supplier', ['createSupplier', 'toogleNewModal']),
-    ...mapActions('expenseCategory', ['getExpenseCategories']),
-    onCountry (event) {
-      this.newSupplier.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.newSupplier.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    createNewClient () {
-      if (this.$refs.form.validate()) {
-        this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.new', [
-              this.$vuetify.lang.t('$vuetify.supplier.name')
-            ]),
-            text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_requested_provider'
-            ),
-            icon: 'info',
-            showCancelButton: true,
-            cancelButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.no'
-            ),
-            confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.yes'
-            ),
-            confirmButtonColor: 'primary'
-          })
-          .then((result) => {
-            this.loading = true
-            this.newSupplier.sendEmail = result.value
-            this.createSupplier(this.newSupplier)
-          })
-      }
-    }
-  }
+	components: { NewExpenseCategory },
+	data () {
+		return {
+			showModal: false,
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('supplier', ['saved', 'newSupplier', 'isActionInProgress']),
+		...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+		this.formValid = false
+		this.getExpenseCategories()
+	},
+	methods: {
+		...mapActions('supplier', ['createSupplier', 'toogleNewModal']),
+		...mapActions('expenseCategory', ['getExpenseCategories']),
+		onCountry (event) {
+			this.newSupplier.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.newSupplier.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		createNewClient () {
+			if (this.$refs.form.validate()) {
+				this.$Swal
+					.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.new', [
+							this.$vuetify.lang.t('$vuetify.supplier.name')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_requested_provider'
+						),
+						icon: 'info',
+						showCancelButton: true,
+						cancelButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.no'
+						),
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.yes'
+						),
+						confirmButtonColor: 'primary'
+					})
+					.then((result) => {
+						this.loading = true
+						this.newSupplier.sendEmail = result.value
+						this.createSupplier(this.newSupplier)
+					})
+			}
+		}
+	}
 }
 </script>
 

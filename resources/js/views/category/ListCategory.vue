@@ -43,81 +43,81 @@ import NewCategory from './NewCategory'
 import EditCategory from './EditCategory'
 
 export default {
-  name: 'ListCategory',
-  components: {
-    NewCategory,
-    EditCategory
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('category', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'categories',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.color'),
-          value: 'color'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getCategories()
-  },
-  methods: {
-    ...mapActions('category', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getCategories',
-      'deleteCategory'
-    ]),
-    editCategoryHandler ($event) {
-      this.openEditModal($event)
-    },
-    deleteCategoryHandler (categoryId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.category')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteCategory(categoryId)
-        })
-    }
-  }
+	name: 'ListCategory',
+	components: {
+		NewCategory,
+		EditCategory
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('category', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'categories',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.color'),
+					value: 'color'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getCategories()
+	},
+	methods: {
+		...mapActions('category', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getCategories',
+			'deleteCategory'
+		]),
+		editCategoryHandler ($event) {
+			this.openEditModal($event)
+		},
+		deleteCategoryHandler (categoryId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.category')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteCategory(categoryId)
+				})
+		}
+	}
 }
 </script>
 

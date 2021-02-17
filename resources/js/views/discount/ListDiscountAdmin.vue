@@ -51,49 +51,49 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListDiscountAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('discount', [
-      'discounts',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'company.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.value'),
-          value: 'value'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.rate'),
-          value: 'percent'
-        }
-      ]
-    }
-  },
-  created () {
-    this.getDiscounts()
-  },
-  methods: {
-    ...mapActions('discount', [
-      'getDiscounts'
-    ])
-  }
+	name: 'ListDiscountAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('discount', [
+			'discounts',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'company.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.value'),
+					value: 'value'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.rate'),
+					value: 'percent'
+				}
+			]
+		}
+	},
+	created () {
+		this.getDiscounts()
+	},
+	methods: {
+		...mapActions('discount', [
+			'getDiscounts'
+		])
+	}
 }
 </script>
 

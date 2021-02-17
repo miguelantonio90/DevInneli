@@ -51,37 +51,37 @@ import { mapActions, mapGetters } from 'vuex'
 import router from '../../router'
 
 export default {
-  props: {
-    hash: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      error: null
-    }
-  },
+	props: {
+		hash: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			error: null
+		}
+	},
 
-  computed: {
-    ...mapGetters('auth', ['user'])
-  },
+	computed: {
+		...mapGetters('auth', ['user'])
+	},
 
-  mounted () {
-    this.sendVerifyRequest(this.hash)
-      .then(() => {
-        this.$router.push({ name: 'pinlogin' })
-      })
-      .catch(() => {
-        this.error = 'Error verifying email'
-      })
-  },
+	mounted () {
+		this.sendVerifyRequest(this.hash)
+			.then(() => {
+				this.$router.push({ name: 'pinlogin' })
+			})
+			.catch(() => {
+				this.error = 'Error verifying email'
+			})
+	},
 
-  methods: {
-    ...mapActions('auth', ['sendVerifyRequest']),
-    goLogin () {
-      router.push('/auth/login')
-    }
-  }
+	methods: {
+		...mapActions('auth', ['sendVerifyRequest']),
+		goLogin () {
+			router.push('/auth/login')
+		}
+	}
 }
 </script>

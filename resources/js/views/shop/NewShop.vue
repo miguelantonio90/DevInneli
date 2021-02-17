@@ -118,83 +118,83 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      formValid: false,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('shop', ['saved', 'newShop', 'isActionInProgress']),
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  watch: {
-    toogleNewModal () {
-      this.$refs.form.reset()
-    }
-  },
-  mounted () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('shop', ['createShop', 'toogleNewModal']),
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.newShop.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onCountry (event) {
-      this.newShop.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async createNewShopAction () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createShop(this.newShop)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('shop', ['saved', 'newShop', 'isActionInProgress']),
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	watch: {
+		toogleNewModal () {
+			this.$refs.form.reset()
+		}
+	},
+	mounted () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('shop', ['createShop', 'toogleNewModal']),
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.newShop.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onCountry (event) {
+			this.newShop.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async createNewShopAction () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createShop(this.newShop)
+			}
+		}
+	}
 }
 </script>
 

@@ -71,29 +71,29 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Forgot',
-  data () {
-    return {
-      email: '',
-      loading: false,
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapGetters(['errors']),
-    ...mapState('auth', ['successForgot']),
-    prefix () {
-      return ''
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['sendEmailForgot']),
-    async sendNotify () {
-      this.loading = true
-      await this.sendEmailForgot(this.email)
-    }
-  }
+	name: 'Forgot',
+	data () {
+		return {
+			email: '',
+			loading: false,
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapGetters(['errors']),
+		...mapState('auth', ['successForgot']),
+		prefix () {
+			return ''
+		}
+	},
+	methods: {
+		...mapActions('auth', ['sendEmailForgot']),
+		async sendNotify () {
+			this.loading = true
+			await this.sendEmailForgot(this.email)
+		}
+	}
 }
 </script>
 

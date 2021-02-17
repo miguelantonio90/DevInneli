@@ -26,6 +26,7 @@
           <template v-slot:item.name="{ item }">
             <v-chip
               :key="JSON.stringify(item)"
+              style="width: 20%"
             >
               <v-avatar
                 v-if="item.color && item.images.length === 0"
@@ -157,126 +158,126 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListArticle',
-  data () {
-    return {
-      localArticles: [],
-      search: '',
-      vBindOption: {
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('article', [
-      'managerArticle',
-      'showNewModal',
-      'showTransfer',
-      'showEditModal',
-      'showShowModal',
-      'articles',
-      'isTableLoading'
-    ]),
-    ...mapState('category', ['categories', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapGetters('auth', ['user']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.ref'),
-          value: 'ref',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shopsNames',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.category'),
-          value: 'category.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.price'),
-          value: 'price',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
-          value: 'cost',
-          select_filter: true
-        }, {
-          text: this.$vuetify.lang.t('$vuetify.articles.percent'),
-          value: 'percent',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getArticles()
-  },
-  methods: {
-    ...mapActions('article', [
-      'toogleNewModal',
-      'toogleTransferModal',
-      'openEditModal',
-      'openTransferModal',
-      'openShowModal',
-      'getArticles',
-      'deleteArticle'
-    ]),
-    ...mapActions('category', ['getCategories']),
-    ...mapActions('shop', ['getShops']),
-    createArticleHandler () {
-      this.$store.state.article.managerArticle = false
-      this.$router.push({ name: 'product_add' })
-    },
-    transferHandler ($event) {
-      this.openTransferModal($event)
-      this.toogleTransferModal(true)
-    },
-    editArticleHandler ($event) {
-      this.$store.state.article.managerArticle = true
-      this.openEditModal($event)
-      this.$router.push({ name: 'product_edit' })
-    },
-    deleteArticleHandler (articleId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.articles')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.isConfirmed) this.deleteArticle(articleId)
-        })
-    }
-  }
+	name: 'ListArticle',
+	data () {
+		return {
+			localArticles: [],
+			search: '',
+			vBindOption: {
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('article', [
+			'managerArticle',
+			'showNewModal',
+			'showTransfer',
+			'showEditModal',
+			'showShowModal',
+			'articles',
+			'isTableLoading'
+		]),
+		...mapState('category', ['categories', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		...mapGetters('auth', ['user']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.ref'),
+					value: 'ref',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shopsNames',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.category'),
+					value: 'category.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.price'),
+					value: 'price',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+					value: 'cost',
+					select_filter: true
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.articles.percent'),
+					value: 'percent',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getArticles()
+	},
+	methods: {
+		...mapActions('article', [
+			'toogleNewModal',
+			'toogleTransferModal',
+			'openEditModal',
+			'openTransferModal',
+			'openShowModal',
+			'getArticles',
+			'deleteArticle'
+		]),
+		...mapActions('category', ['getCategories']),
+		...mapActions('shop', ['getShops']),
+		createArticleHandler () {
+			this.$store.state.article.managerArticle = false
+			this.$router.push({ name: 'product_add' })
+		},
+		transferHandler ($event) {
+			this.openTransferModal($event)
+			this.toogleTransferModal(true)
+		},
+		editArticleHandler ($event) {
+			this.$store.state.article.managerArticle = true
+			this.openEditModal($event)
+			this.$router.push({ name: 'product_edit' })
+		},
+		deleteArticleHandler (articleId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.articles')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.isConfirmed) this.deleteArticle(articleId)
+				})
+		}
+	}
 }
 </script>
 

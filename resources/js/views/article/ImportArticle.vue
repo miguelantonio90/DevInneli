@@ -107,51 +107,51 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  name: 'ImportArticle',
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      file: '',
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('article', ['saved', 'showImportModal', 'importArticle', 'isActionInProgress']),
-    getSistemFrom () {
-      return [
-        {
-          text: 'LOYVERSE',
-          value: 'loyverse'
-        },
-        {
-          text: 'ALEGRA',
-          value: 'alegra'
-        }
-      ]
-    }
-  },
-  created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('article', ['importArticles', 'toogleImportModal']),
-    onFileChange (e) {
-      // this.file = e.target.files[0]
-      this.file = e
-    },
-    async createNewCategory () {
-      const formData = new FormData()
-      formData.append('file', this.file)
-      formData.append('type', this.importArticle.type)
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.importArticles(formData)
-      }
-    }
-  }
+	name: 'ImportArticle',
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			file: '',
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('article', ['saved', 'showImportModal', 'importArticle', 'isActionInProgress']),
+		getSistemFrom () {
+			return [
+				{
+					text: 'LOYVERSE',
+					value: 'loyverse'
+				},
+				{
+					text: 'ALEGRA',
+					value: 'alegra'
+				}
+			]
+		}
+	},
+	created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('article', ['importArticles', 'toogleImportModal']),
+		onFileChange (e) {
+			// this.file = e.target.files[0]
+			this.file = e
+		},
+		async createNewCategory () {
+			const formData = new FormData()
+			formData.append('file', this.file)
+			formData.append('type', this.importArticle.type)
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.importArticles(formData)
+			}
+		}
+	}
 }
 </script>
 

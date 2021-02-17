@@ -230,7 +230,7 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                              <v-text-field-money
+                              <!--                              <v-text-field-money
                                 v-model="item.cant"
                                 :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 :properties="{
@@ -241,6 +241,25 @@
                                   precision: 2,
                                   empty: 0.00,
                                 }"
+                              />-->
+                              <v-text-field-integer
+                                v-model="item.cant"
+                                :label="$vuetify.lang.t('$vuetify.actions.save') "
+                                :properties="{
+                                  readonly: false,
+                                  disabled: false,
+                                  outlined: false,
+                                  clearable: true,
+                                  placeholder: '',
+                                }"
+                                :options="{
+                                  inputMask: '#########',
+                                  outputMask: '#########',
+                                  empty: 0,
+                                  applyAfter: false,
+                                }"
+                                :focus="focus"
+                                @focus="focus = false"
                               />
                             </template>
                           </v-edit-dialog>
@@ -369,341 +388,337 @@ import utils from '../../util'
 import DetailArticleCost from '../buy/DetailArticleCost'
 
 export default {
-  name: 'ManagerSupply',
-  components: {
-    DetailArticleCost,
-    NewDiscount,
-    ExtraData
-  },
-  data () {
-    return {
-      showDiscount: false,
-      supply: {},
-      articleSelected: {},
-      loadingData: false,
-      editedIndex: -1,
-      localArticles: [],
-      localDiscounts: [],
-      update: false,
-      panel: [0, 1, 2],
-
-      totalTax: 0,
-      totalDisc: 0,
-      subTotal: 0,
-      totalCost: 0,
-      formValid: false,
-      showInfoAdd: false,
-      vBindOption: {
-        itemKey: 'name',
-        singleExpand: false,
-        showExpand: true
-      },
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('supply', ['managerSupply', 'newSupply', 'editSupply', 'isActionInProgress', 'supplies']),
-    ...mapState('article', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'articles',
-      'isTableLoading'
-    ]),
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user']),
-    ...mapGetters('supply', ['getNumberFacture']),
-    factureNumber: {
-      get () {
-        return this.getNumberFacture
-      },
-      set (newNumber) {
-        return newNumber
-      }
-    },
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.ref'),
-          value: 'ref',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          with: '15%',
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
-          value: 'inventory',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.articles.cost'),
-          value: 'cost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'cant',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    },
-    getDifference () {
-      let totalCalcP = 0.00
-      this.supply.pays.forEach(v => {
-        totalCalcP += parseFloat(v.cant)
-      })
-      return parseFloat(this.totalCost) - parseFloat(totalCalcP)
-    }
-  },
-  watch: {
-    discounts: function () {
-      this.getLocalDiscounts()
-    },
-    'supply.no_facture': function () {
-      if (this.supply.no_facture !== '') {
-        if (this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.supply.no_facture).length > 0) {
-          this.supply.no_facture = this.generateNF()
-        }
-      }
-    },
-    'supply.taxes' () {
-      this.calcTotalSupply()
-    },
-    'supply.articles' () {
-      this.calcTotalSupply()
-    },
-    'supply.discounts' () {
-      this.calcTotalSupply()
-    }
-  },
-  async created () {
-    this.loadingData = true
-    this.supply = !this.managerSupply ? this.newSupply : this.editSupply
-    if (this.managerSupply) {
-      this.calcTotalSupply()
-    }
-    await this.getArticles()
-    await this.getShops().then((s) => {
-      if (!this.managerSupply) {
-        this.supply.shop = this.shops[0]
-      }
-    })
-    await this.getDiscounts().then(() => {
-      this.getLocalDiscounts()
-    })
-    this.loadingData = false
-    await this.updateDataArticle()
-    this.loadingData = false
-  },
-  methods: {
-    ...mapActions('supply', ['getSupplies']),
-    ...mapActions('article', ['getArticles']),
-    ...mapActions('shop', ['getShops']),
-    ...mapActions('supply', ['getSupplies', 'createSupply', 'updateSupply', 'fetchSupplyNumber']),
-    ...mapActions('discount', ['getDiscounts']),
-    generateNF () {
-      this.fetchSupplyNumber(this.supply.supplier.company_id)
-      const seqer = utils.serialMaker()
-      seqer.set_prefix('C' + new Date().getFullYear() + '-')
-      seqer.set_seq(1000000)
-      this.supply.no_facture = seqer.gensym()
-    },
-    async updateDataArticle () {
-      this.localArticles = []
-      if (this.supply.shop) {
-        await this.articles.forEach((value) => {
-          if (value.variant_values.length > 0) {
-            value.variant_values.forEach((v) => {
-              const artS = v.articles_shops.filter(artS => artS.shop_id === this.supply.shop.id)
-              if (artS.length > 0) {
-                this.validAddToLocalArticle(v, value, artS)
-              }
-            })
-          } else {
-            const artS = value.articles_shops.filter(artS => artS.shop_id === this.supply.shop.id)
-            if (artS.length > 0) {
-              this.validAddToLocalArticle(value, value, artS)
-            }
-          }
-        })
-      }
-    },
-    validAddToLocalArticle (v, value, artS) {
-      let supply = 0
-      if (!value.track_inventory) {
-        this.addToLocalArticle(v, value, 0, artS[0])
-      } else {
-        if (artS.length > 0) {
-          supply = artS[0].stock
-        }
-        this.addToLocalArticle(v, value, supply, artS[0])
-      }
-    },
-    addToLocalArticle (v, value, supply, artS) {
-      this.localArticles.push({
-        ref: value.ref,
-        name: value.name + '(' + v.name + ')',
-        category: !value.category ? '' : value.category.name,
-        path: value.path,
-        images: value.images,
-        taxes: v.tax,
-        discount: [],
-        color: value.color,
-        price: artS.price,
-        cost: v.cost ? v.cost : 0,
-        inventory: supply || 0,
-        cant: 1,
-        totalCant: (supply || 0) + 1,
-        totalCost: v.cost,
-        totalPrice: v.price,
-        article_id: v.id
-      })
-    },
-    getLocalDiscounts () {
-      this.discounts.forEach((v) => {
-        this.localDiscounts.push({
-          id: v.id,
-          name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
-          value: v.value,
-          percent: v.percent
-        })
-      })
-    },
-    selectArticle (item) {
-      if (item) {
-        if (this.supply.articles.filter(art => art.article_id === item.article_id).length === 0) {
-          this.supply.articles.push(item)
-          this.calcTotalSupply()
-        } else {
-          this.showInfoAdd = true
-        }
-      }
-    },
-    deleteItem (item) {
-      this.supply.articles.splice(this.supply.articles.indexOf(item), 1)
-      this.calcTotalSupply()
-    },
-    closeInfoAdd () {
-      this.showInfoAdd = false
-    },
-    async supplyHandler () {
-      if (this.getDifference !== 0) {
-        this.loading = false
-        this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_difference_price', [(this.getDifference + ' ' + this.user.company.currency).toString()]
-        ))
-      } else {
-        if (this.supply.articles.length > 0) {
-          if (this.$refs.form.validate()) {
-            this.loading = true
-            if (!this.managerSupply) {
-              await this.createSupply(this.supply).then(() => {
-                this.$router.push({ name: 'supply_product' })
-              })
-            } else {
-              await this.updateInventory(this.supply).then(() => {
-                this.$router.push({ name: 'supply_product' })
-              })
-            }
-          }
-        } else {
-          this.loading = false
-          this.shopMessageError(this.$vuetify.lang.t(
-            '$vuetify.messages.warning_cant_article'
-          ))
-        }
-      }
-    },
-    shopMessageError (message) {
-      this.$Swal.fire({
-        title: this.$vuetify.lang.t('$vuetify.titles.newF', [
-          this.$vuetify.lang.t('$vuetify.supply.name')
-        ]),
-        text: message,
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonText: this.$vuetify.lang.t(
-          '$vuetify.actions.accept'
-        ),
-        confirmButtonColor: 'red'
-      })
-    },
-    handleClose () {
-      this.localArticles = []
-      this.supply.articles = []
-      this.$router.push({ name: 'supply_product' })
-    },
-    calcTotalArticle: function (item) {
-      this.editedIndex = this.supply.articles.indexOf(item)
-      this.supply.articles[this.editedIndex].totalCost = parseFloat(this.supply.articles[this.editedIndex].cost *
+	name: 'ManagerSupply',
+	components: {
+		DetailArticleCost,
+		NewDiscount,
+		ExtraData
+	},
+	data () {
+		return {
+			focus: false,
+			showDiscount: false,
+			supply: {},
+			articleSelected: {},
+			loadingData: false,
+			editedIndex: -1,
+			localArticles: [],
+			localDiscounts: [],
+			update: false,
+			panel: [0, 1, 2],
+			totalTax: 0,
+			totalDisc: 0,
+			subTotal: 0,
+			totalCost: 0,
+			formValid: false,
+			showInfoAdd: false,
+			vBindOption: {
+				itemKey: 'name',
+				singleExpand: false,
+				showExpand: true
+			},
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('supply', ['managerSupply', 'newSupply', 'editSupply', 'isActionInProgress', 'supplies']),
+		...mapState('article', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'articles',
+			'isTableLoading'
+		]),
+		...mapState('shop', ['shops', 'isShopLoading']),
+		...mapState('discount', ['discounts']),
+		...mapGetters('auth', ['user']),
+		...mapGetters('supply', ['getNumberFacture']),
+		factureNumber: {
+			get () {
+				return this.getNumberFacture
+			},
+			set (newNumber) {
+				return newNumber
+			}
+		},
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.ref'),
+					value: 'ref',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					with: '15%',
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.inventory'),
+					value: 'inventory',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.cost'),
+					value: 'cost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+					value: 'cant',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					value: 'totalCost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		},
+		getDifference () {
+			let totalCalcP = 0.00
+			this.supply.pays.forEach(v => {
+				totalCalcP += parseFloat(v.cant)
+			})
+			return parseFloat(this.totalCost) - parseFloat(totalCalcP)
+		}
+	},
+	watch: {
+		discounts: function () {
+			this.getLocalDiscounts()
+		},
+		'supply.taxes' () {
+			this.calcTotalSupply()
+		},
+		'supply.articles' () {
+			this.calcTotalSupply()
+		},
+		'supply.discounts' () {
+			this.calcTotalSupply()
+		}
+	},
+	async created () {
+		this.loadingData = true
+		this.supply = !this.managerSupply ? this.newSupply : this.editSupply
+		if (this.managerSupply) {
+			this.calcTotalSupply()
+		}
+		await this.getArticles()
+		await this.getShops().then((s) => {
+			if (!this.managerSupply) {
+				this.supply.shop = this.shops[0]
+			}
+		})
+		await this.getDiscounts().then(() => {
+			this.getLocalDiscounts()
+		})
+		await this.updateDataArticle()
+		if (!this.managerSupply) {
+			await this.fetchSupplyNumber().then(() => {
+				this.supply.no_facture = this.generateNF()
+			})
+		}
+		this.loadingData = false
+	},
+	methods: {
+		...mapActions('supply', ['getSupplies']),
+		...mapActions('article', ['getArticles']),
+		...mapActions('shop', ['getShops']),
+		...mapActions('supply', ['getSupplies', 'createSupply', 'updateSupply', 'fetchSupplyNumber']),
+		...mapActions('discount', ['getDiscounts']),
+		generateNF () {
+			const seqer = utils.serialMaker()
+			seqer.set_prefix('C' + new Date().getFullYear() + '-')
+			seqer.set_seq(this.factureNumber)
+			return seqer.gensym()
+		},
+		async updateDataArticle () {
+			this.localArticles = []
+			if (this.supply.shop) {
+				await this.articles.forEach((value) => {
+					if (value.variant_values.length > 0) {
+						value.variant_values.forEach((v) => {
+							const artS = v.articles_shops.filter(artS => artS.shop_id === this.supply.shop.id)
+							if (artS.length > 0) {
+								this.validAddToLocalArticle(v, value, artS)
+							}
+						})
+					} else {
+						const artS = value.articles_shops.filter(artS => artS.shop_id === this.supply.shop.id)
+						if (artS.length > 0) {
+							this.validAddToLocalArticle(value, value, artS)
+						}
+					}
+				})
+			}
+		},
+		validAddToLocalArticle (v, value, artS) {
+			let supply = 0
+			if (!value.track_inventory) {
+				this.addToLocalArticle(v, value, 0, artS[0])
+			} else {
+				if (artS.length > 0) {
+					supply = artS[0].stock
+				}
+				this.addToLocalArticle(v, value, supply, artS[0])
+			}
+		},
+		addToLocalArticle (v, value, supply, artS) {
+			this.localArticles.push({
+				ref: value.ref,
+				name: value.name + '(' + v.name + ')',
+				category: !value.category ? '' : value.category.name,
+				path: value.path,
+				images: value.images,
+				taxes: v.tax,
+				discount: [],
+				color: value.color,
+				price: artS.price,
+				cost: v.cost ? v.cost : 0,
+				inventory: supply || 0,
+				cant: 1,
+				totalCant: (supply || 0) + 1,
+				totalCost: v.cost,
+				totalPrice: v.price,
+				article_id: v.id
+			})
+		},
+		getLocalDiscounts () {
+			this.discounts.forEach((v) => {
+				this.localDiscounts.push({
+					id: v.id,
+					name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
+					value: v.value,
+					percent: v.percent
+				})
+			})
+		},
+		selectArticle (item) {
+			if (item) {
+				if (this.supply.articles.filter(art => art.article_id === item.article_id).length === 0) {
+					this.supply.articles.push(item)
+					this.calcTotalSupply()
+				} else {
+					this.showInfoAdd = true
+				}
+			}
+		},
+		deleteItem (item) {
+			this.supply.articles.splice(this.supply.articles.indexOf(item), 1)
+			this.calcTotalSupply()
+		},
+		closeInfoAdd () {
+			this.showInfoAdd = false
+		},
+		async supplyHandler () {
+			if (this.getDifference !== 0) {
+				this.loading = false
+				this.shopMessageError(this.$vuetify.lang.t(
+					'$vuetify.messages.warning_difference_price', [(this.getDifference + ' ' + this.user.company.currency).toString()]
+				))
+			} else {
+				if (this.supply.articles.length > 0) {
+					if (this.$refs.form.validate()) {
+						this.loading = true
+						if (!this.managerSupply) {
+							await this.createSupply(this.supply).then(() => {
+								this.$router.push({ name: 'supply_product' })
+							})
+						} else {
+							await this.updateInventory(this.supply).then(() => {
+								this.$router.push({ name: 'supply_product' })
+							})
+						}
+					}
+				} else {
+					this.loading = false
+					this.shopMessageError(this.$vuetify.lang.t(
+						'$vuetify.messages.warning_cant_article'
+					))
+				}
+			}
+		},
+		shopMessageError (message) {
+			this.$Swal.fire({
+				title: this.$vuetify.lang.t('$vuetify.titles.newF', [
+					this.$vuetify.lang.t('$vuetify.supply.name')
+				]),
+				text: message,
+				icon: 'warning',
+				showCancelButton: false,
+				confirmButtonText: this.$vuetify.lang.t(
+					'$vuetify.actions.accept'
+				),
+				confirmButtonColor: 'red'
+			})
+		},
+		handleClose () {
+			this.localArticles = []
+			this.supply.articles = []
+			this.$router.push({ name: 'supply_product' })
+		},
+		calcTotalArticle: function (item) {
+			this.editedIndex = this.supply.articles.indexOf(item)
+			this.supply.articles[this.editedIndex].totalCost = parseFloat(this.supply.articles[this.editedIndex].cost *
               this.supply.articles[this.editedIndex].cant).toFixed(2)
-      this.supply.articles[this.editedIndex].totalCant = parseFloat(parseFloat(this.supply.articles[this.editedIndex].supply) -
+			this.supply.articles[this.editedIndex].totalCant = parseFloat(parseFloat(this.supply.articles[this.editedIndex].supply) -
               parseFloat(this.supply.articles[this.editedIndex].cant) || 0).toFixed(2)
-      item.totalCost = item.cant * item.cost + this.articleTotalCost(item) - this.articleTotalDiscount(item)
-      this.calcTotalSupply()
-    },
-    articleTotalCost (item) {
-      let tax = 0
-      if (item.taxes.length > 0) {
-        item.taxes.forEach((v) => {
-          tax += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-        })
-      }
-      return tax
-    },
-    articleTotalDiscount (item) {
-      let disc = 0
-      if (item.discount.length > 0) {
-        item.discount.forEach((v) => {
-          disc += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-        })
-      }
-      return disc
-    },
-    calcTotalSupply () {
-      this.totalTax = 0
-      this.totalDisc = 0
-      this.totalCost = 0
-      this.subTotal = 0
-      this.supply.articles.forEach((v) => {
-        this.subTotal = parseFloat(v.cost) * parseFloat(v.cant) + this.subTotal
-      })
-      this.supply.taxes.forEach((v) => {
-        this.totalTax += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
-      })
-      this.supply.discounts.forEach((v) => {
-        this.totalDisc += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
-      })
-      this.totalCost = (this.subTotal + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
-      this.totalCost = parseFloat(this.totalCost).toFixed(2)
-    },
-    showDiscountArticle ($event) {
-      this.showDiscount = true
-      this.articleSelected = $event
-    },
-    closeDiscount () {
-      this.showDiscount = false
-    },
-    saveDiscount () {
-      this.calcTotalArticle(this.articleSelected)
-      this.showDiscount = false
-    }
-  }
+			item.totalCost = item.cant * item.cost + this.articleTotalCost(item) - this.articleTotalDiscount(item)
+			this.calcTotalSupply()
+		},
+		articleTotalCost (item) {
+			let tax = 0
+			if (item.taxes.length > 0) {
+				item.taxes.forEach((v) => {
+					tax += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+				})
+			}
+			return tax
+		},
+		articleTotalDiscount (item) {
+			let disc = 0
+			if (item.discount.length > 0) {
+				item.discount.forEach((v) => {
+					disc += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+				})
+			}
+			return disc
+		},
+		calcTotalSupply () {
+			this.totalTax = 0
+			this.totalDisc = 0
+			this.totalCost = 0
+			this.subTotal = 0
+			this.supply.articles.forEach((v) => {
+				this.subTotal = parseFloat(v.cost) * parseFloat(v.cant) + this.subTotal
+			})
+			this.supply.taxes.forEach((v) => {
+				this.totalTax += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
+			})
+			this.supply.discounts.forEach((v) => {
+				this.totalDisc += v.percent === 'true' ? this.subTotal * v.value / 100 : v.value
+			})
+			this.totalCost = (this.subTotal + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+			this.totalCost = parseFloat(this.totalCost).toFixed(2)
+		},
+		showDiscountArticle ($event) {
+			this.showDiscount = true
+			this.articleSelected = $event
+		},
+		closeDiscount () {
+			this.showDiscount = false
+		},
+		saveDiscount () {
+			this.calcTotalArticle(this.articleSelected)
+			this.showDiscount = false
+		}
+	}
 }
 </script>
 

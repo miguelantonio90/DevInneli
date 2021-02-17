@@ -123,29 +123,29 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('modifiers', ['editModifier', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  created () {
-    this.formValid = false
-    this.getShops()
-  },
-  methods: {
-    ...mapActions('modifiers', ['updateModifiers', 'toogleEditModal']),
-    ...mapActions('shop', ['getShops']),
-    async handleSubmit () {
-      if (this.$refs.form.validate()) {
-        await this.updateModifiers(this.editModifier)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('modifiers', ['editModifier', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	created () {
+		this.formValid = false
+		this.getShops()
+	},
+	methods: {
+		...mapActions('modifiers', ['updateModifiers', 'toogleEditModal']),
+		...mapActions('shop', ['getShops']),
+		async handleSubmit () {
+			if (this.$refs.form.validate()) {
+				await this.updateModifiers(this.editModifier)
+			}
+		}
+	}
 }
 </script>
 

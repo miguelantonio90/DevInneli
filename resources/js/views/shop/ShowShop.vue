@@ -88,34 +88,34 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'ShowShop',
-  data () {
-    return {
-      errorPhone: null,
-      formValid: false,
-      formRule: {}
-    }
-  },
-  computed: {
-    ...mapState('shop', ['saved', 'editShop', 'isActionInProgress']),
-    bindProps () {
-      return {
-        mode: 'international',
-        defaultCountry: this.editShop.country ? this.editShop.country : 'US',
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  methods: {
-    ...mapActions('shop', ['updateShop', 'toogleShowModal'])
-  }
+	name: 'ShowShop',
+	data () {
+		return {
+			errorPhone: null,
+			formValid: false,
+			formRule: {}
+		}
+	},
+	computed: {
+		...mapState('shop', ['saved', 'editShop', 'isActionInProgress']),
+		bindProps () {
+			return {
+				mode: 'international',
+				defaultCountry: this.editShop.country ? this.editShop.country : 'US',
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	methods: {
+		...mapActions('shop', ['updateShop', 'toogleShowModal'])
+	}
 }
 </script>
 

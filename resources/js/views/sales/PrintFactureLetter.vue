@@ -289,79 +289,79 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import printJS from 'print-js'
 
 export default {
-  name: 'PrintFactureLetter',
-  props: {
-    id: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      totalTax: 0,
-      totalDisc: 0,
-      total: 0,
-      sub_total: 0
-    }
-  },
-  computed: {
-    ...mapState('sale', ['editSale']),
-    ...mapState('discount', ['discounts']),
-    ...mapGetters('auth', ['user', 'userPin']),
-    dateFormatCreated () {
-      const date = new Date(this.editSale.updated_at)
-      const day = date.getDate()
-      const month = date.getMonth() + 1
-      const year = date.getFullYear()
-      if (month < 10) {
-        return (`${day}/0${month}/${year}`)
-      } else {
-        return (`${day}/${month}/${year}`)
-      }
-    }
-  },
-  async created () {
-    await this.getDiscounts()
-    this.totalTax = 0
-    this.totalDisc = 0
-    this.total = 0
-    this.sub_total = 0
-    this.editSale.articles.forEach((v) => {
-      this.sub_total = parseFloat(v.totalPrice) + this.sub_total
-    })
-    this.editSale.taxes.forEach((v) => {
-      this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
-    })
-    this.editSale.discounts.forEach((v) => {
-      this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
-    })
-    this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
-    this.total = parseFloat(this.total).toFixed(2)
-    this.$emit('updateData')
-  },
-  methods: {
-    ...mapActions('sale', ['toogleShowModal']),
-    ...mapActions('discount', ['getDiscounts']),
-    total_pay (item) {
-      let sum = 0
-      item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
-      let discount = 0
-      item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
-      })
-      return item.cant * item.price + sum - discount - item.moneyRefund
-    },
-    printFacture () {
-      printJS({
-        printable: 'letter',
-        type: 'html',
-        targetStyles: ['*'],
-        scanStyles: true
-      })
-    }
-  }
+	name: 'PrintFactureLetter',
+	props: {
+		id: {
+			type: String,
+			default: ''
+		}
+	},
+	data () {
+		return {
+			totalTax: 0,
+			totalDisc: 0,
+			total: 0,
+			sub_total: 0
+		}
+	},
+	computed: {
+		...mapState('sale', ['editSale']),
+		...mapState('discount', ['discounts']),
+		...mapGetters('auth', ['user', 'userPin']),
+		dateFormatCreated () {
+			const date = new Date(this.editSale.updated_at)
+			const day = date.getDate()
+			const month = date.getMonth() + 1
+			const year = date.getFullYear()
+			if (month < 10) {
+				return (`${day}/0${month}/${year}`)
+			} else {
+				return (`${day}/${month}/${year}`)
+			}
+		}
+	},
+	async created () {
+		await this.getDiscounts()
+		this.totalTax = 0
+		this.totalDisc = 0
+		this.total = 0
+		this.sub_total = 0
+		this.editSale.articles.forEach((v) => {
+			this.sub_total = parseFloat(v.totalPrice) + this.sub_total
+		})
+		this.editSale.taxes.forEach((v) => {
+			this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+		})
+		this.editSale.discounts.forEach((v) => {
+			this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+		})
+		this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+		this.total = parseFloat(this.total).toFixed(2)
+		this.$emit('updateData')
+	},
+	methods: {
+		...mapActions('sale', ['toogleShowModal']),
+		...mapActions('discount', ['getDiscounts']),
+		total_pay (item) {
+			let sum = 0
+			item.taxes.forEach((v) => {
+				sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
+			})
+			let discount = 0
+			item.discount.forEach((v) => {
+				discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+			})
+			return item.cant * item.price + sum - discount - item.moneyRefund
+		},
+		printFacture () {
+			printJS({
+				printable: 'letter',
+				type: 'html',
+				targetStyles: ['*'],
+				scanStyles: true
+			})
+		}
+	}
 }
 </script>
 

@@ -195,38 +195,38 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'OpenCloseBox',
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules,
-      total: [0, 0, '']
-    }
-  },
-  computed: {
-    ...mapState('boxes', ['saved', 'openClose', 'isActionInProgress']),
-    ...mapState('sale', ['sales']),
-    ...mapState('refund', ['refunds']),
-    ...mapState('user', ['users']),
-    ...mapGetters('auth', ['user'])
-  },
-  async created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
-    ...mapActions('user', ['getUsers']),
-    calcTotal () {
-      this.total[1] = -1 * (parseFloat(this.openClose.open_money) + this.openClose.payments.filter(p => p.method === 'cash')[0].total -
+	name: 'OpenCloseBox',
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules,
+			total: [0, 0, '']
+		}
+	},
+	computed: {
+		...mapState('boxes', ['saved', 'openClose', 'isActionInProgress']),
+		...mapState('sale', ['sales']),
+		...mapState('refund', ['refunds']),
+		...mapState('user', ['users']),
+		...mapGetters('auth', ['user'])
+	},
+	async created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
+		...mapActions('user', ['getUsers']),
+		calcTotal () {
+			this.total[1] = -1 * (parseFloat(this.openClose.open_money) + this.openClose.payments.filter(p => p.method === 'cash')[0].total -
           parseFloat(this.openClose.totalRefunds) - parseFloat(this.openClose.close_money))
-    },
-    async openCloseBoxHandler () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.openCloseBox(this.openClose)
-      }
-    }
-  }
+		},
+		async openCloseBoxHandler () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.openCloseBox(this.openClose)
+			}
+		}
+	}
 }
 </script>
 

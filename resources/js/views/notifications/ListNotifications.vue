@@ -32,25 +32,25 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'ListNotifications',
-  computed: {
-    ...mapGetters('auth', ['notifications'])
-  },
-  methods: {
-    ...mapActions('auth', ['readNotification']),
-    closeNotification (item) {
-      this.readNotification(item.id)
-    },
-    notificate (arrayN) {
-      const result = []
-      arrayN.forEach((ele) => {
-        const data = []
-        data.push(ele)
-        result.push(data)
-      })
-      return result
-    }
-  }
+	name: 'ListNotifications',
+	computed: {
+		...mapGetters('auth', ['notifications'])
+	},
+	methods: {
+		...mapActions('auth', ['readNotification']),
+		closeNotification (item) {
+			this.readNotification(item.id)
+		},
+		notificate (arrayN) {
+			const result = []
+			arrayN.forEach((ele) => {
+				const data = []
+				data.push(ele)
+				result.push(data)
+			})
+			return result
+		}
+	}
 }
 </script>
 

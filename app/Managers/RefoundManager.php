@@ -50,10 +50,10 @@ class RefoundManager extends BaseManager
             ->where('article_id', '=', $data['article']['id'])
             ->where('shop_id', '=', $data['sale']['shop']['shop_id'])
             ->get()[0];
-        if($data['sale']['type'] === 'sale'){
+        if ($data['sale']['type'] === 'sale') {
             $article_shop->stock += $data['cant'];
             $refunds['box_id'] = $data['box']['id'];
-        }else{
+        } else {
             $article_shop->stock -= $data['cant'];
         }
         $refunds->save();

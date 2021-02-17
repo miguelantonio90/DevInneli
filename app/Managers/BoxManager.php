@@ -175,7 +175,7 @@ class BoxManager extends BaseManager
         foreach ($refunds as $r => $refund) {
             $openClose['totalRefunds'] += $refund->cant;
         }
-        
+
         return $openClose;
 
     }

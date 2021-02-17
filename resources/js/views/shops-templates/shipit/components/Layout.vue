@@ -42,20 +42,20 @@
           <v-icon>mdi-bell</v-icon>
         </v-badge>
       </v-btn>
+
+      <router-link
+        :to="{ name: 'Home', params: $route.params}"
+        tag="v-btn"
+        color="green"
+        overlap
+      >
+        <v-icon>mdi-cart</v-icon>
+      </router-link>
       <v-btn
-        href="/cart"
+        href="/online/cart"
         icon
         v-on="on"
-      >
-        <v-badge
-          content="2"
-          value="2"
-          color="green"
-          overlap
-        >
-          <v-icon>mdi-cart</v-icon>
-        </v-badge>
-      </v-btn>
+      />
     </v-app-bar>
     <v-content>
       <v-bottom-navigation
@@ -63,39 +63,30 @@
         color="primary"
         horizontal
       >
-        <v-menu
-          open-on-hover
-          offset-y
+        <router-link
+          :to="{ name: 'Home', params: $route.params}"
+          tag="v-btn"
         >
-          <template v-slot:activator="{ on }">
-            <v-btn v-on="on">
-              <span>Shop</span>
-            </v-btn>
-          </template>
-          <v-card
-            class="mx-auto"
-            max-width="344"
-            outlined
-          >
-            12
-            <v-list-item
-              v-for="(item, index) in items"
-              :key="index"
-              href="/shop"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-card>
-        </v-menu>
-        <a
-          href="/product"
-          class="v-btn"
+          {{ shopData.shop.name }}
+        </router-link>
+        <router-link
+          :to="{ name: 'Shop', params: $route.params}"
+          tag="v-btn"
         >
-          <span>Product</span>
-        </a>
-        <v-btn href="/blog">
+          {{ shopData.shop.name }}
+        </router-link>
+        <router-link
+          :to="{ name: 'Product', params: $route.params}"
+          tag="v-btn"
+        >
+          Products
+        </router-link>
+        <router-link
+          :to="{ name: 'Blog', params: $route.params}"
+          tag="v-btn"
+        >
           <span>Blog</span>
-        </v-btn>
+        </router-link>
       </v-bottom-navigation>
     </v-content>
     <router-view />
@@ -157,34 +148,31 @@
   </v-app>
 </template>
 <script>
-
 import { mapActions, mapState } from 'vuex'
-export default {
-  data () {
-    return {
-      items: [
-        { title: 'T-Shirts' },
-        { title: 'Jackets' },
-        { title: 'Shirts' },
-        { title: 'Jeans' },
-        { title: 'Shoes' }
-      ],
-      activeBtn: 1
-    }
-  },
-  computed: {
-    ...mapState('category', [
-      'categories',
-      'isTableLoading'
-    ])
-  },
-  created () {
-    this.getShopData(this.$route.params)
-  },
-  methods: {
-    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
-    ...mapActions('shop', ['getShopData'])
 
-  }
+export default {
+	data () {
+		return {
+			activeBtn: 1
+		}
+	},
+	computed: {
+		...mapState('category', [
+			'categories',
+			'isTableLoading'
+		]),
+		...mapState('shop', ['shopData'])
+	},
+	created () {
+		this.getShopData(this.$route.params).then(() => {
+		    if (!this.shopData.shop) {
+				this.$router.push({ name: '404' })
+			}
+		})
+	},
+	methods: {
+		...mapActions('category', ['getCategories', 'getCategoriesShop']),
+		...mapActions('shop', ['getShopData'])
+	}
 }
 </script>

@@ -270,72 +270,72 @@ import DetailRefund from '../refund/DetailRefund'
 import DetailArticleCost from './DetailArticleCost'
 import { mapGetters } from 'vuex'
 export default {
-  name: 'ReceivedList',
-  components: { ListPay, DetailRefund, DetailArticleCost },
-  props: {
-    getTableColumns: {
-      type: Array,
-      default: function () {
-        return []
-      }
-    },
-    articles: {
-      type: Array,
-      default: function () {
-        return []
-      }
-    },
-    received: {
-      type: Array,
-      default: function () {
-        return []
-      }
-    },
-    isTableLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data () {
-    return {
-      localReceived: [],
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
+	name: 'ReceivedList',
+	components: { ListPay, DetailRefund, DetailArticleCost },
+	props: {
+		getTableColumns: {
+			type: Array,
+			default: function () {
+				return []
+			}
+		},
+		articles: {
+			type: Array,
+			default: function () {
+				return []
+			}
+		},
+		received: {
+			type: Array,
+			default: function () {
+				return []
+			}
+		},
+		isTableLoading: {
+			type: Boolean,
+			default: false
+		}
+	},
+	data () {
+		return {
+			localReceived: [],
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
 
-    ...mapGetters('auth', ['user', 'access_permit'])
-  },
-  watch: {
-    articles: function () {
-      console.log(this.articles)
-      this.loadLocalReceived()
-    }
-  },
-  created () {
+		...mapGetters('auth', ['user', 'access_permit'])
+	},
+	watch: {
+		articles: function () {
+			console.log(this.articles)
+			this.loadLocalReceived()
+		}
+	},
+	created () {
 
-  },
-  methods: {
-    loadLocalReceived () {
-      console.log('adsasdsadsadasdsa')
-      if (this.articles.length > 0) {
-        this.localReceived = []
-        this.received.forEach((value) => {
-          const supply = value
-          value.sale.articles.forEach((v, i) => {
-            if (v.parent_id) {
-              supply.sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')'
-            }
-          })
-          this.localReceived.push(supply)
-        })
-      }
-    }
-  }
+	},
+	methods: {
+		loadLocalReceived () {
+			console.log('adsasdsadsadasdsa')
+			if (this.articles.length > 0) {
+				this.localReceived = []
+				this.received.forEach((value) => {
+					const supply = value
+					value.sale.articles.forEach((v, i) => {
+						if (v.parent_id) {
+							supply.sale.articles[i].name = this.articles.filter(art => art.id === v.parent_id)[0].name + '(' + v.name + ')'
+						}
+					})
+					this.localReceived.push(supply)
+				})
+			}
+		}
+	}
 }
 </script>
 

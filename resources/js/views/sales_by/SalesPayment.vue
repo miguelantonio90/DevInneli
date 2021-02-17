@@ -200,182 +200,182 @@ import { Chart } from 'highcharts-vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'SalesPayment',
-  components: { AppLoading, highcharts: Chart },
-  data () {
-    return {
-      loadingData: false,
-      panel: [0],
-      seriesData: [],
-      chartOptions: {},
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: false
-      },
-      menu: false,
-      formRule: this.$rules,
-      dates: [],
-      localShops: [],
-      localSalesByPayments: []
-    }
-  },
-  computed: {
-    ...mapState('shop', ['shops', 'isShopLoading']),
-    ...mapState('sale', ['salesByPayments', 'isTableLoading']),
-    ...mapState('payment', ['paymentsConst']),
-    ...mapGetters('auth', ['user']),
-    dateRangeText () {
-      const d1 = this.dates[0]
-      const d2 = this.dates[1]
-      console.log(this.dates)
-      if (d1 > d2) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.dates = [d2, d1]
-      }
-      return this.dates.join(' ---> ')
-    },
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.cant'),
-          value: 'data.cantTransactions',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.report.grossPrice'),
-          value: 'data.grossPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.report.netPrice'),
-          value: 'data.netPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.report.discountsSale'),
-          value: 'data.totalDiscount',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
-          value: 'data.totalTax',
-          select_filter: true
-        }
-      ]
-    }
-  },
-  async created () {
-    this.loadingData = true
-    let toDay
-    let lastWeek = ''
-    new Date().toLocaleDateString().split('/').reverse().forEach((v, i) => {
-      toDay = (i > 0) ? toDay + '-' + v : v
-    })
-    new Date((new Date()).getTime() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString().split('/').reverse().forEach((v, i) => {
-      lastWeek = (i > 0) ? lastWeek + '-' + v : v
-    })
-    this.dates = [lastWeek, toDay]
-    await this.loadPaymentsConst()
-    await this.getShops().then(() => {
-      this.localShops = this.shops
-    })
-    await this.getSalesByPayment({
-      shops: this.shops,
-      dates: this.dates
-    }).then(() => {
-      this.localSalesByPayments = this.salesByPayments.sort(function (a, b) {
-        if (a.data.netPrice > b.data.netPrice) return -1
-        if (a.data.netPrice < b.data.netPrice) return 1
-        return 0
-      })
-    })
-    await this.loadData()
-    this.loadingData = false
-  },
-  methods: {
-    ...mapActions('shop', ['getShops']),
-    ...mapActions('sale', ['getSalesByPayment']),
-    ...mapActions('payment', ['loadPaymentsConst']),
-    saveDates () {
-      this.$refs.menu.save(this.dates)
-      this.loadSalesByEmployer()
-    },
-    loadData: function () {
-      const categories = []
-      const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
-      this.localSalesByPayments.slice(0, 4).forEach((v) => {
-        if (v.name !== undefined) {
-          categories.push(this.paymentsConst.filter(pay => (pay.value === v.name))[0].name)
-          series.grossPrice.push(v.data.grossPrice)
-          series.totalDiscount.push(v.data.totalDiscount)
-          series.netPrice.push(v.data.netPrice)
-          series.totalCost.push(v.data.totalCost)
-          series.totalTax.push(v.data.totalTax)
-        }
-      })
-      this.chartOptions = {
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: this.$vuetify.lang.t('$vuetify.report.barGraphics')
-        },
-        xAxis: {
-          categories: categories,
-          crosshair: true
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: this.user.company.currency
-          }
-        },
-        tooltip: {
-          headerFormat: '<span style="font-size:10px"><b>{point.key}</b></span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+	name: 'SalesPayment',
+	components: { AppLoading, highcharts: Chart },
+	data () {
+		return {
+			loadingData: false,
+			panel: [0],
+			seriesData: [],
+			chartOptions: {},
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: false
+			},
+			menu: false,
+			formRule: this.$rules,
+			dates: [],
+			localShops: [],
+			localSalesByPayments: []
+		}
+	},
+	computed: {
+		...mapState('shop', ['shops', 'isShopLoading']),
+		...mapState('sale', ['salesByPayments', 'isTableLoading']),
+		...mapState('payment', ['paymentsConst']),
+		...mapGetters('auth', ['user']),
+		dateRangeText () {
+			const d1 = this.dates[0]
+			const d2 = this.dates[1]
+			console.log(this.dates)
+			if (d1 > d2) {
+				// eslint-disable-next-line vue/no-side-effects-in-computed-properties
+				this.dates = [d2, d1]
+			}
+			return this.dates.join(' ---> ')
+		},
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.cant'),
+					value: 'data.cantTransactions',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.report.grossPrice'),
+					value: 'data.grossPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.report.netPrice'),
+					value: 'data.netPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.report.discountsSale'),
+					value: 'data.totalDiscount',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
+					value: 'data.totalTax',
+					select_filter: true
+				}
+			]
+		}
+	},
+	async created () {
+		this.loadingData = true
+		let toDay
+		let lastWeek = ''
+		new Date().toLocaleDateString().split('/').reverse().forEach((v, i) => {
+			toDay = (i > 0) ? toDay + '-' + v : v
+		})
+		new Date((new Date()).getTime() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString().split('/').reverse().forEach((v, i) => {
+			lastWeek = (i > 0) ? lastWeek + '-' + v : v
+		})
+		this.dates = [lastWeek, toDay]
+		await this.loadPaymentsConst()
+		await this.getShops().then(() => {
+			this.localShops = this.shops
+		})
+		await this.getSalesByPayment({
+			shops: this.shops,
+			dates: this.dates
+		}).then(() => {
+			this.localSalesByPayments = this.salesByPayments.sort(function (a, b) {
+				if (a.data.netPrice > b.data.netPrice) return -1
+				if (a.data.netPrice < b.data.netPrice) return 1
+				return 0
+			})
+		})
+		await this.loadData()
+		this.loadingData = false
+	},
+	methods: {
+		...mapActions('shop', ['getShops']),
+		...mapActions('sale', ['getSalesByPayment']),
+		...mapActions('payment', ['loadPaymentsConst']),
+		saveDates () {
+			this.$refs.menu.save(this.dates)
+			this.loadSalesByEmployer()
+		},
+		loadData: function () {
+			const categories = []
+			const series = { grossPrice: [], totalDiscount: [], netPrice: [], totalCost: [], totalTax: [] }
+			this.localSalesByPayments.slice(0, 4).forEach((v) => {
+				if (v.name !== undefined) {
+					categories.push(this.paymentsConst.filter(pay => (pay.value === v.name))[0].name)
+					series.grossPrice.push(v.data.grossPrice)
+					series.totalDiscount.push(v.data.totalDiscount)
+					series.netPrice.push(v.data.netPrice)
+					series.totalCost.push(v.data.totalCost)
+					series.totalTax.push(v.data.totalTax)
+				}
+			})
+			this.chartOptions = {
+				chart: {
+					type: 'column'
+				},
+				title: {
+					text: this.$vuetify.lang.t('$vuetify.report.barGraphics')
+				},
+				xAxis: {
+					categories: categories,
+					crosshair: true
+				},
+				yAxis: {
+					min: 0,
+					title: {
+						text: this.user.company.currency
+					}
+				},
+				tooltip: {
+					headerFormat: '<span style="font-size:10px"><b>{point.key}</b></span><table>',
+					pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                     '<td style="padding:0"><b>{point.y:.1f} ' + this.user.company.currency + '</b></td></tr>',
-          footerFormat: '</table>',
-          shared: true,
-          useHTML: true
-        },
-        plotOptions: {
-          column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-          }
-        },
-        series: [{
-          name: this.$vuetify.lang.t('$vuetify.report.grossSale'),
-          data: series.grossPrice
+					footerFormat: '</table>',
+					shared: true,
+					useHTML: true
+				},
+				plotOptions: {
+					column: {
+						pointPadding: 0.2,
+						borderWidth: 0
+					}
+				},
+				series: [{
+					name: this.$vuetify.lang.t('$vuetify.report.grossSale'),
+					data: series.grossPrice
 
-        }, {
-          name: this.$vuetify.lang.t('$vuetify.report.discountsSale'),
-          data: series.totalDiscount
+				}, {
+					name: this.$vuetify.lang.t('$vuetify.report.discountsSale'),
+					data: series.totalDiscount
 
-        }, {
-          name: this.$vuetify.lang.t('$vuetify.report.netPrice'),
-          data: series.netPrice
+				}, {
+					name: this.$vuetify.lang.t('$vuetify.report.netPrice'),
+					data: series.netPrice
 
-        }, {
-          name: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          data: series.totalCost
+				}, {
+					name: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					data: series.totalCost
 
-        }, {
-          name: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
-          data: series.totalTax
+				}, {
+					name: this.$vuetify.lang.t('$vuetify.tax.total_pay_tax'),
+					data: series.totalTax
 
-        }]
-      }
-    },
-    rowClick ($event) {
-    }
-  }
+				}]
+			}
+		},
+		rowClick ($event) {
+		}
+	}
 }
 </script>
 

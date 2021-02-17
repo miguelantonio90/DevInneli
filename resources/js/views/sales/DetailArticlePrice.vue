@@ -109,19 +109,19 @@
 </template>
 <script>
 export default {
-  name: 'DetailArticlePrice',
-  props: {
-    article: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
-    currency: {
-      type: String,
-      default: ''
-    }
-  }
+	name: 'DetailArticlePrice',
+	props: {
+		article: {
+			type: Object,
+			default: function () {
+				return {}
+			}
+		},
+		currency: {
+			type: String,
+			default: ''
+		}
+	}
 }
 </script>
 

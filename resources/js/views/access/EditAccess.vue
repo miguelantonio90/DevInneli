@@ -151,36 +151,36 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      formValid: false,
-      access_permit: [],
-      key: {},
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress']),
-    ...mapState('keys', ['keys'])
-  },
-  created () {
-    this.access_permit = []
-    this.access_permit = JSON.parse(this.editAccess.access_permit)
-  },
-  methods: {
-    ...mapActions('role', ['updateRole', 'toogleEditModal']),
-    updateAccessPermit () {
-      this.access_permit = []
-      this.access_permit = JSON.parse(this.newAccess.key.access_permit)
-    },
+	data () {
+		return {
+			formValid: false,
+			access_permit: [],
+			key: {},
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress']),
+		...mapState('keys', ['keys'])
+	},
+	created () {
+		this.access_permit = []
+		this.access_permit = JSON.parse(this.editAccess.access_permit)
+	},
+	methods: {
+		...mapActions('role', ['updateRole', 'toogleEditModal']),
+		updateAccessPermit () {
+			this.access_permit = []
+			this.access_permit = JSON.parse(this.newAccess.key.access_permit)
+		},
 
-    async updateRoleHandler () {
-      if (this.$refs.form.validate()) {
-        this.editAccess.access_permit = this.access_permit
-        await this.updateRole(this.editAccess)
-      }
-    }
-  }
+		async updateRoleHandler () {
+			if (this.$refs.form.validate()) {
+				this.editAccess.access_permit = this.access_permit
+				await this.updateRole(this.editAccess)
+			}
+		}
+	}
 }
 </script>
 

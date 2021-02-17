@@ -32,29 +32,29 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 export default {
-  name: 'LinearStatistic',
-  props: {
-    percent: {
-      type: Boolean,
-      default: false
-    },
-    icon: String,
-    title: String,
-    subTitle: String,
-    currency: String,
-    quantity: [String, Number],
-    value: [String, Number],
-    color: String
-  },
-  computed: {
-    caption () {
-      if (this.percent) {
-        return this.value + '% ' + this.subTitle
-      } else {
-        return this.subTitle
-      }
-    }
-  }
+	name: 'LinearStatistic',
+	props: {
+		percent: {
+			type: Boolean,
+			default: false
+		},
+		icon: String,
+		title: String,
+		subTitle: String,
+		currency: String,
+		quantity: [String, Number],
+		value: [String, Number],
+		color: String
+	},
+	computed: {
+		caption () {
+			if (this.percent) {
+				return this.value + '% ' + this.subTitle
+			} else {
+				return this.subTitle
+			}
+		}
+	}
 }
 </script>
 

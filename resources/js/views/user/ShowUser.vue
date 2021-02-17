@@ -147,19 +147,19 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'ShowUser',
-  data () {
-    return {
-      formValid: false
-    }
-  },
-  computed: {
-    ...mapState('user', ['saved', 'editUser']),
-    ...mapState('statics', ['arrayCountry'])
-  },
-  methods: {
-    ...mapActions('user', ['updateUser', 'toogleShowModal'])
-  }
+	name: 'ShowUser',
+	data () {
+		return {
+			formValid: false
+		}
+	},
+	computed: {
+		...mapState('user', ['saved', 'editUser']),
+		...mapState('statics', ['arrayCountry'])
+	},
+	methods: {
+		...mapActions('user', ['updateUser', 'toogleShowModal'])
+	}
 }
 </script>
 

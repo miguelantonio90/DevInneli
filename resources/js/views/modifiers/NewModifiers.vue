@@ -124,34 +124,34 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('modifiers', ['newModifier', 'isActionInProgress']),
-    ...mapState('shop', ['shops', 'isShopLoading'])
-  },
-  created () {
-    this.formValid = false
-    this.getShops().then(() => {
-      this.newModifier.shops = this.shops
-    })
-  },
-  methods: {
-    ...mapActions('modifiers', ['createModifiers', 'toogleNewModal']),
-    ...mapActions('shop', ['getShops']),
-    setModifiers (shops) {
-      this.newModifier.shops = shops
-    },
-    async handleSubmit () {
-      if (this.$refs.form.validate()) {
-        await this.createModifiers(this.newModifier)
-      }
-    }
-  }
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('modifiers', ['newModifier', 'isActionInProgress']),
+		...mapState('shop', ['shops', 'isShopLoading'])
+	},
+	created () {
+		this.formValid = false
+		this.getShops().then(() => {
+			this.newModifier.shops = this.shops
+		})
+	},
+	methods: {
+		...mapActions('modifiers', ['createModifiers', 'toogleNewModal']),
+		...mapActions('shop', ['getShops']),
+		setModifiers (shops) {
+			this.newModifier.shops = shops
+		},
+		async handleSubmit () {
+			if (this.$refs.form.validate()) {
+				await this.createModifiers(this.newModifier)
+			}
+		}
+	}
 }
 </script>
 

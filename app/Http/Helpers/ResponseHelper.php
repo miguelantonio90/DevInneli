@@ -2,7 +2,6 @@
 
 namespace App\Http\Helpers;
 
-use App\Notification;
 use Exception;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
@@ -33,14 +32,14 @@ class ResponseHelper
                 cache()->get('userPin')->position['name'] === 'admin',
                 base64_encode(cache()->get('userPin')->position['access_permit']),
                 [
-                    'name' => cache()->get('userPin')->firstName . ' ' . cache()->get('userPin')->lastName,
+                    'name' => cache()->get('userPin')->firstName.' '.cache()->get('userPin')->lastName,
                     'email' => cache()->get('userPin')->email
                 ]
             ] : '',
-            'notifications' => Notification::latest()
+            /*'notifications' => Notification::latest()
                 ->where('company_id', '=', cache()->get('userPin')->company['id'])
 //                ->where('read', '=', 0)
-                ->get()
+                ->get()*/
         ];
         return response()->json($response);
     }
@@ -50,8 +49,8 @@ class ResponseHelper
      * return error response.
      *
      * @param $error
-     * @param array $errorMessages
-     * @param int $code
+     * @param  array  $errorMessages
+     * @param  int  $code
      * @return JsonResponse|Response
      */
     public static function sendError($error, $errorMessages = [], $code = 404)

@@ -123,28 +123,28 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewKeys',
-  data () {
-    return {
-      formValid: false,
-      formRule: this.$rules
-    }
-  },
-  computed: {
-    ...mapState('keys', ['saved', 'newKey', 'isActionInProgress'])
-  },
-  mounted () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('keys', ['createKey', 'toogleNewModal']),
-    async createNewKey () {
-      if (this.$refs.form.validate()) {
-        this.newKey.access_permit = this.access_permit
-        await this.createKey(this.newKey)
-      }
-    }
-  }
+	name: 'NewKeys',
+	data () {
+		return {
+			formValid: false,
+			formRule: this.$rules
+		}
+	},
+	computed: {
+		...mapState('keys', ['saved', 'newKey', 'isActionInProgress'])
+	},
+	mounted () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('keys', ['createKey', 'toogleNewModal']),
+		async createNewKey () {
+			if (this.$refs.form.validate()) {
+				this.newKey.access_permit = this.access_permit
+				await this.createKey(this.newKey)
+			}
+		}
+	}
 }
 </script>
 

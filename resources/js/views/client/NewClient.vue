@@ -180,89 +180,89 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewUser',
-  data () {
-    return {
-      formValid: false,
-      hidePinCode1: true,
-      hidePinCode2: true,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null,
-      focus: false
-    }
-  },
-  computed: {
-    ...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
-    getAvatar () {
-      return `${this.newClient.avatar ||
+	name: 'NewUser',
+	data () {
+		return {
+			formValid: false,
+			hidePinCode1: true,
+			hidePinCode2: true,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null,
+			focus: false
+		}
+	},
+	computed: {
+		...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
+		getAvatar () {
+			return `${this.newClient.avatar ||
           '/assets/avatar/avatar-undefined.jpg'}`
-    },
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  created () {
-    this.formValid = false
-  },
-  methods: {
-    ...mapActions('client', ['createClient', 'toogleNewModal']),
-    onCountry (event) {
-      this.newClient.country = event.iso2
-      this.countrySelect = event
-    },
-    numbers (event) {
-      const regex = new RegExp('^[0-9]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    onChangeImage (file) {
-      this.newClient.avatar = `data:${file.type};base64,${file.base64}`
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.newClient.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    lettersNumbers (event) {
-      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-      const key = String.fromCharCode(
-        !event.charCode ? event.which : event.charCode
-      )
-      if (!regex.test(key)) {
-        event.preventDefault()
-        return false
-      }
-    },
-    async createNewClient () {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        await this.createClient(this.newClient)
-      }
-    }
-  }
+		},
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+		this.formValid = false
+	},
+	methods: {
+		...mapActions('client', ['createClient', 'toogleNewModal']),
+		onCountry (event) {
+			this.newClient.country = event.iso2
+			this.countrySelect = event
+		},
+		numbers (event) {
+			const regex = new RegExp('^[0-9]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		onChangeImage (file) {
+			this.newClient.avatar = `data:${file.type};base64,${file.base64}`
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.newClient.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		lettersNumbers (event) {
+			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+			const key = String.fromCharCode(
+				!event.charCode ? event.which : event.charCode
+			)
+			if (!regex.test(key)) {
+				event.preventDefault()
+				return false
+			}
+		},
+		async createNewClient () {
+			if (this.$refs.form.validate()) {
+				this.loading = true
+				await this.createClient(this.newClient)
+			}
+		}
+	}
 }
 </script>
 

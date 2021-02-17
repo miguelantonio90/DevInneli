@@ -2,14 +2,19 @@
 
 namespace App\Managers;
 
+use App\ArticleImage;
 use App\ArticlesShops;
+use App\Category;
 use App\OnlineConfig;
 use App\Shop;
 use App\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\This;
 
 class ShopManager extends BaseManager
 {
+
     /**
      * @return mixed
      * @throws Exception
@@ -46,10 +51,20 @@ class ShopManager extends BaseManager
             ->where('name', '=', str_replace('_', ' ', $data['shopName']))
             ->with('articlesShops')
             ->first();
-        $ArticlesShops = ArticlesShops::latest()->where('shop_id', '=', $shop->id)
-            ->with('article')
+        $articlesShops = DB::table('articles')
+            ->join('articles_shops','articles_shops.article_id','=','articles.id')
+            ->join('shops','shops.id','=', 'articles_shops.shop_id')
+            ->where('shops.id','=',$shop->id)
+            ->select('articles.*')
             ->get();
-        return ['shop' => $shop, 'articles' => $ArticlesShops];
+        $categories =  [];
+        foreach ($articlesShops as $key=>$articlesShop){
+            $articlesShop->images = ArticleImage::latest()->where('article_id','=',$articlesShop->id)->get();
+            if($articlesShop->category_id && !array_key_exists($articlesShop->category_id, $categories)){
+                $categories[$articlesShop->category_id] = Category::findOrFail($articlesShop->category_id);
+            }
+        }
+        return ['shop' => $shop, 'categories' => $categories, 'articles' => $articlesShops, 'images'=> ArticleImage::latest()->where('shop_id', '=',$shop->id)->get()];
     }
 
     /**

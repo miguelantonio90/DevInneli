@@ -307,131 +307,131 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Profile',
-  data () {
-    return {
-      color: 'primary',
-      formValid: false,
-      enableEmail: false,
-      loading: false,
-      saving: false,
-      loadingData: false,
-      errorPhone: null,
-      formRule: this.$rules,
-      countrySelect: null
-    }
-  },
-  computed: {
-    ...mapState('auth', ['userData', 'pending']),
-    ...mapState('company', ['saved', 'companies']),
-    ...mapState('statics', ['arrayCountry']),
-    ...mapGetters('auth', ['user', 'isManagerIn', 'isLoggedIn']),
-    getFullName () {
-      return `${this.user.firstName} ${this.user.lastName || ''}`
-    },
-    getCompanyName () {
-      return `${this.user.company.name}`
-    },
-    getAvatar () {
-      return `${this.user.company.logo ? this.user.company.logo
-            : '/assets/avatar/avatar-undefined.jpg'}`
-    },
-    bindProps () {
-      return {
-        mode: 'national',
-        clearable: true,
-        defaultCountry: this.user.company.country || 'US',
-        disabledFetchingCountry: false,
-        autocomplete: 'off',
-        dropdownOptions: {
-          disabledDialCode: false
-        },
-        inputOptions: {
-          showDialCode: false
-        }
-      }
-    }
-  },
-  created () {
-    this.loadingData = true
-    this.getUserData().then(() => {
-      this.loadingData = false
-    })
-  },
-  methods: {
-    ...mapActions('auth', ['getUserData']),
-    ...mapActions('company', ['updateCompany', 'updateLogo']),
-    onCountry (event) {
-      this.userData.company.country = event.iso2
-      this.countrySelect = event
-    },
-    async updateProfile () {
-      this.loading = true
-      await this.updateCompany(this.userData.company).then(() => {
-        if (this.saved) {
-          this.loading = false
-          const msg = this.$vuetify.lang.t(
-            '$vuetify.messages.success_profile'
-          )
-          this.$Toast.fire({
-            icon: 'success',
-            title: msg
-          })
-        }
-      })
-    },
-    async onChangeImage (file) {
-      this.saving = true
-      const id = this.userData.company.id
-      await this.updateLogo({
-        id,
-        file
-      }).then(() => {
-        if (this.saved) {
-          const msg = this.$vuetify.lang.t(
-            '$vuetify.messages.success_avatar'
-          )
-          this.$Toast.fire({
-            icon: 'success',
-            title: msg
-          })
-        }
-      })
-    },
-    onInput (number, object) {
-      const lang = this.$vuetify.lang
-      if (object.valid) {
-        this.userData.company.phone = number
-        this.errorPhone = null
-      } else {
-        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-          lang.t('$vuetify.phone')
-        ])
-      }
-    },
-    openConfirm () {
-      const lang = this.$vuetify.lang
-      this.$Swal.fire({
-        title: lang.t('$vuetify.find_password'),
-        input: 'password',
-        inputAttributes: {
-          minlength: 10,
-          autocapitalize: 'off',
-          autocorrect: 'off'
-        },
-        confirmButtonText: lang.t('$vuetify.actions.accept'),
-        showLoaderOnConfirm: true,
-        preConfirm: (login) => {
+	name: 'Profile',
+	data () {
+		return {
+			color: 'primary',
+			formValid: false,
+			enableEmail: false,
+			loading: false,
+			saving: false,
+			loadingData: false,
+			errorPhone: null,
+			formRule: this.$rules,
+			countrySelect: null
+		}
+	},
+	computed: {
+		...mapState('auth', ['userData', 'pending']),
+		...mapState('company', ['saved', 'companies']),
+		...mapState('statics', ['arrayCountry']),
+		...mapGetters('auth', ['user', 'isManagerIn', 'isLoggedIn']),
+		getFullName () {
+			return `${this.user.firstName} ${this.user.lastName || ''}`
+		},
+		getCompanyName () {
+			return `${this.user.company.name}`
+		},
+		getAvatar () {
+			return `${this.user.company.logo ? this.user.company.logo
+				: '/assets/avatar/avatar-undefined.jpg'}`
+		},
+		bindProps () {
+			return {
+				mode: 'national',
+				clearable: true,
+				defaultCountry: this.user.company.country || 'US',
+				disabledFetchingCountry: false,
+				autocomplete: 'off',
+				dropdownOptions: {
+					disabledDialCode: false
+				},
+				inputOptions: {
+					showDialCode: false
+				}
+			}
+		}
+	},
+	created () {
+		this.loadingData = true
+		this.getUserData().then(() => {
+			this.loadingData = false
+		})
+	},
+	methods: {
+		...mapActions('auth', ['getUserData']),
+		...mapActions('company', ['updateCompany', 'updateLogo']),
+		onCountry (event) {
+			this.userData.company.country = event.iso2
+			this.countrySelect = event
+		},
+		async updateProfile () {
+			this.loading = true
+			await this.updateCompany(this.userData.company).then(() => {
+				if (this.saved) {
+					this.loading = false
+					const msg = this.$vuetify.lang.t(
+						'$vuetify.messages.success_profile'
+					)
+					this.$Toast.fire({
+						icon: 'success',
+						title: msg
+					})
+				}
+			})
+		},
+		async onChangeImage (file) {
+			this.saving = true
+			const id = this.userData.company.id
+			await this.updateLogo({
+				id,
+				file
+			}).then(() => {
+				if (this.saved) {
+					const msg = this.$vuetify.lang.t(
+						'$vuetify.messages.success_avatar'
+					)
+					this.$Toast.fire({
+						icon: 'success',
+						title: msg
+					})
+				}
+			})
+		},
+		onInput (number, object) {
+			const lang = this.$vuetify.lang
+			if (object.valid) {
+				this.userData.company.phone = number
+				this.errorPhone = null
+			} else {
+				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+					lang.t('$vuetify.phone')
+				])
+			}
+		},
+		openConfirm () {
+			const lang = this.$vuetify.lang
+			this.$Swal.fire({
+				title: lang.t('$vuetify.find_password'),
+				input: 'password',
+				inputAttributes: {
+					minlength: 10,
+					autocapitalize: 'off',
+					autocorrect: 'off'
+				},
+				confirmButtonText: lang.t('$vuetify.actions.accept'),
+				showLoaderOnConfirm: true,
+				preConfirm: (login) => {
 
-        },
-        allowOutsideClick: () => !this.$Swal.isLoading()
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.enableEmail = true
-        }
-      })
-    }
-  }
+				},
+				allowOutsideClick: () => !this.$Swal.isLoading()
+			}).then((result) => {
+				if (result.isConfirmed) {
+					this.enableEmail = true
+				}
+			})
+		}
+	}
 }
 </script>
 <style scoped>

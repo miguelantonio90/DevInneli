@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Client;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Managers\CompanyManager;
 use App\Managers\SupplierManager;
-use App\Notifications\InvitationSupplier;
-use App\User;
 use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-//use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+
+//use Illuminate\Notifications\Notification;
 
 class SupplierController extends Controller
 {
@@ -31,7 +27,7 @@ class SupplierController extends Controller
 
     /**
      * SupplierController constructor.
-     * @param SupplierManager $supplierManager
+     * @param  SupplierManager  $supplierManager
      */
     public function __construct(SupplierManager $supplierManager)
     {
@@ -59,7 +55,7 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      * @throws ValidationException
      * @throws Exception
@@ -70,19 +66,16 @@ class SupplierController extends Controller
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $supplier = $this->supplierManager->new($data);
-        $info =
-            ['client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name];
-        if (array_key_exists('sendEmail', $data)) {
-            if ($data['sendEmail']) {
-                Mail::send('emails.invitation-supplier', $info,
-                    function ($message) use ($supplier) {
-                        $message->subject('INNELI');
-                        $message->from('no-reply@inneli.com');
-                        $message->to($supplier->email);
-                    });
-            }
-
-
+        $info = [
+            'client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name,
+            'registerUrl' => config('frontend.email_register_url').base64_encode($supplier),
+        ];
+        if (array_key_exists('sendEmail', $data) && $data['sendEmail']) {
+            Mail::send('emails.invitation-supplier', $info,
+                function ($message) use ($supplier) {
+                    $message->subject('Invitation Email Address');
+                    $message->to($supplier->email);
+                });
         }
         return ResponseHelper::sendResponse(
             $supplier,
@@ -100,7 +93,7 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @param    $id
      * @return JsonResponse|Response
      * @throws ValidationException
@@ -131,7 +124,7 @@ class SupplierController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      * @throws Exception
      */

@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'AppLoading'
+	name: 'AppLoading'
 }
 </script>
 

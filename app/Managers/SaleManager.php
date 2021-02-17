@@ -122,6 +122,15 @@ class SaleManager extends BaseManager
         return $this->filterSale($sales);
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAccessPermit()
+    {
+        return json_decode(cache()->get('userPin')->position['access_permit'], true);
+    }
+
     public function filterSale($sales)
     {
         foreach ($sales as $key => $value) {
@@ -255,15 +264,6 @@ class SaleManager extends BaseManager
                 ->first();
         }
         return $sales;
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    private function getAccessPermit()
-    {
-        return json_decode(cache()->get('userPin')->position['access_permit'], true);
     }
 
     /**
@@ -402,7 +402,7 @@ class SaleManager extends BaseManager
         }
         $saleAS->discount()->sync($discounts);
         $modifiers = [];
-        if(array_key_exists('modifiers', $data)) {
+        if (array_key_exists('modifiers', $data)) {
             foreach ($data['modifiers'] as $key => $modifier) {
                 $modifiers[] = $modifier['id'];
             }

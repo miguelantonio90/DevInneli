@@ -30,7 +30,17 @@ class ConfigManager extends BaseManager
         foreach ($configs as $key=>$config){
             $config['images']= ArticleImage::latest()->where('shop_id', '=',$config['shop_id'])->get();
         }
+
         return $configs;
+    }
+
+    /**
+     *
+     */
+    public static function findConfigById($shopId){
+        return OnlineConfig::latest()
+                ->where('shop_id', '=', $shopId)
+                ->first();
     }
 
     /**

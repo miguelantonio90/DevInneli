@@ -406,117 +406,117 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListInventory',
-  data () {
-    return {
-      localInventories: [],
-      search: '',
-      vBindOption: {
-        itemKey: 'no_facture',
-        singleExpand: false,
-        showExpand: true
-      }
-    }
-  },
-  computed: {
-    ...mapState('inventory', [
-      'managerInventory',
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'inventories',
-      'isTableLoading'
-    ]),
-    ...mapGetters('auth', ['user']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-          value: 'no_facture',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.pay.pay'),
-          value: 'pay',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.payment.name'),
-          value: 'payments.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.supplier.name'),
-          value: 'supplier.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-          value: 'totalCost',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
-          value: 'totalPrice',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-          value: 'shop.name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getInventories()
-  },
-  methods: {
-    ...mapActions('inventory', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getInventories',
-      'deleteInventory'
-    ]),
-    createInventoryHandler () {
-      this.managerInventory = false
-      this.$router.push({ name: 'supply_add' })
-    },
-    editInventoryHandler ($event) {
-      this.managerInventory = true
-      this.openEditModal($event)
-      this.$router.push({ name: 'supply_edit' })
-    },
-    deleteInventoryHandler (articleId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.supply_productS')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.isConfirmed) this.deleteInventory(articleId)
-        })
-    }
-  }
+	name: 'ListInventory',
+	data () {
+		return {
+			localInventories: [],
+			search: '',
+			vBindOption: {
+				itemKey: 'no_facture',
+				singleExpand: false,
+				showExpand: true
+			}
+		}
+	},
+	computed: {
+		...mapState('inventory', [
+			'managerInventory',
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'inventories',
+			'isTableLoading'
+		]),
+		...mapGetters('auth', ['user']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+					value: 'no_facture',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.pay.pay'),
+					value: 'pay',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.payment.name'),
+					value: 'payments.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.supplier.name'),
+					value: 'supplier.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+					value: 'totalCost',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.variants.total_price'),
+					value: 'totalPrice',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+					value: 'shop.name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getInventories()
+	},
+	methods: {
+		...mapActions('inventory', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getInventories',
+			'deleteInventory'
+		]),
+		createInventoryHandler () {
+			this.managerInventory = false
+			this.$router.push({ name: 'supply_add' })
+		},
+		editInventoryHandler ($event) {
+			this.managerInventory = true
+			this.openEditModal($event)
+			this.$router.push({ name: 'supply_edit' })
+		},
+		deleteInventoryHandler (articleId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.supply_productS')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.isConfirmed) this.deleteInventory(articleId)
+				})
+		}
+	}
 }
 </script>
 

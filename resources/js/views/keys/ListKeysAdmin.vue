@@ -53,41 +53,41 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ListKeysAdmin',
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('keys', [
-      'keys',
-      'isTableLoading'
-    ]),
-    ...mapGetters('statics', ['arrayCountry']),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.company'),
-          value: 'name',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.access.name'),
-          value: 'key',
-          select_filter: true
-        }
-      ]
-    }
-  },
-  created () {
-    this.getKeys()
-  },
-  methods: {
-    ...mapActions('keys', [
-      'getKeys'
-    ])
-  }
+	name: 'ListKeysAdmin',
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('keys', [
+			'keys',
+			'isTableLoading'
+		]),
+		...mapGetters('statics', ['arrayCountry']),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.company'),
+					value: 'name',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.access.name'),
+					value: 'key',
+					select_filter: true
+				}
+			]
+		}
+	},
+	created () {
+		this.getKeys()
+	},
+	methods: {
+		...mapActions('keys', [
+			'getKeys'
+		])
+	}
 }
 </script>
 

@@ -57,90 +57,90 @@ import EditClient from '../client/EditClient'
 import NewClient from '../client/NewClient'
 
 export default {
-  components: {
-    EditClient,
-    NewClient
-  },
-  data () {
-    return {
-      search: ''
-    }
-  },
-  computed: {
-    ...mapState('client', [
-      'showNewModal',
-      'showEditModal',
-      'showShowModal',
-      'clients',
-      'isTableLoading'
-    ]),
-    getTableColumns () {
-      return [
-        {
-          text: this.$vuetify.lang.t('$vuetify.firstName'),
-          value: 'firstName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.lastName'),
-          value: 'lastName',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.email'),
-          value: 'email'
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.country'),
-          value: 'nameCountry',
-          select_filter: true
-        },
-        {
-          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-          value: 'actions',
-          sortable: false
-        }
-      ]
-    }
-  },
-  created () {
-    this.getClients()
-  },
-  methods: {
-    ...mapActions('client', [
-      'toogleNewModal',
-      'openEditModal',
-      'openShowModal',
-      'getClients',
-      'deleteClient'
-    ]),
-    editClientHandler ($event) {
-      this.openEditModal($event)
-    },
-    deleteClientHandler (clientId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.menu.client')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.warning_delete'
-          ),
-          icon: 'warning',
-          showCancelButton: true,
-          cancelButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.cancel'
-          ),
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.delete'
-          ),
-          confirmButtonColor: 'red'
-        })
-        .then((result) => {
-          if (result.value) this.deleteClient(clientId)
-        })
-    }
-  }
+	components: {
+		EditClient,
+		NewClient
+	},
+	data () {
+		return {
+			search: ''
+		}
+	},
+	computed: {
+		...mapState('client', [
+			'showNewModal',
+			'showEditModal',
+			'showShowModal',
+			'clients',
+			'isTableLoading'
+		]),
+		getTableColumns () {
+			return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.firstName'),
+					value: 'firstName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.lastName'),
+					value: 'lastName',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.email'),
+					value: 'email'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.country'),
+					value: 'nameCountry',
+					select_filter: true
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}
+			]
+		}
+	},
+	created () {
+		this.getClients()
+	},
+	methods: {
+		...mapActions('client', [
+			'toogleNewModal',
+			'openEditModal',
+			'openShowModal',
+			'getClients',
+			'deleteClient'
+		]),
+		editClientHandler ($event) {
+			this.openEditModal($event)
+		},
+		deleteClientHandler (clientId) {
+			this.$Swal
+				.fire({
+					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+						this.$vuetify.lang.t('$vuetify.menu.client')
+					]),
+					text: this.$vuetify.lang.t(
+						'$vuetify.messages.warning_delete'
+					),
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.cancel'
+					),
+					confirmButtonText: this.$vuetify.lang.t(
+						'$vuetify.actions.delete'
+					),
+					confirmButtonColor: 'red'
+				})
+				.then((result) => {
+					if (result.value) this.deleteClient(clientId)
+				})
+		}
+	}
 }
 </script>
 
