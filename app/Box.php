@@ -34,6 +34,19 @@ class Box extends Model
     protected $fillable = [
         'name', 'shop_id'
     ];
+    public static function createFirst($shop, $company): Shop
+    {
+        $box = new self();
+        $box->name = $shop->name. '(Digital)';
+        $box->shop_id = $shop->id;
+        $box->digital = true;
+        $box->state = 'open';
+        $box->company_id = $company->id;
+        $box->save();
+
+        return $shop;
+
+    }
 
     public function shop(): BelongsTo
     {

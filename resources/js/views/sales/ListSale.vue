@@ -120,18 +120,25 @@
             </template>
           </template>
           <template v-slot:[`item.shop.name`]="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  {{ item.shop.name }}
-                </v-chip>
-              </template>
-              <span>
-                {{ $vuetify.lang.t('$vuetify.menu.box')+'- ' + item.box.name }}</span>
-            </v-tooltip>
+            <template v-if="item.online">
+              <v-chip>
+                {{ item.shop.name }}
+              </v-chip>
+            </template>
+            <template v-else>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    {{ item.shop.name }}
+                  </v-chip>
+                </template>
+                <span v-if="!item.online">
+                  {{ $vuetify.lang.t('$vuetify.menu.box')+'- ' + item.box.name }}</span>
+              </v-tooltip>
+            </template>
           </template>
           <template
             v-slot:[`item.totalPrice`]="{ item }"

@@ -16,6 +16,7 @@ class CreateSalesTable extends BaseMigration
             $table->string('no_facture')->nullable();
             $table->string('state')->nullable();
             $table->string('type')->default('sale');
+            $table->boolean('online')->default(false); /// para definir si es una venta online
             $table->boolean('supply')->default(false); /// para definir si es un pedido
             $table->boolean('supply_process')->default(false); /// para ver si ya el pedido se convirtio en compra/venta
             $table->date('reclamation')->nullable();

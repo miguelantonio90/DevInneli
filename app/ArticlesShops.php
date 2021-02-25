@@ -26,7 +26,7 @@ class ArticlesShops extends Model
     protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
-    protected $fillable = ['price', 'stock', 'under_inventory', 'shop_id', 'article_id'];
+    protected $fillable = ['price', 'stock', 'under_inventory', 'shop_id', 'article_id', 'onlinePrice'];
 
     public function article(): BelongsTo
     {

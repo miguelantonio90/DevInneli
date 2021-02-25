@@ -11,11 +11,13 @@
       <v-toolbar-title
         style="width: 350px"
       >
-        <a
-          href="/"
-          class="white--text"
-          style="text-decoration: none"
-        ><v-icon>mdi-truck</v-icon>&nbsp;ShipIT</a>
+        <router-link
+          color="green"
+          overlap
+          :to="{ name: 'Home', params: $route.params}"
+        >
+          <v-icon>mdi-home</v-icon>&nbsp;
+        </router-link>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -45,7 +47,6 @@
 
       <router-link
         :to="{ name: 'Home', params: $route.params}"
-        tag="v-btn"
         color="green"
         overlap
       >
@@ -66,26 +67,13 @@
         <router-link
           :to="{ name: 'Home', params: $route.params}"
           tag="v-btn"
-        >
-          {{ shopData.shop.name }}
-        </router-link>
+        />
         <router-link
+          v-if="shopData.shop"
           :to="{ name: 'Shop', params: $route.params}"
           tag="v-btn"
         >
           {{ shopData.shop.name }}
-        </router-link>
-        <router-link
-          :to="{ name: 'Product', params: $route.params}"
-          tag="v-btn"
-        >
-          Products
-        </router-link>
-        <router-link
-          :to="{ name: 'Blog', params: $route.params}"
-          tag="v-btn"
-        >
-          <span>Blog</span>
         </router-link>
       </v-bottom-navigation>
     </v-content>
@@ -99,49 +87,46 @@
         width="100%"
         class="secondary white--text text-center"
       >
-        <v-card-text>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">
-              mdi-home
-            </v-icon>
-          </v-btn>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">
-              mdi-email
-            </v-icon>
-          </v-btn>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">
-              mdi-calendar
-            </v-icon>
-          </v-btn>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">
-              mdi-delete
-            </v-icon>
-          </v-btn>
-        </v-card-text>
-
-        <v-card-text class="white--text pt-0">
-          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-        </v-card-text>
+        <v-card-text class="white--text pt-0" />
 
         <v-divider />
 
         <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} — <strong>ShipIT</strong>
+          <v-row
+            v-if="shopData.shop"
+            no-gutters
+          >
+            <v-col
+              v-if="shopData.shop.phone || shopData.shop.address"
+              class="col-12 col-md-4 col-sm-12"
+            >
+              <v-row>
+                <v-col
+                  class="col-12 col-sm-3 pr-4"
+                  align="right"
+                >
+                  <v-icon class="display-2">
+                    mdi-headset
+                  </v-icon>
+                </v-col>
+                <v-col class="col-12 col-sm-9 pr-4">
+                  <h3 class="font-weight-light">
+                    {{ shopData.shop.phone }}
+                  </h3>
+                  <p class="font-weight-thin">
+                    {{ shopData.shop.address }}
+                  </p>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col
+              v-if="shopData.shop"
+              class="col-12 col-md-4 col-sm-12"
+            >
+              {{ new Date().getFullYear() }} — <strong>{{ shopData.shop.name }}</strong>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -163,12 +148,13 @@ export default {
 		]),
 		...mapState('shop', ['shopData'])
 	},
-	created () {
-		this.getShopData(this.$route.params).then(() => {
+	async created () {
+		await this.getShopData(this.$route.params).then(() => {
 		    if (!this.shopData.shop) {
 				this.$router.push({ name: '404' })
 			}
 		})
+		console.log(this.shopData.shop)
 	},
 	methods: {
 		...mapActions('category', ['getCategories', 'getCategoriesShop']),

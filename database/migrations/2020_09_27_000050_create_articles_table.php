@@ -21,6 +21,7 @@ class CreateArticlesTable extends BaseMigration
             $table->string('ref')->nullable();
             $table->string('barCode')->nullable();
             $table->boolean('composite')->default(false);
+            $table->string('description')->nullable();
             $table->boolean('track_inventory')->default(false);
             $table->foreignUuid('category_id')->nullable()->references('id')->on('categories');
 

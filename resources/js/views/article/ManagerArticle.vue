@@ -191,60 +191,6 @@
                           cols="12"
                           md="4"
                         >
-                          <v-switch
-                            v-show="article.id"
-                            v-model="article.onlineSale"
-                            :title="$vuetify.lang.t('$vuetify.articles.onlineSale_text')"
-                            @change="changeComposite"
-                          >
-                            <template v-slot:label>
-                              <div>
-                                {{ $vuetify.lang.t('$vuetify.articles.onlineSale') }}
-                                <v-tooltip
-                                  right
-                                  class="md-6"
-                                >
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <v-icon
-                                      color="primary"
-                                      dark
-                                      v-bind="attrs"
-                                      v-on="on"
-                                    >
-                                      mdi-information-outline
-                                    </v-icon>
-                                  </template>
-                                  <span>{{
-                                    $vuetify.lang.t('$vuetify.articles.onlineSale_text')
-                                  }}</span>
-                                </v-tooltip>
-                              </div>
-                            </template>
-                          </v-switch>
-                        </v-col>
-                        <v-col
-                          cols="12"
-                          md="4"
-                        >
-                          <v-text-field-money
-                            v-model="article.onlinePrice"
-                            :label="$vuetify.lang.t('$vuetify.onlinePrice')"
-                            required
-                            :properties="{
-                              prefix: user.company.currency,
-                              clearable: true
-                            }"
-                            :options="{
-                              length: 15,
-                              precision: 2,
-                              empty: 0.00,
-                            }"
-                          />
-                        </v-col>
-                        <v-col
-                          cols="12"
-                          md="4"
-                        >
                           <v-select
                             v-model="article.category"
                             :items="categories"
@@ -710,17 +656,18 @@ export default {
 		'article.price': function (newVal, oldV) {
 			this.article.articles_shops.forEach(shop => {
 				shop.price = parseFloat(shop.price).toFixed(2) === '0.00' || parseFloat(shop.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(shop.price).toFixed(2)
+				shop.onlinePrice = parseFloat(shop.price).toFixed(2) === '0.00' || parseFloat(shop.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(shop.price).toFixed(2)
 			})
 			this.article.variant_values.forEach(variant => {
 				variant.price = parseFloat(variant.price).toFixed(2) === '0.00' || parseFloat(variant.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(variant.price).toFixed(2)
+				variant.onlinePrice = parseFloat(variant.price).toFixed(2) === '0.00' || parseFloat(variant.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(variant.price).toFixed(2)
 			})
 		},
-		'article.onlinePrice': function (newVal, oldV) {
+		'article.cost': function (newVal, oldV) {
 			this.article.articles_shops.forEach(shop => {
-				shop.onlinePrice = parseFloat(shop.onlinePrice).toFixed(2) === '0.00' || parseFloat(shop.onlinePrice).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.onlinePrice : parseFloat(shop.onlinePrice).toFixed(2)
-			})
-			this.article.variant_values.forEach(variant => {
-				variant.onlinePrice = parseFloat(variant.onlinePrice).toFixed(2) === '0.00' || parseFloat(variant.onlinePrice).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.onlinePrice : parseFloat(variant.onlinePrice).toFixed(2)
+				this.article.variant_values.forEach(variant => {
+					variant.cost = parseFloat(variant.cost).toFixed(2) === '0.00' || parseFloat(variant.cost).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.cost : parseFloat(variant.cost).toFixed(2)
+				})
 			})
 		},
 		'article.composite': function (val) {
@@ -751,15 +698,20 @@ export default {
 			variant_values: [],
 			composite: false,
 			track_inventory: false,
-			category: [],
+			category: {},
 			color: '',
 			articles_shops: [],
 			composites: [],
 			images: []
 		}
 		this.loadingData = true
-		console.log(this.managerArticle)
 		this.article = this.managerArticle ? this.editArticle : this.newArticle
+		if (this.managerArticle && !this.article.composite) {
+			this.article.variant_values.forEach((artS) => {
+			    artS.articles_shops.onlineSale = artS.articles_shops.onlineSale !== 0
+			    artS.articles_shops.personSale = artS.articles_shops.personSale !== 0
+			})
+		}
 		this.article.cost = parseFloat(this.article.cost).toFixed(2)
 		this.article.price = parseFloat(this.article.price).toFixed(2)
 		this.article.onlinePrice = parseFloat(this.article.onlinePrice).toFixed(2)
@@ -824,7 +776,8 @@ export default {
 								articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
 								shop_id: shop.id,
 								shop_name: shop.name,
-								checked: articles_shop.length > 0,
+								personSale: articles_shop.length > 0 ? articles_shop[0].personSale : false,
+								onlineSale: articles_shop.length > 0 ? articles_shop[0].onlineSale : false,
 								name: v.name,
 								price: articles_shop.length > 0 ? articles_shop[0].price : v.price,
 								onlinePrice: articles_shop.length > 0 ? articles_shop[0].onlinePrice : v.onlinePrice,
@@ -836,7 +789,8 @@ export default {
 						this.article.articles_shops.push({
 							shop_id: shop.id,
 							shop_name: shop.name,
-							checked: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 : true,
+							personSale: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 && this.editArticle.articles_shops.filter(sh => sh.id === shop.id)[0].personSale : true,
+							onlineSale: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 && this.editArticle.articles_shops.filter(sh => sh.id === shop.id)[0].onlineSale : true,
 							name: '',
 							price: parseFloat(this.article.price).toFixed(2),
 							onlinePrice: parseFloat(this.article.onlinePrice).toFixed(2),

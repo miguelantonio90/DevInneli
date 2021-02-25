@@ -203,6 +203,9 @@ class ImportManager extends BaseManager
                     'article_id' => $article->id,
                     'shop_id' => $data['shop_id'],
                     'price' => $data['price'],
+                    'onlinePrice' => $data['price'],
+                    'onlineSale' => true,
+                    'personSale' => true,
                     'stock' => $data['stock'] !== "'variable'" ?: 0,
                     'under_inventory' => $data['under_inventory'] !== "'variable'" ?: 0
                 ]);

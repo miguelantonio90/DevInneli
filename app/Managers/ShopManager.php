@@ -4,7 +4,9 @@ namespace App\Managers;
 
 use App\ArticleImage;
 use App\ArticlesShops;
+use App\Box;
 use App\Category;
+use App\Company;
 use App\OnlineConfig;
 use App\Shop;
 use App\User;
@@ -47,15 +49,21 @@ class ShopManager extends BaseManager
      */
     public static function getShopData($data)
     {
+        $company = Company::latest()
+            ->where('name', '=', str_replace('_', ' ', $data['compName']))
+            ->first();
         $shop = Shop::latest()
             ->where('name', '=', str_replace('_', ' ', $data['shopName']))
+            ->where('company_id', '=', $company->id)
             ->with('articlesShops')
+            ->with('company')
             ->first();
         $articlesShops = DB::table('articles')
             ->join('articles_shops','articles_shops.article_id','=','articles.id')
             ->join('shops','shops.id','=', 'articles_shops.shop_id')
             ->where('shops.id','=',$shop->id)
-            ->select('articles.*')
+            ->where('articles_shops.onlineSale','=',true)
+            ->select('articles.*', 'articles_shops.start as start')
             ->get();
         $categories =  [];
         foreach ($articlesShops as $key=>$articlesShop){
@@ -105,7 +113,9 @@ class ShopManager extends BaseManager
         if (auth()->user()['isManager'] === 1 && auth()->user()['company_id'] === $company->id) {
             $user->shops()->attach($shop);
         }
+        $box = Box::createFirst($shop, $company);
         $this->managerBy('new', $shop);
+        $this->managerBy('new', $box);
         return $shop;
     }
 

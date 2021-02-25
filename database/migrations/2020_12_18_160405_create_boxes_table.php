@@ -14,6 +14,7 @@ class CreateBoxesTable extends BaseMigration
     {
         Schema::create('boxes', function (Blueprint $table) {
             $table->string('name');
+            $table->boolean('digital')->default(false);
             $table->string('state')->default('close');
             $table->foreignUuid('shop_id')->nullable()->references('id')->on('shops');
 

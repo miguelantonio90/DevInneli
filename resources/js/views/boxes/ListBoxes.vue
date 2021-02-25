@@ -23,38 +23,40 @@
           @delete-row="deleteBoxesHandler($event)"
         >
           <template v-slot:[`item.state`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-if="item.state === 'open'"
-                  class="mr-2"
-                  small
-                  color="primary"
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="openBox(item.id)"
-                >
-                  mdi-lock
-                </v-icon>
-              </template>
-              <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_close') }}</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-if="item.state !== 'open'"
-                  class="mr-2"
-                  color="primary"
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="openBox(item.id)"
-                >
-                  mdi-lock-open
-                </v-icon>
-              </template>
-              <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
-            </v-tooltip>
+            <template v-if="!item.name.includes('(Digital)')">
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-if="item.state === 'open'"
+                    class="mr-2"
+                    small
+                    color="primary"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="openBox(item.id)"
+                  >
+                    mdi-lock
+                  </v-icon>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_close') }}</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-if="item.state !== 'open'"
+                    class="mr-2"
+                    color="primary"
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="openBox(item.id)"
+                  >
+                    mdi-lock-open
+                  </v-icon>
+                </template>
+                <span>{{ $vuetify.lang.t('$vuetify.access.access.boxes_open') }}</span>
+              </v-tooltip>
+            </template>
             {{ $vuetify.lang.t('$vuetify.sale.state.' + item.state) }}
           </template>
         </app-data-table>
@@ -125,33 +127,58 @@ export default {
 			'deleteBox'
 		]),
 		editBoxesHandler ($event) {
-			this.openEditModal($event)
+		    if (!this.boxes.filter(bx => bx.id === $event)[0].name.includes('(Digital)')) { this.openEditModal($event) } else {
+		        this.showMessage(this.$vuetify.lang.t('$vuetify.titles.edit', [
+					this.$vuetify.lang.t('$vuetify.menu.box')
+				]))
+			}
 		},
 		openBox ($event) {
 			this.openCloseModal($event)
 		},
-		deleteBoxesHandler (categoryId) {
+		showMessage (title) {
 			this.$Swal
 				.fire({
-					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-						this.$vuetify.lang.t('$vuetify.menu.category')
-					]),
+					title: title,
 					text: this.$vuetify.lang.t(
-						'$vuetify.messages.warning_delete'
+						'$vuetify.messages.warning_digital_box'
 					),
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.cancel'
-					),
+					icon: 'info',
+					showCancelButton: false,
 					confirmButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.delete'
+						'$vuetify.actions.accept'
 					),
 					confirmButtonColor: 'red'
 				})
-				.then((result) => {
-					if (result.value) this.deleteBox(categoryId)
-				})
+		},
+		deleteBoxesHandler (categoryId) {
+			if (!this.boxes.filter(bx => bx.id === categoryId)[0].name.includes('(Digital)')) {
+				this.$Swal
+					.fire({
+						title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+							this.$vuetify.lang.t('$vuetify.menu.box')
+						]),
+						text: this.$vuetify.lang.t(
+							'$vuetify.messages.warning_delete'
+						),
+						icon: 'warning',
+						showCancelButton: true,
+						cancelButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.cancel'
+						),
+						confirmButtonText: this.$vuetify.lang.t(
+							'$vuetify.actions.delete'
+						),
+						confirmButtonColor: 'red'
+					})
+					.then((result) => {
+						if (result.value) this.deleteBox(categoryId)
+					})
+			} else {
+				this.showMessage(this.$vuetify.lang.t('$vuetify.titles.delete', [
+					this.$vuetify.lang.t('$vuetify.menu.box')
+				]))
+			}
 		}
 	}
 }

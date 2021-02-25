@@ -273,13 +273,20 @@ class SaleManager extends BaseManager
      */
     public function new($data): Sale
     {
-        $this->validBoxToSale(['id' => $data['box']['id']]);
+        if($data['online'] !== true) {
+            $this->validBoxToSale(['id' => $data['box']['id']]);
+        }
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
             'company_id' => $data['company_id']
         ]);
+
         if (isset($data['box']['id'])) {
             $sale->box_id = $data['box']['id'];
+        }
+        if($data['online']){
+            $sale->online = $data['online']?:false;
+            $sale->box_id = Box::latest()->where('shop_id', '=', $data['shop']['id'])->where('online','=',true)->get();
         }
         $sale->state = $data['state'] ?: null;
         $sale->type = 'sale';

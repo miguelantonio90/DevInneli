@@ -44,9 +44,16 @@
       :headers="getHeader"
       :items="article.articles_shops"
     >
-      <template v-slot:[`item.checked`]="{ item }">
+      <template v-slot:[`item.personSale`]="{ item }">
         <v-simple-checkbox
-          v-model="item.checked"
+          v-model="item.personSale"
+        >
+          />
+        </v-simple-checkbox>
+      </template>
+      <template v-slot:[`item.onlineSale`]="{ item }">
+        <v-simple-checkbox
+          v-model="item.onlineSale"
         >
           />
         </v-simple-checkbox>
@@ -66,6 +73,36 @@
             </div>
             <v-text-field-money
               v-model="item.price"
+              :label="$vuetify.lang.t('$vuetify.actions.edit')"
+              required
+              :properties="{
+                prefix: user.company.currency,
+                clearable: true
+              }"
+              :options="{
+                length: 15,
+                precision: 2,
+                empty: 0.00,
+              }"
+            />
+          </template>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:[`item.onlinePrice`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.onlinePrice"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+        >
+          <div>{{ `${user.company.currency +' '+item.onlinePrice}` }}</div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+            </div>
+            <v-text-field-money
+              v-model="item.onlinePrice"
               :label="$vuetify.lang.t('$vuetify.actions.edit')"
               required
               :properties="{
@@ -186,12 +223,12 @@ export default {
 			let headers = []
 			headers = [
 				{
-					text: this.$vuetify.lang.t('$vuetify.shop_article.enabled'),
-					value: 'checked'
-				},
-				{
 					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
 					value: 'shop_name'
+				},
+				{
+					text: this.$vuetify.lang.t('$vuetify.shop_article.person_sale'),
+					value: 'personSale'
 				}
 			]
 			if (!this.article.composite && this.article.variant_values.length > 0) {
@@ -203,6 +240,15 @@ export default {
 			headers.push({
 				text: this.$vuetify.lang.t('$vuetify.variants.price'),
 				value: 'price'
+			})
+			headers.push(
+				{
+					text: this.$vuetify.lang.t('$vuetify.articles.onlineSale'),
+					value: 'onlineSale'
+				})
+			headers.push({
+				text: this.$vuetify.lang.t('$vuetify.onlinePrice'),
+				value: 'onlinePrice'
 			})
 			if (this.article.track_inventory) {
 				headers.push({

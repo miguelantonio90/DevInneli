@@ -67,6 +67,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <image-dialog
+      :dialog="image"
+      :images="item.images"
+      @saveImage="saveImage"
+      @closeDialog="image=false"
+    />
     <template>
       <v-chip
         v-for="variant in article.variants"
@@ -95,6 +101,30 @@
       @create-row="addVariant"
       @delete-row="deleteVariantValue($event)"
     >
+      <template v-slot:[`item.images`]="{ item }">
+        <template v-if="item.images.length === 0">
+          <!--div
+            id="multiple-image"
+            style="display: flex; justify-content: center;"
+          >
+            <app-upload-multiple-image
+              :data-images="item.images"
+              :upload-success="uploadImage"
+            />
+          </div-->
+          <div class="my-2">
+            <v-btn
+              color="primary"
+              fab
+              x-small
+              dark
+              @click="showImageDialog(item)"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </div>
+        </template>
+      </template>
       <template v-slot:[`item.price`]="{ item }">
         <v-edit-dialog
           :return-value.sync="item.price"
@@ -247,9 +277,11 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import ImageDialog from './imageDialog'
 
 export default {
 	name: 'Variant',
+	components: { ImageDialog },
 	props: {
 		article: {
 			type: Object,
@@ -260,8 +292,10 @@ export default {
 	},
 	data () {
 		return {
+		    image: false,
 			cell: -1,
 			focus: false,
+			item: {},
 			ref: '10000',
 			name: '',
 			editedIndex: -1,
@@ -278,7 +312,11 @@ export default {
 	computed: {
 		...mapGetters('auth', ['user', 'userPin']),
 		getHeader () {
-		    const data = [
+		    return [
+				{
+					text: this.$vuetify.lang.t('$vuetify.representation.image'),
+					value: 'images'
+				},
 				{
 					text: this.$vuetify.lang.t('$vuetify.variants.name'),
 					value: 'name'
@@ -286,31 +324,23 @@ export default {
 				{
 					text: this.$vuetify.lang.t('$vuetify.variants.price'),
 					value: 'price'
-				}]
-			if (this.article.onlineSale) {
-				data.push({
-					text: this.$vuetify.lang.t('$vuetify.variants.price'),
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.onlinePrice'),
 					value: 'onlinePrice'
-				})
-			}
-			data.push({
-				text: this.$vuetify.lang.t('$vuetify.variants.cost'),
-				value: 'cost'
-			})
-			data.push({
-				text: this.$vuetify.lang.t('$vuetify.variants.ref'),
-				value: 'ref'
-			})
-			data.push({
-				text: this.$vuetify.lang.t('$vuetify.variants.barCode'),
-				value: 'barCode'
-			})
-			data.push({
-				text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-				value: 'actions',
-				sortable: false
-			})
-			return data
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.variants.cost'),
+					value: 'cost'
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.variants.ref'),
+					value: 'ref'
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.variants.barCode'),
+					value: 'barCode'
+				}, {
+					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+					value: 'actions',
+					sortable: false
+				}]
 		}
 	},
 	watch: {
@@ -327,6 +357,16 @@ export default {
 		this.ref = parseFloat(this.article.ref) + 1
 	},
 	methods: {
+	    showImageDialog (item) {
+			this.image = true
+			this.item = item
+		},
+		saveImage (images) {
+	        this.item.images = images
+		},
+		uploadImage (formData, index, fileList) {
+			console.log(index, fileList, formData)
+		},
 		numbers (event) {
 			const regex = new RegExp('^\\d+(.\\d{1,2})?$')
 			const key = String.fromCharCode(
@@ -377,6 +417,7 @@ export default {
 						if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
 						result.push({
 							articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+							images: [],
 							name: localValue.toString(),
 							price: localArticle.length > 0 ? parseFloat(localArticle[0].price).toFixed(2) : parseFloat(this.article.price).toFixed(2),
 							onlinePrice: localArticle.length > 0 ? parseFloat(localArticle[0].onlinePrice).toFixed(2) : parseFloat(this.article.onlinePrice).toFixed(2),

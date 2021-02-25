@@ -9,6 +9,7 @@ use App\ArticlesShops;
 use App\Variant;
 use Exception;
 use Illuminate\Auth\AuthManager;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class ArticleManager extends BaseManager
 {
@@ -82,6 +83,9 @@ class ArticleManager extends BaseManager
                 ->get();
         }
         foreach ($articles as $k => $article) {
+            $article['composite'] = (boolean)$article['composite'];
+            $article['personSale'] = (boolean)$article['personSale'];
+            $article['onlineSale'] = (boolean)$article['onlineSale'];
             foreach ($article['images'] as $im => $image) {
                 if ($image['default'] === 1) {
                     $articles[$k]['path'] = $image['path'];
@@ -96,6 +100,7 @@ class ArticleManager extends BaseManager
 
             $shopVariant = [];
             foreach ($article['variantValues'] as $sh => $shopV) {
+                $shopV['images'] = ArticleImage::latest()->where('article_id','=',$shopV['id'])->get();
                 foreach ($shopV['articlesShops'] as $i => $v) {
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
@@ -175,14 +180,18 @@ class ArticleManager extends BaseManager
         }
 
         foreach ($shops as $key => $value) {
-            if ($value['checked']) {
+            if ($value['personSale'] || $value['onlineSale']) {
                 $artShop = ArticlesShops::create([
                     'article_id' => $article->id,
                     'shop_id' => $value['shop_id'],
                     'stock' => $value['stock'] ?: 0,
                     'price' => $value['price'],
+                    'onlinePrice' => $value['onlinePrice'],
                     'under_inventory' => $value['under_inventory'] ?: 0
                 ]);
+                $artShop->personSale = $value['personSale'];
+                $artShop->onlineSale = $value['onlineSale'];
+                $artShop->save();
                 $this->managerBy('new', $artShop);
             }
         }
@@ -232,6 +241,9 @@ class ArticleManager extends BaseManager
         if (isset($data['price'])) {
             $article->price = $data['price'];
         }
+        if (isset($data['onlinePrice'])) {
+            $article->onlinePrice = $data['onlinePrice'];
+        }
         if (isset($data['ref'])) {
             $article->ref = $data['ref'];
         }
@@ -251,8 +263,12 @@ class ArticleManager extends BaseManager
                 'shop_id' => $value['shop_id'],
                 'stock' => $value['stock'] ?: 0,
                 'price' => $value['price'],
+                'onlinePrice' => $value['onlinePrice'],
                 'under_inventory' => $value['under_inventory'] ?: 0
             ]);
+            $artShop->personSale = $value['personSale'];
+            $artShop->onlineSale = $value['onlineSale'];
+            $artShop->save();
             $this->managerBy('new', $artShop);
         }
         foreach ($data['composites'] as $key => $value) {
@@ -262,11 +278,13 @@ class ArticleManager extends BaseManager
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
                     'price' => $value['price'],
+                    'onlinePrice' => $value['onlinePrice'],
                 ]);
             } else {
                 $article_c = ArticlesComposite::findOrFail($value['id']);
                 $article_c['cant'] = $value['cant'];
                 $article_c['price'] = $value['price'];
+                $article_c['onlinePrice'] = $value['onlinePrice'];
                 $article_c->save();
             }
         }
@@ -536,7 +554,7 @@ class ArticleManager extends BaseManager
         foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($shopsArticles as $k => $v) {
-                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['checked'] && $v['articles_shop_id'] !== '') {
+                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['articles_shop_id'] !== '' && ($v['personSale'] || $v['onlineSale'])) {
                     $exist = true;
                 }
             }

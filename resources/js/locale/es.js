@@ -53,7 +53,7 @@ export default {
 	wait: 'Espere por favor...',
 	phone_holder: 'Entre su número de teléfono',
 	price: 'Precio',
-	onlinePrice: 'Precio Online',
+	onlinePrice: 'Precio en línea',
 	cost: 'Costo',
 	color: 'Color',
 	principal: 'Principal',
@@ -177,6 +177,7 @@ export default {
 		success_avatar: 'La imagen se salvado satisfactoriamente.',
 		warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
 		warning_delete: 'No se podrá revertir esta acción!',
+		warning_digital_box: 'Esta Caja se maneja de manera automática, para registrar las ventas en línea y no se puede gestionar.',
 		warning_exist: 'Ya existe una variante con ese nombre!',
 		warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
 		warning_preform: 'Usted creará una Preforma(PRE-FACTURA). ' +
@@ -383,7 +384,7 @@ export default {
 		taxes: 'Impuestos',
 		lay: 'Propina de ley(10%)',
 		composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos',
-		onlineSale: 'Vender en Tienda Virtual',
+		onlineSale: 'Venta en línea',
 		onlineSale_text: 'Este artículo se venderá en su tienda virtual'
 	},
 	panel: {
@@ -408,7 +409,8 @@ export default {
 	shop_article: {
 		under_inventory: 'Bajo Inventario',
 		stock: 'En Stock',
-		enabled: 'Disponible'
+		enabled: 'Disponible',
+		person_sale: 'Venta en Persona'
 	},
 	representation: {
 		representation: 'Representación',
@@ -480,6 +482,7 @@ export default {
 	},
 	sale: {
 		sale: 'Venta',
+		online_text: 'Esta venta se realiza de forma online, y se realizará por la Caja Digital de manera automática',
 		selectArticle: 'Por favor seleccione el artículo',
 		selectShop: 'Debe seleccionar una tienda',
 		discountGeneral: 'Descuento Total por venta',

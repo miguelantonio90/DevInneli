@@ -135,11 +135,6 @@ export const publicRoute = [
 				name: 'Product'
 			},
 			{
-				path: '/online/blog/:compName/:shopName',
-				component: () => import('../views/shops-templates/shipit/components/Blog'),
-				name: 'Blog'
-			},
-			{
 				path: '/post',
 				component: () => import('../views/shops-templates/shipit/components/Post'),
 				name: 'Post'

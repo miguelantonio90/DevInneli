@@ -66,8 +66,12 @@ class VariantManager extends BaseManager
             'shop_id' => $data['shop_id'],
             'stock' => $data['stock'] ?: 0,
             'price' => $data['price'] ?: 0,
+            'online_price' => $data['online_price'] ?: 0,
             'under_inventory' => $data['under_inventory'] ?: 0
         ]);
+        $artShop->personSale = $data['personSale'];
+        $artShop->onlineSale = $data['onlineSale'];
+        $artShop->save();
         $this->managerBy('new', $artShop);
         return $artShop;
     }
@@ -84,7 +88,10 @@ class VariantManager extends BaseManager
         $article_shop['shop_id'] = $data['shop_id'];
         $article_shop['stock'] = $data['stock'] ?: 0;
         $article_shop['price'] = $data['price'];
+        $article_shop['onlinePrice'] = $data['onlinePrice'];
         $article_shop['under_inventory'] = $data['under_inventory'] ?: 0;
+        $article_shop['personSale'] = $data['personSale'];
+        $article_shop['onlineSale'] = $data['onlineSale'];
         $article_shop->save();
         $this->managerBy('edit', $article_shop);
         return $article_shop;

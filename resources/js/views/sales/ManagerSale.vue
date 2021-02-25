@@ -175,7 +175,7 @@
                     <v-col
                       class="py-0"
                       cols="12"
-                      md="4"
+                      md="3"
                     >
                       <v-select
                         id="slc_shop"
@@ -199,7 +199,43 @@
                       cols="12"
                       md="3"
                     >
+                      <v-switch
+                        v-model="sale.online"
+                        :disabled="managerSale"
+                        :title="$vuetify.lang.t('$vuetify.sales.online_text')"
+                      >
+                        <template v-slot:label>
+                          <div>
+                            {{ $vuetify.lang.t('$vuetify.articles.onlineSale') }}
+                            <v-tooltip
+                              right
+                              class="md-6"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                  color="primary"
+                                  dark
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <span>{{
+                                $vuetify.lang.t('$vuetify.sale.online_text')
+                              }}</span>
+                            </v-tooltip>
+                          </div>
+                        </template>
+                      </v-switch>
+                    </v-col>
+                    <v-col
+                      class="py-0"
+                      cols="12"
+                      md="2"
+                    >
                       <v-select
+                        v-if="!sale.online"
                         id="slc_box"
                         v-model="sale.box"
                         :rules="formRule.country"
@@ -232,7 +268,7 @@
                     <v-col
                       class="py-0"
                       cols="12"
-                      md="5"
+                      :md="sale.online?'5':'4'"
                     >
                       <v-autocomplete
                         id="slc_article"
@@ -885,7 +921,7 @@ export default {
 					'$vuetify.messages.warning_difference_price', [(-this.getDifferencePay + this.user.company.currency).toString()]
 				))
 			} else {
-				if (!this.sale.box) {
+				if (!this.sale.online && !this.sale.box) {
 					this.loading = false
 					this.shopMessageError(this.$vuetify.lang.t(
 						'$vuetify.messages.warning_no_box'

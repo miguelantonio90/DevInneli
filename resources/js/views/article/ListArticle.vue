@@ -35,14 +35,9 @@
                 left
                 v-text="item.name.slice(0, 1).toUpperCase()"
               />
-              <v-avatar
-                v-else
-                left
-              >
-                <v-img :src="item.path" />
-              </v-avatar>
-              {{ item.name }}
+              <v-img :src="item.path" />
             </v-chip>
+            {{ item.name }}
           </template>
           <template v-slot:item.percent="{ item }">
             <template v-if="item.variant_values.length===0">
@@ -110,6 +105,9 @@
                         {{ $vuetify.lang.t('$vuetify.firstName') }}
                       </th>
                       <th class="text-left">
+                        {{ $vuetify.lang.t('$vuetify.menu.shop') }}
+                      </th>
+                      <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.price') }}
                       </th>
                       <th class="text-left">
@@ -117,9 +115,6 @@
                       </th>
                       <th class="text-left">
                         {{ $vuetify.lang.t('$vuetify.articles.percent') }}
-                      </th>
-                      <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.menu.shop') }}
                       </th>
                     </tr>
                   </thead>
@@ -130,9 +125,6 @@
                     >
                       <td>{{ dessert.ref }}</td>
                       <td>{{ dessert.name }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
-                      <td>{{ dessert.percent + ' %' }}</td>
                       <td>
                         <v-chip
                           v-for="(shop, i) of dessert.shopsNames"
@@ -142,6 +134,9 @@
                           {{ shop }}
                         </v-chip>
                       </td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
+                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
+                      <td>{{ dessert.percent + ' %' }}</td>
                     </tr>
                   </tbody>
                 </template>

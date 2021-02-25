@@ -177,6 +177,7 @@ export default {
 		refused: 'Failed: Connection refused.',
 		success_avatar: 'The image was saved successfully.',
 		warning_delete: 'This action cannot be reversed!',
+		warning_digital_box: 'This box work automatically, to register online sales, and you can\'t manager.',
 		warning_exist: 'Exist a variant with this name!',
 		warning_excess_money: 'The defined amount to be charged is greater than or equal to the total price. Decrease the amounts already defined',
 		warning_preform: 'You will create a Preform (PRE-FACTURE)' +
@@ -382,7 +383,7 @@ export default {
 		taxes: 'Taxes',
 		lay: 'Law tip (10%)',
 		composite_text: 'Composite articles contain a certain number of other articles',
-		onlineSale: 'Virtual Shop Online',
+		onlineSale: 'Online Sale',
 		onlineSale_text: 'This article will by sale in virtual shop'
 	},
 	panel: {
@@ -407,7 +408,8 @@ export default {
 	shop_article: {
 		under_inventory: 'Low Stock',
 		stock: 'In Stock',
-		enabled: 'Available'
+		enabled: 'Available',
+		person_sale: 'Person Sale'
 	},
 	representation: {
 		representation: 'Representation',
@@ -479,6 +481,7 @@ export default {
 	},
 	sale: {
 		sale: 'Sale',
+		online_text: 'This sale will be online, and reported by Digital Box',
 		selectArticle: 'Please select the article',
 		selectShop: 'You must select a store',
 		discountGeneral: 'General discount',
