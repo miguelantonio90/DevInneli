@@ -2,33 +2,33 @@
   <v-container>
     <v-row>
       <v-col
-          class="py-0"
-          cols="12"
+        class="py-0"
+        cols="12"
       >
-        <new-user v-if="showNewModal"/>
-        <edit-user v-if="showEditModal"/>
+        <new-user v-if="showNewModal" />
+        <edit-user v-if="showEditModal" />
         <app-data-table
-            :headers="getTableColumns"
-            :is-loading="isTableLoading"
-            :items="users"
-            :manager="'employer'"
-            :sort-by="['firstName']"
-            :sort-desc="[false, true]"
-            :title="
+          :headers="getTableColumns"
+          :is-loading="isTableLoading"
+          :items="users"
+          :manager="'employer'"
+          :sort-by="['firstName']"
+          :sort-desc="[false, true]"
+          :title="
             $vuetify.lang.t('$vuetify.titles.list', [
               $vuetify.lang.t('$vuetify.menu.user')
             ])
           "
-            csv-filename="Employees"
-            multi-sort
-            @create-row="toogleNewModal(true)"
-            @edit-row="editUserHandler($event)"
-            @delete-row="deleteUserHandler($event)"
+          csv-filename="Employees"
+          multi-sort
+          @create-row="toogleNewModal(true)"
+          @edit-row="editUserHandler($event)"
+          @delete-row="deleteUserHandler($event)"
         >
           <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
               <v-img
-                  :src="
+                :src="
                   item.avatar ||
                     `/assets/avatar/avatar-undefined.jpg`
                 "
@@ -38,8 +38,8 @@
           </template>
           <template v-slot:[`item.shopsNames`]="{ item }">
             <v-chip
-                v-for="(shop, i) of item.shopsNames"
-                :key="i"
+              v-for="(shop, i) of item.shopsNames"
+              :key="i"
             >
               {{ shop }}
             </v-chip>
@@ -123,39 +123,39 @@ export default {
     deleteUserHandler (userId) {
       this.users.filter(c => c.id === userId)[0].position.key ===
       'super_manager'
-          ? this.$Swal
+        ? this.$Swal
           .fire({
             title: this.$vuetify.lang.t(
-                '$vuetify.titles.no_action',
-                [this.$vuetify.lang.t('$vuetify.actions.delete')]
+              '$vuetify.titles.no_action',
+              [this.$vuetify.lang.t('$vuetify.actions.delete')]
             ),
             text: this.$vuetify.lang.t(
-                '$vuetify.messages.error_delete_manager'
+              '$vuetify.messages.error_delete_manager'
             ),
             icon: 'warning',
             confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.accept'
+              '$vuetify.actions.accept'
             ),
             confirmButtonColor: 'red'
           })
           .then(result => {
           })
-          : this.$Swal
+        : this.$Swal
           .fire({
             title: this.$vuetify.lang.t(
-                '$vuetify.titles.delete',
-                [this.$vuetify.lang.t('$vuetify.menu.user')]
+              '$vuetify.titles.delete',
+              [this.$vuetify.lang.t('$vuetify.menu.user')]
             ),
             text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_delete'
+              '$vuetify.messages.warning_delete'
             ),
             showCancelButton: true,
             cancelButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.cancel'
+              '$vuetify.actions.cancel'
             ),
             icon: 'warning',
             confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.delete'
+              '$vuetify.actions.delete'
             ),
             confirmButtonColor: 'red'
           })

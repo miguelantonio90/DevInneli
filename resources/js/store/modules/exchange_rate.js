@@ -20,15 +20,15 @@ const state = {
   changes: [],
   saved: false,
   newChange: {
-	country: null,
-	currency: null,
-	change: 1
+    country: null,
+    currency: null,
+    change: 1
   },
   editChange: {
-	id: '',
-	country: null,
-	currency: null,
-	change: 1
+    id: '',
+    country: null,
+    currency: null,
+    change: 1
   },
   isChangeLoading: false,
   isActionInProgress: false,
@@ -37,91 +37,91 @@ const state = {
 
 const mutations = {
   [SWITCH_CHANGE_NEW_MODAL] (state, showModal) {
-	state.showNewModal = showModal
+    state.showNewModal = showModal
   },
   [SWITCH_CHANGE_EDIT_MODAL] (state, showModal) {
-	state.showEditModal = showModal
+    state.showEditModal = showModal
   },
   [SWITCH_CHANGE_SHOW_MODAL] (state, showModal) {
-	state.showShowModal = showModal
+    state.showShowModal = showModal
   },
   [CHANGE_TABLE_LOADING] (state, isLoading) {
-	state.isTableLoading = isLoading
-	state.isChangeLoading = isLoading
+    state.isTableLoading = isLoading
+    state.isChangeLoading = isLoading
   },
   [FETCHING_CHANGE] (state, changes) {
-	state.changes = changes
+    state.changes = changes
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
-	state.isActionInProgress = isActionInProgress
+    state.isActionInProgress = isActionInProgress
   },
   [CHANGE_CREATED] (state) {
-	state.showNewModal = false
-	state.newChange = {
+    state.showNewModal = false
+    state.newChange = {
 	  country: null,
 	  currency: null,
 	  change: 1
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_add', [
-		this._vm.$language.t('$vuetify.menu.exchange_rate')
+        this._vm.$language.t('$vuetify.menu.exchange_rate')
 	  ])
-	})
+    })
   },
   [CHANGE_EDIT] (state, id) {
-	state.editChange = Object.assign(
+    state.editChange = Object.assign(
 	  {},
 	  state.changes.filter(node => node.id === id).shift()
-	)
+    )
   },
   [CHANGE_UPDATE] (state) {
-	state.showEditModal = false
-	state.editChange = {
+    state.showEditModal = false
+    state.editChange = {
 	  id: '',
 	  country: null,
 	  currency: null,
 	  change: 1
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_up', [
-		this._vm.$language.t('$vuetify.menu.exchange_rate')
+        this._vm.$language.t('$vuetify.menu.exchange_rate')
 	  ])
-	})
+    })
   },
   [CHANGE_DELETE] (state, error) {
-	state.saved = true
-	state.error = error
-	this._vm.$Toast.fire({
+    state.saved = true
+    state.error = error
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_del', [
-		this._vm.$language.t('$vuetify.menu.exchange_rate')
+        this._vm.$language.t('$vuetify.menu.exchange_rate')
 	  ])
-	})
+    })
   },
   [CANCEL_MODAL] (state) {
-	state.newChange = {
+    state.newChange = {
 	  country: null,
 	  currency: null,
 	  change: 1
-	}
-	state.saved = false
+    }
+    state.saved = false
   },
   [FAILED_CHANGE] (state, error) {
-	state.isTableLoading = false
-	state.isChangeLoading = false
-	state.isActionInProgress = false
-	state.saved = false
-	state.error = error
-	this._vm.$Toast.fire({
+    state.isTableLoading = false
+    state.isChangeLoading = false
+    state.isActionInProgress = false
+    state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
 	  icon: 'error',
 	  title: this._vm.$language.t('$vuetify.messages.failed_catch', [
-		this._vm.$language.t('$vuetify.menu.exchange_rate')
+        this._vm.$language.t('$vuetify.menu.exchange_rate')
 	  ])
-	})
+    })
   }
 }
 
@@ -129,86 +129,86 @@ const getters = {}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
-	commit(SWITCH_CHANGE_NEW_MODAL, showModal)
-	if (!showModal) {
+    commit(SWITCH_CHANGE_NEW_MODAL, showModal)
+    if (!showModal) {
 	  commit(CANCEL_MODAL)
-	}
+    }
   },
   toogleEditModal ({ commit }, showModal) {
-	commit(SWITCH_CHANGE_EDIT_MODAL, showModal)
+    commit(SWITCH_CHANGE_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
-	commit(SWITCH_CHANGE_SHOW_MODAL, showModal)
+    commit(SWITCH_CHANGE_SHOW_MODAL, showModal)
   },
   openEditModal ({ commit }, id) {
-	commit(SWITCH_CHANGE_EDIT_MODAL, true)
-	commit(CHANGE_EDIT, id)
+    commit(SWITCH_CHANGE_EDIT_MODAL, true)
+    commit(CHANGE_EDIT, id)
   },
   openShowModal ({ commit }, id) {
-	commit(SWITCH_CHANGE_SHOW_MODAL, true)
-	commit(CHANGE_EDIT, id)
+    commit(SWITCH_CHANGE_SHOW_MODAL, true)
+    commit(CHANGE_EDIT, id)
   },
   async getChanges ({
-	commit,
-	rootState
+    commit,
+    rootState
   }) {
-	commit(CHANGE_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await exchangeRate
+    commit(CHANGE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await exchangeRate
 	  .fetchExchangeRate()
 	  .then(({ data }) => {
-		commit(FETCHING_CHANGE, data.data)
-		commit(CHANGE_TABLE_LOADING, false)
-		this.dispatch('auth/updateAccess', data)
-		return data
+        commit(FETCHING_CHANGE, data.data)
+        commit(CHANGE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
+        return data
 	  })
 	  .catch(error => commit(FAILED_CHANGE, error))
   },
   async createChange ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, newChange) {
-	commit(ENV_DATA_PROCESS, true)
+    commit(ENV_DATA_PROCESS, true)
 
-	await exchangeRate
+    await exchangeRate
 	  .sendCreateRequest(newChange)
 	  .then(data => {
-		commit(CHANGE_CREATED)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('exchangeRate/getChanges', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(CHANGE_CREATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_CHANGE, error))
   },
   async updateChange ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, editChange) {
-	commit(ENV_DATA_PROCESS, true)
+    commit(ENV_DATA_PROCESS, true)
 
-	await exchangeRate
+    await exchangeRate
 	  .sendUpdateRequest(editChange)
 	  .then(data => {
-		commit(CHANGE_UPDATE)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('exchangeRate/getChanges', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(CHANGE_UPDATE)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_CHANGE, error))
   },
   deleteChange: async function ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, id) {
-	commit(ENV_DATA_PROCESS, true)
+    commit(ENV_DATA_PROCESS, true)
 
-	await exchangeRate
+    await exchangeRate
 	  .sendDeleteRequest(id)
 	  .then(data => {
-		commit(CHANGE_DELETE)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('exchangeRate/getChanges', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(CHANGE_DELETE)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('exchangeRate/getChanges', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_CHANGE, error))
   }

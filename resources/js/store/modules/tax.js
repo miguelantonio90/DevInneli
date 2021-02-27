@@ -22,19 +22,19 @@ const state = {
   loading: false,
   saved: false,
   newTax: {
-	name: '',
-	value: '',
-	type: '',
-	existing: false,
-	percent: 'true'
+    name: '',
+    value: '',
+    type: '',
+    existing: false,
+    percent: 'true'
   },
   editTax: {
-	id: '',
-	name: '',
-	value: '',
-	type: '',
-	existing: false,
-	percent: true
+    id: '',
+    name: '',
+    value: '',
+    type: '',
+    existing: false,
+    percent: true
   },
   isTaxLoading: false,
   isActionInProgress: false,
@@ -43,98 +43,98 @@ const state = {
 
 const mutations = {
   [SWITCH_TAXES_NEW_MODAL] (state, showModal) {
-	state.showNewModal = showModal
+    state.showNewModal = showModal
   },
   [SWITCH_TAXES_EDIT_MODAL] (state, showModal) {
-	state.showEditModal = showModal
+    state.showEditModal = showModal
   },
   [SWITCH_TAXES_SHOW_MODAL] (state, showModal) {
-	state.showShowModal = showModal
+    state.showShowModal = showModal
   },
   [TAXES_TABLE_LOADING] (state, isLoading) {
-	state.isTableLoading = isLoading
-	state.isTaxLoading = isLoading
+    state.isTableLoading = isLoading
+    state.isTaxLoading = isLoading
   },
   [FETCHING_TAXES] (state, taxes) {
-	state.taxes = taxes
+    state.taxes = taxes
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
-	state.isActionInProgress = isActionInProgress
+    state.isActionInProgress = isActionInProgress
   },
   [CANCEL_MODAL] (state) {
-	state.newTax = {
+    state.newTax = {
 	  name: '',
 	  value: '',
 	  type: '',
 	  existing: false,
 	  percent: true
-	}
-	state.saved = false
+    }
+    state.saved = false
   },
   [TAXES_CREATED] (state) {
-	state.showNewModal = false
-	state.newTax = {
+    state.showNewModal = false
+    state.newTax = {
 	  name: '',
 	  value: '',
 	  type: '',
 	  existing: false,
 	  percent: true
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_add', [
-		this._vm.$language.t('$vuetify.menu.tax_list')
+        this._vm.$language.t('$vuetify.menu.tax_list')
 	  ])
-	})
+    })
   },
   [TAXES_EDIT] (state, taxId) {
-	state.editTax = Object.assign(
+    state.editTax = Object.assign(
 	  {},
 	  state.taxes.filter(node => node.id === taxId).shift()
-	)
+    )
   },
   [TAXES_UPDATED] (state) {
-	state.showEditModal = false
-	state.editTax = {
+    state.showEditModal = false
+    state.editTax = {
 	  id: '',
 	  name: '',
 	  value: '',
 	  type: '',
 	  existing: false,
 	  percent: true
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_up', [
-		this._vm.$language.t('$vuetify.menu.tax_list')
+        this._vm.$language.t('$vuetify.menu.tax_list')
 	  ])
-	})
+    })
   },
   [SET_EDIT_TAXES] (state, profile) {
-	state.editTax.push(profile)
+    state.editTax.push(profile)
   },
   [TAXES_DELETE] (state, error) {
-	state.saved = true
-	state.error = error
-	this._vm.$Toast.fire({
+    state.saved = true
+    state.error = error
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_del', [
-		this._vm.$language.t('$vuetify.menu.tax_list')
+        this._vm.$language.t('$vuetify.menu.tax_list')
 	  ])
-	})
+    })
   },
   [FAILED_TAXES] (state, error) {
-	state.saved = false
-	state.error = error
-	state.isActionInProgress = false
-	this._vm.$Toast.fire({
+    state.saved = false
+    state.error = error
+    state.isActionInProgress = false
+    this._vm.$Toast.fire({
 	  icon: 'error',
 	  title: this._vm.$language.t('$vuetify.messages.failed_catch', [
-		this._vm.$language.t('$vuetify.menu.tax_list')
+        this._vm.$language.t('$vuetify.menu.tax_list')
 	  ])
-	})
+    })
   }
 }
 
@@ -142,79 +142,79 @@ const getters = {}
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
-	commit(SWITCH_TAXES_NEW_MODAL, showModal)
-	if (!showModal) {
+    commit(SWITCH_TAXES_NEW_MODAL, showModal)
+    if (!showModal) {
 	  commit(CANCEL_MODAL)
-	}
+    }
   },
   toogleEditModal ({ commit }, showModal) {
-	commit(SWITCH_TAXES_EDIT_MODAL, showModal)
+    commit(SWITCH_TAXES_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
-	commit(SWITCH_TAXES_SHOW_MODAL, showModal)
+    commit(SWITCH_TAXES_SHOW_MODAL, showModal)
   },
   openEditModal ({ commit }, taxId) {
-	commit(SWITCH_TAXES_EDIT_MODAL, true)
-	commit(TAXES_EDIT, taxId)
+    commit(SWITCH_TAXES_EDIT_MODAL, true)
+    commit(TAXES_EDIT, taxId)
   },
   openShowModal ({ commit }, taxId) {
-	commit(SWITCH_TAXES_SHOW_MODAL, true)
-	commit(TAXES_EDIT, taxId)
+    commit(SWITCH_TAXES_SHOW_MODAL, true)
+    commit(TAXES_EDIT, taxId)
   },
   async getTaxes ({ commit }) {
-	commit(TAXES_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await tax
+    commit(TAXES_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await tax
 	  .fetchTaxes()
 	  .then(({ data }) => {
-		commit(FETCHING_TAXES, data.data)
-		commit(TAXES_TABLE_LOADING, false)
-		this.dispatch('auth/updateAccess', data)
-		return data
+        commit(FETCHING_TAXES, data.data)
+        commit(TAXES_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
+        return data
 	  })
 	  .catch(error => commit(FAILED_TAXES, error))
   },
   async createTax ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, newTax) {
-	commit(ENV_DATA_PROCESS, true)
+    commit(ENV_DATA_PROCESS, true)
 
-	await tax
+    await tax
 	  .sendCreateRequest(newTax)
 	  .then(data => {
-		commit(TAXES_CREATED)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('tax/getTaxes', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(TAXES_CREATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('tax/getTaxes', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_TAXES, error))
   },
   async updateTax ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, editTax) {
-	commit(ENV_DATA_PROCESS, true)
-	await tax
+    commit(ENV_DATA_PROCESS, true)
+    await tax
 	  .sendUpdateRequest(editTax)
 	  .then(data => {
-		commit(TAXES_UPDATED)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('tax/getTaxes', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(TAXES_UPDATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('tax/getTaxes', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_TAXES, error))
   },
   async deleteTax ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, taxId) {
-	await tax
+    await tax
 	  .sendDeleteRequest(taxId)
 	  .then(data => {
-		commit(TAXES_DELETE)
-		dispatch('tax/getTaxes', null, { root: true })
-		this.dispatch('auth/updateAccess', data)
+        commit(TAXES_DELETE)
+        dispatch('tax/getTaxes', null, { root: true })
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(error => commit(FAILED_TAXES, error))
   }

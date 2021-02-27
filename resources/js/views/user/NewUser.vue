@@ -1,123 +1,123 @@
 <template>
   <v-dialog
-      v-model="toogleNewModal"
-      max-width="600px"
-      persistent
+    v-model="toogleNewModal"
+    max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.new', [
-              $vuetify.lang.t('$vuetify.menu.user')
-            ])
-          }}</span>
+          $vuetify.lang.t('$vuetify.titles.new', [
+            $vuetify.lang.t('$vuetify.menu.user')
+          ])
+        }}</span>
       </v-card-title>
       <v-card-text>
         <v-form
-            ref="form"
-            v-model="formValid"
-            class="my-10"
-            lazy-validation
+          ref="form"
+          v-model="formValid"
+          class="my-10"
+          lazy-validation
         >
           <v-row>
             <v-col
-                align-self="start"
-                class="pa-0"
-                cols="2"
+              align-self="start"
+              class="pa-0"
+              cols="2"
             >
               <avatar-picker
-                  :image-src="getAvatar"
-                  :image-style="{
+                :image-src="getAvatar"
+                :image-style="{
                   'border-radius': '50%',
                   height: '80px',
                   width: '80px'
                 }"
-                  class="profile mx-auto d-block"
-                  @input="onChangeImage($event)"
+                class="profile mx-auto d-block"
+                @input="onChangeImage($event)"
               />
             </v-col>
             <v-col
-                cols="12"
-                md="5"
+              cols="12"
+              md="5"
             >
               <v-text-field
-                  v-model="newUser.firstName"
-                  :label="$vuetify.lang.t('$vuetify.firstName')"
-                  :rules="formRule.firstName"
-                  required
+                v-model="newUser.firstName"
+                :label="$vuetify.lang.t('$vuetify.firstName')"
+                :rules="formRule.firstName"
+                required
               />
             </v-col>
             <v-col
-                cols="12"
-                md="5"
+              cols="12"
+              md="5"
             >
               <v-text-field
-                  v-model="newUser.lastName"
-                  :label="$vuetify.lang.t('$vuetify.lastName')"
-                  required
+                v-model="newUser.lastName"
+                :label="$vuetify.lang.t('$vuetify.lastName')"
+                required
               />
             </v-col>
             <v-col
-                cols="12"
-                md="5"
+              cols="12"
+              md="5"
             >
               <v-text-field
-                  v-model="newUser.email"
-                  :label="$vuetify.lang.t('$vuetify.email')"
-                  :rules="formRule.email"
-                  autocomplete="off"
-                  required
+                v-model="newUser.email"
+                :label="$vuetify.lang.t('$vuetify.email')"
+                :rules="formRule.email"
+                autocomplete="off"
+                required
               />
             </v-col>
             <v-col
-                cols="12"
-                md="7"
+              cols="12"
+              md="7"
             >
               <vue-tel-input-vuetify
-                  v-model="newUser.phone"
-                  v-bind="bindProps"
-                  :error-messages="errorPhone"
-                  :label="$vuetify.lang.t('$vuetify.phone')"
-                  :placeholder="
+                v-model="newUser.phone"
+                v-bind="bindProps"
+                :error-messages="errorPhone"
+                :label="$vuetify.lang.t('$vuetify.phone')"
+                :placeholder="
                   $vuetify.lang.t('$vuetify.phone_holder')
                 "
-                  :prefix="
+                :prefix="
                   countrySelect
                     ? `+` + countrySelect.dialCode
                     : ``
                 "
-                  :rules="formRule.phone"
-                  :select-label="
+                :rules="formRule.phone"
+                :select-label="
                   $vuetify.lang.t('$vuetify.country')
                 "
-                  required
-                  @input="onInput"
-                  @keypress="numbers"
-                  @country-changed="onCountry"
+                required
+                @input="onInput"
+                @keypress="numbers"
+                @country-changed="onCountry"
               >
                 <template #message="{ key, message }">
                   <slot
-                      v-bind="{ key, message }"
-                      name="label"
+                    v-bind="{ key, message }"
+                    name="label"
                   />
                   {{ message }}
                 </template>
               </vue-tel-input-vuetify>
             </v-col>
             <v-col
-                cols="12"
-                md="6"
+              cols="12"
+              md="6"
             >
               <v-text-field-simplemask
-                  v-model="newUser.pinCode"
-                  :label="$vuetify.lang.t('$vuetify.pinCode')"
-                  :options="{
+                v-model="newUser.pinCode"
+                :label="$vuetify.lang.t('$vuetify.pinCode')"
+                :options="{
                   inputMask: '#-#-#-#-#-#',
                   outputMask: '######',
                   empty: null,
                   alphanumeric: false
                 }"
-                  :properties="{
+                :properties="{
                   clearable: true,
                   required: true,
                   rules: formRule.pinCode
@@ -125,29 +125,29 @@
               />
             </v-col>
             <v-col
-                cols="12"
-                md="6"
+              cols="12"
+              md="6"
             >
               <v-select
-                  v-model="newUser.position"
-                  :disabled="!!isAccessLoading"
-                  :items="roles"
-                  :label="$vuetify.lang.t('$vuetify.menu.access')"
-                  :loading="isAccessLoading"
-                  :rules="formRule.access"
-                  item-text="name"
-                  required
-                  return-object
+                v-model="newUser.position"
+                :disabled="!!isAccessLoading"
+                :items="roles"
+                :label="$vuetify.lang.t('$vuetify.menu.access')"
+                :loading="isAccessLoading"
+                :rules="formRule.access"
+                item-text="name"
+                required
+                return-object
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
                     <template
-                        v-slot:activator="{ on, attrs }"
+                      v-slot:activator="{ on, attrs }"
                     >
                       <v-icon
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="
                           $store.dispatch(
                             'role/toogleNewModal',
                             true
@@ -158,40 +158,40 @@
                       </v-icon>
                     </template>
                     <span>{{
-                        $vuetify.lang.t(
-                            '$vuetify.titles.newAction'
-                        )
-                      }}</span>
+                      $vuetify.lang.t(
+                        '$vuetify.titles.newAction'
+                      )
+                    }}</span>
                   </v-tooltip>
                 </template>
               </v-select>
             </v-col>
             <v-col
-                cols="12"
-                md="12"
+              cols="12"
+              md="12"
             >
               <v-select
-                  v-model="shops"
-                  :disabled="!!isShopLoading"
-                  :items="shops"
-                  :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                  :loading="isShopLoading"
-                  :rules="formRule.shops"
-                  item-text="name"
-                  multiple
-                  required
-                  return-object
-                  @change="setOrders($event)"
+                v-model="shops"
+                :disabled="!!isShopLoading"
+                :items="shops"
+                :label="$vuetify.lang.t('$vuetify.menu.shop')"
+                :loading="isShopLoading"
+                :rules="formRule.shops"
+                item-text="name"
+                multiple
+                required
+                return-object
+                @change="setOrders($event)"
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
                     <template
-                        v-slot:activator="{ on, attrs }"
+                      v-slot:activator="{ on, attrs }"
                     >
                       <v-icon
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="
                           $store.dispatch(
                             'shop/toogleNewModal',
                             true
@@ -202,10 +202,10 @@
                       </v-icon>
                     </template>
                     <span>{{
-                        $vuetify.lang.t(
-                            '$vuetify.titles.newAction'
-                        )
-                      }}</span>
+                      $vuetify.lang.t(
+                        '$vuetify.titles.newAction'
+                      )
+                    }}</span>
                   </v-tooltip>
                 </template>
               </v-select>
@@ -214,28 +214,28 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
-            :disabled="isActionInProgress"
-            class="mb-2"
-            @click="toogleNewModal(false)"
+          :disabled="isActionInProgress"
+          class="mb-2"
+          @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            class="mb-2"
-            color="primary"
-            @click="createNewUser"
+          :disabled="!formValid || isActionInProgress"
+          :loading="isActionInProgress"
+          class="mb-2"
+          color="primary"
+          @click="createNewUser"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
         </v-btn>
       </v-card-actions>
-      <new-access v-if="$store.state.role.showNewModal"/>
-      <new-shop v-if="$store.state.shop.showNewModal"/>
+      <new-access v-if="$store.state.role.showNewModal" />
+      <new-shop v-if="$store.state.shop.showNewModal" />
     </v-card>
   </v-dialog>
 </template>
@@ -302,7 +302,7 @@ export default {
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(
-          !event.charCode ? event.which : event.charCode
+        !event.charCode ? event.which : event.charCode
       )
       if (!regex.test(key)) {
         event.preventDefault()
@@ -326,7 +326,7 @@ export default {
     lettersNumbers (event) {
       const regex = new RegExp('^[a-zA-Z0-9 ]+$')
       const key = String.fromCharCode(
-          !event.charCode ? event.which : event.charCode
+        !event.charCode ? event.which : event.charCode
       )
       if (!regex.test(key)) {
         event.preventDefault()

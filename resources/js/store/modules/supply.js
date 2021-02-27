@@ -37,31 +37,31 @@ const state = {
   saved: false,
   managerSupply: false,
   newSupply: {
-	no_facture: '',
-	pay: '',
-	pays: [],
-	box: null,
-	state: 'open',
-	discounts: [],
-	taxes: [],
-	payments: null,
-	articles: [],
-	shop: null,
-	client: null
+    no_facture: '',
+    pay: '',
+    pays: [],
+    box: null,
+    state: 'open',
+    discounts: [],
+    taxes: [],
+    payments: null,
+    articles: [],
+    shop: null,
+    client: null
   },
   editSupply: {
-	id: '',
-	no_facture: '',
-	box: {},
-	discounts: [],
-	taxes: [],
-	pays: [],
-	payments: {},
-	articles: [],
-	articles_shops: [],
-	shop: {},
-	client: {},
-	client_id: ''
+    id: '',
+    no_facture: '',
+    box: {},
+    discounts: [],
+    taxes: [],
+    pays: [],
+    payments: {},
+    articles: [],
+    articles_shops: [],
+    shop: {},
+    client: {},
+    client_id: ''
   },
   isSupplyTableLoading: false,
   isActionInProgress: false,
@@ -77,31 +77,31 @@ const state = {
 
 const mutations = {
   [SWITCH_SUPPLY_NEW_MODAL] (state, showModal) {
-	state.showNewModal = showModal
+    state.showNewModal = showModal
   },
   [SWITCH_LOAD_DATA] (state, loadData) {
-	state.loadData = loadData
+    state.loadData = loadData
   },
   [SWITCH_SUPPLY_EDIT_MODAL] (state, showModal) {
-	state.showEditModal = showModal
+    state.showEditModal = showModal
   },
   [SWITCH_SUPPLY_SHOW_MODAL] (state, showModal) {
-	state.showShowModal = showModal
+    state.showShowModal = showModal
   },
   [SUPPLY_TABLE_LOADING] (state, isLoading) {
-	state.isTableLoading = isLoading
+    state.isTableLoading = isLoading
   },
   [FETCHING_SUPPLIES] (state, supplies) {
-	state.supplies = []
-	state.received = []
-	state.supplies = supplies[0]
-	state.received = supplies[1]
+    state.supplies = []
+    state.received = []
+    state.supplies = supplies[0]
+    state.received = supplies[1]
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
-	state.isActionInProgress = isActionInProgress
+    state.isActionInProgress = isActionInProgress
   },
   [CANCEL_MODAL] (state) {
-	state.newSupply = {
+    state.newSupply = {
 	  no_facture: '',
 	  pays: [],
 	  box: null,
@@ -112,12 +112,12 @@ const mutations = {
 	  articles: [],
 	  shop: {},
 	  client: {}
-	}
-	state.saved = false
+    }
+    state.saved = false
   },
   [SUPPLY_CREATED] (state) {
-	state.showNewModal = false
-	state.newSupply = {
+    state.showNewModal = false
+    state.newSupply = {
 	  no_facture: '',
 	  pays: [],
 	  box: null,
@@ -128,24 +128,24 @@ const mutations = {
 	  articles: [],
 	  shop: {},
 	  client: {}
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_add', [
-		this._vm.$language.t('$vuetify.menu.supply_productS')
+        this._vm.$language.t('$vuetify.menu.supply_productS')
 	  ])
-	})
+    })
   },
   [SUPPLY_EDIT] (state, supplyId) {
-	state.editSupply = Object.assign(
+    state.editSupply = Object.assign(
 	  {},
 	  state.supplies.filter(node => node.id === supplyId).shift()
-	)
+    )
   },
   [SUPPLY_UPDATED] (state) {
-	state.showEditModal = false
-	state.editSupply = {
+    state.showEditModal = false
+    state.editSupply = {
 	  id: '',
 	  no_facture: '',
 	  pays: [],
@@ -156,298 +156,298 @@ const mutations = {
 	  articles: [],
 	  shop: {},
 	  client: {}
-	}
-	state.saved = true
-	this._vm.$Toast.fire({
+    }
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_up', [
-		this._vm.$language.t('$vuetify.menu.supply_productS')
+        this._vm.$language.t('$vuetify.menu.supply_productS')
 	  ])
-	})
+    })
   },
   [SET_EDIT_SUPPLY] (state, profile) {
-	state.editSupply.push(profile)
+    state.editSupply.push(profile)
   },
   [SUPPLY_DELETE] (state) {
-	state.saved = true
-	this._vm.$Toast.fire({
+    state.saved = true
+    this._vm.$Toast.fire({
 	  icon: 'success',
 	  title: this._vm.$language.t('$vuetify.messages.success_del', [
-		this._vm.$language.t('$vuetify.menu.supply_productS')
+        this._vm.$language.t('$vuetify.menu.supply_productS')
 	  ])
-	})
+    })
   },
   [SET_SUPPLY_AVATAR] (state, avatar) {
-	state.avatar = avatar
-	state.saved = true
+    state.avatar = avatar
+    state.saved = true
   },
   [FAILED_SUPPLY] (state, error) {
-	state.isActionInProgress = false
-	state.isSupplyTableLoading = false
-	state.isTableLoading = false
-	state.saved = false
-	state.error = error
-	this._vm.$Toast.fire({
+    state.isActionInProgress = false
+    state.isSupplyTableLoading = false
+    state.isTableLoading = false
+    state.saved = false
+    state.error = error
+    this._vm.$Toast.fire({
 	  icon: 'error',
 	  title: this._vm.$language.t('$vuetify.messages.failed_catch', [
-		this._vm.$language.t('$vuetify.menu.supply_productS')
+        this._vm.$language.t('$vuetify.menu.supply_productS')
 	  ])
-	})
+    })
   },
   [FETCHING_SUPPLIES_BY_CATEGORIES] (state, supplyByCategory) {
-	state.suppliesByCategories = supplyByCategory
+    state.suppliesByCategories = supplyByCategory
   },
   [FETCHING_SUPPLIES_BY_PAYMENT] (state, suppliesByPayment) {
-	state.suppliesByPayments = suppliesByPayment
+    state.suppliesByPayments = suppliesByPayment
   },
   [FETCHING_SUPPLIES_BY_PRODUCT] (state, suppliesByProduct) {
-	state.suppliesByProducts = suppliesByProduct
+    state.suppliesByProducts = suppliesByProduct
   },
   [FETCHING_SUPPLIES_BY_EMPLOYER] (state, suppliesByEmployer) {
-	state.suppliesByEmployer = suppliesByEmployer
+    state.suppliesByEmployer = suppliesByEmployer
   },
   [FETCHING_SUPPLIES_NUMBER] (state, supplyNumber) {
-	state.supplyNumber = supplyNumber
+    state.supplyNumber = supplyNumber
   },
   [FETCHING_SUPPLIES_BY_LIMIT] (state, suppliesByLimit) {
-	suppliesByLimit.map(value => {
+    suppliesByLimit.map(value => {
 	  switch (value.state) {
 	  case 'open':
-		value.status = this._vm.$language.t(
+          value.status = this._vm.$language.t(
 		  '$vuetify.supply.state.open'
-		)
-		value.color = 'green'
-		break
+          )
+          value.color = 'green'
+          break
 	  case 'accepted':
-		value.status = this._vm.$language.t(
+          value.status = this._vm.$language.t(
 		  '$vuetify.supply.state.accepted'
-		)
-		value.color = 'blue'
-		break
+          )
+          value.color = 'blue'
+          break
 	  case 'cancelled':
-		value.status = this._vm.$language.t(
+          value.status = this._vm.$language.t(
 		  '$vuetify.supply.state.cancelled'
-		)
-		value.color = 'red'
-		break
+          )
+          value.color = 'red'
+          break
 	  }
 	  value.timeString = moment(value.created_at).fromNow()
 	  const createdName = fullName(
-		value.created.firstName,
-		value.created.lastName
+        value.created.firstName,
+        value.created.lastName
 	  )
 	  const clientName = value.client
-		? fullName(value.client.firstName, value.client.lastName)
-		: ''
+        ? fullName(value.client.firstName, value.client.lastName)
+        : ''
 	  value.text =
 		createdName +
 		' ' +
 		this._vm.$language.t('$vuetify.dashboard.timeLineText') +
 		' ' +
 		clientName
-	})
-	state.suppliesByLimit = suppliesByLimit
+    })
+    state.suppliesByLimit = suppliesByLimit
   },
   [FETCHING_SUPPLIES_TOTAL] (state, suppliesStatics) {
-	state.suppliesStatics = suppliesStatics
+    state.suppliesStatics = suppliesStatics
   }
 }
 
 const getters = {
   getNumberFacture: state => {
-	return state.supplyNumber
+    return state.supplyNumber
   }
 }
 
 const actions = {
   toogleNewModal ({ commit }, showModal) {
-	commit(SWITCH_SUPPLY_NEW_MODAL, showModal)
-	if (!showModal) {
+    commit(SWITCH_SUPPLY_NEW_MODAL, showModal)
+    if (!showModal) {
 	  commit(CANCEL_MODAL)
-	}
+    }
   },
   switchLoadData ({ commit }, loadData) {
-	commit(SWITCH_LOAD_DATA, loadData)
+    commit(SWITCH_LOAD_DATA, loadData)
   },
   toogleEditModal ({ commit }, showModal) {
-	commit(SWITCH_SUPPLY_EDIT_MODAL, showModal)
+    commit(SWITCH_SUPPLY_EDIT_MODAL, showModal)
   },
   toogleShowModal ({ commit }, showModal) {
-	commit(SWITCH_SUPPLY_SHOW_MODAL, showModal)
+    commit(SWITCH_SUPPLY_SHOW_MODAL, showModal)
   },
   openEditModal ({ commit }, supplyId) {
-	commit(SUPPLY_EDIT, supplyId)
+    commit(SUPPLY_EDIT, supplyId)
   },
   openShowModal ({ commit }, supplyId) {
-	commit(SWITCH_SUPPLY_SHOW_MODAL, true)
-	commit(SUPPLY_EDIT, supplyId)
+    commit(SWITCH_SUPPLY_SHOW_MODAL, true)
+    commit(SUPPLY_EDIT, supplyId)
   },
   async getSupplies ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplys()
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async getSuppliesByCategories ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, filter) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyByCategory(filter)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_BY_CATEGORIES, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_BY_CATEGORIES, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async getSuppliesByPayment ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, filter) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyByPayment(filter)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_BY_PAYMENT, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_BY_PAYMENT, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async getSupplyByProduct ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, filter) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyByProduct(filter)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_BY_PRODUCT, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_BY_PRODUCT, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async getSupplyByEmployer ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, filter) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyByEmployer(filter)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_BY_EMPLOYER, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_BY_EMPLOYER, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async getSupplyByLimit ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, filter) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyByLimit(filter)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_BY_LIMIT, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_BY_LIMIT, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => {
-		commit(FAILED_SUPPLY, error)
+        commit(FAILED_SUPPLY, error)
 	  })
   },
   async getSupplyStatics ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }) {
-	commit(SUPPLY_TABLE_LOADING, true)
-	// noinspection JSUnresolvedVariable
-	await apiSupply
+    commit(SUPPLY_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiSupply
 	  .fetchSupplyStatics()
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_TOTAL, data.data)
-		commit(SUPPLY_TABLE_LOADING, false)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_TOTAL, data.data)
+        commit(SUPPLY_TABLE_LOADING, false)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async createSupply ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, newSupply) {
-	commit(ENV_DATA_PROCESS, true)
-	await apiSupply
+    commit(ENV_DATA_PROCESS, true)
+    await apiSupply
 	  .sendCreateRequest(newSupply)
 	  .then(data => {
-		commit(SUPPLY_CREATED)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('supply/getSupplies', null, { root: true })
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(SUPPLY_CREATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('supply/getSupplies', null, { root: true })
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async updateSupply ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, supplyE) {
-	commit(ENV_DATA_PROCESS, true)
-	const request = supplyE || state.editSupply
+    commit(ENV_DATA_PROCESS, true)
+    const request = supplyE || state.editSupply
 
-	// const request = profile || state.editUser
-	await apiSupply
+    // const request = profile || state.editUser
+    await apiSupply
 	  .sendUpdateRequest(request)
 	  .then(data => {
-		commit(SUPPLY_UPDATED)
-		commit(ENV_DATA_PROCESS, false)
-		dispatch('supply/getSupplies', null, { root: true })
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(SUPPLY_UPDATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('supply/getSupplies', null, { root: true })
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => {
-		commit(ENV_DATA_PROCESS, false)
-		commit(FAILED_SUPPLY, error)
+        commit(ENV_DATA_PROCESS, false)
+        commit(FAILED_SUPPLY, error)
 	  })
   },
   async deleteSupply ({
-	commit,
-	dispatch,
-	state
+    commit,
+    dispatch,
+    state
   }, supplyId) {
-	await apiSupply
+    await apiSupply
 	  .sendDeleteRequest(supplyId)
 	  .then(data => {
-		commit(SUPPLY_DELETE)
-		dispatch('supply/getSupplies', null, { root: true })
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(SUPPLY_DELETE)
+        dispatch('supply/getSupplies', null, { root: true })
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   },
   async fetchSupplyNumber ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, idProvider) {
-	await apiSupply
+    await apiSupply
 	  .fetchSupplyNumber(idProvider)
 	  .then(({ data }) => {
-		commit(FETCHING_SUPPLIES_NUMBER, data.data)
-		dispatch('auth/updateAccess', data.access, { root: true })
+        commit(FETCHING_SUPPLIES_NUMBER, data.data)
+        dispatch('auth/updateAccess', data.access, { root: true })
 	  })
 	  .catch(error => commit(FAILED_SUPPLY, error))
   }

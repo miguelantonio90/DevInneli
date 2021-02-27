@@ -2,29 +2,29 @@
   <v-container>
     <v-row>
       <v-col
-          class="py-0"
-          cols="12"
+        class="py-0"
+        cols="12"
       >
-        <new-keys v-if="showNewModal"/>
-        <edit-keys v-if="showEditModal"/>
+        <new-keys v-if="showNewModal" />
+        <edit-keys v-if="showEditModal" />
         <v-card>
           <app-data-table
-              :headers="getTableColumns"
-              :is-loading="isTableLoading"
-              :items="keys"
-              :manager="'key'"
-              :sort-by="['key']"
-              :sort-desc="[false, true]"
-              :title="
+            :headers="getTableColumns"
+            :is-loading="isTableLoading"
+            :items="keys"
+            :manager="'key'"
+            :sort-by="['key']"
+            :sort-desc="[false, true]"
+            :title="
               $vuetify.lang.t('$vuetify.titles.list', [
                 $vuetify.lang.t('$vuetify.menu.keys')
               ])
             "
-              csv-filename="Keys"
-              multi-sort
-              @create-row="toogleNewModal(true)"
-              @edit-row="openEditModal($event)"
-              @delete-row="deleteKeyHandler($event)"
+            csv-filename="Keys"
+            multi-sort
+            @create-row="toogleNewModal(true)"
+            @edit-row="openEditModal($event)"
+            @delete-row="deleteKeyHandler($event)"
           >
             <template v-slot:[`item.key`]="{ item }">
               <v-icon>mdi-account-key</v-icon>
@@ -89,26 +89,26 @@ export default {
     ]),
     deleteKeyHandler (keyId) {
       this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-              this.$vuetify.lang.t('$vuetify.menu.access')
-            ]),
-            text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_delete'
-            ),
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.cancel'
-            ),
-            confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.delete'
-            ),
-            confirmButtonColor: 'red'
-          })
-          .then(result => {
-            if (result.value) this.deleteKey(keyId)
-          })
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.menu.access')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_delete'
+          ),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then(result => {
+          if (result.value) this.deleteKey(keyId)
+        })
     }
   }
 }

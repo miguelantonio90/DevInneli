@@ -2,30 +2,30 @@
   <v-container>
     <v-row>
       <v-col
-          class="py-0"
-          cols="12"
+        class="py-0"
+        cols="12"
       >
-        <new-shop v-if="showNewModal"/>
-        <edit-shop v-if="showEditModal"/>
-        <show-shop v-if="showShowModal"/>
+        <new-shop v-if="showNewModal" />
+        <edit-shop v-if="showEditModal" />
+        <show-shop v-if="showShowModal" />
         <v-card>
           <app-data-table
-              :headers="getTableColumns"
-              :is-loading="isTableLoading"
-              :items="shops"
-              :manager="'shop'"
-              :sort-by="['name']"
-              :sort-desc="[false, true]"
-              :title="
+            :headers="getTableColumns"
+            :is-loading="isTableLoading"
+            :items="shops"
+            :manager="'shop'"
+            :sort-by="['name']"
+            :sort-desc="[false, true]"
+            :title="
               $vuetify.lang.t('$vuetify.titles.list', [
                 $vuetify.lang.t('$vuetify.menu.shop')
               ])
             "
-              csv-filename="Shops"
-              multi-sort
-              @create-row="toogleNewModal(true)"
-              @edit-row="openEditModal($event)"
-              @delete-row="deleteShopHandler($event)"
+            csv-filename="Shops"
+            multi-sort
+            @create-row="toogleNewModal(true)"
+            @edit-row="openEditModal($event)"
+            @delete-row="deleteShopHandler($event)"
           >
             <template v-slot:[`item.name`]="{ item }">
               <v-icon>mdi-shopping</v-icon>
@@ -35,8 +35,8 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip
-                      v-bind="attrs"
-                      v-on="on"
+                    v-bind="attrs"
+                    v-on="on"
                   >
                     <v-avatar left>
                       {{ item.countryFlag }}
@@ -116,35 +116,35 @@ export default {
     ]),
     deleteShopHandler (shopId) {
       this.shops.length === 1
-          ? this.$Swal.fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
-              this.$vuetify.lang.t('$vuetify.actions.delete')
-            ]),
-            text: this.$vuetify.lang.t(
-                '$vuetify.messages.error_delete_shop'
-            ),
-            icon: 'warning',
-            confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.accept'
-            ),
-            confirmButtonColor: 'red'
-          })
-          : this.$Swal
+        ? this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
+            this.$vuetify.lang.t('$vuetify.actions.delete')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.error_delete_shop'
+          ),
+          icon: 'warning',
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+        : this.$Swal
           .fire({
             title: this.$vuetify.lang.t(
-                '$vuetify.titles.delete',
-                [this.$vuetify.lang.t('$vuetify.menu.shop')]
+              '$vuetify.titles.delete',
+              [this.$vuetify.lang.t('$vuetify.menu.shop')]
             ),
             text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_delete'
+              '$vuetify.messages.warning_delete'
             ),
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.cancel'
+              '$vuetify.actions.cancel'
             ),
             confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.delete'
+              '$vuetify.actions.delete'
             ),
             confirmButtonColor: 'red'
           })

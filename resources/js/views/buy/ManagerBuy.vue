@@ -1,35 +1,35 @@
 <template>
   <div class="page-add-inventorys">
-    <app-loading v-show="loadingData"/>
+    <app-loading v-show="loadingData" />
     <v-dialog
-        v-model="showDiscount"
-        max-width="400"
-        persistent
+      v-model="showDiscount"
+      max-width="400"
+      persistent
     >
       <v-card>
         <v-card-title>
           <span class="headline">{{
-              $vuetify.lang.t(
-                  '$vuetify.access.access.manager_discount'
-              )
-            }}</span>
+            $vuetify.lang.t(
+              '$vuetify.access.access.manager_discount'
+            )
+          }}</span>
         </v-card-title>
         <v-card-text>
           <v-autocomplete
-              v-model="articleSelected.discount"
-              :items="localDiscounts"
-              chips
-              item-text="name"
-              multiple
-              return-object
+            v-model="articleSelected.discount"
+            :items="localDiscounts"
+            chips
+            item-text="name"
+            multiple
+            return-object
           >
             <template v-slot:append-outer>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      @click="
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="
                       $store.dispatch(
                         'discount/toogleNewModal',
                         true
@@ -40,25 +40,25 @@
                   </v-icon>
                 </template>
                 <span>{{
-                    $vuetify.lang.t('$vuetify.titles.newAction')
-                  }}</span>
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
               </v-tooltip>
             </template>
           </v-autocomplete>
         </v-card-text>
         <v-card-actions>
-          <v-spacer/>
+          <v-spacer />
           <v-btn
-              class="mb-2"
-              @click="closeDiscount"
+            class="mb-2"
+            @click="closeDiscount"
           >
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
           <v-btn
-              class="mb-2"
-              color="primary"
-              @click="saveDiscount()"
+            class="mb-2"
+            color="primary"
+            @click="saveDiscount()"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.accept') }}
@@ -70,36 +70,36 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-              $vuetify.lang.t(
-                  managerInventory
-                      ? '$vuetify.titles.edit'
-                      : '$vuetify.titles.newF',
-                  [$vuetify.lang.t('$vuetify.supply.name')]
-              )
-            }}</span>
+            $vuetify.lang.t(
+              managerInventory
+                ? '$vuetify.titles.edit'
+                : '$vuetify.titles.newF',
+              [$vuetify.lang.t('$vuetify.supply.name')]
+            )
+          }}</span>
         </v-card-title>
         <v-card-text>
           <v-form
-              ref="form"
-              v-model="formValid"
-              lazy-validation
-              style="padding: 0"
+            ref="form"
+            v-model="formValid"
+            lazy-validation
+            style="padding: 0"
           >
             <v-expansion-panels
-                v-model="panel"
-                multiple
-                style="margin: 0"
+              v-model="panel"
+              multiple
+              style="margin: 0"
             >
               <v-expansion-panel style="margin: 0">
                 <v-expansion-panel-header>
                   <div>
                     <v-icon>mdi-database-edit</v-icon>
                     <span
-                        style="text-transform: uppercase;font-weight: bold"
+                      style="text-transform: uppercase;font-weight: bold"
                     >
                       {{
                         $vuetify.lang.t(
-                            '$vuetify.panel.basic'
+                          '$vuetify.panel.basic'
                         )
                       }}
                     </span>
@@ -108,39 +108,39 @@
                 <v-expansion-panel-content>
                   <v-row>
                     <v-col
-                        class="py-0"
-                        cols="12"
-                        md="4"
+                      class="py-0"
+                      cols="12"
+                      md="4"
                     >
                       <v-select
-                          v-model="inventory.shop"
-                          :items="shops"
-                          :label="
+                        v-model="inventory.shop"
+                        :items="shops"
+                        :label="
                           $vuetify.lang.t(
                             '$vuetify.menu.shop'
                           )
                         "
-                          :loading="isShopLoading"
-                          :rules="formRule.country"
-                          chips
-                          clearable
-                          disabled
-                          item-text="name"
-                          required
-                          return-object
-                          rounded
-                          solo
+                        :loading="isShopLoading"
+                        :rules="formRule.country"
+                        chips
+                        clearable
+                        disabled
+                        item-text="name"
+                        required
+                        return-object
+                        rounded
+                        solo
                       />
                     </v-col>
                     <v-col
-                        class="py-0"
-                        cols="12"
-                        md="5"
+                      class="py-0"
+                      cols="12"
+                      md="5"
                     >
                       <v-autocomplete
-                          ref="selectArticle"
-                          :disabled="!inventory.shop"
-                          :hint="
+                        ref="selectArticle"
+                        :disabled="!inventory.shop"
+                        :hint="
                           !inventory.shop
                             ? $vuetify.lang.t(
                               '$vuetify.sale.selectShop'
@@ -154,30 +154,30 @@
                                 '$vuetify.sale.emptyArticle'
                               )
                         "
-                          :items="localArticles"
-                          :label="
+                        :items="localArticles"
+                        :label="
                           $vuetify.lang.t(
                             '$vuetify.menu.articles'
                           )
                         "
-                          chips
-                          item-text="name"
-                          persistent-hint
-                          return-object
-                          @input="selectArticle"
+                        chips
+                        item-text="name"
+                        persistent-hint
+                        return-object
+                        @input="selectArticle"
                       >
                         <template
-                            v-slot:selection="data"
+                          v-slot:selection="data"
                         >
                           <v-chip
-                              v-bind="data.attrs"
-                              :input-value="
+                            v-bind="data.attrs"
+                            :input-value="
                               data.selected
                             "
-                              @click="data.select"
+                            @click="data.select"
                           >
                             <v-avatar
-                                v-if="
+                              v-if="
                                 data.item
                                   .color &&
                                   data.item
@@ -185,23 +185,23 @@
                                     .length ===
                                   0
                               "
-                                :color="
+                              :color="
                                 data.item.color
                               "
-                                class="white--text"
-                                left
-                                v-text="
+                              class="white--text"
+                              left
+                              v-text="
                                 data.item.name
                                   .slice(0, 1)
                                   .toUpperCase()
                               "
                             />
                             <v-avatar
-                                v-else
-                                left
+                              v-else
+                              left
                             >
                               <v-img
-                                  :src="
+                                :src="
                                   data.item
                                     .path
                                 "
@@ -214,7 +214,7 @@
                           <template>
                             <v-list-item-avatar>
                               <v-avatar
-                                  v-if="
+                                v-if="
                                   data.item
                                     .color &&
                                     data
@@ -223,13 +223,13 @@
                                       .length ===
                                     0
                                 "
-                                  :color="
+                                :color="
                                   data.item
                                     .color
                                 "
-                                  class="white--text"
-                                  left
-                                  v-text="
+                                class="white--text"
+                                left
+                                v-text="
                                   data.item.name
                                     .slice(
                                       0,
@@ -239,11 +239,11 @@
                                 "
                               />
                               <v-avatar
-                                  v-else
-                                  left
+                                v-else
+                                left
                               >
                                 <v-img
-                                    :src="
+                                  :src="
                                     data
                                       .item
                                       .path
@@ -255,16 +255,16 @@
                               <v-list-item-title>
                                 {{
                                   data.item
-                                      .name
+                                    .name
                                 }}
                               </v-list-item-title>
                               <v-list-item-subtitle>
                                 {{
                                   `${user
-                                      .company
-                                      .currency +
-                                  ' ' +
-                                  data
+                                    .company
+                                    .currency +
+                                    ' ' +
+                                    data
                                       .item
                                       .cost}`
                                 }}
@@ -275,85 +275,85 @@
                       </v-autocomplete>
                     </v-col>
                     <v-col
-                        cols="12"
-                        md="12"
+                      cols="12"
+                      md="12"
                     >
                       <app-data-table
-                          :headers="getTableColumns"
-                          :is-loading="isTableLoading"
-                          :items="inventory.articles"
-                          :sort-by="['name']"
-                          :sort-desc="[false, true]"
-                          :view-discount-button="true"
-                          :view-edit-button="false"
-                          :view-new-button="false"
-                          :view-show-filter="false"
-                          csv-filename="ProductBuys"
-                          multi-sort
-                          @delete-row="deleteItem($event)"
-                          @manager-discount-row="
+                        :headers="getTableColumns"
+                        :is-loading="isTableLoading"
+                        :items="inventory.articles"
+                        :sort-by="['name']"
+                        :sort-desc="[false, true]"
+                        :view-discount-button="true"
+                        :view-edit-button="false"
+                        :view-new-button="false"
+                        :view-show-filter="false"
+                        csv-filename="ProductBuys"
+                        multi-sort
+                        @delete-row="deleteItem($event)"
+                        @manager-discount-row="
                           showDiscountArticle($event)
                         "
                       >
                         <template
-                            v-slot:[`item.name`]="{
+                          v-slot:[`item.name`]="{
                             item
                           }"
                         >
                           <v-chip
-                              :key="
+                            :key="
                               JSON.stringify(item)
                             "
                           >
                             <v-avatar
-                                v-if="
+                              v-if="
                                 item.color &&
                                   item.images
                                     .length ===
                                   0
                               "
-                                :color="item.color"
-                                class="white--text"
-                                left
-                                v-text="
+                              :color="item.color"
+                              class="white--text"
+                              left
+                              v-text="
                                 item.name
                                   .slice(0, 1)
                                   .toUpperCase()
                               "
                             />
                             <v-avatar
-                                v-else
-                                left
+                              v-else
+                              left
                             >
                               <v-img
-                                  :src="item.path"
+                                :src="item.path"
                               />
                             </v-avatar>
                             {{ item.name }}
                           </v-chip>
                         </template>
                         <template
-                            v-slot:[`item.cant`]="{
+                          v-slot:[`item.cant`]="{
                             item
                           }"
                         >
                           <v-edit-dialog
-                              :cancel-text="
+                            :cancel-text="
                               $vuetify.lang.t(
                                 '$vuetify.actions.cancel'
                               )
                             "
-                              :return-value.sync="
+                            :return-value.sync="
                               item.cant
                             "
-                              :save-text="
+                            :save-text="
                               $vuetify.lang.t(
                                 '$vuetify.actions.save'
                               )
                             "
-                              large
-                              persistent
-                              @save="
+                            large
+                            persistent
+                            @save="
                               calcTotalArticle(
                                 item
                               )
@@ -364,29 +364,29 @@
                             </div>
                             <template v-slot:input>
                               <div
-                                  class="mt-4 title"
+                                class="mt-4 title"
                               >
                                 {{
                                   $vuetify.lang.t(
-                                      '$vuetify.actions.edit'
+                                    '$vuetify.actions.edit'
                                   )
                                 }}
                               </div>
                               <v-text-field-money
-                                  v-model="
+                                v-model="
                                   item.cant
                                 "
-                                  :label="
+                                :label="
                                   $vuetify.lang.t(
                                     '$vuetify.actions.save'
                                   )
                                 "
-                                  :options="{
+                                :options="{
                                   length: 15,
                                   precision: 2,
                                   empty: 0.0
                                 }"
-                                  :properties="{
+                                :properties="{
                                   clearable: true
                                 }"
                               />
@@ -394,12 +394,12 @@
                           </v-edit-dialog>
                         </template>
                         <template
-                            v-slot:[`item.totalCost`]="{
+                          v-slot:[`item.totalCost`]="{
                             item
                           }"
                         >
                           <template
-                              v-if="
+                            v-if="
                               item.taxes.length >
                                 0 ||
                                 item.discount
@@ -408,21 +408,21 @@
                           >
                             <v-tooltip bottom>
                               <template
-                                  v-slot:activator="{
+                                v-slot:activator="{
                                   on,
                                   attrs
                                 }"
                               >
                                 <b>
                                   <v-icon
-                                      v-bind="
-                                    attrs
-                                  "
-                                      v-on="
-                                    on
-                                  "
-                                      class="mr-2"
-                                      small
+                                    v-bind="
+                                      attrs
+                                    "
+                                    class="mr-2"
+                                    small
+                                    v-on="
+                                      on
+                                    "
                                   >
                                     mdi-information
                                   </v-icon>
@@ -430,10 +430,10 @@
                               </template>
                               <template>
                                 <detail-article-cost
-                                    :article="
+                                  :article="
                                     item
                                   "
-                                    :currency="
+                                  :currency="
                                     user
                                       .company
                                       .currency
@@ -441,59 +441,59 @@
                                 />
                               </template>
                               <span
-                                  v-if="
+                                v-if="
                                   item.totalRefund >
                                     0
                                 "
                               >{{
-                                  $vuetify.lang.t(
-                                      '$vuetify.menu.refund'
-                                  ) +
+                                $vuetify.lang.t(
+                                  '$vuetify.menu.refund'
+                                ) +
                                   ': ' +
                                   `${user
-                                      .company
-                                      .currency +
-                                  ' ' +
-                                  item.totalRefund}`
-                                }}</span>
+                                    .company
+                                    .currency +
+                                    ' ' +
+                                    item.totalRefund}`
+                              }}</span>
                             </v-tooltip>
                           </template>
                           {{
                             `${user.company
-                                .currency +
-                            ' ' +
-                            parseFloat(
+                              .currency +
+                              ' ' +
+                              parseFloat(
                                 item.totalCost
-                            ).toFixed(2)}`
+                              ).toFixed(2)}`
                           }}
                         </template>
                       </app-data-table>
                     </v-col>
                     <v-col
-                        v-show="
+                      v-show="
                         inventory.articles.length > 0
                       "
-                        cols="12"
-                        md="6"
+                      cols="12"
+                      md="6"
                     />
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
               <v-col
-                  v-show="inventory.articles.length > 0"
-                  cols="12"
-                  md="12"
+                v-show="inventory.articles.length > 0"
+                cols="12"
+                md="12"
               >
                 <v-expansion-panel>
                   <v-expansion-panel-header>
                     <div>
                       <v-icon>mdi-database-plus</v-icon>
                       <span
-                          style="text-transform: uppercase;font-weight: bold"
+                        style="text-transform: uppercase;font-weight: bold"
                       >
                         {{
                           $vuetify.lang.t(
-                              '$vuetify.pay.extra_data'
+                            '$vuetify.pay.extra_data'
                           )
                         }}
                       </span>
@@ -501,21 +501,21 @@
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <extra-data
-                        :edit="managerInventory"
-                        :sale="inventory"
-                        :sub-total="
+                      :edit="managerInventory"
+                      :sale="inventory"
+                      :sub-total="
                         parseFloat(subTotal).toFixed(2)
                       "
-                        :total-cost="
+                      :total-cost="
                         parseFloat(totalCost).toFixed(2)
                       "
-                        :total-discount="
+                      :total-discount="
                         parseFloat(totalDisc).toFixed(2)
                       "
-                        :total-tax="
+                      :total-tax="
                         parseFloat(totalTax).toFixed(2)
                       "
-                        @updateData="calcTotalSale"
+                      @updateData="calcTotalSale"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -524,25 +524,25 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-spacer/>
+          <v-spacer />
           <v-btn
-              :disabled="isActionInProgress"
-              class="mb-2"
-              @click="handleClose"
+            :disabled="isActionInProgress"
+            class="mb-2"
+            @click="handleClose"
           >
             <v-icon>mdi-close</v-icon>
             {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
           </v-btn>
           <v-btn
-              :disabled="
+            :disabled="
               !formValid ||
                 isActionInProgress ||
                 getDifference !== 0
             "
-              :loading="isActionInProgress"
-              class="mb-2"
-              color="primary"
-              @click="inventoryHandler()"
+            :loading="isActionInProgress"
+            class="mb-2"
+            color="primary"
+            @click="inventoryHandler()"
           >
             <v-icon>mdi-check</v-icon>
             {{ $vuetify.lang.t('$vuetify.sale.state.accepted') }}
@@ -550,28 +550,28 @@
         </v-card-actions>
       </v-card>
       <v-dialog
-          v-model="showInfoAdd"
-          max-width="500px"
+        v-model="showInfoAdd"
+        max-width="500px"
       >
         <v-card>
           <v-card-title class="headline">
             {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
           </v-card-title>
           <v-card-actions>
-            <v-spacer/>
+            <v-spacer />
             <v-btn
-                class="mb-2"
-                color="primary"
-                @click="closeInfoAdd"
+              class="mb-2"
+              color="primary"
+              @click="closeInfoAdd"
             >
               <v-icon>mdi-check</v-icon>
               {{ $vuetify.lang.t('$vuetify.actions.accept') }}
             </v-btn>
-            <v-spacer/>
+            <v-spacer />
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <new-discount v-if="this.$store.state.discount.showNewModal"/>
+      <new-discount v-if="this.$store.state.discount.showNewModal" />
     </v-container>
   </div>
 </template>
@@ -689,11 +689,11 @@ export default {
     },
     'inventory.no_facture': function () {
       if (
+        this.inventories.filter(
+          art => art.no_facture === this.inventory.no_facture
+        ).length > 0 ||
           this.inventories.filter(
-              art => art.no_facture === this.inventory.no_facture
-          ).length > 0 ||
-          this.inventories.filter(
-              art => art.no_facture === this.inventory.no_facture
+            art => art.no_facture === this.inventory.no_facture
           ).length > 0
       ) {
         this.inventory.no_facture = this.generateNF()
@@ -712,8 +712,8 @@ export default {
   async created () {
     this.loadingData = true
     this.inventory = !this.managerInventory
-        ? this.newInventory
-        : this.editInventory
+      ? this.newInventory
+      : this.editInventory
     if (this.managerInventory) {
       this.calcTotalSale()
     }
@@ -754,7 +754,7 @@ export default {
           if (value.variant_values.length > 0) {
             value.variant_values.forEach(v => {
               const artS = v.articles_shops.filter(
-                  artS => artS.shop_id === this.inventory.shop.id
+                artS => artS.shop_id === this.inventory.shop.id
               )
               if (artS.length > 0) {
                 this.validAddToLocalArticle(v, value, artS)
@@ -762,7 +762,7 @@ export default {
             })
           } else {
             const artS = value.articles_shops.filter(
-                artS => artS.shop_id === this.inventory.shop.id
+              artS => artS.shop_id === this.inventory.shop.id
             )
             if (artS.length > 0) {
               this.validAddToLocalArticle(value, value, artS)
@@ -807,8 +807,8 @@ export default {
         this.localDiscounts.push({
           id: v.id,
           name: v.percent
-              ? v.name + '(' + v.value + '%)'
-              : v.name +
+            ? v.name + '(' + v.value + '%)'
+            : v.name +
               '(' +
               this.user.company.currency +
               v.value +
@@ -821,9 +821,9 @@ export default {
     selectArticle (item) {
       if (item) {
         if (
-            this.inventory.articles.filter(
-                art => art.article_id === item.article_id
-            ).length === 0
+          this.inventory.articles.filter(
+            art => art.article_id === item.article_id
+          ).length === 0
         ) {
           this.inventory.articles.push(item)
           this.calcTotalSale()
@@ -834,8 +834,8 @@ export default {
     },
     deleteItem (item) {
       this.inventory.articles.splice(
-          this.inventory.articles.indexOf(item),
-          1
+        this.inventory.articles.indexOf(item),
+        1
       )
       this.calcTotalSale()
     },
@@ -846,16 +846,16 @@ export default {
       if (this.getDifference !== 0) {
         this.loading = false
         this.shopMessageError(
-            this.$vuetify.lang.t(
-                '$vuetify.messages.warning_difference_price',
-                [
-                  (
-                      this.getDifference +
+          this.$vuetify.lang.t(
+            '$vuetify.messages.warning_difference_price',
+            [
+              (
+                this.getDifference +
                       ' ' +
                       this.user.company.currency
-                  ).toString()
-                ]
-            )
+              ).toString()
+            ]
+          )
         )
       } else {
         if (this.inventory.articles.length > 0) {
@@ -863,28 +863,28 @@ export default {
             this.loading = true
             if (!this.managerInventory) {
               await this.createInventory(this.inventory).then(
-                  () => {
-                    this.$router.push({
-                      name: 'supply_product'
-                    })
-                  }
+                () => {
+                  this.$router.push({
+                    name: 'supply_product'
+                  })
+                }
               )
             } else {
               await this.updateInventory(this.inventory).then(
-                  () => {
-                    this.$router.push({
-                      name: 'supply_product'
-                    })
-                  }
+                () => {
+                  this.$router.push({
+                    name: 'supply_product'
+                  })
+                }
               )
             }
           }
         } else {
           this.loading = false
           this.shopMessageError(
-              this.$vuetify.lang.t(
-                  '$vuetify.messages.warning_cant_article'
-              )
+            this.$vuetify.lang.t(
+              '$vuetify.messages.warning_cant_article'
+            )
           )
         }
       }
@@ -898,7 +898,7 @@ export default {
         icon: 'warning',
         showCancelButton: false,
         confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
+          '$vuetify.actions.accept'
         ),
         confirmButtonColor: 'red'
       })
@@ -911,15 +911,15 @@ export default {
     calcTotalArticle: function (item) {
       this.editedIndex = this.inventory.articles.indexOf(item)
       this.inventory.articles[this.editedIndex].totalCost = parseFloat(
-          this.inventory.articles[this.editedIndex].cost *
+        this.inventory.articles[this.editedIndex].cost *
           this.inventory.articles[this.editedIndex].cant
       ).toFixed(2)
       this.inventory.articles[this.editedIndex].totalCant = parseFloat(
+        parseFloat(
+          this.inventory.articles[this.editedIndex].inventory
+        ) -
           parseFloat(
-              this.inventory.articles[this.editedIndex].inventory
-          ) -
-          parseFloat(
-              this.inventory.articles[this.editedIndex].cant
+            this.inventory.articles[this.editedIndex].cant
           ) || 0
       ).toFixed(2)
       item.totalCost =
@@ -933,8 +933,8 @@ export default {
       if (item.taxes.length > 0) {
         item.taxes.forEach(v => {
           tax += v.percent
-              ? (item.cant * item.cost * v.value) / 100
-              : v.value
+            ? (item.cant * item.cost * v.value) / 100
+            : v.value
         })
       }
       return tax
@@ -944,8 +944,8 @@ export default {
       if (item.discount.length > 0) {
         item.discount.forEach(v => {
           disc += v.percent
-              ? (item.cant * item.cost * v.value) / 100
-              : v.value
+            ? (item.cant * item.cost * v.value) / 100
+            : v.value
         })
       }
       return disc
@@ -962,17 +962,17 @@ export default {
       this.inventory.taxes.forEach(v => {
         this.totalTax +=
             v.percent === 'true'
-                ? (this.subTotal * v.value) / 100
-                : v.value
+              ? (this.subTotal * v.value) / 100
+              : v.value
       })
       this.inventory.discounts.forEach(v => {
         this.totalDisc +=
             v.percent === 'true'
-                ? (this.subTotal * v.value) / 100
-                : v.value
+              ? (this.subTotal * v.value) / 100
+              : v.value
       })
       this.totalCost = (
-          this.subTotal +
+        this.subTotal +
           parseFloat(this.totalTax) -
           parseFloat(this.totalDisc)
       ).toFixed(2)

@@ -46,75 +46,75 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-	errors: {}
+    errors: {}
   },
   modules: {
-	app,
-	auth,
-	boxes,
-	openclose,
-	settings,
-	user,
-	assistance,
-	role,
-	keys,
-	shop,
-	category,
-	client,
-	refund,
-	supplier,
-	article,
-	company,
-	products,
-	shoppingCart,
-	expenseCategory,
-	exchangeRate,
-	statics,
-	payment,
-	typeOrder,
-	tax,
-	discount,
-	inventory,
-	sale,
-	supply,
-	online,
-	modifiers
+    app,
+    auth,
+    boxes,
+    openclose,
+    settings,
+    user,
+    assistance,
+    role,
+    keys,
+    shop,
+    category,
+    client,
+    refund,
+    supplier,
+    article,
+    company,
+    products,
+    shoppingCart,
+    expenseCategory,
+    exchangeRate,
+    statics,
+    payment,
+    typeOrder,
+    tax,
+    discount,
+    inventory,
+    sale,
+    supply,
+    online,
+    modifiers
   },
   plugins: [vuexLocal.plugin],
   getters: {
-	errors: state => state.errors
+    errors: state => state.errors
   },
   mutations: {
-	SET_ERRORS (state, response) {
+    SET_ERRORS (state, response) {
 	  if (response) {
-		state.errors = response.data
+        state.errors = response.data
 		  ? {
-			status: response.status,
-			message: response.data.message
+            status: response.status,
+            message: response.data.message
 		  }
 		  : {
-			status: false,
-			message: response.message
+            status: false,
+            message: response.message
 		  }
 
-		this._vm.$Toast.fire({
+        this._vm.$Toast.fire({
 		  icon: 'error',
 		  title: state.errors.message
-		})
+        })
 	  } else {
-		state.errors = {
+        state.errors = {
 		  status: 'failed',
 		  message: 'Failed: Connections refused.'
-		}
-		this._vm.$Toast.fire({
+        }
+        this._vm.$Toast.fire({
 		  icon: 'error',
 		  title: state.errors.message
-		})
+        })
 	  }
-	},
-	CLEAR_ERRORS (state) {
+    },
+    CLEAR_ERRORS (state) {
 	  state.errors = []
-	}
+    }
   }
 })
 

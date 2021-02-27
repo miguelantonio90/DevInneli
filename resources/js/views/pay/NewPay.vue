@@ -1,70 +1,70 @@
 <template>
   <v-dialog
-      v-model="toogleNewModal"
-      max-width="550"
-      persistent
+    v-model="toogleNewModal"
+    max-width="550"
+    persistent
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.new', [
-              $vuetify.lang.t('$vuetify.payment.name')
-            ])
-          }}</span>
+          $vuetify.lang.t('$vuetify.titles.new', [
+            $vuetify.lang.t('$vuetify.payment.name')
+          ])
+        }}</span>
       </v-card-title>
       <v-card-text>
         <v-form
-            ref="form"
-            v-model="formValid"
-            class="my-10"
-            lazy-validation
+          ref="form"
+          v-model="formValid"
+          class="my-10"
+          lazy-validation
         >
           <v-row>
             <v-col
-                class="py-0"
-                cols="12"
-                md="6"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-autocomplete
-                  v-model="pay.name"
-                  :items="getPay"
-                  :label="$vuetify.lang.t('$vuetify.pay.pay')"
-                  item-text="text"
-                  item-value="value"
-                  required
+                v-model="pay.name"
+                :items="getPay"
+                :label="$vuetify.lang.t('$vuetify.pay.pay')"
+                item-text="text"
+                item-value="value"
+                required
               />
             </v-col>
             <v-col
-                v-if="pay.name === 'counted'"
-                class="py-0"
-                cols="12"
-                md="6"
+              v-if="pay.name === 'counted'"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-autocomplete
-                  v-model="pay.method"
-                  :filter="customFilter"
-                  :items="localPayments"
-                  :label="
+                v-model="pay.method"
+                :filter="customFilter"
+                :items="localPayments"
+                :label="
                   $vuetify.lang.t('$vuetify.payment.name')
                 "
-                  :rules="formRule.required"
-                  item-value="method"
-                  return-object
+                :rules="formRule.required"
+                item-value="method"
+                return-object
               >
                 <template v-slot:selection="data">
                   {{
                     $vuetify.lang.t(
-                        '$vuetify.payment.' +
+                      '$vuetify.payment.' +
                         data.item.method
                     )
                   }}
                 </template>
                 <template v-slot:item="data">
                   <template
-                      v-if="typeof data.item !== 'object'"
+                    v-if="typeof data.item !== 'object'"
                   >
                     <v-list-item-content
-                        v-text="data.item"
+                      v-text="data.item"
                     />
                   </template>
                   <template v-else>
@@ -72,7 +72,7 @@
                       <v-list-item-title>
                         {{
                           $vuetify.lang.t(
-                              '$vuetify.payment.' +
+                            '$vuetify.payment.' +
                               data.item.method
                           )
                         }}
@@ -83,199 +83,199 @@
               </v-autocomplete>
             </v-col>
             <v-col
-                class="py-0"
-                cols="12"
-                md="6"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-text-field-money
-                  v-model="pay.cant"
-                  :label="
+                v-model="pay.cant"
+                :label="
                   $vuetify.lang.t('$vuetify.variants.cant')
                 "
-                  :options="{
+                :options="{
                   length: 15,
                   precision: 2,
                   empty: 0.0
                 }"
-                  :properties="{
+                :properties="{
                   prefix: currency,
                   clearable: true
                 }"
-                  :rules="formRule.required"
-                  :value="pending"
-                  required
-                  style="margin-top: 8"
+                :rules="formRule.required"
+                :value="pending"
+                required
+                style="margin-top: 8"
               />
             </v-col>
             <v-col
-                v-if="pay.name !== 'counted'"
-                class="py-0"
-                cols="12"
-                md="6"
+              v-if="pay.name !== 'counted'"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-menu
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  max-width="290px"
-                  min-width="290px"
-                  offset-y
-                  transition="scale-transition"
+                v-model="menu2"
+                :close-on-content-click="false"
+                max-width="290px"
+                min-width="290px"
+                offset-y
+                transition="scale-transition"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                      v-model="computedDateFormatted"
-                      v-bind="attrs"
-                      v-on="on"
-                      :label="
+                    v-model="computedDateFormatted"
+                    v-bind="attrs"
+                    :label="
                       $vuetify.lang.t(
                         '$vuetify.payment.pay_before'
                       )
                     "
-                      persistent-hint
-                      prepend-icon="mdi-calendar"
-                      readonly
+                    persistent-hint
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
                   />
                 </template>
                 <v-date-picker
-                    v-model="pay.mora"
-                    no-title
-                    @input="menu2 = false"
+                  v-model="pay.mora"
+                  no-title
+                  @input="menu2 = false"
                 />
               </v-menu>
             </v-col>
             <v-col
-                v-if="pay.name !== 'counted'"
-                class="py-0"
-                cols="12"
-                md="6"
+              v-if="pay.name !== 'counted'"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-text-field-money
-                  v-model="pay.cantMora"
-                  :label="
+                v-model="pay.cantMora"
+                :label="
                   $vuetify.lang.t(
                     '$vuetify.payment.pay_delay'
                   )
                 "
-                  :options="{
+                :options="{
                   length: 15,
                   precision: 2,
                   empty: 0.0
                 }"
-                  :properties="{
+                :properties="{
                   prefix: currency,
                   clearable: true
                 }"
-                  :rules="formRule.required"
-                  :value="pending"
-                  required
+                :rules="formRule.required"
+                :value="pending"
+                required
               />
             </v-col>
             <v-col
-                v-if="pay.method.method === 'cash'"
-                class="py-0"
-                cols="12"
-                md="6"
-                no-gutters
+              v-if="pay.method.method === 'cash'"
+              class="py-0"
+              cols="12"
+              md="6"
+              no-gutters
             >
               <template>
                 <v-row no-gutters>
                   <v-col
-                      v-if="currencies.length > 0"
-                      cols="3"
+                    v-if="currencies.length > 0"
+                    cols="3"
                   >
                     <v-autocomplete
-                        v-model="pay.currency"
-                        :items="currencies"
-                        :label="
+                      v-model="pay.currency"
+                      :items="currencies"
+                      :label="
                         $vuetify.lang.t(
                           '$vuetify.currency'
                         )
                       "
-                        auto-select-first
-                        item-text="currency"
-                        required
-                        return-object
-                        style="margin-top: 15"
-                        @change="calcDifference"
+                      auto-select-first
+                      item-text="currency"
+                      required
+                      return-object
+                      style="margin-top: 15"
+                      @change="calcDifference"
                     />
                   </v-col>
                   <v-col
-                      :cols="currencies.length > 0 ? 9 : 12"
+                    :cols="currencies.length > 0 ? 9 : 12"
                   >
                     <v-text-field-money
-                        v-model="pay.cant_pay"
-                        :label="
+                      v-model="pay.cant_pay"
+                      :label="
                         $vuetify.lang.t(
                           '$vuetify.payment.cant_pay'
                         )
                       "
-                        :options="{
+                      :options="{
                         length: 15,
                         precision: 2,
                         empty: 0.0
                       }"
-                        :properties="{
+                      :properties="{
                         prefix:
                           currencies.length === 0
                             ? currency
                             : '',
                         clearable: true
                       }"
-                        :rules="formRule.required"
-                        :value="pending"
-                        required
+                      :rules="formRule.required"
+                      :value="pending"
+                      required
                     />
                   </v-col>
                 </v-row>
               </template>
             </v-col>
             <v-col
-                v-if="pay.method.method === 'cash'"
-                class="py-0"
-                cols="12"
-                md="6"
+              v-if="pay.method.method === 'cash'"
+              class="py-0"
+              cols="12"
+              md="6"
             >
               <v-text-field-money
-                  v-model="pay.cant_back"
-                  :label="
+                v-model="pay.cant_back"
+                :label="
                   $vuetify.lang.t(
                     '$vuetify.payment.cant_back'
                   )
                 "
-                  :options="{
+                :options="{
                   length: 15,
                   precision: 2,
                   empty: 0.0
                 }"
-                  :properties="{
+                :properties="{
                   prefix: currency,
                   clearable: true
                 }"
-                  :rules="formRule.required"
-                  :value="pending"
-                  readonly
-                  required
+                :rules="formRule.required"
+                :value="pending"
+                readonly
+                required
               />
             </v-col>
           </v-row>
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
-            :disabled="isActionInProgress"
-            class="mb-2"
-            @click="toogleNewModal(false)"
+          :disabled="isActionInProgress"
+          class="mb-2"
+          @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            class="mb-2"
-            color="primary"
-            @click="$emit('addPayment', pay)"
+          :disabled="!formValid || isActionInProgress"
+          :loading="isActionInProgress"
+          class="mb-2"
+          color="primary"
+          @click="$emit('addPayment', pay)"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -347,7 +347,7 @@ export default {
   watch: {
     'pay.cant': function (val) {
       if (
-          parseFloat(val).toFixed(2) > parseFloat(this.pending).toFixed(2)
+        parseFloat(val).toFixed(2) > parseFloat(this.pending).toFixed(2)
       ) {
         this.pay.cant = parseFloat(this.pending).toFixed(2)
       }
@@ -389,23 +389,23 @@ export default {
     ...mapActions('exchangeRate', ['getChanges']),
     customFilter (item, queryText, itemText) {
       return (
-          this.$vuetify.lang
-              .t('$vuetify.payment.' + item.method)
-              .toLowerCase()
-              .indexOf(queryText.toLowerCase()) > -1
+        this.$vuetify.lang
+          .t('$vuetify.payment.' + item.method)
+          .toLowerCase()
+          .indexOf(queryText.toLowerCase()) > -1
       )
     },
     calcDifference () {
       this.pay.cant_back =
           this.currencies.length > 0
-              ? this.pay.cant_pay * this.pay.currency.change -
+            ? this.pay.cant_pay * this.pay.currency.change -
               this.pay.cant
-              : this.pay.cant_pay - this.pay.cant
+            : this.pay.cant_pay - this.pay.cant
     },
     lettersNumbers (event) {
       const regex = new RegExp('^[a-zA-Z0-9 ]+$')
       const key = String.fromCharCode(
-          !event.charCode ? event.which : event.charCode
+        !event.charCode ? event.which : event.charCode
       )
       if (!regex.test(key)) {
         event.preventDefault()
@@ -420,7 +420,7 @@ export default {
     },
     updateMethod () {
       this.localPayments = this.payments.filter(
-          p => p.name === this.pay.name
+        p => p.name === this.pay.name
       )
       this.pay.method = this.localPayments[0]
     },

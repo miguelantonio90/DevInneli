@@ -8,21 +8,21 @@ export const kebab = str => {
 
 export const compareValues = (key, order = 'asc') => {
   return function innerSort (a, b) {
-	// eslint-disable-next-line no-prototype-builtins
-	if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
 	  return 0
-	}
+    }
 
-	const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key]
-	const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key]
+    const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key]
+    const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key]
 
-	let comparison = 0
-	if (varA > varB) {
+    let comparison = 0
+    if (varA > varB) {
 	  comparison = 1
-	} else if (varA < varB) {
+    } else if (varA < varB) {
 	  comparison = -1
-	}
-	return order === 'desc' ? comparison * -1 : comparison
+    }
+    return order === 'desc' ? comparison * -1 : comparison
   }
 }
 
@@ -30,17 +30,17 @@ export const serialMaker = () => {
   let prefix = ''
   let seq = 0
   return {
-	set_prefix: function (p) {
+    set_prefix: function (p) {
 	  prefix = String(p)
-	},
-	set_seq: function (s) {
+    },
+    set_seq: function (s) {
 	  seq = s
-	},
-	gensym: function () {
+    },
+    gensym: function () {
 	  const result = prefix + seq
 	  seq += 1
 	  return result
-	}
+    }
   }
 }
 export const fullName = (firstName, lastName) => {
@@ -66,14 +66,14 @@ export const toggleFullScreen = () => {
 	doc.msExitFullscreen
 
   if (
-	!doc.fullscreenElement &&
+    !doc.fullscreenElement &&
 	!doc.mozFullScreenElement &&
 	!doc.webkitFullscreenElement &&
 	!doc.msFullscreenElement
   ) {
-	requestFullScreen.call(docEl)
+    requestFullScreen.call(docEl)
   } else {
-	cancelFullScreen.call(doc)
+    cancelFullScreen.call(doc)
   }
 }
 

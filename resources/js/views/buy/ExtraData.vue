@@ -1,31 +1,31 @@
 <template>
   <v-container>
-    <new-supplier v-if="$store.state.supplier.showNewModal"/>
-    <new-tax v-if="$store.state.tax.showNewModal"/>
-    <new-payment v-if="$store.state.payment.showNewModal"/>
-    <new-discount v-if="$store.state.discount.showNewModal"/>
+    <new-supplier v-if="$store.state.supplier.showNewModal" />
+    <new-tax v-if="$store.state.tax.showNewModal" />
+    <new-payment v-if="$store.state.payment.showNewModal" />
+    <new-discount v-if="$store.state.discount.showNewModal" />
     <v-row>
       <v-col
-          class="py-0"
-          cols="12"
-          md="6"
+        class="py-0"
+        cols="12"
+        md="6"
       >
         <v-autocomplete
-            v-model="sale.supplier"
-            :items="suppliers"
-            :label="$vuetify.lang.t('$vuetify.menu.supplier')"
-            :loading="isSupplierTableLoading"
-            clearable
-            item-text="firstName"
-            return-object
+          v-model="sale.supplier"
+          :items="suppliers"
+          :label="$vuetify.lang.t('$vuetify.menu.supplier')"
+          :loading="isSupplierTableLoading"
+          clearable
+          item-text="firstName"
+          return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="
                     $store.dispatch(
                       'supplier/toogleNewModal',
                       true
@@ -36,19 +36,19 @@
                 </v-icon>
               </template>
               <span>{{
-                  $vuetify.lang.t('$vuetify.titles.newAction')
-                }}</span>
+                $vuetify.lang.t('$vuetify.titles.newAction')
+              }}</span>
             </v-tooltip>
           </template>
           <template v-slot:selection="data">
             <v-chip
-                v-bind="data.attrs"
-                :input-value="data.selected"
-                @click="data.select"
+              v-bind="data.attrs"
+              :input-value="data.selected"
+              @click="data.select"
             >
               <v-avatar left>
                 <v-img
-                    :src="
+                  :src="
                     data.item.avatar ||
                       '/assets/avatar/avatar-undefined.jpg'
                   "
@@ -61,7 +61,7 @@
             <template>
               <v-list-item-avatar>
                 <v-img
-                    :src="
+                  :src="
                     data.item.avatar ||
                       '/assets/avatar/avatar-undefined.jpg'
                   "
@@ -80,44 +80,44 @@
         </v-autocomplete>
       </v-col>
       <v-col
-          class="py-0"
-          cols="12"
-          md="3"
+        class="py-0"
+        cols="12"
+        md="3"
       >
         <v-text-field
-            v-model="sale.no_facture"
-            :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
-            :rules="formRule.required"
-            required
+          v-model="sale.no_facture"
+          :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
+          :rules="formRule.required"
+          required
         />
       </v-col>
       <v-col
-          class="py-0"
-          cols="12"
-          md="3"
+        class="py-0"
+        cols="12"
+        md="3"
       >
         <v-select
-            v-model="sale.taxes"
-            :disabled="!!isTaxLoading"
-            :items="taxes"
-            :label="$vuetify.lang.t('$vuetify.tax.nameGeneral')"
-            :loading="isTaxLoading"
-            :rules="formRule.country"
-            chips
-            clearable
-            deletable-chips
-            item-text="name"
-            multiple
-            required
-            return-object
+          v-model="sale.taxes"
+          :disabled="!!isTaxLoading"
+          :items="taxes"
+          :label="$vuetify.lang.t('$vuetify.tax.nameGeneral')"
+          :loading="isTaxLoading"
+          :rules="formRule.country"
+          chips
+          clearable
+          deletable-chips
+          item-text="name"
+          multiple
+          required
+          return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="
                     $store.dispatch(
                       'tax/toogleNewModal',
                       true
@@ -128,39 +128,39 @@
                 </v-icon>
               </template>
               <span>{{
-                  $vuetify.lang.t('$vuetify.titles.newAction')
-                }}</span>
+                $vuetify.lang.t('$vuetify.titles.newAction')
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
       </v-col>
       <v-col
-          class="py-0"
-          cols="12"
-          md="4"
+        class="py-0"
+        cols="12"
+        md="4"
       >
         <v-select
-            v-model="sale.discounts"
-            :disabled="!!isTaxLoading"
-            :items="localDiscounts"
-            :label="$vuetify.lang.t('$vuetify.sale.discountGeneral')"
-            :loading="isTaxLoading"
-            :rules="formRule.country"
-            chips
-            clearable
-            deletable-chips
-            item-text="name"
-            multiple
-            required
-            return-object
+          v-model="sale.discounts"
+          :disabled="!!isTaxLoading"
+          :items="localDiscounts"
+          :label="$vuetify.lang.t('$vuetify.sale.discountGeneral')"
+          :loading="isTaxLoading"
+          :rules="formRule.country"
+          chips
+          clearable
+          deletable-chips
+          item-text="name"
+          multiple
+          required
+          return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="
                     $store.dispatch(
                       'discount/toogleNewModal',
                       true
@@ -171,24 +171,24 @@
                 </v-icon>
               </template>
               <span>{{
-                  $vuetify.lang.t('$vuetify.titles.newAction')
-                }}</span>
+                $vuetify.lang.t('$vuetify.titles.newAction')
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
       </v-col>
       <v-col
-          cols="12"
-          md="12"
+        cols="12"
+        md="12"
       >
         <list-pay
-            :currency="user.company.currency"
-            :edit="edit"
-            :sale="sale"
-            :sub-total="parseFloat(subTotal).toFixed(2)"
-            :total-discount="parseFloat(totalDiscount).toFixed(2)"
-            :total-price="parseFloat(getTotalCost).toFixed(2)"
-            :total-tax="parseFloat(totalTax).toFixed(2)"
+          :currency="user.company.currency"
+          :edit="edit"
+          :sale="sale"
+          :sub-total="parseFloat(subTotal).toFixed(2)"
+          :total-discount="parseFloat(totalDiscount).toFixed(2)"
+          :total-price="parseFloat(getTotalCost).toFixed(2)"
+          :total-tax="parseFloat(totalTax).toFixed(2)"
         />
       </v-col>
     </v-row>
@@ -279,8 +279,8 @@ export default {
         this.localDiscounts.push({
           id: v.id,
           name: v.percent
-              ? v.name + '(' + v.value + '%)'
-              : v.name +
+            ? v.name + '(' + v.value + '%)'
+            : v.name +
               '(' +
               this.user.company.currency +
               v.value +

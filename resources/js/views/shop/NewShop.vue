@@ -1,66 +1,66 @@
 <template>
   <v-dialog
-      v-model="toogleNewModal"
-      max-width="600px"
-      persistent
+    v-model="toogleNewModal"
+    max-width="600px"
+    persistent
   >
     <v-card>
       <v-card-title>
         <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
-              $vuetify.lang.t('$vuetify.menu.shop')
-            ])
-          }}</span>
+          $vuetify.lang.t('$vuetify.titles.newF', [
+            $vuetify.lang.t('$vuetify.menu.shop')
+          ])
+        }}</span>
       </v-card-title>
       <v-card-text>
         <v-form
-            ref="form"
-            v-model="formValid"
-            class="my-10"
-            lazy-validation
+          ref="form"
+          v-model="formValid"
+          class="my-10"
+          lazy-validation
         >
           <v-row>
             <v-col
-                cols="12"
-                md="4"
+              cols="12"
+              md="4"
             >
               <v-text-field
-                  v-model="newShop.name"
-                  :counter="10"
-                  :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                  :rules="formRule.firstName"
-                  prepend-icon="mdi-home-variant"
-                  required
-                  @keypress="lettersNumbers"
+                v-model="newShop.name"
+                :counter="10"
+                :label="$vuetify.lang.t('$vuetify.menu.shop')"
+                :rules="formRule.firstName"
+                prepend-icon="mdi-home-variant"
+                required
+                @keypress="lettersNumbers"
               />
             </v-col>
             <v-col>
               <vue-tel-input-vuetify
-                  v-model="newShop.phone"
-                  v-bind="bindProps"
-                  :error-messages="errorPhone"
-                  :label="$vuetify.lang.t('$vuetify.phone')"
-                  :placeholder="
+                v-model="newShop.phone"
+                v-bind="bindProps"
+                :error-messages="errorPhone"
+                :label="$vuetify.lang.t('$vuetify.phone')"
+                :placeholder="
                   $vuetify.lang.t('$vuetify.phone_holder')
                 "
-                  :prefix="
+                :prefix="
                   countrySelect
                     ? `+` + countrySelect.dialCode
                     : ``
                 "
-                  :rules="formRule.phone"
-                  :select-label="
+                :rules="formRule.phone"
+                :select-label="
                   $vuetify.lang.t('$vuetify.country')
                 "
-                  required
-                  @input="onInput"
-                  @keypress="numbers"
-                  @country-changed="onCountry"
+                required
+                @input="onInput"
+                @keypress="numbers"
+                @country-changed="onCountry"
               >
                 <template #message="{ key, message }">
                   <slot
-                      v-bind="{ key, message }"
-                      name="label"
+                    v-bind="{ key, message }"
+                    name="label"
                   />
                   {{ message }}
                 </template>
@@ -69,54 +69,54 @@
           </v-row>
           <v-row>
             <v-col
-                cols="12"
-                md="12"
+              cols="12"
+              md="12"
             >
               <v-text-field
-                  v-model="newShop.address"
-                  :counter="120"
-                  :label="$vuetify.lang.t('$vuetify.address')"
-                  :rules="formRule.address"
-                  prepend-icon="mdi-home-map-marker"
-                  required
+                v-model="newShop.address"
+                :counter="120"
+                :label="$vuetify.lang.t('$vuetify.address')"
+                :rules="formRule.address"
+                prepend-icon="mdi-home-map-marker"
+                required
               />
             </v-col>
             <v-col
-                cols="12"
-                md="12"
+              cols="12"
+              md="12"
             >
               <v-text-field
-                  v-model="newShop.description"
-                  :counter="120"
-                  :label="
+                v-model="newShop.description"
+                :counter="120"
+                :label="
                   $vuetify.lang.t(
                     '$vuetify.access.description'
                   )
                 "
-                  :rules="formRule.description"
-                  prepend-icon="mdi-file-document"
-                  required
+                :rules="formRule.description"
+                prepend-icon="mdi-file-document"
+                required
               />
             </v-col>
           </v-row>
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
-            :disabled="isActionInProgress"
-            class="mb-2"
-            @click="toogleNewModal(false)"
+          :disabled="isActionInProgress"
+          class="mb-2"
+          @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-            :disabled="!formValid || isActionInProgress"
-            :loading="isActionInProgress"
-            class="mb-2"
-            color="primary"
-            @click="createNewShopAction"
+          :disabled="!formValid || isActionInProgress"
+          :loading="isActionInProgress"
+          class="mb-2"
+          color="primary"
+          @click="createNewShopAction"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t('$vuetify.actions.save') }}
@@ -179,7 +179,7 @@ export default {
     lettersNumbers (event) {
       const regex = new RegExp('^[a-zA-Z0-9 ]+$')
       const key = String.fromCharCode(
-          !event.charCode ? event.which : event.charCode
+        !event.charCode ? event.which : event.charCode
       )
       if (!regex.test(key)) {
         event.preventDefault()
@@ -193,7 +193,7 @@ export default {
     numbers (event) {
       const regex = new RegExp('^[0-9]+$')
       const key = String.fromCharCode(
-          !event.charCode ? event.which : event.charCode
+        !event.charCode ? event.which : event.charCode
       )
       if (!regex.test(key)) {
         event.preventDefault()

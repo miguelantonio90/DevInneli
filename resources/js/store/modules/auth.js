@@ -32,37 +32,37 @@ const state = {
   access: [],
   notification: [],
   fromModel: {
-	email: '',
-	password: ''
+    email: '',
+    password: ''
   },
   formRegister: {
-	shopName: '',
-	username: '',
-	email: '',
-	password: '',
-	phone: '',
-	password_confirmation: '',
-	sector: '',
-	country: ''
+    shopName: '',
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+    password_confirmation: '',
+    sector: '',
+    country: ''
   },
   formReset: {
-	email: '',
-	password: '',
-	password_confirmation: ''
+    email: '',
+    password: '',
+    password_confirmation: ''
   },
   socialIcons: [
-	{
+    {
 	  text: 'Google',
 	  icon: 'mdi-google'
-	},
-	{
+    },
+    {
 	  text: 'Facebook',
 	  icon: 'mdi-facebook'
-	},
-	{
+    },
+    {
 	  text: 'Twitter',
 	  icon: 'mdi-twitter'
-	}
+    }
   ]
 }
 
@@ -81,266 +81,266 @@ const getters = {
 // mutations
 const mutations = {
   [IS_MANAGER] (state, isManager) {
-	state.isManager = isManager
+    state.isManager = isManager
   },
   [SET_USER_DATA] (state, user) {
-	state.userData = user
+    state.userData = user
   },
   [IN_PROCESS_RESET] (state, process) {
-	state.loadingReset = process
+    state.loadingReset = process
   },
   [UPDATE_ACCESS] (state, access) {
-	if (access !== undefined) {
+    if (access !== undefined) {
 	  state.access = []
 	  state.access = access.length > 0 ? JSON.parse(atob(access[1])) : {}
 	  state.isAdmin = access[0]
 	  state.userPin = access[2]
-	}
+    }
   },
   [UPDATE_NOTIFICATION] (state, notifications) {
-	if (notifications !== undefined) {
+    if (notifications !== undefined) {
 	  state.notification = []
 	  state.notification = notifications
-	}
+    }
   },
   [LOGIN] (state, pending) {
-	state.pending = pending
+    state.pending = pending
   },
   [LOGIN_SUCCESS] (state) {
-	state.isLoggedIn = true
-	state.pending = false
+    state.isLoggedIn = true
+    state.pending = false
   },
   [PIN_SUCCESS] (state, userPin) {
-	state.pinSuccess = true
-	state.userPin = userPin
-	state.pending = false
+    state.pinSuccess = true
+    state.userPin = userPin
+    state.pending = false
   },
   [LOGOUT] (state) {
-	state.isLoggedIn = false
-	state.isManagerIn = false
+    state.isLoggedIn = false
+    state.isManagerIn = false
   },
   [FORGOT_PASSWORD] (state, status) {
-	state.successForgot = status
-	if (status) {
+    state.successForgot = status
+    if (status) {
 	  this._vm.$Toast.fire({
-		icon: 'success',
-		title: this._vm.$language.t('$vuetify.messages.check_mail'),
-		timer: 5000
+        icon: 'success',
+        title: this._vm.$language.t('$vuetify.messages.check_mail'),
+        timer: 5000
 	  })
 	  router.push({ name: 'login' })
-	}
+    }
   },
   [LOGIN_FAILED] (state) {
-	state.isLoggedIn = false
-	state.pending = false
-	this._vm.$Toast.fire({
+    state.isLoggedIn = false
+    state.pending = false
+    this._vm.$Toast.fire({
 	  icon: 'error',
 	  title: this._vm.$language.t('$vuetify.messages.login_failed')
-	})
+    })
   },
   [PIN_FAILED] (state) {
-	state.pinSuccess = false
-	state.isManager = false
-	this._vm.$Toast.fire({
+    state.pinSuccess = false
+    state.isManager = false
+    this._vm.$Toast.fire({
 	  icon: 'error',
 	  title: this._vm.$language.t('$vuetify.messages.pin_failed')
-	})
+    })
   },
   [ENV_DATA_PROCESS] (state, pending) {
-	state.pending = pending
+    state.pending = pending
   },
   [SET_RESET] (state, reset) {
-	state.formReset = {
+    state.formReset = {
 	  username: '',
 	  email: '',
 	  password: '',
 	  password_confirmation: ''
-	}
-	state.successReset = reset
-	if (reset) {
+    }
+    state.successReset = reset
+    if (reset) {
 	  this._vm.$Toast.fire({
-		icon: 'success',
-		title: this._vm.$language.t(
+        icon: 'success',
+        title: this._vm.$language.t(
 		  '$vuetify.messages.password_success'
-		)
+        )
 	  })
-	} else {
+    } else {
 	  this._vm.$Toast.fire({
-		icon: 'error',
-		title: 'Invalid Token.'
+        icon: 'error',
+        title: 'Invalid Token.'
 	  })
-	}
-	router.push({ name: 'login' })
+    }
+    router.push({ name: 'login' })
   },
   [FAILED_CATCH] (state, error) {
-	state.pending = false
-	state.error = error
-	state.isLoggedIn = false
-	if (error.status === 401 && error.statusText === 'Unauthorized') {
+    state.pending = false
+    state.error = error
+    state.isLoggedIn = false
+    if (error.status === 401 && error.statusText === 'Unauthorized') {
 	  localStorage.removeToken()
 	  router.push({ name: 'login' })
-	} else {
+    } else {
 	  let msg = this._vm.$language.t('$vuetify.messages.login_failed')
 	  Object.keys(state.error.data.errors).forEach(v => {
-		if (v !== 'message') {
+        if (v !== 'message') {
 		  if (v === 'email') {
-			if (
+            if (
 			  state.error.data.errors[v][0] ===
 			  'The email has already been taken.'
-			) {
+            ) {
 			  msg = this._vm.$language.t(
-				'$vuetify.messages.register_exist_email'
+                '$vuetify.messages.register_exist_email'
 			  )
-			}
+            }
 		  }
-		}
+        }
 	  })
 	  this._vm.$Toast.fire({
-		icon: 'error',
-		title: msg
+        icon: 'error',
+        title: msg
 	  })
-	}
+    }
   }
 }
 
 // actions
 const actions = {
   async getUserData ({ commit }) {
-	await auth
+    await auth
 	  .getUserData()
 	  .then(({ data }) => {
-		commit(SET_USER_DATA, data.data)
-		this.dispatch('auth/updateAccess', data)
+        commit(SET_USER_DATA, data.data)
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(({ response }) => {
-		commit(FAILED_CATCH, response)
-		localStorage.removeToken()
+        commit(FAILED_CATCH, response)
+        localStorage.removeToken()
 	  })
   },
   async sendLoginRequest ({ commit }, login) {
-	commit(LOGIN, true)
+    commit(LOGIN, true)
 
-	return await auth
+    return await auth
 	  .loginRequest(login)
 	  .then(({ data }) => {
-		commit(LOGIN, false)
-		commit(LOGIN_SUCCESS)
-		localStorage.saveToken(
+        commit(LOGIN, false)
+        commit(LOGIN_SUCCESS)
+        localStorage.saveToken(
 		  data.token_type + ' ' + data.access_token
-		)
+        )
 	  })
 	  .catch(({ response }) => {
-		commit(LOGIN_FAILED)
-		commit(FAILED_CATCH, response)
+        commit(LOGIN_FAILED)
+        commit(FAILED_CATCH, response)
 	  })
   },
   async sendLoginPincode ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, login) {
-	commit(LOGIN)
-	return await auth
+    commit(LOGIN)
+    return await auth
 	  .loginPincodeRequest(login)
 	  .then(({ data }) => {
-		commit(PIN_SUCCESS, data.data)
-		commit(UPDATE_ACCESS, data.access)
-		commit(UPDATE_NOTIFICATION, data.notifications)
-		if (data.success && data.data.isManager) {
+        commit(PIN_SUCCESS, data.data)
+        commit(UPDATE_ACCESS, data.access)
+        commit(UPDATE_NOTIFICATION, data.notifications)
+        if (data.success && data.data.isManager) {
 		  commit(IS_MANAGER, true)
 		  localStorage.saveTokenManager(data.data.access_token)
-		} else {
+        } else {
 		  commit(IS_MANAGER, false)
 		  localStorage.removeTokenManager()
-		}
+        }
 	  })
 	  .catch(({ response }) => {
-		commit(PIN_FAILED)
-		commit(IS_MANAGER, false)
-		// commit(FAILED_CATCH, response)
-		localStorage.removeTokenManager()
+        commit(PIN_FAILED)
+        commit(IS_MANAGER, false)
+        // commit(FAILED_CATCH, response)
+        localStorage.removeTokenManager()
 	  })
   },
   async sendRegisterRequest ({
-	commit,
-	dispatch
+    commit,
+    dispatch
   }, register) {
-	return await auth
+    return await auth
 	  .registerRequest(register)
 	  .then(({ data }) => {
-		commit(LOGIN_SUCCESS)
-		localStorage.saveToken(
+        commit(LOGIN_SUCCESS)
+        localStorage.saveToken(
 		  data.token_type + ' ' + data.access_token
-		)
-		dispatch('getUserData')
-		router.push('/hi')
+        )
+        dispatch('getUserData')
+        router.push('/hi')
 	  })
 	  .catch(({ response }) => {
-		commit(FAILED_CATCH, response)
+        commit(FAILED_CATCH, response)
 	  })
   },
   async sendLogoutRequest ({ commit }) {
-	commit(LOGOUT)
-	await auth
+    commit(LOGOUT)
+    await auth
 	  .logoutRequest()
 	  .then(() => commit(SET_USER_DATA, null))
 	  .then(() => {
-		localStorage.removeToken()
-		localStorage.removeTokenManager()
+        localStorage.removeToken()
+        localStorage.removeTokenManager()
 	  })
   },
   async sendVerifyResendRequest ({ commit }) {
-	return await auth.verifyResendRequest().catch(({ response }) => {
+    return await auth.verifyResendRequest().catch(({ response }) => {
 	  commit(FAILED_CATCH, response)
-	})
+    })
   },
   async sendVerifyRequest ({ dispatch }, hash) {
-	return await auth
+    return await auth
 	  .verifyRequest(hash)
 	  .then(() => dispatch('getUserData'))
   },
   async sendEmailForgot ({ commit }, email) {
-	return await auth
+    return await auth
 	  .verifyMailForgot(email)
 	  .then(response => {
-		if (response.status === 200 && response.data.success) {
+        if (response.status === 200 && response.data.success) {
 		  commit(FORGOT_PASSWORD, true)
-		} else {
+        } else {
 		  commit(FORGOT_PASSWORD, false)
-		}
+        }
 	  })
 	  .catch(response => {
-		response.unauthorized = true
-		commit(FAILED_CATCH, response)
+        response.unauthorized = true
+        commit(FAILED_CATCH, response)
 	  })
   },
   async sendResetPassword ({ commit }, newData) {
-	commit(IN_PROCESS_RESET, true)
+    commit(IN_PROCESS_RESET, true)
 
-	return await auth
+    return await auth
 	  .resetPassword(newData.token, newData)
 	  .then(response => {
-		if (response.status === 200 && response.data.success) {
+        if (response.status === 200 && response.data.success) {
 		  commit(IN_PROCESS_RESET, false)
 		  commit(SET_RESET, true)
-		} else {
+        } else {
 		  commit(IN_PROCESS_RESET, false)
 		  commit(SET_RESET, false)
-		}
+        }
 	  })
   },
   async updateAccess ({ commit }, data) {
-	commit(UPDATE_ACCESS, data.access)
-	commit(UPDATE_NOTIFICATION, data.notifications)
+    commit(UPDATE_ACCESS, data.access)
+    commit(UPDATE_NOTIFICATION, data.notifications)
   },
   async readNotification ({ commit }, idNotification) {
-	await auth
+    await auth
 	  .readNotification(idNotification)
 	  .then(({ data }) => {
-		this.dispatch('auth/updateAccess', data)
+        this.dispatch('auth/updateAccess', data)
 	  })
 	  .catch(({ response }) => {
-		commit(FAILED_CATCH, response)
-		localStorage.removeToken()
+        commit(FAILED_CATCH, response)
+        localStorage.removeToken()
 	  })
   }
 }

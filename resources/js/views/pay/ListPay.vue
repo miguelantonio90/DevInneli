@@ -1,46 +1,46 @@
 <template>
   <v-container>
     <new-payment
-        v-if="showNewModal"
-        :currency="currency"
-        :payments="payments"
-        :pays="sale.pays"
-        :pending="totalPrice - totalPays"
-        @addPayment="addToPayment"
+      v-if="showNewModal"
+      :currency="currency"
+      :payments="payments"
+      :pays="sale.pays"
+      :pending="totalPrice - totalPays"
+      @addPayment="addToPayment"
     />
     <v-card>
       <v-card-text>
         <v-row>
           <v-col
-              cols="12"
-              md="4"
+            cols="12"
+            md="4"
           >
             <facture
-                :currency="currency || ''"
-                :edit="true"
-                :sale="sale"
-                :sub-total="parseFloat(subTotal).toFixed(2)"
-                :total-discount="
+              :currency="currency || ''"
+              :edit="true"
+              :sale="sale"
+              :sub-total="parseFloat(subTotal).toFixed(2)"
+              :total-discount="
                 parseFloat(totalDiscount).toFixed(2)
               "
-                :total-price="parseFloat(totalPrice).toFixed(2)"
-                :total-tax="parseFloat(totalTax).toFixed(2)"
-                @updateData="update = false"
+              :total-price="parseFloat(totalPrice).toFixed(2)"
+              :total-tax="parseFloat(totalTax).toFixed(2)"
+              @updateData="update = false"
             />
           </v-col>
           <v-col
-              class="py-0"
-              cols="12"
-              md="8"
+            class="py-0"
+            cols="12"
+            md="8"
           >
             <app-data-table
-                :headers="getTableColumns"
-                :hide-footer="!show"
-                :items="sale.pays"
-                :manager="'payment'"
-                :sort-by="['name']"
-                :sort-desc="[false, true]"
-                :title="
+              :headers="getTableColumns"
+              :hide-footer="!show"
+              :items="sale.pays"
+              :manager="'payment'"
+              :sort-by="['name']"
+              :sort-desc="[false, true]"
+              :title="
                 show
                   ? $vuetify.lang.t(
                     '$vuetify.variants.total_price'
@@ -51,79 +51,79 @@
                     parseFloat(totalPrice).toFixed(2)
                   : ''
               "
-                :view-delete-button="show"
-                :view-edit-button="false"
-                :view-new-button="show"
-                :view-show-filter="false"
-                :view-tour-button="show"
-                csv-filename="Categories"
-                multi-sort
-                style="margin-top: 10px"
-                @create-row="addNewPayment"
-                @delete-row="deletePaymentHandler($event)"
+              :view-delete-button="show"
+              :view-edit-button="false"
+              :view-new-button="show"
+              :view-show-filter="false"
+              :view-tour-button="show"
+              csv-filename="Categories"
+              multi-sort
+              style="margin-top: 10px"
+              @create-row="addNewPayment"
+              @delete-row="deletePaymentHandler($event)"
             >
               <template v-slot:[`item.method`]="{ item }">
                 {{
                   $vuetify.lang.t(
-                      '$vuetify.payment.' + item.method
+                    '$vuetify.payment.' + item.method
                   )
                 }}
               </template>
               <template v-slot:[`item.name`]="{ item }">
                 {{
                   $vuetify.lang.t(
-                      '$vuetify.payment.' + item.name
+                    '$vuetify.payment.' + item.name
                   )
                 }}
               </template>
               <template v-slot:[`item.cant`]="{ item }">
                 <v-edit-dialog
-                    :cancel-text="
+                  :cancel-text="
                     $vuetify.lang.t(
                       '$vuetify.actions.cancel'
                     )
                   "
-                    :save-text="
+                  :save-text="
                     $vuetify.lang.t('$vuetify.actions.save')
                   "
-                    large
-                    persistent
-                    @open="openEditCant(item)"
-                    @save="saveEditCant(item)"
+                  large
+                  persistent
+                  @open="openEditCant(item)"
+                  @save="saveEditCant(item)"
                 >
                   <div>
                     {{
                       `${currency +
-                      ' ' +
-                      parseFloat(item.cant).toFixed(
+                        ' ' +
+                        parseFloat(item.cant).toFixed(
                           2
-                      )}`
+                        )}`
                     }}
                   </div>
                   <template v-slot:input>
                     <div class="mt-4 title">
                       {{
                         $vuetify.lang.t(
-                            '$vuetify.actions.edit'
+                          '$vuetify.actions.edit'
                         )
                       }}
                     </div>
                     <v-text-field-money
-                        v-model="cant"
-                        :label="
+                      v-model="cant"
+                      :label="
                         $vuetify.lang.t(
                           '$vuetify.actions.edit'
                         )
                       "
-                        :options="{
+                      :options="{
                         length: 15,
                         precision: 2,
                         empty: 0.0
                       }"
-                        :properties="{
+                      :properties="{
                         clearable: true
                       }"
-                        required
+                      required
                     />
                   </template>
                 </v-edit-dialog>
@@ -132,9 +132,9 @@
                 <div v-if="item.method === 'cash'">
                   {{
                     `${
-                        item.currency.currency
-                            ? item.currency.currency
-                            : currency
+                      item.currency.currency
+                        ? item.currency.currency
+                        : currency
                     }`
                   }}
                   {{ parseFloat(item.cant_pay).toFixed(2) }}
@@ -283,12 +283,12 @@ export default {
             this.$vuetify.lang.t('$vuetify.payment.name')
           ]),
           text: this.$vuetify.lang.t(
-              '$vuetify.messages.warning_excess_money'
+            '$vuetify.messages.warning_excess_money'
           ),
           icon: 'warning',
           showCancelButton: false,
           confirmButtonText: this.$vuetify.lang.t(
-              '$vuetify.actions.accept'
+            '$vuetify.actions.accept'
           ),
           confirmButtonColor: 'red'
         })
@@ -296,26 +296,26 @@ export default {
     },
     deletePaymentHandler (item) {
       this.$Swal
-          .fire({
-            title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-              this.$vuetify.lang.t('$vuetify.menu.pay')
-            ]),
-            text: this.$vuetify.lang.t(
-                '$vuetify.messages.warning_delete'
-            ),
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.cancel'
-            ),
-            confirmButtonText: this.$vuetify.lang.t(
-                '$vuetify.actions.delete'
-            ),
-            confirmButtonColor: 'red'
-          })
-          .then(() => {
-            this.sale.pays.splice(this.sale.pays.indexOf(item), 1)
-          })
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.menu.pay')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_delete'
+          ),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then(() => {
+          this.sale.pays.splice(this.sale.pays.indexOf(item), 1)
+        })
     },
     addToPayment (pay) {
       this.sale.pays.push({
@@ -337,7 +337,7 @@ export default {
     },
     saveEditCant (item) {
       if (
-          this.totalPays - item.cant + parseFloat(this.cant) <=
+        this.totalPays - item.cant + parseFloat(this.cant) <=
           this.totalPrice
       ) {
         item.cant = this.cant
@@ -349,8 +349,8 @@ export default {
       item.cant = parseFloat(item.cant.toString()).toFixed(2)
       item.cant_back =
           item.currency.id !== ''
-              ? item.cant_pay * item.currency.change - item.cant
-              : item.cant_pay - item.cant
+            ? item.cant_pay * item.currency.change - item.cant
+            : item.cant_pay - item.cant
       this.calcTotalPay()
     },
     calcTotalPay () {

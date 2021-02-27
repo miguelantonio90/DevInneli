@@ -2,23 +2,23 @@
   <v-container>
     <v-row>
       <v-col
-          class="py-0"
-          cols="12"
+        class="py-0"
+        cols="12"
       >
         <app-data-table
-            :headers="getTableColumns"
-            :is-loading="isTableLoading"
-            :items="users"
-            :manager="'employer'"
-            :sort-by="['firstName']"
-            :sort-desc="[false, true]"
-            :title="
+          :headers="getTableColumns"
+          :is-loading="isTableLoading"
+          :items="users"
+          :manager="'employer'"
+          :sort-by="['firstName']"
+          :sort-desc="[false, true]"
+          :title="
             $vuetify.lang.t('$vuetify.titles.list', [
               $vuetify.lang.t('$vuetify.menu.user')
             ])
           "
-            csv-filename="Employees"
-            multi-sort
+          csv-filename="Employees"
+          multi-sort
         >
           <template v-slot:[`item.company.name`]="{ item }">
             <template>
@@ -26,15 +26,15 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip
-                      v-bind="attrs"
-                      v-on="on"
+                    v-bind="attrs"
+                    v-on="on"
                   >
                     <v-avatar left>
                       {{
                         arrayCountry.filter(
-                            cou =>
-                                cou.id ===
-                                item.company.country
+                          cou =>
+                            cou.id ===
+                            item.company.country
                         )[0].emoji
                       }}
                     </v-avatar>
@@ -42,17 +42,17 @@
                   </v-chip>
                 </template>
                 <span>{{
-                    arrayCountry.filter(
-                        cou => cou.id === item.company.country
-                    )[0].name
-                  }}</span>
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
           <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
               <v-img
-                  :src="
+                :src="
                   item.avatar ||
                     `/assets/avatar/avatar-undefined.jpg`
                 "
@@ -62,8 +62,8 @@
           </template>
           <template v-slot:[`item.shopsNames`]="{ item }">
             <v-chip
-                v-for="(shop, i) of item.shopsNames"
-                :key="i"
+              v-for="(shop, i) of item.shopsNames"
+              :key="i"
             >
               {{ shop }}
             </v-chip>
@@ -72,13 +72,13 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-chip
-                    v-bind="attrs"
-                    v-on="on"
+                  v-bind="attrs"
+                  v-on="on"
                 >
                   <v-avatar left>
                     {{
                       arrayCountry.filter(
-                          cou => cou.id === item.country
+                        cou => cou.id === item.country
                       )[0].emoji
                     }}
                   </v-avatar>
@@ -86,10 +86,10 @@
                 </v-chip>
               </template>
               <span>{{
-                  arrayCountry.filter(
-                      cou => cou.id === item.company.country
-                  )[0].name
-                }}</span>
+                arrayCountry.filter(
+                  cou => cou.id === item.company.country
+                )[0].name
+              }}</span>
             </v-tooltip>
           </template>
         </app-data-table>
