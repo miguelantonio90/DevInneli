@@ -130,7 +130,7 @@ export default {
     supply_add: 'Orders Request',
     supply_edit: 'Edit Purchase',
     finance: 'Finance',
-    type_of_order: 'Type of Order',
+    type_of_order: 'List of Type of Order',
     tax_list: 'Tax',
     discount: 'Discount',
     discounts: 'Discounts',
