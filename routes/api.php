@@ -18,6 +18,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
     //Testing routes
     Route::get('ping', 'PingController@index')->name('ping');
     Route::get('sendmail', 'PingController@sendMsg')->name('sendmail');
+    Route::post('shop/data', 'ShopController@getShopData')->name('getShopData');
     //End Testing routes
 
     Route::post('login', 'LoginController@login')->name('login');
@@ -48,7 +49,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::resource('keys', 'KeyPositionsController');
 
         Route::resource('shop', 'ShopController');
-        Route::post('shop/data', 'ShopController@getShopData')->name('getShopData');
         Route::post('shop/no_config', 'ShopController@getShopNoConfig')->name('getShopNoConfig');
 
         Route::resource('online', 'ConfigController');
