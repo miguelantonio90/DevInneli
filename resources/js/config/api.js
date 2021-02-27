@@ -4,46 +4,46 @@ import storage from './localStorage'
 const baseUrl = process.env.MIX_APP_URL_API
 
 const post = (resource, params) => {
-	return axios.post(baseUrl + resource, params, {
-		headers: {
-			Authorization: storage.getToken()
-		}
-	})
+  return axios.post(baseUrl + resource, params, {
+    headers: {
+      Authorization: storage.getToken()
+    }
+  })
 }
 const get = (resource) => {
-	return axios.get(baseUrl + resource, {
-		headers: {
-			Authorization: storage.getToken()
-		}
-	})
+  return axios.get(baseUrl + resource, {
+    headers: {
+      Authorization: storage.getToken()
+    }
+  })
 }
 const put = (resource, params) => {
-	return axios.put(baseUrl + resource, params, {
-		headers: {
-			Authorization: storage.getToken()
-		}
-	})
+  return axios.put(baseUrl + resource, params, {
+    headers: {
+      Authorization: storage.getToken()
+    }
+  })
 }
 const remove = (resource) => {
-	return axios.delete(baseUrl + resource, {
-		headers: {
-			Authorization: storage.getToken()
-		}
-	})
+  return axios.delete(baseUrl + resource, {
+    headers: {
+      Authorization: storage.getToken()
+    }
+  })
 }
 const importData = (resource, data) => {
-	return axios.post(baseUrl + resource, data, {
-		headers: {
-			Authorization: storage.getToken(),
-			'content-type': 'multipart/form-data'
-		}
-	})
+  return axios.post(baseUrl + resource, data, {
+    headers: {
+      Authorization: storage.getToken(),
+      'content-type': 'multipart/form-data'
+    }
+  })
 }
 
 export default {
-	get,
-	post,
-	put,
-	remove,
-	importData
+  get,
+  post,
+  put,
+  remove,
+  importData
 }

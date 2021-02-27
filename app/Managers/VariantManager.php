@@ -66,7 +66,7 @@ class VariantManager extends BaseManager
             'shop_id' => $data['shop_id'],
             'stock' => $data['stock'] ?: 0,
             'price' => $data['price'] ?: 0,
-            'online_price' => $data['online_price'] ?: 0,
+            'onlinePrice' => $data['onlinePrice'] ?: 0,
             'under_inventory' => $data['under_inventory'] ?: 0
         ]);
         $artShop->personSale = $data['personSale'];

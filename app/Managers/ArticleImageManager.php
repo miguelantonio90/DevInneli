@@ -5,7 +5,6 @@ namespace App\Managers;
 
 
 use App\ArticleImage;
-use App\Articles;
 
 class ArticleImageManager
 {
@@ -28,7 +27,6 @@ class ArticleImageManager
             }
         }
     }
-
 
 
     /**

@@ -56,78 +56,78 @@
 import UndoIcon from './UndoIcon'
 
 export default {
-	name: 'VuePincode',
-	components: { UndoIcon },
-	data () {
-		return {
-			pincode: '',
-			pincodeError: false,
-			pincodeSuccess: false
-		}
-	},
-	computed: {
-		pincodeLength () {
-			return this.pincode.length
-		},
-		buttonDisabled () {
-			return this.pincodeError || this.pincodeSuccess
-		}
-	},
-	watch: {
-		pincode: function () {
-			if (this.pincodeLength === 6) {
-				this.$emit('pincode', this.pincode)
-			}
-		}
-	},
-	created () {
-		window.focus()
-		window.addEventListener('keypress', e => {
-			if (e.key === '0') {
-				this.clickPinButton(0)
-			} else if (!isNaN(e.key)) {
-				this.$refs.btnPin.map((btn) => {
-					if (btn.$el.innerText === e.key.toString()) {
-						btn.$el.click()
-					}
-				})
-			} else if (e.key === 'Delete') {
-				this.resetPincode()
-			}
-		})
-		window.addEventListener('keyup', e => {
-			if (this.pincodeLength > 0) {
-				if (e.key === 'Backspace') {
-					this.resetPincode()
-				}
-			}
-		})
-	},
-	destroyed () {
-		this.resetPincode()
-	},
-	methods: {
-		clickPinButton (pressedNumber) {
-			if (this.pincodeLength < 6) {
-				this.pincode = this.pincode + pressedNumber
-			}
-		},
-		resetPincode () {
-			this.pincode = ''
-			this.pincodeError = false
-			this.pincodeSuccess = false
-		},
+  name: 'VuePincode',
+  components: { UndoIcon },
+  data () {
+    return {
+      pincode: '',
+      pincodeError: false,
+      pincodeSuccess: false
+    }
+  },
+  computed: {
+    pincodeLength () {
+      return this.pincode.length
+    },
+    buttonDisabled () {
+      return this.pincodeError || this.pincodeSuccess
+    }
+  },
+  watch: {
+    pincode: function () {
+      if (this.pincodeLength === 6) {
+        this.$emit('pincode', this.pincode)
+      }
+    }
+  },
+  created () {
+    window.focus()
+    window.addEventListener('keypress', e => {
+      if (e.key === '0') {
+        this.clickPinButton(0)
+      } else if (!isNaN(e.key)) {
+        this.$refs.btnPin.map((btn) => {
+          if (btn.$el.innerText === e.key.toString()) {
+            btn.$el.click()
+          }
+        })
+      } else if (e.key === 'Delete') {
+        this.resetPincode()
+      }
+    })
+    window.addEventListener('keyup', e => {
+      if (this.pincodeLength > 0) {
+        if (e.key === 'Backspace') {
+          this.resetPincode()
+        }
+      }
+    })
+  },
+  destroyed () {
+    this.resetPincode()
+  },
+  methods: {
+    clickPinButton (pressedNumber) {
+      if (this.pincodeLength < 6) {
+        this.pincode = this.pincode + pressedNumber
+      }
+    },
+    resetPincode () {
+      this.pincode = ''
+      this.pincodeError = false
+      this.pincodeSuccess = false
+    },
 
-		triggerMiss () {
-			this.pincodeError = true
-			setTimeout(() => this.resetPincode(), 800)
-		},
+    triggerMiss () {
+      this.pincodeError = true
+      setTimeout(() => this.resetPincode(), 800)
+    },
 
-		triggerSuccess () {
-			this.pincodeSuccess = true
-			setTimeout(() => this.resetPincode(), 2500)
-		}
-	}
+    triggerSuccess () {
+      this.pincodeSuccess = true
+      setTimeout(() => this.resetPincode(), 2500)
+    }
+  }
 }
 </script>
 

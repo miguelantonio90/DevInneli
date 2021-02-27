@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.discount'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.discount")
           ])
         }}</span>
       </v-card-title>
@@ -46,11 +46,11 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.00,
+                  empty: 0.0
                 }"
               />
             </v-col>
-            <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
+            <h4>{{ $vuetify.lang.t("$vuetify.tax.rate") }}</h4>
             <v-radio-group
               v-model="editDiscount.percent"
               row
@@ -60,7 +60,9 @@
                 value="true"
               />
               <v-radio
-                :label="$vuetify.lang.t('$vuetify.tax.permanent')"
+                :label="
+                  $vuetify.lang.t('$vuetify.tax.permanent')
+                "
                 value="false"
               />
             </v-radio-group>
@@ -76,7 +78,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -86,7 +88,7 @@
           @click="updateDiscountHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -97,26 +99,26 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: 'EditDiscount',
-	data () {
-		return {
-			formValid: false,
-			errorPhone: null,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('discount', ['saved', 'editDiscount', 'isActionInProgress'])
-	},
-	methods: {
-		...mapActions('discount', ['updateDiscount', 'toogleEditModal']),
-		async updateDiscountHandler () {
-			if (this.$refs.form.validate()) {
-				this.loading = true
-				await this.updateDiscount(this.editDiscount)
-			}
-		}
-	}
+  name: 'EditDiscount',
+  data () {
+    return {
+      formValid: false,
+      errorPhone: null,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('discount', ['saved', 'editDiscount', 'isActionInProgress'])
+  },
+  methods: {
+    ...mapActions('discount', ['updateDiscount', 'toogleEditModal']),
+    async updateDiscountHandler () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.updateDiscount(this.editDiscount)
+      }
+    }
+  }
 }
 </script>
 

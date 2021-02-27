@@ -1,1029 +1,1029 @@
 import {
-	LayoutAuth,
-	LayoutDefault,
-	RouteWrapper,
-	LayoutVerify,
-	LayoutLock/*,
+  LayoutAuth,
+  LayoutDefault,
+  RouteWrapper,
+  LayoutVerify,
+  LayoutLock/*,
   LayoutSales */
 } from '../components/layouts'
 
 export const publicRoute = [
-	{
-		path: '*',
-		children: [],
-		component: () => import('../views/error/NotFound')
-	},
-	{
-		path: '/auth',
-		component: LayoutAuth,
-		meta: {
-			title: 'Register'
-		},
-		redirect: '/auth/register',
-		hidden: true,
-		children: [
-			{
-				path: 'register',
-				name: 'register',
-				meta: {
-					title: 'Register'
-				},
-				component: () => import('../views/auth/Register')
-			}
-		]
-	},
-	{
-		path: '/auth/register/:hash',
-		component: LayoutAuth,
-		hidden: true,
-		children: [
-			{
-				path: '/auth/register/:hash',
-				name: 'invitation_password',
-				meta: { title: 'Invitation Register' },
-				component: () => import('../views/auth/Register')
-			}
-		]
-	},
-	{
-		path: '/auth',
-		component: LayoutAuth,
-		meta: {
-			title: 'Login'
-		},
-		redirect: '/auth/login',
-		hidden: true,
-		children: [
-			{
-				path: 'login',
-				name: 'login',
-				meta: {
-					title: 'Login'
-				},
-				component: () => import('../views/auth/Login')
-			}
-		]
-	},
-	{
-		path: '/auth',
-		component: LayoutAuth,
-		meta: {
-			title: 'Forgot'
-		},
-		redirect: '/auth/forgot',
-		hidden: true,
-		children: [
-			{
-				path: 'forgot',
-				name: 'forgot',
-				meta: {
-					title: 'Forgot Password'
-				},
-				component: () => import('../views/auth/Forgot')
-			}
-		]
-	},
-	{
-		path: '/404',
-		name: '404',
-		hidden: true,
-		meta: {
-			title: 'Not Found'
-		},
-		children: [],
-		component: () => import('../views/error/NotFound')
-	},
-	{
-		path: '/500',
-		name: '500',
-		hidden: true,
-		meta: {
-			title: 'Server Error'
-		},
-		children: [],
-		component: () => import('../views/error/Error')
-	},
-	{
-		path: '/online/shop/:compName/:shopName',
-		props: true,
-		name: 'online_shop',
-		access: ['dashboard'],
-		meta: {
-			title: 'dashboard',
-			group: 'apps',
-			icon: 'mdi-view-dashboard',
-			requiresAuth: true
-		},
-		component: () => import('../views/shops-templates/shipit/components/Layout'),
-		children: [
-			{
-				path: '/online/:compName/:shopName',
-				component: () => import('../views/shops-templates/shipit/components/Home'),
-				props: true,
-				name: 'Home'
-			},
-			{
-				path: '/online/shop/:compName/:shopName',
-				component: () => import('../views/shops-templates/shipit/components/Shop'),
-				props: true,
-				name: 'Shop'
-			},
-			{
-				path: '/online/product/:compName/:shopName',
-				props: true,
-				component: () => import('../views/shops-templates/shipit/components/Product'),
-				name: 'Product'
-			},
-			{
-				path: '/post',
-				component: () => import('../views/shops-templates/shipit/components/Post'),
-				name: 'Post'
-			},
-			{
-				path: '/cart',
-				component: () => import('../views/shops-templates/shipit/components/Cart'),
-				name: 'Cart'
-			}
-		]
-	},
-	{
-		path: '/password/reset/:hash',
-		component: LayoutAuth,
-		hidden: true,
-		children: [
-			{
-				path: '/password/reset/:hash',
-				name: 'reset_password',
-				meta: {
-					title: 'Reset Password'
-				},
-				component: () => import('../views/auth/ResetPassword')
-			}
-		]
-	}
+  {
+    path: '*',
+    children: [],
+    component: () => import('../views/error/NotFound')
+  },
+  {
+    path: '/auth',
+    component: LayoutAuth,
+    meta: {
+      title: 'Register'
+    },
+    redirect: '/auth/register',
+    hidden: true,
+    children: [
+      {
+        path: 'register',
+        name: 'register',
+        meta: {
+          title: 'Register'
+        },
+        component: () => import('../views/auth/Register')
+      }
+    ]
+  },
+  {
+    path: '/auth/register/:hash',
+    component: LayoutAuth,
+    hidden: true,
+    children: [
+      {
+        path: '/auth/register/:hash',
+        name: 'invitation_password',
+        meta: { title: 'Invitation Register' },
+        component: () => import('../views/auth/Register')
+      }
+    ]
+  },
+  {
+    path: '/auth',
+    component: LayoutAuth,
+    meta: {
+      title: 'Login'
+    },
+    redirect: '/auth/login',
+    hidden: true,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        meta: {
+          title: 'Login'
+        },
+        component: () => import('../views/auth/Login')
+      }
+    ]
+  },
+  {
+    path: '/auth',
+    component: LayoutAuth,
+    meta: {
+      title: 'Forgot'
+    },
+    redirect: '/auth/forgot',
+    hidden: true,
+    children: [
+      {
+        path: 'forgot',
+        name: 'forgot',
+        meta: {
+          title: 'Forgot Password'
+        },
+        component: () => import('../views/auth/Forgot')
+      }
+    ]
+  },
+  {
+    path: '/404',
+    name: '404',
+    hidden: true,
+    meta: {
+      title: 'Not Found'
+    },
+    children: [],
+    component: () => import('../views/error/NotFound')
+  },
+  {
+    path: '/500',
+    name: '500',
+    hidden: true,
+    meta: {
+      title: 'Server Error'
+    },
+    children: [],
+    component: () => import('../views/error/Error')
+  },
+  {
+    path: '/online/shop/:compName/:shopName',
+    props: true,
+    name: 'online_shop',
+    access: ['dashboard'],
+    meta: {
+      title: 'dashboard',
+      group: 'apps',
+      icon: 'mdi-view-dashboard',
+      requiresAuth: true
+    },
+    component: () => import('../views/shops-templates/shipit/components/Layout'),
+    children: [
+      {
+        path: '/online/:compName/:shopName',
+        component: () => import('../views/shops-templates/shipit/components/Home'),
+        props: true,
+        name: 'Home'
+      },
+      {
+        path: '/online/shop/:compName/:shopName',
+        component: () => import('../views/shops-templates/shipit/components/Shop'),
+        props: true,
+        name: 'Shop'
+      },
+      {
+        path: '/online/product/:compName/:shopName',
+        props: true,
+        component: () => import('../views/shops-templates/shipit/components/Product'),
+        name: 'Product'
+      },
+      {
+        path: '/post',
+        component: () => import('../views/shops-templates/shipit/components/Post'),
+        name: 'Post'
+      },
+      {
+        path: '/cart',
+        component: () => import('../views/shops-templates/shipit/components/Cart'),
+        name: 'Cart'
+      }
+    ]
+  },
+  {
+    path: '/password/reset/:hash',
+    component: LayoutAuth,
+    hidden: true,
+    children: [
+      {
+        path: '/password/reset/:hash',
+        name: 'reset_password',
+        meta: {
+          title: 'Reset Password'
+        },
+        component: () => import('../views/auth/ResetPassword')
+      }
+    ]
+  }
 ]
 
 export const protectedRoute = [
-	{
-		path: '/',
-		component: LayoutDefault,
-		meta: {
-			title: 'home',
-			group: 'apps',
-			icon: ''
-		},
-		redirect: '/dashboard',
-		children: [
-			{
-				path: '/dashboard',
-				name: 'dashboard',
-				access: ['dashboard'],
-				meta: {
-					title: 'dashboard',
-					group: 'apps',
-					icon: 'mdi-view-dashboard',
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/Dashboard')
-			},
-			{
-				path: '/403',
-				name: 'Forbidden',
-				access: ['Forbidden'],
-				meta: {
-					title: 'access_denied',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/error/Deny')
-			},
-			{
-				path: '/user/profile',
-				name: 'Profile',
-				access: ['profile'],
-				meta: {
-					title: 'profile',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/auth/Profile')
-			},
-			{
-				path: '/sales',
-				component: RouteWrapper,
-				access: ['manager_vending'],
-				redirect: '/sales/vending.list',
-				meta: {
-					title: 'vending',
-					icon: 'mdi-cash-usd',
-					group: 'sales'
-				},
-				children: [
-					{
-						path: '/sales/vending.list',
-						name: 'vending',
-						access: 'list',
-						meta: {
-							title: 'vending',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/sales/ListSale.vue')
-					},
-					{
-						path: '/sales/vending/new',
-						name: 'vending_new',
-						access: 'create',
-						meta: {
-							title: 'vending_new',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/sales/ManagerSale')
-					},
-					{
-						path: '/sales/vending/edit',
-						name: 'vending_edit',
-						access: 'edit',
-						meta: {
-							title: 'vending_edit',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/sales/ManagerSale')
-					},
-					{
-						path: '/sales/refund.list',
-						name: 'refund',
-						access: 'list',
-						meta: {
-							title: 'refund',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/refund/ListRefund')
-					},
-					{
-						path: '/sales/boxes.list',
-						name: 'boxes',
-						access: 'list',
-						meta: {
-							title: 'boxes',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/boxes/ListBoxes')
-					}
-				]
-			},
-			{
-				path: '/articles',
-				component: RouteWrapper,
-				access: ['manager_article', 'manager_category', 'manager_mod'],
-				redirect: '/articles/product.list',
-				meta: {
-					title: 'articles',
-					icon: 'mdi-shopping',
-					requiresAuth: true,
-					group: 'articles'
-				},
-				children: [
-					{
-						path: '/articles/product.list',
-						name: 'product_list',
-						access: 'list',
-						meta: {
-							title: 'product_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/article/ListArticle.vue')
-					},
-					{
-						path: '/articles/category.list',
-						name: 'category_list',
-						access: 'list',
-						meta: {
-							title: 'category_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/category/ListCategory')
-					},
-					{
-						path: '/articles/modifiers.list',
-						name: 'modifiers_list',
-						access: 'list',
-						meta: {
-							title: 'modifiers_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/modifiers/ListModifiers')
-					},
-					{
-						path: '/articles/discounts.list',
-						name: 'discounts_list',
-						meta: {
-							title: 'discounts_list',
-							hiddenInMenu: true,
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/error/Deny')
-					},
-					{
-						path: '/articles/product.add',
-						name: 'product_add',
-						access: 'create',
-						meta: {
-							title: 'product_add',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/article/ManagerArticle')
-					},
-					{
-						path: '/articles/product.edit',
-						name: 'product_edit',
-						access: 'edit',
-						meta: {
-							title: 'product_edit',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/article/ManagerArticle')
-					},
-					{
-						path: '/article/type_of_order.list',
-						name: 'type_of_order',
-						access: 'list',
-						meta: {
-							title: 'type_of_order',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/type_order/ListTypeOfOrder')
-					}
-				]
-			},
-			{
-				path: '/finance',
-				component: RouteWrapper,
-				redirect: '/finance/supplier.list',
-				access: ['manager_supplier', 'manager_buy'],
-				meta: {
-					title: 'finance',
-					icon: 'mdi-podium',
-					requiresAuth: true,
-					group: 'finance'
-				},
-				children: [
-					{
-						path: '/finance/supplier.list',
-						name: 'supplier_list',
-						access: 'list',
-						meta: {
-							title: 'supplier_list',
-							icon: 'mdi-car',
-							requiresAuth: true
-						},
-						component: () => import('../views/supplier/ListSupplier')
-					},
-					{
-						path: '/finance/buy_list',
-						name: 'buy_product',
-						access: 'list',
-						meta: {
-							title: 'buy_product',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/buy/ListBuy')
-					},
-					{
-						path: '/finance/supply.add',
-						name: 'supply_add',
-						access: 'create',
-						meta: {
-							title: 'supply_add',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/supply/ManagerSupply')
-					},
-					{
-						path: '/finance/supply.edit',
-						name: 'supply_edit',
-						access: 'edit',
-						meta: {
-							title: 'supply_edit',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/supply/ManagerSupply')
-					},
-					{
-						path: '/finance/supply_list',
-						name: 'supply_product',
-						access: 'list',
-						meta: {
-							title: 'supply_product',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/supply/ListSupply')
-					},
-					{
-						path: '/finance/tax.list',
-						name: 'tax_list',
-						access: 'list',
-						meta: {
-							title: 'tax_list',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/tax/ListTax')
-					},
-					{
-						path: '/finance/discount.list',
-						name: 'discount',
-						access: 'list',
-						meta: {
-							title: 'discount',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/discount/ListDiscount')
-					},
-					{
-						path: '/finance/pay.list',
-						name: 'pay',
-						access: 'list',
-						meta: {
-							title: 'pay',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/discount/ListDiscount')
-					},
-					{
-						path: '/finance/exchange_rate.list',
-						name: 'exchange_rate',
-						access: 'list',
-						meta: {
-							title: 'exchange_rate',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/exchange_rate/ListExchangeRate')
-					},
-					{
-						path: '/finance/expense_category.list',
-						name: 'expense_category',
-						access: 'list',
-						meta: {
-							title: 'expense_category',
-							icon: 'mdi-car',
-							hiddenInMenu: true,
-							requiresAuth: true
-						},
-						component: () => import('../views/expense_category/ListExpenseCategory')
-					}
-				]
-			},
-			{
-				path: '/resume',
-				component: RouteWrapper,
-				redirect: '/resume/sell_product.list',
-				access: ['manager_sell'],
-				meta: {
-					title: 'resume',
-					icon: 'mdi-chart-bar',
-					group: 'resume'
-				},
-				children: [
-					{
-						path: '/resume/sell_product.list',
-						name: 'sell_product',
-						access: 'sell_by_product',
-						meta: {
-							title: 'sell_product',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesProduct')
-					},
-					{
-						path: '/resume/sell_category.list',
-						name: 'sell_category',
-						access: 'sell_by_category',
-						meta: {
-							title: 'sell_category',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesCategory')
-					},
-					{
-						path: '/resume/sell_user.list',
-						name: 'sell_user',
-						access: 'sell_by_employer',
-						meta: {
-							title: 'sell_user',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesEmployer')
-					},
-					{
-						path: '/resume/sell_types_payment.list',
-						name: 'sell_types_payment',
-						access: 'sell_by_payments',
-						meta: {
-							title: 'sell_types_payment',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesPayment')
-					}
-				]
-			},
-			{
-				path: '/users',
-				component: RouteWrapper,
-				redirect: '/users/employer.list',
-				access: ['manager_employer', 'manager_access', 'manager_assistence'],
-				meta: {
-					title: 'user',
-					icon: 'mdi-account-star',
-					group: 'user'
-				},
-				children: [
-					{
-						path: '/users/employer.list',
-						name: 'employer_list',
-						access: 'list',
-						meta: {
-							title: 'employer_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/user/ListUser')
-					},
-					{
-						path: '/users/access.list',
-						name: 'access',
-						access: 'list',
-						meta: {
-							title: 'access',
-							hiddenInMenu: true,
-							icon: 'mdi-account-key',
-							requiresAuth: true
-						},
-						component: () => import('../views/access/ListAccess')
-					},
-					{
-						path: '/users/access.add',
-						name: 'access_new',
-						access: 'create',
-						meta: {
-							title: 'access_new',
-							hiddenInMenu: true,
-							icon: 'mdi-account-key',
-							requiresAuth: true
-						},
-						component: () => import('../views/access/NewAccess')
-					},
-					{
-						path: '/users/assistance.list',
-						name: 'assistance',
-						access: 'list',
-						meta: {
-							title: 'assistance',
-							icon: 'mdi-clock',
-							requiresAuth: true
-						},
-						component: () => import('../views/assistance/ListAssistance')
-					}
-				]
-			},
-			{
-				path: '/clients',
-				component: RouteWrapper,
-				redirect: '/clients/client.list',
-				access: ['manager_client'],
-				meta: {
-					title: 'client',
-					icon: 'mdi-account-multiple',
-					group: 'clients',
-					requiresAuth: true
-				},
-				children: [
-					{
-						path: '/clients/client.list',
-						name: 'clients_list',
-						access: 'list',
-						meta: {
-							title: 'client_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/client/ListClient')
-					}
-				]
-			},
-			{
-				path: '/setting',
-				access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
-				name: 'setting',
-				meta: {
-					title: 'setting',
-					icon: 'mdi-cog',
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/general/General')
-			},
-			{
-				path: '/online/setting',
-				access: ['manager_shop'],
-				name: 'shop_online',
-				meta: {
-					title: 'shop_online',
-					icon: 'mdi-briefcase-upload',
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/online-config/ListOnlineConfig')
-			},
-			{
-				path: '/online/config.add',
-				name: 'config_add',
-				access: ['manager_shop'],
-				meta: {
-					title: 'online_config',
-					icon: 'mdi-briefcase-upload',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/online-config/ManagerOnlineConfig')
-			},
-			{
-				path: '/online/config.edit',
-				name: 'config_edit',
-				access: ['manager_shop'],
-				meta: {
-					title: 'online_config',
-					icon: 'mdi-briefcase-upload',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/online-config/ManagerOnlineConfig')
-			}
-		]
-	},
-	{
-		path: '/hi',
-		component: LayoutVerify,
-		meta: {
-			title: 'verify'
-		},
-		redirect: '/hi/welcome',
-		hidden: true,
-		children: [
-			{
-				path: 'welcome',
-				name: 'welcome',
-				meta: {
-					title: 'welcome',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				component: () => import('../views/Welcome')
-			},
-			{
-				path: 'verify/:hash',
-				name: 'verify',
-				props: true,
-				meta: {
-					title: 'verify',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				component: () => import('../views/auth/Verify')
-			}
-		]
-	},
-	{
-		path: '/lock',
-		component: LayoutLock,
-		meta: {
-			title: 'pinlogin'
-		},
-		redirect: '/lock/pin',
-		hidden: true,
-		children: [
-			{
-				path: 'pin',
-				name: 'pinlogin',
-				meta: {
-					title: 'pinlogin',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				component: () => import('../views/AppLock')
-			}
-		]
-	},
-	{
-		path: '/',
-		component: LayoutDefault,
-		meta: {
-			title: 'home',
-			group: 'apps',
-			icon: ''
-		},
-		redirect: '/admin/dashboard',
-		children: [
-			{
-				path: '/admin/dashboard',
-				name: 'admin_dashboard',
-				access: ['dashboard'],
-				meta: {
-					title: 'dashboard',
-					group: 'apps',
-					icon: 'mdi-view-dashboard',
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/AdminDashboard')
-			},
-			{
-				path: '/admin/403',
-				name: 'admin_forbidden',
-				access: ['Forbidden'],
-				meta: {
-					title: 'access_denied',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/error/Deny')
-			},
-			{
-				path: '/admin/user/profile',
-				name: 'admin_profile',
-				access: ['profile'],
-				meta: {
-					title: 'profile',
-					hiddenInMenu: true,
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/auth/Profile')
-			},
-			{
-				path: '/admin/sales',
-				component: RouteWrapper,
-				access: ['manager_vending'],
-				redirect: '/admin/sales/vending.list',
-				meta: {
-					title: 'vending',
-					icon: 'mdi-cash-usd',
-					group: 'sales'
-				},
-				children: [
-					{
-						path: '/admin/sales/vending.list',
-						access: 'list',
-						name: 'admin_vending',
-						meta: {
-							title: 'vending',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/sales/ListSale.vue')
-					},
-					{
-						path: '/admin/sales/refund.list',
-						name: 'admin_refund',
-						access: 'list',
-						meta: {
-							title: 'vending',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/sales/ListSale.vue')
-					}
-				]
-			},
-			{
-				path: '/admin/articles',
-				component: RouteWrapper,
-				access: ['manager_article', 'manager_category', 'manager_mod'],
-				redirect: '/admin/articles/product.list',
-				meta: {
-					title: 'articles',
-					icon: 'mdi-shopping',
-					requiresAuth: true,
-					group: 'articles'
-				},
-				children: [
-					{
-						path: '/admin/articles/product.list',
-						name: 'admin_product_list',
-						access: 'list',
-						meta: {
-							title: 'product_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/article/AdminArticle.vue')
-					},
-					{
-						path: '/admin/articles/category.list',
-						name: 'admin_category_list',
-						access: 'list',
-						meta: {
-							title: 'category_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/category/ListCategoryAdmin')
-					}
-				]
-			},
-			{
-				path: '/admin/finance',
-				component: RouteWrapper,
-				redirect: '/admin/finance/supplier.list',
-				access: ['manager_supplier', 'manager_buy'],
-				meta: {
-					title: 'finance',
-					icon: 'mdi-podium',
-					requiresAuth: true,
-					group: 'finance'
-				},
-				children: [
-					{
-						path: '/admin/finance/supplier.list',
-						name: 'admin_supplier_list',
-						access: 'list',
-						meta: {
-							title: 'supplier_list',
-							icon: 'mdi-car',
-							requiresAuth: true
-						},
-						component: () => import('../views/supplier/ListSupplierAdmin')
-					},
-					{
-						path: '/admin/finance/buy_list',
-						name: 'admin_supply_product',
-						access: 'list',
-						meta: {
-							title: 'supply_product',
-							icon: 'mdi-database-plus',
-							hiddenInMenu: false,
-							requiresAuth: true
-						},
-						component: () => import('../views/inventory/ListInventoryAdmin')
-					}
-				]
-			},
-			{
-				path: '/admin/resume',
-				component: RouteWrapper,
-				redirect: '/resume/sell_product.list',
-				access: ['manager_sell'],
-				meta: {
-					title: 'resume',
-					icon: 'mdi-chart-bar',
-					group: 'resume'
-				},
-				children: [
-					{
-						path: '/admin/resume/sell_product.list',
-						name: 'admin_sell_product',
-						access: 'sell_by_product',
-						meta: {
-							title: 'sell_product',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesProduct')
-					},
-					{
-						path: '/admin/resume/sell_category.list',
-						name: 'admin_sell_category',
-						access: 'sell_by_category',
-						meta: {
-							title: 'sell_category',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesCategory')
-					},
-					{
-						path: '/admin/resume/sell_user.list',
-						name: 'admin_sell_user',
-						access: 'sell_by_employer',
-						meta: {
-							title: 'sell_user',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesEmployer')
-					},
-					{
-						path: '/admin/resume/sell_types_payment.list',
-						name: 'admin_sell_types_payment',
-						access: 'sell_by_payments',
-						meta: {
-							title: 'sell_types_payment',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/sales_by/SalesPayment')
-					}
-				]
-			},
-			{
-				path: '/admin/users',
-				component: RouteWrapper,
-				redirect: '/admin/users/employer.list',
-				access: ['manager_employer', 'manager_access', 'manager_assistence'],
-				meta: {
-					title: 'user',
-					icon: 'mdi-account-star',
-					group: 'user'
-				},
-				children: [
-					{
-						path: '/admin/users/employer.list',
-						name: 'admin_employer_list',
-						access: 'employer_list',
-						meta: {
-							title: 'employer_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/user/ListUserAdmin')
-					}
-				]
-			},
-			{
-				path: '/admin/clients',
-				component: RouteWrapper,
-				redirect: '/clients/client.list',
-				access: ['manager_client'],
-				meta: {
-					title: 'client',
-					icon: 'mdi-account-multiple',
-					group: 'clients',
-					requiresAuth: true
-				},
-				children: [
-					{
-						path: '/admin/clients/client.list',
-						name: 'admin_clients_list',
-						access: 'list',
-						meta: {
-							title: 'client_list',
-							icon: 'mdi-database-plus',
-							requiresAuth: true
-						},
-						component: () => import('../views/client/ListClientAdmin')
-					}
-				]
-			},
-			{
-				path: '/admin/setting',
-				access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
-				meta: {
-					title: 'setting',
-					icon: 'mdi-cog',
-					requiresAuth: true
-				},
-				children: [],
-				component: () => import('../views/general/General')
-			}
-		]
-	}
+  {
+    path: '/',
+    component: LayoutDefault,
+    meta: {
+      title: 'home',
+      group: 'apps',
+      icon: ''
+    },
+    redirect: '/dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        access: ['dashboard'],
+        meta: {
+          title: 'dashboard',
+          group: 'apps',
+          icon: 'mdi-view-dashboard',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/Dashboard')
+      },
+      {
+        path: '/403',
+        name: 'Forbidden',
+        access: ['Forbidden'],
+        meta: {
+          title: 'access_denied',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/error/Deny')
+      },
+      {
+        path: '/user/profile',
+        name: 'Profile',
+        access: ['profile'],
+        meta: {
+          title: 'profile',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/auth/Profile')
+      },
+      {
+        path: '/sales',
+        component: RouteWrapper,
+        access: ['manager_vending'],
+        redirect: '/sales/vending.list',
+        meta: {
+          title: 'vending',
+          icon: 'mdi-cash-usd',
+          group: 'sales'
+        },
+        children: [
+          {
+            path: '/sales/vending.list',
+            name: 'vending',
+            access: 'list',
+            meta: {
+              title: 'vending',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale.vue')
+          },
+          {
+            path: '/sales/vending/new',
+            name: 'vending_new',
+            access: 'create',
+            meta: {
+              title: 'vending_new',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ManagerSale')
+          },
+          {
+            path: '/sales/vending/edit',
+            name: 'vending_edit',
+            access: 'edit',
+            meta: {
+              title: 'vending_edit',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ManagerSale')
+          },
+          {
+            path: '/sales/refund.list',
+            name: 'refund',
+            access: 'list',
+            meta: {
+              title: 'refund',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/refund/ListRefund')
+          },
+          {
+            path: '/sales/boxes.list',
+            name: 'boxes',
+            access: 'list',
+            meta: {
+              title: 'boxes',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/boxes/ListBoxes')
+          }
+        ]
+      },
+      {
+        path: '/articles',
+        component: RouteWrapper,
+        access: ['manager_article', 'manager_category', 'manager_mod'],
+        redirect: '/articles/product.list',
+        meta: {
+          title: 'articles',
+          icon: 'mdi-shopping',
+          requiresAuth: true,
+          group: 'articles'
+        },
+        children: [
+          {
+            path: '/articles/product.list',
+            name: 'product_list',
+            access: 'list',
+            meta: {
+              title: 'product_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/article/ListArticle.vue')
+          },
+          {
+            path: '/articles/category.list',
+            name: 'category_list',
+            access: 'list',
+            meta: {
+              title: 'category_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/category/ListCategory')
+          },
+          {
+            path: '/articles/modifiers.list',
+            name: 'modifiers_list',
+            access: 'list',
+            meta: {
+              title: 'modifiers_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/modifiers/ListModifiers')
+          },
+          {
+            path: '/articles/discounts.list',
+            name: 'discounts_list',
+            meta: {
+              title: 'discounts_list',
+              hiddenInMenu: true,
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/error/Deny')
+          },
+          {
+            path: '/articles/product.add',
+            name: 'product_add',
+            access: 'create',
+            meta: {
+              title: 'product_add',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/ManagerArticle')
+          },
+          {
+            path: '/articles/product.edit',
+            name: 'product_edit',
+            access: 'edit',
+            meta: {
+              title: 'product_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/ManagerArticle')
+          },
+          {
+            path: '/article/type_of_order.list',
+            name: 'type_of_order',
+            access: 'list',
+            meta: {
+              title: 'type_of_order',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/type_order/ListTypeOfOrder')
+          }
+        ]
+      },
+      {
+        path: '/finance',
+        component: RouteWrapper,
+        redirect: '/finance/supplier.list',
+        access: ['manager_supplier', 'manager_buy'],
+        meta: {
+          title: 'finance',
+          icon: 'mdi-podium',
+          requiresAuth: true,
+          group: 'finance'
+        },
+        children: [
+          {
+            path: '/finance/supplier.list',
+            name: 'supplier_list',
+            access: 'list',
+            meta: {
+              title: 'supplier_list',
+              icon: 'mdi-car',
+              requiresAuth: true
+            },
+            component: () => import('../views/supplier/ListSupplier')
+          },
+          {
+            path: '/finance/buy_list',
+            name: 'buy_product',
+            access: 'list',
+            meta: {
+              title: 'buy_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/buy/ListBuy')
+          },
+          {
+            path: '/finance/supply.add',
+            name: 'supply_add',
+            access: 'create',
+            meta: {
+              title: 'supply_add',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/supply/ManagerSupply')
+          },
+          {
+            path: '/finance/supply.edit',
+            name: 'supply_edit',
+            access: 'edit',
+            meta: {
+              title: 'supply_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/supply/ManagerSupply')
+          },
+          {
+            path: '/finance/supply_list',
+            name: 'supply_product',
+            access: 'list',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/supply/ListSupply')
+          },
+          {
+            path: '/finance/tax.list',
+            name: 'tax_list',
+            access: 'list',
+            meta: {
+              title: 'tax_list',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/tax/ListTax')
+          },
+          {
+            path: '/finance/discount.list',
+            name: 'discount',
+            access: 'list',
+            meta: {
+              title: 'discount',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/discount/ListDiscount')
+          },
+          {
+            path: '/finance/pay.list',
+            name: 'pay',
+            access: 'list',
+            meta: {
+              title: 'pay',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/discount/ListDiscount')
+          },
+          {
+            path: '/finance/exchange_rate.list',
+            name: 'exchange_rate',
+            access: 'list',
+            meta: {
+              title: 'exchange_rate',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/exchange_rate/ListExchangeRate')
+          },
+          {
+            path: '/finance/expense_category.list',
+            name: 'expense_category',
+            access: 'list',
+            meta: {
+              title: 'expense_category',
+              icon: 'mdi-car',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/expense_category/ListExpenseCategory')
+          }
+        ]
+      },
+      {
+        path: '/resume',
+        component: RouteWrapper,
+        redirect: '/resume/sell_product.list',
+        access: ['manager_sell'],
+        meta: {
+          title: 'resume',
+          icon: 'mdi-chart-bar',
+          group: 'resume'
+        },
+        children: [
+          {
+            path: '/resume/sell_product.list',
+            name: 'sell_product',
+            access: 'sell_by_product',
+            meta: {
+              title: 'sell_product',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesProduct')
+          },
+          {
+            path: '/resume/sell_category.list',
+            name: 'sell_category',
+            access: 'sell_by_category',
+            meta: {
+              title: 'sell_category',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesCategory')
+          },
+          {
+            path: '/resume/sell_user.list',
+            name: 'sell_user',
+            access: 'sell_by_employer',
+            meta: {
+              title: 'sell_user',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesEmployer')
+          },
+          {
+            path: '/resume/sell_types_payment.list',
+            name: 'sell_types_payment',
+            access: 'sell_by_payments',
+            meta: {
+              title: 'sell_types_payment',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesPayment')
+          }
+        ]
+      },
+      {
+        path: '/users',
+        component: RouteWrapper,
+        redirect: '/users/employer.list',
+        access: ['manager_employer', 'manager_access', 'manager_assistence'],
+        meta: {
+          title: 'user',
+          icon: 'mdi-account-star',
+          group: 'user'
+        },
+        children: [
+          {
+            path: '/users/employer.list',
+            name: 'employer_list',
+            access: 'list',
+            meta: {
+              title: 'employer_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/user/ListUser')
+          },
+          {
+            path: '/users/access.list',
+            name: 'access',
+            access: 'list',
+            meta: {
+              title: 'access',
+              hiddenInMenu: true,
+              icon: 'mdi-account-key',
+              requiresAuth: true
+            },
+            component: () => import('../views/access/ListAccess')
+          },
+          {
+            path: '/users/access.add',
+            name: 'access_new',
+            access: 'create',
+            meta: {
+              title: 'access_new',
+              hiddenInMenu: true,
+              icon: 'mdi-account-key',
+              requiresAuth: true
+            },
+            component: () => import('../views/access/NewAccess')
+          },
+          {
+            path: '/users/assistance.list',
+            name: 'assistance',
+            access: 'list',
+            meta: {
+              title: 'assistance',
+              icon: 'mdi-clock',
+              requiresAuth: true
+            },
+            component: () => import('../views/assistance/ListAssistance')
+          }
+        ]
+      },
+      {
+        path: '/clients',
+        component: RouteWrapper,
+        redirect: '/clients/client.list',
+        access: ['manager_client'],
+        meta: {
+          title: 'client',
+          icon: 'mdi-account-multiple',
+          group: 'clients',
+          requiresAuth: true
+        },
+        children: [
+          {
+            path: '/clients/client.list',
+            name: 'clients_list',
+            access: 'list',
+            meta: {
+              title: 'client_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/client/ListClient')
+          }
+        ]
+      },
+      {
+        path: '/setting',
+        access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
+        name: 'setting',
+        meta: {
+          title: 'setting',
+          icon: 'mdi-cog',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/general/General')
+      },
+      {
+        path: '/online/setting',
+        access: ['manager_shop'],
+        name: 'shop_online',
+        meta: {
+          title: 'shop_online',
+          icon: 'mdi-briefcase-upload',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ListOnlineConfig')
+      },
+      {
+        path: '/online/config.add',
+        name: 'config_add',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
+      },
+      {
+        path: '/online/config.edit',
+        name: 'config_edit',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
+      }
+    ]
+  },
+  {
+    path: '/hi',
+    component: LayoutVerify,
+    meta: {
+      title: 'verify'
+    },
+    redirect: '/hi/welcome',
+    hidden: true,
+    children: [
+      {
+        path: 'welcome',
+        name: 'welcome',
+        meta: {
+          title: 'welcome',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/Welcome')
+      },
+      {
+        path: 'verify/:hash',
+        name: 'verify',
+        props: true,
+        meta: {
+          title: 'verify',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/auth/Verify')
+      }
+    ]
+  },
+  {
+    path: '/lock',
+    component: LayoutLock,
+    meta: {
+      title: 'pinlogin'
+    },
+    redirect: '/lock/pin',
+    hidden: true,
+    children: [
+      {
+        path: 'pin',
+        name: 'pinlogin',
+        meta: {
+          title: 'pinlogin',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        component: () => import('../views/AppLock')
+      }
+    ]
+  },
+  {
+    path: '/',
+    component: LayoutDefault,
+    meta: {
+      title: 'home',
+      group: 'apps',
+      icon: ''
+    },
+    redirect: '/admin/dashboard',
+    children: [
+      {
+        path: '/admin/dashboard',
+        name: 'admin_dashboard',
+        access: ['dashboard'],
+        meta: {
+          title: 'dashboard',
+          group: 'apps',
+          icon: 'mdi-view-dashboard',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/AdminDashboard')
+      },
+      {
+        path: '/admin/403',
+        name: 'admin_forbidden',
+        access: ['Forbidden'],
+        meta: {
+          title: 'access_denied',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/error/Deny')
+      },
+      {
+        path: '/admin/user/profile',
+        name: 'admin_profile',
+        access: ['profile'],
+        meta: {
+          title: 'profile',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/auth/Profile')
+      },
+      {
+        path: '/admin/sales',
+        component: RouteWrapper,
+        access: ['manager_vending'],
+        redirect: '/admin/sales/vending.list',
+        meta: {
+          title: 'vending',
+          icon: 'mdi-cash-usd',
+          group: 'sales'
+        },
+        children: [
+          {
+            path: '/admin/sales/vending.list',
+            access: 'list',
+            name: 'admin_vending',
+            meta: {
+              title: 'vending',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale.vue')
+          },
+          {
+            path: '/admin/sales/refund.list',
+            name: 'admin_refund',
+            access: 'list',
+            meta: {
+              title: 'vending',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/sales/ListSale.vue')
+          }
+        ]
+      },
+      {
+        path: '/admin/articles',
+        component: RouteWrapper,
+        access: ['manager_article', 'manager_category', 'manager_mod'],
+        redirect: '/admin/articles/product.list',
+        meta: {
+          title: 'articles',
+          icon: 'mdi-shopping',
+          requiresAuth: true,
+          group: 'articles'
+        },
+        children: [
+          {
+            path: '/admin/articles/product.list',
+            name: 'admin_product_list',
+            access: 'list',
+            meta: {
+              title: 'product_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/article/AdminArticle.vue')
+          },
+          {
+            path: '/admin/articles/category.list',
+            name: 'admin_category_list',
+            access: 'list',
+            meta: {
+              title: 'category_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/category/ListCategoryAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/finance',
+        component: RouteWrapper,
+        redirect: '/admin/finance/supplier.list',
+        access: ['manager_supplier', 'manager_buy'],
+        meta: {
+          title: 'finance',
+          icon: 'mdi-podium',
+          requiresAuth: true,
+          group: 'finance'
+        },
+        children: [
+          {
+            path: '/admin/finance/supplier.list',
+            name: 'admin_supplier_list',
+            access: 'list',
+            meta: {
+              title: 'supplier_list',
+              icon: 'mdi-car',
+              requiresAuth: true
+            },
+            component: () => import('../views/supplier/ListSupplierAdmin')
+          },
+          {
+            path: '/admin/finance/buy_list',
+            name: 'admin_supply_product',
+            access: 'list',
+            meta: {
+              title: 'supply_product',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: false,
+              requiresAuth: true
+            },
+            component: () => import('../views/inventory/ListInventoryAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/resume',
+        component: RouteWrapper,
+        redirect: '/resume/sell_product.list',
+        access: ['manager_sell'],
+        meta: {
+          title: 'resume',
+          icon: 'mdi-chart-bar',
+          group: 'resume'
+        },
+        children: [
+          {
+            path: '/admin/resume/sell_product.list',
+            name: 'admin_sell_product',
+            access: 'sell_by_product',
+            meta: {
+              title: 'sell_product',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesProduct')
+          },
+          {
+            path: '/admin/resume/sell_category.list',
+            name: 'admin_sell_category',
+            access: 'sell_by_category',
+            meta: {
+              title: 'sell_category',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesCategory')
+          },
+          {
+            path: '/admin/resume/sell_user.list',
+            name: 'admin_sell_user',
+            access: 'sell_by_employer',
+            meta: {
+              title: 'sell_user',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesEmployer')
+          },
+          {
+            path: '/admin/resume/sell_types_payment.list',
+            name: 'admin_sell_types_payment',
+            access: 'sell_by_payments',
+            meta: {
+              title: 'sell_types_payment',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/sales_by/SalesPayment')
+          }
+        ]
+      },
+      {
+        path: '/admin/users',
+        component: RouteWrapper,
+        redirect: '/admin/users/employer.list',
+        access: ['manager_employer', 'manager_access', 'manager_assistence'],
+        meta: {
+          title: 'user',
+          icon: 'mdi-account-star',
+          group: 'user'
+        },
+        children: [
+          {
+            path: '/admin/users/employer.list',
+            name: 'admin_employer_list',
+            access: 'employer_list',
+            meta: {
+              title: 'employer_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/user/ListUserAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/clients',
+        component: RouteWrapper,
+        redirect: '/clients/client.list',
+        access: ['manager_client'],
+        meta: {
+          title: 'client',
+          icon: 'mdi-account-multiple',
+          group: 'clients',
+          requiresAuth: true
+        },
+        children: [
+          {
+            path: '/admin/clients/client.list',
+            name: 'admin_clients_list',
+            access: 'list',
+            meta: {
+              title: 'client_list',
+              icon: 'mdi-database-plus',
+              requiresAuth: true
+            },
+            component: () => import('../views/client/ListClientAdmin')
+          }
+        ]
+      },
+      {
+        path: '/admin/setting',
+        access: ['manager_shop', 'manager_key', 'manager_access', 'manager_payment', 'manager_expense_category', 'manager_exchange_rate', 'manager_type_of_order', 'manager_tax', 'manager_discount'],
+        meta: {
+          title: 'setting',
+          icon: 'mdi-cog',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/general/General')
+      }
+    ]
+  }
 ]

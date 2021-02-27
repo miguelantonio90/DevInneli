@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
     /**
      * Display a listing of the resource by shop.
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      * @throws Exception
      */

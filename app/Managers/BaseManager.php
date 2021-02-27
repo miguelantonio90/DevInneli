@@ -4,7 +4,6 @@
 namespace App\Managers;
 
 
-use App\ArticleImage;
 use App\Category;
 use App\Shop;
 use Exception as Exception;

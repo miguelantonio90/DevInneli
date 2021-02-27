@@ -57,18 +57,18 @@
 </template>
 <script>
 export default {
-	props: {
-		article: {
-			type: Object,
-			default: function () {
-				return {}
-			}
-		}
-	},
-	data: () => ({
-		rating: 4.5,
-		item: 5
-	})
+  props: {
+    article: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  },
+  data: () => ({
+    rating: 4.5,
+    item: 5
+  })
 }
 </script>
 f

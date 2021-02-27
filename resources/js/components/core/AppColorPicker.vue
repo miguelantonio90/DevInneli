@@ -20,25 +20,25 @@
 
 import VSwatches from 'vue-swatches'
 export default {
-	name: 'AppColorPicker',
-	components: { VSwatches },
-	props: {
-		value: {
-			type: String,
-			default: '#1FBC9C',
-			required: true
-		}
-	},
-	data () {
-		return {
-			color: this.value
-		}
-	},
-	methods: {
-		input ($event) {
-			this.$emit('input', $event)
-		}
-	}
+  name: 'AppColorPicker',
+  components: { VSwatches },
+  props: {
+    value: {
+      type: String,
+      default: '#1FBC9C',
+      required: true
+    }
+  },
+  data () {
+    return {
+      color: this.value
+    }
+  },
+  methods: {
+    input ($event) {
+      this.$emit('input', $event)
+    }
+  }
 }
 </script>
 

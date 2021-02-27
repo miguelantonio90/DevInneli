@@ -41,12 +41,12 @@ import AppDrawer from '../AppDrawer'
 import AppToolbar from '../AppToolbar'
 
 export default {
-	name: 'LayoutVerify',
-	components: {
-		AppToolbar,
-		AppDrawer,
-		AppFab
-	}
+  name: 'LayoutVerify',
+  components: {
+    AppToolbar,
+    AppDrawer,
+    AppFab
+  }
 }
 </script>
 

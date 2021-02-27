@@ -248,194 +248,194 @@ import { mapActions, mapGetters } from 'vuex'
 import localStorage from '../config/localStorage'
 
 export default {
-	name: 'AppToolbar',
-	components: { ListNotifications },
-	props: {
-		showNavIcon: {
-			type: Boolean,
-			default: true
-		},
-		showLockIcon: {
-			type: Boolean,
-			default: true
-		},
-		showSalesIcon: {
-			type: Boolean,
-			default: true
-		},
-		showBuyIcon: {
-			type: Boolean,
-			default: true
-		},
-		showMenuLang: {
-			type: Boolean,
-			default: true
-		},
-		showMenuUser: {
-			type: Boolean,
-			default: true
-		}
-	},
-	data () {
-		return {
-			showSale: false,
-			showBuy: false,
-			isMobile: false
-		}
-	},
-	computed: {
-		...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn', 'notifications']),
-		toolbarColor () {
-			return this.$vuetify.options.extra.mainNav
-		},
-		availableLanguages () {
-			const { locales } = this.$vuetify.lang
-			return Object.keys(locales).map((lang) => {
-				return {
-					text: locales[lang].label,
-					value: lang
-				}
-			})
-		},
-		localeText () {
-			const find = this.availableLanguages.find(
-				(item) => item.value === this.$vuetify.lang.current
-			)
-			return find.text
-		},
-		breadcrumbs () {
-			const { matched } = this.$route
-			return matched.map((route, index) => {
-				const to = index === matched.length - 1
-					? this.$route.path
-					: route.path || route.redirect
-				const text = this.$vuetify.lang.t(
-					'$vuetify.menu.' + route.meta.title
-				)
-				return {
-					text: text,
-					to: to,
-					exact: true,
-					disabled: false
-				}
-			})
-		},
-		profileMenus () {
-			return [
-				{
-					icon: 'mdi-face',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.profile'),
-					click: this.handleProfile
-				},
-				{
-					icon: 'mdi-logout',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.logout'),
-					click: this.handleLogout
-				}
-			]
-		},
-		employeeMenus () {
-			return [
-				{
-					icon: 'mdi-face',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.profile'),
-					click: this.handleProfileEmployee
-				}, {
-					icon: 'mdi-timer',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.turnOn'),
-					click: this.handleProfileEmployee
-				}
-			]
-		},
-		adminMenus () {
-			return [
-				{
-					icon: 'mdi-face',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.profile'),
-					click: this.handleProfileAdmin
-				},
-				{
-					icon: 'mdi-logout',
-					href: '#',
-					title: this.$vuetify.lang.t('$vuetify.menu.logout'),
-					click: this.handleLogout
-				}
-			]
-		}
-	},
-	watch: {
-		access_permit: function () {
-			this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
-				? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
-			this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
-				? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
-		}
-	},
-	created () {
-		this.getUserData().then((v) => {
-			this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
-				? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
-			this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
-				? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
-		})
-	},
-	mounted () {
-		this.onResize()
-		window.addEventListener('resize', this.onResize, { passive: true })
-	},
-	beforeDestroy () {
-		if (typeof window !== 'undefined') {
-			window.removeEventListener('resize', this.onResize, { passive: true })
-		}
-	},
-	methods: {
-		...mapActions('auth', ['sendLogoutRequest', 'getUserData']),
-		handleDrawerToggle () {
-			this.$emit('side-icon-click')
-		},
-		onResize () {
-			this.isMobile = window.innerWidth < 600
-		},
-		handleFullScreen () {
-			Util.toggleFullScreen()
-		},
-		handleLogout () {
-			this.sendLogoutRequest().then(() => {
-				this.$router.push('/auth/login')
-			})
-		},
-		handleChangeLocale (value) {
-			this.$vuetify.lang.current = value
-			localStorage.setLanguage(value)
-			window.location.reload()
-		},
-		handleProfileEmployee () {
-			alert('Profile employee')
-		},
-		handleProfile () {
-			this.$router.push({ name: 'Profile' })
-		},
-		handleProfileAdmin () {
-			this.$router.push({ name: 'admin_profile' })
-		},
-		handlePinLogin () {
-			localStorage.removeTokenManager()
-			this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
-		},
-		handleSales () {
-			this.$store.state.sale.managerSale = false
-			this.$router.push({ name: 'vending_new' }).catch(() => {})
-		},
-		handleBuy () {
-			this.$store.state.inventory.managerInventory = false
-			this.$router.push({ name: 'supply_add' }).catch(() => {})
-		}
-	}
+  name: 'AppToolbar',
+  components: { ListNotifications },
+  props: {
+    showNavIcon: {
+      type: Boolean,
+      default: true
+    },
+    showLockIcon: {
+      type: Boolean,
+      default: true
+    },
+    showSalesIcon: {
+      type: Boolean,
+      default: true
+    },
+    showBuyIcon: {
+      type: Boolean,
+      default: true
+    },
+    showMenuLang: {
+      type: Boolean,
+      default: true
+    },
+    showMenuUser: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      showSale: false,
+      showBuy: false,
+      isMobile: false
+    }
+  },
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn', 'notifications']),
+    toolbarColor () {
+      return this.$vuetify.options.extra.mainNav
+    },
+    availableLanguages () {
+      const { locales } = this.$vuetify.lang
+      return Object.keys(locales).map((lang) => {
+        return {
+          text: locales[lang].label,
+          value: lang
+        }
+      })
+    },
+    localeText () {
+      const find = this.availableLanguages.find(
+        (item) => item.value === this.$vuetify.lang.current
+      )
+      return find.text
+    },
+    breadcrumbs () {
+      const { matched } = this.$route
+      return matched.map((route, index) => {
+        const to = index === matched.length - 1
+          ? this.$route.path
+          : route.path || route.redirect
+        const text = this.$vuetify.lang.t(
+          '$vuetify.menu.' + route.meta.title
+        )
+        return {
+          text: text,
+          to: to,
+          exact: true,
+          disabled: false
+        }
+      })
+    },
+    profileMenus () {
+      return [
+        {
+          icon: 'mdi-face',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.profile'),
+          click: this.handleProfile
+        },
+        {
+          icon: 'mdi-logout',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.logout'),
+          click: this.handleLogout
+        }
+      ]
+    },
+    employeeMenus () {
+      return [
+        {
+          icon: 'mdi-face',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.profile'),
+          click: this.handleProfileEmployee
+        }, {
+          icon: 'mdi-timer',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.turnOn'),
+          click: this.handleProfileEmployee
+        }
+      ]
+    },
+    adminMenus () {
+      return [
+        {
+          icon: 'mdi-face',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.profile'),
+          click: this.handleProfileAdmin
+        },
+        {
+          icon: 'mdi-logout',
+          href: '#',
+          title: this.$vuetify.lang.t('$vuetify.menu.logout'),
+          click: this.handleLogout
+        }
+      ]
+    }
+  },
+  watch: {
+    access_permit: function () {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
+    }
+  },
+  created () {
+    this.getUserData().then((v) => {
+      this.showSale = this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_vending')[0].actions.vending_add : this.showSalesIcon
+      this.showBuy = this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add
+        ? this.access_permit.filter(a => a.title.name === 'manager_buy')[0].actions.buy_add : this.showBuyIcon
+    })
+  },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+  },
+  beforeDestroy () {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize, { passive: true })
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['sendLogoutRequest', 'getUserData']),
+    handleDrawerToggle () {
+      this.$emit('side-icon-click')
+    },
+    onResize () {
+      this.isMobile = window.innerWidth < 600
+    },
+    handleFullScreen () {
+      Util.toggleFullScreen()
+    },
+    handleLogout () {
+      this.sendLogoutRequest().then(() => {
+        this.$router.push('/auth/login')
+      })
+    },
+    handleChangeLocale (value) {
+      this.$vuetify.lang.current = value
+      localStorage.setLanguage(value)
+      window.location.reload()
+    },
+    handleProfileEmployee () {
+      alert('Profile employee')
+    },
+    handleProfile () {
+      this.$router.push({ name: 'Profile' })
+    },
+    handleProfileAdmin () {
+      this.$router.push({ name: 'admin_profile' })
+    },
+    handlePinLogin () {
+      localStorage.removeTokenManager()
+      this.$router.push({ name: 'pinlogin', params: { email: this.user.email } })
+    },
+    handleSales () {
+      this.$store.state.sale.managerSale = false
+      this.$router.push({ name: 'vending_new' }).catch(() => {})
+    },
+    handleBuy () {
+      this.$store.state.inventory.managerInventory = false
+      this.$router.push({ name: 'supply_add' }).catch(() => {})
+    }
+  }
 }
 </script>
 

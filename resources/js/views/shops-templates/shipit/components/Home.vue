@@ -3,6 +3,7 @@
     <v-carousel hide-delimiters>
       <v-carousel-item
         v-for="image in shopData.images"
+        :key="image.path"
         :src="image.path"
       >
         <v-row
@@ -20,6 +21,7 @@
     >
       <div
         v-for="art in articlesMerge.slice(0,1)"
+        :key="art.path"
         class="col-md-6 col-sm-6 col-xs-12"
       >
         <v-card>
@@ -64,6 +66,7 @@
     >
       <div
         v-for="art in articlesMerge.slice(2,4)"
+        :key="art.path"
         class="col-md-4 col-sm-4 col-xs-12"
       >
         <v-card outlined>
@@ -96,41 +99,40 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	data () {
-		return {
-			activeBtn: 0
-		}
-	},
-	computed: {
-		...mapState('category', [
-			'categories',
-			'isTableLoading'
-		]),
-		...mapState('article', ['articlesMerge']),
-		...mapState('shop', ['shopData'])
-	},
-	async created () {
-		await this.getShopData(this.$route.params).then(() => {
-		}).catch((error) => {
-			console.log(error)
-			if (error === 500) { this.$router.push({ name: '404' }) }
-		})
-	},
-	methods: {
-		...mapActions('category', ['getCategories', 'getCategoriesShop']),
-		...mapActions('article', ['getArticlesMerge']),
-		...mapActions('shop', ['getShopData']),
-		goTo (article) {
+  data () {
+    return {
+      activeBtn: 0
+    }
+  },
+  computed: {
+    ...mapState('category', [
+      'categories',
+      'isTableLoading'
+    ]),
+    ...mapState('article', ['articlesMerge']),
+    ...mapState('shop', ['shopData'])
+  },
+  async created () {
+    await this.getShopData(this.$route.params).then(() => {
+    }).catch((error) => {
+      if (error === 500) { this.$router.push({ name: '404' }) }
+    })
+  },
+  methods: {
+    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
+    ...mapActions('article', ['getArticlesMerge']),
+    ...mapActions('shop', ['getShopData']),
+    goTo (article) {
 		    this.$router.push({
-				name: 'Product',
-				params: {
-					compName: this.$route.params.compName,
-					shopName: this.$route.params.shopName,
-					article: article
-				}
-			})
-		}
-	}
+        name: 'Product',
+        params: {
+          compName: this.$route.params.compName,
+          shopName: this.$route.params.shopName,
+          article: article
+        }
+      })
+    }
+  }
 }
 </script>
 <style>

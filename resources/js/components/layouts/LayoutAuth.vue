@@ -16,9 +16,9 @@
 
 <script>
 export default {
-	data: () => ({}),
+  data: () => ({}),
 
-	methods: {}
+  methods: {}
 }
 </script>
 <style lang="sass" scoped>

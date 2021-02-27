@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.supplier'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.supplier")
           ])
         }}</span>
       </v-card-title>
@@ -37,7 +37,11 @@
             >
               <v-text-field
                 v-model="editSupplier.identity"
-                :label="$vuetify.lang.t('$vuetify.supplier.identity')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.supplier.identity'
+                  )
+                "
                 :rules="formRule.identity"
                 required
               />
@@ -48,7 +52,9 @@
             >
               <v-text-field
                 v-model="editSupplier.email"
-                :label="$vuetify.lang.t('$vuetify.supplier.email')"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.email')
+                "
                 :rules="formRule.email"
                 autocomplete="off"
                 required
@@ -60,14 +66,24 @@
             >
               <vue-tel-input-vuetify
                 v-model="editSupplier.phone"
-                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
-                :label="$vuetify.lang.t('$vuetify.supplier.phone')"
+                :placeholder="
+                  $vuetify.lang.t('$vuetify.phone_holder')
+                "
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.phone')
+                "
                 required
                 :rules="formRule.phone"
-                :select-label="$vuetify.lang.t('$vuetify.supplier.country')"
+                :select-label="
+                  $vuetify.lang.t('$vuetify.supplier.country')
+                "
                 v-bind="bindProps"
                 :error-messages="errorPhone"
-                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                :prefix="
+                  countrySelect
+                    ? `+` + countrySelect.dialCode
+                    : ``
+                "
                 @country-changed="onCountry"
                 @keypress="numbers"
                 @input="onInput"
@@ -89,7 +105,11 @@
                 v-model="editSupplier.contract"
                 :counter="120"
                 :rules="formRule.contract"
-                :label="$vuetify.lang.t('$vuetify.supplier.contract')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.supplier.contract'
+                  )
+                "
                 required
               />
             </v-col>
@@ -105,20 +125,33 @@
                 :disabled="!!isCategoryLoading"
                 item-text="name"
                 item-value="id"
-                :label="$vuetify.lang.t('$vuetify.supplier.expense')"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.expense')
+                "
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template
+                      v-slot:activator="{ on, attrs }"
+                    >
                       <v-icon
                         v-bind="attrs"
                         v-on="on"
-                        @click="$store.dispatch('expenseCategory/toogleNewModal',true)"
+                        @click="
+                          $store.dispatch(
+                            'expenseCategory/toogleNewModal',
+                            true
+                          )
+                        "
                       >
                         mdi-plus
                       </v-icon>
                     </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                    <span>{{
+                      $vuetify.lang.t(
+                        "$vuetify.titles.newAction"
+                      )
+                    }}</span>
                   </v-tooltip>
                 </template>
               </v-select>
@@ -131,7 +164,9 @@
                 v-model="editSupplier.address"
                 :counter="120"
                 :rules="formRule.address"
-                :label="$vuetify.lang.t('$vuetify.supplier.address')"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.address')
+                "
                 required
               />
             </v-col>
@@ -142,7 +177,9 @@
               <v-text-field
                 v-model="editSupplier.note"
                 :counter="120"
-                :label="$vuetify.lang.t('$vuetify.supplier.note')"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.note')
+                "
               />
             </v-col>
           </v-row>
@@ -156,7 +193,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -166,10 +203,12 @@
           @click="updateSupplierHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
-      <new-expense-category v-if="$store.state.expenseCategory.showNewModal" />
+      <new-expense-category
+        v-if="$store.state.expenseCategory.showNewModal"
+      />
     </v-card>
   </v-dialog>
 </template>
@@ -179,72 +218,82 @@ import { mapActions, mapState } from 'vuex'
 import NewExpenseCategory from '../expense_category/New'
 
 export default {
-	components: { NewExpenseCategory },
-	data () {
-		return {
-			formValid: false,
-			errorPhone: null,
-			formRule: this.$rules,
-			countrySelect: null
-		}
-	},
-	computed: {
-		...mapState('supplier', ['saved', 'editSupplier', 'isActionInProgress']),
-		...mapState('expenseCategory', ['saved', 'categories', 'isCategoryLoading']),
-		bindProps () {
-			return {
-				mode: 'national',
-				clearable: true,
-				defaultCountry: this.editSupplier.country ? this.editSupplier.country : 'US',
-				disabledFetchingCountry: false,
-				autocomplete: 'off',
-				dropdownOptions: {
-					disabledDialCode: false
-				},
-				inputOptions: {
-					showDialCode: false
-				}
-			}
-		}
-	},
-	created () {
-		this.getExpenseCategories()
-	},
-	methods: {
-		...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
-		...mapActions('expenseCategory', ['getExpenseCategories']),
-		onCountry (event) {
-			this.editSupplier.country = event.iso2
-			this.countrySelect = event
-		},
-		numbers (event) {
-			const regex = new RegExp('^[0-9]+$')
-			const key = String.fromCharCode(
-				!event.charCode ? event.which : event.charCode
-			)
-			if (!regex.test(key)) {
-				event.preventDefault()
-				return false
-			}
-		},
-		onInput (number, object) {
-			const lang = this.$vuetify.lang
-			if (object.valid) {
-				this.editSupplier.phone = number
-				this.errorPhone = null
-			} else {
-				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-					lang.t('$vuetify.phone')
-				])
-			}
-		},
-		async updateSupplierHandler () {
-			if (this.$refs.form.validate()) {
-				this.loading = true
-				await this.updateSupplier(this.editSupplier)
-			}
-		}
-	}
+  components: { NewExpenseCategory },
+  data () {
+    return {
+      formValid: false,
+      errorPhone: null,
+      formRule: this.$rules,
+      countrySelect: null
+    }
+  },
+  computed: {
+    ...mapState('supplier', [
+      'saved',
+      'editSupplier',
+      'isActionInProgress'
+    ]),
+    ...mapState('expenseCategory', [
+      'saved',
+      'categories',
+      'isCategoryLoading'
+    ]),
+    bindProps () {
+      return {
+        mode: 'national',
+        clearable: true,
+        defaultCountry: this.editSupplier.country
+          ? this.editSupplier.country
+          : 'US',
+        disabledFetchingCountry: false,
+        autocomplete: 'off',
+        dropdownOptions: {
+          disabledDialCode: false
+        },
+        inputOptions: {
+          showDialCode: false
+        }
+      }
+    }
+  },
+  created () {
+    this.getExpenseCategories()
+  },
+  methods: {
+    ...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
+    ...mapActions('expenseCategory', ['getExpenseCategories']),
+    onCountry (event) {
+      this.editSupplier.country = event.iso2
+      this.countrySelect = event
+    },
+    numbers (event) {
+      const regex = new RegExp('^[0-9]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    onInput (number, object) {
+      const lang = this.$vuetify.lang
+      if (object.valid) {
+        this.editSupplier.phone = number
+        this.errorPhone = null
+      } else {
+        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+          lang.t('$vuetify.phone')
+        ])
+      }
+    },
+    async updateSupplierHandler () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.updateSupplier(this.editSupplier)
+      }
+    }
+  }
 }
 </script>
 

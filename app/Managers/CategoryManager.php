@@ -33,7 +33,6 @@ class CategoryManager extends BaseManager
      */
     public static function getCategoriesShop($data)
     {
-        var_dump($data);
         return Shop::latest()->where('name', '=', $data['shopName'])->get();
     }
 

@@ -26,46 +26,46 @@ import AppUploadMultipleImage from './core/AppUploadMultipleImage'
 import AppTour from './core/AppTour'
 
 const components = [
-	CircleStatistic,
-	LinearStatistic,
-	MiniStatistic,
-	VWidget,
-	PlainTable,
-	AppDataTable,
-	AvatarPicker,
-	MaterialCard,
-	AppLoading,
-	VuePincode,
-	CheckOutDialog,
-	ProductCard,
-	ProductList,
-	ShoppingCartTotals,
-	ShoppingCart,
-	Coupons,
-	AppColorPicker,
-	AppDateTimePicker,
-	AppUploadMultipleImage,
-	AppTour
+  CircleStatistic,
+  LinearStatistic,
+  MiniStatistic,
+  VWidget,
+  PlainTable,
+  AppDataTable,
+  AvatarPicker,
+  MaterialCard,
+  AppLoading,
+  VuePincode,
+  CheckOutDialog,
+  ProductCard,
+  ProductList,
+  ShoppingCartTotals,
+  ShoppingCart,
+  Coupons,
+  AppColorPicker,
+  AppDateTimePicker,
+  AppUploadMultipleImage,
+  AppTour
 ]
 
 // Installation of the library as a plugin
 export function install (Vue, opts = {}) {
-	components.forEach(component => {
-		Vue.component(component.name, component)
-	})
+  components.forEach(component => {
+    Vue.component(component.name, component)
+  })
 
-	Moment.locale(localStorage.getLanguage() ||
+  Moment.locale(localStorage.getLanguage() ||
     window.navigator.language.split('-')[0])
 
-	Vue.prototype.$Toast = Notifications.Toast
-	Vue.prototype.$Swal = Notifications.Swal
-	Vue.prototype.$rules = rules
-	Vue.prototype.$language = Vuetify.framework.lang
-	Vue.prototype.$moment = Moment
+  Vue.prototype.$Toast = Notifications.Toast
+  Vue.prototype.$Swal = Notifications.Swal
+  Vue.prototype.$rules = rules
+  Vue.prototype.$language = Vuetify.framework.lang
+  Vue.prototype.$moment = Moment
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-	Vue.use({ install })
+  Vue.use({ install })
 }
 
 // Library export as a plugin
@@ -73,7 +73,7 @@ export default { install: install }
 
 // Export of the components individually
 export {
-	AppDataTable,
-	AvatarPicker,
-	MaterialCard
+  AppDataTable,
+  AvatarPicker,
+  MaterialCard
 }

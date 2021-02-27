@@ -49,11 +49,11 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 export default {
-	name: 'PlainTable',
-	props: {
-		title: String,
-		headers: Array,
-		items: Array
-	}
+  name: 'PlainTable',
+  props: {
+    title: String,
+    headers: Array,
+    items: Array
+  }
 }
 </script>

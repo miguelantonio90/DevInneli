@@ -35,8 +35,9 @@ class Supply extends Model
      * @var array
      */
     protected $fillable = [
-        'company_id' , 'sale_id', 'state_id', 'to_company'
+        'company_id', 'sale_id', 'state_id', 'to_company'
     ];
+
     /**
      * @return BelongsTo
      */
@@ -47,17 +48,17 @@ class Supply extends Model
 
     public function sale(): HasOne
     {
-        return $this->hasOne(Sale::class, 'id','sale_id');
+        return $this->hasOne(Sale::class, 'id', 'sale_id');
     }
 
     public function state(): HasOne
     {
-        return $this->hasOne(SupplyState::class, 'id','state_id');
+        return $this->hasOne(SupplyState::class, 'id', 'state_id');
     }
 
     public function from(): HasOne
     {
-        return $this->hasOne(User::class, 'id','created_by');
+        return $this->hasOne(User::class, 'id', 'created_by');
     }
 
 }

@@ -35,25 +35,25 @@ import AppToolbar from '../AppToolbar'
 import AppFab from '../AppFab'
 
 export default {
-	name: 'LayoutDefault',
-	components: {
-		AppDrawer,
-		AppToolbar,
-		AppFab
-	},
+  name: 'LayoutDefault',
+  components: {
+    AppDrawer,
+    AppToolbar,
+    AppFab
+  },
 
-	data () {
-		return {
-			showDrawer: true
-		}
-	},
-	created () {
-	},
-	methods: {
-		handleDrawerVisiable () {
-			this.showDrawer = !this.showDrawer
-		}
-	}
+  data () {
+    return {
+      showDrawer: true
+    }
+  },
+  created () {
+  },
+  methods: {
+    handleDrawerVisiable () {
+      this.showDrawer = !this.showDrawer
+    }
+  }
 }
 </script>
 

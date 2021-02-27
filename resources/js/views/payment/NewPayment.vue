@@ -6,8 +6,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.payment.name'),
+          $vuetify.lang.t("$vuetify.titles.new", [
+            $vuetify.lang.t("$vuetify.payment.name")
           ])
         }}</span>
       </v-card-title>
@@ -56,7 +56,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -66,7 +66,7 @@
           @click="createNewPayment"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -77,44 +77,48 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: 'NewPayment',
-	data () {
-		return {
-			formValid: false,
-			hidePinCode1: true,
-			hidePinCode2: true,
-			errorPhone: null,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('payment', ['saved', 'newPayment', 'paymentsConst', 'isActionInProgress']),
-		...mapState('statics', ['payments'])
-	},
-	created () {
-		this.formValid = false
-	},
-	methods: {
-		...mapActions('payment', ['createPayment', 'toogleNewModal']),
-		lettersNumbers (event) {
-			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-			const key = String.fromCharCode(
-				!event.charCode ? event.which : event.charCode
-			)
-			if (!regex.test(key)) {
-				event.preventDefault()
-				return false
-			}
-		},
-		async createNewPayment () {
-			if (this.$refs.form.validate()) {
-				this.loading = true
-				await this.createPayment(this.newPayment)
-			}
-		}
-	}
+  name: 'NewPayment',
+  data () {
+    return {
+      formValid: false,
+      hidePinCode1: true,
+      hidePinCode2: true,
+      errorPhone: null,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('payment', [
+      'saved',
+      'newPayment',
+      'paymentsConst',
+      'isActionInProgress'
+    ]),
+    ...mapState('statics', ['payments'])
+  },
+  created () {
+    this.formValid = false
+  },
+  methods: {
+    ...mapActions('payment', ['createPayment', 'toogleNewModal']),
+    lettersNumbers (event) {
+      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    async createNewPayment () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.createPayment(this.newPayment)
+      }
+    }
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

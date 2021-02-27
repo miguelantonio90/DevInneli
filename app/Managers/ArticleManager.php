@@ -9,8 +9,11 @@ use App\ArticlesShops;
 use App\Variant;
 use Exception;
 use Illuminate\Auth\AuthManager;
-use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Http\Request;
 
+/**
+ * @method findMoreStars(Request $request)
+ */
 class ArticleManager extends BaseManager
 {
     /**
@@ -30,8 +33,8 @@ class ArticleManager extends BaseManager
 
     /**
      * ArticleManager constructor.
-     * @param VariantManager $variantManager
-     * @param ArticleImageManager $articleImageManager
+     * @param  VariantManager  $variantManager
+     * @param  ArticleImageManager  $articleImageManager
      */
     public function __construct(VariantManager $variantManager, ArticleImageManager $articleImageManager)
     {
@@ -64,6 +67,7 @@ class ArticleManager extends BaseManager
             $company = CompanyManager::getCompanyByAdmin();
             $articles = Articles::latest()
                 ->where('company_id', '=', $company->id)
+                ->whereNull('deleted_at')
                 ->with('company')
                 ->with([
                     'category' => function ($q) use ($company) {
@@ -83,9 +87,9 @@ class ArticleManager extends BaseManager
                 ->get();
         }
         foreach ($articles as $k => $article) {
-            $article['composite'] = (boolean)$article['composite'];
-            $article['personSale'] = (boolean)$article['personSale'];
-            $article['onlineSale'] = (boolean)$article['onlineSale'];
+            $article['composite'] = (boolean) $article['composite'];
+            $article['personSale'] = (boolean) $article['personSale'];
+            $article['onlineSale'] = (boolean) $article['onlineSale'];
             foreach ($article['images'] as $im => $image) {
                 if ($image['default'] === 1) {
                     $articles[$k]['path'] = $image['path'];
@@ -100,7 +104,7 @@ class ArticleManager extends BaseManager
 
             $shopVariant = [];
             foreach ($article['variantValues'] as $sh => $shopV) {
-                $shopV['images'] = ArticleImage::latest()->where('article_id','=',$shopV['id'])->get();
+                $shopV['images'] = ArticleImage::latest()->where('article_id', '=', $shopV['id'])->get();
                 foreach ($shopV['articlesShops'] as $i => $v) {
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
@@ -123,7 +127,7 @@ class ArticleManager extends BaseManager
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
-                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] == 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100,
+                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] === 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100,
                     2);
             }
         }
@@ -142,7 +146,7 @@ class ArticleManager extends BaseManager
             ->orderBy('ref', 'DESC')
             ->first();
 
-        return ($number && count($number->toArray()) > 0) ? (int)$number['ref'] : 1000;
+        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
     }
 
     /**
@@ -331,7 +335,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param Articles $article
+     * @param  Articles  $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void

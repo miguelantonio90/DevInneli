@@ -16,6 +16,6 @@
 
 <script>
 export default {
-	name: 'UndoIcon'
+  name: 'UndoIcon'
 }
 </script>

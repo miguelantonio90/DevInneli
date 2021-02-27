@@ -67,17 +67,6 @@ class ConfigController extends Controller
     }
 
     /**
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
@@ -93,6 +82,17 @@ class ConfigController extends Controller
             $this->configManager->edit($id, $request->all()),
             'Config has updated successfully.'
         );
+    }
+
+    /**
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+        ]);
     }
 
     /**

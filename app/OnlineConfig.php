@@ -28,7 +28,7 @@ class OnlineConfig extends Model
 
     public function shop(): HasOne
     {
-        return $this->hasOne(Shop::class, 'id','shop_id');
+        return $this->hasOne(Shop::class, 'id', 'shop_id');
     }
 
 }

@@ -37,22 +37,22 @@ import AppFab from '../AppFab'
 import AppToolbar from '../AppToolbar'
 
 export default {
-	name: 'LayoutLock',
-	components: {
-		SalesDrawer,
-		AppToolbar,
-		AppFab
-	},
-	data () {
-		return {
-			showDrawer: true
-		}
-	},
-	methods: {
-		handleDrawerVisiable () {
-			this.showDrawer = !this.showDrawer
-		}
-	}
+  name: 'LayoutLock',
+  components: {
+    SalesDrawer,
+    AppToolbar,
+    AppFab
+  },
+  data () {
+    return {
+      showDrawer: true
+    }
+  },
+  methods: {
+    handleDrawerVisiable () {
+      this.showDrawer = !this.showDrawer
+    }
+  }
 }
 </script>
 

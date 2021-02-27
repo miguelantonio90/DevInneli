@@ -73,27 +73,27 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
 
-	data () {
-		return {
-			formValid: false,
-			errorPhone: null,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('expenseCategory', ['editCategory', 'isActionInProgress'])
-	},
-	created () {
-		this.formValid = false
-	},
-	methods: {
-		...mapActions('expenseCategory', ['updateCategory', 'toogleEditModal']),
-		async handleCategory () {
-			if (this.$refs.form.validate()) {
-				await this.updateCategory(this.editCategory)
-			}
-		}
-	}
+  data () {
+    return {
+      formValid: false,
+      errorPhone: null,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('expenseCategory', ['editCategory', 'isActionInProgress'])
+  },
+  created () {
+    this.formValid = false
+  },
+  methods: {
+    ...mapActions('expenseCategory', ['updateCategory', 'toogleEditModal']),
+    async handleCategory () {
+      if (this.$refs.form.validate()) {
+        await this.updateCategory(this.editCategory)
+      }
+    }
+  }
 }
 </script>
 

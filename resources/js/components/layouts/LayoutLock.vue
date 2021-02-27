@@ -17,7 +17,7 @@
 <script>
 
 export default {
-	name: 'LayoutLock'
+  name: 'LayoutLock'
 }
 </script>
 

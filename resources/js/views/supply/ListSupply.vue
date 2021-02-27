@@ -548,234 +548,234 @@ import DetailRefund from '../refund/DetailRefund'
 import ListPay from '../pay/ListPay'
 import DetailArticleCost from './DetailArticleCost'
 export default {
-	name: 'ListSupply',
-	components: { DetailRefund, NewRefound, ListPay, DetailArticleCost },
-	data () {
-		return {
-			tab: null,
-			menu: false,
-			fav: true,
-			message: false,
-			hints: true,
-			search: '',
-			localAccess: {},
-			vBindOption: {
-				itemKey: 'no_facture',
-				singleExpand: false,
-				showExpand: true
-			}
-		}
-	},
-	computed: {
-		...mapState('supply', ['showNewModal', 'showEditModal', 'loading', 'showShowModal', 'supplies', 'received', 'isTableLoading']),
-		...mapState('supplier', ['clientSuppliers']),
-		...mapState('article', ['articles']),
-		...mapState('refund', ['showNewModal']),
-		...mapGetters('auth', ['user', 'access_permit']),
-		getTableColumns () {
-			return [
-				{
-					text: this.$vuetify.lang.t('$vuetify.supply_state.state.name'),
-					value: 'state',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.to'),
-					value: 'to',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-					value: 'sale.no_facture',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-					value: 'sale.totalCost',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-					value: 'sale.shop.name',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-					value: 'actions',
-					sortable: false
-				}
-			]
-		},
-		getRTableColumns () {
-			return [
-				{
-					text: this.$vuetify.lang.t('$vuetify.supply_state.state.name'),
-					value: 'state.name',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.fromData'),
-					value: 'from.name',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
-					value: 'sale.no_facture',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
-					value: 'sale.totalCost',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-					value: 'sale.shop.name',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-					value: 'actions',
-					sortable: false
-				}
-			]
-		}
-	},
-	watch: {
-		loadData: function () {
-			if (this.loadData === true) { this.loadInitData() }
-		}
-	},
-	created () {
-		this.getClientSupplier()
-		this.loadInitData()
-	},
-	methods: {
-		...mapActions('supply', [
-			'toogleNewModal',
-			'openEditModal',
-			'openShowModal',
-			'getSupplies',
-			'updateSupply',
-			'deleteSupply'
-		]),
-		...mapActions('supplier', ['getClientSupplier']),
-		...mapActions('article', ['getArticles']),
-		...mapActions('refund', ['openNewModal']),
-		async loadInitData () {
-			await this.getArticles()
-			await this.getSupplies()
-		},
-		refundArticle (supply, article) {
-			if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
-				this.$Swal.fire({
-					title: this.$vuetify.lang.t('$vuetify.actions.refund', [
-						this.$vuetify.lang.t('$vuetify.menu.articles')
-					]),
-					text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'),
-					icon: 'warning',
-					showCancelButton: false,
-					confirmButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.accept'
-					),
-					confirmButtonColor: 'red'
-				})
-			} else {
-				this.openNewModal({ supply, article })
-			}
-		},
-		cancelProductPreform (item, art) {
-		},
-		total_pay (item) {
-			let sum = 0
-			item.taxes.forEach((v) => {
-				sum += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-			})
-			let discount = 0
-			item.discount.forEach((v) => {
-				discount += v.percent ? item.cant * item.cost * v.value / 100 : v.value
-			})
-			return item.cant * item.cost + sum - discount - item.moneyRefund
-		},
-		createSupplyHandler () {
-			if (this.articles.length === 0) {
-				this.showMessage(true, this.$vuetify.lang.t(
-					'$vuetify.messages.warning_no_article'
-				))
-			} else if (this.clientSuppliers.length === 0) {
-				this.showMessage(true, this.$vuetify.lang.t(
-					'$vuetify.messages.warning_no_clients_supplier'
-				), '/supplier')
-			} else {
-				this.$store.state.supply.managerSupply = false
-				this.$router.push({ name: 'supply_add' })
-			}
-		},
-		editSupplyHandler ($event) {
-			const supply = this.supplies.filter(sp => sp.id === $event)[0]
-			if (supply.state.name === 'cancelled') {
-				this.showMessage(false, this.$vuetify.lang.t(
-					'$vuetify.messages.warning_supply_state_cancelled'
-				))
-			} else if (supply.state.name !== 'requested') {
-				this.showMessage(false, this.$vuetify.lang.t(
-					'$vuetify.messages.warning_supply_state'
-				))
-			} else {
-				this.openEditModal($event)
-				this.$store.state.supply.managerSupply = true
-				this.$router.push({ name: 'supply_edit' })
-			}
-		},
-		deleteSupplyHandler ($event) {
-			const supply = this.supplies.filter(sp => sp.id === $event)[0]
-			if (supply.state.name === 'cancelled') {
-				this.$Swal
-					.fire({
-						title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-							this.$vuetify.lang.t('$vuetify.supply.name')
-						]),
-						text: this.$vuetify.lang.t(
-							'$vuetify.messages.warning_delete'
-						),
-						icon: 'warning',
-						showCancelButton: true,
-						cancelButtonText: this.$vuetify.lang.t(
-							'$vuetify.actions.cancel'
-						),
-						confirmButtonText: this.$vuetify.lang.t(
-							'$vuetify.actions.delete'
-						),
-						confirmButtonColor: 'red'
-					})
-					.then((result) => {
-						if (result.isConfirmed) this.deleteSupply($event)
-					})
-			} else {
-				this.showMessage(false, this.$vuetify.lang.t(
-					'$vuetify.messages.warning_supply_delete'
-				))
-			}
-		},
-		changeStateHandler (item) {
-			this.updateSupply(item)
-		},
-		showMessage (newM, txt, url) {
-			this.$Swal
-				.fire({
-					title: this.$vuetify.lang.t(newM ? '$vuetify.titles.new' : '$vuetify.titles.edit', [
-						this.$vuetify.lang.t('$vuetify.menu.supply_productS')
-					]),
-					text: txt,
-					icon: 'warning',
-					showCancelButton: false,
-					confirmButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.accept'
-					),
-					confirmButtonColor: 'red'
-				})
-		}
-	}
+  name: 'ListSupply',
+  components: { DetailRefund, NewRefound, ListPay, DetailArticleCost },
+  data () {
+    return {
+      tab: null,
+      menu: false,
+      fav: true,
+      message: false,
+      hints: true,
+      search: '',
+      localAccess: {},
+      vBindOption: {
+        itemKey: 'no_facture',
+        singleExpand: false,
+        showExpand: true
+      }
+    }
+  },
+  computed: {
+    ...mapState('supply', ['showNewModal', 'showEditModal', 'loading', 'showShowModal', 'supplies', 'received', 'isTableLoading']),
+    ...mapState('supplier', ['clientSuppliers']),
+    ...mapState('article', ['articles']),
+    ...mapState('refund', ['showNewModal']),
+    ...mapGetters('auth', ['user', 'access_permit']),
+    getTableColumns () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.supply_state.state.name'),
+          value: 'state',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.to'),
+          value: 'to',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+          value: 'sale.no_facture',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+          value: 'sale.totalCost',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'sale.shop.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+          value: 'actions',
+          sortable: false
+        }
+      ]
+    },
+    getRTableColumns () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.supply_state.state.name'),
+          value: 'state.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.fromData'),
+          value: 'from.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.tax.noFacture'),
+          value: 'sale.no_facture',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.variants.total_cost'),
+          value: 'sale.totalCost',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'sale.shop.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+          value: 'actions',
+          sortable: false
+        }
+      ]
+    }
+  },
+  watch: {
+    loadData: function () {
+      if (this.loadData === true) { this.loadInitData() }
+    }
+  },
+  created () {
+    this.getClientSupplier()
+    this.loadInitData()
+  },
+  methods: {
+    ...mapActions('supply', [
+      'toogleNewModal',
+      'openEditModal',
+      'openShowModal',
+      'getSupplies',
+      'updateSupply',
+      'deleteSupply'
+    ]),
+    ...mapActions('supplier', ['getClientSupplier']),
+    ...mapActions('article', ['getArticles']),
+    ...mapActions('refund', ['openNewModal']),
+    async loadInitData () {
+      await this.getArticles()
+      await this.getSupplies()
+    },
+    refundArticle (supply, article) {
+      if (article.cant === article.cantRefund && this.total_pay(article) === article.moneyRefund) {
+        this.$Swal.fire({
+          title: this.$vuetify.lang.t('$vuetify.actions.refund', [
+            this.$vuetify.lang.t('$vuetify.menu.articles')
+          ]),
+          text: this.$vuetify.lang.t('$vuetify.messages.warning_refund_all'),
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+      } else {
+        this.openNewModal({ supply, article })
+      }
+    },
+    cancelProductPreform (item, art) {
+    },
+    total_pay (item) {
+      let sum = 0
+      item.taxes.forEach((v) => {
+        sum += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+      })
+      let discount = 0
+      item.discount.forEach((v) => {
+        discount += v.percent ? item.cant * item.cost * v.value / 100 : v.value
+      })
+      return item.cant * item.cost + sum - discount - item.moneyRefund
+    },
+    createSupplyHandler () {
+      if (this.articles.length === 0) {
+        this.showMessage(true, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_no_article'
+        ))
+      } else if (this.clientSuppliers.length === 0) {
+        this.showMessage(true, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_no_clients_supplier'
+        ), '/supplier')
+      } else {
+        this.$store.state.supply.managerSupply = false
+        this.$router.push({ name: 'supply_add' })
+      }
+    },
+    editSupplyHandler ($event) {
+      const supply = this.supplies.filter(sp => sp.id === $event)[0]
+      if (supply.state.name === 'cancelled') {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_state_cancelled'
+        ))
+      } else if (supply.state.name !== 'requested') {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_state'
+        ))
+      } else {
+        this.openEditModal($event)
+        this.$store.state.supply.managerSupply = true
+        this.$router.push({ name: 'supply_edit' })
+      }
+    },
+    deleteSupplyHandler ($event) {
+      const supply = this.supplies.filter(sp => sp.id === $event)[0]
+      if (supply.state.name === 'cancelled') {
+        this.$Swal
+          .fire({
+            title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+              this.$vuetify.lang.t('$vuetify.supply.name')
+            ]),
+            text: this.$vuetify.lang.t(
+              '$vuetify.messages.warning_delete'
+            ),
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.cancel'
+            ),
+            confirmButtonText: this.$vuetify.lang.t(
+              '$vuetify.actions.delete'
+            ),
+            confirmButtonColor: 'red'
+          })
+          .then((result) => {
+            if (result.isConfirmed) this.deleteSupply($event)
+          })
+      } else {
+        this.showMessage(false, this.$vuetify.lang.t(
+          '$vuetify.messages.warning_supply_delete'
+        ))
+      }
+    },
+    changeStateHandler (item) {
+      this.updateSupply(item)
+    },
+    showMessage (newM, txt, url) {
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t(newM ? '$vuetify.titles.new' : '$vuetify.titles.edit', [
+            this.$vuetify.lang.t('$vuetify.menu.supply_productS')
+          ]),
+          text: txt,
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.accept'
+          ),
+          confirmButtonColor: 'red'
+        })
+    }
+  }
 }
 </script>
 

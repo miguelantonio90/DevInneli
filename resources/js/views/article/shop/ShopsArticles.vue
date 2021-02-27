@@ -7,14 +7,19 @@
       >
         <v-switch
           v-show="!article.id"
-          v-if="!article.composite "
+          v-if="!article.composite"
           v-model="article.track_inventory"
-          :title="$vuetify.lang.t('$vuetify.articles.track_inventory')"
+          :title="
+            $vuetify.lang.t('$vuetify.articles.track_inventory')
+          "
         >
           <template v-slot:label>
             <div>
               {{
-                $vuetify.lang.t('$vuetify.articles.track_inventory') }}
+                $vuetify.lang.t(
+                  "$vuetify.articles.track_inventory"
+                )
+              }}
               <v-tooltip
                 right
                 class="md-6"
@@ -31,7 +36,9 @@
                 </template>
                 <p>
                   {{
-                    $vuetify.lang.t('$vuetify.messages.warning_article_service')
+                    $vuetify.lang.t(
+                      "$vuetify.messages.warning_article_service"
+                    )
                   }}
                 </p>
               </v-tooltip>
@@ -45,16 +52,12 @@
       :items="article.articles_shops"
     >
       <template v-slot:[`item.personSale`]="{ item }">
-        <v-simple-checkbox
-          v-model="item.personSale"
-        >
+        <v-simple-checkbox v-model="item.personSale">
           />
         </v-simple-checkbox>
       </template>
       <template v-slot:[`item.onlineSale`]="{ item }">
-        <v-simple-checkbox
-          v-model="item.onlineSale"
-        >
+        <v-simple-checkbox v-model="item.onlineSale">
           />
         </v-simple-checkbox>
       </template>
@@ -66,10 +69,12 @@
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         >
-          <div>{{ `${user.company.currency +' '+item.price}` }}</div>
+          <div>
+            {{ `${user.company.currency + " " + item.price}` }}
+          </div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-money
               v-model="item.price"
@@ -82,7 +87,7 @@
               :options="{
                 length: 15,
                 precision: 2,
-                empty: 0.00,
+                empty: 0.0
               }"
             />
           </template>
@@ -96,10 +101,14 @@
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         >
-          <div>{{ `${user.company.currency +' '+item.onlinePrice}` }}</div>
+          <div>
+            {{
+              `${user.company.currency + " " + item.onlinePrice}`
+            }}
+          </div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-money
               v-model="item.onlinePrice"
@@ -112,7 +121,7 @@
               :options="{
                 length: 15,
                 precision: 2,
-                empty: 0.00,
+                empty: 0.0
               }"
             />
           </template>
@@ -129,19 +138,19 @@
           <div>{{ item.stock }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-integer
               v-model="item.stock"
-              :label="$vuetify.lang.t('$vuetify.actions.save') "
+              :label="$vuetify.lang.t('$vuetify.actions.save')"
               :properties="{
-                clearable: true,
+                clearable: true
               }"
               :options="{
                 inputMask: '#########',
                 outputMask: '#########',
                 empty: 1,
-                applyAfter: false,
+                applyAfter: false
               }"
             />
           </template>
@@ -158,19 +167,19 @@
           <div>{{ item.under_inventory }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-integer
               v-model="item.under_inventory"
-              :label="$vuetify.lang.t('$vuetify.actions.save') "
+              :label="$vuetify.lang.t('$vuetify.actions.save')"
               :properties="{
-                clearable: true,
+                clearable: true
               }"
               :options="{
                 inputMask: '#########',
                 outputMask: '#########',
                 empty: 1,
-                applyAfter: false,
+                applyAfter: false
               }"
             />
           </template>
@@ -200,73 +209,76 @@
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'ShopsArticles',
-	props: {
-		article: {
-			type: Object,
-			default: function () {
-				return {}
-			}
-		}
-	},
-	data () {
-		return {
-			snack: false,
-			snackColor: '',
-			snackText: '',
-			pagination: {}
-		}
-	},
-	computed: {
-		...mapGetters('auth', ['user']),
-		getHeader () {
-			let headers = []
-			headers = [
-				{
-					text: this.$vuetify.lang.t('$vuetify.menu.shop'),
-					value: 'shop_name'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.shop_article.person_sale'),
-					value: 'personSale'
-				}
-			]
-			if (!this.article.composite && this.article.variant_values.length > 0) {
-				headers.push({
-					text: this.$vuetify.lang.t('$vuetify.variants.variant'),
-					value: 'name'
-				})
-			}
-			headers.push({
-				text: this.$vuetify.lang.t('$vuetify.variants.price'),
-				value: 'price'
-			})
-			headers.push(
-				{
-					text: this.$vuetify.lang.t('$vuetify.articles.onlineSale'),
-					value: 'onlineSale'
-				})
-			headers.push({
-				text: this.$vuetify.lang.t('$vuetify.onlinePrice'),
-				value: 'onlinePrice'
-			})
-			if (this.article.track_inventory) {
-				headers.push({
-					text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
-					value: 'stock'
-				})
-				headers.push({
-					text: this.$vuetify.lang.t('$vuetify.shop_article.under_inventory'),
-					value: 'under_inventory'
-				})
-			}
-			return headers
-		}
-	},
-	created () {
-	}
+  name: 'ShopsArticles',
+  props: {
+    article: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  },
+  data () {
+    return {
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      pagination: {}
+    }
+  },
+  computed: {
+    ...mapGetters('auth', ['user']),
+    getHeader () {
+      let headers = []
+      headers = [
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.shop'),
+          value: 'shop_name'
+        },
+        {
+          text: this.$vuetify.lang.t(
+            '$vuetify.shop_article.person_sale'
+          ),
+          value: 'personSale'
+        }
+      ]
+      if (
+        !this.article.composite &&
+                this.article.variant_values.length > 0
+      ) {
+        headers.push({
+          text: this.$vuetify.lang.t('$vuetify.variants.variant'),
+          value: 'name'
+        })
+      }
+      headers.push({
+        text: this.$vuetify.lang.t('$vuetify.variants.price'),
+        value: 'price'
+      })
+      headers.push({
+        text: this.$vuetify.lang.t('$vuetify.articles.onlineSale'),
+        value: 'onlineSale'
+      })
+      headers.push({
+        text: this.$vuetify.lang.t('$vuetify.onlinePrice'),
+        value: 'onlinePrice'
+      })
+      if (this.article.track_inventory) {
+        headers.push({
+          text: this.$vuetify.lang.t('$vuetify.shop_article.stock'),
+          value: 'stock'
+        })
+        headers.push({
+          text: this.$vuetify.lang.t(
+            '$vuetify.shop_article.under_inventory'
+          ),
+          value: 'under_inventory'
+        })
+      }
+      return headers
+    }
+  },
+  created () {}
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

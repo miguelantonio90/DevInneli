@@ -27,8 +27,8 @@ class ConfigManager extends BaseManager
                 ->with('shop')
                 ->get();
         }
-        foreach ($configs as $key=>$config){
-            $config['images']= ArticleImage::latest()->where('shop_id', '=',$config['shop_id'])->get();
+        foreach ($configs as $key => $config) {
+            $config['images'] = ArticleImage::latest()->where('shop_id', '=', $config['shop_id'])->get();
         }
 
         return $configs;
@@ -37,10 +37,11 @@ class ConfigManager extends BaseManager
     /**
      *
      */
-    public static function findConfigById($shopId){
+    public static function findConfigById($shopId)
+    {
         return OnlineConfig::latest()
-                ->where('shop_id', '=', $shopId)
-                ->first();
+            ->where('shop_id', '=', $shopId)
+            ->first();
     }
 
     /**
@@ -52,15 +53,15 @@ class ConfigManager extends BaseManager
     {
         $shop = OnlineConfig::create([
             'company_id' => $data['company_id'],
-            'shop_id'=> $data['shop']['id'],
-            'template'=> $data['template']['name']
+            'shop_id' => $data['shop']['id'],
+            'template' => $data['template']['name']
         ]);
-        foreach ($data['images'] as $k=>$image){
+        foreach ($data['images'] as $k => $image) {
             $articleImage = ArticleImage::create([
                 'name' => $image['name'],
                 'path' => $image['path'],
                 'default' => $image['default'],
-                ]);
+            ]);
             $articleImage->shop_id = $data['shop']['id'];
             $articleImage->save();
         }

@@ -1,21 +1,21 @@
 <template>
   <v-container>
-    <b>{{ $vuetify.lang.t('$vuetify.menu.refund') }}</b>
+    <b>{{ $vuetify.lang.t("$vuetify.menu.refund") }}</b>
     <v-simple-table dense>
       <template v-slot:default>
         <thead>
           <tr>
             <th class="text-left">
-              {{ $vuetify.lang.t('$vuetify.created_by') }}
+              {{ $vuetify.lang.t("$vuetify.created_by") }}
             </th>
             <th class="text-left">
-              {{ $vuetify.lang.t('$vuetify.date') }}
+              {{ $vuetify.lang.t("$vuetify.date") }}
             </th>
             <th class="text-left">
-              {{ $vuetify.lang.t('$vuetify.variants.cant') }}
+              {{ $vuetify.lang.t("$vuetify.variants.cant") }}
             </th>
             <th class="text-left">
-              {{ $vuetify.lang.t('$vuetify.payment.cash') }}
+              {{ $vuetify.lang.t("$vuetify.payment.cash") }}
             </th>
           </tr>
         </thead>
@@ -34,7 +34,7 @@
               {{ refund.cant }}
             </td>
             <td>
-              {{ `${currency + ' ' +refund.money}` }}
+              {{ `${currency + " " + refund.money}` }}
             </td>
           </tr>
         </tbody>
@@ -44,13 +44,21 @@
               colspan="2"
               class="text-center"
             >
-              <b>{{ $vuetify.lang.t('$vuetify.pay.total') }}</b>
+              <b>{{ $vuetify.lang.t("$vuetify.pay.total") }}</b>
             </td>
             <td style="color: red">
-              <b>{{ parseFloat(localArticle.cantRefund).toFixed(2) }}</b>
+              <b>{{
+                parseFloat(localArticle.cantRefund).toFixed(2)
+              }}</b>
             </td>
             <td style="color: red">
-              <b>{{ `${currency + ' ' +parseFloat(localArticle.moneyRefund).toFixed(2)}` }}</b>
+              <b>{{
+                `${currency +
+                  " " +
+                  parseFloat(
+                    localArticle.moneyRefund
+                  ).toFixed(2)}`
+              }}</b>
             </td>
           </tr>
         </tfoot>
@@ -60,26 +68,26 @@
 </template>
 <script>
 export default {
-	name: 'DetailRefund',
-	props: {
-		article: {
-			type: Object,
-			default: () => {}
-		},
-		currency: {
-			type: String,
-			default: ''
-		}
-	},
-	data () {
-		return {
-			localArticle: {}
-		}
-	},
-	mounted () {
-		this.localArticle = this.article
-	}
+  name: 'DetailRefund',
+  props: {
+    article: {
+      type: Object,
+      default: () => {}
+    },
+    currency: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      localArticle: {}
+    }
+  },
+  mounted () {
+    this.localArticle = this.article
+  }
 }
 </script>
 
-  <style scoped />
+<style scoped />

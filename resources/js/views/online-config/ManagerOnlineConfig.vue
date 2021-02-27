@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <span class="headline">
-        {{ $vuetify.lang.t('$vuetify.menu.shop_online') }}
+        {{ $vuetify.lang.t("$vuetify.menu.shop_online") }}
       </span>
     </v-card-title>
     <v-card-text>
@@ -13,21 +13,25 @@
             :editable="formValid"
             step="1"
           >
-            {{ $vuetify.lang.t('$vuetify.panel.basic') }}
+            {{ $vuetify.lang.t("$vuetify.panel.basic") }}
           </v-stepper-step>
           <v-divider />
           <v-stepper-step
             :step="2"
             editable
           >
-            {{ $vuetify.lang.t('$vuetify.representation.representation') }}
+            {{
+              $vuetify.lang.t(
+                "$vuetify.representation.representation"
+              )
+            }}
           </v-stepper-step>
           <v-divider />
           <v-stepper-step
             :step="3"
             editable
           >
-            {{ $vuetify.lang.t('$vuetify.online.credits_pay') }}
+            {{ $vuetify.lang.t("$vuetify.online.credits_pay") }}
           </v-stepper-step>
         </v-stepper-header>
 
@@ -53,7 +57,11 @@
                         rounded
                         :disabled="managerConfig"
                         :items="shopsNoConfig"
-                        :label="$vuetify.lang.t('$vuetify.menu.shop')"
+                        :label="
+                          $vuetify.lang.t(
+                            '$vuetify.menu.shop'
+                          )
+                        "
                         item-text="name"
                         :loading="isShopLoading"
                         return-object
@@ -70,7 +78,11 @@
                         v-model="config.template"
                         rounded
                         :items="templates"
-                        :label="$vuetify.lang.t('$vuetify.online.template')"
+                        :label="
+                          $vuetify.lang.t(
+                            '$vuetify.online.template'
+                          )
+                        "
                         item-text="name"
                         :loading="isShopLoading"
                         return-object
@@ -81,7 +93,7 @@
                   </v-row>
                   <v-row>
                     <v-col
-                      v-for="(n,i) in templateView[0]"
+                      v-for="(n, i) in templateView[0]"
                       :key="i"
                       class="d-flex child-flex"
                       cols="6"
@@ -115,7 +127,9 @@
                   :disabled="!formValid || isShopLoading"
                   @click="step = 2"
                 >
-                  {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.next")
+                  }}
                   <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
                 <v-spacer />
@@ -123,10 +137,16 @@
                 <v-btn
                   class="mb-2"
                   :disabled="isShopLoading"
-                  @click="$router.push({name:'product_list'})"
+                  @click="
+                    $router.push({ name: 'product_list' })
+                  "
                 >
                   <v-icon>mdi-close</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                  {{
+                    $vuetify.lang.t(
+                      "$vuetify.actions.cancel"
+                    )
+                  }}
                 </v-btn>
                 <v-btn
                   class="mb-2"
@@ -135,7 +155,9 @@
                   :loading="isShopLoading"
                   @click="managerConfigHandler"
                 >
-                  {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.save")
+                  }}
                   <v-icon>mdi-check</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -153,27 +175,37 @@
               <v-card-actions>
                 <v-btn
                   text
-                  @click="step=2"
+                  @click="step = 2"
                 >
                   <v-icon>mdi-chevron-left</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.back")
+                  }}
                 </v-btn>
                 <v-btn
                   color="primary"
                   :disabled="!formValid || isShopLoading"
                   @click="step = 3"
                 >
-                  {{ $vuetify.lang.t('$vuetify.actions.next') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.next")
+                  }}
                   <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
                 <v-spacer />
                 <v-btn
                   class="mb-2"
                   :disabled="isShopLoading"
-                  @click="$router.push({name:'product_list'})"
+                  @click="
+                    $router.push({ name: 'product_list' })
+                  "
                 >
                   <v-icon>mdi-close</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                  {{
+                    $vuetify.lang.t(
+                      "$vuetify.actions.cancel"
+                    )
+                  }}
                 </v-btn>
                 <v-btn
                   class="mb-2"
@@ -183,7 +215,9 @@
                   @click="managerConfigHandler"
                 >
                   <v-icon>mdi-check</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.save")
+                  }}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -197,8 +231,15 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="config.credentials.paypal.client_id"
-                      :label="$vuetify.lang.t('$vuetify.online.paypal_client_id')"
+                      v-model="
+                        config.credentials.paypal
+                          .client_id
+                      "
+                      :label="
+                        $vuetify.lang.t(
+                          '$vuetify.online.paypal_client_id'
+                        )
+                      "
                       :rules="formRule.required"
                       required
                       autofocus
@@ -209,8 +250,15 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="config.credentials.paypal.paypal_secret"
-                      :label="$vuetify.lang.t('$vuetify.online.paypal_secret')"
+                      v-model="
+                        config.credentials.paypal
+                          .paypal_secret
+                      "
+                      :label="
+                        $vuetify.lang.t(
+                          '$vuetify.online.paypal_secret'
+                        )
+                      "
                       :rules="formRule.required"
                       required
                       autofocus
@@ -221,19 +269,27 @@
               <v-card-actions>
                 <v-btn
                   text
-                  @click="step=1"
+                  @click="step = 1"
                 >
                   <v-icon>mdi-chevron-left</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.back') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.back")
+                  }}
                 </v-btn>
                 <v-spacer />
                 <v-btn
                   class="mb-2"
                   :disabled="isShopLoading"
-                  @click="$router.push({name:'product_list'})"
+                  @click="
+                    $router.push({ name: 'product_list' })
+                  "
                 >
                   <v-icon>mdi-close</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+                  {{
+                    $vuetify.lang.t(
+                      "$vuetify.actions.cancel"
+                    )
+                  }}
                 </v-btn>
                 <v-btn
                   class="mb-2"
@@ -243,7 +299,9 @@
                   @click="managerConfigHandler"
                 >
                   <v-icon>mdi-check</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.actions.save') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.save")
+                  }}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -257,55 +315,59 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: 'ManagerOnlineConfig',
-	data () {
-		return {
-			formValid: false,
-			step: 1,
-			formRule: this.$rules,
-			templateView: [[{
-				src: require('../shops-templates/shipit/assets/template/1.jpg')
-			}, {
-				src: require('../shops-templates/shipit/assets/template/2.jpg')
-			}]],
-			templates: [{
-				name: 'ShipIT'
-			}],
-			config: {}
-		}
-	},
-	computed: {
-		...mapState('shop', ['shopsNoConfig', 'isShopLoading']),
-		...mapState('online', ['newConfig', 'editConfig', 'managerConfig'])
-	},
-	async created () {
-		if (!this.managerConfig) {
-			await this.getShopsNoConfig()
-			this.config = this.newConfig
-			this.config.shop = this.shopsNoConfig[0]
-			this.config.template = this.templates[0]
-		} else {
-			this.config = this.editConfig
-		}
-	},
-	methods: {
-		...mapActions('shop', ['getShopsNoConfig']),
-		...mapActions('online', ['createConfig', 'updateConfig']),
-		uploadImage (formData, index, fileList) {
-			this.config.images = fileList
-			console.log(fileList)
-		},
-		managerConfigHandler () {
-			if (this.managerConfig) {
-				this.updateConfig(this.config)
-			} else {
-				this.createConfig(this.config)
-			}
-		}
-	}
+  name: 'ManagerOnlineConfig',
+  data () {
+    return {
+      formValid: false,
+      step: 1,
+      formRule: this.$rules,
+      templateView: [
+        [
+          {
+            src: require('../shops-templates/shipit/assets/template/1.jpg')
+          },
+          {
+            src: require('../shops-templates/shipit/assets/template/2.jpg')
+          }
+        ]
+      ],
+      templates: [
+        {
+          name: 'ShipIT'
+        }
+      ],
+      config: {}
+    }
+  },
+  computed: {
+    ...mapState('shop', ['shopsNoConfig', 'isShopLoading']),
+    ...mapState('online', ['newConfig', 'editConfig', 'managerConfig'])
+  },
+  async created () {
+    if (!this.managerConfig) {
+      await this.getShopsNoConfig()
+      this.config = this.newConfig
+      this.config.shop = this.shopsNoConfig[0]
+      this.config.template = this.templates[0]
+    } else {
+      this.config = this.editConfig
+    }
+  },
+  methods: {
+    ...mapActions('shop', ['getShopsNoConfig']),
+    ...mapActions('online', ['createConfig', 'updateConfig']),
+    uploadImage (formData, index, fileList) {
+      this.config.images = fileList
+    },
+    managerConfigHandler () {
+      if (this.managerConfig) {
+        this.updateConfig(this.config)
+      } else {
+        this.createConfig(this.config)
+      }
+    }
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -36,28 +36,28 @@
 
 <script>
 export default {
-	name: 'MiniStatistic',
-	props: {
-		disabled: {
-			type: Boolean,
-			default: false
-		},
-		icon: {
-			type: String,
-			default: ''
-		},
-		title: {
-			type: String,
-			default: ''
-		},
-		subTitle: {
-			type: String,
-			default: ''
-		},
-		color: {
-			type: String,
-			default: ''
-		}
-	}
+  name: 'MiniStatistic',
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    subTitle: {
+      type: String,
+      default: ''
+    },
+    color: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>

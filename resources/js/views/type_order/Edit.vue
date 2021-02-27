@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.type_of_order'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.type_of_order")
           ])
         }}</span>
       </v-card-title>
@@ -58,16 +58,27 @@
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template
+                      v-slot:activator="{ on, attrs }"
+                    >
                       <v-icon
                         v-bind="attrs"
                         v-on="on"
-                        @click="$store.dispatch('shop/toogleNewModal',true)"
+                        @click="
+                          $store.dispatch(
+                            'shop/toogleNewModal',
+                            true
+                          )
+                        "
                       >
                         mdi-plus
                       </v-icon>
                     </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                    <span>{{
+                      $vuetify.lang.t(
+                        "$vuetify.titles.newAction"
+                      )
+                    }}</span>
                   </v-tooltip>
                 </template>
               </v-select>
@@ -82,7 +93,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -91,7 +102,7 @@
           @click="handleSubmit"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -102,33 +113,31 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-
-	data () {
-		return {
-			formValid: false,
-			errorPhone: null,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('typeOrder', ['editOrder', 'isActionInProgress']),
-		...mapState('shop', ['shops', 'isShopLoading'])
-	},
-	created () {
-		this.formValid = false
-		this.getShops()
-	},
-	methods: {
-		...mapActions('typeOrder', ['updateTypeOrder', 'toogleEditModal']),
-		...mapActions('shop', ['getShops']),
-		async handleSubmit () {
-			if (this.$refs.form.validate()) {
-				await this.updateTypeOrder(this.editOrder)
-			}
-		}
-	}
+  data () {
+    return {
+      formValid: false,
+      errorPhone: null,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('typeOrder', ['editOrder', 'isActionInProgress']),
+    ...mapState('shop', ['shops', 'isShopLoading'])
+  },
+  created () {
+    this.formValid = false
+    this.getShops()
+  },
+  methods: {
+    ...mapActions('typeOrder', ['updateTypeOrder', 'toogleEditModal']),
+    ...mapActions('shop', ['getShops']),
+    async handleSubmit () {
+      if (this.$refs.form.validate()) {
+        await this.updateTypeOrder(this.editOrder)
+      }
+    }
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

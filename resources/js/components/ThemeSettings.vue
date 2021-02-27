@@ -91,124 +91,124 @@ import colors from 'vuetify/es5/util/colors'
 import localStorage from '../config/localStorage'
 
 export default {
-	data () {
-		return {
-			themeColor: localStorage.getTheme() || 'indigo',
-			sideBarOption: 'light',
-			colors: colors
-		}
-	},
-	computed: {
-		themeColorOptions () {
-			return [
-				{
-					key: 'blue',
-					value: {
-						sideNav: 'blue',
-						mainNav: 'blue',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'teal',
-					value: {
-						sideNav: 'teal',
-						mainNav: 'teal',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'red',
-					value: {
-						sideNav: 'red',
-						mainNav: 'red',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'orange',
-					value: {
-						sideNav: 'orange',
-						mainNav: 'orange',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'purple',
-					value: {
-						sideNav: 'purple',
-						mainNav: 'purple',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'indigo',
-					value: {
-						sideNav: 'indigo',
-						mainNav: 'indigo',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'cyan',
-					value: {
-						sideNav: 'cyan',
-						mainNav: 'cyan',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'pink',
-					value: {
-						sideNav: 'pink',
-						mainNav: 'pink',
-						sideMenu: 'white'
-					}
-				},
-				{
-					key: 'green',
-					value: {
-						sideNav: 'green',
-						mainNav: 'green',
-						sideMenu: 'white'
-					}
-				}
-			]
-		},
-		availableLanguages () {
-			const { locales } = this.$vuetify.lang
-			return Object.keys(locales).map((lang) => {
-				return {
-					text: locales[lang].label,
-					value: lang
-				}
-			})
-		}
-	},
-	watch: {
-		themeColor: {
-			handler (val) {
-				this.$vuetify.theme.themes.light.primary = this.colors[val].base
-				localStorage.setTheme(val)
-			},
-			immediate: true
-		},
-		sideBarOption: {
-			handler (val) {
-				this.$vuetify.theme.dark = val === 'dark'
-			},
-			immediate: true
-		},
-		updateTheme () {
-		}
-	},
-	methods: {
-		changeLocale (lang) {
-			this.$vuetify.lang.current = lang
-			localStorage.setLanguage(lang)
-			window.location.reload()
-		}
-	}
+  data () {
+    return {
+      themeColor: localStorage.getTheme() || 'indigo',
+      sideBarOption: 'light',
+      colors: colors
+    }
+  },
+  computed: {
+    themeColorOptions () {
+      return [
+        {
+          key: 'blue',
+          value: {
+            sideNav: 'blue',
+            mainNav: 'blue',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'teal',
+          value: {
+            sideNav: 'teal',
+            mainNav: 'teal',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'red',
+          value: {
+            sideNav: 'red',
+            mainNav: 'red',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'orange',
+          value: {
+            sideNav: 'orange',
+            mainNav: 'orange',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'purple',
+          value: {
+            sideNav: 'purple',
+            mainNav: 'purple',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'indigo',
+          value: {
+            sideNav: 'indigo',
+            mainNav: 'indigo',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'cyan',
+          value: {
+            sideNav: 'cyan',
+            mainNav: 'cyan',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'pink',
+          value: {
+            sideNav: 'pink',
+            mainNav: 'pink',
+            sideMenu: 'white'
+          }
+        },
+        {
+          key: 'green',
+          value: {
+            sideNav: 'green',
+            mainNav: 'green',
+            sideMenu: 'white'
+          }
+        }
+      ]
+    },
+    availableLanguages () {
+      const { locales } = this.$vuetify.lang
+      return Object.keys(locales).map((lang) => {
+        return {
+          text: locales[lang].label,
+          value: lang
+        }
+      })
+    }
+  },
+  watch: {
+    themeColor: {
+      handler (val) {
+        this.$vuetify.theme.themes.light.primary = this.colors[val].base
+        localStorage.setTheme(val)
+      },
+      immediate: true
+    },
+    sideBarOption: {
+      handler (val) {
+        this.$vuetify.theme.dark = val === 'dark'
+      },
+      immediate: true
+    },
+    updateTheme () {
+    }
+  },
+  methods: {
+    changeLocale (lang) {
+      this.$vuetify.lang.current = lang
+      localStorage.setLanguage(lang)
+      window.location.reload()
+    }
+  }
 }
 </script>
 <style lang="sass" scoped>

@@ -6,8 +6,11 @@
         cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.client'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.client')
+            ])
+          "
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="clients"
@@ -26,20 +29,33 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.company.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.firstName`]="{ item }"
-          >
+          <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
-              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+              <v-img
+                :src="
+                  item.avatar ||
+                    `/assets/avatar/avatar-undefined.jpg`
+                "
+              />
             </v-avatar>
             {{ item.firstName }}
           </template>
@@ -69,53 +85,48 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-	data () {
-		return {
-			search: ''
-		}
-	},
-	computed: {
-		...mapState('client', [
-			'clients',
-			'isTableLoading'
-		]),
-		...mapGetters('statics', ['arrayCountry']),
-		getTableColumns () {
-			return [
-				{
-					text: this.$vuetify.lang.t('$vuetify.company'),
-					value: 'company.name'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.firstName'),
-					value: 'firstName',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.lastName'),
-					value: 'lastName',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.email'),
-					value: 'email'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.country'),
-					value: 'nameCountry',
-					select_filter: true
-				}
-			]
-		}
-	},
-	created () {
-		this.getClients()
-	},
-	methods: {
-		...mapActions('client', [
-			'getClients'
-		])
-	}
+  data () {
+    return {
+      search: ''
+    }
+  },
+  computed: {
+    ...mapState('client', ['clients', 'isTableLoading']),
+    ...mapGetters('statics', ['arrayCountry']),
+    getTableColumns () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.company'),
+          value: 'company.name'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.firstName'),
+          value: 'firstName',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.lastName'),
+          value: 'lastName',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.email'),
+          value: 'email'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.country'),
+          value: 'nameCountry',
+          select_filter: true
+        }
+      ]
+    }
+  },
+  created () {
+    this.getClients()
+  },
+  methods: {
+    ...mapActions('client', ['getClients'])
+  }
 }
 </script>
 

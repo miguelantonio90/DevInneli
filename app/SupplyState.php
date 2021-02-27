@@ -20,6 +20,7 @@ class SupplyState extends Model
 {
     use Uuid;
     use SoftDeletes, SoftCascadeTrait;
+
     public $incrementing = false;
     protected $dates = ['deleted_at'];
     protected $keyType = 'string';

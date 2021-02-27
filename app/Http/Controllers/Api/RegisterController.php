@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Box;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Position;
@@ -583,7 +582,7 @@ class RegisterController extends Controller
                     ]
                 ]);
                 $atm->save();
-                $user->isSupplier = count(Supplier::latest()->where('email','=', $user['email'])->get()) > 0;
+                $user->isSupplier = count(Supplier::latest()->where('email', '=', $user['email'])->get()) > 0;
                 $user->save();
                 $response = $user;
             }

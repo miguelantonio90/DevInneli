@@ -45,71 +45,71 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-	name: 'ListAdmin',
-	data () {
-		return {
-			search: ''
-		}
-	},
-	computed: {
-		...mapState('expenseCategory', [
-			'categories',
-			'isTableLoading'
-		]),
-		...mapGetters('statics', ['arrayCountry']),
-		getTableColumns () {
-			return [{
-				text: this.$vuetify.lang.t('$vuetify.company'),
-				value: 'company.name',
-				select_filter: true
-			},
-			{
-				text: this.$vuetify.lang.t('$vuetify.firstName'),
-				value: 'name',
-				select_filter: true
-			},
-			{
-				text: this.$vuetify.lang.t('$vuetify.access.description'),
-				value: 'description'
-			}
-			]
-		}
-	},
-	created () {
-		this.getExpenseCategories()
-	},
-	methods: {
-		...mapActions('expenseCategory', [
-			'toogleNewModal',
-			'openEditModal',
-			'openShowModal',
-			'getExpenseCategories',
-			'deleteCategory'
-		]),
-		deleteCategoryHandler (categoryId) {
-			this.$Swal
-				.fire({
-					title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-						this.$vuetify.lang.t('$vuetify.menu.expense_category')
-					]),
-					text: this.$vuetify.lang.t(
-						'$vuetify.messages.warning_delete'
-					),
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.cancel'
-					),
-					confirmButtonText: this.$vuetify.lang.t(
-						'$vuetify.actions.delete'
-					),
-					confirmButtonColor: 'red'
-				})
-				.then((result) => {
-					if (result.value) this.deleteCategory(categoryId)
-				})
-		}
-	}
+  name: 'ListAdmin',
+  data () {
+    return {
+      search: ''
+    }
+  },
+  computed: {
+    ...mapState('expenseCategory', [
+      'categories',
+      'isTableLoading'
+    ]),
+    ...mapGetters('statics', ['arrayCountry']),
+    getTableColumns () {
+      return [{
+        text: this.$vuetify.lang.t('$vuetify.company'),
+        value: 'company.name',
+        select_filter: true
+      },
+      {
+        text: this.$vuetify.lang.t('$vuetify.firstName'),
+        value: 'name',
+        select_filter: true
+      },
+      {
+        text: this.$vuetify.lang.t('$vuetify.access.description'),
+        value: 'description'
+      }
+      ]
+    }
+  },
+  created () {
+    this.getExpenseCategories()
+  },
+  methods: {
+    ...mapActions('expenseCategory', [
+      'toogleNewModal',
+      'openEditModal',
+      'openShowModal',
+      'getExpenseCategories',
+      'deleteCategory'
+    ]),
+    deleteCategoryHandler (categoryId) {
+      this.$Swal
+        .fire({
+          title: this.$vuetify.lang.t('$vuetify.titles.delete', [
+            this.$vuetify.lang.t('$vuetify.menu.expense_category')
+          ]),
+          text: this.$vuetify.lang.t(
+            '$vuetify.messages.warning_delete'
+          ),
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.cancel'
+          ),
+          confirmButtonText: this.$vuetify.lang.t(
+            '$vuetify.actions.delete'
+          ),
+          confirmButtonColor: 'red'
+        })
+        .then((result) => {
+          if (result.value) this.deleteCategory(categoryId)
+        })
+    }
+  }
 }
 </script>
 

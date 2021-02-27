@@ -136,29 +136,28 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	data () {
-		return {
-			activeBtn: 1
-		}
-	},
-	computed: {
-		...mapState('category', [
-			'categories',
-			'isTableLoading'
-		]),
-		...mapState('shop', ['shopData'])
-	},
-	async created () {
-		await this.getShopData(this.$route.params).then(() => {
+  data () {
+    return {
+      activeBtn: 1
+    }
+  },
+  computed: {
+    ...mapState('category', [
+      'categories',
+      'isTableLoading'
+    ]),
+    ...mapState('shop', ['shopData'])
+  },
+  async created () {
+    await this.getShopData(this.$route.params).then(() => {
 		    if (!this.shopData.shop) {
-				this.$router.push({ name: '404' })
-			}
-		})
-		console.log(this.shopData.shop)
-	},
-	methods: {
-		...mapActions('category', ['getCategories', 'getCategoriesShop']),
-		...mapActions('shop', ['getShopData'])
-	}
+        this.$router.push({ name: '404' })
+      }
+    })
+  },
+  methods: {
+    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
+    ...mapActions('shop', ['getShopData'])
+  }
 }
 </script>

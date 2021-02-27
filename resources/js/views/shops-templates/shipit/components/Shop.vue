@@ -139,44 +139,42 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	data: () => ({
-		page: 0,
-		localArticles: [],
-		localCategories: [],
-		min: 0,
-		max: 10000
-	}),
-	computed: {
-		...mapState('shop', ['shopData'])
-	},
-	async created () {
-		await this.getShopData(this.$route.params).then(() => {
+  data: () => ({
+    page: 0,
+    localArticles: [],
+    localCategories: [],
+    min: 0,
+    max: 10000
+  }),
+  computed: {
+    ...mapState('shop', ['shopData'])
+  },
+  async created () {
+    await this.getShopData(this.$route.params).then(() => {
 		    this.localArticles = this.shopData.articles
 		    this.localCategories = this.shopData.categories
-		}).catch((error) => {
-		    console.log(error)
+    }).catch((error) => {
 		    if (error === 500) { this.$router.push({ name: '404' }) }
-		})
-		console.log(this.shopData)
-	},
-	methods: {
-		...mapActions('category', ['getCategories', 'getCategoriesShop']),
-		...mapActions('shop', ['getShopData']),
-		goToProduct (article) {
-			this.$router.push({
-				name: 'Product',
-				params: {
-					compName: this.$route.params.compName,
-					shopName: this.$route.params.shopName,
-					article: article
-				}
-			})
-		},
-		filterArticles (category) {
+    })
+  },
+  methods: {
+    ...mapActions('category', ['getCategories', 'getCategoriesShop']),
+    ...mapActions('shop', ['getShopData']),
+    goToProduct (article) {
+      this.$router.push({
+        name: 'Product',
+        params: {
+          compName: this.$route.params.compName,
+          shopName: this.$route.params.shopName,
+          article: article
+        }
+      })
+    },
+    filterArticles (category) {
 		    this.localArticles = this.shopData.articles.filter(art => art.category_id === category.id)
-			this.page = 0
-		}
-	}
+      this.page = 0
+    }
+  }
 }
 </script>
 <style>

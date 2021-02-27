@@ -51,6 +51,7 @@ class SalesArticlesShops extends Model
 
     public function modifier(): BelongsToMany
     {
-        return $this->belongsToMany(Modifiers::class, 'sales_articles_shop_modifiers', 'sales_articles_shops_id','modifier_id');
+        return $this->belongsToMany(Modifiers::class, 'sales_articles_shop_modifiers', 'sales_articles_shops_id',
+            'modifier_id');
     }
 }

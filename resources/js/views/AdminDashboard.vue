@@ -112,71 +112,71 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'AdminDashboard',
-	data () {
-		return {
-			cantArticles: 0,
-			cantShops: 0,
-			cantEmployers: 0
-		}
-	},
-	computed: {
-		...mapState('company', [
-			'companies',
-			'isActionInProgress'
-		]),
-		...mapGetters('statics', ['arrayCountry']),
-		getTableColumns () {
-			return [
-				{
-					text: this.$vuetify.lang.t('$vuetify.company'),
-					value: 'name',
-					select_filter: true
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.country'),
-					value: 'country'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.email'),
-					value: 'email'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.currency'),
-					value: 'currency'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.phone'),
-					value: 'phone'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.menu.employee'),
-					value: 'employers'
-				},
-				{
-					text: this.$vuetify.lang.t('$vuetify.menu.supplier'),
-					value: 'suppliers'
-				}
-			]
-		}
-	},
-	watch: {
-		companies: function () {
-			this.cantEmployers = 0
-			this.cantShops = 0
-			this.cantArticles = 0
-			this.companies.forEach((v) => {
-				this.cantEmployers += v.employers.length
-				this.cantShops += v.shops.length
-				this.cantArticles += v.articles.length
-			})
-		}
-	},
-	created () {
-		this.getCompanies()
-	},
-	methods: {
-		...mapActions('company', ['getCompanies'])
-	}
+  name: 'AdminDashboard',
+  data () {
+    return {
+      cantArticles: 0,
+      cantShops: 0,
+      cantEmployers: 0
+    }
+  },
+  computed: {
+    ...mapState('company', [
+      'companies',
+      'isActionInProgress'
+    ]),
+    ...mapGetters('statics', ['arrayCountry']),
+    getTableColumns () {
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.company'),
+          value: 'name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.country'),
+          value: 'country'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.email'),
+          value: 'email'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.currency'),
+          value: 'currency'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.phone'),
+          value: 'phone'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.employee'),
+          value: 'employers'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.supplier'),
+          value: 'suppliers'
+        }
+      ]
+    }
+  },
+  watch: {
+    companies: function () {
+      this.cantEmployers = 0
+      this.cantShops = 0
+      this.cantArticles = 0
+      this.companies.forEach((v) => {
+        this.cantEmployers += v.employers.length
+        this.cantShops += v.shops.length
+        this.cantArticles += v.articles.length
+      })
+    }
+  },
+  created () {
+    this.getCompanies()
+  },
+  methods: {
+    ...mapActions('company', ['getCompanies'])
+  }
 }
 </script>

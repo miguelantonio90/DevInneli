@@ -4,7 +4,7 @@
 
 <script>
 export default {
-	name: 'CheckOutDialog'
+  name: 'CheckOutDialog'
 }
 </script>
 

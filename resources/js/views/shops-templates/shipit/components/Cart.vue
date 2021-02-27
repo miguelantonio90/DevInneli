@@ -228,25 +228,25 @@
 </template>
 <script>
 export default {
-	data: () => ({
-		rating: 4.5,
-		breadcrums: [
-			{
-				text: 'Home',
-				disabled: false,
-				href: 'breadcrumbs_home'
-			},
-			{
-				text: 'Clothing',
-				disabled: false,
-				href: 'breadcrumbs_clothing'
-			},
-			{
-				text: 'T-Shirts',
-				disabled: true,
-				href: 'breadcrumbs_shirts'
-			}
-		]
-	})
+  data: () => ({
+    rating: 4.5,
+    breadcrums: [
+      {
+        text: 'Home',
+        disabled: false,
+        href: 'breadcrumbs_home'
+      },
+      {
+        text: 'Clothing',
+        disabled: false,
+        href: 'breadcrumbs_clothing'
+      },
+      {
+        text: 'T-Shirts',
+        disabled: true,
+        href: 'breadcrumbs_shirts'
+      }
+    ]
+  })
 }
 </script>

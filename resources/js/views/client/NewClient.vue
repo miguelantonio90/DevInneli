@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.client'),
+          $vuetify.lang.t("$vuetify.titles.new", [
+            $vuetify.lang.t("$vuetify.menu.client")
           ])
         }}</span>
       </v-card-title>
@@ -27,7 +27,11 @@
             >
               <avatar-picker
                 :image-src="getAvatar"
-                :image-style="{ 'border-radius': '50%','height':'80px','width':'80px' }"
+                :image-style="{
+                  'border-radius': '50%',
+                  height: '80px',
+                  width: '80px'
+                }"
                 class="profile mx-auto d-block"
                 @input="onChangeImage($event)"
               />
@@ -71,14 +75,22 @@
             >
               <vue-tel-input-vuetify
                 v-model="newClient.phone"
-                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
+                :placeholder="
+                  $vuetify.lang.t('$vuetify.phone_holder')
+                "
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
                 :rules="formRule.phone"
-                :select-label="$vuetify.lang.t('$vuetify.country')"
+                :select-label="
+                  $vuetify.lang.t('$vuetify.country')
+                "
                 v-bind="bindProps"
                 :error-messages="errorPhone"
-                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                :prefix="
+                  countrySelect
+                    ? `+` + countrySelect.dialCode
+                    : ``
+                "
                 @country-changed="onCountry"
                 @keypress="numbers"
                 @input="onInput"
@@ -119,14 +131,14 @@
                 :label="$vuetify.lang.t('$vuetify.barCode')"
                 :properties="{
                   clearable: true,
-                  required:true,
-                  rules:formRule.required
+                  required: true,
+                  rules: formRule.required
                 }"
                 :options="{
                   inputMask: '##-####-####-###',
                   outputMask: '#############',
                   empty: null,
-                  alphanumeric: true,
+                  alphanumeric: true
                 }"
                 :focus="focus"
                 @focus="focus = false"
@@ -145,7 +157,11 @@
               <v-text-field
                 v-model="newClient.description"
                 :counter="120"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.access.description'
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -159,7 +175,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -169,7 +185,7 @@
           @click="createNewClient"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -180,91 +196,90 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: 'NewUser',
-	data () {
-		return {
-			formValid: false,
-			hidePinCode1: true,
-			hidePinCode2: true,
-			errorPhone: null,
-			formRule: this.$rules,
-			countrySelect: null,
-			focus: false
-		}
-	},
-	computed: {
-		...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
-		getAvatar () {
-			return `${this.newClient.avatar ||
-          '/assets/avatar/avatar-undefined.jpg'}`
-		},
-		bindProps () {
-			return {
-				mode: 'national',
-				clearable: true,
-				disabledFetchingCountry: false,
-				autocomplete: 'off',
-				dropdownOptions: {
-					disabledDialCode: false
-				},
-				inputOptions: {
-					showDialCode: false
-				}
-			}
-		}
-	},
-	created () {
-		this.formValid = false
-	},
-	methods: {
-		...mapActions('client', ['createClient', 'toogleNewModal']),
-		onCountry (event) {
-			this.newClient.country = event.iso2
-			this.countrySelect = event
-		},
-		numbers (event) {
-			const regex = new RegExp('^[0-9]+$')
-			const key = String.fromCharCode(
-				!event.charCode ? event.which : event.charCode
-			)
-			if (!regex.test(key)) {
-				event.preventDefault()
-				return false
-			}
-		},
-		onChangeImage (file) {
-			this.newClient.avatar = `data:${file.type};base64,${file.base64}`
-		},
-		onInput (number, object) {
-			const lang = this.$vuetify.lang
-			if (object.valid) {
-				this.newClient.phone = number
-				this.errorPhone = null
-			} else {
-				this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
-					lang.t('$vuetify.phone')
-				])
-			}
-		},
-		lettersNumbers (event) {
-			const regex = new RegExp('^[a-zA-Z0-9 ]+$')
-			const key = String.fromCharCode(
-				!event.charCode ? event.which : event.charCode
-			)
-			if (!regex.test(key)) {
-				event.preventDefault()
-				return false
-			}
-		},
-		async createNewClient () {
-			if (this.$refs.form.validate()) {
-				this.loading = true
-				await this.createClient(this.newClient)
-			}
-		}
-	}
+  name: 'NewClient',
+  data () {
+    return {
+      formValid: false,
+      hidePinCode1: true,
+      hidePinCode2: true,
+      errorPhone: null,
+      formRule: this.$rules,
+      countrySelect: null,
+      focus: false
+    }
+  },
+  computed: {
+    ...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
+    getAvatar () {
+      return `${this.newClient.avatar ||
+                '/assets/avatar/avatar-undefined.jpg'}`
+    },
+    bindProps () {
+      return {
+        mode: 'national',
+        clearable: true,
+        disabledFetchingCountry: false,
+        autocomplete: 'off',
+        dropdownOptions: {
+          disabledDialCode: false
+        },
+        inputOptions: {
+          showDialCode: false
+        }
+      }
+    }
+  },
+  created () {
+    this.formValid = false
+  },
+  methods: {
+    ...mapActions('client', ['createClient', 'toogleNewModal']),
+    onCountry (event) {
+      this.newClient.country = event.iso2
+      this.countrySelect = event
+    },
+    numbers (event) {
+      const regex = new RegExp('^[0-9]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    onChangeImage (file) {
+      this.newClient.avatar = `data:${file.type};base64,${file.base64}`
+    },
+    onInput (number, object) {
+      const lang = this.$vuetify.lang
+      if (object.valid) {
+        this.newClient.phone = number
+        this.errorPhone = null
+      } else {
+        this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
+          lang.t('$vuetify.phone')
+        ])
+      }
+    },
+    lettersNumbers (event) {
+      const regex = new RegExp('^[a-zA-Z0-9 ]+$')
+      const key = String.fromCharCode(
+        !event.charCode ? event.which : event.charCode
+      )
+      if (!regex.test(key)) {
+        event.preventDefault()
+        return false
+      }
+    },
+    async createNewClient () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.createClient(this.newClient)
+      }
+    }
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

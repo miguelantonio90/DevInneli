@@ -8,7 +8,7 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          {{ $vuetify.lang.t('$vuetify.activeAccount') }}
+          {{ $vuetify.lang.t("$vuetify.activeAccount") }}
         </v-col>
       </v-row>
     </v-alert>
@@ -72,20 +72,20 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-	name: 'Welcome',
-	computed: {
-		...mapState('auth', ['isLoggedIn', 'userData']),
-		...mapGetters(['errors'])
-	},
-	mounted () {
-		this.getUserData()
-	},
-	created () {
-		this.getUserData()
-	},
-	methods: {
-		...mapActions('auth', ['getUserData'])
-	}
+  name: 'Welcome',
+  computed: {
+    ...mapState('auth', ['isLoggedIn', 'userData']),
+    ...mapGetters(['errors'])
+  },
+  mounted () {
+    this.getUserData()
+  },
+  created () {
+    this.getUserData()
+  },
+  methods: {
+    ...mapActions('auth', ['getUserData'])
+  }
 }
 </script>
 

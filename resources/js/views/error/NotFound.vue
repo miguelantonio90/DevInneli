@@ -29,11 +29,11 @@
 
 <script>
 export default {
-	methods: {
-		goHome () {
-			this.$router.push({ path: '/' })
-		}
-	}
+  methods: {
+    goHome () {
+      this.$router.push({ path: '/' })
+    }
+  }
 }
 </script>
 <style lang="sass" scoped>

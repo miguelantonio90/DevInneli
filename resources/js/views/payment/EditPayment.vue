@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.pay'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.pay")
           ])
         }}</span>
       </v-card-title>
@@ -57,7 +57,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -67,7 +67,7 @@
           @click="updatePaymentHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -78,27 +78,27 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: 'EditPayment',
-	data () {
-		return {
-			formValid: false,
-			errorPhone: null,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
-		...mapState('statics', ['payments'])
-	},
-	methods: {
-		...mapActions('payment', ['updatePayment', 'toogleEditModal']),
-		async updatePaymentHandler () {
-			if (this.$refs.form.validate()) {
-				this.loading = true
-				await this.updatePayment(this.editPayment)
-			}
-		}
-	}
+  name: 'EditPayment',
+  data () {
+    return {
+      formValid: false,
+      errorPhone: null,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('payment', ['saved', 'editPayment', 'isActionInProgress']),
+    ...mapState('statics', ['payments'])
+  },
+  methods: {
+    ...mapActions('payment', ['updatePayment', 'toogleEditModal']),
+    async updatePaymentHandler () {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.updatePayment(this.editPayment)
+      }
+    }
+  }
 }
 </script>
 

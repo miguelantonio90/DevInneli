@@ -138,7 +138,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      * @throws Exception
      */

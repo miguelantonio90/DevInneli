@@ -52,54 +52,59 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-	name: 'AppLock',
-	data () {
-		return {
-			loadingData: false,
-			loading: false
-		}
-	},
-	computed: {
-		...mapState('auth', ['isLoggedIn', 'userData']),
-		...mapGetters(['errors']),
-		...mapGetters('auth', ['isManagerIn', 'isAdminIn', 'pinSuccess', 'user']),
-		getCompanyName () {
-			return `${this.user.company.name}`
-		}
-	},
-	created () {
-		this.loadingData = true
-		this.getUserData().then(() => {
-			this.loadingData = false
-		})
-	},
-	methods: {
-		...mapActions('auth', ['getUserData', 'sendLoginPincode']),
-		async login (pincode) {
-			this.loading = true
-			const email = this.user.email
-			await this.sendLoginPincode({ email, pincode }).then(() => {
-				if (this.pinSuccess) {
-					if (this.isLoggedIn && this.isAdminIn) {
-						this.loading = false
-						this.$refs.pincodeInput.triggerSuccess()
-						this.$router.push({ name: 'admin_dashboard' })
-					} else if (this.isLoggedIn && this.isManagerIn) {
-						this.loading = false
-						this.$refs.pincodeInput.triggerSuccess()
-						this.$router.push('/dashboard')
-					} else if (this.isLoggedIn && !this.isManagerIn) {
-						this.loading = false
-						this.$refs.pincodeInput.triggerSuccess()
-						this.$router.push({ name: 'dashboard' })
-					}
-				} else {
-					this.loading = false
-					this.$refs.pincodeInput.triggerMiss()
-				}
-			})
-		}
-	}
+  name: 'AppLock',
+  data () {
+    return {
+      loadingData: false,
+      loading: false
+    }
+  },
+  computed: {
+    ...mapState('auth', ['isLoggedIn', 'userData']),
+    ...mapGetters(['errors']),
+    ...mapGetters('auth', [
+      'isManagerIn',
+      'isAdminIn',
+      'pinSuccess',
+      'user'
+    ]),
+    getCompanyName () {
+      return `${this.user.company.name}`
+    }
+  },
+  created () {
+    this.loadingData = true
+    this.getUserData().then(() => {
+      this.loadingData = false
+    })
+  },
+  methods: {
+    ...mapActions('auth', ['getUserData', 'sendLoginPincode']),
+    async login (pincode) {
+      this.loading = true
+      const email = this.user.email
+      await this.sendLoginPincode({ email, pincode }).then(() => {
+        if (this.pinSuccess) {
+          if (this.isLoggedIn && this.isAdminIn) {
+            this.loading = false
+            this.$refs.pincodeInput.triggerSuccess()
+            this.$router.push({ name: 'admin_dashboard' })
+          } else if (this.isLoggedIn && this.isManagerIn) {
+            this.loading = false
+            this.$refs.pincodeInput.triggerSuccess()
+            this.$router.push('/dashboard')
+          } else if (this.isLoggedIn && !this.isManagerIn) {
+            this.loading = false
+            this.$refs.pincodeInput.triggerSuccess()
+            this.$router.push({ name: 'dashboard' })
+          }
+        } else {
+          this.loading = false
+          this.$refs.pincodeInput.triggerMiss()
+        }
+      })
+    }
+  }
 }
 </script>
 

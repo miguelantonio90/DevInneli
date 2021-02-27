@@ -177,13 +177,14 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @param $id
      */
-    public  function readNotification(Request $request, $id){
+    public function readNotification(Request $request, $id)
+    {
         $notif = Notification::findOrFail($id);
         $notif->read = true;
         $notif->save();
-        return ResponseHelper::sendResponse([],'Notification is read.');
+        return ResponseHelper::sendResponse([], 'Notification is read.');
     }
 }

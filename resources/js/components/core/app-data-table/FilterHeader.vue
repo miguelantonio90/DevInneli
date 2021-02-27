@@ -242,58 +242,58 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 export default {
-	filters: {
-		haslength (val) {
-			return Array.isArray(val) && !!val.length
-		}
-	},
-	props: [
-		'id',
-		'hasCsvImport',
-		'hasCsvExport',
-		'headersChoosen',
-		'headerChoices',
-		'selectManyFilters',
-		'selectFilters',
-		'checkboxFilters',
-		'filtersEnabledCount',
-		'hasFilters',
-		'loading'
-	],
-	data () {
-		return {
-			searchValue: null,
-			showFilterMenu: null
-		}
-	},
-	watch: {
-		searchValue (newValue) {
-			this.$emit('searchValueChanged', newValue)
-		},
-		showFilterMenu (newValue) {
-			this.$emit('showFilterMenuChanged', newValue)
-		}
-	},
-	methods: {
-		clearFilters () {
-			this.$emit('clearFilters')
-		},
-		onChangedFilters () {
-			this.$emit('onChangedFilters')
-		},
-		resetColumns () {
-			this.$emit('resetColumns')
-		},
-		headersChoosenChanged (e) {
-			this.$emit('headersChoosenChanged', e)
-		},
-		onClickExport () {
-			this.$emit('onClickExport')
-		},
-		onClickImport () {
-			this.$emit('onClickImport')
-		}
-	}
+  filters: {
+    haslength (val) {
+      return Array.isArray(val) && !!val.length
+    }
+  },
+  props: [
+    'id',
+    'hasCsvImport',
+    'hasCsvExport',
+    'headersChoosen',
+    'headerChoices',
+    'selectManyFilters',
+    'selectFilters',
+    'checkboxFilters',
+    'filtersEnabledCount',
+    'hasFilters',
+    'loading'
+  ],
+  data () {
+    return {
+      searchValue: null,
+      showFilterMenu: null
+    }
+  },
+  watch: {
+    searchValue (newValue) {
+      this.$emit('searchValueChanged', newValue)
+    },
+    showFilterMenu (newValue) {
+      this.$emit('showFilterMenuChanged', newValue)
+    }
+  },
+  methods: {
+    clearFilters () {
+      this.$emit('clearFilters')
+    },
+    onChangedFilters () {
+      this.$emit('onChangedFilters')
+    },
+    resetColumns () {
+      this.$emit('resetColumns')
+    },
+    headersChoosenChanged (e) {
+      this.$emit('headersChoosenChanged', e)
+    },
+    onClickExport () {
+      this.$emit('onClickExport')
+    },
+    onClickImport () {
+      this.$emit('onClickImport')
+    }
+  }
 }
 </script>
 

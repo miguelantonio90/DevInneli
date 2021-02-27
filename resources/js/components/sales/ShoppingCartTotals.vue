@@ -2,7 +2,7 @@
 
 <script>
 export default {
-	name: 'ShoppingCartTotals'
+  name: 'ShoppingCartTotals'
 }
 </script>
 

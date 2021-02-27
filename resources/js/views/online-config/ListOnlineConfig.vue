@@ -7,9 +7,11 @@
       >
         <v-card>
           <app-data-table
-            :title="$vuetify.lang.t('$vuetify.titles.list',
-                                    [$vuetify.lang.t('$vuetify.menu.shop'),])"
-
+            :title="
+              $vuetify.lang.t('$vuetify.titles.list', [
+                $vuetify.lang.t('$vuetify.menu.shop')
+              ])
+            "
             :is-loading="isTableLoading"
             csv-filename="Configs"
             :headers="getTableColumns"
@@ -109,25 +111,22 @@ export default {
       this.$router.push({ name: 'config_edit' })
     },
     deleteConfigHandler (shopId) {
-      this.$Swal
-        .fire({
-          title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
-            this.$vuetify.lang.t('$vuetify.actions.delete')
-          ]),
-          text: this.$vuetify.lang.t(
-            '$vuetify.messages.error_delete_shop'
-          ),
-          icon: 'warning',
-          confirmButtonText: this.$vuetify.lang.t(
-            '$vuetify.actions.accept'
-          ),
-          confirmButtonColor: 'red'
-        })
+      this.$Swal.fire({
+        title: this.$vuetify.lang.t('$vuetify.titles.no_action', [
+          this.$vuetify.lang.t('$vuetify.actions.delete')
+        ]),
+        text: this.$vuetify.lang.t(
+          '$vuetify.messages.error_delete_shop'
+        ),
+        icon: 'warning',
+        confirmButtonText: this.$vuetify.lang.t(
+          '$vuetify.actions.accept'
+        ),
+        confirmButtonColor: 'red'
+      })
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

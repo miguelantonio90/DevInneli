@@ -20,25 +20,25 @@
 
 <script>
 export default {
-	name: 'VWidget',
-	props: {
-		title: {
-			type: String,
-			default: ''
-		},
-		enableHeader: {
-			type: Boolean,
-			default: true
-		},
-		contentBg: {
-			type: String,
-			default: 'white'
-		}
-	},
+  name: 'VWidget',
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    enableHeader: {
+      type: Boolean,
+      default: true
+    },
+    contentBg: {
+      type: String,
+      default: 'white'
+    }
+  },
 
-	data () {
-		return {}
-	},
-	computed: {}
+  data () {
+    return {}
+  },
+  computed: {}
 }
 </script>

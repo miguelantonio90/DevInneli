@@ -26,47 +26,47 @@
 <script>
 
 export default {
-	name: 'AppDrawer',
-	components: {},
-	props: {
-		expanded: {
-			type: Boolean,
-			default: true
-		},
-		showDrawer: Boolean
-	},
-	data () {
-		return {
-			mini: false,
-			drawerWidth: 256,
-			drawer: true,
-			scrollSettings: {
-				maxScrollbarLength: 160
-			}
-		}
-	},
+  name: 'AppDrawer',
+  components: {},
+  props: {
+    expanded: {
+      type: Boolean,
+      default: true
+    },
+    showDrawer: Boolean
+  },
+  data () {
+    return {
+      mini: false,
+      drawerWidth: 256,
+      drawer: true,
+      scrollSettings: {
+        maxScrollbarLength: 160
+      }
+    }
+  },
 
-	computed: {
-		computeLogo () {
-			return '/assets/m.png'
-		}
-	},
-	watch: {
-		showDrawer: {
-			handler (val) {
-				this.drawer = val
-			},
-			immediate: true
-		}
-	},
-	created () {
-	},
+  computed: {
+    computeLogo () {
+      return '/assets/m.png'
+    }
+  },
+  watch: {
+    showDrawer: {
+      handler (val) {
+        this.drawer = val
+      },
+      immediate: true
+    }
+  },
+  created () {
+  },
 
-	methods: {
-		handleDrawerCollapse () {
-			this.drawerWidth = this.drawerWidth === 256 ? 64 : 256
-		}
-	}
+  methods: {
+    handleDrawerCollapse () {
+      this.drawerWidth = this.drawerWidth === 256 ? 64 : 256
+    }
+  }
 }
 </script>
 

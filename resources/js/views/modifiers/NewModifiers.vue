@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.modifiers'),
+          $vuetify.lang.t("$vuetify.titles.new", [
+            $vuetify.lang.t("$vuetify.menu.modifiers")
           ])
         }}</span>
       </v-card-title>
@@ -50,16 +50,27 @@
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template
+                      v-slot:activator="{ on, attrs }"
+                    >
                       <v-icon
                         v-bind="attrs"
                         v-on="on"
-                        @click="$store.dispatch('shop/toogleNewModal',true)"
+                        @click="
+                          $store.dispatch(
+                            'shop/toogleNewModal',
+                            true
+                          )
+                        "
                       >
                         mdi-plus
                       </v-icon>
                     </template>
-                    <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                    <span>{{
+                      $vuetify.lang.t(
+                        "$vuetify.titles.newAction"
+                      )
+                    }}</span>
                   </v-tooltip>
                 </template>
               </v-select>
@@ -71,7 +82,17 @@
               <v-switch
                 v-model="newModifier.percent"
                 inset
-                :label="`${newModifier.percent?$vuetify.lang.t('$vuetify.tax.percent'):$vuetify.lang.t('$vuetify.tax.permanent')}`"
+                :label="
+                  `${
+                    newModifier.percent
+                      ? $vuetify.lang.t(
+                        '$vuetify.tax.percent'
+                      )
+                      : $vuetify.lang.t(
+                        '$vuetify.tax.permanent'
+                      )
+                  }`
+                "
               />
             </v-col>
             <v-col
@@ -89,7 +110,7 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.00,
+                  empty: 0.0
                 }"
               />
             </v-col>
@@ -103,7 +124,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -112,7 +133,7 @@
           @click="handleSubmit"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -123,37 +144,35 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-
-	data () {
-		return {
-			formValid: false,
-			formRule: this.$rules
-		}
-	},
-	computed: {
-		...mapState('modifiers', ['newModifier', 'isActionInProgress']),
-		...mapState('shop', ['shops', 'isShopLoading'])
-	},
-	created () {
-		this.formValid = false
-		this.getShops().then(() => {
-			this.newModifier.shops = this.shops
-		})
-	},
-	methods: {
-		...mapActions('modifiers', ['createModifiers', 'toogleNewModal']),
-		...mapActions('shop', ['getShops']),
-		setModifiers (shops) {
-			this.newModifier.shops = shops
-		},
-		async handleSubmit () {
-			if (this.$refs.form.validate()) {
-				await this.createModifiers(this.newModifier)
-			}
-		}
-	}
+  data () {
+    return {
+      formValid: false,
+      formRule: this.$rules
+    }
+  },
+  computed: {
+    ...mapState('modifiers', ['newModifier', 'isActionInProgress']),
+    ...mapState('shop', ['shops', 'isShopLoading'])
+  },
+  created () {
+    this.formValid = false
+    this.getShops().then(() => {
+      this.newModifier.shops = this.shops
+    })
+  },
+  methods: {
+    ...mapActions('modifiers', ['createModifiers', 'toogleNewModal']),
+    ...mapActions('shop', ['getShops']),
+    setModifiers (shops) {
+      this.newModifier.shops = shops
+    },
+    async handleSubmit () {
+      if (this.$refs.form.validate()) {
+        await this.createModifiers(this.newModifier)
+      }
+    }
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
