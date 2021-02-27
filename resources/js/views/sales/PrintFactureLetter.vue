@@ -6,9 +6,7 @@
   >
     <v-card>
       <v-card-text>
-        <div
-          id="letter"
-        >
+        <div id="letter">
           <header class="clearfix">
             <div class="container">
               <figure>
@@ -33,7 +31,9 @@
                 </div>
                 <div class="email">
                   <a
-                    :href="'mailto:' + `${user.company.email }`"
+                    :href="
+                      'mailto:' + `${user.company.email}`
+                    "
                   >{{ user.company.email }}</a>
                 </div>
               </div>
@@ -53,31 +53,55 @@
                   <p>{{ editSale.client.address }}</p>
                   <p>{{ editSale.client.address }}</p>
                   <a
-                    :href="'mailto:' + `${editSale.client.email }`"
+                    :href="
+                      'mailto:' +
+                        `${editSale.client.email}`
+                    "
                   >{{ editSale.client.email }}</a>
                 </div>
                 <div class="data right">
                   <div class="date">
                     <p>
-                      {{ $vuetify.lang.t('$vuetify.tax.noFacture') + ': ' }}
+                      {{
+                        $vuetify.lang.t(
+                          "$vuetify.tax.noFacture"
+                        ) + ": "
+                      }}
                       {{ editSale.no_facture }}
                     </p>
                   </div>
                   <div class="date">
                     <p>
-                      {{ $vuetify.lang.t('$vuetify.menu.box') + ': ' }}
+                      {{
+                        $vuetify.lang.t(
+                          "$vuetify.menu.box"
+                        ) + ": "
+                      }}
                       {{ editSale.box.name }}
                     </p>
                   </div>
                   <div class="date">
                     <p>
-                      {{ $vuetify.lang.t('$vuetify.articles.sell_by') + ': ' }}
-                      {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}
+                      {{
+                        $vuetify.lang.t(
+                          "$vuetify.articles.sell_by"
+                        ) + ": "
+                      }}
+                      {{ editSale.create.firstName }}
+                      {{
+                        editSale.create.lastName
+                          ? editSale.create.lastName
+                          : ""
+                      }}
                     </p>
                   </div>
                   <div class="date">
                     <p>
-                      {{ $vuetify.lang.t('$vuetify.date') + ': ' }}
+                      {{
+                        $vuetify.lang.t(
+                          "$vuetify.date"
+                        ) + ": "
+                      }}
                       {{ dateFormatCreated }}
                     </p>
                   </div>
@@ -88,10 +112,18 @@
                 <thead>
                   <tr>
                     <th class="qty">
-                      {{ $vuetify.lang.t('$vuetify.report.cant').toUpperCase() }}
+                      {{
+                        $vuetify.lang
+                          .t("$vuetify.report.cant")
+                          .toUpperCase()
+                      }}
                     </th>
                     <th class="desc">
-                      {{ $vuetify.lang.t('$vuetify.menu.article').toUpperCase() }}
+                      {{
+                        $vuetify.lang
+                          .t("$vuetify.menu.article")
+                          .toUpperCase()
+                      }}
                     </th>
                     <th class="price">
                       $$
@@ -110,26 +142,79 @@
                       {{ article.cant }}
                     </td>
                     <td class="desc">
-                      <h3>{{ article.name }} {{ article.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(article.um).name) + ')':'' }}</h3>
+                      <h3>
+                        {{ article.name }}
+                        {{
+                          article.um
+                            ? "(" +
+                              $vuetify.lang.t(
+                                "$vuetify.um." +
+                                  JSON.parse(
+                                    article.um
+                                  ).name
+                              ) +
+                              ")"
+                            : ""
+                        }}
+                      </h3>
                     </td>
                     <td class="price">
-                      {{ user.company.currency +' ' + article.price }}
+                      {{
+                        user.company.currency +
+                          " " +
+                          article.price
+                      }}
                       <table>
                         <thead>
-                          <th style="width: 60%; background-color: white; color: black; font-size: large" />
-                          <th style="width: 40%; background-color: white; color: black; font-size: large" />
+                          <th
+                            style="width: 60%; background-color: white; color: black; font-size: large"
+                          />
+                          <th
+                            style="width: 40%; background-color: white; color: black; font-size: large"
+                          />
                         </thead>
                         <tbody>
                           <tr
-                            v-for="(lDiscount, j) of article.discount"
+                            v-for="(lDiscount,
+                                    j) of article.discount"
                             :key="j"
                           >
                             <td>
-                              {{ $vuetify.lang.t('$vuetify.menu.discount') +'(' +lDiscount.name }}{{ lDiscount.percent ? '('+lDiscount.value +'%)) ':') ' }}
+                              {{
+                                $vuetify.lang.t(
+                                  "$vuetify.menu.discount"
+                                ) +
+                                  "(" +
+                                  lDiscount.name
+                              }}{{
+                                lDiscount.percent
+                                  ? "(" +
+                                    lDiscount.value +
+                                    "%)) "
+                                  : ") "
+                              }}
                             </td>
                             <td>
-                              <i> -{{ `${user.company.currency}` }}
-                                {{ lDiscount.percent ? parseFloat(lDiscount.value*article.cant*article.price/100).toFixed(2) : parseFloat(lDiscount.value).toFixed(2) }}
+                              <i>
+                                -{{
+                                  `${user.company.currency}`
+                                }}
+                                {{
+                                  lDiscount.percent
+                                    ? parseFloat(
+                                      (lDiscount.value *
+                                        article.cant *
+                                        article.price) /
+                                        100
+                                    ).toFixed(
+                                      2
+                                    )
+                                    : parseFloat(
+                                      lDiscount.value
+                                    ).toFixed(
+                                      2
+                                    )
+                                }}
                               </i>
                             </td>
                           </tr>
@@ -138,11 +223,41 @@
                             :key="lTax.name"
                           >
                             <td>
-                              {{ $vuetify.lang.t('$vuetify.articles.tax') +'(' +lTax.name }}{{ lTax.percent ? '('+lTax.value +'%)) ':') ' }}
+                              {{
+                                $vuetify.lang.t(
+                                  "$vuetify.articles.tax"
+                                ) +
+                                  "(" +
+                                  lTax.name
+                              }}{{
+                                lTax.percent
+                                  ? "(" +
+                                    lTax.value +
+                                    "%)) "
+                                  : ") "
+                              }}
                             </td>
                             <td>
-                              <i> +{{ `${user.company.currency}` }}
-                                {{ lTax.percent ? parseFloat(lTax.value*article.cant*article.price/100).toFixed(2) : parseFloat(lTax.value).toFixed(2) }}
+                              <i>
+                                +{{
+                                  `${user.company.currency}`
+                                }}
+                                {{
+                                  lTax.percent
+                                    ? parseFloat(
+                                      (lTax.value *
+                                        article.cant *
+                                        article.price) /
+                                        100
+                                    ).toFixed(
+                                      2
+                                    )
+                                    : parseFloat(
+                                      lTax.value
+                                    ).toFixed(
+                                      2
+                                    )
+                                }}
                               </i>
                             </td>
                           </tr>
@@ -150,7 +265,13 @@
                       </table>
                     </td>
                     <td class="total">
-                      {{ user.company.currency +' '+ parseFloat(article.totalPrice).toFixed(2) }}
+                      {{
+                        user.company.currency +
+                          " " +
+                          parseFloat(
+                            article.totalPrice
+                          ).toFixed(2)
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -169,13 +290,25 @@
                           class="price"
                           style="border-right: black"
                         >
-                          {{ $vuetify.lang.t('$vuetify.payment.' + pay.method) }}:
+                          {{
+                            $vuetify.lang.t(
+                              "$vuetify.payment." +
+                                pay.method
+                            )
+                          }}:
                         </td>
                         <td
                           class="price"
                           style="text-align: left"
                         >
-                          {{ `${user.company.currency + ' ' + parseFloat(pay.cant).toFixed(2)}` }}
+                          {{
+                            `${user.company
+                              .currency +
+                              " " +
+                              parseFloat(
+                                pay.cant
+                              ).toFixed(2)}`
+                          }}
                         </td>
                       </tr>
                     </tbody>
@@ -186,37 +319,81 @@
                     <tbody>
                       <tr class="total">
                         <td class="price">
-                          {{ $vuetify.lang.t('$vuetify.pay.sub_total') }}:
+                          {{
+                            $vuetify.lang.t(
+                              "$vuetify.pay.sub_total"
+                            )
+                          }}:
                         </td>
                         <td class="price">
-                          {{ `${user.company.currency + ' ' + parseFloat(sub_total).toFixed(2)}` }}
+                          {{
+                            `${user.company
+                              .currency +
+                              " " +
+                              parseFloat(
+                                sub_total
+                              ).toFixed(2)}`
+                          }}
                         </td>
                       </tr>
-                      <template v-if="editSale.taxes.length > 0">
+                      <template
+                        v-if="editSale.taxes.length > 0"
+                      >
                         <tr
                           v-for="tax in editSale.taxes"
                           :key="tax.id"
                           class="total"
                         >
                           <td class="price">
-                            {{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }} +{{ tax.value }}%)
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.tax.name"
+                              )
+                            }}({{ tax.name }} +{{
+                              tax.value
+                            }}%)
                           </td>
                           <td class="price">
-                            <i>+{{ `${user.company.currency + ' ' + parseFloat(tax.value * sub_total / 100).toFixed(2)}` }} </i>
+                            <i>+{{
+                              `${user.company
+                                .currency +
+                                " " +
+                                parseFloat(
+                                  (tax.value *
+                                    sub_total) /
+                                    100
+                                ).toFixed(
+                                  2
+                                )}`
+                            }}
+                            </i>
                           </td>
                         </tr>
                       </template>
                       <template v-else>
                         <tr>
                           <td class="price">
-                            {{ $vuetify.lang.t('$vuetify.articles.tax_by_sale') }}
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.articles.tax_by_sale"
+                              )
+                            }}
                           </td>
                           <td class="price">
-                            <i>{{ user.company.currency + ' 00.00' }}</i>
+                            <i>{{
+                              user.company
+                                .currency +
+                                " 00.00"
+                            }}</i>
                           </td>
                         </tr>
                       </template>
-                      <template v-if="editSale.discounts.length > 0">
+                      <template
+                        v-if="
+                          editSale.discounts.length >
+                            0
+                        "
+                      >
                         <tr
                           v-for="discount in editSale.discounts"
                           :key="discount.id"
@@ -226,30 +403,67 @@
                             class="price"
                             style="width: 30%"
                           >
-                            {{ $vuetify.lang.t('$vuetify.menu.discount') }}({{ discount.name }} -{{ discount.value }}%)
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.menu.discount"
+                              )
+                            }}({{
+                              discount.name
+                            }}
+                            -{{ discount.value }}%)
                           </td>
                           <td class="price">
-                            <i>-{{ `${user.company.currency + ' ' + parseFloat(discount.value * sub_total / 100).toFixed(2)}` }}</i>
+                            <i>-{{
+                              `${user.company
+                                .currency +
+                                " " +
+                                parseFloat(
+                                  (discount.value *
+                                    sub_total) /
+                                    100
+                                ).toFixed(
+                                  2
+                                )}`
+                            }}</i>
                           </td>
                         </tr>
                       </template>
                       <template v-else>
                         <tr>
                           <td class="price">
-                            {{ $vuetify.lang.t('$vuetify.menu.discounts') }}
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.menu.discounts"
+                              )
+                            }}
                           </td>
                           <td class="price">
-                            <i>{{ user.company.currency + ' 00.00' }}</i>
+                            <i>{{
+                              user.company
+                                .currency +
+                                " 00.00"
+                            }}</i>
                           </td>
                         </tr>
                       </template>
                       <tr>
                         <td class="price">
-                          <h3>{{ $vuetify.lang.t('$vuetify.pay.total') }}:</h3>
+                          <h3>
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.pay.total"
+                              )
+                            }}:
+                          </h3>
                         </td>
                         <td class="price">
                           <h3>
-                            <i>{{ `${user.company.currency + ' ' + total}` }}</i>
+                            <i>{{
+                              `${user.company
+                                .currency +
+                                " " +
+                                total}`
+                            }}</i>
                           </h3>
                         </td>
                       </tr>
@@ -268,7 +482,7 @@
           @click="toogleShowModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-spacer />
         <v-btn
@@ -277,7 +491,7 @@
           @click="printFacture"
         >
           <v-icon>mdi-printer</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.print') }}
+          {{ $vuetify.lang.t("$vuetify.actions.print") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -314,9 +528,9 @@ export default {
       const month = date.getMonth() + 1
       const year = date.getFullYear()
       if (month < 10) {
-        return (`${day}/0${month}/${year}`)
+        return `${day}/0${month}/${year}`
       } else {
-        return (`${day}/${month}/${year}`)
+        return `${day}/${month}/${year}`
       }
     }
   },
@@ -326,16 +540,26 @@ export default {
     this.totalDisc = 0
     this.total = 0
     this.sub_total = 0
-    this.editSale.articles.forEach((v) => {
+    this.editSale.articles.forEach(v => {
       this.sub_total = parseFloat(v.totalPrice) + this.sub_total
     })
-    this.editSale.taxes.forEach((v) => {
-      this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+    this.editSale.taxes.forEach(v => {
+      this.totalTax +=
+                v.percent === 'true'
+                  ? (this.sub_total * v.value) / 100
+                  : v.value
     })
-    this.editSale.discounts.forEach((v) => {
-      this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+    this.editSale.discounts.forEach(v => {
+      this.totalDisc +=
+                v.percent === 'true'
+                  ? (this.sub_total * v.value) / 100
+                  : v.value
     })
-    this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+    this.total = (
+      this.sub_total +
+            parseFloat(this.totalTax) -
+            parseFloat(this.totalDisc)
+    ).toFixed(2)
     this.total = parseFloat(this.total).toFixed(2)
     this.$emit('updateData')
   },
@@ -344,12 +568,16 @@ export default {
     ...mapActions('discount', ['getDiscounts']),
     total_pay (item) {
       let sum = 0
-      item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      item.taxes.forEach(v => {
+        sum += v.percent
+          ? (item.cant * item.price * v.value) / 100
+          : v.value
       })
       let discount = 0
-      item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      item.discount.forEach(v => {
+        discount += v.percent
+          ? (item.cant * item.price * v.value) / 100
+          : v.value
       })
       return item.cant * item.price + sum - discount - item.moneyRefund
     },
@@ -366,7 +594,6 @@ export default {
 </script>
 
 <style scoped>
-
 .profile {
     width: 100px;
     height: 100px;
@@ -374,7 +601,7 @@ export default {
 }
 * {
     font-size: 10px;
-    font-family: 'Times New Roman',sans-serif;
+    font-family: "Times New Roman", sans-serif;
 }
 
 td,
@@ -385,19 +612,87 @@ table {
     border-collapse: collapse;
 }
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -410,7 +705,8 @@ html {
     line-height: 1;
 }
 
-ol, ul {
+ol,
+ul {
     list-style: none;
 }
 
@@ -419,29 +715,47 @@ table {
     border-spacing: 0;
 }
 
-caption, th, td {
+caption,
+th,
+td {
     text-align: left;
     font-weight: normal;
     vertical-align: middle;
 }
 
-q, blockquote {
+q,
+blockquote {
     quotes: none;
 }
-q:before, q:after, blockquote:before, blockquote:after {
-  content: none;
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+    content: none;
 }
 
 a img {
     border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
     display: block;
 }
 
 body {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     font-weight: 300;
     font-size: 12px;
     margin: 0;
@@ -504,14 +818,17 @@ header figure img {
 header .company-info {
     float: right;
     color: #555555;
-    font-family: SourceSansPro,sans-serif;
+    font-family: SourceSansPro, sans-serif;
     line-height: 10px;
 }
-header .company-info .address, header .company-info .phone, header .company-info .email {
+header .company-info .address,
+header .company-info .phone,
+header .company-info .email {
     margin-top: 5px;
     position: relative;
 }
-header .company-info .address img, header .company-info .phone img {
+header .company-info .address img,
+header .company-info .phone img {
     margin-top: 2px;
 }
 header .company-info .email img {
@@ -564,7 +881,9 @@ section table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-section table .qty, section table .unit, section table .total {
+section table .qty,
+section table .unit,
+section table .total {
     width: 15%;
 }
 section table .desc {
@@ -580,7 +899,7 @@ section table thead {
 }
 section table thead th {
     padding: 7px 10px;
-    background: #FFFFFF;
+    background: #ffffff;
     border-bottom: 2px solid black;
     color: black;
     text-align: center;
@@ -670,5 +989,4 @@ img {
     max-width: inherit;
     width: inherit;
 }
-
 </style>

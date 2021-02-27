@@ -8,8 +8,11 @@
         <new-supplier v-if="showNewModal" />
         <edit-supplier v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.supplier')])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.supplier')
+            ])
+          "
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="suppliers"
@@ -126,7 +129,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteSupplier(id)
         })
     }

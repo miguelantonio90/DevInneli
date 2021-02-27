@@ -62,7 +62,12 @@ export default {
   computed: {
     ...mapState('auth', ['isLoggedIn', 'userData']),
     ...mapGetters(['errors']),
-    ...mapGetters('auth', ['isManagerIn', 'isAdminIn', 'pinSuccess', 'user']),
+    ...mapGetters('auth', [
+      'isManagerIn',
+      'isAdminIn',
+      'pinSuccess',
+      'user'
+    ]),
     getCompanyName () {
       return `${this.user.company.name}`
     }

@@ -13,18 +13,32 @@ class ArticleImageManager
      * @param $articleId
      * @param $images
      */
-    public static function new($articleId, $images): void
+    public function new($articleId, $images): void
     {
         if ($articleId && count($images) > 0) {
             foreach ($images as $key => $image) {
-                ArticleImage::create([
+                $art = ArticleImage::create([
                     'name' => $image['name'],
                     'path' => $image['path'],
-                    'default' => $image['default'],
-                    'article_id' => $articleId
+                    'default' => $image['default']
                 ]);
+                $art['article_id'] = $articleId;
+                $art->save();
             }
         }
+    }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     * @throws Exception
+     */
+    public function delete($id)
+    {
+        $article = ArticleImage::findOrFail($id);
+        $this->managerBy('delete', $article);
+        return $article->delete();
     }
 
 }

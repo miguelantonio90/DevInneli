@@ -1,61 +1,78 @@
 <template>
   <v-container>
-    <new-supplier v-if="$store.state.supplier.showNewModal" />
-    <new-tax v-if="$store.state.tax.showNewModal" />
-    <new-payment v-if="$store.state.payment.showNewModal" />
-    <new-discount v-if="$store.state.discount.showNewModal" />
+    <new-supplier v-if="$store.state.supplier.showNewModal"/>
+    <new-tax v-if="$store.state.tax.showNewModal"/>
+    <new-payment v-if="$store.state.payment.showNewModal"/>
+    <new-discount v-if="$store.state.discount.showNewModal"/>
     <v-row>
       <v-col
-        class="py-0"
-        cols="12"
-        md="6"
+          class="py-0"
+          cols="12"
+          md="6"
       >
         <v-autocomplete
-          v-model="sale.supplier"
-          clearable
-          :items="suppliers"
-          :label="$vuetify.lang.t('$vuetify.menu.supplier')"
-          item-text="firstName"
-          :loading="isSupplierTableLoading"
-          return-object
+            v-model="sale.supplier"
+            :items="suppliers"
+            :label="$vuetify.lang.t('$vuetify.menu.supplier')"
+            :loading="isSupplierTableLoading"
+            clearable
+            item-text="firstName"
+            return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="$store.dispatch('supplier/toogleNewModal',true)"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="
+                    $store.dispatch(
+                      'supplier/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
             </v-tooltip>
           </template>
           <template v-slot:selection="data">
             <v-chip
-              v-bind="data.attrs"
-              :input-value="data.selected"
-              @click="data.select"
+                v-bind="data.attrs"
+                :input-value="data.selected"
+                @click="data.select"
             >
               <v-avatar left>
-                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+                <v-img
+                    :src="
+                    data.item.avatar ||
+                      '/assets/avatar/avatar-undefined.jpg'
+                  "
+                />
               </v-avatar>
-              {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+              {{ data.item.name }}
             </v-chip>
           </template>
           <template v-slot:item="data">
             <template>
               <v-list-item-avatar>
-                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+                <v-img
+                    :src="
+                    data.item.avatar ||
+                      '/assets/avatar/avatar-undefined.jpg'
+                  "
+                />
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+                  {{ data.item.name }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ `${data.item.email }` }}
+                  {{ `${data.item.email}` }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </template>
@@ -63,101 +80,115 @@
         </v-autocomplete>
       </v-col>
       <v-col
-        class="py-0"
-        cols="12"
-        md="3"
+          class="py-0"
+          cols="12"
+          md="3"
       >
         <v-text-field
-          v-model="sale.no_facture"
-          :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
-          required
-          :rules="formRule.required"
+            v-model="sale.no_facture"
+            :label="$vuetify.lang.t('$vuetify.tax.noFacture')"
+            :rules="formRule.required"
+            required
         />
       </v-col>
       <v-col
-        class="py-0"
-        cols="12"
-        md="3"
+          class="py-0"
+          cols="12"
+          md="3"
       >
         <v-select
-          v-model="sale.taxes"
-          chips
-          clearable
-          deletable-chips
-          :items="taxes"
-          multiple
-          :label="$vuetify.lang.t('$vuetify.tax.nameGeneral')"
-          item-text="name"
-          :loading="isTaxLoading"
-          :disabled="!!isTaxLoading"
-          return-object
-          required
-          :rules="formRule.country"
+            v-model="sale.taxes"
+            :disabled="!!isTaxLoading"
+            :items="taxes"
+            :label="$vuetify.lang.t('$vuetify.tax.nameGeneral')"
+            :loading="isTaxLoading"
+            :rules="formRule.country"
+            chips
+            clearable
+            deletable-chips
+            item-text="name"
+            multiple
+            required
+            return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="$store.dispatch('tax/toogleNewModal',true)"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="
+                    $store.dispatch(
+                      'tax/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
             </v-tooltip>
           </template>
         </v-select>
       </v-col>
       <v-col
-        class="py-0"
-        cols="12"
-        md="4"
+          class="py-0"
+          cols="12"
+          md="4"
       >
         <v-select
-          v-model="sale.discounts"
-          chips
-          clearable
-          deletable-chips
-          :items="localDiscounts"
-          multiple
-          :label="$vuetify.lang.t('$vuetify.sale.discountGeneral')"
-          item-text="name"
-          :loading="isTaxLoading"
-          :disabled="!!isTaxLoading"
-          return-object
-          required
-          :rules="formRule.country"
+            v-model="sale.discounts"
+            :disabled="!!isTaxLoading"
+            :items="localDiscounts"
+            :label="$vuetify.lang.t('$vuetify.sale.discountGeneral')"
+            :loading="isTaxLoading"
+            :rules="formRule.country"
+            chips
+            clearable
+            deletable-chips
+            item-text="name"
+            multiple
+            required
+            return-object
         >
           <template v-slot:append-outer>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="$store.dispatch('discount/toogleNewModal',true)"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="
+                    $store.dispatch(
+                      'discount/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                  $vuetify.lang.t('$vuetify.titles.newAction')
+                }}</span>
             </v-tooltip>
           </template>
         </v-select>
       </v-col>
       <v-col
-        cols="12"
-        md="12"
+          cols="12"
+          md="12"
       >
         <list-pay
-          :edit="edit"
-          :sale="sale"
-          :total-price="parseFloat(getTotalCost).toFixed(2)"
-          :total-tax="parseFloat(totalTax).toFixed(2)"
-          :total-discount="parseFloat(totalDiscount).toFixed(2)"
-          :sub-total="parseFloat(subTotal).toFixed(2)"
-          :currency="user.company.currency"
+            :currency="user.company.currency"
+            :edit="edit"
+            :sale="sale"
+            :sub-total="parseFloat(subTotal).toFixed(2)"
+            :total-discount="parseFloat(totalDiscount).toFixed(2)"
+            :total-price="parseFloat(getTotalCost).toFixed(2)"
+            :total-tax="parseFloat(totalTax).toFixed(2)"
         />
       </v-col>
     </v-row>
@@ -173,7 +204,13 @@ import NewSupplier from '../supplier/NewSupplier'
 
 export default {
   name: 'ExtraData',
-  components: { NewSupplier, ListPay, NewPayment, NewTax, NewDiscount },
+  components: {
+    NewSupplier,
+    ListPay,
+    NewPayment,
+    NewTax,
+    NewDiscount
+  },
   props: {
     edit: {
       type: Boolean,
@@ -238,10 +275,16 @@ export default {
     ...mapActions('payment', ['getPayments']),
     ...mapActions('discount', ['getDiscounts']),
     getLocalDiscounts () {
-      this.discounts.forEach((v) => {
+      this.discounts.forEach(v => {
         this.localDiscounts.push({
           id: v.id,
-          name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
+          name: v.percent
+              ? v.name + '(' + v.value + '%)'
+              : v.name +
+              '(' +
+              this.user.company.currency +
+              v.value +
+              ')',
           value: v.value,
           percent: v.percent
         })
@@ -251,6 +294,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

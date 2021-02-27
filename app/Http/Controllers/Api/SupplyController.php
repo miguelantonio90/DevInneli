@@ -79,6 +79,18 @@ class SupplyController extends Controller
         );
     }
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+    public function findNumberFacture(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->supplyManager->findFactureNumber($request),
+            'New number sale retrieved successfully.'
+        );
+    }
 
     /**
      * Remove the specified resource from storage.

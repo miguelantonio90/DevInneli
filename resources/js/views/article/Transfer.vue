@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.actions.transfer', [
-            $vuetify.lang.t('$vuetify.articles.name'),
+          $vuetify.lang.t("$vuetify.actions.transfer", [
+            $vuetify.lang.t("$vuetify.articles.name")
           ])
         }}</span>
       </v-card-title>
@@ -23,7 +23,9 @@
             <v-col md="6">
               <v-text-field-money
                 v-model="editArticle.cost"
-                :label="$vuetify.lang.t('$vuetify.articles.cost')"
+                :label="
+                  $vuetify.lang.t('$vuetify.articles.cost')
+                "
                 required
                 :properties="{
                   clearable: true
@@ -31,7 +33,7 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.00,
+                  empty: 0.0
                 }"
               />
             </v-col>
@@ -46,7 +48,7 @@
           @click="toogleTransferModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -56,7 +58,7 @@
           @click="transferArticleHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -85,6 +87,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

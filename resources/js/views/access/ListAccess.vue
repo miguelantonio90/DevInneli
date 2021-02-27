@@ -9,9 +9,11 @@
         <edit-access v-if="showEditModal" />
         <v-card>
           <app-data-table
-            :title="$vuetify.lang.t('$vuetify.titles.list',
-                                    [$vuetify.lang.t('$vuetify.menu.access'),])"
-
+            :title="
+              $vuetify.lang.t('$vuetify.titles.list', [
+                $vuetify.lang.t('$vuetify.menu.access')
+              ])
+            "
             :is-loading="isTableLoading"
             csv-filename="Access"
             :headers="getTableColumns"
@@ -140,7 +142,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteRole(roleId)
         })
     }

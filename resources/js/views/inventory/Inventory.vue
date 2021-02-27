@@ -26,18 +26,26 @@
               :return-value.sync="item.cost"
               large
               persistent
-              :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-              :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+              :cancel-text="
+                $vuetify.lang.t('$vuetify.actions.cancel')
+              "
+              :save-text="
+                $vuetify.lang.t('$vuetify.actions.save')
+              "
               @save="calcTotal"
             >
               <div>{{ item.cost }}</div>
               <template v-slot:input>
                 <div class="mt-4 title">
-                  {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.edit")
+                  }}
                 </div>
                 <v-text-field-money
                   v-model="item.cost"
-                  :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                  :label="
+                    $vuetify.lang.t('$vuetify.actions.edit')
+                  "
                   required
                   :properties="{
                     clearable: true
@@ -45,7 +53,7 @@
                   :options="{
                     length: 15,
                     precision: 2,
-                    empty: 0.00,
+                    empty: 0.0
                   }"
                 />
               </template>
@@ -56,18 +64,26 @@
               :return-value.sync="item.cant"
               large
               persistent
-              :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-              :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+              :cancel-text="
+                $vuetify.lang.t('$vuetify.actions.cancel')
+              "
+              :save-text="
+                $vuetify.lang.t('$vuetify.actions.save')
+              "
               @save="calcTotal"
             >
               <div>{{ item.cant }}</div>
               <template v-slot:input>
                 <div class="mt-4 title">
-                  {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                  {{
+                    $vuetify.lang.t("$vuetify.actions.edit")
+                  }}
                 </div>
                 <v-text-field
                   v-model="item.cant"
-                  :label="$vuetify.lang.t('$vuetify.actions.save') "
+                  :label="
+                    $vuetify.lang.t('$vuetify.actions.save')
+                  "
                   single-line
                   counter
                   autofocus
@@ -95,7 +111,7 @@
         />
       </v-col>
       <v-col
-        v-show="supplies_product.length > 0 "
+        v-show="supplies_product.length > 0"
         cols="6"
       >
         <resume-supply :supply-selected="supplySelected" />
@@ -198,14 +214,16 @@ export default {
   async created () {
     this.loadingData = true
     await this.getArticles().then(() => {
-      this.articles.forEach((value) => {
+      this.articles.forEach(value => {
         if (!value.parent_id) {
           let inventory = 0
           if (value.variant_values.length > 0) {
-            value.variant_values.forEach((v) => {
+            value.variant_values.forEach(v => {
               if (v.articles_shops.length > 0) {
-                v.articles_shops.forEach((k) => {
-                  inventory += k.stock ? parseFloat(k.stock) : 0
+                v.articles_shops.forEach(k => {
+                  inventory += k.stock
+                    ? parseFloat(k.stock)
+                    : 0
                 })
               }
               this.localArticles.push({
@@ -228,7 +246,7 @@ export default {
             })
           } else {
             if (value.articles_shops.length > 0) {
-              value.articles_shops.forEach((k) => {
+              value.articles_shops.forEach(k => {
                 inventory += k.stock ? parseFloat(k.stock) : 0
               })
             }
@@ -269,20 +287,27 @@ export default {
       this.supplySelected = supply
     },
     deleteItem (item) {
-      this.supplies_product.splice(this.supplies_product.indexOf(item), 1)
+      this.supplies_product.splice(
+        this.supplies_product.indexOf(item),
+        1
+      )
     },
     selectRow (item) {
       this.editedIndex = this.supplies_product.indexOf(item)
       this.supplySelected = item
     },
     calcTotal: function () {
-      this.supplies_product[this.editedIndex].totalPrice = parseFloat(this.supplies_product[this.editedIndex].price * this.supplies_product[this.editedIndex].cant).toFixed(2)
-      this.supplies_product[this.editedIndex].totalCost = parseFloat(this.supplies_product[this.editedIndex].cost * this.supplies_product[this.editedIndex].cant).toFixed(2)
+      this.supplies_product[this.editedIndex].totalPrice = parseFloat(
+        this.supplies_product[this.editedIndex].price *
+                    this.supplies_product[this.editedIndex].cant
+      ).toFixed(2)
+      this.supplies_product[this.editedIndex].totalCost = parseFloat(
+        this.supplies_product[this.editedIndex].cost *
+                    this.supplies_product[this.editedIndex].cant
+      ).toFixed(2)
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -2,31 +2,14 @@
 
 namespace App\Managers;
 
+use App\Company;
+use App\Notification;
 use App\Supplier;
+use App\User;
 use Exception;
 
 class SupplierManager extends BaseManager
 {
-
-    /**
-     * @return mixed
-     */
-    public function findAllByCompany()
-    {
-        if (auth()->user()['isAdmin'] === 1) {
-            $suppliers = Supplier::latest()
-                ->with('company')
-                ->get();
-        } else {
-            $company = CompanyManager::getCompanyByAdmin();
-            $suppliers = Supplier::latest()
-                ->where('company_id', '=', $company->id)
-                ->with('expanse')
-                ->get();
-        }
-
-        return $suppliers;
-    }
 
     /**
      * @param $data
@@ -79,6 +62,21 @@ class SupplierManager extends BaseManager
             $supplier->note = $data['note'];
         }
         $supplier->save();
+        $com = Company::latest()->where('email', '=', $data['email'])->get();
+        if (count($com) > 0) {
+            $user = User::latest()->where('email', '=', $data['email'])->first();
+            $user->isSupplier = true;
+            $user->save();
+            $notification = Notification::create([
+                'company_id' => $supplier->company_id,
+                'to' => $user->id,
+                'params' => $supplier->name,
+                'msg' => 'supplier_is_register',
+                'type' => 'info',
+                'read' => false
+            ]);
+            $this->managerBy('new', $notification);
+        }
         return $supplier;
 
     }
@@ -115,4 +113,41 @@ class SupplierManager extends BaseManager
         return $supplier->delete();
     }
 
+    public function getSupplierClients()
+    {
+
+        $suppliers = $this->findAllByCompany();
+        $users = [];
+        foreach ($suppliers as $k => $supplier) {
+            $user = User::latest()->where('email', '=', $supplier->email)->get();
+            if (count($user) > 0) {
+                if ($user[0]->isSupplier) {
+                    $users [] = $supplier;
+                }
+            }
+        }
+        return $users;
+
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function findAllByCompany()
+    {
+        if (auth()->user()['isAdmin'] === 1) {
+            $suppliers = Supplier::latest()
+                ->with('company')
+                ->get();
+        } else {
+            $company = CompanyManager::getCompanyByAdmin();
+            $suppliers = Supplier::latest()
+                ->where('company_id', '=', $company->id)
+                ->with('expanse')
+                ->get();
+        }
+
+        return $suppliers;
+    }
 }

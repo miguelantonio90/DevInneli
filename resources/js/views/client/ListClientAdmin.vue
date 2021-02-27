@@ -6,8 +6,11 @@
         cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.client'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.client')
+            ])
+          "
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="clients"
@@ -26,20 +29,33 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.company.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.firstName`]="{ item }"
-          >
+          <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
-              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+              <v-img
+                :src="
+                  item.avatar ||
+                    `/assets/avatar/avatar-undefined.jpg`
+                "
+              />
             </v-avatar>
             {{ item.firstName }}
           </template>
@@ -75,10 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('client', [
-      'clients',
-      'isTableLoading'
-    ]),
+    ...mapState('client', ['clients', 'isTableLoading']),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
       return [
@@ -112,9 +125,7 @@ export default {
     this.getClients()
   },
   methods: {
-    ...mapActions('client', [
-      'getClients'
-    ])
+    ...mapActions('client', ['getClients'])
   }
 }
 </script>

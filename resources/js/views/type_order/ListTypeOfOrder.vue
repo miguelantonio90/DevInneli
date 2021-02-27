@@ -22,14 +22,20 @@
           @edit-row="openEditModal($event)"
           @delete-row="deleteHandler($event)"
         >
-          <template v-slot:[`group.header`]="{items, isOpen, toggle}">
+          <template
+            v-slot:[`group.header`]="{ items, isOpen, toggle }"
+          >
             <th colspan="100%">
-              <v-icon
-                @click="toggle"
-              >
-                {{ isOpen ? 'mdi-minus' : 'mdi-plus' }}
+              <v-icon @click="toggle">
+                {{ isOpen ? "mdi-minus" : "mdi-plus" }}
               </v-icon>
-              {{ $vuetify.lang.t('$vuetify.panel.shop').toUpperCase()+': '+ items[0].shopName }}
+              {{
+                $vuetify.lang
+                  .t("$vuetify.panel.shop")
+                  .toUpperCase() +
+                  ": " +
+                  items[0].shopName
+              }}
             </th>
           </template>
         </app-data-table>
@@ -125,7 +131,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteTypeOrder(id)
         })
     },

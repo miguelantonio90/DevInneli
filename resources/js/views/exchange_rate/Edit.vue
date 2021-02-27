@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.exchange_rate'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.exchange_rate")
           ])
         }}</span>
       </v-card-title>
@@ -39,10 +39,7 @@
                   slot-scope="data"
                 >
                   <template
-                    v-if="
-                      typeof data.item !==
-                        'object'
-                    "
+                    v-if="typeof data.item !== 'object'"
                   >
                     <v-list-item-content
                       v-text="data.item"
@@ -50,12 +47,14 @@
                   </template>
                   <template v-else>
                     <v-list-item-avatar>
-                      {{
-                        data.item.emoji
-                      }}
+                      {{ data.item.emoji }}
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{
+                          data.item.name
+                        }}
+                      </v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </template>
@@ -65,11 +64,19 @@
               cols="12"
               md="12"
             >
-              <v-text-field
+              <v-text-field-money
                 v-model="editChange.change"
                 :label="$vuetify.lang.t('$vuetify.change')"
-                :rules="formRule.change"
                 required
+                :rules="formRule.change"
+                :properties="{
+                  clearable: true
+                }"
+                :options="{
+                  length: 15,
+                  precision: 2,
+                  empty: 0
+                }"
               />
             </v-col>
           </v-row>
@@ -83,7 +90,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -93,7 +100,7 @@
           @click="handleSubmit"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -104,7 +111,6 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-
   data () {
     return {
       formValid: false,
@@ -130,5 +136,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

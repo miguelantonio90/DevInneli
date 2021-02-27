@@ -2,19 +2,19 @@
   <v-container>
     <v-row>
       <v-col
-        class="py-0"
-        cols="12"
+          class="py-0"
+          cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.menu.category_list')"
-          csv-filename="Categories"
-          :headers="getTableColumns"
-          :is-loading="isTableLoading"
-          :items="categories"
-          :manager="'category'"
-          :sort-by="['name']"
-          :sort-desc="[false, true]"
-          multi-sort
+            :headers="getTableColumns"
+            :is-loading="isTableLoading"
+            :items="categories"
+            :manager="'category'"
+            :sort-by="['name']"
+            :sort-desc="[false, true]"
+            :title="$vuetify.lang.t('$vuetify.menu.category_list')"
+            csv-filename="Categories"
+            multi-sort
         >
           <template v-slot:[`item.company.name`]="{ item }">
             <template>
@@ -22,25 +22,33 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip
-                    v-bind="attrs"
-                    v-on="on"
+                      v-bind="attrs"
+                      v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                            cou =>
+                                cou.id ===
+                                item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.company.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                    arrayCountry.filter(
+                        cou => cou.id === item.company.country
+                    )[0].name
+                  }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.color`]="{ item }"
-          >
+          <template v-slot:[`item.color`]="{ item }">
             <v-chip
-              :color="item.color"
-              dark
+                :color="item.color"
+                dark
             >
               {{ item.color }}
             </v-chip>
@@ -52,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ListBoxAdmin',
@@ -62,10 +70,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('category', [
-      'categories',
-      'isTableLoading'
-    ]),
+    ...mapState('category', ['categories', 'isTableLoading']),
     getTableColumns () {
       return [
         {
@@ -88,9 +93,7 @@ export default {
     this.getCategories()
   },
   methods: {
-    ...mapActions('category', [
-      'getCategories'
-    ])
+    ...mapActions('category', ['getCategories'])
   }
 }
 </script>

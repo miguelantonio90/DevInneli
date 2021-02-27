@@ -8,8 +8,11 @@
         <new-assistance v-if="showNewModal" />
         <edit-assistance v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.assistance'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.assistance')
+            ])
+          "
           csv-filename="Assistance"
           :is-loading="isTableLoading"
           :headers="getTableColumns"
@@ -71,7 +74,9 @@ export default {
           select_filter: true
         },
         {
-          text: this.$vuetify.lang.t('$vuetify.assistance.total_hours'),
+          text: this.$vuetify.lang.t(
+            '$vuetify.assistance.total_hours'
+          ),
           value: 'totalHours'
         },
         {
@@ -115,7 +120,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteAssistance(assistanceId)
         })
     }

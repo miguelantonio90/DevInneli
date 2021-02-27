@@ -327,6 +327,16 @@
                             </template>
                           </v-switch>
                         </v-col>
+                        <v-col
+                          cols="12"
+                          md="12"
+                        >
+                          <v-text-field
+                            v-model="article.description"
+                            :counter="250"
+                            :label="$vuetify.lang.t('$vuetify.access.description')"
+                          />
+                        </v-col>
                       </v-row>
                       <v-row v-show="article.composite">
                         <v-col
@@ -646,9 +656,18 @@ export default {
     'article.price': function (newVal, oldV) {
       this.article.articles_shops.forEach(shop => {
         shop.price = parseFloat(shop.price).toFixed(2) === '0.00' || parseFloat(shop.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(shop.price).toFixed(2)
+        shop.onlinePrice = parseFloat(shop.price).toFixed(2) === '0.00' || parseFloat(shop.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(shop.price).toFixed(2)
       })
       this.article.variant_values.forEach(variant => {
         variant.price = parseFloat(variant.price).toFixed(2) === '0.00' || parseFloat(variant.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(variant.price).toFixed(2)
+        variant.onlinePrice = parseFloat(variant.price).toFixed(2) === '0.00' || parseFloat(variant.price).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.price : parseFloat(variant.price).toFixed(2)
+      })
+    },
+    'article.cost': function (newVal, oldV) {
+      this.article.articles_shops.forEach(shop => {
+        this.article.variant_values.forEach(variant => {
+          variant.cost = parseFloat(variant.cost).toFixed(2) === '0.00' || parseFloat(variant.cost).toFixed(2) === parseFloat(oldV).toFixed(2) ? this.article.cost : parseFloat(variant.cost).toFixed(2)
+        })
       })
     },
     'article.composite': function (val) {
@@ -656,6 +675,7 @@ export default {
       if (!val) {
         this.article.variant_values.forEach(variant => {
           variant.price = parseFloat(variant.price).toFixed(2) === '0.00' ? this.article.price : parseFloat(variant.price).toFixed(2)
+          variant.onlinePrice = parseFloat(variant.onlinePrice).toFixed(2) === '0.00' ? this.article.onlinePrice : parseFloat(variant.onlinePrice).toFixed(2)
         })
       }
     },
@@ -664,27 +684,17 @@ export default {
     }
   },
   async created () {
-    this.article = {
-      name: '',
-      um: '',
-      price: 0.00,
-      unit: 'unit',
-      cost: 0.00,
-      ref: this.articleNumber,
-      barCode: '',
-      variants: [],
-      tax: [],
-      variant_values: [],
-      composite: false,
-      track_inventory: false,
-      category: [],
-      color: '',
-      articles_shops: [],
-      composites: [],
-      images: []
-    }
     this.loadingData = true
     this.article = this.managerArticle ? this.editArticle : this.newArticle
+    if (this.managerArticle && !this.article.composite) {
+      this.article.variant_values.forEach((artS) => {
+			    artS.articles_shops.onlineSale = artS.articles_shops.onlineSale !== 0
+			    artS.articles_shops.personSale = artS.articles_shops.personSale !== 0
+      })
+    }
+    this.article.cost = parseFloat(this.article.cost).toFixed(2)
+    this.article.price = parseFloat(this.article.price).toFixed(2)
+    this.article.onlinePrice = parseFloat(this.article.onlinePrice).toFixed(2)
     this.article.um = !this.managerArticle ? this.arrayUM[0] : this.editArticle.um ? JSON.parse(this.editArticle.um) : this.arrayUM[0]
     await this.getShops().then(() => {
       this.updateDataShops()
@@ -746,22 +756,26 @@ export default {
                 articles_shop_id: articles_shop.length > 0 ? articles_shop[0].id : '',
                 shop_id: shop.id,
                 shop_name: shop.name,
-                checked: articles_shop.length > 0,
+                personSale: articles_shop.length > 0 ? articles_shop[0].personSale : false,
+                onlineSale: articles_shop.length > 0 ? articles_shop[0].onlineSale : false,
                 name: v.name,
                 price: articles_shop.length > 0 ? articles_shop[0].price : v.price,
-                under_inventory: articles_shop.length > 0 ? articles_shop[0].under_inventory : '0.00',
-                stock: articles_shop.length > 0 ? articles_shop[0].stock : '0.00'
+                onlinePrice: articles_shop.length > 0 ? articles_shop[0].onlinePrice : v.onlinePrice,
+                under_inventory: articles_shop.length > 0 ? articles_shop[0].under_inventory : 1,
+                stock: articles_shop.length > 0 ? articles_shop[0].stock : 1
               })
             })
           } else {
             this.article.articles_shops.push({
               shop_id: shop.id,
               shop_name: shop.name,
-              checked: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 : true,
+              personSale: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 && this.editArticle.articles_shops.filter(sh => sh.id === shop.id)[0].personSale : true,
+              onlineSale: this.managerArticle ? this.editArticle.articles_shops.filter(sh => sh.id === shop.id).length > 0 && this.editArticle.articles_shops.filter(sh => sh.id === shop.id)[0].onlineSale : true,
               name: '',
               price: parseFloat(this.article.price).toFixed(2),
-              stock: '0.00',
-              under_inventory: '0.00'
+              onlinePrice: parseFloat(this.article.onlinePrice).toFixed(2),
+              stock: 1,
+              under_inventory: 1
             })
           }
         })
@@ -775,7 +789,6 @@ export default {
     },
     managerArticleHandler () {
       let valid = true
-      console.log(this.article)
       if (!this.article.category) {
         valid = false
         this.showAlertMessage(this.$vuetify.lang.t(

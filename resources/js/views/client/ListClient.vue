@@ -8,8 +8,11 @@
         <new-client v-if="showNewModal" />
         <edit-client v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.client'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.client')
+            ])
+          "
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="clients"
@@ -21,11 +24,14 @@
           @edit-row="editClientHandler($event)"
           @delete-row="deleteClientHandler($event)"
         >
-          <template
-            v-slot:[`item.firstName`]="{ item }"
-          >
+          <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
-              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+              <v-img
+                :src="
+                  item.avatar ||
+                    `/assets/avatar/avatar-undefined.jpg`
+                "
+              />
             </v-avatar>
             {{ item.firstName }}
           </template>
@@ -136,7 +142,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteClient(clientId)
         })
     }

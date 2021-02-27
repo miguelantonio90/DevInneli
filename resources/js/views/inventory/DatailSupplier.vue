@@ -20,12 +20,19 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('supplier/toogleNewModal',true)"
+                  @click="
+                    $store.dispatch(
+                      'supplier/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                $vuetify.lang.t("$vuetify.titles.newAction")
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
@@ -75,12 +82,19 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('tax/toogleNewModal',true)"
+                  @click="
+                    $store.dispatch(
+                      'tax/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                $vuetify.lang.t("$vuetify.titles.newAction")
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
@@ -115,12 +129,19 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('payment/toogleNewModal',true)"
+                  @click="
+                    $store.dispatch(
+                      'payment/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                $vuetify.lang.t("$vuetify.titles.newAction")
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
@@ -163,7 +184,11 @@ export default {
     ...mapState('shop', ['shops', 'isShopLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['sales']),
-    ...mapState('inventory', ['newInventory', 'editInventory', 'inventories']),
+    ...mapState('inventory', [
+      'newInventory',
+      'editInventory',
+      'inventories'
+    ]),
     getPay () {
       return [
         {
@@ -179,7 +204,14 @@ export default {
   },
   watch: {
     'newInventory.no_facture': function () {
-      if (this.sales.filter(art => art.no_facture === this.newInventory.no_facture).length > 0 || this.inventories.filter(art => art.no_facture === this.newInventory.no_facture).length > 0) {
+      if (
+        this.sales.filter(
+          art => art.no_facture === this.newInventory.no_facture
+        ).length > 0 ||
+                this.inventories.filter(
+                  art => art.no_facture === this.newInventory.no_facture
+                ).length > 0
+      ) {
         this.supply.no_facture = this.generateNF()
       }
     }
@@ -191,7 +223,9 @@ export default {
     await this.getPayments()
     await this.getInventories()
     await this.getSales()
-    if (!this.edit) { this.supply.no_facture = this.generateNF() }
+    if (!this.edit) {
+      this.supply.no_facture = this.generateNF()
+    }
   },
   methods: {
     ...mapActions('supplier', ['getSuppliers']),
@@ -201,7 +235,10 @@ export default {
     ...mapActions('sale', ['getSales']),
     ...mapActions('payment', ['getPayments']),
     generateNF () {
-      return Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000
+      return (
+        Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) +
+                1000000000
+      )
     },
     updateStore () {
       if (this.edit) {
@@ -224,6 +261,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

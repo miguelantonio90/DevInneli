@@ -3,7 +3,6 @@
 namespace App\Managers;
 
 use App\ArticlesShops;
-use App\Box;
 use App\ExchangeRate;
 use App\PaySale;
 use App\Sale;
@@ -24,7 +23,7 @@ class BuyManager extends BaseManager
         $company = CompanyManager::getCompanyByAdmin();
         $sales = Sale::latest()
             ->where('company_id', '=', $company->id)
-            ->where('type','=','buy')
+            ->where('type', '=', 'buy')
             ->where()
             ->orderBy('created_at', 'ASC')
             ->take($limit)
@@ -75,13 +74,13 @@ class BuyManager extends BaseManager
         if (auth()->user()['isAdmin'] === 1) {
             $sales = Sale::latest()
                 ->with('company')
-                ->where('type','=','buy')
+                ->where('type', '=', 'buy')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
             $sales = Sale::latest()
                 ->where('company_id', '=', $company->id)
-                ->where('type','=','buy')
+                ->where('type', '=', 'buy')
                 ->when($this->getAccessPermit()[2]->actions->just_yours === true, function ($query) {
                     return $query->where('created_by', '=', cache()->get('userPin')['id']);
                 })
@@ -137,14 +136,13 @@ class BuyManager extends BaseManager
                     'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
                     'pay_sales.currency_id', 'pay_sales.cant_back')
                 ->get();
-            foreach ($sales[$key]['pays'] as $p=>$pay){
-                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id):'';
+            foreach ($sales[$key]['pays'] as $p => $pay) {
+                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id) : '';
             }
             $sales[$key]['supplier'] = DB::table('suppliers')
                 ->join('sales', 'sales.provider_id', '=', 'suppliers.id')
                 ->where('sales.id', '=', $value['id'])
                 ->first();
-            $totalCost = 0;
             $subTotal = 0;
             $totalTax = 0;
             $totalDisc = 0;
@@ -220,8 +218,7 @@ class BuyManager extends BaseManager
             $sales[$key]['create'] = DB::table('users')
                 ->where('users.id', '=', $value['created_by'])
                 ->select('firstName', 'lastName')
-                ->get()[0]
-            ;
+                ->get()[0];
         }
         return $sales;
     }
@@ -242,22 +239,22 @@ class BuyManager extends BaseManager
             $sale->provider_id = $data['supplier']['id'];
         }
         $sale->save();
-        $this->updateSaleData($sale, $data, false);
+        $this->updateSaleData($sale->id, $data, false);
         return $sale;
     }
 
     /**
-     * @param $sale
+     * @param $saleId
      * @param $data
      * @param $edit
      * @throws Exception
      */
-    public function updateSaleData($sale, $data, $edit): void
+    public function updateSaleData($saleId, $data, $edit): void
     {
+        $sale = Sale::findOrFail($saleId);
         $articles = $data['articles'];
         $pays = $data['pays'];
         foreach ($articles as $key => $value) {
-
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
@@ -277,7 +274,7 @@ class BuyManager extends BaseManager
             }
             $pSale['cant'] = $pay['cant'];
             if ($pay['method'] === 'cash') {
-                $pSale['currency_id'] = $pay['currency']['id'] ? $pay['currency']['id'] : '';
+                $pSale['currency_id'] = $pay['currency'] !== null && isset($pay['currency']['id']) ? $pay['currency']['id'] : '';
                 $pSale['cant_pay'] = $pay['cant_pay'];
                 $pSale['cant_back'] = $pay['cant_back'];
             }
@@ -303,6 +300,7 @@ class BuyManager extends BaseManager
         $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
     }
+
     /**
      * @param $sale
      * @param $articleShopId
@@ -321,7 +319,7 @@ class BuyManager extends BaseManager
                 'sale_id' => $sale->id,
                 'articles_shops_id' => $articleShopId,
                 'cant' => $data['cant'],
-                'price' => $data['price']?:0.00
+                'price' => $data['price'] ?: 0.00
             ]);
         } else {
             $saleAS = SalesArticlesShops::findOrFail($salesArtShop[0]['id']);
@@ -355,22 +353,22 @@ class BuyManager extends BaseManager
             $sale->provider_id = null;
         }
         $sale->save();
-        $this->removeSaleArticle($sale, $data['articles']);
-        $this->removePaySale($sale, $data['pays']);
-        $this->updateSaleData($sale, $data, true);
+        $this->removeSaleArticle($sale->id, $data['articles']);
+        $this->removePaySale($sale->id, $data['pays']);
+        $this->updateSaleData($sale->edit, $data, true);
 
         return $sale;
     }
 
     /**
-     * @param $sale
+     * @param $saleId
      * @param $articles
      * @throws Exception
      */
-    private function removeSaleArticle($sale, $articles): void
+    public function removeSaleArticle($saleId, $articles): void
     {
         $saleArtShopDB = SalesArticlesShops::latest()
-            ->where('sale_id', '=', $sale->id)
+            ->where('sale_id', '=', $saleId)
             ->with('articles_shops')
             ->get();
         foreach ($saleArtShopDB as $art => $value) {
@@ -391,14 +389,14 @@ class BuyManager extends BaseManager
     }
 
     /**
-     * @param $sale
+     * @param $saleId
      * @param $pays
      * @throws Exception
      */
-    private function removePaySale($sale, $pays): void
+    public function removePaySale($saleId, $pays): void
     {
         $paySale = PaySale::latest()
-            ->where('sale_id', '=', $sale->id)
+            ->where('sale_id', '=', $saleId)
             ->with('method')
             ->get();
         foreach ($paySale as $art => $value) {

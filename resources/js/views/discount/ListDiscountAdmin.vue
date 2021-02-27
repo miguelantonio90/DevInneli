@@ -6,8 +6,11 @@
         cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.discount'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.discount')
+            ])
+          "
           csv-filename="Discounts"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
@@ -27,19 +30,31 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.percent`]="{ item }"
-          >
-            {{ item.percent ==="true" ? $vuetify.lang.t('$vuetify.tax.percent'):$vuetify.lang.t('$vuetify.tax.permanent') }}
+          <template v-slot:[`item.percent`]="{ item }">
+            {{
+              item.percent === "true"
+                ? $vuetify.lang.t("$vuetify.tax.percent")
+                : $vuetify.lang.t("$vuetify.tax.permanent")
+            }}
           </template>
         </app-data-table>
       </v-col>
@@ -58,10 +73,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('discount', [
-      'discounts',
-      'isTableLoading'
-    ]),
+    ...mapState('discount', ['discounts', 'isTableLoading']),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
       return [
@@ -90,9 +102,7 @@ export default {
     this.getDiscounts()
   },
   methods: {
-    ...mapActions('discount', [
-      'getDiscounts'
-    ])
+    ...mapActions('discount', ['getDiscounts'])
   }
 }
 </script>

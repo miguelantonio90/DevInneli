@@ -26,6 +26,7 @@ class SaleManager extends BaseManager
         $sales = Sale::latest()
             ->where('company_id', '=', $company->id)
             ->where('type', '=', 'sale')
+            ->whereNull('deleted_at')
             ->orderBy('created_at', 'ASC')
             ->take($limit)
             ->get();
@@ -120,6 +121,15 @@ class SaleManager extends BaseManager
                 ->get();
         }
         return $this->filterSale($sales);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAccessPermit()
+    {
+        return json_decode(cache()->get('userPin')->position['access_permit'], true);
     }
 
     public function filterSale($sales)
@@ -258,28 +268,27 @@ class SaleManager extends BaseManager
     }
 
     /**
-     * @return mixed
-     * @throws Exception
-     */
-    private function getAccessPermit()
-    {
-        return json_decode(cache()->get('userPin')->position['access_permit'], true);
-    }
-
-    /**
      * @param $data
      * @return Sale
      * @throws Exception
      */
     public function new($data): Sale
     {
-        $this->validBoxToSale(['id' => $data['box']['id']]);
+        if ($data['online'] !== true) {
+            $this->validBoxToSale(['id' => $data['box']['id']]);
+        }
         $sale = Sale::create([
             'no_facture' => $data['no_facture'],
             'company_id' => $data['company_id']
         ]);
+
         if (isset($data['box']['id'])) {
             $sale->box_id = $data['box']['id'];
+        }
+        if ($data['online']) {
+            $sale->online = $data['online'] ?: false;
+            $sale->box_id = Box::latest()->where('shop_id', '=', $data['shop']['id'])->where('online', '=',
+                true)->get();
         }
         $sale->state = $data['state'] ?: null;
         $sale->type = 'sale';
@@ -312,9 +321,10 @@ class SaleManager extends BaseManager
      * @param $sale
      * @param $data
      * @param $edit
+     * @return Sale
      * @throws Exception
      */
-    public function updateSaleData($sale, $data, $edit): void
+    public function updateSaleData($sale, $data, $edit): Sale
     {
         $articles = $data['articles'];
         $pays = $data['pays'];
@@ -360,13 +370,12 @@ class SaleManager extends BaseManager
         }
         $sale->taxes()->sync(Tax::find($taxes));
         $discounts = [];
-
         foreach ($data['discounts'] as $k => $v) {
             $discounts[] = $v['id'];
         }
-
         $edit ? $this->managerBy('edit', $sale) : $this->managerBy('new', $sale);
         $sale->discounts()->sync($discounts);
+        return $sale;
     }
 
     /**
@@ -402,10 +411,12 @@ class SaleManager extends BaseManager
         }
         $saleAS->discount()->sync($discounts);
         $modifiers = [];
-        foreach ($data['modifiers'] as $key => $modifier) {
-            $modifiers[] = $modifier['id'];
+        if (array_key_exists('modifiers', $data)) {
+            foreach ($data['modifiers'] as $key => $modifier) {
+                $modifiers[] = $modifier['id'];
+            }
+            $saleAS->modifier()->sync($modifiers);
         }
-        $saleAS->modifier()->sync($modifiers);
         return $cant;
     }
 
@@ -541,6 +552,7 @@ class SaleManager extends BaseManager
             ->where('articles.category_id', '=', $id)
             ->where('sales.type', '=', 'sale')
             ->where('sales.state', '=', 'accepted')
+            ->whereNull('sales.deleted_at')
             ->orderBy('articles.created_at');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
@@ -613,6 +625,7 @@ class SaleManager extends BaseManager
             ->leftJoin('payments', 'payments.id', '=', 'pay_sales.payment_id')
             ->where('sales.created_by', '=', cache()->get('userPin')['id'])
             ->where('sales.type', '=', 'sale')
+            ->whereNull('sales.deleted_at')
             ->where('sales.state', '=', 'accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];
@@ -709,6 +722,7 @@ class SaleManager extends BaseManager
             ->whereDate('sales_articles_shops.updated_at', '<=', $dates[1])
             ->whereIn('articles_shops.shop_id', $shops)
             ->where('sales.type', '=', 'sale')
+            ->whereNull('sales.deleted_at')
             ->where('sales.state', '=', 'accepted')
             ->get();
         $result = [];
@@ -776,6 +790,7 @@ class SaleManager extends BaseManager
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->where('sales.type', '=', 'sale')
+            ->whereNull('sales.deleted_at')
             ->where('sales.state', '=', 'accepted');
         if (array_key_exists('dates', $filter)) {
             $dates = [date($filter['dates'][0]), date($filter['dates'][1])];

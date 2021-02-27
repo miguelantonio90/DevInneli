@@ -10,11 +10,11 @@ const state = {
 
 // getters
 const getters = {
-  getThemeColor: (state) => {
-    return colors[state.themeColor].base
+  getThemeColor: state => {
+	return colors[state.themeColor].base
   },
-  windowHeight: (state) => state.windowHeight,
-  windowWidth: (state) => state.windowWidth
+  windowHeight: state => state.windowHeight,
+  windowWidth: state => state.windowWidth
 }
 
 // actions
@@ -23,13 +23,13 @@ const actions = {}
 // mutations
 const mutations = {
   setThemeColor (state, payload) {
-    state.themeColor = payload
+	state.themeColor = payload
   },
   setWindowHeight (state, { windowHeight }) {
-    state.windowHeight = windowHeight
+	state.windowHeight = windowHeight
   },
   setWindowWidth (state, { windowWidth }) {
-    state.windowWidth = windowWidth
+	state.windowWidth = windowWidth
   }
 }
 

@@ -6,8 +6,8 @@ const state = {
 
 // getters
 const getters = {
-  getThemeColor: (state) => {
-    return colors[state.themeColor].base
+  getThemeColor: state => {
+	return colors[state.themeColor].base
   }
 }
 
@@ -16,7 +16,7 @@ const actions = {}
 // mutations
 const mutations = {
   setThemeColor (state, payload) {
-    state.themeColor = payload
+	state.themeColor = payload
   }
 }
 

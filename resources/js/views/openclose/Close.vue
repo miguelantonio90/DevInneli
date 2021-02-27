@@ -7,7 +7,9 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.newF', [$vuetify.lang.t('$vuetify.menu.box')])
+          $vuetify.lang.t("$vuetify.titles.newF", [
+            $vuetify.lang.t("$vuetify.menu.box")
+          ])
         }}</span>
       </v-card-title>
       <v-card-text>
@@ -58,7 +60,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -68,7 +70,7 @@
           @click="editBoxHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>

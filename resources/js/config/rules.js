@@ -34,9 +34,7 @@ const email = [
     language.t('$vuetify.email')
   ]),
   (v) => /.+@.+\..+/.test(v) ||
-    language.t('$vuetify.rule.bad_email', [
-      language.t('$vuetify.email')
-    ])
+    language.t('$vuetify.rule.bad_email', [language.t('$vuetify.email')])
 ]
 const password = [
   (v) => !!v || language.t('$vuetify.rule.required', [
@@ -64,63 +62,53 @@ const shops = [
   (v) =>
     !!v || language.t('$vuetify.rule.required', [
       language.t('$vuetify.menu.shop')
-    ])
+    ]),
+  (v) => (v && v.length >= 10) || language.t('$vuetify.rule.pin.min', ['10'])
 ]
 const city = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.city')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.city')])
 ]
 const province = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.province')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.province')])
 ]
 const barCode = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.barCode')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.barCode')])
 ]
 const description = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.access.description')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.access.description')]),
+  (v) => (v && v.length >= 120) || language.t('$vuetify.rule.pin.min', ['120'])
 ]
 const phone = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.phone')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.phone')]),
+  (v) => !!isNumeric(v) || language.t('$vuetify.rule.bad_numeric', [
+    language.t('$vuetify.phone')
+  ])
 ]
 const address = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.address')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.address')]),
+  (v) => (v && v.length >= 120) || language.t('$vuetify.rule.pin.min', ['120'])
 ]
 const contract = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.supplier.contract')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.supplier.contract')])
 ]
 const identity = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [
-      language.t('$vuetify.supplier.identity')
-    ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.supplier.identity')])
 ]
 const key = [
   (v) => !!v || language.t('$vuetify.rule.required', [

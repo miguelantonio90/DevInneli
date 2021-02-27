@@ -12,27 +12,15 @@
       >
         <v-autocomplete
           v-model="sale.supplier"
-          clearable
-          :items="suppliers"
+          :rules="formRule.country"
+          :items="clientSuppliers"
           :label="$vuetify.lang.t('$vuetify.menu.supplier')"
           item-text="firstName"
           :loading="isSupplierTableLoading"
+          auto-select-first
           return-object
+          @input="$emit('generateNF')"
         >
-          <template v-slot:append-outer>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="$store.dispatch('supplier/toogleNewModal',true)"
-                >
-                  mdi-plus
-                </v-icon>
-              </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
-            </v-tooltip>
-          </template>
           <template v-slot:selection="data">
             <v-chip
               v-bind="data.attrs"
@@ -40,22 +28,32 @@
               @click="data.select"
             >
               <v-avatar left>
-                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+                <v-img
+                  :src="
+                    data.item.avatar ||
+                      '/assets/avatar/avatar-undefined.jpg'
+                  "
+                />
               </v-avatar>
-              {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+              {{ data.item.name }}
             </v-chip>
           </template>
           <template v-slot:item="data">
             <template>
               <v-list-item-avatar>
-                <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+                <v-img
+                  :src="
+                    data.item.avatar ||
+                      '/assets/avatar/avatar-undefined.jpg'
+                  "
+                />
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{ data.item.firstName+' '+ `${data.item.lastName!==null?data.item.lastName:''}` }}
+                  {{ data.item.name }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ `${data.item.email }` }}
+                  {{ `${data.item.email}` }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </template>
@@ -100,12 +98,19 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('tax/toogleNewModal',true)"
+                  @click="
+                    $store.dispatch(
+                      'tax/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                $vuetify.lang.t("$vuetify.titles.newAction")
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
@@ -136,12 +141,19 @@
                 <v-icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="$store.dispatch('discount/toogleNewModal',true)"
+                  @click="
+                    $store.dispatch(
+                      'discount/toogleNewModal',
+                      true
+                    )
+                  "
                 >
                   mdi-plus
                 </v-icon>
               </template>
-              <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+              <span>{{
+                $vuetify.lang.t("$vuetify.titles.newAction")
+              }}</span>
             </v-tooltip>
           </template>
         </v-select>
@@ -169,11 +181,10 @@ import NewTax from '../tax/NewTax'
 import NewPayment from '../payment/NewPayment'
 import NewDiscount from '../discount/NewDiscount'
 import ListPay from '../pay/ListPay'
-import NewSupplier from '../supplier/NewSupplier'
 
 export default {
   name: 'ExtraData',
-  components: { NewSupplier, ListPay, NewPayment, NewTax, NewDiscount },
+  components: { ListPay, NewPayment, NewTax, NewDiscount },
   props: {
     edit: {
       type: Boolean,
@@ -209,7 +220,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('supplier', ['suppliers', 'isSupplierTableLoading']),
+    ...mapState('supplier', ['clientSuppliers', 'isSupplierTableLoading']),
     ...mapState('tax', ['taxes', 'isTaxLoading']),
     ...mapState('payment', ['payments', 'isPaymentLoading']),
     ...mapState('sale', ['newSale', 'editSale']),
@@ -225,7 +236,7 @@ export default {
     }
   },
   async created () {
-    await this.getSuppliers()
+    await this.getClientSupplier()
     await this.getTaxes()
     await this.getPayments()
     await this.getDiscounts().then(() => {
@@ -233,15 +244,21 @@ export default {
     })
   },
   methods: {
-    ...mapActions('supplier', ['getSuppliers']),
+    ...mapActions('supplier', ['getClientSupplier']),
     ...mapActions('tax', ['getTaxes']),
     ...mapActions('payment', ['getPayments']),
     ...mapActions('discount', ['getDiscounts']),
     getLocalDiscounts () {
-      this.discounts.forEach((v) => {
+      this.discounts.forEach(v => {
         this.localDiscounts.push({
           id: v.id,
-          name: v.percent ? v.name + '(' + v.value + '%)' : v.name + '(' + this.user.company.currency + v.value + ')',
+          name: v.percent
+            ? v.name + '(' + v.value + '%)'
+            : v.name +
+                          '(' +
+                          this.user.company.currency +
+                          v.value +
+                          ')',
           value: v.value,
           percent: v.percent
         })
@@ -251,6 +268,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

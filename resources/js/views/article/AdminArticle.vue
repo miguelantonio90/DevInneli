@@ -6,8 +6,11 @@
         cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.articles'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.articles')
+            ])
+          "
           :headers="getTableColumns"
           :view-transfer-button="true"
           csv-filename="Articles"
@@ -28,18 +31,26 @@
                   v-on="on"
                 >
                   <v-avatar left>
-                    {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                    {{
+                      arrayCountry.filter(
+                        cou =>
+                          cou.id ===
+                          item.company.country
+                      )[0].emoji
+                    }}
                   </v-avatar>
                   {{ item.company.country }}
                 </v-chip>
               </template>
-              <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+              <span>{{
+                arrayCountry.filter(
+                  cou => cou.id === item.company.country
+                )[0].name
+              }}</span>
             </v-tooltip>
           </template>
           <template v-slot:item.name="{ item }">
-            <v-chip
-              :key="JSON.stringify(item)"
-            >
+            <v-chip :key="JSON.stringify(item)">
               <v-avatar
                 v-if="item.color && item.images.length === 0"
                 class="white--text"
@@ -57,18 +68,18 @@
             </v-chip>
           </template>
           <template v-slot:item.percent="{ item }">
-            <template v-if="item.variant_values.length===0">
+            <template v-if="item.variant_values.length === 0">
               {{ item.percent }} %
             </template>
           </template>
           <template v-slot:item.price="{ item }">
-            <template v-if="item.variant_values.length===0">
-              {{ `${user.company.currency + ' ' + item.price}` }}
+            <template v-if="item.variant_values.length === 0">
+              {{ `${user.company.currency + " " + item.price}` }}
             </template>
           </template>
           <template v-slot:item.cost="{ item }">
-            <template v-if="item.variant_values.length===0">
-              {{ `${user.company.currency + ' ' + item.cost}` }}
+            <template v-if="item.variant_values.length === 0">
+              {{ `${user.company.currency + " " + item.cost}` }}
             </template>
           </template>
           <template v-slot:item.shopsNames="{ item }">
@@ -79,7 +90,13 @@
               {{ shop }}
             </v-chip>
           </template>
-          <template v-slot:[`item.data-table-expand`]="{item, expand, isExpanded }">
+          <template
+            v-slot:[`item.data-table-expand`]="{
+              item,
+              expand,
+              isExpanded
+            }"
+          >
             <v-btn
               v-if="item.variant_values.length > 0"
               color="primary"
@@ -106,7 +123,7 @@
               </v-icon>
             </v-btn>
           </template>
-          <template v-slot:expanded-item="{ headers,item }">
+          <template v-slot:expanded-item="{ headers, item }">
             <td
               :colspan="headers.length"
               style="padding: 0 0 0 0"
@@ -116,19 +133,39 @@
                   <thead>
                     <tr>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.firstName') }}
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.firstName"
+                          )
+                        }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.price') }}
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.articles.price"
+                          )
+                        }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.cost') }}
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.articles.cost"
+                          )
+                        }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.articles.percent') }}
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.articles.percent"
+                          )
+                        }}
                       </th>
                       <th class="text-left">
-                        {{ $vuetify.lang.t('$vuetify.menu.shop') }}
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.menu.shop"
+                          )
+                        }}
                       </th>
                     </tr>
                   </thead>
@@ -138,13 +175,28 @@
                       :key="dessert.ref"
                     >
                       <td>{{ dessert.name }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.price}` }}</td>
-                      <td>{{ `${user.company.currency + ' ' + dessert.cost}` }}</td>
-                      <td>{{ dessert.percent + ' %' }}</td>
+                      <td>
+                        {{
+                          `${user.company.currency +
+                            " " +
+                            dessert.price}`
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          `${user.company.currency +
+                            " " +
+                            dessert.cost}`
+                        }}
+                      </td>
+                      <td>
+                        {{ dessert.percent + " %" }}
+                      </td>
                       <td>
                         <v-chip
-                          v-for="(shop, i) of dessert.shopsNames"
-                          :key="i+shop"
+                          v-for="(shop,
+                                  i) of dessert.shopsNames"
+                          :key="i + shop"
                           small
                         >
                           {{ shop }}
@@ -224,7 +276,8 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.articles.cost'),
           value: 'cost',
           select_filter: true
-        }, {
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.articles.percent'),
           value: 'percent',
           select_filter: true

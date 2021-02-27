@@ -6,19 +6,28 @@ const getUserData = () => {
   return api.get('auth')
 }
 
-const loginRequest = ({ email, password }) => {
-  return api.post('login', { email, password })
+const loginRequest = ({
+  email,
+  password
+}) => {
+  return api.post('login', {
+	email,
+	password
+  })
 }
 
-const loginPincodeRequest = ({ email, pincode }) => {
+const loginPincodeRequest = ({
+  email,
+  pincode
+}) => {
   const user = {
-    email: email,
-    pincode: pincode
+	email: email,
+	pincode: pincode
   }
   return api.post('login/pincode', user)
 }
 
-const registerRequest = (user) => {
+const registerRequest = user => {
   return api.post('register', user)
 }
 
@@ -30,15 +39,20 @@ const verifyResendRequest = () => {
   return api.get('email/resend')
 }
 
-const verifyRequest = (hash) => {
+const verifyRequest = hash => {
   return api.get(`email/verify/${hash}`)
 }
 
-const verifyMailForgot = (email) => {
+const verifyMailForgot = email => {
   return api.post('password/reset/link', { email: email })
 }
+
 const resetPassword = (hash, newData) => {
   return api.post('password/reset/new/' + hash, newData)
+}
+
+const readNotification = idNotification => {
+  return api.post('user/read/notification/' + idNotification)
 }
 
 export default {
@@ -50,5 +64,6 @@ export default {
   verifyRequest,
   verifyResendRequest,
   verifyMailForgot,
-  resetPassword
+  resetPassword,
+  readNotification
 }

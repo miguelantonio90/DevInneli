@@ -66,18 +66,16 @@ class SupplierController extends Controller
         $data['company_id'] = (CompanyManager::getCompanyByAdmin())->id;
         $this->validator($data)->validate();
         $supplier = $this->supplierManager->new($data);
-        $info =
-            ['client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name];
-        if ($data['sendEmail']) {
+        $info = [
+            'client' => Company::findOrFail(CompanyManager::getCompanyByAdmin()->id)->name,
+            'registerUrl' => config('frontend.email_register_url').base64_encode($supplier),
+        ];
+        if (array_key_exists('sendEmail', $data) && $data['sendEmail']) {
             Mail::send('emails.invitation-supplier', $info,
-//                function ($message, $supplier){
                 function ($message) use ($supplier) {
-                    $message->subject('INNELI');
-                    $message->from('no-reply@inneli.com');
+                    $message->subject('Invitation Email Address');
                     $message->to($supplier->email);
                 });
-
-
         }
         return ResponseHelper::sendResponse(
             $supplier,
@@ -121,6 +119,19 @@ class SupplierController extends Controller
     {
         return ResponseHelper::sendResponse(
             $this->supplierManager->delete($id),
+            'Supplier has deleted successfully.'
+        );
+    }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+    public function getSupplierClients(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->supplierManager->getSupplierClients(),
             'Supplier has deleted successfully.'
         );
     }

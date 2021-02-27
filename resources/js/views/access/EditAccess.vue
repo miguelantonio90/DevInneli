@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.access'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.access")
           ])
         }}</span>
       </v-card-title>
@@ -23,9 +23,7 @@
             cols="12"
             justify="space-around"
           >
-            <v-col
-              md="4"
-            >
+            <v-col md="4">
               <v-text-field
                 v-model="editAccess.name"
                 :label="$vuetify.lang.t('$vuetify.access.name')"
@@ -36,28 +34,36 @@
             <v-col md="4">
               <v-checkbox
                 v-model="editAccess.accessEmail"
-                :label="$vuetify.lang.t('$vuetify.access.accessEmail')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.access.accessEmail'
+                  )
+                "
               />
             </v-col>
             <v-col md="4">
               <v-checkbox
                 v-model="editAccess.accessPin"
-                :label="$vuetify.lang.t('$vuetify.access.accessPin')"
+                :label="
+                  $vuetify.lang.t('$vuetify.access.accessPin')
+                "
               />
             </v-col>
-            <v-col
-              md="12"
-            >
+            <v-col md="12">
               <v-text-field
                 v-model="editAccess.description"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.access.description'
+                  )
+                "
               />
             </v-col>
           </v-row>
           <v-row>
             <v-expansion-panels popout>
               <v-col
-                v-for="(access,j) in access_permit"
+                v-for="(access, j) in access_permit"
                 :key="j"
                 cols="12"
                 md="6"
@@ -66,18 +72,34 @@
                   <v-expansion-panel-header>
                     <v-switch
                       v-model="access.title.value"
-                      :title="$vuetify.lang.t('$vuetify.access.access.' + access.title.name)"
+                      :title="
+                        $vuetify.lang.t(
+                          '$vuetify.access.access.' +
+                            access.title.name
+                        )
+                      "
                     >
                       <template v-slot:label>
                         <div>
                           <b>
-                            {{ $vuetify.lang.t('$vuetify.access.access.' + access.title.name) }}
+                            {{
+                              $vuetify.lang.t(
+                                "$vuetify.access.access." +
+                                  access.title
+                                    .name
+                              )
+                            }}
                           </b>
                           <v-tooltip
                             right
                             class="md-6"
                           >
-                            <template v-slot:activator="{ on, attrs }">
+                            <template
+                              v-slot:activator="{
+                                on,
+                                attrs
+                              }"
+                            >
                               <v-icon
                                 color="primary"
                                 dark
@@ -88,7 +110,9 @@
                               </v-icon>
                             </template>
                             <span>{{
-                              $vuetify.lang.t('$vuetify.access.access.manager_help')
+                              $vuetify.lang.t(
+                                "$vuetify.access.access.manager_help"
+                              )
                             }}</span>
                           </v-tooltip>
                         </div>
@@ -103,15 +127,23 @@
                       </v-icon>
                     </template>
                   </v-expansion-panel-header>
-                  <v-expansion-panel-content v-show="access.title.value">
+                  <v-expansion-panel-content
+                    v-show="access.title.value"
+                  >
                     <v-row>
                       <v-col
-                        v-for="(item,i) in access.actions"
+                        v-for="(item,
+                                i) in access.actions"
                         :key="i"
                       >
                         <v-switch
                           v-model="item[i]"
-                          :label="$vuetify.lang.t('$vuetify.access.access.' + i)"
+                          :label="
+                            $vuetify.lang.t(
+                              '$vuetify.access.access.' +
+                                i
+                            )
+                          "
                         />
                       </v-col>
                     </v-row>
@@ -130,7 +162,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -140,7 +172,7 @@
           @click="updateRoleHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -160,7 +192,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('role', ['saved', 'editAccess', 'keys', 'isActionInProgress']),
+    ...mapState('role', [
+      'saved',
+      'editAccess',
+      'keys',
+      'isActionInProgress'
+    ]),
     ...mapState('keys', ['keys'])
   },
   created () {

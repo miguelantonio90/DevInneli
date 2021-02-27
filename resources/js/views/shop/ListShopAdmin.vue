@@ -2,22 +2,24 @@
   <v-container>
     <v-row>
       <v-col
-        class="py-0"
-        cols="12"
+          class="py-0"
+          cols="12"
       >
         <v-card>
           <app-data-table
-            :title="$vuetify.lang.t('$vuetify.titles.list',
-                                    [$vuetify.lang.t('$vuetify.menu.shop'),])"
-
-            :is-loading="isTableLoading"
-            csv-filename="Shops"
-            :headers="getTableColumns"
-            :items="shops"
-            :manager="'shop'"
-            :sort-by="['name']"
-            :sort-desc="[false, true]"
-            multi-sort
+              :headers="getTableColumns"
+              :is-loading="isTableLoading"
+              :items="shops"
+              :manager="'shop'"
+              :sort-by="['name']"
+              :sort-desc="[false, true]"
+              :title="
+              $vuetify.lang.t('$vuetify.titles.list', [
+                $vuetify.lang.t('$vuetify.menu.shop')
+              ])
+            "
+              csv-filename="Shops"
+              multi-sort
           >
             <template v-slot:[`item.company.name`]="{ item }">
               <template>
@@ -25,16 +27,27 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-chip
-                      v-bind="attrs"
-                      v-on="on"
+                        v-bind="attrs"
+                        v-on="on"
                     >
                       <v-avatar left>
-                        {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                        {{
+                          arrayCountry.filter(
+                              cou =>
+                                  cou.id ===
+                                  item.company.country
+                          )[0].emoji
+                        }}
                       </v-avatar>
                       {{ item.country }}
                     </v-chip>
                   </template>
-                  <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                  <span>{{
+                      arrayCountry.filter(
+                          cou =>
+                              cou.id === item.company.country
+                      )[0].name
+                    }}</span>
                 </v-tooltip>
               </template>
             </template>
@@ -46,8 +59,8 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip
-                    v-bind="attrs"
-                    v-on="on"
+                      v-bind="attrs"
+                      v-on="on"
                   >
                     <v-avatar left>
                       {{ item.countryFlag }}
@@ -90,7 +103,8 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.company'),
           value: 'company.name',
           select_filter: true
-        }, {
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.name'),
           value: 'name',
           select_filter: true
@@ -127,6 +141,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

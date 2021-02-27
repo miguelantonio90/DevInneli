@@ -2,13 +2,18 @@
 
 namespace App\Managers;
 
+use App\ArticleImage;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
 use App\Variant;
 use Exception;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Http\Request;
 
+/**
+ * @method findMoreStars(Request $request)
+ */
 class ArticleManager extends BaseManager
 {
     /**
@@ -22,12 +27,19 @@ class ArticleManager extends BaseManager
     private $variantManager;
 
     /**
-     * ArticleManager constructor.
-     * @param VariantManager $variantManager
+     * @var ArticleImageManager
      */
-    public function __construct(VariantManager $variantManager)
+    private $articleImageManager;
+
+    /**
+     * ArticleManager constructor.
+     * @param  VariantManager  $variantManager
+     * @param  ArticleImageManager  $articleImageManager
+     */
+    public function __construct(VariantManager $variantManager, ArticleImageManager $articleImageManager)
     {
         $this->variantManager = $variantManager;
+        $this->articleImageManager = $articleImageManager;
     }
 
 
@@ -55,6 +67,7 @@ class ArticleManager extends BaseManager
             $company = CompanyManager::getCompanyByAdmin();
             $articles = Articles::latest()
                 ->where('company_id', '=', $company->id)
+                ->whereNull('deleted_at')
                 ->with('company')
                 ->with([
                     'category' => function ($q) use ($company) {
@@ -74,6 +87,9 @@ class ArticleManager extends BaseManager
                 ->get();
         }
         foreach ($articles as $k => $article) {
+            $article['composite'] = (boolean) $article['composite'];
+            $article['personSale'] = (boolean) $article['personSale'];
+            $article['onlineSale'] = (boolean) $article['onlineSale'];
             foreach ($article['images'] as $im => $image) {
                 if ($image['default'] === 1) {
                     $articles[$k]['path'] = $image['path'];
@@ -88,19 +104,20 @@ class ArticleManager extends BaseManager
 
             $shopVariant = [];
             foreach ($article['variantValues'] as $sh => $shopV) {
+                $shopV['images'] = ArticleImage::latest()->where('article_id', '=', $shopV['id'])->get();
                 foreach ($shopV['articlesShops'] as $i => $v) {
                     $shopVariant[$sh] = $v['shops']['name'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
-                if (round($articles[$k]['variantValues'][$sh]['price'],2) === 0.00) {
+                if (round($articles[$k]['variantValues'][$sh]['price'], 2) === 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 0;
-                } elseif (round($articles[$k]['variantValues'][$sh]['cost'],2) === 0.00) {
+                } elseif (round($articles[$k]['variantValues'][$sh]['cost'], 2) === 0.00) {
                     $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
                 } else {
-                    $articles[$k]['variantValues'][$sh]['percent'] =  round(
-                            (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
-                            2
-                        );
+                    $articles[$k]['variantValues'][$sh]['percent'] = round(
+                        (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                        2
+                    );
                 }
             }
 
@@ -110,7 +127,8 @@ class ArticleManager extends BaseManager
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
-                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] == 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100, 2);
+                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] === 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100,
+                    2);
             }
         }
         return $articles;
@@ -128,7 +146,7 @@ class ArticleManager extends BaseManager
             ->orderBy('ref', 'DESC')
             ->first();
 
-        return ($number && count($number->toArray()) > 0) ? (int)$number['ref'] : 1000;
+        return ($number && count($number->toArray()) > 0) ? (int) $number['ref'] : 1000;
     }
 
     /**
@@ -166,20 +184,24 @@ class ArticleManager extends BaseManager
         }
 
         foreach ($shops as $key => $value) {
-            if ($value['checked']) {
+            if ($value['personSale'] || $value['onlineSale']) {
                 $artShop = ArticlesShops::create([
                     'article_id' => $article->id,
                     'shop_id' => $value['shop_id'],
                     'stock' => $value['stock'] ?: 0,
                     'price' => $value['price'],
+                    'onlinePrice' => $value['onlinePrice'],
                     'under_inventory' => $value['under_inventory'] ?: 0
                 ]);
+                $artShop->personSale = $value['personSale'];
+                $artShop->onlineSale = $value['onlineSale'];
+                $artShop->save();
                 $this->managerBy('new', $artShop);
             }
         }
         $article->save();
         if (count($data['images']) > 0) {
-            ArticleImageManager::new($article->id, $data['images']);
+            $this->articleImageManager->new($article->id, $data['images']);
         }
         $this->updateTaxes($article, $taxes);
         return $article;
@@ -223,6 +245,9 @@ class ArticleManager extends BaseManager
         if (isset($data['price'])) {
             $article->price = $data['price'];
         }
+        if (isset($data['onlinePrice'])) {
+            $article->onlinePrice = $data['onlinePrice'];
+        }
         if (isset($data['ref'])) {
             $article->ref = $data['ref'];
         }
@@ -242,8 +267,12 @@ class ArticleManager extends BaseManager
                 'shop_id' => $value['shop_id'],
                 'stock' => $value['stock'] ?: 0,
                 'price' => $value['price'],
+                'onlinePrice' => $value['onlinePrice'],
                 'under_inventory' => $value['under_inventory'] ?: 0
             ]);
+            $artShop->personSale = $value['personSale'];
+            $artShop->onlineSale = $value['onlineSale'];
+            $artShop->save();
             $this->managerBy('new', $artShop);
         }
         foreach ($data['composites'] as $key => $value) {
@@ -253,11 +282,13 @@ class ArticleManager extends BaseManager
                     'composite_id' => $value['composite_id'],
                     'cant' => $value['cant'],
                     'price' => $value['price'],
+                    'onlinePrice' => $value['onlinePrice'],
                 ]);
             } else {
                 $article_c = ArticlesComposite::findOrFail($value['id']);
                 $article_c['cant'] = $value['cant'];
                 $article_c['price'] = $value['price'];
+                $article_c['onlinePrice'] = $value['onlinePrice'];
                 $article_c->save();
             }
         }
@@ -304,7 +335,7 @@ class ArticleManager extends BaseManager
     }
 
     /**
-     * @param Articles $article
+     * @param  Articles  $article
      * @param $taxes
      */
     public function updateTaxes(Articles $article, $taxes): void
@@ -350,6 +381,7 @@ class ArticleManager extends BaseManager
             $this->updateComposite($article, $data);
         } else {
             $this->updateVariants($article, $data['variants']);
+            $this->updateArticleImage($article, $data['images']);
             $this->updateChidrensArticles($article, $data);
 
         }
@@ -410,6 +442,34 @@ class ArticleManager extends BaseManager
                 $this->variantManager->editVariant($v);
             } else {
                 $this->variantManager->newVariant($v, $article->id);
+            }
+        }
+    }
+
+    /**
+     * @param $article
+     * @param $images
+     * @throws Exception
+     */
+    public function updateArticleImage($article, $images): void
+    {
+        $variantDB = ArticleImage::latest()
+            ->where('article_id', '=', $article->id)
+            ->get();
+        foreach ($variantDB as $key => $value) {
+            $exist = false;
+            foreach ($images as $k => $v) {
+                if (isset($v['id']) && $v['id'] === $value['id']) {
+                    $exist = true;
+                }
+            }
+            if (!$exist) {
+                $this->articleImageManager->delete($value->id);
+            }
+        }
+        foreach ($images as $k => $v) {
+            if (!array_key_exists('id', $v)) {
+                $this->articleImageManager->new($article->id, [$v]);
             }
         }
     }
@@ -498,7 +558,7 @@ class ArticleManager extends BaseManager
         foreach ($variantDB as $key => $value) {
             $exist = false;
             foreach ($shopsArticles as $k => $v) {
-                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['checked'] && $v['articles_shop_id'] !=='') {
+                if (isset($v['articles_shop_id']) && $v['articles_shop_id'] === $value['id'] && $v['articles_shop_id'] !== '' && ($v['personSale'] || $v['onlineSale'])) {
                     $exist = true;
                 }
             }

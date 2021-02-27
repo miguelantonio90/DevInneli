@@ -7,7 +7,7 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.importData')
+          $vuetify.lang.t("$vuetify.titles.importData")
         }}</span>
       </v-card-title>
       <v-card-text>
@@ -21,7 +21,7 @@
             class="subtitle-1 text-center"
             cols="12"
           >
-            {{ $vuetify.lang.t('$vuetify.import_csv') }}
+            {{ $vuetify.lang.t("$vuetify.import_csv") }}
           </v-col>
           <v-col cols="6">
             <v-progress-linear
@@ -50,7 +50,9 @@
                 small-chips
                 :rules="formRule.required"
                 accept="document/csv"
-                :placeholder="$vuetify.lang.t('$vuetify.rule.select')"
+                :placeholder="
+                  $vuetify.lang.t('$vuetify.rule.select')
+                "
                 prepend-icon="mdi-file-document"
                 :label="$vuetify.lang.t('$vuetify.file')"
                 @change="onFileChange"
@@ -72,10 +74,34 @@
               />
             </v-col>
             <v-col>
-              <p><b>{{ $vuetify.lang.t('$vuetify.messages.observation') }}</b></p>
-              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_category') }}</p>
-              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_shop') }}</p>
-              <p>{{ $vuetify.lang.t('$vuetify.messages.info_import_ref') }}</p>
+              <p>
+                <b>{{
+                  $vuetify.lang.t(
+                    "$vuetify.messages.observation"
+                  )
+                }}</b>
+              </p>
+              <p>
+                {{
+                  $vuetify.lang.t(
+                    "$vuetify.messages.info_import_category"
+                  )
+                }}
+              </p>
+              <p>
+                {{
+                  $vuetify.lang.t(
+                    "$vuetify.messages.info_import_shop"
+                  )
+                }}
+              </p>
+              <p>
+                {{
+                  $vuetify.lang.t(
+                    "$vuetify.messages.info_import_ref"
+                  )
+                }}
+              </p>
             </v-col>
           </v-row>
         </v-form>
@@ -88,7 +114,7 @@
           @click="toogleImportModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -98,7 +124,7 @@
           @click="createNewCategory"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -119,7 +145,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('article', ['saved', 'showImportModal', 'importArticle', 'isActionInProgress']),
+    ...mapState('article', [
+      'saved',
+      'showImportModal',
+      'importArticle',
+      'isActionInProgress'
+    ]),
     getSistemFrom () {
       return [
         {
@@ -155,6 +186,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

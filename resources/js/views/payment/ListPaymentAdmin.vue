@@ -26,12 +26,22 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
@@ -60,25 +70,26 @@ export default {
     ]),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
-      return [{
-        text: this.$vuetify.lang.t('$vuetify.company'),
-        value: 'company.name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.firstName'),
-        value: 'name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.menu.pay'),
-        value: 'enEs'
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.actions.actions'),
-        value: 'actions',
-        sortable: false
-      }
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.company'),
+          value: 'company.name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.firstName'),
+          value: 'name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.menu.pay'),
+          value: 'enEs'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.actions.actions'),
+          value: 'actions',
+          sortable: false
+        }
       ]
     }
   },
@@ -115,7 +126,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deletePayment(id)
         })
     }
@@ -123,6 +134,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -27,23 +27,39 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template v-slot:[`group.header`]="{items, isOpen, toggle}">
+          <template
+            v-slot:[`group.header`]="{ items, isOpen, toggle }"
+          >
             <th colspan="100%">
-              <v-icon
-                @click="toggle"
-              >
-                {{ isOpen ? 'mdi-minus' : 'mdi-plus' }}
+              <v-icon @click="toggle">
+                {{ isOpen ? "mdi-minus" : "mdi-plus" }}
               </v-icon>
-              {{ $vuetify.lang.t('$vuetify.panel.shop').toUpperCase()+': '+ items[0].shopName }}
+              {{
+                $vuetify.lang
+                  .t("$vuetify.panel.shop")
+                  .toUpperCase() +
+                  ": " +
+                  items[0].shopName
+              }}
             </th>
           </template>
         </app-data-table>
@@ -84,7 +100,8 @@ export default {
           text: this.$vuetify.lang.t('$vuetify.company'),
           value: 'company.name',
           select_filter: true
-        }, {
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.name'),
           value: 'name',
           select_filter: true,
@@ -133,7 +150,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteTypeOrder(id)
         })
     },

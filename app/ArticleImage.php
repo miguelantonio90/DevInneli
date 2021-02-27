@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @method static findOrFail($id)
+ * @method static latest()
+ * @method find($id)
  * @method static create(array $array)
+ * @method static select(string $string, $raw)
+ * @method static where(string $string, string $string1, mixed $id)
  */
 class ArticleImage extends Model
 {

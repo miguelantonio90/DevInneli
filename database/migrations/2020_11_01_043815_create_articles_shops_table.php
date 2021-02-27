@@ -14,6 +14,10 @@ class CreateArticlesShopsTable extends BaseMigration
     {
         Schema::create($tableName, function (Blueprint $table) {
             $table->decimal('price',15,2)->default(0);
+            $table->decimal('onlinePrice', 15, 2)->default(0);
+            $table->boolean('personSale')->default(true);
+            $table->boolean('onlineSale')->default(true);
+            $table->integer('start')->default(0);
             $table->integer('stock')->nullable();
             $table->integer('under_inventory')->nullable();
             $table->foreignUuid('article_id')->references('id')->on('articles')

@@ -33,6 +33,19 @@ export const publicRoute = [
     ]
   },
   {
+    path: '/auth/register/:hash',
+    component: LayoutAuth,
+    hidden: true,
+    children: [
+      {
+        path: '/auth/register/:hash',
+        name: 'invitation_password',
+        meta: { title: 'Invitation Register' },
+        component: () => import('../views/auth/Register')
+      }
+    ]
+  },
+  {
     path: '/auth',
     component: LayoutAuth,
     meta: {
@@ -77,7 +90,6 @@ export const publicRoute = [
     meta: {
       title: 'Not Found'
     },
-
     children: [],
     component: () => import('../views/error/NotFound')
   },
@@ -90,6 +102,49 @@ export const publicRoute = [
     },
     children: [],
     component: () => import('../views/error/Error')
+  },
+  {
+    path: '/online/shop/:compName/:shopName',
+    props: true,
+    name: 'online_shop',
+    access: ['dashboard'],
+    meta: {
+      title: 'dashboard',
+      group: 'apps',
+      icon: 'mdi-view-dashboard',
+      requiresAuth: true
+    },
+    component: () => import('../views/shops-templates/shipit/components/Layout'),
+    children: [
+      {
+        path: '/online/:compName/:shopName',
+        component: () => import('../views/shops-templates/shipit/components/Home'),
+        props: true,
+        name: 'Home'
+      },
+      {
+        path: '/online/shop/:compName/:shopName',
+        component: () => import('../views/shops-templates/shipit/components/Shop'),
+        props: true,
+        name: 'Shop'
+      },
+      {
+        path: '/online/product/:compName/:shopName',
+        props: true,
+        component: () => import('../views/shops-templates/shipit/components/Product'),
+        name: 'Product'
+      },
+      {
+        path: '/post',
+        component: () => import('../views/shops-templates/shipit/components/Post'),
+        name: 'Post'
+      },
+      {
+        path: '/cart',
+        component: () => import('../views/shops-templates/shipit/components/Cart'),
+        name: 'Cart'
+      }
+    ]
   },
   {
     path: '/password/reset/:hash',
@@ -354,7 +409,7 @@ export const protectedRoute = [
             component: () => import('../views/buy/ListBuy')
           },
           {
-            path: '/finance/buy.add',
+            path: '/finance/supply.add',
             name: 'supply_add',
             access: 'create',
             meta: {
@@ -363,7 +418,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/buy/ManagerBuy')
+            component: () => import('../views/supply/ManagerSupply')
           },
           {
             path: '/finance/supply.edit',
@@ -375,7 +430,7 @@ export const protectedRoute = [
               hiddenInMenu: true,
               requiresAuth: true
             },
-            component: () => import('../views/buy/ManagerBuy')
+            component: () => import('../views/supply/ManagerSupply')
           },
           {
             path: '/finance/supply_list',
@@ -603,6 +658,44 @@ export const protectedRoute = [
         },
         children: [],
         component: () => import('../views/general/General')
+      },
+      {
+        path: '/online/setting',
+        access: ['manager_shop'],
+        name: 'shop_online',
+        meta: {
+          title: 'shop_online',
+          icon: 'mdi-briefcase-upload',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ListOnlineConfig')
+      },
+      {
+        path: '/online/config.add',
+        name: 'config_add',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
+      },
+      {
+        path: '/online/config.edit',
+        name: 'config_edit',
+        access: ['manager_shop'],
+        meta: {
+          title: 'online_config',
+          icon: 'mdi-briefcase-upload',
+          hiddenInMenu: true,
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/online-config/ManagerOnlineConfig')
       }
     ]
   },

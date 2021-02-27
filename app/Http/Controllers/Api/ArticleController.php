@@ -136,4 +136,17 @@ class ArticleController extends Controller
             'Article number retrieved successfully.'
         );
     }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+    public function findMoreStars(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->articleManager->findMoreStars($request),
+            'Article number retrieved successfully.'
+        );
+    }
 }

@@ -1,18 +1,18 @@
 <template>
   <v-app class="exception">
     <v-container
-      fill-height
-      fluid
+        fill-height
+        fluid
     >
       <v-layout
-        align-center
-        justify-center
-        row
+          align-center
+          justify-center
+          row
       >
         <div class="mr-3 hidden-sm-and-down">
           <img
-            alt
-            src="/assets/error/500.svg"
+              alt
+              src="/assets/error/500.svg"
           >
         </div>
         <div class="text-md-center">
@@ -22,8 +22,8 @@
           </h2>
           <div>
             <v-btn
-              color="primary"
-              @click="goHome"
+                color="primary"
+                @click="goHome"
             >
               Go Home
             </v-btn>

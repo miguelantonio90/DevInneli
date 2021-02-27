@@ -34,6 +34,34 @@ class ShopController extends Controller
         return ResponseHelper::sendResponse($this->shopManager->findAllByCompany(), 'Shops retrieved successfully.');
     }
 
+
+    /**
+     * Display a listing of the resource by shop.
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getShopData(Request $request): JsonResponse
+    {
+        return ResponseHelper::sendResponse(
+            $this->shopManager::getShopData($request),
+            'Categories retrieved successfully.'
+        );
+    }
+
+    /**
+     * Display a listing of the resource by shop.
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getShopNoConfig(): JsonResponse
+    {
+        return ResponseHelper::sendResponse(
+            $this->shopManager::getShopNoConfig(),
+            'Categories retrieved successfully.'
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NunoMaduro\Collision\Provider;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * Class Sale
@@ -40,7 +39,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-        'no_facture', 'company_id' , 'payment_id'
+        'no_facture', 'company_id', 'payment_id'
     ];
 
     /**

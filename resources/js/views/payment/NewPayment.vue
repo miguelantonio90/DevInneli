@@ -6,8 +6,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.payment.name'),
+          $vuetify.lang.t("$vuetify.titles.new", [
+            $vuetify.lang.t("$vuetify.payment.name")
           ])
         }}</span>
       </v-card-title>
@@ -56,7 +56,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -66,7 +66,7 @@
           @click="createNewPayment"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -88,7 +88,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('payment', ['saved', 'newPayment', 'paymentsConst', 'isActionInProgress']),
+    ...mapState('payment', [
+      'saved',
+      'newPayment',
+      'paymentsConst',
+      'isActionInProgress'
+    ]),
     ...mapState('statics', ['payments'])
   },
   created () {
@@ -116,5 +121,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

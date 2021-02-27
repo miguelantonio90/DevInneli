@@ -49,6 +49,8 @@ class LoginController extends Controller
         parent::__construct();
 
         $this->middleware('guest')->except('logout');
+        /*$this->middleware('guest:users')->except('logout');
+        $this->middleware('guest:clients')->except('logout');*/
     }
 
     /**
@@ -67,6 +69,7 @@ class LoginController extends Controller
      * @param  Request  $request
      * @return JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response|void
      * @throws ValidationException
+     * @throws Exception
      */
     public function login(Request $request)
     {

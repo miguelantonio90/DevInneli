@@ -26,18 +26,26 @@
                     v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                          cou =>
+                            cou.id ===
+                            item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.company.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                  arrayCountry.filter(
+                    cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.color`]="{ item }"
-          >
+          <template v-slot:[`item.color`]="{ item }">
             <v-chip
               :color="item.color"
               dark
@@ -62,10 +70,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('category', [
-      'categories',
-      'isTableLoading'
-    ]),
+    ...mapState('category', ['categories', 'isTableLoading']),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
       return [
@@ -89,9 +94,7 @@ export default {
     this.getCategories()
   },
   methods: {
-    ...mapActions('category', [
-      'getCategories'
-    ])
+    ...mapActions('category', ['getCategories'])
   }
 }
 </script>

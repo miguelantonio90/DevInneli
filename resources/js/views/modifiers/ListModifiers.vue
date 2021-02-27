@@ -8,8 +8,11 @@
         <new-modifiers v-if="showNewModal" />
         <edit-modifiers v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.modifiers_list'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.modifiers_list')
+            ])
+          "
           csv-filename="Modifiers"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
@@ -22,10 +25,12 @@
           @edit-row="openEditModal($event)"
           @delete-row="deleteModifiersHandler($event)"
         >
-          <template
-            v-slot:[`item.percent`]="{ item }"
-          >
-            {{ item.percent ==="true" ? $vuetify.lang.t('$vuetify.tax.percent'):$vuetify.lang.t('$vuetify.tax.permanent') }}
+          <template v-slot:[`item.percent`]="{ item }">
+            {{
+              item.percent === "true"
+                ? $vuetify.lang.t("$vuetify.tax.percent")
+                : $vuetify.lang.t("$vuetify.tax.permanent")
+            }}
           </template>
           <template v-slot:item.shopsNames="{ item }">
             <v-chip
@@ -105,7 +110,7 @@ export default {
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
-            this.$vuetify.lang.t('$vuetify.articles.tax')
+            this.$vuetify.lang.t('$vuetify.menu.modifiers')
           ]),
           text: this.$vuetify.lang.t(
             '$vuetify.messages.warning_delete'
@@ -120,7 +125,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteModifiers(modifierId)
         })
     }

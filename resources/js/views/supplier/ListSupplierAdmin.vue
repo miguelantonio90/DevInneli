@@ -6,8 +6,11 @@
         cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.supplier')])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.supplier')
+            ])
+          "
           csv-filename="Categories"
           :headers="getTableColumns"
           :items="suppliers"
@@ -25,12 +28,22 @@
                   v-on="on"
                 >
                   <v-avatar left>
-                    {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                    {{
+                      arrayCountry.filter(
+                        cou =>
+                          cou.id ===
+                          item.company.country
+                      )[0].emoji
+                    }}
                   </v-avatar>
                   {{ item.company.country }}
                 </v-chip>
               </template>
-              <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+              <span>{{
+                arrayCountry.filter(
+                  cou => cou.id === item.company.country
+                )[0].name
+              }}</span>
             </v-tooltip>
           </template>
           <template v-slot:[`item.nameCountry`]="{ item }">
@@ -66,10 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('supplier', [
-      'suppliers',
-      'isTableLoading'
-    ]),
+    ...mapState('supplier', ['suppliers', 'isTableLoading']),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
       return [

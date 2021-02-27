@@ -6,13 +6,19 @@
           cols="12"
           md="6"
         >
-          <b style="text-transform: uppercase">{{ $vuetify.lang.t('$vuetify.price') }}</b>
+          <b style="text-transform: uppercase">{{
+            $vuetify.lang.t("$vuetify.price")
+          }}</b>
         </v-col>
         <v-col
           cols="12"
           md="6"
         >
-          {{ `${currency + ' ' + parseFloat(article.price).toFixed(2)}` }}
+          {{
+            `${currency +
+              " " +
+              parseFloat(article.price).toFixed(2)}`
+          }}
         </v-col>
       </v-row>
       <v-row
@@ -23,21 +29,40 @@
           cols="12"
           md="6"
         >
-          <b style="color: darkblue">{{ $vuetify.lang.t('$vuetify.tax.name') }}({{ tax.name }})</b>
+          <b
+            style="color: darkblue"
+          >{{ $vuetify.lang.t("$vuetify.tax.name") }}({{
+            tax.name
+          }})</b>
         </v-col>
         <v-col
-          v-if="tax.percent==='true'"
+          v-if="tax.percent === 'true'"
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(tax.value * article.price / 100).toFixed(2)}` }} ({{ tax.value }}%)</i>
+          <i
+            style="color: darkblue"
+          >+{{
+            `${currency +
+              " " +
+              parseFloat(
+                (tax.value * article.price) / 100
+              ).toFixed(2)}`
+          }}
+            ({{ tax.value }}%)</i>
         </v-col>
         <v-col
           v-else
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(tax.value).toFixed(2)}` }}</i>
+          <i
+            style="color: darkblue"
+          >+{{
+            `${currency +
+              " " +
+              parseFloat(tax.value).toFixed(2)}`
+          }}</i>
         </v-col>
       </v-row>
       <v-row
@@ -51,18 +76,33 @@
           <b style="color: darkblue">{{ mod.name }}</b>
         </v-col>
         <v-col
-          v-if="mod.percent==='true'"
+          v-if="mod.percent === 'true'"
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(mod.value * article.price / 100).toFixed(2)}` }} ({{ mod.value }}%)</i>
+          <i
+            style="color: darkblue"
+          >+{{
+            `${currency +
+              " " +
+              parseFloat(
+                (mod.value * article.price) / 100
+              ).toFixed(2)}`
+          }}
+            ({{ mod.value }}%)</i>
         </v-col>
         <v-col
           v-else
           cols="12"
           md="6"
         >
-          <i style="color: darkblue">+{{ `${currency + ' ' + parseFloat(mod.value).toFixed(2)}` }}</i>
+          <i
+            style="color: darkblue"
+          >+{{
+            `${currency +
+              " " +
+              parseFloat(mod.value).toFixed(2)}`
+          }}</i>
         </v-col>
       </v-row>
       <v-row
@@ -76,18 +116,28 @@
           <b style="color: red">{{ disc.name }}</b>
         </v-col>
         <v-col
-          v-if="disc.percent==='true'"
+          v-if="disc.percent === 'true'"
           cols="12"
           md="6"
         >
-          <i style="color: red">-{{ `${currency + ' ' + parseFloat(disc.value * article.price / 100).toFixed(2)}` }}</i>
+          <i
+            style="color: red"
+          >-{{
+            `${currency +
+              " " +
+              parseFloat(
+                (disc.value * article.price) / 100
+              ).toFixed(2)}`
+          }}</i>
         </v-col>
         <v-col
           v-else
           cols="12"
           md="6"
         >
-          <i style="color: red">-{{ `${currency + ' ' + disc.value}` }}</i>
+          <i
+            style="color: red"
+          >-{{ `${currency + " " + disc.value}` }}</i>
         </v-col>
       </v-row>
       <v-row>
@@ -95,13 +145,19 @@
           cols="12"
           md="6"
         >
-          <b style="text-transform: uppercase">{{ $vuetify.lang.t('$vuetify.pay.total') }}</b>
+          <b style="text-transform: uppercase">{{
+            $vuetify.lang.t("$vuetify.pay.total")
+          }}</b>
         </v-col>
         <v-col
           cols="12"
           md="6"
         >
-          {{ `${currency + ' ' + parseFloat(article.totalPrice).toFixed(2)}` }}
+          {{
+            `${currency +
+              " " +
+              parseFloat(article.totalPrice).toFixed(2)}`
+          }}
         </v-col>
       </v-row>
     </v-card-text>
@@ -125,6 +181,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

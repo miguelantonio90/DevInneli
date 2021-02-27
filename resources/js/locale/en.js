@@ -53,6 +53,7 @@ export default {
   wait: 'Please wait ...',
   phone_holder: 'Enter your phone number',
   price: 'Price',
+  onlinePrice: 'Online Price',
   cost: 'Cost',
   color: 'Color',
   main: 'Main',
@@ -61,10 +62,13 @@ export default {
   import_csv: 'Importing file',
   state: 'State',
   to: 'A',
+  fromData: 'Realize By',
   guide: 'Click to start guide',
   // menu
   menu: {
     setting: 'Configuration',
+    shop_online: 'Online Shop',
+    config_add: 'Shop Online Configuration',
     home: 'Home',
     shops: 'Shops',
     shop: 'Store',
@@ -89,18 +93,18 @@ export default {
     article: 'Article',
     category: 'Category',
     expense_category: 'Expense Category',
-    expense_category_list: 'Expense Category',
+    expense_category_list: 'List of Expense Category',
     exchange_rate: 'Foreign currency',
-    exchange_rate_list: 'Foreign currency',
-    category_list: 'Categories',
-    boxes_list: 'Boxes',
-    product_list: 'Products',
-    modifiers_list: 'Modifiers',
+    exchange_rate_list: 'List of Foreign currency',
+    category_list: 'List of Categories',
+    boxes_list: 'List of Boxes',
+    product_list: 'List of Products',
+    modifiers_list: 'List of Modifiers',
     modifiers: 'Modifier',
     discounts_list: 'List of Discounts',
     pay: 'Payment Methods',
     supplier: 'Suppliers',
-    supplier_list: 'Suppliers',
+    supplier_list: 'List of Suppliers',
     resume: 'Summary',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
@@ -155,8 +159,8 @@ export default {
     bad_phone: '{0} must be valid',
     select: 'Select',
     pin: {
-      min: 'The minimum quantity is {0} digits',
-      max: 'The maximum amount is {0} digits'
+      min: 'The minimum quantity is {0}',
+      max: 'The maximum amount is {0}'
     },
     general_required: 'This field is required'
   },
@@ -174,6 +178,7 @@ export default {
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
+    warning_digital_box: 'This box work automatically, to register online sales, and you can\'t manager.',
     warning_exist: 'Exist a variant with this name!',
     warning_excess_money: 'The defined amount to be charged is greater than or equal to the total price. Decrease the amounts already defined',
     warning_preform: 'You will create a Preform (PRE-FACTURE)' +
@@ -199,8 +204,12 @@ export default {
     warning_no_category: 'You need select a Category',
     warning_composite: 'If the article is composite, you must define the elements that compose it',
     warning_price: 'You cannot add that item. If the price is higher than the cost, it will not give you profit ',
-    warning_cant_article: 'You cannot add this sale. You must add at least one item. ',
-    warning_no_article: 'You cannot add Sale. You must add at least one article in the system. ',
+    warning_cant_article: "You can't do this action. You must add at least one item. ",
+    warning_no_article: "You can't do this action. You must add at least one article in the system.",
+    warning_no_clients_supplier: "You can't do this action. You need have a Supplier registered in system.",
+    warning_supply_state: "You can't do this action. Supplier init the process, please Cancel the supply.",
+    warning_supply_state_cancelled: "You can't do this action. Supply has been cancelled, is not important edited.",
+    warning_supply_delete: "You can't do this action. You need Cancel this supply first, and then you can delete.",
     warning_exist_refunds: 'You cannot edit this Sale. This sale have refunds, please change state to Cancel o create a new Sale. ',
     warning_no_box: 'You cannot add this sale. You must add or select a box. ',
     warning_difference_price: 'There is a difference between the total price and the one defined in the payments of {0}. \n Please fix the difference. ',
@@ -374,7 +383,9 @@ export default {
     tax_by_sale: 'Taxes by Sale',
     taxes: 'Taxes',
     lay: 'Law tip (10%)',
-    composite_text: 'Composite articles contain a certain number of other articles'
+    composite_text: 'Composite articles contain a certain number of other articles',
+    onlineSale: 'Online Sale',
+    onlineSale_text: 'This article will by sale in virtual shop'
   },
   panel: {
     basic: 'Basic',
@@ -398,7 +409,8 @@ export default {
   shop_article: {
     under_inventory: 'Low Stock',
     stock: 'In Stock',
-    enabled: 'Available'
+    enabled: 'Available',
+    person_sale: 'Person Sale'
   },
   representation: {
     representation: 'Representation',
@@ -406,13 +418,15 @@ export default {
     image: 'Image'
   },
   buy_product: {
-    supply: 'Supplier'
+    supply: 'Supplier',
+    emit: 'Supply Emit',
+    received: 'Supply Received'
   },
   payment: {
     name: 'Payment Method',
     counted: 'Counted',
     cash: 'Cash',
-    card: 'Targeta',
+    card: 'Card',
     check: 'Check',
     credit: 'Credit',
     deposit: 'Deposit',
@@ -468,6 +482,7 @@ export default {
   },
   sale: {
     sale: 'Sale',
+    online_text: 'This sale will be online, and reported by Digital Box',
     selectArticle: 'Please select the article',
     selectShop: 'You must select a store',
     discountGeneral: 'General discount',
@@ -650,6 +665,30 @@ export default {
     selectBox: 'Select the Box where you sell. If the box is closed, then the system will open it with $0.00',
     addBox: 'Add a new Box',
     selectArticle: 'Select all articles that you will sell'
+  },
+  supply_state: {
+    state: {
+      state: 'State',
+      requested: 'Requested',
+      accepted: 'accepted',
+      process: 'Process',
+      ship: 'Ship',
+      received: 'Received',
+      cancelled: 'Cancelled'
+    }
+  },
+  online: {
+    template: 'Template',
+    showing: 'Showing',
+    of: 'of',
+    credits_pay: 'Pay Credentials',
+    paypal_credit: 'PayPal Credentials',
+    paypal_client_id: 'CLIENT ID',
+    paypal_secret: 'PAYPAL SECRET'
+  },
+  notifications: {
+    supplier_is_register: 'Your Supllier {0} is register in INNELI. You can make Orders using the system',
+    solicited_supply: 'Client {0} has registered a supply'
   },
   ...en
 }

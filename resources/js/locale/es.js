@@ -53,6 +53,7 @@ export default {
   wait: 'Espere por favor...',
   phone_holder: 'Entre su número de teléfono',
   price: 'Precio',
+  onlinePrice: 'Precio en línea',
   cost: 'Costo',
   color: 'Color',
   principal: 'Principal',
@@ -61,10 +62,13 @@ export default {
   import_csv: 'Importando archivo',
   state: 'Estado',
   to: 'A',
+  fromData: 'Realizado por',
   guide: 'Click para iniciar guía',
   // menu
   menu: {
     setting: 'Configuración',
+    shop_online: 'Tienda Online',
+    online_config: 'Configuración de Tienda Online',
     home: 'Inicio',
     shops: 'Tiendas',
     shop: 'Tienda',
@@ -89,18 +93,18 @@ export default {
     article: 'Artículo',
     category: 'Categoría',
     expense_category: 'Categoría de Gasto',
-    expense_category_list: 'Categoría de Gastos',
+    expense_category_list: 'Lista Categorías de Gastos',
     exchange_rate: 'Moneda extranjera',
-    exchange_rate_list: 'Moneda extranjera',
-    category_list: 'Categorías',
-    boxes_list: 'Cajas',
-    product_list: 'Productos',
-    modifiers_list: 'Modificadores',
+    exchange_rate_list: 'Lista Moneda Extranjera',
+    category_list: 'Lista de Categorías',
+    boxes_list: 'Lista de Cajas',
+    product_list: 'Lista de Productos',
+    modifiers_list: 'Lista de Modificadores',
     modifiers: 'Modificador',
-    discounts_list: ' Listado de Descuentos',
+    discounts_list: ' Lista de Descuentos',
     pay: 'Métodos de Pago',
     supplier: 'Proveedores',
-    supplier_list: 'Proveedores',
+    supplier_list: 'Lista de Proveedores',
     resume: 'Resumen',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
@@ -155,8 +159,8 @@ export default {
     bad_phone: '{0} debe ser válido',
     select: 'Seleccione',
     pin: {
-      min: 'La cantidad mínima es de {0} digítos',
-      max: 'La cantidad máxima es de {0} digítos'
+      min: 'La cantidad mínima es de {0}',
+      max: 'La cantidad máxima es de {0}'
     },
     general_required: 'Este campo es requerido'
   },
@@ -174,6 +178,7 @@ export default {
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
     warning_delete: 'No se podrá revertir esta acción!',
+    warning_digital_box: 'Esta Caja se maneja de manera automática, para registrar las ventas en línea y no se puede gestionar.',
     warning_exist: 'Ya existe una variante con ese nombre!',
     warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
     warning_preform: 'Usted creará una Preforma(PRE-FACTURA). ' +
@@ -199,8 +204,12 @@ export default {
     warning_no_category: 'Debe seleccionar una Categoría al producto',
     warning_composite: 'Si el artículo es compuesto, debe definir los elementos que lo componen',
     warning_price: 'No puede adicionar ese artículo. Si el precio es mayor que el costo, no le dará beneficios',
-    warning_cant_article: 'No puede adicionar esta Venta. Debe adicionar al menos un artículo.',
-    warning_no_article: 'No puede adicionar Venta. Debe adicionar al menos un artículo en el sistema.',
+    warning_cant_article: 'No puede adicionar esta Compras. Debe adicionar al menos un artículo.',
+    warning_no_article: 'No puede  realizar esta operación. Debe adicionar al menos un artículo en el sistema.',
+    warning_no_clients_supplier: 'No puede realizar esta operación. Debe adicionar al menos un Proveedor que esté registrado en el sistema.',
+    warning_supply_state: 'No puede realizar esta operación. Se ha iniciado el proceso por parte del proveedor, por favor cancele el pedido si no lo desea.',
+    warning_supply_state_cancelled: 'No puede realizar esta operación. Este pedido ha sido cancelado, no tiene sentido editarlo.',
+    warning_supply_delete: 'No puede realizar esta operación. Primero debe Cancelar el pedido, y entonces puede eliminarlo.',
     warning_exist_refunds: 'No puede editar esta Venta. Ya posee reembolsos, por favor cámbiele el estado a Cancelada o cree una nueva.',
     warning_no_box: 'No puede adicionar esta compra. Debe Adicionar o  Seleccionar una caja.',
     warning_difference_price: 'Existe una diferencia entre el precio total y el definido en los pagos de {0}. \n Por favor arregle la diferencia.',
@@ -221,7 +230,7 @@ export default {
        'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
     info_import_shop: 'Si este archivo contiene artículos relacionado con tiendas, las mismas serán importadas al sistema  con el país donde usted fue registrado, ' +
         'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándole los nuevos artículos. Si desea ' +
-        'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el listado.',
+        'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el Lista.',
     info_import_ref: 'Si usted ya ha creado Artículos y las Referencias coinciden con las de los Artículos importados, se le rescribirá a los nuevos artículos.',
     observation: 'Observación'
   },
@@ -375,7 +384,9 @@ export default {
     tax_by_sale: 'Impuestos por Venta Total',
     taxes: 'Impuestos',
     lay: 'Propina de ley(10%)',
-    composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos'
+    composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos',
+    onlineSale: 'Venta en línea',
+    onlineSale_text: 'Este artículo se venderá en su tienda virtual'
   },
   panel: {
     basic: 'Básico',
@@ -399,7 +410,8 @@ export default {
   shop_article: {
     under_inventory: 'Bajo Inventario',
     stock: 'En Stock',
-    enabled: 'Disponible'
+    enabled: 'Disponible',
+    person_sale: 'Venta en Persona'
   },
   representation: {
     representation: 'Representación',
@@ -465,10 +477,13 @@ export default {
     total: 'Total'
   },
   supply: {
-    name: 'Compra'
+    name: 'Compra',
+    emit: 'Pedidos Emitidos',
+    received: 'Pedidos Recibidos'
   },
   sale: {
     sale: 'Venta',
+    online_text: 'Esta venta se realiza de forma online, y se realizará por la Caja Digital de manera automática',
     selectArticle: 'Por favor seleccione el artículo',
     selectShop: 'Debe seleccionar una tienda',
     discountGeneral: 'Descuento Total por venta',
@@ -645,7 +660,7 @@ export default {
   helpSales: {
     listStep1: '<strong>Botón Adicionar</strong>!<br> Crear nueva venta',
     listStep2: '<strong>Filtros</strong>!<br> Establecer filtros de búsquedas y descargar datos',
-    listStep3: '<strong>Listado</strong>!<br> Lista las ventas creadas.'
+    listStep3: '<strong>Lista</strong>!<br> Lista las ventas creadas.'
   },
   helpSaleManager: {
     selectShop: 'Aquí selecciona la Tienda en que se realiza la venta',
@@ -653,6 +668,30 @@ export default {
         'abrirá para el usuario autenticado con $0.00',
     addBox: 'Aquí adiciona una nueva Caja',
     selectArticle: 'Aquí selecciona los artículos que se venderá'
+  },
+  supply_state: {
+    state: {
+      name: 'Estado',
+      requested: 'Solicitada',
+      accepted: 'Aceptado',
+      process: 'En Proceso',
+      ship: 'Enviado',
+      received: 'Recibida',
+      cancelled: 'Cancelada'
+    }
+  },
+  online: {
+    template: 'Plantilla',
+    showing: 'Mostrando',
+    of: 'de',
+    credits_pay: 'Credenciales de pago',
+    paypal_credit: 'Credenciales de PayPal',
+    paypal_client_id: 'ID CLIENTE',
+    paypal_secret: 'PAYPAL SECRET'
+  },
+  notifications: {
+    supplier_is_register: 'El proveedor {0} se ha registrado en el sistema. Usted puede realizar sus pedidos usando INNELI',
+    solicited_supply: 'El cliente {0} ha registrado un pedido para usted.'
   },
   ...es
 }

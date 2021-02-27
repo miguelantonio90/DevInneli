@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Position;
 use App\Providers\RouteServiceProvider;
 use App\Shop;
+use App\Supplier;
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
@@ -581,6 +582,8 @@ class RegisterController extends Controller
                     ]
                 ]);
                 $atm->save();
+                $user->isSupplier = count(Supplier::latest()->where('email', '=', $user['email'])->get()) > 0;
+                $user->save();
                 $response = $user;
             }
         }

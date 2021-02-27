@@ -1,14 +1,12 @@
 <template>
   <div class="page-add-inventory">
     <app-loading v-show="loadingData" />
-    <v-container
-      v-if="!loadingData"
-    >
+    <v-container v-if="!loadingData">
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t('$vuetify.titles.newF', [
-              $vuetify.lang.t('$vuetify.supply.name'),
+            $vuetify.lang.t("$vuetify.titles.newF", [
+              $vuetify.lang.t("$vuetify.supply.name")
             ])
           }}</span>
         </v-card-title>
@@ -28,8 +26,14 @@
                 <v-expansion-panel-header>
                   <div>
                     <v-icon>mdi-database-edit</v-icon>
-                    <span style="text-transform: uppercase;font-weight: bold">
-                      {{ $vuetify.lang.t('$vuetify.panel.basic') }}
+                    <span
+                      style="text-transform: uppercase;font-weight: bold"
+                    >
+                      {{
+                        $vuetify.lang.t(
+                          "$vuetify.panel.basic"
+                        )
+                      }}
                     </span>
                   </div>
                 </v-expansion-panel-header>
@@ -58,23 +62,56 @@
                         :headers="getTableColumns"
                         :items="newInventory.articles"
                       >
-                        <template v-slot:[`item.cost`]="{ item }">
+                        <template
+                          v-slot:[`item.cost`]="{
+                            item
+                          }"
+                        >
                           <v-edit-dialog
-                            :return-value.sync="item.cost"
+                            :return-value.sync="
+                              item.cost
+                            "
                             large
                             persistent
-                            :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                            :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+                            :cancel-text="
+                              $vuetify.lang.t(
+                                '$vuetify.actions.cancel'
+                              )
+                            "
+                            :save-text="
+                              $vuetify.lang.t(
+                                '$vuetify.actions.save'
+                              )
+                            "
                             @save="calcTotal(item)"
                           >
-                            <div>{{ `${user.company.currency + ' ' + item.cost }` }}</div>
+                            <div>
+                              {{
+                                `${user.company
+                                  .currency +
+                                  " " +
+                                  item.cost}`
+                              }}
+                            </div>
                             <template v-slot:input>
-                              <div class="mt-4 title">
-                                {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                              <div
+                                class="mt-4 title"
+                              >
+                                {{
+                                  $vuetify.lang.t(
+                                    "$vuetify.actions.edit"
+                                  )
+                                }}
                               </div>
                               <v-text-field-money
-                                v-model="item.cost"
-                                :label="$vuetify.lang.t('$vuetify.actions.edit')"
+                                v-model="
+                                  item.cost
+                                "
+                                :label="
+                                  $vuetify.lang.t(
+                                    '$vuetify.actions.edit'
+                                  )
+                                "
                                 required
                                 :properties="{
                                   clearable: true
@@ -82,34 +119,71 @@
                                 :options="{
                                   length: 15,
                                   precision: 2,
-                                  empty: 0.00,
+                                  empty: 0.0
                                 }"
                               />
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:[`item.price`]="{ item }">
+                        <template
+                          v-slot:[`item.price`]="{
+                            item
+                          }"
+                        >
                           <div>
-                            {{ `${user.company.currency + ' ' + item.price }` }}
+                            {{
+                              `${user.company
+                                .currency +
+                                " " +
+                                item.price}`
+                            }}
                           </div>
                         </template>
-                        <template v-slot:[`item.cant`]="{ item }">
+                        <template
+                          v-slot:[`item.cant`]="{
+                            item
+                          }"
+                        >
                           <v-edit-dialog
-                            :return-value.sync="item.cant"
+                            :return-value.sync="
+                              item.cant
+                            "
                             large
                             persistent
-                            :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
-                            :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+                            :cancel-text="
+                              $vuetify.lang.t(
+                                '$vuetify.actions.cancel'
+                              )
+                            "
+                            :save-text="
+                              $vuetify.lang.t(
+                                '$vuetify.actions.save'
+                              )
+                            "
                             @save="calcTotal(item)"
                           >
-                            <div>{{ item.cant }}</div>
+                            <div>
+                              {{ item.cant }}
+                            </div>
                             <template v-slot:input>
-                              <div class="mt-4 title">
-                                {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+                              <div
+                                class="mt-4 title"
+                              >
+                                {{
+                                  $vuetify.lang.t(
+                                    "$vuetify.actions.edit"
+                                  )
+                                }}
                               </div>
                               <v-text-field
-                                v-model="item.cant"
-                                :label="$vuetify.lang.t('$vuetify.actions.save') "
+                                v-model="
+                                  item.cant
+                                "
+                                :label="
+                                  $vuetify.lang.t(
+                                    '$vuetify.actions.save'
+                                  )
+                                "
                                 single-line
                                 counter
                                 autofocus
@@ -117,16 +191,40 @@
                             </template>
                           </v-edit-dialog>
                         </template>
-                        <template v-slot:[`item.totalCost`]="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalCost }` }}
+                        <template
+                          v-slot:[`item.totalCost`]="{
+                            item
+                          }"
+                        >
+                          {{
+                            `${user.company
+                              .currency +
+                              " " +
+                              item.totalCost}`
+                          }}
                         </template>
-                        <template v-slot:[`item.totalPrice`]="{ item }">
-                          {{ `${user.company.currency + ' ' + item.totalPrice }` }}
+                        <template
+                          v-slot:[`item.totalPrice`]="{
+                            item
+                          }"
+                        >
+                          {{
+                            `${user.company
+                              .currency +
+                              " " +
+                              item.totalPrice}`
+                          }}
                         </template>
-                        <template v-slot:[`item.actions`]="{ item }">
+                        <template
+                          v-slot:[`item.actions`]="{
+                            item
+                          }"
+                        >
                           <v-icon
                             small
-                            @click="deleteItem(item)"
+                            @click="
+                              deleteItem(item)
+                            "
                           >
                             mdi-delete
                           </v-icon>
@@ -134,7 +232,9 @@
                       </v-data-table>
                     </v-col>
                     <v-col
-                      v-show="newInventory.articles.length > 0 "
+                      v-show="
+                        newInventory.articles.length > 0
+                      "
                       cols="12"
                       md="6"
                     />
@@ -150,13 +250,21 @@
                   <v-expansion-panel-header>
                     <div>
                       <v-icon>mdi-database-plus</v-icon>
-                      <span style="text-transform: uppercase;font-weight: bold">
-                        {{ $vuetify.lang.t('$vuetify.pay.extra_data') }}
+                      <span
+                        style="text-transform: uppercase;font-weight: bold"
+                      >
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.pay.extra_data"
+                          )
+                        }}
                       </span>
                     </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <detail-supplier @updateData="update = true" />
+                    <detail-supplier
+                      @updateData="update = true"
+                    />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-col>
@@ -173,8 +281,14 @@
                   <v-expansion-panel-header>
                     <div>
                       <v-icon>mdi-database-plus</v-icon>
-                      <span style="text-transform: uppercase;font-weight: bold">
-                        {{ $vuetify.lang.t('$vuetify.menu.resume') }}
+                      <span
+                        style="text-transform: uppercase;font-weight: bold"
+                      >
+                        {{
+                          $vuetify.lang.t(
+                            "$vuetify.menu.resume"
+                          )
+                        }}
                       </span>
                     </div>
                   </v-expansion-panel-header>
@@ -182,7 +296,9 @@
                     <resume-supply
                       :edit="false"
                       :update="update"
-                      :currency="user.company.currency || ''"
+                      :currency="
+                        user.company.currency || ''
+                      "
                       @updateData="update = false"
                     />
                   </v-expansion-panel-content>
@@ -196,10 +312,10 @@
           <v-btn
             class="mb-2"
             :disabled="isActionInProgress"
-            @click="$router.push({name:'supply_product'})"
+            @click="$router.push({ name: 'supply_product' })"
           >
             <v-icon>mdi-close</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+            {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
           </v-btn>
           <v-btn
             class="mb-2"
@@ -209,7 +325,7 @@
             @click="createNewInventory"
           >
             <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.save') }}
+            {{ $vuetify.lang.t("$vuetify.actions.save") }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -219,7 +335,7 @@
       >
         <v-card>
           <v-card-title class="headline">
-            {{ $vuetify.lang.t('$vuetify.messages.dont_add') }}
+            {{ $vuetify.lang.t("$vuetify.messages.dont_add") }}
           </v-card-title>
           <v-card-actions>
             <v-spacer />
@@ -229,7 +345,7 @@
               @click="closeInfoAdd"
             >
               <v-icon>mdi-check</v-icon>
-              {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+              {{ $vuetify.lang.t("$vuetify.actions.accept") }}
             </v-btn>
             <v-spacer />
           </v-card-actions>
@@ -260,7 +376,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('inventory', ['newInventory', 'isActionInProgress', 'inventories']),
+    ...mapState('inventory', [
+      'newInventory',
+      'isActionInProgress',
+      'inventories'
+    ]),
     ...mapState('article', [
       'showNewModal',
       'showEditModal',
@@ -322,15 +442,17 @@ export default {
   async created () {
     this.loadingData = true
     await this.getArticles().then(() => {
-      this.articles.forEach((value) => {
+      this.articles.forEach(value => {
         if (value.track_inventory) {
           if (!value.parent_id) {
             let inventory = 0
             if (value.variant_values.length > 0) {
-              value.variant_values.forEach((v) => {
+              value.variant_values.forEach(v => {
                 if (v.articles_shops.length > 0) {
-                  v.articles_shops.forEach((k) => {
-                    inventory += k.stock ? parseFloat(k.stock) : 0
+                  v.articles_shops.forEach(k => {
+                    inventory += k.stock
+                      ? parseFloat(k.stock)
+                      : 0
                   })
                 }
                 this.localArticles.push({
@@ -347,8 +469,10 @@ export default {
               })
             } else {
               if (value.articles_shops.length > 0) {
-                value.articles_shops.forEach((k) => {
-                  inventory += k.stock ? parseFloat(k.stock) : 0
+                value.articles_shops.forEach(k => {
+                  inventory += k.stock
+                    ? parseFloat(k.stock)
+                    : 0
                 })
               }
               this.localArticles.push({
@@ -375,7 +499,11 @@ export default {
     ...mapActions('sale', ['getSales']),
     selectArticle (item) {
       if (item) {
-        if (this.newInventory.articles.filter(art => art.article_id === item.article_id).length === 0) {
+        if (
+          this.newInventory.articles.filter(
+            art => art.article_id === item.article_id
+          ).length === 0
+        ) {
           this.newInventory.articles.push(item)
         } else {
           this.showInfoAdd = true
@@ -383,13 +511,24 @@ export default {
       }
     },
     deleteItem (item) {
-      this.newInventory.articles.splice(this.newInventory.articles.indexOf(item), 1)
+      this.newInventory.articles.splice(
+        this.newInventory.articles.indexOf(item),
+        1
+      )
       this.update = true
     },
     calcTotal: function (item) {
       this.editedIndex = this.newInventory.articles.indexOf(item)
-      this.newInventory.articles[this.editedIndex].totalPrice = parseFloat(this.newInventory.articles[this.editedIndex].price * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
-      this.newInventory.articles[this.editedIndex].totalCost = parseFloat(this.newInventory.articles[this.editedIndex].cost * this.newInventory.articles[this.editedIndex].cant).toFixed(2)
+      this.newInventory.articles[
+        this.editedIndex
+      ].totalPrice = parseFloat(
+        this.newInventory.articles[this.editedIndex].price *
+                    this.newInventory.articles[this.editedIndex].cant
+      ).toFixed(2)
+      this.newInventory.articles[this.editedIndex].totalCost = parseFloat(
+        this.newInventory.articles[this.editedIndex].cost *
+                    this.newInventory.articles[this.editedIndex].cant
+      ).toFixed(2)
       this.update = true
     },
     closeInfoAdd () {
@@ -403,9 +542,11 @@ export default {
           await this.$router.push({ name: 'supply_product' })
         }
       } else {
-        this.shopMessageError(this.$vuetify.lang.t(
-          '$vuetify.messages.warning_cant_article'
-        ))
+        this.shopMessageError(
+          this.$vuetify.lang.t(
+            '$vuetify.messages.warning_cant_article'
+          )
+        )
       }
     },
     shopMessageError (message) {
@@ -423,10 +564,7 @@ export default {
       })
     }
   }
-
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

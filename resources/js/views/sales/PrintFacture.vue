@@ -18,18 +18,28 @@
             alt="LOGO"
           >
           <p class="centrado">
-            {{ $vuetify.lang.t('$vuetify.sale.ticket') }}<br>
+            {{ $vuetify.lang.t("$vuetify.sale.ticket") }}<br>
             <b><i>{{ editSale.shop.name }}</i></b><br>
-            <b>{{ $vuetify.lang.t('$vuetify.tax.noFacture') }}</b>:
-            {{ editSale.no_facture }}<br>
-            <b>{{ $vuetify.lang.t('$vuetify.articles.sell_by') + ': ' }}</b>
-            {{ editSale.create.firstName }} {{ editSale.create.lastName? editSale.create.lastName: '' }}<br>
-            <b>{{ $vuetify.lang.t('$vuetify.menu.box') + ': ' }}</b>
+            <b>{{ $vuetify.lang.t("$vuetify.tax.noFacture") }}</b>: {{ editSale.no_facture }}<br>
+            <b>{{
+              $vuetify.lang.t("$vuetify.articles.sell_by") + ": "
+            }}</b>
+            {{ editSale.create.firstName }}
+            {{
+              editSale.create.lastName
+                ? editSale.create.lastName
+                : ""
+            }}<br>
+            <b>{{ $vuetify.lang.t("$vuetify.menu.box") + ": " }}</b>
             {{ editSale.box.name }}<br>
             <b>{{ $vuetify.lang.t('$vuetify.menu.coin') + ': ' }}</b>
             {{ user.company.currency }}<br>
             {{ new Date(editSale.updated_at).toUTCString() }}<br>
-            {{ user.company.slogan ? user.company.slogan.toUpperCase(): '' }}
+            {{
+              user.company.slogan
+                ? user.company.slogan.toUpperCase()
+                : ""
+            }}
           </p>
           <div style="width: 100%; margin-bottom: 20px">
             <v-col
@@ -334,16 +344,26 @@ export default {
     this.totalDisc = 0
     this.total = 0
     this.sub_total = 0
-    this.editSale.articles.forEach((v) => {
+    this.editSale.articles.forEach(v => {
       this.sub_total = parseFloat(v.totalPrice) + this.sub_total
     })
-    this.editSale.taxes.forEach((v) => {
-      this.totalTax += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+    this.editSale.taxes.forEach(v => {
+      this.totalTax +=
+                v.percent === 'true'
+                  ? (this.sub_total * v.value) / 100
+                  : v.value
     })
-    this.editSale.discounts.forEach((v) => {
-      this.totalDisc += v.percent === 'true' ? this.sub_total * v.value / 100 : v.value
+    this.editSale.discounts.forEach(v => {
+      this.totalDisc +=
+                v.percent === 'true'
+                  ? (this.sub_total * v.value) / 100
+                  : v.value
     })
-    this.total = (this.sub_total + parseFloat(this.totalTax) - parseFloat(this.totalDisc)).toFixed(2)
+    this.total = (
+      this.sub_total +
+            parseFloat(this.totalTax) -
+            parseFloat(this.totalDisc)
+    ).toFixed(2)
     this.total = parseFloat(this.total).toFixed(2)
     this.$emit('updateData')
   },
@@ -352,12 +372,16 @@ export default {
     ...mapActions('discount', ['getDiscounts']),
     total_pay (item) {
       let sum = 0
-      item.taxes.forEach((v) => {
-        sum += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      item.taxes.forEach(v => {
+        sum += v.percent
+          ? (item.cant * item.price * v.value) / 100
+          : v.value
       })
       let discount = 0
-      item.discount.forEach((v) => {
-        discount += v.percent ? item.cant * item.price * v.value / 100 : v.value
+      item.discount.forEach(v => {
+        discount += v.percent
+          ? (item.cant * item.price * v.value) / 100
+          : v.value
       })
       return item.cant * item.price + sum - discount - item.moneyRefund
     },
@@ -369,7 +393,6 @@ export default {
 </script>
 
 <style scoped>
-
 .profile {
     width: 100px;
     height: 100px;

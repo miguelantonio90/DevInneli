@@ -1,13 +1,13 @@
 <template>
   <v-container
-    class="page-forgot"
-    fill-height
+      class="page-forgot"
+      fill-height
   >
     <v-row>
       <v-col>
         <v-card
-          class="pa-3 page-forgot__card"
-          tile
+            class="pa-3 page-forgot__card"
+            tile
         >
           <v-card-title>
             <h1 class="primary--text display-1 text-center">
@@ -16,46 +16,44 @@
           </v-card-title>
           <v-card-text>
             <v-form
-              ref="form"
-              v-model="formValid"
-              class="my-10"
-              lazy-validation
+                ref="form"
+                v-model="formValid"
+                class="my-10"
+                lazy-validation
             >
               <v-text-field
-                v-model="email"
-                :label="$vuetify.lang.t('$vuetify.email')"
-                :rules="formRule.email"
-                :hint="$vuetify.lang.t('$vuetify.hint_forgot')"
-                append-icon="mdi-email"
-                autocomplete="off"
-                name="register"
-                required
-                type="email"
+                  v-model="email"
+                  :hint="$vuetify.lang.t('$vuetify.hint_forgot')"
+                  :label="$vuetify.lang.t('$vuetify.email')"
+                  :rules="formRule.email"
+                  append-icon="mdi-email"
+                  autocomplete="off"
+                  name="register"
+                  required
+                  type="email"
               />
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-tooltip
-              bottom
-            >
+            <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                  v-bind="attrs"
-                  class="mr-3"
-                  v-on="on"
-                  @click="$router.push({name:'login'})"
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mr-3"
+                    @click="$router.push({ name: 'login' })"
                 >
                   mdi-chevron-left
                 </v-icon>
               </template>
               <span>{{ $vuetify.lang.t('$vuetify.login') }}</span>
             </v-tooltip>
-            <v-spacer />
+            <v-spacer/>
             <v-btn
-              :disabled="!formValid || loading"
-              :loading="loading"
-              color="primary"
-              @click="sendNotify"
+                :disabled="!formValid || loading"
+                :loading="loading"
+                color="primary"
+                @click="sendNotify"
             >
               <v-icon>mdi-send</v-icon>
               {{ $vuetify.lang.t('$vuetify.forgot_btn') }}

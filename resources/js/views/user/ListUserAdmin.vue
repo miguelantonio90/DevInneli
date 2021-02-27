@@ -2,21 +2,23 @@
   <v-container>
     <v-row>
       <v-col
-        class="py-0"
-        cols="12"
+          class="py-0"
+          cols="12"
       >
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.user'),])"
-
-          :is-loading="isTableLoading"
-          csv-filename="Employees"
-          :headers="getTableColumns"
-          :items="users"
-          :manager="'employer'"
-          :sort-by="['firstName']"
-          :sort-desc="[false, true]"
-          multi-sort
+            :headers="getTableColumns"
+            :is-loading="isTableLoading"
+            :items="users"
+            :manager="'employer'"
+            :sort-by="['firstName']"
+            :sort-desc="[false, true]"
+            :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.user')
+            ])
+          "
+            csv-filename="Employees"
+            multi-sort
         >
           <template v-slot:[`item.company.name`]="{ item }">
             <template>
@@ -24,31 +26,44 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-chip
-                    v-bind="attrs"
-                    v-on="on"
+                      v-bind="attrs"
+                      v-on="on"
                   >
                     <v-avatar left>
-                      {{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].emoji }}
+                      {{
+                        arrayCountry.filter(
+                            cou =>
+                                cou.id ===
+                                item.company.country
+                        )[0].emoji
+                      }}
                     </v-avatar>
                     {{ item.company.country }}
                   </v-chip>
                 </template>
-                <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+                <span>{{
+                    arrayCountry.filter(
+                        cou => cou.id === item.company.country
+                    )[0].name
+                  }}</span>
               </v-tooltip>
             </template>
           </template>
-          <template
-            v-slot:[`item.firstName`]="{ item }"
-          >
+          <template v-slot:[`item.firstName`]="{ item }">
             <v-avatar>
-              <v-img :src="item.avatar || `/assets/avatar/avatar-undefined.jpg`" />
+              <v-img
+                  :src="
+                  item.avatar ||
+                    `/assets/avatar/avatar-undefined.jpg`
+                "
+              />
             </v-avatar>
             {{ item.firstName }}
           </template>
           <template v-slot:[`item.shopsNames`]="{ item }">
             <v-chip
-              v-for="(shop, i) of item.shopsNames"
-              :key="i"
+                v-for="(shop, i) of item.shopsNames"
+                :key="i"
             >
               {{ shop }}
             </v-chip>
@@ -57,16 +72,24 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-chip
-                  v-bind="attrs"
-                  v-on="on"
+                    v-bind="attrs"
+                    v-on="on"
                 >
                   <v-avatar left>
-                    {{ arrayCountry.filter(cou=>cou.id===item.country)[0].emoji }}
+                    {{
+                      arrayCountry.filter(
+                          cou => cou.id === item.country
+                      )[0].emoji
+                    }}
                   </v-avatar>
                   {{ item.country }}
                 </v-chip>
               </template>
-              <span>{{ arrayCountry.filter(cou=>cou.id===item.company.country)[0].name }}</span>
+              <span>{{
+                  arrayCountry.filter(
+                      cou => cou.id === item.company.country
+                  )[0].name
+                }}</span>
             </v-tooltip>
           </template>
         </app-data-table>
@@ -85,11 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', [
-      'showShowModal',
-      'users',
-      'isTableLoading'
-    ]),
+    ...mapState('user', ['showShowModal', 'users', 'isTableLoading']),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
       return [

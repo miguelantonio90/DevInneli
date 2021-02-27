@@ -539,10 +539,10 @@ export default {
         .map((h) => {
           addFilter(
             h.value,
-                `${this.$vuetify.lang.t('$vuetify.component.select_one')} ` + h.text,
-                this.selectFiltersRegistered,
-                this.selectFilters,
-                { caseSensitive: h.case_sensitive }
+						`${this.$vuetify.lang.t('$vuetify.component.select_one')} ` + h.text,
+						this.selectFiltersRegistered,
+						this.selectFilters,
+						{ caseSensitive: h.case_sensitive }
           )
         })
       newHeaders
@@ -550,13 +550,13 @@ export default {
         .map((h) => {
           addFilter(
             h.value,
-                `${this.$vuetify.lang.t('$vuetify.component.many_filter')} ` + h.text,
-                this.selectManyFiltersRegistered,
-                this.selectManyFilters,
-                {
-                  caseSensitive: h.case_sensitive,
-                  isManyFilter: true
-                }
+						`${this.$vuetify.lang.t('$vuetify.component.many_filter')} ` + h.text,
+						this.selectManyFiltersRegistered,
+						this.selectManyFilters,
+						{
+						  caseSensitive: h.case_sensitive,
+						  isManyFilter: true
+						}
           )
         })
       newHeaders
@@ -564,12 +564,12 @@ export default {
         .map((h) => {
           addFilter(
             h.value,
-                `${this.$vuetify.lang.t('$vuetify.component.select_one')} ` + h.text,
-                this.checkboxFiltersRegistered,
-                this.checkboxFilters,
-                { isCheckbox: true },
-                false,
-                [true, false]
+						`${this.$vuetify.lang.t('$vuetify.component.select_one')} ` + h.text,
+						this.checkboxFiltersRegistered,
+						this.checkboxFilters,
+						{ isCheckbox: true },
+						false,
+						[true, false]
           )
         })
       newHeaders.map((h) => {

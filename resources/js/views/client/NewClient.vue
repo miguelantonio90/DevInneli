@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.new', [
-            $vuetify.lang.t('$vuetify.menu.client'),
+          $vuetify.lang.t("$vuetify.titles.new", [
+            $vuetify.lang.t("$vuetify.menu.client")
           ])
         }}</span>
       </v-card-title>
@@ -27,7 +27,11 @@
             >
               <avatar-picker
                 :image-src="getAvatar"
-                :image-style="{ 'border-radius': '50%','height':'80px','width':'80px' }"
+                :image-style="{
+                  'border-radius': '50%',
+                  height: '80px',
+                  width: '80px'
+                }"
                 class="profile mx-auto d-block"
                 @input="onChangeImage($event)"
               />
@@ -71,14 +75,22 @@
             >
               <vue-tel-input-vuetify
                 v-model="newClient.phone"
-                :placeholder="$vuetify.lang.t('$vuetify.phone_holder')"
+                :placeholder="
+                  $vuetify.lang.t('$vuetify.phone_holder')
+                "
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
                 :rules="formRule.phone"
-                :select-label="$vuetify.lang.t('$vuetify.country')"
+                :select-label="
+                  $vuetify.lang.t('$vuetify.country')
+                "
                 v-bind="bindProps"
                 :error-messages="errorPhone"
-                :prefix="countrySelect ?`+`+countrySelect.dialCode:``"
+                :prefix="
+                  countrySelect
+                    ? `+` + countrySelect.dialCode
+                    : ``
+                "
                 @country-changed="onCountry"
                 @keypress="numbers"
                 @input="onInput"
@@ -119,14 +131,14 @@
                 :label="$vuetify.lang.t('$vuetify.barCode')"
                 :properties="{
                   clearable: true,
-                  required:true,
-                  rules:formRule.required
+                  required: true,
+                  rules: formRule.required
                 }"
                 :options="{
                   inputMask: '##-####-####-###',
                   outputMask: '#############',
                   empty: null,
-                  alphanumeric: true,
+                  alphanumeric: true
                 }"
                 :focus="focus"
                 @focus="focus = false"
@@ -145,7 +157,11 @@
               <v-text-field
                 v-model="newClient.description"
                 :counter="120"
-                :label="$vuetify.lang.t('$vuetify.access.description')"
+                :label="
+                  $vuetify.lang.t(
+                    '$vuetify.access.description'
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -159,7 +175,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -169,7 +185,7 @@
           @click="createNewClient"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -180,7 +196,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'NewUser',
+  name: 'NewClient',
   data () {
     return {
       formValid: false,
@@ -196,7 +212,7 @@ export default {
     ...mapState('client', ['saved', 'newClient', 'isActionInProgress']),
     getAvatar () {
       return `${this.newClient.avatar ||
-          '/assets/avatar/avatar-undefined.jpg'}`
+                '/assets/avatar/avatar-undefined.jpg'}`
     },
     bindProps () {
       return {
@@ -266,5 +282,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

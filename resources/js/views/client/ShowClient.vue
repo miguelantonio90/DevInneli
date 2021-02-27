@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.show', [
-            $vuetify.lang.t('$vuetify.menu.user'),
+          $vuetify.lang.t("$vuetify.titles.show", [
+            $vuetify.lang.t("$vuetify.menu.user")
           ])
         }}</span>
       </v-card-title>
@@ -137,7 +137,7 @@
           @click="toogleShowModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.close') }}
+          {{ $vuetify.lang.t("$vuetify.actions.close") }}
         </v-btn>
       </v-card-actions>
     </v-card>

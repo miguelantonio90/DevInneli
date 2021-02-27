@@ -35,7 +35,11 @@ class ResponseHelper
                     'name' => cache()->get('userPin')->firstName.' '.cache()->get('userPin')->lastName,
                     'email' => cache()->get('userPin')->email
                 ]
-            ] : ''
+            ] : '',
+            /*'notifications' => Notification::latest()
+                ->where('company_id', '=', cache()->get('userPin')->company['id'])
+//                ->where('read', '=', 0)
+                ->get()*/
         ];
         return response()->json($response);
     }

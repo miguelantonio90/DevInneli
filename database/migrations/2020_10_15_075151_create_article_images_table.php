@@ -18,11 +18,13 @@ class CreateArticleImagesTable extends Migration
             $table->string('name')->nullable();
             $table->longText('path')->nullable();
             $table->boolean('default')->nullable();
+            $table->string('position')->nullable();
+            $table->foreignUuid('article_id')->nullable()->references('id')->on('articles')
+                ->onDelete('cascade');
+            $table->foreignUuid('shop_id')->nullable()->references('id')->on('shops')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreignUuid('article_id')->references('id')->on('articles')
-                ->onDelete('cascade');
         });
     }
 

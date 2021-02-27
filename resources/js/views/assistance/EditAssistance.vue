@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.edit', [
-            $vuetify.lang.t('$vuetify.menu.assistance'),
+          $vuetify.lang.t("$vuetify.titles.edit", [
+            $vuetify.lang.t("$vuetify.menu.assistance")
           ])
         }}</span>
       </v-card-title>
@@ -28,7 +28,9 @@
                 v-model="editAssistance.user"
                 :items="users"
                 chips
-                :label="$vuetify.lang.t('$vuetify.menu.employee')"
+                :label="
+                  $vuetify.lang.t('$vuetify.menu.employee')
+                "
                 item-text="firstName"
                 item-value="id"
                 :loading="isUserTableLoading"
@@ -44,22 +46,55 @@
                     @click="data.select"
                   >
                     <v-avatar left>
-                      <v-img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'" />
+                      <v-img
+                        :src="
+                          data.item.avatar ||
+                            '/assets/avatar/avatar-undefined.jpg'
+                        "
+                      />
                     </v-avatar>
-                    {{ data.item.firstName + ' ' + `${data.item.lastName !== null ? data.item.lastName : ''}` }}
+                    {{
+                      data.item.firstName +
+                        " " +
+                        `${
+                          data.item.lastName !== null
+                            ? data.item.lastName
+                            : ""
+                        }`
+                    }}
                   </v-chip>
                 </template>
                 <template v-slot:item="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item" />
+                  <template
+                    v-if="typeof data.item !== 'object'"
+                  >
+                    <v-list-item-content
+                      v-text="data.item"
+                    />
                   </template>
                   <template v-else>
                     <v-list-item-avatar>
-                      <img :src="data.item.avatar || '/assets/avatar/avatar-undefined.jpg'">
+                      <img
+                        :src="
+                          data.item.avatar ||
+                            '/assets/avatar/avatar-undefined.jpg'
+                        "
+                      >
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title>
-                        {{ data.item.firstName + ' ' + `${data.item.lastName !== null ? data.item.lastName : ''}` }}
+                        {{
+                          data.item.firstName +
+                            " " +
+                            `${
+                              data.item
+                                .lastName !==
+                              null
+                                ? data.item
+                                  .lastName
+                                : ""
+                            }`
+                        }}
                       </v-list-item-title>
                     </v-list-item-content>
                   </template>
@@ -89,7 +124,9 @@
               <app-datetime-picker
                 v-model="datetimeEntry"
                 :min-date="datetimeEntry"
-                :label="$vuetify.lang.t('$vuetify.assistance.entry')"
+                :label="
+                  $vuetify.lang.t('$vuetify.assistance.entry')
+                "
               />
             </v-col>
             <v-col
@@ -99,18 +136,19 @@
               <app-datetime-picker
                 v-model="datetimeExit"
                 :min-date="datetimeEntry"
-                :label="$vuetify.lang.t('$vuetify.assistance.exit')"
+                :label="
+                  $vuetify.lang.t('$vuetify.assistance.exit')
+                "
               />
             </v-col>
           </v-row>
         </v-form>
-        <v-chip
-          class="mr-2"
-        >
+        <v-chip class="mr-2">
           <v-icon left>
             mdi-alarm-check
           </v-icon>
-          {{ $vuetify.lang.t('$vuetify.assistance.total_hours') }} : {{ getTotalHours }}
+          {{ $vuetify.lang.t("$vuetify.assistance.total_hours") }} :
+          {{ getTotalHours }}
         </v-chip>
       </v-card-text>
       <v-card-actions>
@@ -121,7 +159,7 @@
           @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -131,7 +169,7 @@
           @click="updateAssistanceHandler"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -150,7 +188,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('assistance', ['saved', 'editAssistance', 'isActionInProgress']),
+    ...mapState('assistance', [
+      'saved',
+      'editAssistance',
+      'isActionInProgress'
+    ]),
     ...mapState('user', ['users', 'isUserTableLoading']),
     ...mapState('shop', ['shops', 'isShopLoading']),
     datetimeEntry: {
@@ -170,12 +212,15 @@ export default {
       }
     },
     getTotalHours () {
-      return `${this.editAssistance.datetimeEntry === '' ||
-      this.editAssistance.datetimeExit === ''
-          ? 0 : differenceInHours(
-              new Date(this.editAssistance.datetimeExit),
-              new Date(this.editAssistance.datetimeEntry)
-          )}`
+      return `${
+                this.editAssistance.datetimeEntry === '' ||
+                this.editAssistance.datetimeExit === ''
+                    ? 0
+                    : differenceInHours(
+                          new Date(this.editAssistance.datetimeExit),
+                          new Date(this.editAssistance.datetimeEntry)
+                      )
+            }`
     }
   },
   created () {
@@ -200,5 +245,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

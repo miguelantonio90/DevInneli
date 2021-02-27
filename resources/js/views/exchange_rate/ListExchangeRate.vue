@@ -24,7 +24,9 @@
           <template slot="subtitle">
             <span style="color: darkred">
               {{
-                `${$vuetify.lang.t('$vuetify.messages.info_exchange_rate')} ${user.company.currency}`
+                `${$vuetify.lang.t(
+                  "$vuetify.messages.info_exchange_rate"
+                )} ${user.company.currency}`
               }}
             </span>
           </template>
@@ -112,7 +114,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteChange(id)
         })
     }

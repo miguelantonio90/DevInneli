@@ -18,19 +18,19 @@ const state = {
 
 const mutations = {
   [FETCH_COUNTRIES] (state, arrayCurrency) {
-    state.arrayCurrency = arrayCurrency
+	state.arrayCurrency = arrayCurrency
   },
   [FETCH_PAYMENTS] (state, payments) {
-    state.payments = payments
+	state.payments = payments
   },
   [COUNTRIES_LOADING] (state, isLoading) {
-    state.isCountryLoading = isLoading
+	state.isCountryLoading = isLoading
   },
   [PAYMENTS_LOADING] (state, isLoading) {
-    state.isPaymentsLoading = isLoading
+	state.isPaymentsLoading = isLoading
   },
   [FAILED] (state, error) {
-    state.error = error
+	state.error = error
   }
 }
 
@@ -41,8 +41,7 @@ const getters = {
   payments: state => state.payments
 }
 
-const actions = {
-}
+const actions = {}
 
 export default {
   namespaced: true,

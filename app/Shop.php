@@ -51,7 +51,7 @@ class Shop extends Model
         $shop->country = $data['country']['id'];
         $shop->company_id = $company->id;
         $shop->save();
-
+        Box::createFirst($shop, $company);
         return $shop;
 
     }

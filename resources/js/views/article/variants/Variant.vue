@@ -7,9 +7,12 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            $vuetify.lang.t(newVariant ? '$vuetify.titles.edit': '$vuetify.titles.newF', [
-              this.$vuetify.lang.t('$vuetify.variants.variant')
-            ])
+            $vuetify.lang.t(
+              newVariant
+                ? "$vuetify.titles.edit"
+                : "$vuetify.titles.newF",
+              [this.$vuetify.lang.t("$vuetify.variants.variant")]
+            )
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -25,7 +28,11 @@
                   :hint="hintText[0]"
                   persistent-hint
                   style="margin-top: 14px"
-                  :label="$vuetify.lang.t('$vuetify.variants.name')"
+                  :label="
+                    $vuetify.lang.t(
+                      '$vuetify.variants.name'
+                    )
+                  "
                 />
               </v-col>
               <v-col
@@ -37,7 +44,11 @@
                   v-model="select"
                   multiple
                   value=""
-                  :label="$vuetify.lang.t('$vuetify.variants.options')"
+                  :label="
+                    $vuetify.lang.t(
+                      '$vuetify.variants.options'
+                    )
+                  "
                   chips
                   deletable-chips
                   class="tag-input"
@@ -53,20 +64,28 @@
             @click="closeDialog"
           >
             <v-icon>mdi-close</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+            {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
           </v-btn>
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="select.length === 0 || name === '' || hintText[1]"
+            :disabled="
+              select.length === 0 || name === '' || hintText[1]
+            "
             @click="saveVariant"
           >
             <v-icon>mdi-check</v-icon>
-            {{ $vuetify.lang.t('$vuetify.actions.accept') }}
+            {{ $vuetify.lang.t("$vuetify.actions.accept") }}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <image-dialog
+      :dialog="image"
+      :images="itemImg.images"
+      @saveImage="saveImage"
+      @closeDialog="image = false"
+    />
     <template>
       <v-chip
         v-for="variant in article.variants"
@@ -95,7 +114,31 @@
       @create-row="addVariant"
       @delete-row="deleteVariantValue($event)"
     >
-      <template v-slot:[`item.price`]="{ item }">
+      <template v-slot:item.images="{ item }">
+        <template v-if="item.images.length === 0">
+          <!--div
+            id="multiple-image"
+            style="display: flex; justify-content: center;"
+          >
+            <app-upload-multiple-image
+              :data-images="item.images"
+              :upload-success="uploadImage"
+            />
+          </div-->
+          <div class="my-2">
+            <v-btn
+              color="primary"
+              fab
+              x-small
+              dark
+              @click="showImageDialog(item)"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </div>
+        </template>
+      </template>
+      <template v-slot:item.price="{ item }">
         <v-edit-dialog
           :return-value.sync="item.price"
           large
@@ -104,10 +147,12 @@
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
           @save="$emit('updateVariant')"
         >
-          <div>{{ `${user.company.currency + ' ' + item.price}` }}</div>
+          <div>
+            {{ `${user.company.currency + " " + item.price}` }}
+          </div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-money
               v-model="item.price"
@@ -120,13 +165,48 @@
               :options="{
                 length: 15,
                 precision: 2,
-                empty: 0.00,
+                empty: 0.0
               }"
             />
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:[`item.cost`]="{ item }">
+      <template v-slot:item.onlinePrice="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.onlinePrice"
+          large
+          persistent
+          :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
+          :save-text="$vuetify.lang.t('$vuetify.actions.save')"
+          @save="$emit('updateVariant')"
+        >
+          <div>
+            {{
+              `${user.company.currency + " " + item.onlinePrice}`
+            }}
+          </div>
+          <template v-slot:input>
+            <div class="mt-4 title">
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
+            </div>
+            <v-text-field-money
+              v-model="item.onlinePrice"
+              :label="$vuetify.lang.t('$vuetify.actions.edit')"
+              required
+              :properties="{
+                prefix: user.company.currency,
+                clearable: true
+              }"
+              :options="{
+                length: 15,
+                precision: 2,
+                empty: 0.0
+              }"
+            />
+          </template>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:item.cost="{ item }">
         <v-edit-dialog
           :return-value.sync="item.cost"
           large
@@ -134,10 +214,12 @@
           :cancel-text="$vuetify.lang.t('$vuetify.actions.cancel')"
           :save-text="$vuetify.lang.t('$vuetify.actions.save')"
         >
-          <div>{{ `${user.company.currency + ' ' + item.cost}` }}</div>
+          <div>
+            {{ `${user.company.currency + " " + item.cost}` }}
+          </div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-money
               v-model="item.cost"
@@ -150,13 +232,13 @@
               :options="{
                 length: 15,
                 precision: 2,
-                empty: 0.00,
+                empty: 0.0
               }"
             />
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:[`item.ref`]="{ item }">
+      <template v-slot:item.ref="{ item }">
         <v-edit-dialog
           :return-value.sync="item.ref"
           large
@@ -167,7 +249,7 @@
           <div>{{ item.ref }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field
               v-model="item.ref"
@@ -178,7 +260,7 @@
           </template>
         </v-edit-dialog>
       </template>
-      <template v-slot:[`item.barCode`]="{ item }">
+      <template v-slot:item.barCode="{ item }">
         <v-edit-dialog
           :return-value.sync="item.barCode"
           large
@@ -189,19 +271,19 @@
           <div>{{ item.barCode }}</div>
           <template v-slot:input>
             <div class="mt-4 title">
-              {{ $vuetify.lang.t('$vuetify.actions.edit') }}
+              {{ $vuetify.lang.t("$vuetify.actions.edit") }}
             </div>
             <v-text-field-simplemask
               v-model="item.barCode"
               :label="$vuetify.lang.t('$vuetify.barCode')"
               :properties="{
-                clearable: true,
+                clearable: true
               }"
               :options="{
                 inputMask: '##-####-####-###',
                 outputMask: '#############',
                 empty: 0,
-                alphanumeric: true,
+                alphanumeric: true
               }"
               :focus="focus"
               @focus="focus = false"
@@ -214,11 +296,12 @@
 </template>
 
 <script>
-
 import { mapGetters } from 'vuex'
+import ImageDialog from './imageDialog'
 
 export default {
   name: 'Variant',
+  components: { ImageDialog },
   props: {
     article: {
       type: Object,
@@ -229,8 +312,10 @@ export default {
   },
   data () {
     return {
+      image: false,
       cell: -1,
       focus: false,
+      itemImg: {},
       ref: '10000',
       name: '',
       editedIndex: -1,
@@ -249,12 +334,20 @@ export default {
     getHeader () {
       return [
         {
+          text: this.$vuetify.lang.t('$vuetify.representation.image'),
+          value: 'images'
+        },
+        {
           text: this.$vuetify.lang.t('$vuetify.variants.name'),
           value: 'name'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.price'),
           value: 'price'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.onlinePrice'),
+          value: 'onlinePrice'
         },
         {
           text: this.$vuetify.lang.t('$vuetify.variants.cost'),
@@ -279,9 +372,19 @@ export default {
   watch: {
     name: function () {
       this.hintText = ['', false]
-      if (this.article.variants.filter(art => art.name === this.name).length > 0) {
-        if (this.article.variants.filter(art => art.name === this.name)[0] !== this.variantManager) {
-          this.hintText = [this.$vuetify.lang.t('$vuetify.messages.warning_exist'), true]
+      if (
+        this.article.variants.filter(art => art.name === this.name)
+          .length > 0
+      ) {
+        if (
+          this.article.variants.filter(
+            art => art.name === this.name
+          )[0] !== this.variantManager
+        ) {
+          this.hintText = [
+            this.$vuetify.lang.t('$vuetify.messages.warning_exist'),
+            true
+          ]
         }
       }
     }
@@ -290,6 +393,16 @@ export default {
     this.ref = parseFloat(this.article.ref) + 1
   },
   methods: {
+    showImageDialog (item) {
+      this.image = true
+      this.item = item
+    },
+    saveImage (images) {
+      this.item.images = images
+    },
+    uploadImage (formData, index, fileList) {
+      console.log(index, fileList, formData)
+    },
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
       const key = String.fromCharCode(
@@ -336,33 +449,117 @@ export default {
       data.forEach((value, index) => {
         if (index === 0) {
           value.value.forEach(localValue => {
-            const localArticle = this.article.variant_values.filter(sh => sh.name === localValue)
-            if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+            const localArticle = this.article.variant_values.filter(
+              sh => sh.name === localValue
+            )
+            if (localArticle.length === 0) {
+              this.ref = parseInt(this.ref) + 1
+            }
             result.push({
-              articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
+              articles_shops:
+                                localArticle.length > 0
+                                  ? localArticle[0].articles_shops
+                                  : [],
+              images: [],
               name: localValue.toString(),
-              price: localArticle.length > 0 ? parseFloat(localArticle[0].price).toFixed(2) : parseFloat(this.article.price).toFixed(2),
-              cost: localArticle.length > 0 ? parseFloat(localArticle[0].cost).toFixed(2) : parseFloat(this.article.cost).toFixed(2),
-              ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
-              barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+              price:
+                                localArticle.length > 0
+                                  ? parseFloat(localArticle[0].price).toFixed(
+                                    2
+                                  )
+                                  : parseFloat(this.article.price).toFixed(2),
+              onlinePrice:
+                                localArticle.length > 0
+                                  ? parseFloat(
+                                    localArticle[0].onlinePrice
+                                  ).toFixed(2)
+                                  : parseFloat(
+                                    this.article.onlinePrice
+                                  ).toFixed(2),
+              cost:
+                                localArticle.length > 0
+                                  ? parseFloat(localArticle[0].cost).toFixed(
+                                    2
+                                  )
+                                  : parseFloat(this.article.cost).toFixed(2),
+              ref:
+                                localArticle.length > 0
+                                  ? localArticle[0].ref
+                                  : this.ref,
+              barCode:
+                                localArticle.length > 0
+                                  ? localArticle[0].barCode
+                                  : this.barCode
             })
-            if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
+            if (localArticle.length > 0) {
+              result[result.length - 1].id = localArticle[0].id
+            }
           })
         } else {
           value.value.forEach(localValue => {
             localResult.forEach(v => {
-              const localArticle = this.article.variant_values.filter(sh => sh.name === localValue.toString() + '/' + v.name.toString() ||
-                              sh.name === v.name.toString() + '/' + localValue.toString())
-              if (localArticle.length === 0) { this.ref = parseInt(this.ref) + 1 }
+              const localArticle = this.article.variant_values.filter(
+                sh =>
+                  sh.name ===
+                                        localValue.toString() +
+                                            '/' +
+                                            v.name.toString() ||
+                                    sh.name ===
+                                        v.name.toString() +
+                                            '/' +
+                                            localValue.toString()
+              )
+              if (localArticle.length === 0) {
+                this.ref = parseInt(this.ref) + 1
+              }
               result.push({
-                articles_shops: localArticle.length > 0 ? localArticle[0].articles_shops : [],
-                name: localArticle.length > 0 ? localArticle[0].name : localValue.toString() + '/' + v.name.toString(),
-                price: localArticle.length > 0 ? parseFloat(localArticle[0].price).toFixed(2) : parseFloat(this.article.price).toFixed(2),
-                cost: localArticle.length > 0 ? parseFloat(localArticle[0].cost).toFixed(2) : parseFloat(this.article.cost).toFixed(),
-                ref: localArticle.length > 0 ? localArticle[0].ref : this.ref,
-                barCode: localArticle.length > 0 ? localArticle[0].barCode : this.barCode
+                articles_shops:
+                                    localArticle.length > 0
+                                      ? localArticle[0].articles_shops
+                                      : [],
+                name:
+                                    localArticle.length > 0
+                                      ? localArticle[0].name
+                                      : localValue.toString() +
+                                          '/' +
+                                          v.name.toString(),
+                price:
+                                    localArticle.length > 0
+                                      ? parseFloat(
+                                        localArticle[0].price
+                                      ).toFixed(2)
+                                      : parseFloat(
+                                        this.article.price
+                                      ).toFixed(2),
+                onlinePrice:
+                                    localArticle.length > 0
+                                      ? parseFloat(
+                                        localArticle[0].onlinePrice
+                                      ).toFixed(2)
+                                      : parseFloat(
+                                        this.article.onlinePrice
+                                      ).toFixed(2),
+                cost:
+                                    localArticle.length > 0
+                                      ? parseFloat(
+                                        localArticle[0].cost
+                                      ).toFixed(2)
+                                      : parseFloat(
+                                        this.article.cost
+                                      ).toFixed(),
+                ref:
+                                    localArticle.length > 0
+                                      ? localArticle[0].ref
+                                      : this.ref,
+                barCode:
+                                    localArticle.length > 0
+                                      ? localArticle[0].barCode
+                                      : this.barCode
               })
-              if (localArticle.length > 0) { result[result.length - 1].id = localArticle[0].id }
+              if (localArticle.length > 0) {
+                result[result.length - 1].id =
+                                    localArticle[0].id
+              }
             })
           })
         }
@@ -402,14 +599,18 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) {
             if (!item.id) {
               this.article.variant_values.splice(item, 1)
             }
             if (this.article.variants.length === 1) {
-              this.article.variants[0].value.length === 1 ? this.removeVariant(this.article.variants[0])
-                : this.article.variants[0].value.splice(item.name, 1)
+              this.article.variants[0].value.length === 1
+                ? this.removeVariant(this.article.variants[0])
+                : this.article.variants[0].value.splice(
+                  item.name,
+                  1
+                )
             }
           }
         })

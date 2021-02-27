@@ -7,8 +7,8 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          $vuetify.lang.t('$vuetify.titles.newF', [
-            $vuetify.lang.t('$vuetify.menu.category'),
+          $vuetify.lang.t("$vuetify.titles.newF", [
+            $vuetify.lang.t("$vuetify.menu.category")
           ])
         }}</span>
       </v-card-title>
@@ -51,7 +51,7 @@
           @click="toogleNewModal(false)"
         >
           <v-icon>mdi-close</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
+          {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
         </v-btn>
         <v-btn
           :disabled="!formValid || isActionInProgress"
@@ -61,7 +61,7 @@
           @click="createNewCategory"
         >
           <v-icon>mdi-content-save</v-icon>
-          {{ $vuetify.lang.t('$vuetify.actions.save') }}
+          {{ $vuetify.lang.t("$vuetify.actions.save") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -72,7 +72,6 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-
   data () {
     return {
       formValid: false,
@@ -113,5 +112,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

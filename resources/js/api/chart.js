@@ -15,56 +15,56 @@ const shortMonth = [
   'Nov',
   'Dec'
 ]
-const monthVisitData = shortMonth.map((m) => {
+const monthVisitData = shortMonth.map(m => {
   return {
-    month: m,
-    'Unique Visit': Math.floor(Math.random() * 1000) + 200,
-    'Page View': Math.floor(Math.random() * 1000) + 250
+	month: m,
+	'Unique Visit': Math.floor(Math.random() * 1000) + 200,
+	'Page View': Math.floor(Math.random() * 1000) + 250
   }
 })
 
 const campaignData = [
   {
-    value: 335,
-    name: 'Website'
+	value: 335,
+	name: 'Website'
   },
   {
-    value: 310,
-    name: 'Email'
+	value: 310,
+	name: 'Email'
   },
   {
-    value: 234,
-    name: 'Ads'
+	value: 234,
+	name: 'Ads'
   },
   {
-    value: 135,
-    name: 'Video'
+	value: 135,
+	name: 'Video'
   },
   {
-    value: 1548,
-    name: 'Search'
+	value: 1548,
+	name: 'Search'
   }
 ]
 const locationData = [
   {
-    value: 50,
-    name: 'China'
+	value: 50,
+	name: 'China'
   },
   {
-    value: 35,
-    name: 'USA'
+	value: 35,
+	name: 'USA'
   },
   {
-    value: 25,
-    name: 'EU'
+	value: 25,
+	name: 'EU'
   },
   {
-    value: 10,
-    name: 'Russia'
+	value: 10,
+	name: 'Russia'
   },
   {
-    value: 10,
-    name: 'Other'
+	value: 10,
+	name: 'Other'
   }
 ]
 
@@ -92,15 +92,15 @@ const StackMainData = [
 ]
 const StackData = StackMainData.map((item, key) => {
   return {
-    label: key + 'D',
-    max: 500,
-    sales: item
+	label: key + 'D',
+	max: 500,
+	sales: item
   }
 })
-const SinData = range(1, 12).map((i) => {
+const SinData = range(1, 12).map(i => {
   return {
-    cate: 'Cat' + i,
-    value: (Math.sin(i / 5) * (i / 5 - 0.1) + i / 6) * 5
+	cate: 'Cat' + i,
+	value: (Math.sin(i / 5) * (i / 5 - 0.1) + i / 6) * 5
   }
 })
 

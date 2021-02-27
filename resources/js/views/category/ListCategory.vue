@@ -21,9 +21,7 @@
           @edit-row="editCategoryHandler($event)"
           @delete-row="deleteCategoryHandler($event)"
         >
-          <template
-            v-slot:[`item.color`]="{ item }"
-          >
+          <template v-slot:[`item.color`]="{ item }">
             <v-chip
               :color="item.color"
               dark
@@ -113,7 +111,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteCategory(categoryId)
         })
     }

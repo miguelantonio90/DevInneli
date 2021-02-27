@@ -15,7 +15,7 @@ class CreateClientsTable extends BaseMigration
         Schema::create('clients', function (Blueprint $table) {
             $table->string('firstName');
             $table->string('lastName')->nullable();
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
@@ -25,6 +25,7 @@ class CreateClientsTable extends BaseMigration
             $table->string('barCode')->nullable();
             $table->longText('avatar')->nullable();
             $table->string('description')->nullable();
+            $table->rememberToken();
         });
         parent::up($tableName, $company);
     }

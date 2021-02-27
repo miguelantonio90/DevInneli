@@ -7,9 +7,11 @@
       >
         <v-card>
           <app-data-table
-            :title="$vuetify.lang.t('$vuetify.titles.list',
-                                    [$vuetify.lang.t('$vuetify.menu.access'),])"
-
+            :title="
+              $vuetify.lang.t('$vuetify.titles.list', [
+                $vuetify.lang.t('$vuetify.menu.access')
+              ])
+            "
             :is-loading="isTableLoading"
             csv-filename="Access"
             :headers="getTableColumns"
@@ -32,12 +34,22 @@
                       v-on="on"
                     >
                       <v-avatar left>
-                        {{ arrayCountry.filter(cou=>cou.id===item.country)[0].emoji }}
+                        {{
+                          arrayCountry.filter(
+                            cou =>
+                              cou.id ===
+                              item.country
+                          )[0].emoji
+                        }}
                       </v-avatar>
                       {{ item.country }}
                     </v-chip>
                   </template>
-                  <span>{{ arrayCountry.filter(cou=>cou.id===item.country)[0].name }}</span>
+                  <span>{{
+                    arrayCountry.filter(
+                      cou => cou.id === item.country
+                    )[0].name
+                  }}</span>
                 </v-tooltip>
               </template>
             </template>
@@ -100,24 +112,25 @@ export default {
     ]),
     ...mapGetters('statics', ['arrayCountry']),
     getTableColumns () {
-      return [{
-        text: this.$vuetify.lang.t('$vuetify.company'),
-        value: 'company_name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.name'),
-        value: 'name',
-        select_filter: true
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.accessPin'),
-        value: 'accessPin'
-      },
-      {
-        text: this.$vuetify.lang.t('$vuetify.access.accessEmail'),
-        value: 'accessEmail'
-      }
+      return [
+        {
+          text: this.$vuetify.lang.t('$vuetify.company'),
+          value: 'company_name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.access.name'),
+          value: 'name',
+          select_filter: true
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.access.accessPin'),
+          value: 'accessPin'
+        },
+        {
+          text: this.$vuetify.lang.t('$vuetify.access.accessEmail'),
+          value: 'accessEmail'
+        }
       ]
     }
   },
@@ -151,7 +164,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteRole(roleId)
         })
     }

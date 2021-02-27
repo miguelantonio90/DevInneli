@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -27,10 +26,10 @@ class InvitationSupplier extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via($notifiable)
     {
         return ['mail'];
 
@@ -39,10 +38,10 @@ class InvitationSupplier extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable): MailMessage
+    public function toMail($notifiable)
     {
         return (new MailMessage)
             ->greeting($this->details['greeting'])
@@ -54,16 +53,17 @@ class InvitationSupplier extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable): array
+    public function toArray($notifiable)
     {
         return [
             //
         ];
     }
-    public function toDatabase($notifiable): array
+
+    public function toDatabase($notifiable)
     {
 
         return [

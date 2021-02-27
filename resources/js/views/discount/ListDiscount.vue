@@ -8,8 +8,11 @@
         <new-discount v-if="showNewModal" />
         <edit-discount v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.discount'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.discount')
+            ])
+          "
           csv-filename="Discounts"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
@@ -22,10 +25,12 @@
           @edit-row="editDiscountHandler($event)"
           @delete-row="deleteDiscountHandler($event)"
         >
-          <template
-            v-slot:[`item.percent`]="{ item }"
-          >
-            {{ item.percent ==="true" ? $vuetify.lang.t('$vuetify.tax.percent'):$vuetify.lang.t('$vuetify.tax.permanent') }}
+          <template v-slot:[`item.percent`]="{ item }">
+            {{
+              item.percent === "true"
+                ? $vuetify.lang.t("$vuetify.tax.percent")
+                : $vuetify.lang.t("$vuetify.tax.permanent")
+            }}
           </template>
         </app-data-table>
       </v-col>
@@ -110,7 +115,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteDiscount(taxId)
         })
     }

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class PaySale
  * @package App
- * @package App
  * @method static findOrFail($id)
  * @method static latest()
  * @method find($id)

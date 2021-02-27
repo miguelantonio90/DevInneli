@@ -8,7 +8,7 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          {{ $vuetify.lang.t('$vuetify.activeAccount') }}
+          {{ $vuetify.lang.t("$vuetify.activeAccount") }}
         </v-col>
       </v-row>
     </v-alert>

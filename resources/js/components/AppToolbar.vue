@@ -11,6 +11,39 @@
     />
     <v-spacer />
     <v-toolbar-items>
+      <v-menu
+        offset-y
+        origin="center center"
+        transition="scale-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            slot="activator"
+            icon
+            text
+            v-on="on"
+          >
+            <template
+              v-if="notifications.length > 0"
+            >
+              <v-badge
+                :content="notifications.length"
+                :value="notifications.length"
+                color="pink"
+                overlap
+              >
+                <v-icon>mdi-bell</v-icon>
+              </v-badge>
+            </template>
+            <template v-else>
+              <v-icon>mdi-bell</v-icon>
+            </template>
+          </v-btn>
+        </template>
+        <list-notifications
+          v-if="notifications.length > 0"
+        />
+      </v-menu>
       <v-tooltip
         bottom
       >
@@ -210,11 +243,13 @@
 </template>
 <script>
 import Util from '../util'
+import ListNotifications from '../views/notifications/ListNotifications'
 import { mapActions, mapGetters } from 'vuex'
 import localStorage from '../config/localStorage'
 
 export default {
   name: 'AppToolbar',
+  components: { ListNotifications },
   props: {
     showNavIcon: {
       type: Boolean,
@@ -249,7 +284,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'isAdminIn', 'user', 'access_permit', 'isManagerIn', 'notifications']),
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav
     },

@@ -7,8 +7,11 @@
       >
         <edit-refound v-if="showEditModal" />
         <app-data-table
-          :title="$vuetify.lang.t('$vuetify.titles.list',
-                                  [$vuetify.lang.t('$vuetify.menu.refund'),])"
+          :title="
+            $vuetify.lang.t('$vuetify.titles.list', [
+              $vuetify.lang.t('$vuetify.menu.refund')
+            ])
+          "
           csv-filename="Refunds"
           :headers="getTableColumns"
           :is-loading="isTableLoading"
@@ -40,11 +43,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('refund', [
-      'showEditModal',
-      'refunds',
-      'isTableLoading'
-    ]),
+    ...mapState('refund', ['showEditModal', 'refunds', 'isTableLoading']),
     getTableColumns () {
       return [
         {
@@ -109,7 +108,7 @@ export default {
           ),
           confirmButtonColor: 'red'
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) this.deleteRefund(id)
         })
     }
@@ -117,6 +116,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -16,6 +16,7 @@ class CreateSuppliesTable extends BaseMigration
         Schema::create($tableName, function (Blueprint $table) {
             $table->foreignUuid('state_id')->references('id')->on('supply_states');
             $table->foreignUuid('sale_id')->references('id')->on('sales');
+            $table->foreignUuid('to_company')->references('id')->on('companies');
         });
         parent::up($tableName, $company);
     }
