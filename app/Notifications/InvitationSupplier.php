@@ -15,7 +15,7 @@ class InvitationSupplier extends Notification
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param $details
      */
     public function __construct($details)
     {

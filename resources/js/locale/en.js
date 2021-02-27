@@ -133,7 +133,8 @@ export default {
     type_of_order: 'Type of Order',
     tax_list: 'Tax',
     discount: 'Discount',
-    discounts: 'Discounts'
+    discounts: 'Discounts',
+    coin: 'Coin'
   },
   // settings
   settings: {

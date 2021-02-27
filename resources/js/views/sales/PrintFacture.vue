@@ -32,6 +32,8 @@
             }}<br>
             <b>{{ $vuetify.lang.t("$vuetify.menu.box") + ": " }}</b>
             {{ editSale.box.name }}<br>
+            <b>{{ $vuetify.lang.t('$vuetify.menu.coin') + ': ' }}</b>
+            {{ user.company.currency }}<br>
             {{ new Date(editSale.updated_at).toUTCString() }}<br>
             {{
               user.company.slogan
