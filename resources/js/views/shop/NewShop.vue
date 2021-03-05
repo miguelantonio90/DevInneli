@@ -168,7 +168,7 @@ export default {
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.newShop.phone = number
+        this.newShop.phone = number.replace(' ', '')
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [

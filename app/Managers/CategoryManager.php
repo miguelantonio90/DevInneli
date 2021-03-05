@@ -17,10 +17,12 @@ class CategoryManager extends BaseManager
         if (auth()->user()['isAdmin'] === 1) {
             $categories = Category::latest()
                 ->with('company')
+                ->with('articles')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
             $categories = Category::latest()
+                ->with('articles')
                 ->where('company_id', '=', $company->id)
                 ->get();
         }

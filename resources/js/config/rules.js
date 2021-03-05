@@ -98,7 +98,7 @@ const address = [
   (v) =>
     !!v ||
     language.t('$vuetify.rule.required', [language.t('$vuetify.address')]),
-  (v) => (v && v.length >= 120) || language.t('$vuetify.rule.pin.min', ['120'])
+  (v) => (v && v.length <= 200) || language.t('$vuetify.rule.pin.max', ['200'])
 ]
 const contract = [
   (v) =>

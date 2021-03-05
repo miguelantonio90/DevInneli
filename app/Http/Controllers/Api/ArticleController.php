@@ -122,7 +122,21 @@ class ArticleController extends Controller
      */
     public function import(Request $request): void
     {
-        $this->importManger->importData($request->file);
+        $this->importManger->importData($request->file, $request->online);
+    }
+
+    /**
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+    public function byCategory(Request $request)
+    {
+        return ResponseHelper::sendResponse(
+            $this->articleManager->findAllByCategory($request->all()),
+            'Sale by category retrieved successfully.'
+        );
     }
 
     /**

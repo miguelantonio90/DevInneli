@@ -87,7 +87,8 @@ const state = {
   },
   importArticle: {
     type: 'loyverse',
-    file: ''
+    file: '',
+    online: true
   },
   showImportModal: false,
   isArticleTableLoading: false,
@@ -320,16 +321,16 @@ const actions = {
         this.dispatch('auth/updateAccess', data)
 	  }).catch((error) => commit(FAILED_ARTICLE, error))
   },
-  async getArticlesMerge ({
+  async getArticlesByCategory ({
     commit,
     dispatch
-  }) {
+  }, data) {
     commit(ARTICLE_TABLE_LOADING, true)
     // noinspection JSUnresolvedVariable
     await apiArticle
-	  .fetchArticles()
+	  .fetchArticlesByCategory(data)
 	  .then(({ data }) => {
-        commit(FETCHING_ARTICLES_MERGE, data.data)
+        commit(FETCHING_ARTICLES, data.data)
         commit(ARTICLE_TABLE_LOADING, false)
         this.dispatch('auth/updateAccess', data)
 	  }).catch((error) => commit(FAILED_ARTICLE, error))
@@ -348,6 +349,20 @@ const actions = {
         dispatch('article/getArticles', null, { root: true })
         this.dispatch('auth/updateAccess', data)
 	  }).catch((error) => commit(FAILED_ARTICLE, error))
+  },
+  async getArticlesMerge ({
+    commit,
+    dispatch
+  }) {
+    commit(ARTICLE_TABLE_LOADING, true)
+    // noinspection JSUnresolvedVariable
+    await apiArticle
+      .fetchArticles()
+      .then(({ data }) => {
+        commit(FETCHING_ARTICLES_MERGE, data.data)
+        commit(ARTICLE_TABLE_LOADING, false)
+        this.dispatch('auth/updateAccess', data)
+      }).catch((error) => commit(FAILED_ARTICLE, error))
   },
   async refoundArticle ({
     commit,

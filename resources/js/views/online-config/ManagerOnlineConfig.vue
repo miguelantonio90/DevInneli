@@ -166,12 +166,48 @@
           <v-stepper-content :step="2">
             <v-card>
               <v-card-text>
-                <app-upload-multiple-image
-                  style="width: 100%"
-                  :data-images="config.images"
-                  :upload-success="uploadImage"
-                />
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-card>
+                      <v-card-subtitle>
+                        {{
+                          $vuetify.lang.t("$vuetify.component.logo")
+                        }}
+                      </v-card-subtitle>
+                      <v-card-text>
+                        <avatar-picker
+                          :image-src="getAvatar"
+                          :image-style="{
+                            'border-radius': '50%',
+                            height: '10em'
+                          }"
+                          class="profile mx-auto d-block"
+                          @input="onChangeImage($event)"
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-card>
+                      <v-card-subtitle>{{ $vuetify.lang.t('$vuetify.menu.home') }}</v-card-subtitle>
+                      <v-card-text>
+                        <app-upload-multiple-image
+                          style="width: 100%"
+                          :data-images="config.images"
+                          :upload-success="uploadImage"
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
               </v-card-text>
+
               <v-card-actions>
                 <v-btn
                   text
@@ -336,11 +372,28 @@ export default {
           name: 'ShipIT'
         }
       ],
-      config: {}
+      config: {
+        template: '',
+        shop: {},
+        logo: [],
+        credentials: {
+          paypal: {
+            client_id: '',
+            paypal_secret: ''
+          }
+        },
+        images: []
+      }
     }
   },
   computed: {
     ...mapState('shop', ['shopsNoConfig', 'isShopLoading']),
+    getAvatar () {
+      return `${this.config.logo
+                  ? this.config.logo
+                  : '/assets/avatar/avatar-undefined.jpg'
+          }`
+    },
     ...mapState('online', ['newConfig', 'editConfig', 'managerConfig'])
   },
   async created () {
@@ -358,6 +411,9 @@ export default {
     ...mapActions('online', ['createConfig', 'updateConfig']),
     uploadImage (formData, index, fileList) {
       this.config.images = fileList
+    },
+    onChangeImage (file) {
+      this.config.logo = file.base64
     },
     managerConfigHandler () {
       if (this.managerConfig) {

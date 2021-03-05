@@ -41,6 +41,6 @@ class Supplier extends Model
 
     public function expanse(): BelongsTo
     {
-        return $this->belongsTo(ExpenseCategory::class, 'exprense_id');
+        return $this->belongsTo(ExpenseCategory::class, 'expense_id');
     }
 }

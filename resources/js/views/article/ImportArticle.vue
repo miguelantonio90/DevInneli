@@ -73,7 +73,10 @@
                 :rules="formRule.country"
               />
             </v-col>
-            <v-col>
+            <v-col
+              cols="12"
+              md="12"
+            >
               <p>
                 <b>{{
                   $vuetify.lang.t(
@@ -121,7 +124,7 @@
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
-          @click="createNewCategory"
+          @click="importArticleHandler"
         >
           <v-icon>mdi-content-save</v-icon>
           {{ $vuetify.lang.t("$vuetify.actions.save") }}
@@ -156,10 +159,6 @@ export default {
         {
           text: 'LOYVERSE',
           value: 'loyverse'
-        },
-        {
-          text: 'ALEGRA',
-          value: 'alegra'
         }
       ]
     }
@@ -173,10 +172,11 @@ export default {
       // this.file = e.target.files[0]
       this.file = e
     },
-    async createNewCategory () {
+    async importArticleHandler () {
       const formData = new FormData()
       formData.append('file', this.file)
       formData.append('type', this.importArticle.type)
+      formData.append('online', this.importArticle.online)
       if (this.$refs.form.validate()) {
         this.loading = true
         await this.importArticles(formData)

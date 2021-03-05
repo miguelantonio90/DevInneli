@@ -36,6 +36,20 @@
               md="6"
             >
               <v-text-field
+                v-model="newSupplier.email"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.email')
+                "
+                :rules="formRule.email"
+                autocomplete="off"
+                required
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-text-field
                 v-model="newSupplier.identity"
                 :label="
                   $vuetify.lang.t(
@@ -48,21 +62,22 @@
             </v-col>
             <v-col
               cols="12"
-              md="5"
+              md="6"
             >
               <v-text-field
-                v-model="newSupplier.email"
+                v-model="newSupplier.contract"
+                :rules="formRule.contract"
                 :label="
-                  $vuetify.lang.t('$vuetify.supplier.email')
+                  $vuetify.lang.t(
+                    '$vuetify.supplier.contract'
+                  )
                 "
-                :rules="formRule.email"
-                autocomplete="off"
                 required
               />
             </v-col>
             <v-col
               cols="12"
-              md="7"
+              md="6"
             >
               <vue-tel-input-vuetify
                 v-model="newSupplier.phone"
@@ -96,22 +111,6 @@
                   {{ message }}
                 </template>
               </vue-tel-input-vuetify>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="newSupplier.contract"
-                :counter="120"
-                :rules="formRule.contract"
-                :label="
-                  $vuetify.lang.t(
-                    '$vuetify.supplier.contract'
-                  )
-                "
-                required
-              />
             </v-col>
             <v-col
               cols="12"
@@ -160,11 +159,19 @@
             </v-col>
             <v-col
               cols="12"
+              md="6"
+            >
+              <v-switch
+                v-model="newSupplier.walking"
+                :label="$vuetify.lang.t('$vuetify.articles.walking')"
+              />
+            </v-col>
+            <v-col
+              cols="12"
               md="12"
             >
               <v-text-field
                 v-model="newSupplier.address"
-                :counter="120"
                 :rules="formRule.address"
                 :label="
                   $vuetify.lang.t('$vuetify.supplier.address')
@@ -178,7 +185,6 @@
             >
               <v-text-field
                 v-model="newSupplier.note"
-                :counter="120"
                 :label="
                   $vuetify.lang.t('$vuetify.supplier.note')
                 "
@@ -278,7 +284,7 @@ export default {
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.newSupplier.phone = number
+        this.newSupplier.phone = number.replace(' ', '')
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [
