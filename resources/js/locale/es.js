@@ -66,6 +66,7 @@ export default {
   guide: 'Click para iniciar guía',
   // menu
   menu: {
+    bank: 'Banco',
     setting: 'Configuración',
     shop_online: 'Tienda Online',
     online_config: 'Configuración de Tienda Online',
@@ -97,6 +98,7 @@ export default {
     exchange_rate: 'Moneda extranjera',
     exchange_rate_list: 'Lista Moneda Extranjera',
     category_list: 'Lista de Categorías',
+    bank_list: 'Lista de Bancos',
     boxes_list: 'Lista de Cajas',
     product_list: 'Lista de Productos',
     modifiers_list: 'Lista de Modificadores',
@@ -174,10 +176,12 @@ export default {
     manager: 'Propietario'
   },
   messages: {
+    empty_elements: 'No existen elementos.',
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
     warning_delete: 'No se podrá revertir esta acción!',
+    warning_exist_articles: 'No se puede eliminar esta Categoría. Tiene Artículos adjuntos, por favor elimínelos primero!',
     warning_digital_box: 'Esta Caja se maneja de manera automática, para registrar las ventas en línea y no se puede gestionar.',
     warning_exist: 'Ya existe una variante con ese nombre!',
     warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
@@ -259,7 +263,8 @@ export default {
     next: 'Siguiente',
     back: 'Atrás',
     yes: 'Si',
-    no: 'No'
+    no: 'No',
+    eye: 'Ver'
   },
   titles: {
     list: 'Lista de {0}',
@@ -352,6 +357,7 @@ export default {
     filter_disabled: 'Filtro deshabilitado',
     loading: 'Cargando',
     images: {
+      name: 'Imágenes',
       dragText: 'Arrastra la imagen (múltiple)',
       browseText: '(o) Seleccione ',
       primaryText: 'Defecto',
@@ -359,6 +365,8 @@ export default {
       popupText: 'Esta imagen se mostrará como predeterminada ',
       dropText: 'Suelta tu archivo aquí ...'
     },
+    banner: 'Banner',
+    logo: 'Logo',
     image: 'Imagen'
   },
   tips: {
@@ -384,7 +392,9 @@ export default {
     tax_by_sale: 'Impuestos por Venta Total',
     taxes: 'Impuestos',
     lay: 'Propina de ley(10%)',
+    walking: 'Ambulante',
     composite_text: 'Los artículos compuestos contienen una determinada cantidad de otros artículos',
+    online_text: 'Los artículos serán insertado para que se puedan vender en línea automáticamente o no',
     onlineSale: 'Venta en línea',
     onlineSale_text: 'Este artículo se venderá en su tienda virtual'
   },
@@ -425,6 +435,8 @@ export default {
     name: 'Método de Pago',
     counted: 'Contado',
     cash: 'Efectivo',
+    bank: 'Banco',
+    credit_card: 'Targeta de Crédito',
     card: 'Targeta',
     check: 'Cheque',
     credit: 'Crédito',
@@ -497,6 +509,10 @@ export default {
       close: 'Cerrada'
     },
     emptyArticle: 'Esta tienda no tiene artículos. Por favor abastezca la tienda'
+  },
+  box_state: {
+    open: 'Abierta',
+    close: 'Cerrada'
   },
   report: {
     contact_us: 'Contáctenos',
@@ -692,6 +708,9 @@ export default {
   notifications: {
     supplier_is_register: 'El proveedor {0} se ha registrado en el sistema. Usted puede realizar sus pedidos usando INNELI',
     solicited_supply: 'El cliente {0} ha registrado un pedido para usted.'
+  },
+  bank: {
+    count_number: 'No. de Cuenta'
   },
   ...es
 }

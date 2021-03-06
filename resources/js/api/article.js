@@ -4,6 +4,9 @@ export default {
   fetchArticles () {
     return api.get('article')
   },
+  fetchArticlesByCategory (filter) {
+    return api.post('article/byCategory', filter)
+  },
   sendCreateRequest (article) {
     return api.post('article', article)
   },

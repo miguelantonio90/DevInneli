@@ -86,6 +86,7 @@ class ArticleManager extends BaseManager
                 ])
                 ->get();
         }
+
         foreach ($articles as $k => $article) {
             $article['composite'] = (boolean) $article['composite'];
             $article['personSale'] = (boolean) $article['personSale'];
@@ -123,11 +124,110 @@ class ArticleManager extends BaseManager
 
             if ($article['price'] === 0.00) {
                 $articles[$k]['percent'] = 0;
-            } elseif ($article['cost'] === 0.00) {
+            } elseif (!$article['cost'] || (double)$article['cost'] === 0.00 || $article['cost'] === 0) {
                 $articles[$k]['percent'] = 100;
             } else {
                 $difference = $article['price'] - $article['cost'];
-                $articles[$k]['percent'] = !$article['cost'] || $article['cost'] === 0.00 || $article['cost'] === 0 ? 100 : round(($difference / $article['cost']) * 100,
+                $articles[$k]['percent'] = round(($difference / $article['cost']) * 100,
+                    2);
+            }
+        }
+        return $articles;
+    }
+
+
+    /**
+     * @param $categoryId
+     * @return mixed
+     */
+    public function findAllByCategory($categoryId)
+    {
+        if (auth()->user()['isAdmin'] === 1) {
+            $articles = Articles::latest()
+                ->with('company')
+                ->with('category')
+                ->with('composites')
+                ->with('articlesShops')
+                ->with('variants')
+                ->with('tax')
+                ->with('variantValues')
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('article_images.default', 'desc');
+                    }
+                ])
+                ->where('category_id','=', $categorId)
+                ->get();
+        } else {
+            $company = CompanyManager::getCompanyByAdmin();
+            $articles = Articles::latest()
+                ->where('company_id', '=', $company->id)
+                ->whereNull('deleted_at')
+                ->with('company')
+                ->with([
+                    'category' => function ($q) use ($company) {
+                        $q->where('categories.company_id', '=', $company->id);
+                    }
+                ])
+                ->with('composites')
+                ->with('articlesShops')
+                ->with('variants')
+                ->with('tax')
+                ->with('variantValues')
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('article_images.default', 'desc');
+                    }
+                ])
+                ->where('category_id','=', $categoryId)
+                ->get();
+        }
+        return $this->filterArticles($articles);
+    }
+
+    private function filterArticles($articles){
+        foreach ($articles as $k => $article) {
+            $article['composite'] = (boolean) $article['composite'];
+            $article['personSale'] = (boolean) $article['personSale'];
+            $article['onlineSale'] = (boolean) $article['onlineSale'];
+            foreach ($article['images'] as $im => $image) {
+                if ($image['default'] === 1) {
+                    $articles[$k]['path'] = $image['path'];
+                    $articles[$k]['nameImage'] = $image['name'];
+                }
+            }
+            $shopNames = [];
+            foreach ($article['articlesShops'] as $sh => $shop) {
+                $shopNames[$sh] = $shop['shops']['name'];
+            }
+            $articles[$k]['shopsNames'] = array_unique($shopNames);
+
+            $shopVariant = [];
+            foreach ($article['variantValues'] as $sh => $shopV) {
+                $shopV['images'] = ArticleImage::latest()->where('article_id', '=', $shopV['id'])->get();
+                foreach ($shopV['articlesShops'] as $i => $v) {
+                    $shopVariant[$sh] = $v['shops']['name'];
+                }
+                $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
+                if (round($articles[$k]['variantValues'][$sh]['price'], 2) === 0.00) {
+                    $articles[$k]['variantValues'][$sh]['percent'] = 0;
+                } elseif (round($articles[$k]['variantValues'][$sh]['cost'], 2) === 0.00) {
+                    $articles[$k]['variantValues'][$sh]['percent'] = 100.00;
+                } else {
+                    $articles[$k]['variantValues'][$sh]['percent'] = round(
+                        (100 * $articles[$k]['variantValues'][$sh]['cost']) / $articles[$k]['variantValues'][$sh]['price'],
+                        2
+                    );
+                }
+            }
+
+            if ($article['price'] === 0.00) {
+                $articles[$k]['percent'] = 0;
+            } elseif (!$article['cost'] || (double)$article['cost'] === 0.00 || $article['cost'] === 0) {
+                $articles[$k]['percent'] = 100;
+            } else {
+                $difference = $article['price'] - $article['cost'];
+                $articles[$k]['percent'] = round(($difference / $article['cost']) * 100,
                     2);
             }
         }

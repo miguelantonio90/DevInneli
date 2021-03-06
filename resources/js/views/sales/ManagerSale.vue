@@ -182,9 +182,8 @@
                         v-model="sale.shop"
                         chips
                         rounded
-                        disabled
+                        :disabled="managerSale"
                         solo
-                        clearable
                         :items="shops"
                         :label="$vuetify.lang.t('$vuetify.menu.shop')"
                         item-text="name"
@@ -202,7 +201,7 @@
                       <v-switch
                         v-model="sale.online"
                         :disabled="managerSale"
-                        :title="$vuetify.lang.t('$vuetify.sales.online_text')"
+                        :title="$vuetify.lang.t('$vuetify.articles.online_text')"
                       >
                         <template v-slot:label>
                           <div>
@@ -867,7 +866,7 @@ export default {
     getLocalBoxes () {
       this.localBoxes = []
       if (this.sale.shop) {
-        this.localBoxes = this.boxes.filter(bx => bx.shop_id === this.sale.shop.id)
+        this.localBoxes = this.boxes[this.sale.shop.id].boxes
         if (this.localBoxes.length > 0) {
           this.sale.box = this.localBoxes[0]
         }

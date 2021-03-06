@@ -280,6 +280,17 @@ export const protectedRoute = [
         ]
       },
       {
+        path: '/bank/back.list',
+        access: ['manager_vending'],
+        meta: {
+          title: 'bank',
+          icon: 'mdi-bank',
+          group: 'bank'
+        },
+        children: [],
+        component: () => import('../views/bank/BankList')
+      },
+      {
         path: '/articles',
         component: RouteWrapper,
         access: ['manager_article', 'manager_category', 'manager_mod'],
@@ -358,6 +369,19 @@ export const protectedRoute = [
               requiresAuth: true
             },
             component: () => import('../views/article/ManagerArticle')
+          },
+          {
+            path: '/articles/product.by_category/:categoryId',
+            name: 'product_by_category',
+            props: true,
+            access: 'edit',
+            meta: {
+              title: 'product_edit',
+              icon: 'mdi-database-plus',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/article/ListArticleByCategory')
           },
           {
             path: '/article/type_of_order.list',

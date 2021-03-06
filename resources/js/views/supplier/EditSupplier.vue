@@ -36,6 +36,20 @@
               md="6"
             >
               <v-text-field
+                v-model="editSupplier.email"
+                :label="
+                  $vuetify.lang.t('$vuetify.supplier.email')
+                "
+                :rules="formRule.email"
+                autocomplete="off"
+                required
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-text-field
                 v-model="editSupplier.identity"
                 :label="
                   $vuetify.lang.t(
@@ -48,21 +62,23 @@
             </v-col>
             <v-col
               cols="12"
-              md="5"
+              md="6"
             >
               <v-text-field
-                v-model="editSupplier.email"
+                v-model="editSupplier.contract"
+                :counter="120"
+                :rules="formRule.contract"
                 :label="
-                  $vuetify.lang.t('$vuetify.supplier.email')
+                  $vuetify.lang.t(
+                    '$vuetify.supplier.contract'
+                  )
                 "
-                :rules="formRule.email"
-                autocomplete="off"
                 required
               />
             </v-col>
             <v-col
               cols="12"
-              md="7"
+              md="6"
             >
               <vue-tel-input-vuetify
                 v-model="editSupplier.phone"
@@ -86,6 +102,7 @@
                 "
                 @country-changed="onCountry"
                 @keypress="numbers"
+                @change="removeSpace"
                 @input="onInput"
               >
                 <template #message="{ key, message }">
@@ -96,22 +113,6 @@
                   {{ message }}
                 </template>
               </vue-tel-input-vuetify>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-text-field
-                v-model="editSupplier.contract"
-                :counter="120"
-                :rules="formRule.contract"
-                :label="
-                  $vuetify.lang.t(
-                    '$vuetify.supplier.contract'
-                  )
-                "
-                required
-              />
             </v-col>
             <v-col
               cols="12"
@@ -128,6 +129,7 @@
                 :label="
                   $vuetify.lang.t('$vuetify.supplier.expense')
                 "
+                return-object
               >
                 <template v-slot:append-outer>
                   <v-tooltip bottom>
@@ -155,6 +157,15 @@
                   </v-tooltip>
                 </template>
               </v-select>
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-switch
+                v-model="editSupplier.walking"
+                :label="$vuetify.lang.t('$vuetify.articles.walking')"
+              />
             </v-col>
             <v-col
               cols="12"
@@ -190,7 +201,7 @@
         <v-btn
           class="mb-2"
           :disabled="isActionInProgress"
-          @click="toogleNewModal(false)"
+          @click="toogleEditModal(false)"
         >
           <v-icon>mdi-close</v-icon>
           {{ $vuetify.lang.t("$vuetify.actions.cancel") }}
@@ -256,8 +267,8 @@ export default {
       }
     }
   },
-  created () {
-    this.getExpenseCategories()
+  async created () {
+    await this.getExpenseCategories()
   },
   methods: {
     ...mapActions('supplier', ['updateSupplier', 'toogleEditModal']),
@@ -276,10 +287,13 @@ export default {
         return false
       }
     },
+    removeSpace () {
+      this.editSupplier.phone = this.editSupplier.phone.replace(' ', '')
+    },
     onInput (number, object) {
       const lang = this.$vuetify.lang
       if (object.valid) {
-        this.editSupplier.phone = number
+        this.editSupplier.phone = number.replace(' ', '')
         this.errorPhone = null
       } else {
         this.errorPhone = lang.t('$vuetify.rule.bad_phone', [

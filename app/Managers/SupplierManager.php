@@ -23,6 +23,8 @@ class SupplierManager extends BaseManager
             'expense_id' => $data['expanse'],
             'name' => $data['name']
         ]);
+        $supplier->walking = $data['walking'];
+        $supplier->save();
         $this->managerBy('new', $supplier);
         return $this->updateData($supplier, $data);
     }
@@ -96,6 +98,7 @@ class SupplierManager extends BaseManager
         if (isset($data['address'])) {
             $supplier->address = $data['address'];
         }
+        $supplier->walking = $data['walking'];
         $supplier->save();
         $this->managerBy('edit', $supplier);
         return $supplier;

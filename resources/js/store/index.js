@@ -14,6 +14,7 @@ import payment from './modules/payment'
 import client from './modules/client'
 import supplier from './modules/supplier'
 import company from './modules/company'
+import bank from './modules/bank'
 import category from './modules/category'
 import article from './modules/article'
 import statics from './modules/statics'
@@ -59,6 +60,7 @@ const store = new Vuex.Store({
     role,
     keys,
     shop,
+    bank,
     category,
     client,
     refund,

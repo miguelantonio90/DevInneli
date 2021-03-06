@@ -34,7 +34,7 @@ class ImportManager extends BaseManager
      * @param $file
      * @throws Exception
      */
-    public function importData($file): void
+    public function importData($file, $online): void
     {
         $fileName = time().'.'.$file->getClientOriginalExtension();
         $file->move(public_path('upload'), $fileName);
@@ -54,11 +54,11 @@ class ImportManager extends BaseManager
                 $jsonInfo = explode(',', (json_encode(str_replace(['"', ']'], '', $value))), 18)[17];
                 if ($basicData[2] !== '""') {
                     $parent = $this->createArticleFromImportFile($basicData, $shopsInfo, '', $basicData[2], $jsonInfo,
-                        $company);
+                        $company, $online);
                 }
                 if ($basicData[6] !== '""') {
                     $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[6], $jsonInfo,
-                        $company);
+                        $company, $online);
                     if (str_replace('"', '', $basicData[5]) !== '') {
                         $v[0] = str_replace('"', '', $basicData[5]);
                         $variants[$v[0]]['article'] = $parent->id;
@@ -69,7 +69,7 @@ class ImportManager extends BaseManager
                 }
                 if ($basicData[8] !== '""') {
                     $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[8], $jsonInfo,
-                        $company);
+                        $company, $online);
                     if (str_replace('"', '', $basicData[7]) !== '') {
                         $v[1] = str_replace('"', '', $basicData[7]);
                         $variants[$v[1]]['article'] = $parent->id;
@@ -80,7 +80,7 @@ class ImportManager extends BaseManager
                 }
                 if ($basicData[10] !== '""') {
                     $this->createArticleFromImportFile($basicData, $shopsInfo, $parent->id, $basicData[10], $jsonInfo,
-                        $company);
+                        $company, $online);
                     if (str_replace('"', '', $basicData[9]) !== '') {
                         $variants['article'] = $parent->id;
                         $v[2] = str_replace('"', '', $basicData[9]);
@@ -99,7 +99,7 @@ class ImportManager extends BaseManager
                 }
             }
         }
-        $this->createCompositeFromImportFile($composite, $company);
+        $this->createCompositeFromImportFile($composite, $company, $online);
         $this->createVariantsFromImportFile($variants);
     }
 
@@ -141,7 +141,7 @@ class ImportManager extends BaseManager
      * @return Articles
      * @throws Exception
      */
-    public function createArticleFromImportFile($basicData, $shopsInfo, $parentId, $pos, $jsonInfo, $company): Articles
+    public function createArticleFromImportFile($basicData, $shopsInfo, $parentId, $pos, $jsonInfo, $company, $online): Articles
     {
         $categoryId = $this->getCategoryIdFromImportFile(str_replace('"', '', $basicData[3]));
         $newArticle = new Articles();
@@ -161,7 +161,7 @@ class ImportManager extends BaseManager
         $newArticle->barCode = str_replace('"', '', $basicData[13]);
         $newArticle->color = '#1FBC9C';
         $newArticle->save();
-        $this->insertArticleShopFromImportFile($newArticle, $shopsInfo, $jsonInfo);
+        $this->insertArticleShopFromImportFile($newArticle, $shopsInfo, $jsonInfo, $online);
         return $newArticle;
     }
 
@@ -186,7 +186,7 @@ class ImportManager extends BaseManager
      * @param $jsonInfo
      * @throws Exception
      */
-    public function insertArticleShopFromImportFile($article, $shopsInfo, $jsonInfo): void
+    public function insertArticleShopFromImportFile($article, $shopsInfo, $jsonInfo, $online): void
     {
         $shopData = explode(',', json_encode(str_replace(['"', 'variable'], '', $jsonInfo)));
         for ($i = 0, $iMax = count($shopData); $i < $iMax; $i += 3) {

@@ -3,11 +3,12 @@
 namespace App\Managers;
 
 use App\Articles;
+use App\Bank;
 use App\Category;
 use App\Shop;
 use Exception;
 
-class CategoryManager extends BaseManager
+class BankManager extends BaseManager
 {
     /**
      * @return mixed
@@ -15,18 +16,19 @@ class CategoryManager extends BaseManager
     public static function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $categories = Category::latest()
+            $banks = Bank::latest()
                 ->with('company')
-                ->with('articles')
+                ->with('currency')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
-            $categories = Category::latest()
-                ->with('articles')
+            $banks = Bank::latest()
+                ->with('company')
+                ->with('currency')
                 ->where('company_id', '=', $company->id)
                 ->get();
         }
-        return $categories;
+        return $banks;
     }
 
     /**
@@ -46,14 +48,23 @@ class CategoryManager extends BaseManager
     public function new($data)
     {
         $company = CompanyManager::getCompanyByAdmin();
-        $category = Category::create([
+        $bank = Bank::create([
             'company_id' => $company->id,
             'name' => $data['name'],
+            'count_number' => $data['count_number'],
+            'count_type' => $data['count_type'],
+            'init_balance' => $data['init_balance']
         ]);
-        $category->color = $data['color'] ?? '#1FBC9C';
-        $this->managerBy('new', $category);
-        $category->save();
-        return $category;
+
+        $bank->color = $data['color'] ?? '#1FBC9C';
+        $bank->date = $data['date'];
+        if (array_key_exists('id', $data['currency'])) {
+            $bank->currency_id = $data['currency']['id'];
+        }
+        $bank->description = $data['description'];
+        $this->managerBy('new', $bank);
+        $bank->save();
+        return $bank;
     }
 
     /**
@@ -64,14 +75,22 @@ class CategoryManager extends BaseManager
      */
     public function edit($id, $data)
     {
-        $category = Category::findOrFail($id);
+        $bank = Bank::findOrFail($id);
         if (isset($data['name'])) {
-            $category->name = $data['name'];
+            $bank->name = $data['name'];
         }
-        $category->color = $data['color'] ?? '#1FBC9C';
-        $this->managerBy('edit', $category);
-        $category->save();
-        return $category;
+        $bank->color = $data['color'] ?? '#1FBC9C';
+        $bank->count_type = $data['count_type'];
+        if (array_key_exists('id', $data['currency'])) {
+            $bank->currency_id = $data['currency']['id'];
+        }
+        $bank->count_number = $data['count_number'];
+        $bank->init_balance = $data['init_balance'];
+        $bank->date = $data['date'];
+        $bank->description = $data['description'];
+        $this->managerBy('edit', $bank);
+        $bank->save();
+        return $bank;
     }
 
     /**
@@ -88,9 +107,9 @@ class CategoryManager extends BaseManager
             $article->category_id = null;
             $article->save();
         }
-        $category = Category::findOrFail($id);
-        $this->managerBy('delete', $category);
-        return $category->delete();
+        $bank = Bank::findOrFail($id);
+        $this->managerBy('delete', $bank);
+        return $bank->delete();
     }
 
 

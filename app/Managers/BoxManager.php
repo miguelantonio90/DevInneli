@@ -20,18 +20,22 @@ class BoxManager extends BaseManager
     public static function findAllByCompany()
     {
         if (auth()->user()['isAdmin'] === 1) {
-            $categories = Box::latest()
+            $boxes = Box::latest()
                 ->with('company')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
-            $categories = Box::latest()
+            $boxes = Box::latest()
                 ->where('company_id', '=', $company->id)
                 ->with('shop')
                 ->get();
         }
-
-        return $categories;
+        $result = [];
+        foreach ($boxes as $key=>$box){
+            $result[$box->shop_id]['boxes'][] = $box;
+            $result[$box->shop_id]['shop'] = $box->shop;
+        }
+        return $result;
     }
 
     /**

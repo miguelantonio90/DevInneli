@@ -20,6 +20,7 @@ class CreateSupplierTable extends BaseMigration
             $table->string('country')->nullable();
             $table->string('address')->nullable();
             $table->string('contract')->nullable();
+            $table->boolean('walking')->default(false);
             $table->string('note')->nullable();
             $table->foreignUuid('expense_id')->references('id')->on('expense_categories')
                 ->onDelete('cascade');

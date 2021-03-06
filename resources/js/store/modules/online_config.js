@@ -30,11 +30,12 @@ const state = {
   newConfig: {
     template: '',
     shop: {},
+    logo: {},
     credentials: {
-	  paypal: {
+      paypal: {
         client_id: '',
         paypal_secret: ''
-	  }
+      }
     },
     images: []
   },
@@ -42,6 +43,7 @@ const state = {
     id: '',
     template: '',
     shop: {},
+    logo: {},
     images: []
   },
   showImportModal: false,
@@ -81,10 +83,17 @@ const mutations = {
   },
   [CANCEL_MODAL] (state) {
     state.newConfig = {
-	  template: '',
-	  shop: {},
-	  images: []
-    }
+      template: '',
+      shop: {},
+      logo: {},
+      credentials: {
+        paypal: {
+          client_id: '',
+          paypal_secret: ''
+        }
+      },
+      images: []
+    },
     state.saved = true
   },
   [CONFIG_CREATED] (state) {

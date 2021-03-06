@@ -66,6 +66,7 @@ export default {
   guide: 'Click to start guide',
   // menu
   menu: {
+    bank: 'Bank',
     setting: 'Configuration',
     shop_online: 'Online Shop',
     config_add: 'Shop Online Configuration',
@@ -97,6 +98,7 @@ export default {
     exchange_rate: 'Foreign currency',
     exchange_rate_list: 'List of Foreign currency',
     category_list: 'List of Categories',
+    bank_list: 'Bank List',
     boxes_list: 'List of Boxes',
     product_list: 'List of Products',
     modifiers_list: 'List of Modifiers',
@@ -175,9 +177,11 @@ export default {
   },
   // error
   messages: {
+    empty_elements: 'No exist elements.',
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
+    warning_exist_articles: "You can't delete this Category. Please delete articles first!",
     warning_digital_box: 'This box work automatically, to register online sales, and you can\'t manager.',
     warning_exist: 'Exist a variant with this name!',
     warning_excess_money: 'The defined amount to be charged is greater than or equal to the total price. Decrease the amounts already defined',
@@ -258,7 +262,8 @@ export default {
     next: 'Next',
     back: 'Back',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    eye: 'See'
   },
   titles: {
     list: 'List of {0}',
@@ -351,6 +356,7 @@ export default {
     filter_disabled: 'Filter disabled',
     loading: 'Loading',
     images: {
+      name: 'Images',
       dragText: 'Drag the image (multiple)',
       browseText: '(or) Select',
       primaryText: 'Default',
@@ -358,6 +364,7 @@ export default {
       popupText: 'This image will show as default',
       dropText: 'Drop your file here ...'
     },
+    logo: 'Logo',
     image: 'Image'
   },
   tips: {
@@ -383,7 +390,9 @@ export default {
     tax_by_sale: 'Taxes by Sale',
     taxes: 'Taxes',
     lay: 'Law tip (10%)',
+    walking: 'Walking',
     composite_text: 'Composite articles contain a certain number of other articles',
+    online_text: 'Articles will be inserted and sale online or not',
     onlineSale: 'Online Sale',
     onlineSale_text: 'This article will by sale in virtual shop'
   },
@@ -426,6 +435,8 @@ export default {
     name: 'Payment Method',
     counted: 'Counted',
     cash: 'Cash',
+    bank: 'Bank',
+    credit_card: 'Credit Card',
     card: 'Card',
     check: 'Check',
     credit: 'Credit',
@@ -496,6 +507,10 @@ export default {
       close: 'Closed'
     },
     emptyArticle: 'This shop has no items. Please stock the store '
+  },
+  box_state: {
+    open: 'Open',
+    close: 'Close'
   },
   report: {
     contact_us: 'Contact Us',
@@ -689,6 +704,9 @@ export default {
   notifications: {
     supplier_is_register: 'Your Supllier {0} is register in INNELI. You can make Orders using the system',
     solicited_supply: 'Client {0} has registered a supply'
+  },
+  bank: {
+    count_number: 'Count Number'
   },
   ...en
 }

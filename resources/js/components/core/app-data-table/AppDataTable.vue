@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title v-if="title !== ''">
       <v-app-bar
         flat
         dense
