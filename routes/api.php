@@ -75,6 +75,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('supplier/getClients', 'SupplierController@getSupplierClients')->name('getSupplierClients');
 
         Route::resource('article', 'ArticleController');
+        Route::resource('bank', 'BankController');
         Route::post('article/import', 'ArticleController@import')->name('articleImport');
         Route::post('article/byCategory', 'ArticleController@byCategory')->name('byCategory');
         Route::get('article/number/get', 'ArticleController@findArticleNumber')->name('numberArticle');

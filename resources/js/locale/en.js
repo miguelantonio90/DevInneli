@@ -177,6 +177,7 @@ export default {
   },
   // error
   messages: {
+    empty_elements: 'No exist elements.',
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
@@ -434,6 +435,8 @@ export default {
     name: 'Payment Method',
     counted: 'Counted',
     cash: 'Cash',
+    bank: 'Bank',
+    credit_card: 'Credit Card',
     card: 'Card',
     check: 'Check',
     credit: 'Credit',
@@ -701,6 +704,9 @@ export default {
   notifications: {
     supplier_is_register: 'Your Supllier {0} is register in INNELI. You can make Orders using the system',
     solicited_supply: 'Client {0} has registered a supply'
+  },
+  bank: {
+    count_number: 'Count Number'
   },
   ...en
 }

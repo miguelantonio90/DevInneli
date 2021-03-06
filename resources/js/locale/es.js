@@ -176,6 +176,7 @@ export default {
     manager: 'Propietario'
   },
   messages: {
+    empty_elements: 'No existen elementos.',
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
@@ -434,6 +435,8 @@ export default {
     name: 'Método de Pago',
     counted: 'Contado',
     cash: 'Efectivo',
+    bank: 'Banco',
+    credit_card: 'Targeta de Crédito',
     card: 'Targeta',
     check: 'Cheque',
     credit: 'Crédito',
@@ -705,6 +708,9 @@ export default {
   notifications: {
     supplier_is_register: 'El proveedor {0} se ha registrado en el sistema. Usted puede realizar sus pedidos usando INNELI',
     solicited_supply: 'El cliente {0} ha registrado un pedido para usted.'
+  },
+  bank: {
+    count_number: 'No. de Cuenta'
   },
   ...es
 }
