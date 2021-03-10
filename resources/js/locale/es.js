@@ -309,6 +309,7 @@ export default {
       manager_category: 'Gestionar Categorías',
       manager_mod: 'Gestionar Modificadores',
       manager_supplier: 'Gestionar Proveedores',
+      manager_order: 'Gestionar Pedidos',
       manager_buy: 'Gestionar Compras',
       manager_sell: 'Ver Resumen de Ventas',
       sell_by_product: 'Ver Resumen de Ventas por Artículos',

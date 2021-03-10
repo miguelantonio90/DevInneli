@@ -191,6 +191,7 @@
                         return-object
                         required
                         :rules="formRule.country"
+                        @change="updateDataArticle"
                       />
                     </v-col>
                     <v-col
@@ -284,6 +285,7 @@
                       >
                         <template v-slot:selection="data">
                           <v-chip
+                            style="max-width: 160px"
                             v-bind="data.attrs"
                             :input-value="data.selected"
                             @click="data.select"
@@ -417,7 +419,7 @@
                               <div class="mt-4 title">
                                 {{ $vuetify.lang.t('$vuetify.actions.edit') }}
                               </div>
-                              <v-text-field-integer
+                              <v-text-field-money
                                 v-model="item.cant"
                                 :label="$vuetify.lang.t('$vuetify.actions.save') "
                                 :properties="{
@@ -767,8 +769,8 @@ export default {
     })
     this.loadingData = false
     await this.getBoxes()
+    console.log('aaaaaaaa')
     await this.updateDataArticle()
-
     if (!this.managerSale) {
       await this.fetchSaleNumber().then(() => {
         this.sale.no_facture = this.generateNF()
@@ -791,6 +793,7 @@ export default {
       return seqer.gensym()
     },
     async updateDataArticle () {
+      this.sale.articles = []
       this.getLocalBoxes()
       this.localArticles = []
       if (this.sale.shop) {

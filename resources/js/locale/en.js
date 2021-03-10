@@ -308,6 +308,7 @@ export default {
       manager_category: 'Manage Categories',
       manager_mod: 'Manage Modifiers',
       manager_supplier: 'Manage Suppliers',
+      manager_order: 'Manage Order',
       manager_buy: 'Manage Purchases',
       manager_sell: 'See Sales Summary',
       sell_by_product: 'View Sales Summary by Items',

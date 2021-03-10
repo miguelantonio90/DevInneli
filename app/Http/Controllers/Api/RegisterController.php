@@ -128,6 +128,13 @@ class RegisterController extends Controller
                     ]
                 ],
                 [
+                    'title' => ['name' => 'manager_order', 'value' => true],
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
+                ],
+                [
                     'title' => ['name' => 'manager_boxes', 'value' => true],
                     'actions' => [
                         'just_yours' => false, 'list' => true, 'create' => true,
@@ -158,6 +165,13 @@ class RegisterController extends Controller
                 ],
                 [
                     'title' => ['name' => 'manager_supplier', 'value' => true],
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
+                ],
+                [
+                    'title' => ['name' => 'manager_bank', 'value' => true],
                     'actions' => [
                         'just_yours' => false, 'list' => true, 'create' => true,
                         'edit' => true, 'delete' => true, 'import' => true, 'export' => true
@@ -265,7 +279,6 @@ class RegisterController extends Controller
                 ]
             ]);
             $position->save();
-
             if ($position) {
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
@@ -296,6 +309,13 @@ class RegisterController extends Controller
                         ]
                     ],
                     [
+                        'title' => ['name' => 'manager_order', 'value' => true],
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => true
+                        ]
+                    ],
+                    [
                         'title' => ['name' => 'manager_boxes', 'value' => true],
                         'actions' => [
                             'just_yours' => false, 'list' => true, 'create' => false,
@@ -308,6 +328,13 @@ class RegisterController extends Controller
                         'actions' => [
                             'just_yours' => false, 'list' => true, 'create' => false, 'edit' => false,
                             'delete' => false, 'import' => false, 'export' => true
+                        ]
+                    ],
+                    [
+                        'title' => ['name' => 'manager_bank', 'value' => true],
+                        'actions' => [
+                            'just_yours' => false, 'list' => true, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
                         ]
                     ],
                     [
@@ -448,6 +475,13 @@ class RegisterController extends Controller
                         'title' => ['name' => 'manager_vending', 'value' => true],
                         'actions' => [
                             'just_yours' => false, 'list' => true, 'create' => true,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
+                    ],
+                    [
+                        'title' => ['name' => 'manager_order', 'value' => false],
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
                             'edit' => false, 'delete' => false, 'import' => false, 'export' => false
                         ]
                     ],

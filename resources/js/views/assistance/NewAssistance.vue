@@ -107,14 +107,14 @@
             >
               <v-select
                 v-model="newAssistance.shop"
+                :disabled="!!isShopLoading"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                item-text="name"
-                item-value="id"
                 :loading="isShopLoading"
-                :disabled="!!isShopLoading"
-                :rules="formRule.shop"
+                item-text="name"
                 required
+                :rules="formRule.country"
+                return-object
               />
             </v-col>
             <v-col

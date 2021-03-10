@@ -121,8 +121,7 @@ export default {
       this.openEditModal($event)
     },
     deleteUserHandler (userId) {
-      this.users.filter(c => c.id === userId)[0].position.key ===
-      'super_manager'
+      this.users.filter(c => c.id === userId)[0].position.name === 'CEO'
         ? this.$Swal
           .fire({
             title: this.$vuetify.lang.t(
@@ -132,7 +131,7 @@ export default {
             text: this.$vuetify.lang.t(
               '$vuetify.messages.error_delete_manager'
             ),
-            icon: 'warning',
+            icon: 'info',
             confirmButtonText: this.$vuetify.lang.t(
               '$vuetify.actions.accept'
             ),

@@ -5,6 +5,8 @@ namespace App\Managers;
 
 
 use App\Category;
+use App\Notification;
+use Illuminate\Support\Facades\Mail;
 use App\Shop;
 use Exception as Exception;
 
@@ -48,5 +50,19 @@ class BaseManager
             ->where('name', '=', $name)
             ->get();
 
+    }
+
+    public function notificate($data)
+    {
+        $notification = Notification::create($data);
+        $this->managerBy('new', $notification);
+    }
+
+    public function sendEmail($template, $info, $to, $subject){
+        Mail::send($template, $info,
+            function ($message) use ($to, $subject) {
+                $message->subject($subject);
+                $message->to($to);
+            });
     }
 }

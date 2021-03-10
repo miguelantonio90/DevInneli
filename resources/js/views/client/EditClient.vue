@@ -80,7 +80,6 @@
                 "
                 :label="$vuetify.lang.t('$vuetify.phone')"
                 required
-                :rules="formRule.phone"
                 :select-label="
                   $vuetify.lang.t('$vuetify.country')
                 "

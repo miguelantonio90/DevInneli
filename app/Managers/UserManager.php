@@ -97,6 +97,7 @@ class UserManager extends BaseManager
      */
     private function updateData($user, $data, $shops, $position)
     {
+        $user->country = $data['country'];
         $user->pinCode = $data['pinCode'];
         $user->firstName = $data['firstName'];
         $user->lastName = $data['lastName'];
@@ -141,7 +142,7 @@ class UserManager extends BaseManager
     public function delete($id)
     {
         $user = User::findOrFail($id);
-        $this->managerBy('new', $user);
+        $this->managerBy('delete', $user);
         return $user->delete();
     }
 

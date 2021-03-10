@@ -87,7 +87,6 @@
                     ? `+` + countrySelect.dialCode
                     : ``
                 "
-                :rules="formRule.phone"
                 :select-label="
                   $vuetify.lang.t('$vuetify.country')
                 "
@@ -131,7 +130,7 @@
             >
               <v-select
                 v-model="editUser.position"
-                :disabled="!!isAccessLoading"
+                :disabled="!!isAccessLoading || editUser.position.name === 'CEO'"
                 :items="roles"
                 :label="$vuetify.lang.t('$vuetify.menu.access')"
                 :loading="isAccessLoading"
@@ -173,42 +172,16 @@
             >
               <v-select
                 v-model="editUser.shops"
-                :disabled="!!isShopLoading"
+                :disabled="!!isShopLoading || editUser.position.name === 'CEO'"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 :loading="isShopLoading"
-                :rules="formRule.shops"
                 item-text="name"
                 multiple
                 required
                 return-object
-              >
-                <template v-slot:append-outer>
-                  <v-tooltip bottom>
-                    <template
-                      v-slot:activator="{ on, attrs }"
-                    >
-                      <v-icon
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="
-                          $store.dispatch(
-                            'shop/toogleNewModal',
-                            true
-                          )
-                        "
-                      >
-                        mdi-plus
-                      </v-icon>
-                    </template>
-                    <span>{{
-                      $vuetify.lang.t(
-                        '$vuetify.titles.newAction'
-                      )
-                    }}</span>
-                  </v-tooltip>
-                </template>
-              </v-select>
+                :rules="formRule.country"
+              />
             </v-col>
           </v-row>
         </v-form>
@@ -224,7 +197,7 @@
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-          :disabled="!formValid || isActionInProgress"
+          :disabled="!formValid || isActionInProgress || editUser.shops.length === 0"
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"

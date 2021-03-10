@@ -2,12 +2,15 @@
 
 namespace App\Managers;
 
+use App\Articles;
 use App\ArticlesShops;
 use App\Box;
+use App\Company;
 use App\ExchangeRate;
 use App\PaySale;
 use App\Sale;
 use App\SalesArticlesShops;
+use App\Shop;
 use App\Tax;
 use App\User;
 use Exception;
@@ -17,7 +20,7 @@ class SaleManager extends BaseManager
 {
 
     /**
-     * @param  int  $limit
+     * @param int $limit
      * @return mixed
      */
     public function findSalesByLimit(int $limit)
@@ -56,8 +59,8 @@ class SaleManager extends BaseManager
 
         if ($number && count($number->toArray()) > 0) {
             $lastNumber = explode('-', $number['no_facture']);
-            if ('F'.date('Y') === $lastNumber[0]) {
-                return (int) $lastNumber[1] + 1;
+            if ('F' . date('Y') === $lastNumber[0]) {
+                return (int)$lastNumber[1] + 1;
             }
 
             return 1000000;
@@ -89,6 +92,168 @@ class SaleManager extends BaseManager
         }
 
         return $response;
+    }
+
+    /**
+     * @param $data
+     * @return Sale|null
+     * @throws Exception
+     */
+    public function changeState($data): ?Sale
+    {
+        $saleState = Sale::findOrFail($data['id']);
+        $saleState->state = $data['state'];
+        $saleState->save();
+        if ($saleState->state === 'accepted') {
+            $sale = Sale::latest()
+                ->where('id', '=', $data['id'])
+                ->with('company')
+                ->with('box')
+                ->with('articles_shops')
+                ->with('taxes')
+                ->with('discounts')
+                ->with('refounds')
+                ->with('pay_sales')
+                ->orderBy('created_at', 'ASC')
+                ->first();
+            $sale['shop'] = DB::table('shops')
+                ->select('shops.*', 'shops.id as shop_id')
+                ->where('sales.id', '=', $data['id'])
+                ->leftJoin('articles_shops', 'shops.id', '=', 'articles_shops.shop_id')
+                ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
+                ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->first();
+            $sale['articles'] = DB::table('articles')
+                ->select([
+                    'articles.*', 'sales_articles_shops.cant', 'sales_articles_shops.price',
+                    'articles_shops.stock as inventory', 'articles.id as article_id'
+                ])
+                ->where('sales.id', '=', $data['id'])
+                ->leftJoin('articles_shops', 'articles_shops.article_id', '=', 'articles.id')
+                ->leftJoin('sales_articles_shops', 'sales_articles_shops.articles_shops_id', '=',
+                    'articles_shops.id')
+                ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                ->get();
+            $sale['pays'] = DB::table('payments')
+                ->where('sales.id', '=', $data['id'])
+                ->whereNull('pay_sales.deleted_at')
+                ->leftJoin('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
+                ->leftJoin('sales', 'sales.id', '=', 'pay_sales.sale_id')
+                ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
+                    'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
+                    'pay_sales.currency_id', 'pay_sales.cant_back')
+                ->get();
+            $sale['client'] = DB::table('clients')
+                ->leftJoin('sales', 'sales.client_id', '=', 'clients.id')
+                ->where('sales.id', '=', $data['id'])
+                ->first();
+            $totalCost = 0;
+            $subTotal = 0;
+            $totalTax = 0;
+            $totalDisc = 0;
+            $totalRefund = 0;
+            $cashPays = [];
+            foreach ($sale['pays'] as $p => $pay) {
+                $pay->currency = $pay->currency_id ? ExchangeRate::findOrFail($pay->currency_id) : '';
+                if($pay->method === 'cash'){
+                    $cashPays[] = $pay;
+                }
+            }
+            $sale['cashPays'] = $cashPays;
+            foreach ($sale['articles'] as $k => $v) {
+                $sale['articles'][$k]->images = DB::table('article_images')
+                    ->where('article_images.article_id', '=', $v->id)
+                    ->get();
+                $sale['articles'][$k]->taxes = DB::table('taxes')
+                    ->leftJoin('article_tax', 'article_tax.tax_id', '=', 'taxes.id')
+                    ->leftJoin('articles', 'articles.id', '=', 'article_tax.article_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->addSelect(['taxes.*'])
+                    ->get();
+                $sale['articles'][$k]->refounds = DB::table('refunds')
+                    ->join('users', 'users.id', '=', 'refunds.created_by')
+                    ->where('refunds.article_id', '=', $v->id)
+                    ->where('refunds.sale_id', '=', $data['id'])
+                    ->select('refunds.*', 'users.firstName as created_by')
+                    ->get();
+                $sale['articles'][$k]->modifiers = DB::table('modifiers')
+                    ->leftJoin('sales_articles_shop_modifiers', 'sales_articles_shop_modifiers.modifier_id', '=',
+                        'modifiers.id')
+                    ->leftJoin('sales_articles_shops', 'sales_articles_shops.id', '=',
+                        'sales_articles_shop_modifiers.sales_articles_shops_id')
+                    ->leftJoin('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->leftJoin('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->leftJoin('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $sale['shop']->shop_id)
+                    ->where('sales.id', '=', $sale['id'])
+                    ->addSelect(['modifiers.*'])
+                    ->get();
+                $sale['articles'][$k]->discount = DB::table('discounts')
+                    ->leftJoin('sales_articles_shop_discounts', 'sales_articles_shop_discounts.discount_id', '=',
+                        'discounts.id')
+                    ->leftJoin('sales_articles_shops', 'sales_articles_shops.id', '=',
+                        'sales_articles_shop_discounts.sales_articles_shops_id')
+                    ->leftJoin('articles_shops', 'articles_shops.id', '=', 'sales_articles_shops.articles_shops_id')
+                    ->leftJoin('articles', 'articles.id', '=', 'articles_shops.article_id')
+                    ->leftJoin('shops', 'shops.id', '=', 'articles_shops.shop_id')
+                    ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
+                    ->where('articles.id', '=', $v->id)
+                    ->where('shops.id', '=', $sale['shop']->shop_id)
+                    ->where('sales.id', '=', $sale['id'])
+                    ->addSelect(['discounts.*'])
+                    ->get();
+                $sum = 0;
+                $discount = 0;
+                $refund = 0;
+                $cantRefund = 0;
+                foreach ($sale['articles'][$k]->discount as $j => $i) {
+                    $discount += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
+                foreach ($sale['articles'][$k]->modifiers as $j => $i) {
+                    $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                }
+                foreach ($sale['articles'][$k]->taxes as $j => $i) {
+                    if ($i->type === 'added') {
+                        $sum += $i->percent ? $v->cant * $v->price * $i->value / 100 : $i->value;
+                    }
+                }
+                foreach ($sale['articles'][$k]->refounds as $s => $t) {
+                    $refund += $t->money;
+                    $cantRefund += $t->cant;
+                }
+                $sale['articles'][$k]->moneyRefund = $refund;
+                $sale['articles'][$k]->cantRefund = $cantRefund;
+                $totalCost += $v->cant * $v->cost;
+                $sale['articles'][$k]->totalPrice = $v->cant * $v->price + $sum - $discount - $refund;
+                $subTotal += $sale['articles'][$k]->totalPrice;
+                $totalRefund += $refund;
+
+            }
+            foreach ($sale['taxes'] as $j => $i) {
+                $totalTax += $i->percent ? $subTotal * $i->value / 100 : $i->value;
+            }
+            foreach ($sale['discounts'] as $j => $i) {
+                $totalDisc += $i->percent ? $subTotal * $i->value / 100 : $i->value;
+            }
+            $totalPrice = $subTotal + $totalTax - $totalDisc;
+            $sale['totalCost'] = round($totalCost, 2);
+            $sale['totalTax'] = round($totalTax, 2);
+            $sale['totalDisc'] = round($totalDisc, 2);
+            $sale['subTotal'] = round($subTotal, 2);
+            $sale['totalRefund'] = round($totalRefund, 2);
+            $sale['totalPrice'] = round($totalPrice, 2);
+            $sale['create'] = DB::table('users')
+                ->where('users.id', '=', $sale['created_by'])
+                ->select('firstName', 'lastName')
+                ->first();
+            $sale->state = $data['state'];
+            $this->sendEmail('emails.facture', ['editSale' => $sale], 'jlbarrero19990@gmail.com', 'Factura');
+        }
+        $this->managerBy('edit', $saleState);
+        return $saleState;
     }
 
     /**
@@ -329,7 +494,6 @@ class SaleManager extends BaseManager
         $articles = $data['articles'];
         $pays = $data['pays'];
         foreach ($articles as $key => $value) {
-
             $articleShop = ArticlesShops::latest()
                 ->where('article_id', '=', $value['article_id'])
                 ->where('shop_id', '=', $edit ? $data['shop']['shop_id'] : $data['shop']['id'])
@@ -337,6 +501,22 @@ class SaleManager extends BaseManager
             $oldCant = $this->createSaleArticleShop($sale, $articleShop->id, $value);
             if ($data['state'] !== 'preform') {
                 $articleShop['stock'] = $articleShop['stock'] + $oldCant - $value['cant'];
+                $this->notificate([
+                    'company_id' => Articles::latest()->where('id', '=', $value['article_id'])->with('company')->first()->company->id,
+                    'params' => $articleShop['stock'],
+                    'msg' => 'under_inventory',
+                    'type' => 'info',
+                    'read' => false
+                ]);
+                if ($articleShop['stock'] < $articleShop['under_inventory']) {
+                    $company = Company::findOrFail(CompanyManager::getCompanyByAdmin()->id);
+                    $this->sendEmail('emails.under-stock', [
+                        'client' => $company->name,
+                        'product' => Articles::findOrFail($articleShop['article_id'])->name,
+                        'cant' => $articleShop['stock'],
+                        'shop' => Shop::findOrFail($articleShop['shop_id'])->name,
+                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
+                }
             }
             $articleShop->save();
         }
@@ -458,14 +638,29 @@ class SaleManager extends BaseManager
         foreach ($saleArtShopDB as $art => $value) {
             $exist = false;
             foreach ($articles as $k => $v) {
-                if (array_key_exists('id',
-                    $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
+                if (array_key_exists('id', $v) ? $v['id'] : $v['article_id'] === $value['articles_shops']['article_id']) {
                     $exist = true;
                 }
             }
             if (!$exist) {
                 $artShop = ArticlesShops::findOrFail($value['articles_shops']['article_id']);
                 $artShop['stock'] -= $value['cant'];
+                if ($artShop['stock'] < $artShop['under_inventory']) {
+                    $company = Company::findOrFail(CompanyManager::getCompanyByAdmin()->id);
+                    $this->notificate([
+                        'company_id' => $company->id,
+                        'params' => $artShop['stock'],
+                        'msg' => 'under_inventory',
+                        'type' => 'info',
+                        'read' => false
+                    ]);
+                    $this->sendEmail('emails.under-stock', [
+                        'client' => $company->name,
+                        'product' => Articles::findOrFail($value['articles_shops']['article_id'])->name,
+                        'cant' => $artShop['stock'],
+                        'shop' => Shop::findOrFail($value['articles_shops']['shop_id'])->name,
+                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
+                }
                 $this->managerBy('edit', $artShop);
                 $artShop->save();
             }

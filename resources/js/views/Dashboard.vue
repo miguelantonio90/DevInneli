@@ -560,6 +560,22 @@ export default {
             )
           })
         this.access_permit.filter(
+          permit => permit.title.name === 'manager_order'
+        )[0].title.value === true
+          ? this.statistic.push({
+            icon: 'mdi-truck',
+            sub_title: this.$vuetify.lang.t(
+              '$vuetify.access.access.manager_order'
+            ),
+            goToClick: 'vending'
+          })
+          : this.statisticDeny.push({
+            icon: 'mdi-close',
+            sub_title: this.$vuetify.lang.t(
+              '$vuetify.access.access.manager_vending'
+            )
+          })
+        this.access_permit.filter(
           permit => permit.title.name === 'manager_supplier'
         )[0].title.value === true
           ? this.statistic.push({

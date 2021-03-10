@@ -66,7 +66,7 @@
             >
               <v-text-field
                 v-model="editSupplier.contract"
-                :counter="120"
+                :counter="16"
                 :rules="formRule.contract"
                 :label="
                   $vuetify.lang.t(

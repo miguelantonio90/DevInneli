@@ -218,7 +218,6 @@
                             countrySelect.dialCode
                           : ``
                       "
-                      :rules="formRule.phone"
                       :select-label="
                         $vuetify.lang.t(
                           '$vuetify.country'

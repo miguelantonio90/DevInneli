@@ -93,6 +93,13 @@ class SaleController extends Controller
         );
     }
 
+    public function changeState(Request $request){
+        return ResponseHelper::sendResponse(
+            $this->saleManager->changeState($request),
+            'Sales statics retrieved successfully.'
+        );
+    }
+
     /**
      * @param  Request  $request
      * @return JsonResponse|Response
