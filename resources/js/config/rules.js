@@ -84,7 +84,7 @@ const description = [
   (v) =>
     !!v ||
     language.t('$vuetify.rule.required', [language.t('$vuetify.access.description')]),
-  (v) => (v && v.length >= 120) || language.t('$vuetify.rule.pin.min', ['120'])
+  (v) => (v && v.length < 120) || language.t('$vuetify.rule.pin.min', ['120'])
 ]
 const phone = [
   (v) =>

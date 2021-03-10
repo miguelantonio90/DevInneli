@@ -60,7 +60,7 @@ class AssistanceManager extends BaseManager
             'datetimeEntry' => Carbon::parse($entry),
             'datetimeExit' => Carbon::parse($exit),
             'totalHours' => $data['totalHours'],
-            'shop_id' => $data['shop'],
+            'shop_id' => $data['shop']['id'],
             'user_id' => $data['user'],
             'company_id' => (CompanyManager::getCompanyByAdmin())->id
         ]);
@@ -86,6 +86,7 @@ class AssistanceManager extends BaseManager
             $assistance->datetimeExit = Carbon::parse($exit);
             $assistance->shop_id = $data['shop']['id'];
             $assistance->user_id = $data['user']['id'];
+            $assistance->totalHours = $data['totalHours'];
             $assistance->company_id = (CompanyManager::getCompanyByAdmin())->id;
             $this->managerBy('edit', $assistance);
             $assistance->save();

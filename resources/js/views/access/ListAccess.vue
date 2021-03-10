@@ -24,7 +24,7 @@
             multi-sort
             @create-row="toogleNewModal(true)"
             @edit-row="openEditModal($event)"
-            @delete-row="deleteRole($event)"
+            @delete-row="deleteRoleHandler($event)"
           >
             <template v-slot:[`item.name`]="{ item }">
               <v-icon>mdi-account-key</v-icon>

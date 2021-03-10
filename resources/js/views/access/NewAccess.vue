@@ -6,11 +6,7 @@
   >
     <v-card>
       <v-card-title>
-        <span class="headline">{{
-          $vuetify.lang.t("$vuetify.titles.new", [
-            $vuetify.lang.t("$vuetify.menu.access")
-          ])
-        }}</span>
+        <span class="headline">{{ $vuetify.lang.t("$vuetify.menu.access_new") }}</span>
       </v-card-title>
       <v-card-text>
         <v-form
@@ -78,6 +74,7 @@
                             access.title.name
                         )
                       "
+                      @change="changeAccess(access)"
                     >
                       <template v-slot:label>
                         <div>
@@ -132,12 +129,12 @@
                   >
                     <v-row>
                       <v-col
-                        v-for="(item,
+                        v-for="(action,
                                 i) in access.actions"
                         :key="i"
                       >
                         <v-switch
-                          v-model="item[i]"
+                          v-model="access.actions[i]"
                           :label="
                             $vuetify.lang.t(
                               '$vuetify.access.access.' +
@@ -212,6 +209,17 @@ export default {
         }
       },
       {
+        title: { name: 'manager_category', value: false },
+        actions: {
+          list: true,
+          create: false,
+          edit: false,
+          delete: false,
+          import: false,
+          export: false
+        }
+      },
+      {
         title: { name: 'manager_refunds', value: false },
         actions: {
           list: true,
@@ -248,7 +256,21 @@ export default {
       },
       {
         title: {
-          name: 'manager_category',
+          name: 'manager_buy',
+          value: false
+        },
+        actions: {
+          list: true,
+          create: false,
+          edit: false,
+          delete: false,
+          import: false,
+          export: false
+        }
+      },
+      {
+        title: {
+          name: 'manager_order',
           value: false
         },
         actions: {
@@ -277,20 +299,6 @@ export default {
       {
         title: {
           name: 'manager_supplier',
-          value: false
-        },
-        actions: {
-          list: true,
-          create: false,
-          edit: false,
-          delete: false,
-          import: false,
-          export: false
-        }
-      },
-      {
-        title: {
-          name: 'manager_buy',
           value: false
         },
         actions: {
@@ -474,6 +482,12 @@ export default {
   },
   methods: {
     ...mapActions('role', ['createRole', 'toogleNewModal']),
+    changeAccess (access) {
+      this.access_permit.filter(ap => ap.title.name === access.title.name)[0].actions.create = access.title.value
+      access.actions.edit = access.title.value
+      access.actions.delete = access.title.value
+      access.actions.list = access.title.value
+    },
     async createNewRole () {
       if (this.$refs.form.validate()) {
         this.newAccess.access_permit = this.access_permit

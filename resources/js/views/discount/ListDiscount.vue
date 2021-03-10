@@ -25,6 +25,9 @@
           @edit-row="editDiscountHandler($event)"
           @delete-row="deleteDiscountHandler($event)"
         >
+          <template v-slot:[`item.value`]="{ item }">
+            {{ parseFloat(item.value).toFixed(2) }}
+          </template>
           <template v-slot:[`item.percent`]="{ item }">
             {{
               item.percent === "true"

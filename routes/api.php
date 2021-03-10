@@ -85,6 +85,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
         Route::post('supply/number/facture', 'SupplyController@findNumberFacture')->name('numberFacture');
 
         Route::resource('sale', 'SaleController');
+        Route::post('sale/change/state', 'SaleController@changeState')->name('changeState');
         Route::post('sale/category', 'SaleController@saleCategory')->name('saleCategory');
         Route::post('sale/payment', 'SaleController@salePayment')->name('salePayment');
         Route::post('sale/product', 'SaleController@saleByProduct')->name('saleByProduct');

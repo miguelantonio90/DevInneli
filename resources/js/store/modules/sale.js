@@ -427,6 +427,26 @@ const actions = {
         commit(FAILED_SALE, error)
 	  })
   },
+  async changeStateSale ({
+    commit,
+    dispatch
+  }, update) {
+    commit(ENV_DATA_PROCESS, true)
+
+    // const request = profile || state.editUser
+    await apiSale
+	  .changeStateSale(update)
+	  .then(data => {
+        commit(SALE_UPDATED)
+        commit(ENV_DATA_PROCESS, false)
+        dispatch('sale/getSales', null, { root: true })
+        dispatch('auth/updateAccess', data.access, { root: true })
+	  })
+	  .catch(error => {
+        commit(ENV_DATA_PROCESS, false)
+        commit(FAILED_SALE, error)
+	  })
+  },
   async deleteSale ({
     commit,
     dispatch,

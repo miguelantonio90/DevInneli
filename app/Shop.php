@@ -49,6 +49,7 @@ class Shop extends Model
         $shop = new self();
         $shop->name = $data['shopName'];
         $shop->country = $data['country']['id'];
+        $shop->phone = $data['phone'];
         $shop->company_id = $company->id;
         $shop->save();
         Box::createFirst($shop, $company);

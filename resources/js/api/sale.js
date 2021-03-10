@@ -7,6 +7,9 @@ export default {
   sendCreateRequest (sale) {
     return api.post('sale', sale)
   },
+  changeStateSale (data) {
+    return api.post('sale/change/state', data)
+  },
   sendUpdateRequest (sale) {
     return api.put('sale/' + sale.id, sale)
   },

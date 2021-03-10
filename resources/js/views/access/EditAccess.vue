@@ -78,6 +78,7 @@
                             access.title.name
                         )
                       "
+                      @change="changeAccess(access)"
                     >
                       <template v-slot:label>
                         <div>
@@ -137,7 +138,7 @@
                         :key="i"
                       >
                         <v-switch
-                          v-model="item[i]"
+                          v-model="access.actions[i]"
                           :label="
                             $vuetify.lang.t(
                               '$vuetify.access.access.' +
@@ -206,6 +207,12 @@ export default {
   },
   methods: {
     ...mapActions('role', ['updateRole', 'toogleEditModal']),
+    changeAccess (access) {
+      this.access_permit.filter(ap => ap.title.name === access.title.name)[0].actions.create = access.title.value
+      this.access_permit.filter(ap => ap.title.name === access.title.name)[0].actions.edit = access.title.value
+      this.access_permit.filter(ap => ap.title.name === access.title.name)[0].actions.delete = access.title.value
+      this.access_permit.filter(ap => ap.title.name === access.title.name)[0].actions.list = access.title.value
+    },
     updateAccessPermit () {
       this.access_permit = []
       this.access_permit = JSON.parse(this.newAccess.key.access_permit)

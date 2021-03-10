@@ -171,44 +171,17 @@
               md="12"
             >
               <v-select
-                v-model="shops"
+                v-model="newUser.shops"
                 :disabled="!!isShopLoading"
                 :items="shops"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
                 :loading="isShopLoading"
-                :rules="formRule.shops"
                 item-text="name"
                 multiple
                 required
+                :rules="formRule.country"
                 return-object
-                @change="setOrders($event)"
-              >
-                <template v-slot:append-outer>
-                  <v-tooltip bottom>
-                    <template
-                      v-slot:activator="{ on, attrs }"
-                    >
-                      <v-icon
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="
-                          $store.dispatch(
-                            'shop/toogleNewModal',
-                            true
-                          )
-                        "
-                      >
-                        mdi-plus
-                      </v-icon>
-                    </template>
-                    <span>{{
-                      $vuetify.lang.t(
-                        '$vuetify.titles.newAction'
-                      )
-                    }}</span>
-                  </v-tooltip>
-                </template>
-              </v-select>
+              />
             </v-col>
           </v-row>
         </v-form>
@@ -224,7 +197,7 @@
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-          :disabled="!formValid || isActionInProgress"
+          :disabled="!formValid || isActionInProgress || newUser.shops.length === 0"
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"

@@ -26,11 +26,9 @@
             >
               <v-text-field
                 v-model="editShop.name"
-                :counter="10"
+                :counter="20"
                 :label="$vuetify.lang.t('$vuetify.menu.shop')"
-                :rules="formRule.shop"
                 prepend-icon="mdi-home-variant"
-                required
                 @keypress="lettersNumbers"
               />
             </v-col>
@@ -75,7 +73,7 @@
                 v-model="editShop.address"
                 :counter="120"
                 :label="$vuetify.lang.t('$vuetify.address')"
-                :rules="formRule.address"
+                :rules="formRule.required"
                 prepend-icon="mdi-home-map-marker"
                 required
               />
@@ -92,9 +90,7 @@
                     '$vuetify.access.description'
                   )
                 "
-                :rules="formRule.description"
                 prepend-icon="mdi-file-document"
-                required
               />
             </v-col>
           </v-row>

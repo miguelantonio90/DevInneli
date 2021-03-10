@@ -769,6 +769,7 @@ export default {
       'openShowModal',
       'getSales',
       'updateSale',
+      'changeStateSale',
       'switchLoadData',
       'deleteSale'
     ]),
@@ -820,7 +821,7 @@ export default {
         ]
     },
     changeState (item) {
-      this.updateSale(item)
+      this.changeStateSale({ id: item.id, state: item.state })
     },
     refundArticle (sale, article) {
       if (

@@ -93,9 +93,7 @@
                     '$vuetify.access.description'
                   )
                 "
-                :rules="formRule.description"
                 prepend-icon="mdi-file-document"
-                required
               />
             </v-col>
           </v-row>

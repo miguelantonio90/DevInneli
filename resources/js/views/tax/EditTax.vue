@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="toogleEditModal"
-    max-width="450"
+    max-width="500"
     persistent
   >
     <v-card>
@@ -22,7 +22,7 @@
           <v-row>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field
                 v-model="editTax.name"
@@ -33,7 +33,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="12"
+              md="6"
             >
               <v-text-field-money
                 v-model="editTax.value"
@@ -50,24 +50,33 @@
                 required
               />
             </v-col>
-            <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
-            <v-radio-group
-              v-model="editTax.percent"
-              row
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
             >
-              <v-radio
-                :label="$vuetify.lang.t('$vuetify.tax.percent')"
-                value="true"
-              />
-              <v-radio
-                :label="
-                  $vuetify.lang.t('$vuetify.tax.permanent')
-                "
-                value="false"
-              />
-            </v-radio-group>
-            <v-col />
-            <v-col md="12">
+              <h4>{{ $vuetify.lang.t('$vuetify.tax.rate') }}</h4>
+              <v-radio-group
+                v-model="editTax.percent"
+                row
+              >
+                <v-radio
+                  :label="$vuetify.lang.t('$vuetify.tax.percent')"
+                  value="true"
+                />
+                <v-radio
+                  :label="
+                    $vuetify.lang.t('$vuetify.tax.permanent')
+                  "
+                  value="false"
+                />
+              </v-radio-group>
+            </v-col>
+            <v-col
+              class="py-0"
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="editTax.type"
                 :items="getTypeTax"
@@ -78,6 +87,31 @@
                 item-value="value"
                 required
               />
+            </v-col>
+            <v-col md="6">
+              <v-switch
+                v-model="editTax.existing"
+                :label="
+                  $vuetify.lang.t('$vuetify.tax.option_tax')
+                "
+              />
+            </v-col>
+            <v-col
+              v-if="
+                editTax.value &&
+                  editTax.value !== 0.0 &&
+                  editTax.value !== 0.0 &&
+                  editTax.percent === 'true'
+              "
+              md="12"
+            >
+              <i style="color: green">{{
+                $vuetify.lang.t(
+                  '$vuetify.tax.example',
+                  [editTax.value],
+                  [user.company.currency]
+                )
+              }}</i>
             </v-col>
           </v-row>
         </v-form>
@@ -108,7 +142,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'EditTax',
@@ -121,6 +155,7 @@ export default {
   },
   computed: {
     ...mapState('tax', ['saved', 'editTax', 'isActionInProgress']),
+    ...mapGetters('auth', ['user']),
     getTypeTax () {
       return [
         {
