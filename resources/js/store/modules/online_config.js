@@ -93,7 +93,7 @@ const mutations = {
         }
       },
       images: []
-    },
+    }
     state.saved = true
   },
   [CONFIG_CREATED] (state) {
