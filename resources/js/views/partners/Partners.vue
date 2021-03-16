@@ -99,7 +99,7 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item
-                    v-clipboard:copy="getRefferalLink"
+                    v-clipboard:copy="getReferralLink"
                     v-clipboard:success="onCopy"
                     v-clipboard:error="onError"
                     v-bind="attrs"
@@ -113,11 +113,11 @@
                     </v-list-item-action>
                     <v-list-item-content>
                       <v-list-item-title
-                        v-text="getRefferalLink"
+                        v-text="getReferralLink"
                       />
                       <v-list-item-subtitle
                         v-text="
-                          $vuetify.lang.t('$vuetify.refferalLink')
+                          $vuetify.lang.t('$vuetify.referralLink')
                         "
                       />
                     </v-list-item-content>
@@ -217,7 +217,7 @@ export default {
     getCompanyName () {
       return `${this.userData.company.name}`
     },
-    getRefferalLink () {
+    getReferralLink () {
       return `${process.env.MIX_APP_URL_AFFILIATE + this.userData.affiliate_id}`
     },
     columnHeaders () {

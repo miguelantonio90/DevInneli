@@ -64,7 +64,7 @@ export default {
   to: 'A',
   fromData: 'Realize By',
   guide: 'Click to start guide',
-  refferalLink: 'Referral link',
+  referralLink: 'Referral link',
   // menu
   menu: {
     bank: 'Bank',
