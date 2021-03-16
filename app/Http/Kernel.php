@@ -25,6 +25,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Questocat\Referral\Http\Middleware\CheckReferral;
 
 class Kernel extends HttpKernel
 {
@@ -86,5 +87,6 @@ class Kernel extends HttpKernel
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
         'respond.json' => RespondWithJsonMiddleware::class,
+        'referral' => CheckReferral::class
     ];
 }

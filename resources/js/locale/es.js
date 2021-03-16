@@ -64,6 +64,7 @@ export default {
   to: 'A',
   fromData: 'Realizado por',
   guide: 'Click para iniciar guía',
+  refferalLink: 'Link de refrencia',
   // menu
   menu: {
     bank: 'Banco',
@@ -136,7 +137,8 @@ export default {
     tax_list: 'Impuesto',
     discount: 'Descuento',
     discounts: 'Descuentos',
-    coin: 'Moneda'
+    coin: 'Moneda',
+    affiliate: 'Socios'
   },
   // settings
   settings: {
@@ -371,7 +373,10 @@ export default {
     image: 'Imagen'
   },
   tips: {
-    account_delete: 'Eliminar cuenta permanentemente.'
+    account_delete: 'Eliminar cuenta permanentemente.',
+    referrals_on: 'Activar sistema de referencia',
+    referrals_off: 'Desactivar sistema de refrencia',
+    copy_link: 'Click para copiar link'
   },
   articles: {
     name: 'Artículo',
@@ -712,6 +717,19 @@ export default {
   },
   bank: {
     count_number: 'No. de Cuenta'
+  },
+  partners: {
+    referrals: 'Recuento de referencias',
+    referralsSub: 'Recuento de referencias vinculadas',
+    referrer: 'Referenciado',
+    referrerSub: 'Referenciado por empresa',
+    not_specified: 'No especificado',
+    referralsList: 'Lista de referencias',
+    activate: 'Activa tu programa de referidos',
+    description: 'Si invitas a una persona y esta persona paga una membresía, tú obtienes un mes gratis. ' +
+    'Si consigues que 10 personas se registren como tus referidos, recibes $100 como agradecimiento.',
+    confirm_copied: 'Se copió su enlace de referencia: ',
+    error_copied: 'No se pudo copiar el texto'
   },
   ...es
 }

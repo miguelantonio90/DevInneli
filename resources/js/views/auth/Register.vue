@@ -185,6 +185,8 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 export default {
   name: 'Register',
@@ -234,15 +236,22 @@ export default {
   },
   created () {
     if (this.$route.params.hash) {
-      const data = JSON.parse(atob(this.$route.params.hash))
-      if (data) {
-        this.formRegister.shopName = data.name
-        this.formRegister.email = data.email
+      const affiliateId = this.$route.params.hash.split('=')
+      if (affiliateId.length > 0 && affiliateId[0] === 'ref') {
+        this.sendAffiliateRequest(affiliateId[1])
+      } else {
+        const data = JSON.parse(atob(this.$route.params.hash))
+        if (data) {
+          this.formRegister.shopName = data.name
+          this.formRegister.email = data.email
+        }
       }
+    } else {
+      this.$cookies.remove('referral')
     }
   },
   methods: {
-    ...mapActions('auth', ['sendRegisterRequest']),
+    ...mapActions('auth', ['sendRegisterRequest', 'sendAffiliateRequest']),
     customFilter (item, queryText, itemText) {
       return (
         this.$vuetify.lang

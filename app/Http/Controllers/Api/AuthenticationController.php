@@ -38,6 +38,8 @@ class AuthenticationController extends Controller
         $user['position']->disabled = $position['key'] === 'super_manager';
         $user['company'] = $company;
         $user['position'] = $position;
+        $user['referrals'] = auth()->user()->referrals  ?? [];
+        $user['referrer'] = auth()->user()->referrer  ?? [];
         return ResponseHelper::sendResponse($user, '');
     }
 }

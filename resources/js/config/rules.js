@@ -89,10 +89,7 @@ const description = [
 const phone = [
   (v) =>
     !!v ||
-    language.t('$vuetify.rule.required', [language.t('$vuetify.phone')]),
-  (v) => !!isNumeric(v) || language.t('$vuetify.rule.bad_numeric', [
-    language.t('$vuetify.phone')
-  ])
+    language.t('$vuetify.rule.required', [language.t('$vuetify.phone')])
 ]
 const address = [
   (v) =>
