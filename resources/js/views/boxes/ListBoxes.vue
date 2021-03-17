@@ -184,7 +184,6 @@ export default {
       Object.values(this.boxes).forEach((shop) => {
         if (shop.boxes.filter(bx => bx.id === $event).length > 0) { digital = shop.boxes.filter(bx => bx.id === $event)[0].digital }
       })
-      console.log(digital)
       return digital
     },
     editBoxesHandler ($event) {
