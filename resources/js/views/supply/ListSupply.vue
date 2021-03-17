@@ -698,11 +698,7 @@ export default {
       return item.cant * item.cost + sum - discount - item.moneyRefund
     },
     createSupplyHandler () {
-      if (this.articles.length === 0) {
-        this.showMessage(true, this.$vuetify.lang.t(
-          '$vuetify.messages.warning_no_article'
-        ))
-      } else if (this.clientSuppliers.length === 0) {
+      if (this.clientSuppliers.length === 0) {
         this.showMessage(true, this.$vuetify.lang.t(
           '$vuetify.messages.warning_no_clients_supplier'
         ), '/supplier')

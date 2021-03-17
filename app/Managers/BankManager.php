@@ -4,7 +4,9 @@ namespace App\Managers;
 
 use App\Articles;
 use App\Bank;
+use App\BankPayment;
 use App\Category;
+use App\Payment;
 use App\Shop;
 use Exception;
 
@@ -19,13 +21,15 @@ class BankManager extends BaseManager
             $banks = Bank::latest()
                 ->with('company')
                 ->with('currency')
+                ->with('payments_banks')
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
             $banks = Bank::latest()
-                ->with('company')
-                ->with('currency')
                 ->where('company_id', '=', $company->id)
+                ->with('currency')
+                ->with('company')
+                ->with('payments_banks')
                 ->get();
         }
         return $banks;
@@ -52,19 +56,33 @@ class BankManager extends BaseManager
             'company_id' => $company->id,
             'name' => $data['name'],
             'count_number' => $data['count_number'],
-            'count_type' => $data['count_type'],
             'init_balance' => $data['init_balance']
         ]);
-
         $bank->color = $data['color'] ?? '#1FBC9C';
         $bank->date = $data['date'];
         if (array_key_exists('id', $data['currency'])) {
             $bank->currency_id = $data['currency']['id'];
         }
+        $paymentsIds = $this->getIds($data['payments_banks']);
+        foreach ($paymentsIds as $key => $paymentsId) {
+            $bPayment = BankPayment::create([
+                'bank_id' => $bank->id,
+                'payment_id' => $paymentsId['id']
+            ]);
+        }
         $bank->description = $data['description'];
         $this->managerBy('new', $bank);
         $bank->save();
         return $bank;
+    }
+
+    private function getIds($payments_banks)
+    {
+        $ids = [];
+        foreach ($payments_banks as $key => $paymentsBank) {
+            $ids[$key] = $paymentsBank['id'];
+        }
+        return Payment::find($ids);
     }
 
     /**
@@ -80,7 +98,6 @@ class BankManager extends BaseManager
             $bank->name = $data['name'];
         }
         $bank->color = $data['color'] ?? '#1FBC9C';
-        $bank->count_type = $data['count_type'];
         if (array_key_exists('id', $data['currency'])) {
             $bank->currency_id = $data['currency']['id'];
         }

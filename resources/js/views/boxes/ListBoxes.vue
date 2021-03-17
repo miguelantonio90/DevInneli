@@ -184,6 +184,7 @@ export default {
       Object.values(this.boxes).forEach((shop) => {
         if (shop.boxes.filter(bx => bx.id === $event).length > 0) { digital = shop.boxes.filter(bx => bx.id === $event)[0].digital }
       })
+      console.log(digital)
       return digital
     },
     editBoxesHandler ($event) {
@@ -215,7 +216,7 @@ export default {
       })
     },
     deleteBoxesHandler ($event) {
-      !this.isDigital($event)
+      this.isDigital($event)
         ? this.showMessage(
           this.$vuetify.lang.t('$vuetify.titles.delete', [
             this.$vuetify.lang.t('$vuetify.menu.box')

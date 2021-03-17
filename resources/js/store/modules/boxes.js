@@ -89,10 +89,9 @@ const mutations = {
     })
   },
   [BOX_EDIT] (state, boxId) {
-    state.editBox = Object.assign(
-	  {},
-	  state.boxes.filter(node => node.id === boxId).shift()
-    )
+    Object.values(state.boxes).forEach((shop) => {
+      if (shop.boxes.filter(bx => bx.id === boxId).length > 0) { state.editBox = shop.boxes.filter(bx => bx.id === boxId)[0] }
+    })
   },
   [EDIT_OPEN_CLOSE] (state, data) {
     // state.openClose.id = data.id
@@ -102,10 +101,9 @@ const mutations = {
     state.openClose = data
   },
   [BOX_OPEN_CLOSE] (state, boxId) {
-    state.openClose.box = Object.assign(
-	  {},
-	  state.boxes.filter(node => node.id === boxId).shift()
-    )
+    Object.values(state.boxes).forEach((shop) => {
+      if (shop.boxes.filter(bx => bx.id === boxId).length > 0) { state.openClose.box = shop.boxes.filter(bx => bx.id === boxId)[0] }
+    })
   },
   [BOX_UPDATED] (state) {
     state.showEditModal = false

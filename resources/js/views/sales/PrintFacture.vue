@@ -74,8 +74,10 @@
               <table style="width: 100%">
                 <tbody>
                   <tr>
-                    <td>{{ art.cant }}</td>
-                    <td>{{ art.name }} {{ art.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(art.um).name) + ')':'' }}</td>
+                    <td class="cantidad">
+                      {{ art.cant }}
+                    </td>
+                    <td>{{ art.name }} {{ art.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(JSON.parse(art.um)).name) + ')':'' }}</td>
                     <td>
                       {{
                         `${ parseFloat(art.cant*art.price).toFixed(2)}`
@@ -419,6 +421,7 @@ th.producto {
 
 td.cantidad,
 th.cantidad {
+    margin-left: 0px;
     width: 50px;
     max-width: 50px;
     word-break: break-all;

@@ -15,10 +15,12 @@ class CreatePaySalesTable extends BaseMigration
         Schema::create($tableName, function (Blueprint $table) {
             $table->foreignUuid('sale_id')->references('id')->on('sales')
                 ->onDelete('cascade');
-            $table->string('payment_id')->references('id')->on('payments');
+            $table->string('bank_payment_id')->references('id')->on('bank_payments');
             $table->decimal('cant')->default(0.00);
             $table->date('mora')->nullable();
             $table->decimal('cantMora')->nullable();
+            $table->string('check_number')->nullable(); ////no de serie del cheque
+            $table->string('check_emited')->nullable(); //// quien emitio el cheque
             $table->string('currency_id')->nullable()->references('id')->on('exchange_rates');
             $table->decimal('cant_pay')->default(0.00);
             $table->decimal('cant_back')->default(0.00);

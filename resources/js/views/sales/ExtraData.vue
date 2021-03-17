@@ -4,6 +4,11 @@
     <new-tax v-if="$store.state.tax.showNewModal" />
     <new-payment v-if="$store.state.payment.showNewModal" />
     <new-discount v-if="this.$store.state.discount.showNewModal" />
+    <v-card-title>
+      <v-icon @click="$emit('cancelExtraData')">
+        mdi-arrow-left-bold-circle
+      </v-icon> {{ $vuetify.lang.t('$vuetify.pay.extra_data') }}
+    </v-card-title>
     <v-row>
       <v-col
         class="py-0"

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bank;
+use App\BankPayment;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Position;
@@ -284,6 +286,7 @@ class RegisterController extends Controller
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
                 $supervisor = new Position();
+                Bank::createFirst($company, $user);
                 $supervisor->company_id = $company->id;
                 $supervisor->name = 'Supervisor';
                 $supervisor->accessEmail = 1;

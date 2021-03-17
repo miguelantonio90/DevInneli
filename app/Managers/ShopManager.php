@@ -105,9 +105,8 @@ class ShopManager extends BaseManager
      * @return mixed
      * @throws Exception
      */
-    public function new($request)
+    public function new($data)
     {
-        $data = $request->all();
         $company = CompanyManager::getCompanyByAdmin();
         $data['company_id'] = $company->id;
         $user = User::findOrFail(auth()->id());

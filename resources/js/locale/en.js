@@ -263,7 +263,9 @@ export default {
     back: 'Back',
     yes: 'Yes',
     no: 'No',
-    eye: 'See'
+    eye: 'See',
+    minus: 'Minus',
+    plus: 'Plus'
   },
   titles: {
     list: 'List of {0}',
@@ -500,6 +502,7 @@ export default {
     discountGeneral: 'General discount',
     ticket: 'TICKET SALE',
     facture: 'Facture',
+    cart: 'Cart',
     state: {
       open: 'In process',
       preform: 'Preform',
@@ -707,7 +710,8 @@ export default {
     solicited_supply: 'Client {0} has registered a supply'
   },
   bank: {
-    count_number: 'Count Number'
+    count_number: 'Count Number',
+    type_operation: 'Type of Operation Banking'
   },
   ...en
 }

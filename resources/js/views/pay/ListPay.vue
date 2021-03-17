@@ -319,6 +319,7 @@ export default {
     },
     addToPayment (pay) {
       this.sale.pays.push({
+        bank: pay.bank,
         name: pay.method.name,
         method: pay.method.method,
         cant: pay.cant,
