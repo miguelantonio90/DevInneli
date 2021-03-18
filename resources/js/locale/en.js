@@ -503,6 +503,7 @@ export default {
     sale: 'Sale',
     online_text: 'This sale will be online, and reported by Digital Box',
     selectArticle: 'Please select the article',
+    no_article: 'No exist articles in this shop, please first create articles',
     selectShop: 'You must select a store',
     discountGeneral: 'General discount',
     ticket: 'TICKET SALE',

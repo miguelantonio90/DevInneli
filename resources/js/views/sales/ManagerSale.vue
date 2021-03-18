@@ -112,6 +112,7 @@
               />
               <v-spacer />
               <v-menu
+                v-if="categories.length > 0"
                 open-on-hover
                 offset-y
               >
@@ -166,7 +167,6 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-select
-                    id="slc_box"
                     v-model="sale.box"
                     :rules="formRule.country"
                     :items="localBoxes"
@@ -379,6 +379,43 @@
                 </v-list-item-content>
               </v-list-item>
             </v-navigation-drawer>
+            <v-row>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-autocomplete
+                  id="slc_box"
+                  v-model="sale.box"
+                  style="margin: 15px"
+                  :rules="formRule.country"
+                  :items="localBoxes"
+                  :disabled="managerSale"
+                  required
+                  :label="$vuetify.lang.t('$vuetify.menu.box')"
+                  item-text="name"
+                  return-object
+                >
+                  <template v-slot:append-outer>
+                    <v-tooltip
+                      bottom
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          id="btn_add_box"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="$store.dispatch('boxes/toogleNewModal',true)"
+                        >
+                          mdi-plus
+                        </v-icon>
+                      </template>
+                      <span>{{ $vuetify.lang.t('$vuetify.titles.newAction') }}</span>
+                    </v-tooltip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
             <v-row
               v-if="localArticles.length > 0"
             >
@@ -424,6 +461,12 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row
+              v-else
+              style="margin: 20px"
+            >
+              {{ $vuetify.lang.t('$vuetify.sale.no_article') }}
+            </v-row>
           </v-form>
         </v-card>
       </v-card-text>
@@ -441,7 +484,7 @@
           <v-btn
             class="mb-2"
             color="success"
-            :disabled="!formValid || isActionInProgress"
+            :disabled="!formValid || isActionInProgress || !sale.box.id"
             :loading="isActionInProgress"
             @click="saleHandler('preform')"
           >
