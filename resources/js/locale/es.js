@@ -730,8 +730,8 @@ export default {
     not_specified: 'No especificado',
     referralsList: 'Lista de referencias',
     activate: 'Activa tu programa de referidos',
-    description: 'Si invitas a una persona y esta persona paga una membresía, tú obtienes un mes gratis. ' +
-    'Si consigues que 10 personas se registren como tus referidos, recibes $100 como agradecimiento.',
+    description: 'Si invitas a una persona y paga su membresía, tú obtienes ganancias por ello. ' +
+    'Tenemos muchas ofertas para que obtengas mayores ganancias.',
     confirm_copied: 'Se copió su enlace de referencia: ',
     error_copied: 'No se pudo copiar el texto'
   },
