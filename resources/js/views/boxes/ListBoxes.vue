@@ -215,7 +215,7 @@ export default {
       })
     },
     deleteBoxesHandler ($event) {
-      !this.isDigital($event)
+      this.isDigital($event)
         ? this.showMessage(
           this.$vuetify.lang.t('$vuetify.titles.delete', [
             this.$vuetify.lang.t('$vuetify.menu.box')

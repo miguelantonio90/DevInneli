@@ -64,6 +64,7 @@ export default {
   to: 'A',
   fromData: 'Realizado por',
   guide: 'Click para iniciar guía',
+  referralLink: 'Link de refrencia',
   // menu
   menu: {
     bank: 'Banco',
@@ -136,7 +137,8 @@ export default {
     tax_list: 'Impuesto',
     discount: 'Descuento',
     discounts: 'Descuentos',
-    coin: 'Moneda'
+    coin: 'Moneda',
+    affiliate: 'Socios'
   },
   // settings
   settings: {
@@ -264,7 +266,9 @@ export default {
     back: 'Atrás',
     yes: 'Si',
     no: 'No',
-    eye: 'Ver'
+    eye: 'Ver',
+    minus: 'Menos',
+    plus: 'Más'
   },
   titles: {
     list: 'Lista de {0}',
@@ -371,7 +375,10 @@ export default {
     image: 'Imagen'
   },
   tips: {
-    account_delete: 'Eliminar cuenta permanentemente.'
+    account_delete: 'Eliminar cuenta permanentemente.',
+    referrals_on: 'Activar sistema de referencia',
+    referrals_off: 'Desactivar sistema de refrencia',
+    copy_link: 'Click para copiar link'
   },
   articles: {
     name: 'Artículo',
@@ -502,6 +509,7 @@ export default {
     discountGeneral: 'Descuento Total por venta',
     ticket: 'TICKET DE VENTA',
     facture: 'Factura',
+    cart: 'Carrito',
     state: {
       open: 'En proceso',
       preform: 'Preforma',
@@ -624,31 +632,31 @@ export default {
   um: {
     name: 'Unidad de Medida',
     distance: 'Distancia',
-    u: 'Unidad',
-    mm: 'Milímetro',
-    cm: 'Centímetro',
-    pp: 'Pulgada',
-    m: 'Metro',
-    footer: 'Pie',
-    yard: 'Yarda',
-    km: 'Kilómetro',
-    mll: 'Milla',
+    u: 'Unidad(s)',
+    mm: 'Milímetro(s)',
+    cm: 'Centímetro(s)',
+    pp: 'Pulgada(s)',
+    m: 'Metro(s)',
+    footer: 'Pie(s)',
+    yard: 'Yarda(s)',
+    km: 'Kilómetro(s)',
+    mll: 'Milla(s)',
     temp: 'Temperatura',
     c: 'Celsius',
     k: 'Kelvin',
     f: 'Faraday',
     time: 'Tiempo',
-    s: 'Segundo',
-    mt: 'Minuto',
-    h: 'Hora',
-    d: 'Día',
+    s: 'Segundo(s)',
+    mt: 'Minuto(s)',
+    h: 'Hora(s)',
+    d: 'Día(s)',
     ms: 'Masa',
-    mg: 'Miligramo',
-    g: 'Gramo',
-    kg: 'Kilogramo',
-    ton: 'Tonelada',
-    lb: 'Libra',
-    oz: 'Onza',
+    mg: 'Miligramo(s)',
+    g: 'Gramo(s)',
+    kg: 'Kilogramo(s)',
+    ton: 'Tonelada(s)',
+    lb: 'Libra(s)',
+    oz: 'Onza(s)',
     velocity: 'Velocidad',
     m_s: 'Metro/Segundo',
     km_h: 'Kilómetro/Hora',
@@ -711,7 +719,21 @@ export default {
     solicited_supply: 'El cliente {0} ha registrado un pedido para usted.'
   },
   bank: {
-    count_number: 'No. de Cuenta'
+    count_number: 'No. de Cuenta',
+    type_operation: 'Tipo de Operación Bancaria'
+  },
+  partners: {
+    referrals: 'Recuento de referencias',
+    referralsSub: 'Recuento de referencias vinculadas',
+    referrer: 'Referenciado',
+    referrerSub: 'Referenciado por empresa',
+    not_specified: 'No especificado',
+    referralsList: 'Lista de referencias',
+    activate: 'Activa tu programa de referidos',
+    description: 'Si invitas a una persona y paga su membresía, tú obtienes ganancias por ello. ' +
+    'Tenemos muchas ofertas para que obtengas mayores ganancias.',
+    confirm_copied: 'Se copió su enlace de referencia: ',
+    error_copied: 'No se pudo copiar el texto'
   },
   ...es
 }

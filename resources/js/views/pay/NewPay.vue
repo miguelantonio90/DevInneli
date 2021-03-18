@@ -26,16 +26,16 @@
               md="6"
             >
               <v-autocomplete
-                v-model="pay.name"
-                :items="getPay"
-                :label="$vuetify.lang.t('$vuetify.pay.pay')"
-                item-text="text"
+                v-model="pay.bank"
+                :items="banks"
+                :label="$vuetify.lang.t('$vuetify.menu.bank')"
+                item-text="name"
                 item-value="value"
                 required
+                return-object
               />
             </v-col>
             <v-col
-              v-if="pay.name === 'counted'"
               class="py-0"
               cols="12"
               md="6"
@@ -43,11 +43,12 @@
               <v-autocomplete
                 v-model="pay.method"
                 :filter="customFilter"
-                :items="localPayments"
+                :items="pay.bank.paymentBanks"
                 :label="
                   $vuetify.lang.t('$vuetify.payment.name')
                 "
                 :rules="formRule.required"
+                item-text="name"
                 item-value="method"
                 return-object
               >
@@ -95,16 +96,20 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.0
+                  empty: 0.0,
+                  min:0.00,
+                  max:pending
                 }"
                 :properties="{
                   prefix: currency,
-                  clearable: true
+                  clearable: true,
+                  max:pending,
+                  min:0.00,
                 }"
                 :rules="formRule.required"
                 :value="pending"
                 required
-                style="margin-top: 8"
+                style="margin-top: 8px"
               />
             </v-col>
             <v-col
@@ -195,7 +200,7 @@
                       item-text="currency"
                       required
                       return-object
-                      style="margin-top: 15"
+                      style="margin-top: 15px"
                       @change="calcDifference"
                     />
                   </v-col>
@@ -271,7 +276,9 @@
           {{ $vuetify.lang.t('$vuetify.actions.cancel') }}
         </v-btn>
         <v-btn
-          :disabled="!formValid || isActionInProgress"
+          :disabled="!formValid || isActionInProgress ||
+            pay.method.method === 'cash' && parseFloat(pay.cant_pay).toFixed(2) === '0.00' ||
+            pay.method.method === 'cash' && pay.cant_back < 0.00"
           :loading="isActionInProgress"
           class="mb-2"
           color="primary"
@@ -312,14 +319,15 @@ export default {
       currencies: [],
       pay: {
         name: 'counted',
+        bank: {},
         method: '',
         cant: '',
-        delay: 0.0,
+        delay: 0.00,
         mora: new Date().toISOString().substr(0, 10),
-        cantMora: 0.0,
-        cant_pay: 0.0,
+        cantMora: 0.00,
+        cant_pay: 0.00,
         currency: {},
-        cant_back: 0.0
+        cant_back: 0.00
       },
       localPayments: [],
       formRule: this.$rules
@@ -328,6 +336,7 @@ export default {
   computed: {
     ...mapState('payment', ['saved', 'newPayment', 'isActionInProgress']),
     ...mapState('exchangeRate', ['saved', 'changes']),
+    ...mapState('bank', ['saved', 'banks']),
     computedDateFormatted () {
       return this.formatDate(this.pay.mora)
     },
@@ -383,10 +392,12 @@ export default {
     this.pay.cant = this.pending
     this.getChanges()
     this.updateMethod()
+    this.getBanks()
   },
   methods: {
     ...mapActions('payment', ['createPayment', 'toogleNewModal']),
     ...mapActions('exchangeRate', ['getChanges']),
+    ...mapActions('bank', ['getBanks']),
     customFilter (item, queryText, itemText) {
       return (
         this.$vuetify.lang

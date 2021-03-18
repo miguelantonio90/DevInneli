@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
- * @method find($id)
+ * @method static find(array $idShops)
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  * @property mixed color

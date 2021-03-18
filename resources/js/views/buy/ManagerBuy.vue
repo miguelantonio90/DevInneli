@@ -299,6 +299,7 @@
                           v-slot:[`item.name`]="{
                             item
                           }"
+                          style="max-width: 50px"
                         >
                           <v-chip
                             :key="

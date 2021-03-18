@@ -373,17 +373,17 @@
                                 }}
                               </div>
                               <!--                              <v-text-field-money
-                                v-model="item.cant"
-                                :label="$vuetify.lang.t('$vuetify.actions.save') "
-                                :properties="{
-                                  clearable: true,
-                                }"
-                                :options="{
-                                  length: 15,
-                                  precision: 2,
-                                  empty: 0.00,
-                                }"
-                              />-->
+                                                              v-model="item.cant"
+                                                              :label="$vuetify.lang.t('$vuetify.actions.save') "
+                                                              :properties="{
+                                                                clearable: true,
+                                                              }"
+                                                              :options="{
+                                                                length: 15,
+                                                                precision: 2,
+                                                                empty: 0.00,
+                                                              }"
+                                                            />-->
                               <v-text-field-integer
                                 v-model="
                                   item.cant
@@ -605,7 +605,7 @@ import utils from '../../util'
 import DetailArticleCost from '../buy/DetailArticleCost'
 
 export default {
-  name: 'ManagerSupply',
+  name: 'ManagerSupplyOld',
   components: {
     DetailArticleCost,
     NewDiscount,
@@ -828,10 +828,10 @@ export default {
           name: v.percent
             ? v.name + '(' + v.value + '%)'
             : v.name +
-                          '(' +
-                          this.user.company.currency +
-                          v.value +
-                          ')',
+                        '(' +
+                        this.user.company.currency +
+                        v.value +
+                        ')',
           value: v.value,
           percent: v.percent
         })
@@ -920,11 +920,11 @@ export default {
       this.editedIndex = this.supply.articles.indexOf(item)
       this.supply.articles[this.editedIndex].totalCost = parseFloat(
         this.supply.articles[this.editedIndex].cost *
-                    this.supply.articles[this.editedIndex].cant
+                this.supply.articles[this.editedIndex].cant
       ).toFixed(2)
       this.supply.articles[this.editedIndex].totalCant = parseFloat(
         parseFloat(this.supply.articles[this.editedIndex].supply) -
-                    parseFloat(this.supply.articles[this.editedIndex].cant) || 0
+                parseFloat(this.supply.articles[this.editedIndex].cant) || 0
       ).toFixed(2)
       item.totalCost =
                 item.cant * item.cost +

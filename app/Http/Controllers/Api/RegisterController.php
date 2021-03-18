@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bank;
+use App\BankPayment;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Position;
@@ -17,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -187,11 +190,11 @@ class RegisterController extends Controller
                 [
                     'title' => ['name' => 'manager_sell', 'value' => true],
                     'actions' =>
-                        [
-                            'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
-                            'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
-                            'export' => true
-                        ]
+                    [
+                        'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
+                        'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
+                        'export' => true
+                    ]
                 ],
                 [
                     'title' => ['name' => 'manager_employer', 'value' => true],
@@ -284,6 +287,7 @@ class RegisterController extends Controller
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
                 $supervisor = new Position();
+                Bank::createFirst($company, $user);
                 $supervisor->company_id = $company->id;
                 $supervisor->name = 'Supervisor';
                 $supervisor->accessEmail = 1;
@@ -368,11 +372,11 @@ class RegisterController extends Controller
                     [
                         'title' => ['name' => 'manager_sell', 'value' => true],
                         'actions' =>
-                            [
-                                'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
-                                'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
-                                'export' => true
-                            ]
+                        [
+                            'just_yours' => false, 'sell_by_product' => true, 'sell_by_category' => true,
+                            'sell_by_employer' => true, 'sell_by_payments' => true, 'import' => true,
+                            'export' => true
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
@@ -531,11 +535,11 @@ class RegisterController extends Controller
                     [
                         'title' => ['name' => 'manager_sell', 'value' => false],
                         'actions' =>
-                            [
-                                'just_yours' => false, 'sell_by_product' => false, 'sell_by_category' => false,
-                                'sell_by_employer' => false, 'sell_by_payments' => false, 'import' => false,
-                                'export' => false
-                            ]
+                        [
+                            'just_yours' => false, 'sell_by_product' => false, 'sell_by_category' => false,
+                            'sell_by_employer' => false, 'sell_by_payments' => false, 'import' => false,
+                            'export' => false
+                        ]
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],

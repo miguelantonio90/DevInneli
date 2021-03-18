@@ -7,6 +7,8 @@ namespace App\Managers;
 use App\Articles;
 use App\ArticlesComposite;
 use App\ArticlesShops;
+use App\Box;
+use App\Company;
 use App\Shop;
 use App\User;
 use App\Variant;
@@ -22,7 +24,7 @@ class ImportManager extends BaseManager
 
     /**
      * ImportManager constructor.
-     * @param  CategoryManager  $categoryManager
+     * @param CategoryManager $categoryManager
      */
     public function __construct(CategoryManager $categoryManager)
     {
@@ -36,9 +38,9 @@ class ImportManager extends BaseManager
      */
     public function importData($file, $online): void
     {
-        $fileName = time().'.'.$file->getClientOriginalExtension();
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
         $file->move(public_path('upload'), $fileName);
-        $csv = file_get_contents((public_path('upload/').$fileName));
+        $csv = file_get_contents((public_path('upload/') . $fileName));
         //        $csv = file_get_contents((public_path('upload/') . '1606006301.csv'));
         $csv = str_replace(',variable,', ',,', $csv);
         $array = array_map("str_getcsv", explode("\n", $csv));
@@ -105,21 +107,21 @@ class ImportManager extends BaseManager
 
     /**
      * @param $shopData
-     * @param $company
+     * @param $company_id
      * @return array
      * @throws Exception
      */
-    public function insertShopsFromImportFile($shopData, $company): array
+    public function insertShopsFromImportFile($shopData, $company_id): array
     {
-
         $dataShops = explode(',', json_encode(str_replace('"', '', $shopData)));
         $shops = [];
+        $company=Company::findOrFail($company_id->id);
         $country = ['id' => cache()->get('userPin')['country']];
         foreach ($dataShops as $key => $value) {
             if (array_key_exists(1, explode('[', $value))) {
                 $shopName = str_replace([']', '"'], '', explode('[', $value)[1]);
                 $exist = $this->findShopByName($shopName);
-                $data = ['shopName' => $shopName, 'country' => $country];
+                $data = ['shopName' => $shopName, 'country' => $country];   
                 $shop = count($exist) === 0 ? Shop::createFirst($data, $company) : $exist[0];
                 $shop->created_by = cache()->get('userPin')['id'];
                 User::latest()

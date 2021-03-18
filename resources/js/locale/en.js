@@ -64,6 +64,7 @@ export default {
   to: 'A',
   fromData: 'Realize By',
   guide: 'Click to start guide',
+  referralLink: 'Referral link',
   // menu
   menu: {
     bank: 'Bank',
@@ -136,7 +137,8 @@ export default {
     tax_list: 'Tax',
     discount: 'Discount',
     discounts: 'Discounts',
-    coin: 'Coin'
+    coin: 'Coin',
+    affiliate: 'Partners'
   },
   // settings
   settings: {
@@ -263,7 +265,9 @@ export default {
     back: 'Back',
     yes: 'Yes',
     no: 'No',
-    eye: 'See'
+    eye: 'See',
+    minus: 'Minus',
+    plus: 'Plus'
   },
   titles: {
     list: 'List of {0}',
@@ -369,7 +373,10 @@ export default {
     image: 'Image'
   },
   tips: {
-    account_delete: 'Permanently delete account.'
+    account_delete: 'Permanently delete account.',
+    referrals_on: 'Activate referral system',
+    referrals_off: 'Deactivate referral system',
+    copy_link: 'Click to copy link'
   },
   articles: {
     name: 'Article',
@@ -500,6 +507,7 @@ export default {
     discountGeneral: 'General discount',
     ticket: 'TICKET SALE',
     facture: 'Facture',
+    cart: 'Cart',
     state: {
       open: 'In process',
       preform: 'Preform',
@@ -707,7 +715,21 @@ export default {
     solicited_supply: 'Client {0} has registered a supply'
   },
   bank: {
-    count_number: 'Count Number'
+    count_number: 'Count Number',
+    type_operation: 'Type of Operation Banking'
+  },
+  partners: {
+    referrals: 'Referral count',
+    referralsSub: 'Linked referral count',
+    referrer: 'Referenced',
+    referrerSub: 'Referenced by company',
+    not_specified: 'Not Specified',
+    referralsList: 'Referrals List',
+    activate: 'Activate your Referral Program',
+    description: 'If you invite a person and this person pays for a membership, you get a free month. ' +
+     'If you get 10 people to sign up as your referrals, you get $ 100 as a thank you.',
+    confirm_copied: 'Your referral link has been copied: ',
+    error_copied: 'The text could not be copied'
   },
   ...en
 }

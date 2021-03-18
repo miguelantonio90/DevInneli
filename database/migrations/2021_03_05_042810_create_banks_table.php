@@ -13,9 +13,9 @@ class CreateBanksTable extends BaseMigration
     public function up(string $tableName = 'banks', bool $company = true): void
     {
         Schema::create('banks', function (Blueprint $table) {
-            $table->enum('count_type', ['bank', 'credit_card', 'cash']);
             $table->string('name');
             $table->string('count_number');
+            $table->boolean('default_bank')->default(false);
             $table->string('currency_id')->nullable()->references('id')->on('exchange_rates');
             $table->decimal('init_balance')->default(0.00);
             $table->date('date')->nullable(now());

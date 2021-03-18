@@ -32,10 +32,10 @@
           <v-col
             v-for="bank in banks"
             :key="bank.id"
-            style="margin-bottom: 20px; margin-left: 20px"
+            style="margin-bottom: 20px"
             class="py-0"
             cols="12"
-            md="4"
+            md="6"
           >
             <v-card
               class="mx-auto"
@@ -49,7 +49,7 @@
                     <span class="title font-weight-light">{{ bank.name }}</span>
                   </v-list-item-title>
 
-                  <v-list-item-icon>
+                  <v-list-item-icon v-if="!bank.default_bank">
                     <v-spacer />
                     <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
@@ -86,11 +86,25 @@
               </v-card-title>
               <v-card-subtitle>
                 <p>
-                  {{ $vuetify.lang.t('$vuetify.tax.type') }}: {{ $vuetify.lang.t('$vuetify.payment.' + bank.count_type) }} <br>
                   {{ $vuetify.lang.t('$vuetify.bank.count_number') }}: {{ bank.count_number }} <br>
                   {{ $vuetify.lang.t('$vuetify.date') }}: {{ formatDate(bank.date) }}<br>
-                  {{ $vuetify.lang.t('$vuetify.boxes.init') }}: {{ bank.currency_id ? bank.currency.name : user.company.currency }} {{ bank.init_balance }}
+                  {{ $vuetify.lang.t('$vuetify.boxes.init') }}: {{ bank.currency_id ? bank.currency.currency : user.company.currency }} {{ bank.init_balance }}
                 </p>
+                <b>{{ $vuetify.lang.t('$vuetify.bank.type_operation') }}:</b> <br>
+                <v-row>
+                  <v-col
+                    v-for="(paymentBank,i) in bank.payments_banks"
+                    :key="i"
+                    cols="12"
+                    md="6"
+                  >
+                    <p>
+                      <v-icon small>
+                        mdi-check
+                      </v-icon> {{ $vuetify.lang.t('$vuetify.payment.' + paymentBank.payment.method) }}
+                    </p>
+                  </v-col>
+                </v-row>
 
                 <v-list-item class="grow">
                   <v-row

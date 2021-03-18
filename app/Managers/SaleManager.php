@@ -4,6 +4,7 @@ namespace App\Managers;
 
 use App\Articles;
 use App\ArticlesShops;
+use App\BankPayment;
 use App\Box;
 use App\Company;
 use App\ExchangeRate;
@@ -138,7 +139,7 @@ class SaleManager extends BaseManager
             $sale['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $data['id'])
                 ->whereNull('pay_sales.deleted_at')
-                ->leftJoin('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
+                ->leftJoin('pay_sales', 'pay_sales.bank_payment_id', '=', 'payments.id')
                 ->leftJoin('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
                     'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
@@ -250,7 +251,7 @@ class SaleManager extends BaseManager
                 ->select('firstName', 'lastName')
                 ->first();
             $sale->state = $data['state'];
-            $this->sendEmail('emails.facture', ['editSale' => $sale], 'jlbarrero19990@gmail.com', 'Factura');
+//            $this->sendEmail('emails.facture', ['editSale' => $sale], 'jlbarrero19990@gmail.com', 'Factura');
         }
         $this->managerBy('edit', $saleState);
         return $saleState;
@@ -322,8 +323,9 @@ class SaleManager extends BaseManager
             $sales[$key]['pays'] = DB::table('payments')
                 ->where('sales.id', '=', $value['id'])
                 ->whereNull('pay_sales.deleted_at')
-                ->leftJoin('pay_sales', 'pay_sales.payment_id', '=', 'payments.id')
-                ->leftJoin('sales', 'sales.id', '=', 'pay_sales.sale_id')
+                ->join('bank_payments', 'bank_payments.payment_id', '=', 'payments.id')
+                ->join('pay_sales', 'pay_sales.bank_payment_id', '=', 'bank_payments.id')
+                ->join('sales', 'sales.id', '=', 'pay_sales.sale_id')
                 ->select('payments.id as payment_id', 'pay_sales.id', 'payments.name', 'payments.method',
                     'pay_sales.cant', 'pay_sales.mora', 'pay_sales.cantMora', 'pay_sales.cant_pay',
                     'pay_sales.currency_id', 'pay_sales.cant_back')
@@ -510,26 +512,29 @@ class SaleManager extends BaseManager
                 ]);
                 if ($articleShop['stock'] < $articleShop['under_inventory']) {
                     $company = Company::findOrFail(CompanyManager::getCompanyByAdmin()->id);
-                    $this->sendEmail('emails.under-stock', [
-                        'client' => $company->name,
-                        'product' => Articles::findOrFail($articleShop['article_id'])->name,
-                        'cant' => $articleShop['stock'],
-                        'shop' => Shop::findOrFail($articleShop['shop_id'])->name,
-                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
+//                    $this->sendEmail('emails.under-stock', [
+//                        'client' => $company->name,
+//                        'product' => Articles::findOrFail($articleShop['article_id'])->name,
+//                        'cant' => $articleShop['stock'],
+//                        'shop' => Shop::findOrFail($articleShop['shop_id'])->name,
+//                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
                 }
             }
             $articleShop->save();
         }
         foreach ($pays as $k => $pay) {
             if (!array_key_exists('id', $pay)) {
+                $bPayment = BankPayment::latest()
+                    ->where('bank_id', '=',$pay['bank']['id'])
+                    ->where('payment_id', '=',$pay['payment_id'])
+                    ->first();
                 $pSale = PaySale::create([
-                    'payment_id' => $pay['payment_id'],
+                    'bank_payment_id' => $bPayment->id,
                     'sale_id' => $sale->id
                 ]);
             } else {
                 $pSale = PaySale::findOrFail($pay['id']);
             }
-
             $pSale['cant'] = $pay['cant'];
             if ($pay['method'] === 'cash') {
                 $pSale['currency_id'] = count($pay['currency']) > 0 ? $pay['currency']['id'] : '';
@@ -645,22 +650,22 @@ class SaleManager extends BaseManager
             if (!$exist) {
                 $artShop = ArticlesShops::findOrFail($value['articles_shops']['article_id']);
                 $artShop['stock'] -= $value['cant'];
-                if ($artShop['stock'] < $artShop['under_inventory']) {
-                    $company = Company::findOrFail(CompanyManager::getCompanyByAdmin()->id);
-                    $this->notificate([
-                        'company_id' => $company->id,
-                        'params' => $artShop['stock'],
-                        'msg' => 'under_inventory',
-                        'type' => 'info',
-                        'read' => false
-                    ]);
-                    $this->sendEmail('emails.under-stock', [
-                        'client' => $company->name,
-                        'product' => Articles::findOrFail($value['articles_shops']['article_id'])->name,
-                        'cant' => $artShop['stock'],
-                        'shop' => Shop::findOrFail($value['articles_shops']['shop_id'])->name,
-                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
-                }
+//                if ($artShop['stock'] < $artShop['under_inventory']) {
+//                    $company = Company::findOrFail(CompanyManager::getCompanyByAdmin()->id);
+//                    $this->notificate([
+//                        'company_id' => $company->id,
+//                        'params' => $artShop['stock'],
+//                        'msg' => 'under_inventory',
+//                        'type' => 'info',
+//                        'read' => false
+//                    ]);
+//                    $this->sendEmail('emails.under-stock', [
+//                        'client' => $company->name,
+//                        'product' => Articles::findOrFail($value['articles_shops']['article_id'])->name,
+//                        'cant' => $artShop['stock'],
+//                        'shop' => Shop::findOrFail($value['articles_shops']['shop_id'])->name,
+//                    ], $company->email, 'INNELI Informa sobre Bajo Inventario');
+//                }
                 $this->managerBy('edit', $artShop);
                 $artShop->save();
             }
@@ -817,7 +822,7 @@ class SaleManager extends BaseManager
                 'articles_shops.id')
             ->leftJoin('sales', 'sales.id', '=', 'sales_articles_shops.sale_id')
             ->leftJoin('pay_sales', 'pay_sales.sale_id', '=', 'sales.id')
-            ->leftJoin('payments', 'payments.id', '=', 'pay_sales.payment_id')
+            ->leftJoin('payments', 'payments.id', '=', 'pay_sales.bank_payment_id')
             ->where('sales.created_by', '=', cache()->get('userPin')['id'])
             ->where('sales.type', '=', 'sale')
             ->whereNull('sales.deleted_at')

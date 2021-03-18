@@ -411,11 +411,9 @@ const actions = {
     dispatch
   }, saleE) {
     commit(ENV_DATA_PROCESS, true)
-    const request = saleE || state.editSale
-
-    // const request = profile || state.editUser
+    console.log(saleE)
     await apiSale
-	  .sendUpdateRequest(request)
+	  .sendUpdateRequest(saleE)
 	  .then(data => {
         commit(SALE_UPDATED)
         commit(ENV_DATA_PROCESS, false)

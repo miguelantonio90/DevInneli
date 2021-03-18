@@ -24,20 +24,20 @@ const state = {
   loading: false,
   saved: false,
   newBank: {
-    count_type: '',
     name: '',
     count_number: '',
     currency: {},
     init_balance: 0.00,
+    payments_banks: [],
     date: '',
     description: ''
   },
   editBank: {
     id: '',
-    count_type: '',
     name: '',
     currency: {},
     count_number: '',
+    payments_banks: [],
     init_balance: 0.00,
     date: '',
     description: ''
@@ -62,6 +62,12 @@ const mutations = {
     state.isBankLoading = isLoading
   },
   [FETCHING_BANKS] (state, banks) {
+    banks.map(value => {
+      value.paymentBanks = []
+      value.payments_banks.forEach(v => {
+        value.paymentBanks.push(v.payment)
+      })
+    })
     state.banks = banks
   },
   [ENV_DATA_PROCESS] (state, isActionInProgress) {
@@ -70,7 +76,6 @@ const mutations = {
   [BANK_CREATED] (state) {
     state.showNewModal = false
     state.newBank = {
-      count_type: '',
       name: '',
       currency: {},
       count_number: '',
@@ -97,7 +102,6 @@ const mutations = {
     state.showEditModal = false
     state.editBank = {
 	  id: '',
-      count_type: '',
       name: '',
       currency: {},
       count_number: '',

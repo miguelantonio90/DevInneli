@@ -1,6 +1,7 @@
 <template>
   <v-container>
-    <v-row>
+    <app-loading v-show="loadingData" />
+    <v-row v-if="!loadingData">
       <v-col
         class="py-0"
         cols="12"
@@ -434,7 +435,7 @@
                               )
                           }}</span>
                         </v-tooltip>
-                        {{ article.cant }}
+                        {{ article.cant }} {{ article.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(JSON.parse(article.um)).name) + ')':'' }}
                       </td>
                       <td>
                         {{
@@ -650,6 +651,7 @@ export default {
   },
   data () {
     return {
+      loadingData: false,
       id: 'Sale',
       menu: false,
       fav: true,
@@ -776,10 +778,12 @@ export default {
     ...mapActions('article', ['getArticles']),
     ...mapActions('refund', ['openNewModal']),
     async loadInitData () {
+      this.loadingData = true
       this.localSales = []
       await this.getArticles()
       await this.getSales()
       this.switchLoadData(false)
+      this.loadingData = false
     },
     getLocalStates (item) {
       return item.state === 'open'

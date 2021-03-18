@@ -120,6 +120,7 @@
                           cols="12"
                           md="4"
                         >
+                          focus
                           <v-text-field-simplemask
                             v-model="article.barCode"
                             :label="$vuetify.lang.t('$vuetify.barCode')"

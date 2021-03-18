@@ -24,40 +24,6 @@
               cols="12"
               md="6"
             >
-              <v-autocomplete
-                v-model="editBank.count_type"
-                :label="$vuetify.lang.t('$vuetify.tax.type')"
-                disabled
-                :items="getTypeBank"
-              >
-                <template v-slot:selection="data">
-                  <i>
-                    {{ $vuetify.lang.t('$vuetify.payment.' + data.item) }}</i>
-                </template>
-                <template v-slot:item="data">
-                  <template
-                    v-if="typeof data.item !== 'object'"
-                  >
-                    <v-list-item-content
-                      v-text="$vuetify.lang.t('$vuetify.payment.' + data.item)"
-                    />
-                  </template>
-                  <template v-else>
-                    <v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          {{ $vuetify.lang.t('$vuetify.payment.' + data.item.text) }}
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item-icon>
-                  </template>
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
               <v-text-field
                 v-model="editBank.name"
                 :label="$vuetify.lang.t('$vuetify.firstName')"
@@ -167,6 +133,64 @@
               </template>
             </v-col>
             <v-col
+              class="py-0"
+              cols="12"
+              md="12"
+            >
+              <v-autocomplete
+                v-model="editBank.paymentBanks"
+                readonly
+                item-text="name"
+                required
+                chips
+                :filter="customFilter"
+                :items="payments"
+                :label="
+                  $vuetify.lang.t('$vuetify.payment.name')
+                "
+                :rules="formRule.required"
+                return-object
+                item-value="method"
+                multiple
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    @click="data.select"
+                  >
+                    {{
+                      $vuetify.lang.t(
+                        '$vuetify.payment.' +
+                          data.item.method
+                      )
+                    }}
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <template
+                    v-if="typeof data.item !== 'object'"
+                  >
+                    <v-list-item-content
+                      v-text="data.item"
+                    />
+                  </template>
+                  <template v-else>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{
+                          $vuetify.lang.t(
+                            '$vuetify.payment.' +
+                              data.item.method
+                          )
+                        }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col
               cols="12"
               md="12"
             >
@@ -230,6 +254,7 @@ export default {
   computed: {
     ...mapState('bank', ['saved', 'editBank', 'isActionInProgress']),
     ...mapState('exchangeRate', ['changes']),
+    ...mapState('payment', ['payments']),
     ...mapGetters('auth', ['user']),
     computedDateFormatted () {
       return this.formatDate(this.editBank.date)
@@ -262,8 +287,20 @@ export default {
       }
     }
   },
+  created () {
+    this.getPayments()
+  },
   methods: {
     ...mapActions('bank', ['updateBank', 'toogleEditModal']),
+    ...mapActions('payment', ['getPayments']),
+    customFilter (item, queryText, itemText) {
+      return (
+        this.$vuetify.lang
+          .t('$vuetify.payment.' + item.method)
+          .toLowerCase()
+          .indexOf(queryText.toLowerCase()) > -1
+      )
+    },
     inputColor (color) {
       this.editBank.color = color
     },

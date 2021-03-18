@@ -4,16 +4,11 @@
     <new-tax v-if="$store.state.tax.showNewModal" />
     <new-payment v-if="$store.state.payment.showNewModal" />
     <new-discount v-if="this.$store.state.discount.showNewModal" />
-    <v-card-title>
-      <v-icon @click="$emit('cancelExtraData')">
-        mdi-arrow-left-bold-circle
-      </v-icon> {{ $vuetify.lang.t('$vuetify.pay.extra_data') }}
-    </v-card-title>
     <v-row>
       <v-col
         class="py-0"
         cols="12"
-        md="6"
+        md="12"
       >
         <v-autocomplete
           v-model="sale.client"
@@ -104,7 +99,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="12"
       >
         <v-text-field
           v-model="sale.no_facture"
@@ -117,7 +112,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="3"
+        md="12"
       >
         <v-select
           v-model="sale.taxes"
@@ -160,7 +155,7 @@
       <v-col
         class="py-0"
         cols="12"
-        md="4"
+        md="12"
       >
         <v-select
           v-model="sale.discounts"
@@ -200,36 +195,20 @@
           </template>
         </v-select>
       </v-col>
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <list-pay
-          :edit="edit"
-          :sale="sale"
-          :total-price="parseFloat(totalPrice).toFixed(2)"
-          :total-tax="parseFloat(totalTax).toFixed(2)"
-          :total-discount="parseFloat(totalDiscount).toFixed(2)"
-          :sub-total="
-            subTotal ? parseFloat(subTotal).toFixed(2) : 0.0
-          "
-          :currency="user.company.currency"
-        />
-      </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import NewClient from '../client/NewClient'
-import NewTax from '../tax/NewTax'
-import NewPayment from '../payment/NewPayment'
-import NewDiscount from '../discount/NewDiscount'
-import ListPay from '../pay/ListPay'
+import NewClient from '../../client/NewClient'
+import NewTax from '../../tax/NewTax'
+import NewPayment from '../../payment/NewPayment'
+import NewDiscount from '../../discount/NewDiscount'
+import ListPay from '../../pay/ListPay'
 
 export default {
-  name: 'ExtraData',
-  components: { ListPay, NewPayment, NewTax, NewClient, NewDiscount },
+  name: 'SaleLeftDrawer',
+  components: { NewPayment, NewTax, NewClient, NewDiscount },
   props: {
     edit: {
       type: Boolean,

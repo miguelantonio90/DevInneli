@@ -4,11 +4,11 @@ namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class PaySale
+ * Class BankPayment
  * @package App
  * @method static findOrFail($id)
  * @method static latest()
@@ -16,31 +16,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static create(array $array)
  * @method static select(string $string, $raw)
  */
-class PaySale extends Model
+class BankPayment extends Model
 {
-    use Uuid, SoftDeletes;
+    use Uuid;
+    use SoftDeletes;
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
     protected $keyType = 'string';
     protected $guarded = [];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['bank_payment_id', 'sale_id'];
+    protected $fillable = ['bank_id', 'payment_id'];
 
-
-    public function sale(): HasMany
+    public function bank():HasOne
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasOne(Bank::class);
+    }
+
+    public function payment():HasOne
+    {
+        return $this->hasOne(Payment::class, 'id', 'payment_id');
     }
 
 
-    public function method(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'id', 'payment_id');
-    }
 }

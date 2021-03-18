@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use Questocat\Referral\Traits\UserReferral;
 
 /**
  * @method static findOrFail($id)
@@ -38,7 +39,8 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait;
+    use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait, UserReferral;
+
 
     public $incrementing = false;
     protected $dates = ['deleted_at'];
@@ -144,5 +146,25 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new MailResetPasswordNotification($token));
+    }
+
+    /**
+     * A user has a referrer.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(self::class, 'referred_by', 'affiliate_id')->with('company');
+    }
+
+    /**
+     * A user has many referrals.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referrals()
+    {
+        return $this->hasMany(self::class, 'referred_by', 'affiliate_id')->with('company');
     }
 }
