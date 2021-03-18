@@ -182,7 +182,6 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon
-                            id="btn_add_box"
                             v-bind="attrs"
                             v-on="on"
                             @click="$store.dispatch('boxes/toogleNewModal',true)"
