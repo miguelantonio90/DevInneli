@@ -483,7 +483,7 @@
           <v-btn
             class="mb-2"
             color="success"
-            :disabled="!formValid || isActionInProgress || !sale.box.id"
+            :disabled="!formValid || isActionInProgress || !sale.box"
             :loading="isActionInProgress"
             @click="saleHandler('preform')"
           >
