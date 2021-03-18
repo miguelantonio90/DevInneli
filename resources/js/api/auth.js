@@ -55,6 +55,9 @@ const readNotification = idNotification => {
   return api.post('user/read/notification/' + idNotification)
 }
 
+const affiliateRequest = (affiliateId) => {
+  return api.post('affiliate/' + affiliateId)
+}
 export default {
   getUserData,
   loginRequest,
@@ -65,5 +68,6 @@ export default {
   verifyResendRequest,
   verifyMailForgot,
   resetPassword,
-  readNotification
+  readNotification,
+  affiliateRequest
 }

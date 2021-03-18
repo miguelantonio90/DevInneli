@@ -33,6 +33,25 @@ export const publicRoute = [
     ]
   },
   {
+    path: '/affiliate/:affiliate_id',
+    component: LayoutAuth,
+    meta: {
+      title: 'Register'
+    },
+    redirect: '/auth/register/ref=:affiliate_id',
+    hidden: true,
+    children: [
+      {
+        path: 'affiliate',
+        name: 'affiliate',
+        meta: {
+          title: 'Register'
+        },
+        component: () => import('../views/auth/Register')
+      }
+    ]
+  },
+  {
     path: '/auth/register/:hash',
     component: LayoutAuth,
     hidden: true,
@@ -670,6 +689,18 @@ export const protectedRoute = [
             component: () => import('../views/client/ListClient')
           }
         ]
+      },
+      {
+        path: '/user/partners',
+        access: ['dashboard'],
+        name: 'partners',
+        meta: {
+          title: 'affiliate',
+          icon: 'mdi-account-network',
+          requiresAuth: true
+        },
+        children: [],
+        component: () => import('../views/partners/Partners')
       },
       {
         path: '/setting',

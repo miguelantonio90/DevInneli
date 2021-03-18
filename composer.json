@@ -21,7 +21,8 @@
     "laravel/passport": "^9.2",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^2.0",
-    "paypal/rest-api-sdk-php": "^1.14"
+    "paypal/rest-api-sdk-php": "^1.14",
+    "questocat/laravel-referral": "^1.0"
   },
   "require-dev": {
     "facade/ignition": "^2.0",

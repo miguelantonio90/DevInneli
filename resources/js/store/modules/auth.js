@@ -17,6 +17,7 @@ const IS_MANAGER = 'IS_MANAGER'
 const FAILED_CATCH = 'FAILED_CATCH'
 const UPDATE_ACCESS = 'UPDATE_ACCESS'
 const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION'
+const AFFILIATE_UPDATE = 'AFFILIATE_UPDATE'
 
 const state = {
   isLoggedIn: !!localStorage.getToken(),
@@ -29,6 +30,7 @@ const state = {
   loadingReset: false,
   successForgot: false,
   successReset: false,
+  affiliateId: null,
   access: [],
   notification: [],
   fromModel: {
@@ -200,6 +202,10 @@ const mutations = {
         title: msg
 	  })
     }
+  },
+  [AFFILIATE_UPDATE] (state, affiliateId) {
+    state.affiliateId = affiliateId
+    this._vm.$cookies.set('referral', affiliateId)
   }
 }
 
@@ -342,6 +348,19 @@ const actions = {
         commit(FAILED_CATCH, response)
         localStorage.removeToken()
 	  })
+  },
+
+  async sendAffiliateRequest ({ commit }, affiliateId) {
+    await auth
+      .affiliateRequest(affiliateId)
+      .then(({ data }) => {
+        commit(AFFILIATE_UPDATE, data.affiliate_id)
+      })
+      .catch(({ response }) => {
+        if (!response || response.status !== 404) return console.log('Something went wrong')
+
+        console.log('Affiliate does not exist. Register for our referral program here: https://inneli.dev/affiliate')
+      })
   }
 }
 

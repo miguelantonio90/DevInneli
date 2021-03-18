@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Questocat\Referral\ReferralServiceProvider::class,
 
         /*
          * Application Service Providers...

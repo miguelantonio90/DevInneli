@@ -3,7 +3,9 @@ import router from './router/'
 import store from './store/'
 import App from './App.vue'
 import VueTour from 'vue-tour'
+import VueCookies from 'vue-cookies'
 import IdleVue from 'idle-vue'
+import VueClipboard from 'vue-clipboard2'
 import vuetify from './plugins/vuetify'
 import './plugins/vuetify-mask.js'
 import * as AppComponents from './components'
@@ -17,6 +19,8 @@ import 'vue-tour/dist/vue-tour.css'
 
 Vue.use(HighchartsVue)
 Vue.use(VueTour)
+Vue.use(VueCookies)
+Vue.use(VueClipboard)
 
 const eventsHub = new Vue()
 

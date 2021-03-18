@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.json']], function () {
+Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.json','referral']], function () {
 
     //Testing routes
     Route::get('ping', 'PingController@index')->name('ping');
@@ -31,7 +32,11 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
     Route::get('company/email/{email}', 'CompanyController@companyByEmail');
 
-    Route::group(['middleware' => ['auth:api', 'respond.json']], function () {
+    Route::post('affiliate/{user:affiliate_id}', function (User $user) {
+        return $user->only('id','company_id' ,'firstName', 'affiliate_id');
+    })->middleware('referral');
+
+    Route::group(['middleware' => ['auth:api', 'respond.json','referral']], function () {
 
         Route::get('email/verify/{hash}', 'VerificationController@verify')->name('verification.verify');
 

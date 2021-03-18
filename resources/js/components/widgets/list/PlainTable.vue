@@ -20,7 +20,7 @@
         :items="items"
         hide-default-footer
       >
-        <template v-slot:item.avatar="{ item }">
+        <template v-slot:[`item.avatar`]="{ item }">
           <v-avatar class="ma-3">
             <img
               :src="item.avatar || `/assets/avatar/sign-no-photo-512.png`"
@@ -28,7 +28,7 @@
             >
           </v-avatar>
         </template>
-        <template v-slot:item.progress="{ item }">
+        <template v-slot:[`item.progress`]="{ item }">
           <strong>{{ Math.ceil(item.progress) }}%</strong>
           <!--<v-progress-linear
             :value="item.progress"
