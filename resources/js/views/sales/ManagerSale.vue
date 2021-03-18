@@ -386,7 +386,7 @@
                 <v-autocomplete
                   id="slc_box"
                   v-model="sale.box"
-                  style="margin: 15px"
+                  style="margin-left: 15px;margin-top: 15px"
                   :rules="formRule.country"
                   :items="localBoxes"
                   :disabled="managerSale"
@@ -437,10 +437,11 @@
                 <v-divider />
                 <v-row>
                   <v-col
-                    v-for="item in articlesFilter.slice(page*8 +1, page*8 + 9)"
+                    v-for="item in articlesFilter.slice(page*8, page*8 + 8)"
                     :key="item.id"
                     cols="12"
                     md="3"
+                    style="margin: 15px"
                   >
                     <article-sale
                       :article="item"
