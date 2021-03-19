@@ -506,9 +506,11 @@ export default {
     no_article: 'No exist articles in this shop, please first create articles',
     selectShop: 'You must select a store',
     discountGeneral: 'General discount',
+    clear_cart: 'Clear Cart',
     ticket: 'TICKET SALE',
     facture: 'Facture',
     cart: 'Cart',
+    cant_money: 'Cant of Money',
     state: {
       open: 'In process',
       preform: 'Preform',
@@ -731,6 +733,14 @@ export default {
      'If you get 10 people to sign up as your referrals, you get $ 100 as a thank you.',
     confirm_copied: 'Your referral link has been copied: ',
     error_copied: 'The text could not be copied'
+  },
+  accounting_category: {
+    name: 'Accounting Category',
+    accounting_accounts: 'Accounting Accounts',
+    actives: 'Actives',
+    pasives: 'Pasives',
+    income: 'Income',
+    expenses: 'Exprenses'
   },
   ...en
 }

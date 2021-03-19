@@ -4,7 +4,10 @@
     max-width="450"
     persistent
   >
-    <v-card>
+    <app-loading v-show="loadingData" />
+    <v-card
+      v-if="!loadingData"
+    >
       <v-card-title>
         <span class="headline">
           {{
@@ -25,25 +28,21 @@
           <v-row>
             <v-col
               v-if="openClose.box.state === 'close'"
-              class="py-0"
               cols="12"
               md="6"
             >
-              <v-select
+              <v-autocomplete
                 v-model="openClose.open_to"
-                :clearable="users.length > 1"
-                :items="users"
-                :label="$vuetify.lang.t('$vuetify.to') + ':'"
                 :rules="formRule.country"
-                item-text="firstName"
+                :items="users"
                 required
+                :label="$vuetify.lang.t('$vuetify.to') + ':'"
+                item-text="firstName"
                 return-object
-                style="margin-top: 15px"
               />
             </v-col>
             <v-col
               v-if="openClose.box.state !== 'open'"
-              class="py-0"
               cols="12"
               md="6"
             >
@@ -55,8 +54,9 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.0
+                  empty: 0.00
                 }"
+                :prefix="user.company.currency"
                 :properties="{
                   clearable: true
                 }"
@@ -92,7 +92,7 @@
                 :options="{
                   length: 15,
                   precision: 2,
-                  empty: 0.0
+                  empty: 0.00
                 }"
                 :properties="{
                   clearable: true
@@ -118,7 +118,7 @@
                 :value="
                   payment.total
                     ? parseFloat(payment.total).toFixed(2)
-                    : 0
+                    : 0.00
                 "
                 readonly
               />
@@ -134,16 +134,15 @@
                   :label="
                     $vuetify.lang.t('$vuetify.menu.refund')
                   "
-                  :rules="formRule.required"
                   :value="
                     openClose.totalRefunds
                       ? parseFloat(
                         openClose.totalRefunds
                       ).toFixed(2)
-                      : 0
+                      : 0.00
                   "
+                  :prefix="user.company.currency"
                   readonly
-                  required
                 />
               </template>
             </v-col>
@@ -196,8 +195,9 @@
                   :value="
                     total[1]
                       ? parseFloat(total[1]).toFixed(2)
-                      : 0
+                      : 0.00
                   "
+                  :prefix="user.company.currency"
                   readonly
                   required
                 />
@@ -238,6 +238,7 @@ export default {
   name: 'OpenCloseBox',
   data () {
     return {
+      loadingData: false,
       formValid: false,
       formRule: this.$rules,
       total: [0, 0, '']
@@ -248,15 +249,25 @@ export default {
     ...mapState('sale', ['sales']),
     ...mapState('refund', ['refunds']),
     ...mapState('user', ['users']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
+    isValid () {
+      return this.openClose.box.state === 'close' ? !!this.openClose.open_to : false
+    }
   },
   async created () {
+    this.loadingData = true
     this.formValid = false
+    await this.getUsers()
+    if (this.openClose.box.state !== 'close') {
+      this.calcTotal()
+    }
+    this.loadingData = false
   },
   methods: {
     ...mapActions('boxes', ['openCloseBox', 'toogleOpenCloseModal']),
     ...mapActions('user', ['getUsers']),
     calcTotal () {
+      console.log('asasasasasasasaas')
       this.total[1] =
           -1 *
           (parseFloat(this.openClose.open_money) +
@@ -268,7 +279,9 @@ export default {
     async openCloseBoxHandler () {
       if (this.$refs.form.validate()) {
         this.loading = true
-        await this.openCloseBox(this.openClose)
+        await this.openCloseBox(this.openClose).then((v) => {
+          window.location.reload()
+        })
       }
     }
   }

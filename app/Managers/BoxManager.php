@@ -156,14 +156,15 @@ class BoxManager extends BaseManager
         $managerSale = new SaleManager();
         $openClose['sales'] = $managerSale->filterSale($sales);
         $openClose['payments'] = PaymentManager::findAllByCompany();
+        foreach ($openClose['payments'] as $ps => $payment) {
+            $payment['total'] += round(0, 2);
+        }
 
         foreach ($openClose['sales'] as $k => $sale) {
-            foreach ($sale['pay_sales'] as $p => $pay) {
+            foreach ($sale['pays'] as $p => $pay) {
                 foreach ($openClose['payments'] as $ps => $payment) {
-                    if ($pay['payment_id'] === $payment['id']) {
-                        $payment['total'] += round($pay['cant'], 2);
-                    } else {
-                        $payment['total'] += round(0, 2);
+                    if ($pay->payment_id === $payment->id) {
+                        $payment['total'] += round($pay->cant, 2);
                     }
                 }
             }

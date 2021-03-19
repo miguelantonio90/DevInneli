@@ -6,7 +6,7 @@
     <v-speed-dial
       v-if="sale.articles.length > 0 && !showExtraData"
       v-model="fab"
-      style="margin-top: 0px; position: absolute;top: 15%; left: 0; z-index: 2"
+      style="margin-top: 10px; position: absolute;top: 15%; left: 0; z-index: 2"
       :top="top"
       :bottom="bottom"
       :right="right"
@@ -28,35 +28,62 @@
           </v-icon>
         </v-btn>
       </template>
-      <v-btn
-        fab
-        dark
-        small
-        color="green"
-        @click="showCartArticles=totalArticles > 0; showExtraData = false"
+      <v-tooltip
+        bottom
       >
-        {{ totalArticles }}
-        <v-icon>mdi-cart</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        color="indigo"
-        @click="showExtraData = true; showCartArticles=false"
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            fab
+            dark
+            v-bind="attrs"
+            small
+            color="green"
+            v-on="on"
+            @click="showCartArticles=totalArticles > 0; showExtraData = false"
+          >
+            {{ totalArticles }}
+            <v-icon>mdi-cart</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.menu.articles') }}</span>
+      </v-tooltip>
+      <v-tooltip
+        bottom
       >
-        <v-icon>mdi-file-document</v-icon>
-      </v-btn>
-      <v-btn
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            fab
+            dark
+            v-bind="attrs"
+            small
+            color="indigo"
+            v-on="on"
+            @click="showExtraData = true; showCartArticles=false"
+          >
+            <v-icon>mdi-file-document</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.sale.facture') }}</span>
+      </v-tooltip>
+      <v-tooltip
         v-if="!showCartArticles"
-        fab
-        dark
-        small
-        color="red"
-        @click="clearArticles"
+        bottom
       >
-        <v-icon>mdi-cart-off</v-icon>
-      </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            fab
+            dark
+            v-bind="attrs"
+            small
+            color="red"
+            v-on="on"
+            @click="clearArticles"
+          >
+            <v-icon>mdi-cart-off</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.sale.clear_cart') }}</span>
+      </v-tooltip>
     </v-speed-dial>
     <app-loading v-show="loadingData" />
     <v-card
@@ -108,7 +135,7 @@
                 return-object
                 required
                 :rules="formRule.country"
-                @change="updateDataArticle"
+                @change="changeShop"
               />
               <v-spacer />
               <v-menu
@@ -484,7 +511,7 @@
           <v-btn
             class="mb-2"
             color="success"
-            :disabled="!formValid || isActionInProgress || !sale.box"
+            :disabled="!formValid || isActionInProgress || !sale.box || sale.articles.length === 0"
             :loading="isActionInProgress"
             @click="saleHandler('preform')"
           >
@@ -497,7 +524,7 @@
             v-show="(sale.state === 'preform' && sale.pays.length > 0) || sale.state === 'open'"
             class="mb-2"
             color="success"
-            :disabled="!formValid || isActionInProgress"
+            :disabled="!formValid || isActionInProgress || !sale.box || sale.articles.length === 0"
             :loading="isActionInProgress"
             @click="saleHandler('open')"
           >
@@ -507,7 +534,7 @@
           <v-btn
             class="mb-2"
             color="primary"
-            :disabled="!formValid || isActionInProgress"
+            :disabled="!formValid || isActionInProgress || !sale.box || sale.articles.length === 0"
             :loading="isActionInProgress"
             @click="saleHandler('accepted')"
           >
@@ -792,8 +819,11 @@ export default {
     ...mapActions('sale', ['getSales', 'createSale', 'updateSale', 'fetchSaleNumber']),
     ...mapActions('discount', ['getDiscounts']),
     ...mapActions('modifiers', ['getModifiers']),
+    changeShop () {
+      this.updateDataArticle()
+      this.clearArticles()
+    },
     clearArticles () {
-      console.log(this.totalArticles)
       this.sale.articles.forEach((art) => {
         this.articlesFilter.filter(article => article.id === art.id)[0].cant = 1
         art.cant = 1
