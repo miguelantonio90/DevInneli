@@ -734,5 +734,13 @@ export default {
     confirm_copied: 'Your referral link has been copied: ',
     error_copied: 'The text could not be copied'
   },
+  accounting_category: {
+    name: 'Accounting Category',
+    accounting_accounts: 'Accounting Accounts',
+    actives: 'Actives',
+    pasives: 'Pasives',
+    income: 'Income',
+    expenses: 'Exprenses'
+  },
   ...en
 }

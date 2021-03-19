@@ -740,5 +740,13 @@ export default {
     confirm_copied: 'Se copió su enlace de referencia: ',
     error_copied: 'No se pudo copiar el texto'
   },
+  accounting_category: {
+    name: 'Categoría contable',
+    accounting_accounts: 'Cuentas contable',
+    actives: 'Activos',
+    pasives: 'Pasivos',
+    income: 'Ingresos',
+    expenses: 'Egresos'
+  },
   ...es
 }
