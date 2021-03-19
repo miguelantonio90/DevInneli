@@ -42,7 +42,7 @@ const state = {
     sales: [],
     open_money: 0.0,
     close_money: 0.0,
-    open_to: {},
+    open_to: null,
     closeBy: {}
   },
   showImportModal: false,

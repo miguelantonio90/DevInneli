@@ -504,13 +504,17 @@ export default {
   sale: {
     sale: 'Venta',
     online_text: 'Esta venta se realiza de forma online, y se realizará por la Caja Digital de manera automática',
-    selectArticle: 'Por favor seleccione el artículo',
+    selectArticle: 'Por favor seleccione el artí' +
+        '' +
+        '',
     no_article: 'No existen artículos en esta tienda, por favor primero adicione artículos',
     selectShop: 'Debe seleccionar una tienda',
     discountGeneral: 'Descuento Total por venta',
+    clear_cart: 'Limpiar Carrito',
     ticket: 'TICKET DE VENTA',
     facture: 'Factura',
     cart: 'Carrito',
+    cant_money: 'Cantidad de dinero',
     state: {
       open: 'En proceso',
       preform: 'Preforma',

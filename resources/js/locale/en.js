@@ -506,9 +506,11 @@ export default {
     no_article: 'No exist articles in this shop, please first create articles',
     selectShop: 'You must select a store',
     discountGeneral: 'General discount',
+    clear_cart: 'Clear Cart',
     ticket: 'TICKET SALE',
     facture: 'Facture',
     cart: 'Cart',
+    cant_money: 'Cant of Money',
     state: {
       open: 'In process',
       preform: 'Preform',

@@ -435,7 +435,7 @@
                               )
                           }}</span>
                         </v-tooltip>
-                        {{ article.cant }} {{ article.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(JSON.parse(article.um)).name) + ')':'' }}
+                        {{ article.cant }} {{ article.um? '('+$vuetify.lang.t('$vuetify.um.' + JSON.parse(article.um).name) + ')':'' }}
                       </td>
                       <td>
                         {{

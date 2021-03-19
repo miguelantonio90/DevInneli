@@ -18,6 +18,10 @@ class CreateBankPaymentsTable extends BaseMigration
             $table->string('payment_id')->nullable()->references('id')->on('payments');
         });
         parent::up($tableName, $company);
+        Schema::table('refunds', function($table) {
+            $table->foreignUuid('bank_payment_id')->nullable()->references('id')->on('bank_payments')
+                ->onDelete('cascade');
+        });
     }
 
     /**

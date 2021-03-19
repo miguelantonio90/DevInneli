@@ -26,7 +26,8 @@ const state = {
   newRefund: {
     sale: {},
     article: {},
-    box: {},
+    box: null,
+    bank: null,
     cant: 0,
     money: 0
   },
@@ -35,6 +36,7 @@ const state = {
     sale: {},
     article: {},
     box: {},
+    bank: {},
     cant: 0,
     money: 0
   },
