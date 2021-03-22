@@ -16,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use Questocat\Referral\Traits\UserReferral;
+use Rinvex\Subscriptions\Traits\HasSubscriptions;
 
 /**
  * @method static findOrFail($id)
@@ -39,7 +40,7 @@ use Questocat\Referral\Traits\UserReferral;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait, UserReferral;
+    use SoftDeletes, Notifiable, HasApiTokens, Uuid, SoftCascadeTrait, UserReferral, HasSubscriptions;
 
 
     public $incrementing = false;
