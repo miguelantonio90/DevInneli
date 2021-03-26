@@ -284,6 +284,20 @@ export default {
       },
       {
         title: {
+          name: 'manager_accounting',
+          value: false
+        },
+        actions: {
+          list: true,
+          create: false,
+          edit: false,
+          delete: false,
+          import: false,
+          export: false
+        }
+      },
+      {
+        title: {
           name: 'manager_mod',
           value: false
         },

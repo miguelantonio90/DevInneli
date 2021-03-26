@@ -1,34 +1,33 @@
 <template>
   <v-card>
-    <v-card-title v-if="title !== ''">
-      <v-app-bar
-        flat
-        dense
-        color="rgba(0, 0, 0, 0)"
+    <v-app-bar
+      v-if="title !== ''"
+      flat
+      dense
+      color="rgba(0, 0, 0, 0)"
+    >
+      <h4>{{ title }}</h4>
+      <v-spacer />
+      <v-tooltip
+        v-if="viewTourButton"
+        bottom
       >
-        {{ title }}
-        <v-spacer />
-        <v-tooltip
-          v-if="viewTourButton"
-          bottom
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="teal darken-2"
-              dark
-              v-bind="attrs"
-              icon
-              medium
-              v-on="on"
-              @click="tourButtonClicked"
-            >
-              <v-icon>mdi-help</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
-        </v-tooltip>
-      </v-app-bar>
-    </v-card-title>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="teal darken-2"
+            dark
+            v-bind="attrs"
+            icon
+            medium
+            v-on="on"
+            @click="tourButtonClicked"
+          >
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $vuetify.lang.t('$vuetify.guide') }}</span>
+      </v-tooltip>
+    </v-app-bar>
     <v-container
       v-if="viewShowFilter"
       fluid

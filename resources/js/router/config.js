@@ -550,6 +550,56 @@ export const protectedRoute = [
         ]
       },
       {
+        path: '/accounting',
+        component: RouteWrapper,
+        redirect: '/accounting/accounting.list',
+        access: ['manager_accounting'],
+        meta: {
+          title: 'account_classify',
+          icon: 'mdi-book-open-page-variant',
+          requiresAuth: true,
+          group: 'accounting'
+        },
+        children: [
+          {
+            path: '/accounting/accounting.list',
+            name: 'account_classify',
+            access: 'list',
+            meta: {
+              title: 'account_classify',
+              icon: 'mdi-book-open-page-variant',
+              requiresAuth: true
+            },
+            component: () => import('../views/account/category/ListAccountCategory')
+          },
+          {
+            path: '/accounting/account.list',
+            name: 'accounting_account',
+            access: 'list',
+            props: true,
+            meta: {
+              title: 'accountings',
+              icon: 'mdi-book-open-page-variant',
+              requiresAuth: true
+            },
+            component: () => import('../views/account/accounting/ListAccountingAccount')
+          },
+          {
+            path: '/accounting/accounting_move.list/:account',
+            name: 'account_move_by_category',
+            access: 'list',
+            props: true,
+            meta: {
+              title: 'account_moves',
+              icon: 'mdi-book-open-page-variant',
+              hiddenInMenu: true,
+              requiresAuth: true
+            },
+            component: () => import('../views/account/move/ListAccountMove')
+          }
+        ]
+      },
+      {
         path: '/resume',
         component: RouteWrapper,
         redirect: '/resume/sell_product.list',

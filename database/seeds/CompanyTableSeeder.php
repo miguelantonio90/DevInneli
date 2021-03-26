@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Accounting\AccountingCategory;
 use App\Company;
 use App\Payment;
 use App\Position;
@@ -175,5 +176,6 @@ class CompanyTableSeeder extends Seeder
                 ]
             );
         }
+        AccountingCategory::createFirsts($company->id);
     }
 }

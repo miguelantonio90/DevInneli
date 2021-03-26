@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Accounting\AccountingCategory;
 use App\Bank;
-use App\BankPayment;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Position;
@@ -19,7 +19,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -204,6 +203,13 @@ class RegisterController extends Controller
                     ]
                 ],
                 [
+                    'title' => ['name' => 'manager_accounting', 'value' => true],
+                    'actions' => [
+                        'just_yours' => false, 'list' => true, 'create' => true,
+                        'edit' => true, 'delete' => true, 'import' => true, 'export' => true
+                    ]
+                ],
+                [
                     'title' => ['name' => 'manager_assistence', 'value' => true],
                     'actions' => [
                         'just_yours' => false, 'list' => true, 'create' => true,
@@ -286,6 +292,7 @@ class RegisterController extends Controller
                 $user = User::createFirst($data, $company, $position);
                 $shop = Shop::createFirst($data, $company);
                 $user->shops()->saveMany([$shop]);
+                AccountingCategory::createFirsts($company->id);
                 $supervisor = new Position();
                 Bank::createFirst($company, $user);
                 $supervisor->company_id = $company->id;
@@ -380,6 +387,13 @@ class RegisterController extends Controller
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
+                        'actions' => [
+                            'just_yours' => false, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
+                    ],
+                    [
+                        'title' => ['name' => 'manager_accounting', 'value' => false],
                         'actions' => [
                             'just_yours' => false, 'list' => false, 'create' => false,
                             'edit' => false, 'delete' => false, 'import' => false, 'export' => false
@@ -543,6 +557,13 @@ class RegisterController extends Controller
                     ],
                     [
                         'title' => ['name' => 'manager_employer', 'value' => false],
+                        'actions' => [
+                            'just_yours' => true, 'list' => false, 'create' => false,
+                            'edit' => false, 'delete' => false, 'import' => false, 'export' => false
+                        ]
+                    ],
+                    [
+                        'title' => ['name' => 'manager_accounting', 'value' => false],
                         'actions' => [
                             'just_yours' => true, 'list' => false, 'create' => false,
                             'edit' => false, 'delete' => false, 'import' => false, 'export' => false

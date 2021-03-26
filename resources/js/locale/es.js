@@ -67,6 +67,9 @@ export default {
   referralLink: 'Link de refrencia',
   // menu
   menu: {
+    sub_file: 'Sub Archivo Contable',
+    account_move: 'Movimiento Contable',
+    account_moves: 'Movimientos Contable',
     bank: 'Banco',
     setting: 'Configuración',
     shop_online: 'Tienda Online',
@@ -99,6 +102,7 @@ export default {
     exchange_rate: 'Moneda extranjera',
     exchange_rate_list: 'Lista Moneda Extranjera',
     category_list: 'Lista de Categorías',
+    accounting_category_list: 'Lista de Categorías Contables',
     bank_list: 'Lista de Bancos',
     boxes_list: 'Lista de Cajas',
     product_list: 'Lista de Productos',
@@ -109,6 +113,9 @@ export default {
     supplier: 'Proveedores',
     supplier_list: 'Lista de Proveedores',
     resume: 'Resumen',
+    account_classify: 'Archivo Contable',
+    accountings: 'Cuentas Contables',
+    accounting: 'Cuenta Contable',
     sell_product: 'Venta por Productos',
     sell_category: 'Venta por Categorías',
     sell_user: 'Venta por Empleado',
@@ -179,6 +186,7 @@ export default {
   },
   messages: {
     empty_elements: 'No existen elementos.',
+    no_delete_default: 'No se puede ejecutar esta función. Este elemento es por defecto',
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
     warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
@@ -253,6 +261,7 @@ export default {
     newF: 'Nueva',
     edit: 'Editar',
     show: 'Mostrar',
+    show_p: 'Mostrar {0}',
     delete: 'Eliminar',
     list: 'Listar',
     save: 'Guardar',
@@ -310,6 +319,7 @@ export default {
       transport: 'Trasladar Artículos',
       manager_vending: 'Gestionar Ventas',
       manager_refunds: 'Gestionar Reembolsos',
+      manager_accounting: 'Gestionar Cuentas Contables',
       manager_category: 'Gestionar Categorías',
       manager_mod: 'Gestionar Modificadores',
       manager_supplier: 'Gestionar Proveedores',
@@ -347,6 +357,7 @@ export default {
     others: 'Otros',
     fieldColor: 'Elige un color',
     select_all: 'Seleccionar Todos',
+    select_account: 'Seleccionar Cuenta',
     select_one: 'Seleccionar',
     active_select_filter: 'Filtros de selección activos',
     active_many_filter: 'Seleccionar filtros activos (de muchos)',
@@ -594,6 +605,8 @@ export default {
   boxes: {
     difference: 'Diferencia',
     init: 'Balance Inicial',
+    current: 'Balance Actual',
+    future: 'Balance Futuro',
     final: 'Balance Final'
   },
   tour: {
@@ -744,9 +757,21 @@ export default {
     name: 'Categoría contable',
     accounting_accounts: 'Cuentas contable',
     actives: 'Activos',
-    pasives: 'Pasivos',
-    income: 'Ingresos',
-    expenses: 'Egresos'
+    passives: 'Pasivos',
+    incomes: 'Ingresos',
+    expenses: 'Egresos',
+    code: 'Código',
+    nature: 'Naturaleza',
+    creditor: 'Acreedora',
+    debtor: 'Deudora',
+    debit: 'Debe(Débito)',
+    assets: 'Haber(Crédito)',
+    description_nature: {
+      creditor: 'Por su naturaleza aumentan su saldo al registrar un crédito (haber, abono).\n' +
+          'Por contra, se reduce su saldo al hacer un registro de débito (haber, abono) en ellas.',
+      debtor: 'Por su naturaleza disminuye su saldo al registrar un crédito (haber, abono).\n' +
+          'Por contra, se aumenta su saldo al hacer un registro de débito (haber, abono) en ellas.\n'
+    }
   },
   ...es
 }
