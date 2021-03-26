@@ -66,6 +66,12 @@ Route::group(['namespace' => 'Api', 'as' => 'api.', 'middleware' => ['respond.js
 
         Route::resource('client', 'ClientController');
 
+        Route::resource('accounting/category', 'Accounting\AccountingController');
+        Route::post('accounting/category/tree', 'Accounting\AccountingController@getTree')->name('getTree');
+        Route::resource('accounting/move', 'Accounting\MoveController');
+        Route::post('accounting/move/account', 'Accounting\MoveController@getMoveAccount')->name('getMoveAccount');
+
+        Route::resource('accounting/account', 'Accounting\AccountController');
         Route::resource('category', 'CategoryController');
         Route::post('category/shops', 'CategoryController@getCategoriesShop')->name('getCategoriesShop');
 

@@ -15,10 +15,16 @@ class CreateAccountingCategoriesTable extends BaseMigration
         Schema::create('accounting_categories', function (Blueprint $table) {
             $table->string('name');
             $table->string('color');
-            $table->string('description');
+            $table->enum('nature', ['creditor', 'debtor'])->default('creditor');
+            $table->boolean('default_category')->default(false);
+            $table->string('description')->nullable();
 
         });
         parent::up($tableName, $company);
+        Schema::table('accounting_categories', function($table) {
+            $table->foreignUuid('parent_id')->nullable()->references('id')->on('accounting_categories')
+                ->onDelete('cascade');
+        });
     }
 
     /**

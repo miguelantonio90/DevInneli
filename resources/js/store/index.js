@@ -6,6 +6,9 @@ import VuexPersistence from 'vuex-persist'
 import app from './modules/app'
 import auth from './modules/auth'
 import user from './modules/user'
+import accountCategory from './modules/accountCategory'
+import accountMove from './modules/accountMove'
+import account from './modules/account'
 import assistance from './modules/assistance'
 import role from './modules/role'
 import keys from './modules/keys'
@@ -56,6 +59,9 @@ const store = new Vuex.Store({
     openclose,
     settings,
     user,
+    accountCategory,
+    accountMove,
+    account,
     assistance,
     role,
     keys,

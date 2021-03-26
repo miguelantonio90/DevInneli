@@ -67,6 +67,9 @@ export default {
   referralLink: 'Referral link',
   // menu
   menu: {
+    sub_file: 'Sub file Account',
+    account_move: 'Move',
+    account_moves: 'Moves',
     bank: 'Bank',
     setting: 'Configuration',
     shop_online: 'Online Shop',
@@ -99,6 +102,7 @@ export default {
     exchange_rate: 'Foreign currency',
     exchange_rate_list: 'List of Foreign currency',
     category_list: 'List of Categories',
+    accounting_category_list: 'List of Categories of Accounting Account ',
     bank_list: 'Bank List',
     boxes_list: 'List of Boxes',
     product_list: 'List of Products',
@@ -109,6 +113,9 @@ export default {
     supplier: 'Suppliers',
     supplier_list: 'List of Suppliers',
     resume: 'Summary',
+    account_classify: 'Account File',
+    accountings: 'Accounting Accounts',
+    accounting: 'Accounting Account',
     sell_product: 'Sale by Products',
     sell_category: 'Sale by Categories',
     sell_user: 'Sale by Employee',
@@ -180,6 +187,7 @@ export default {
   // error
   messages: {
     empty_elements: 'No exist elements.',
+    no_delete_default: 'You can\'t execute this function. This element is by default',
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
     warning_delete: 'This action cannot be reversed!',
@@ -252,6 +260,7 @@ export default {
     newF: 'New',
     edit: 'Edit',
     show: 'Show',
+    show_p: 'Show {0}',
     delete: 'Delete',
     list: 'List',
     save: 'Save',
@@ -309,6 +318,7 @@ export default {
       transport: 'Move Items',
       manager_vending: 'Manage Sales',
       manager_refunds: 'Manage Refunds',
+      manager_accounting: 'Manager Accounting Account',
       manager_category: 'Manage Categories',
       manager_mod: 'Manage Modifiers',
       manager_supplier: 'Manage Suppliers',
@@ -346,6 +356,7 @@ export default {
     others: 'Others',
     fieldColor: 'Choose a color',
     select_all: 'Select All',
+    select_account: 'Select Account',
     select_one: 'Select',
     active_select_filter: 'Active selection filters',
     active_many_filter: 'Select active filters (out of many)',
@@ -590,6 +601,8 @@ export default {
   boxes: {
     difference: 'Difference',
     init: ' Initial Balance',
+    current: 'CurrentBalance',
+    future: 'Future Balance',
     final: 'Final Balance'
   },
   tour: {
@@ -738,9 +751,21 @@ export default {
     name: 'Accounting Category',
     accounting_accounts: 'Accounting Accounts',
     actives: 'Actives',
-    pasives: 'Pasives',
-    income: 'Income',
-    expenses: 'Exprenses'
+    passives: 'Passives',
+    incomes: 'Incomes',
+    expenses: 'Expenses',
+    code: 'Code',
+    nature: 'Nature',
+    creditor: 'Creditor',
+    debtor: 'Debtor',
+    debit: 'Debit',
+    assets: 'Assets(Credit)',
+    description_nature: {
+      creditor: 'By their nature, they increase their balance when registering a credit (credit, credit).\n' +
+              'On the other hand, your balance is reduced by making a debit record (credit, credit) in them\n',
+      debtor: 'By its nature, your balance decreases when you register a credit (credit, credit).\n' +
+              'On the other hand, your balance is increased by making a debit record (credit, credit) in them.\n'
+    }
   },
   ...en
 }
