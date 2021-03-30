@@ -59,7 +59,7 @@
             </v-col>
             <v-col
               cols="12"
-              md="5"
+              md="4"
             >
               <v-text-field
                 v-model="newClient.email"
@@ -71,7 +71,18 @@
             </v-col>
             <v-col
               cols="12"
-              md="7"
+              md="4"
+            >
+              <v-text-field
+                v-model="newClient.rnc"
+                :label="$vuetify.lang.t('$vuetify.fiscal.rnc')"
+                :hint="$vuetify.lang.t('$vuetify.hints.rnc')"
+                required
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
             >
               <vue-tel-input-vuetify
                 v-model="newClient.phone"

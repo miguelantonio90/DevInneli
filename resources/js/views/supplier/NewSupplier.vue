@@ -79,6 +79,17 @@
               cols="12"
               md="6"
             >
+              <v-text-field
+                v-model="newSupplier.rnc"
+                :label="$vuetify.lang.t('$vuetify.fiscal.rnc')"
+                :hint="$vuetify.lang.t('$vuetify.hints.rnc')"
+                required
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
               <vue-tel-input-vuetify
                 v-model="newSupplier.phone"
                 :placeholder="
