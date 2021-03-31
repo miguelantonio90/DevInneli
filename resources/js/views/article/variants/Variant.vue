@@ -8,7 +8,7 @@
         <v-card-title>
           <span class="headline">{{
             $vuetify.lang.t(
-              newVariant
+              !newVariant
                 ? "$vuetify.titles.edit"
                 : "$vuetify.titles.newF",
               [this.$vuetify.lang.t("$vuetify.variants.variant")]
@@ -49,6 +49,7 @@
                       '$vuetify.variants.options'
                     )
                   "
+                  :hint="$vuetify.lang.t('$vuetify.hints.press_enter')"
                   chips
                   deletable-chips
                   class="tag-input"
@@ -80,30 +81,72 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <image-dialog
-      :dialog="image"
-      :images="itemImg.images"
-      @saveImage="saveImage"
-      @closeDialog="image = false"
+    <!--v-card v-if="image">
+      <v-card-subtitle>
+        <v-list-item two-line>
+          <v-list-item-title>
+            <span
+              v-if="item.id"
+              class="subtitle-2 font-weight-light"
+            />
+          </v-list-item-title>
+          {{
+            this.$vuetify.lang.t("$vuetify.representation.image")
+          }}
+          <v-list-item-icon>
+            <v-spacer />
+            <v-icon
+              class="mr-2"
+              small
+              color="primary"
+              @click="saveImage"
+            >
+              mdi-check
+            </v-icon>
+          </v-list-item-icon>
+        </v-list-item>
+      </v-card-subtitle>
+      <v-card-text>
+        <div
+          id="multiple-image"
+          style="display: flex; justify-content: center;"
+        >
+          <app-upload-multiple-image
+            :data-images="item.images"
+            :upload-success="uploadImage"
+          />
+        </div>
+      </v-card-text>
+    </v-card-->
+    <representation
+      v-if="image"
+      :show-close="true"
+      :article-images="item.images"
+      :article-color="item.color"
+      @inputColor="inputColor"
+      @uploadImage="uploadImage"
+      @closeDialog="closeArticleRepresentation"
     />
     <template>
-      <v-chip
-        v-for="variant in article.variants"
-        :key="variant.name"
-        close
-        close-icon="mdi-delete"
-        color="success"
-        text-color="white"
-        @click:close="removeVariant(variant)"
-      >
-        <v-icon
-          left
-          @click="editVariant(variant)"
+      <template>
+        <v-chip
+          v-for="variant in article.variants"
+          :key="variant.name"
+          close
+          close-icon="mdi-delete"
+          color="success"
+          text-color="white"
+          @click:close="removeVariant(variant)"
         >
-          mdi-pencil
-        </v-icon>
-        {{ variant.name }}
-      </v-chip>
+          <v-icon
+            left
+            @click="editVariant(variant)"
+          >
+            mdi-pencil
+          </v-icon>
+          {{ variant.name }}
+        </v-chip>
+      </template>
     </template>
     <app-data-table
       :view-show-filter="false"
@@ -115,28 +158,25 @@
       @delete-row="deleteVariantValue($event)"
     >
       <template v-slot:item.images="{ item }">
-        <template v-if="item.images.length === 0">
-          <!--div
-            id="multiple-image"
-            style="display: flex; justify-content: center;"
-          >
-            <app-upload-multiple-image
-              :data-images="item.images"
-              :upload-success="uploadImage"
-            />
-          </div-->
-          <div class="my-2">
-            <v-btn
-              color="primary"
-              fab
-              x-small
-              dark
-              @click="showImageDialog(item)"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </div>
-        </template>
+        <v-chip
+          :key="item.name"
+          style="width: 50%"
+          @click="showArticleRepresentation(item)"
+        >
+          <v-avatar
+            v-if="item.color && item.images.length === 0"
+            class="white--text"
+            :color="item.color"
+            left
+            @click="showArticleRepresentation(item)"
+          />
+          <v-img
+            v-else
+            style="width: 15%;border-radius: 50%"
+            :src="item.images.filter(im=>im.default)[0].path"
+            @click="showArticleRepresentation(item)"
+          />
+        </v-chip>
       </template>
       <template v-slot:item.price="{ item }">
         <v-edit-dialog
@@ -294,14 +334,13 @@
     </app-data-table>
   </v-container>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
-import ImageDialog from './imageDialog'
+import Representation from '../representation/Representation'
 
 export default {
   name: 'Variant',
-  components: { ImageDialog },
+  components: { Representation },
   props: {
     article: {
       type: Object,
@@ -335,6 +374,7 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.representation.image'),
+          width: '10%',
           value: 'images'
         },
         {
@@ -393,15 +433,24 @@ export default {
     this.ref = parseFloat(this.article.ref) + 1
   },
   methods: {
-    showImageDialog (item) {
+    closeArticleRepresentation () {
+      this.image = false
+    },
+    showArticleRepresentation (item) {
       this.image = true
       this.item = item
     },
-    saveImage (images) {
-      this.item.images = images
+    saveImage () {
+      this.image = false
     },
-    uploadImage (formData, index, fileList) {
-      console.log(index, fileList, formData)
+    inputColor (color) {
+      this.item.color = color
+      this.article.images = []
+      this.image = false
+    },
+    uploadImage (images) {
+      this.item.images = images
+      this.image = false
     },
     numbers (event) {
       const regex = new RegExp('^\\d+(.\\d{1,2})?$')
@@ -461,6 +510,7 @@ export default {
                                   ? localArticle[0].articles_shops
                                   : [],
               images: [],
+              color: '#1FBC9C',
               name: localValue.toString(),
               price:
                                 localArticle.length > 0
@@ -523,6 +573,8 @@ export default {
                                       : localValue.toString() +
                                           '/' +
                                           v.name.toString(),
+                images: [],
+                color: '#1FBC9C',
                 price:
                                     localArticle.length > 0
                                       ? parseFloat(
@@ -583,6 +635,7 @@ export default {
       this.dialog = true
     },
     deleteVariantValue (item) {
+      console.log(item)
       this.$Swal
         .fire({
           title: this.$vuetify.lang.t('$vuetify.titles.delete', [
@@ -600,9 +653,10 @@ export default {
           confirmButtonColor: 'red'
         })
         .then(result => {
+          console.log(result.value)
           if (result.value) {
             if (!item.id) {
-              this.article.variant_values.splice(item, 1)
+              this.article.variant_values.splice(this.article.variant_values.indexOf(item), 1)
             }
             if (this.article.variants.length === 1) {
               this.article.variants[0].value.length === 1

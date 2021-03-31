@@ -68,6 +68,7 @@ class ArticleManager extends BaseManager
             $articles = Articles::latest()
                 ->where('company_id', '=', $company->id)
                 ->whereNull('deleted_at')
+                ->whereNull('parent_id')
                 ->with('company')
                 ->with([
                     'category' => function ($q) use ($company) {
@@ -100,6 +101,8 @@ class ArticleManager extends BaseManager
             $shopNames = [];
             foreach ($article['articlesShops'] as $sh => $shop) {
                 $shopNames[$sh] = $shop['shops']['name'];
+                $shop['onlineSale'] = (boolean)$shop['onlineSale'];
+                $shop['personSale'] = (boolean)$shop['personSale'];
             }
             $articles[$k]['shopsNames'] = array_unique($shopNames);
 
@@ -108,6 +111,8 @@ class ArticleManager extends BaseManager
                 $shopV['images'] = ArticleImage::latest()->where('article_id', '=', $shopV['id'])->get();
                 foreach ($shopV['articlesShops'] as $i => $v) {
                     $shopVariant[$sh] = $v['shops']['name'];
+                    $v['onlineSale'] = (boolean)$v['onlineSale'];
+                    $v['personSale'] = (boolean)$v['personSale'];
                 }
                 $articles[$k]['variantValues'][$sh]['shopsNames'] = array_unique($shopVariant);
                 if (round($articles[$k]['variantValues'][$sh]['price'], 2) === 0.00) {
@@ -156,7 +161,7 @@ class ArticleManager extends BaseManager
                         $q->orderBy('article_images.default', 'desc');
                     }
                 ])
-                ->where('category_id','=', $categorId)
+                ->where('category_id','=', $categoryId)
                 ->get();
         } else {
             $company = CompanyManager::getCompanyByAdmin();
@@ -411,6 +416,9 @@ class ArticleManager extends BaseManager
         }
         if (isset($data['cost'])) {
             $article->cost = $data['cost'];
+        }
+        if (isset($data['onlinePrice'])) {
+            $article->onlinePrice = $data['onlinePrice'];
         }
         if (isset($data['price'])) {
             $article->price = $data['price'];
