@@ -16,6 +16,7 @@ class CreateSupplierTable extends BaseMigration
             $table->string('name');
             $table->string('identity')->nullable();
             $table->string('phone')->nullable();
+            $table->string('rnc')->nullable();
             $table->string('email')->nullable();
             $table->string('country')->nullable();
             $table->string('address')->nullable();

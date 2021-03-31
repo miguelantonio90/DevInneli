@@ -120,7 +120,6 @@
                           cols="12"
                           md="4"
                         >
-                          focus
                           <v-text-field-simplemask
                             v-model="article.barCode"
                             :label="$vuetify.lang.t('$vuetify.barCode')"
@@ -195,11 +194,14 @@
                           <v-select
                             v-model="article.category"
                             :items="categories"
+                            clearable
                             :label="$vuetify.lang.t('$vuetify.menu.category')"
                             item-text="name"
                             :loading="isCategoryLoading"
                             :disabled="!!isCategoryLoading"
                             return-object
+                            required
+                            :rules="formRule.country"
                           >
                             <template v-slot:append-outer>
                               <v-tooltip bottom>
@@ -509,67 +511,12 @@
 
               <v-stepper-content :step="`${article.composite ? 3 : 4}`">
                 <v-card>
-                  <v-card-text>
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        md="12"
-                      >
-                        <v-radio-group
-                          v-model="representation"
-                          row
-                        >
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              md="4"
-                            >
-                              <v-radio
-                                :label="$vuetify.lang.t('$vuetify.representation.image')"
-                                value="image"
-                              />
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              md="8"
-                            >
-                              <v-radio
-                                :label="$vuetify.lang.t('$vuetify.representation.color_shape')"
-                                value="color"
-                              />
-                            </v-col>
-                          </v-row>
-                        </v-radio-group>
-                      </v-col>
-                      <v-row>
-                        <v-col
-                          v-show="representation===`image`"
-                          cols="12"
-                          md="12"
-                        >
-                          <div
-                            id="multiple-image"
-                            style="display: flex; justify-content: center;"
-                          >
-                            <app-upload-multiple-image
-                              :data-images="article.images"
-                              :upload-success="uploadImage"
-                            />
-                          </div>
-                        </v-col>
-                        <v-col
-                          v-show="representation===`color`"
-                          cols="12"
-                          md="9"
-                        >
-                          <app-color-picker
-                            :value="article.color || ``"
-                            @input="inputColor"
-                          />
-                        </v-col>
-                      </v-row>
-                    </v-row>
-                  </v-card-text>
+                  <representation
+                    :article-images="article.images"
+                    :article-color="article.color"
+                    @inputColor="inputColor"
+                    @uploadImage="uploadImage"
+                  />
                   <v-card-actions>
                     <v-btn
                       text
@@ -616,10 +563,11 @@ import NewTax from '../tax/NewTax'
 import ShopsArticles from './shop/ShopsArticles'
 import CompositeList from './composite/CompositeList'
 import Variant from './variants/Variant'
+import Representation from './representation/Representation'
 
 export default {
   name: 'ManagerArticle',
-  components: { NewCategory, NewTax, CompositeList, Variant, ShopsArticles },
+  components: { Representation, NewCategory, NewTax, CompositeList, Variant, ShopsArticles },
   data () {
     return {
       formValid: false,
@@ -784,13 +732,14 @@ export default {
     },
     inputColor (color) {
       this.article.color = color
+      this.article.images = []
     },
-    uploadImage (formData, index, fileList) {
-      this.article.images = fileList
+    uploadImage (images) {
+      this.article.images = images
     },
     managerArticleHandler () {
       let valid = true
-      if (!this.article.category) {
+      if (!this.article.category || !this.article.category.id) {
         valid = false
         this.showAlertMessage(this.$vuetify.lang.t(
           '$vuetify.messages.warning_no_category'

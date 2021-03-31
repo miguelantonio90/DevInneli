@@ -749,7 +749,11 @@ export default {
   },
   watch: {
     txtFilter: function () {
-      this.articlesFilter = this.txtFilter !== '' ? this.localArticles.filter(art => art.name.toLowerCase().includes(this.txtFilter.toLowerCase()) || art.barCode.toLowerCase().includes(this.txtFilter.toLowerCase())) : this.localArticles
+      this.articlesFilter = this.txtFilter !== ''
+        ? this.localArticles.filter(
+          art => art.name.toLowerCase().includes(this.txtFilter.toLowerCase()) ||
+                  (art.barCode !== null ? art.barCode.toLowerCase().includes(this.txtFilter.toLowerCase()) : false)
+        ) : this.localArticles
     },
     discounts: function () {
       this.getLocalDiscounts()

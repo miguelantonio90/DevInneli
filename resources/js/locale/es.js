@@ -67,6 +67,7 @@ export default {
   referralLink: 'Link de refrencia',
   // menu
   menu: {
+    fiscal_account: 'Cuenta Fiscal',
     sub_file: 'Sub Archivo Contable',
     account_move: 'Movimiento Contable',
     account_moves: 'Movimientos Contable',
@@ -110,7 +111,7 @@ export default {
     modifiers: 'Modificador',
     discounts_list: ' Lista de Descuentos',
     pay: 'Métodos de Pago',
-    supplier: 'Proveedores',
+    supplier: 'Proveedor',
     supplier_list: 'Lista de Proveedores',
     resume: 'Resumen',
     account_classify: 'Archivo Contable',
@@ -189,14 +190,14 @@ export default {
     no_delete_default: 'No se puede ejecutar esta función. Este elemento es por defecto',
     refused: 'Fallido: Conexión rechazada.',
     success_avatar: 'La imagen se salvado satisfactoriamente.',
-    warning_requested_provider: 'Si su proveedor no está registrado desea que le enviemos un correo con invitación',
+    warning_requested_provider: 'Si su proveedor no está registrado, ¿desea que le enviemos un correo con invitación?',
     warning_delete: 'No se podrá revertir esta acción!',
     warning_exist_articles: 'No se puede eliminar esta Categoría. Tiene Artículos adjuntos, por favor elimínelos primero!',
     warning_digital_box: 'Esta Caja se maneja de manera automática, para registrar las ventas en línea y no se puede gestionar.',
     warning_exist: 'Ya existe una variante con ese nombre!',
     warning_excess_money: 'La cantidad definida a cobrar es mayor o igual a la precio total. Disminuya las cantidades ya definidas',
     warning_preform: 'Usted creará una Preforma(PRE-FACTURA). ' +
-        'Esto no se contemplará como venta real hasta tanto no defina la Forma de Pago en la Sección de Datos Adicionales!',
+            'Esto no se contemplará como venta real hasta tanto no defina la Forma de Pago en la Sección de Datos Adicionales!',
     error_delete_shop: 'Debe existir al menos una tienda',
     error_delete_manager: 'Este usuario no puede ser eliminado',
     error_edit_manager: 'Este usuario no puede ser editado. Use el perfil para editarlo.',
@@ -233,7 +234,7 @@ export default {
     warning_refund_Money: 'Usted ha reembolsado $' + '{0}, solo puede reembolsar entre $0.00 y $' + '{1}',
     warning_refund_all: 'No se puede reeembolsar. Usted ha reembolsado todo el dinero y los artículos',
     warning_article_service: 'Si no selecciona este campo el sistema asumirá que está creando un servicio ' +
-        'y no podrá abastecerlo(Realizar una compra). Si lo seleciona podrá ponerle una cantidad en el almacén o tienda',
+            'y no podrá abastecerlo(Realizar una compra). Si lo seleciona podrá ponerle una cantidad en el almacén o tienda',
     info_exchange_rate: 'La tasa de cambio es con respecto a 1',
     idle_title: 'Sesión expirada',
     idle_info: 'Ha dejado este navegador inactivo durante 10 minutos.',
@@ -241,16 +242,22 @@ export default {
     warning_ref: 'No puede adicionar ese artículo. La Referencia {0} ya está en uso.',
     warning_barCode: 'No puede adicionar ese artículo. El Código de Barras {0} se está usando por {1} y {2}.',
     info_import_category: 'Si este archivo contiene Categorías, serán importadas al sistema, pero si usted ya ha creado alguna antes de importar, ' +
-       'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
+            'y coinciden los nombres, entonces se mantendrán las antiguas, adjuntándole los nuevos artículos.',
     info_import_shop: 'Si este archivo contiene artículos relacionado con tiendas, las mismas serán importadas al sistema  con el país donde usted fue registrado, ' +
-        'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándole los nuevos artículos. Si desea ' +
-        'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el Lista.',
+            'pero si usted ya ha creado alguna antes de importar, y coinciden los nombres, entonces se mantendrá la antigua, relacionándole los nuevos artículos. Si desea ' +
+            'cambiar el país, luego de importarla, puede ir al menú de Configuración, sección de Tiendas y Editar la misma en el Lista.',
     info_import_ref: 'Si usted ya ha creado Artículos y las Referencias coinciden con las de los Artículos importados, se le rescribirá a los nuevos artículos.',
     observation: 'Observación'
+  },
+  /// hints messages
+  hints: {
+    press_enter: 'Presione ENTER para adicionar a la lista',
+    rnc: 'RNC o RUC. Se refiere a la identificación como contribuyente'
   },
   // options
   actions: {
     actions: 'Acciones',
+    config: 'Configurar {0}',
     refund: 'Reembolsar',
     accept: 'Aceptar',
     open: 'Abrir',
@@ -516,8 +523,8 @@ export default {
     sale: 'Venta',
     online_text: 'Esta venta se realiza de forma online, y se realizará por la Caja Digital de manera automática',
     selectArticle: 'Por favor seleccione el artí' +
-        '' +
-        '',
+            '' +
+            '',
     no_article: 'No existen artículos en esta tienda, por favor primero adicione artículos',
     selectShop: 'Debe seleccionar una tienda',
     discountGeneral: 'Descuento Total por venta',
@@ -621,19 +628,19 @@ export default {
     step2: '<strong>Menu</strong>!<br> Aquí encontramos las funcionalidades principales por módulos',
     step3: '<strong>Configuración</strong>!<br> Elementos de <a href="/setting" style="color:#4fc08d">configuración</a>',
     step4: '<strong>Gestión de Artículos</strong>!<br> ' +
-      '<a href="/articles/product.list" style="color:#4fc08d">Productos</a><br>' +
-      '<a href="/articles/category.list" style="color:#4fc08d">Categorías</a>',
+            '<a href="/articles/product.list" style="color:#4fc08d">Productos</a><br>' +
+            '<a href="/articles/category.list" style="color:#4fc08d">Categorías</a>',
     step5: '<strong>Gestión  de Ventas</strong>!<br> ' +
-      '<a href="/sales/vending.list" style="color:#4fc08d">Ventas</a><br>' +
-      '<a href="/sales/refund.list" style="color:#4fc08d">Reembolsos</a><br>' +
-      '<a href="/sales/boxes.list" style="color:#4fc08d">Cajas</a>',
+            '<a href="/sales/vending.list" style="color:#4fc08d">Ventas</a><br>' +
+            '<a href="/sales/refund.list" style="color:#4fc08d">Reembolsos</a><br>' +
+            '<a href="/sales/boxes.list" style="color:#4fc08d">Cajas</a>',
     step6: '<strong>Gestión de empleados</strong>!<br> ' +
-      'Lista de <a href="/users/employer.list" style="color:#4fc08d">empleados</a><br>' +
-      'Tarjetas de <a href="/users/assistance.list" style="color:#4fc08d">asistencia</a>',
+            'Lista de <a href="/users/employer.list" style="color:#4fc08d">empleados</a><br>' +
+            'Tarjetas de <a href="/users/assistance.list" style="color:#4fc08d">asistencia</a>',
     step7: '<strong>Gestión de <a href="/clients/client.list" style="color:#4fc08d">clientes</a></strong>!',
     step8: '<strong>Gestión de mis finanzas</strong>!<br>' +
-      '<a href="/finance/supplier.list" style="color:#4fc08d">Proveedores</a><br>' +
-      '<a href="/finance/buy_list" style="color:#4fc08d">Gestión de compras</a>',
+            '<a href="/finance/supplier.list" style="color:#4fc08d">Proveedores</a><br>' +
+            '<a href="/finance/buy_list" style="color:#4fc08d">Gestión de compras</a>',
     step9: '<strong>Resumen</strong>!<br>Resumen gráficos de mis ventas',
     step10: '<strong>Nav Icon</strong>!<br>Abrir y cerrar el menu general',
     step11: '<strong>Lock Icon</strong>!<br>Bloqueo de pantalla o aplicación',
@@ -642,8 +649,8 @@ export default {
     step14: '<strong>Compras</strong>!<br>Acceso directo a la compras de prodcutos',
     step15: '<strong>Selector de idioma</strong>!<br>Selector de idioma para la visualiazación',
     step16: '<strong>User Icon</strong>!<br>' +
-      '<a href="/finance/supplier.list" style="color:#4fc08d">Perfil</a><br>' +
-      'Cerrar sección',
+            '<a href="/finance/supplier.list" style="color:#4fc08d">Perfil</a><br>' +
+            'Cerrar sección',
     step17: '<strong>Ajuste de Tema</strong>!<br>Selecionar colores, idiomas y estilos de la aplicación',
     step18: '<strong>Estadísticas generales</strong>!<br> Principales indicadores de compañía'
   },
@@ -708,7 +715,7 @@ export default {
   helpSaleManager: {
     selectShop: 'Aquí selecciona la Tienda en que se realiza la venta',
     selectBox: 'Aquí selecciona la Caja por donde se venderá. Si está cerrada, automáticamente se ' +
-        'abrirá para el usuario autenticado con $0.00',
+            'abrirá para el usuario autenticado con $0.00',
     addBox: 'Aquí adiciona una nueva Caja',
     selectArticle: 'Aquí selecciona los artículos que se venderá'
   },
@@ -749,7 +756,7 @@ export default {
     referralsList: 'Lista de referencias',
     activate: 'Activa tu programa de referidos',
     description: 'Si invitas a una persona y paga su membresía, tú obtienes ganancias por ello. ' +
-    'Tenemos muchas ofertas para que obtengas mayores ganancias.',
+            'Tenemos muchas ofertas para que obtengas mayores ganancias.',
     confirm_copied: 'Se copió su enlace de referencia: ',
     error_copied: 'No se pudo copiar el texto'
   },
@@ -768,10 +775,15 @@ export default {
     assets: 'Haber(Crédito)',
     description_nature: {
       creditor: 'Por su naturaleza aumentan su saldo al registrar un crédito (haber, abono).\n' +
-          'Por contra, se reduce su saldo al hacer un registro de débito (haber, abono) en ellas.',
+                'Por contra, se reduce su saldo al hacer un registro de débito (haber, abono) en ellas.',
       debtor: 'Por su naturaleza disminuye su saldo al registrar un crédito (haber, abono).\n' +
-          'Por contra, se aumenta su saldo al hacer un registro de débito (haber, abono) en ellas.\n'
+                'Por contra, se aumenta su saldo al hacer un registro de débito (haber, abono) en ellas.\n'
     }
+  },
+  fiscal: {
+    rnc: 'RNC',
+    first_facture: 'Primera Factura',
+    prefix: 'Prefijos de Factura'
   },
   ...es
 }

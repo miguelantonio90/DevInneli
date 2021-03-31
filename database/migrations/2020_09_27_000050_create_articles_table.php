@@ -16,6 +16,7 @@ class CreateArticlesTable extends BaseMigration
             $table->string('name');
             $table->json('um')->nullable();
             $table->decimal('price', 15, 2)->default(0);
+            $table->decimal('onlinePrice', 15, 2)->default(0);
             $table->decimal('cost', 15, 2)->default(0);
             $table->string('color')->nullable();
             $table->string('ref')->nullable();

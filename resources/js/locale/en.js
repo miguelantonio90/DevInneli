@@ -30,7 +30,7 @@ export default {
   noDefined: 'Undefined',
   aboutMe: 'About me',
   activeAccount:
-'Hello, your account has been created, but it has not been activated yet. Please access the registered email, you have been sent a message for activation. ',
+        'Hello, your account has been created, but it has not been activated yet. Please access the registered email, you have been sent a message for activation. ',
   confirm_password: 'Confirm Password',
   confirm_pinCode: 'Confirm Code',
   company: 'Company',
@@ -67,6 +67,7 @@ export default {
   referralLink: 'Referral link',
   // menu
   menu: {
+    fiscal_account: 'Fiscal Account',
     sub_file: 'Sub file Account',
     account_move: 'Move',
     account_moves: 'Moves',
@@ -110,7 +111,7 @@ export default {
     modifiers: 'Modifier',
     discounts_list: 'List of Discounts',
     pay: 'Payment Methods',
-    supplier: 'Suppliers',
+    supplier: 'Supplier',
     supplier_list: 'List of Suppliers',
     resume: 'Summary',
     account_classify: 'Account File',
@@ -190,13 +191,14 @@ export default {
     no_delete_default: 'You can\'t execute this function. This element is by default',
     refused: 'Failed: Connection refused.',
     success_avatar: 'The image was saved successfully.',
+    warning_requested_provider: 'If your provider is not registered, you want us to send you an invitation email?',
     warning_delete: 'This action cannot be reversed!',
     warning_exist_articles: "You can't delete this Category. Please delete articles first!",
     warning_digital_box: 'This box work automatically, to register online sales, and you can\'t manager.',
     warning_exist: 'Exist a variant with this name!',
     warning_excess_money: 'The defined amount to be charged is greater than or equal to the total price. Decrease the amounts already defined',
     warning_preform: 'You will create a Preform (PRE-FACTURE)' +
-        'This will not be considered as a real sale until you define the Payment Method in the Additional Data Section',
+            'This will not be considered as a real sale until you define the Payment Method in the Additional Data Section',
     error_delete_shop: 'There must be at least one store',
     error_delete_manager: 'This user cannot be deleted',
     error_edit_manager: 'This user cannot be edited. Use the profile to edit it. ',
@@ -206,7 +208,7 @@ export default {
     success_del: '{0} has been successfully removed.',
     failed_catch: 'Error occurred while processing data from {0}',
     check_mail:
-      'An email has been sent with the details to change password.',
+            'An email has been sent with the details to change password.',
     password_success: 'The password was updated successfully.',
     warning_create: 'Cannot create this element. First you must create {0} ',
     sure_delete: 'Are you sure to delete this item?',
@@ -233,7 +235,7 @@ export default {
     warning_refund_Money: 'You have refunded $' + '{0}, you can only refund between $ 0.00 and $' + '{1}',
     warning_refund_all: 'Unable to refund. You have refunded all money and items',
     warning_article_service: "If you do not select this field, the system will assume that you are creating a ' +\n'" +
-        "        'service and you will not be able to supply it (Make a purchase). If you select then you can add existence in store or shop",
+            "        'service and you will not be able to supply it (Make a purchase). If you select then you can add existence in store or shop",
     info_exchange_rate: 'The exchange rate is with respect to 1',
     idle_title: 'Session expired',
     idle_info: 'You have left this browser idle for 10 minutes.',
@@ -241,15 +243,21 @@ export default {
     warning_ref: 'You cannot add that article. Reference {0} is already in use. ',
     warning_barCode: 'You cannot add that item. Barcode {0} is used by {1} and {2}',
     info_import_category: 'If this file contains Categories, they will be imported to the system, but if you have already created any before importing,' +
-      'and the names match, then the old ones will be kept, attaching the new items.',
+            'and the names match, then the old ones will be kept, attaching the new items.',
     info_import_shop: 'If this file contains items related to stores, they will be imported into the system with the country where you were registered,' +
-      'but if you have already created one before importing, and the names match, then the old one will be kept, linking the new articles to it. If you want ' +
-      'change the country, after importing it, you can go to the Settings menu, Stores section and Edit it in the list.',
+            'but if you have already created one before importing, and the names match, then the old one will be kept, linking the new articles to it. If you want ' +
+            'change the country, after importing it, you can go to the Settings menu, Stores section and Edit it in the list.',
     info_import_ref: 'If you have already created Articles and the References match those of the imported Articles, you will be rewritten to the new articles.',
     observation: 'Observation'
   },
+  /// hints messages
+  hints: {
+    press_enter: 'Press ENTER to add to the list',
+    rnc: 'RNC or RUC. This is your identification as contributor'
+  },
   actions: {
     actions: 'Actions',
+    config: 'Config {0}',
     refund: 'Refund',
     accept: 'Accept',
     open: 'Open',
@@ -446,9 +454,7 @@ export default {
     image: 'Image'
   },
   buy_product: {
-    supply: 'Supplier',
-    emit: 'Supply Emit',
-    received: 'Supply Received'
+    supply: 'Supplier'
   },
   payment: {
     name: 'Payment Method',
@@ -508,7 +514,9 @@ export default {
     total: 'Total'
   },
   supply: {
-    name: 'Purchase'
+    name: 'Purchase',
+    emit: 'Supply Emit',
+    received: 'Supply Received'
   },
   sale: {
     sale: 'Sale',
@@ -617,19 +625,19 @@ export default {
     step2: '<strong>Menu</strong>!<br> Here we find the main functionalities by modules',
     step3: '<strong> Configuration </strong><br> General <a href="/setting" style="color:#4fc08d">configuration</a> elements ',
     step4: '<strong>Management of Articles</strong>!<br> ' +
-      '<a href="/articles/product.list" style="color:#4fc08d">Products</a><br>' +
-      '<a href="/articles/category.list" style="color:#4fc08d">Categories</a>',
+            '<a href="/articles/product.list" style="color:#4fc08d">Products</a><br>' +
+            '<a href="/articles/category.list" style="color:#4fc08d">Categories</a>',
     step5: '<strong> Sales Management </strong>! <br>' +
-      '<a href="/sales/vending.list" style="color:#4fc08d">Sales </a><br>' +
-      '<a href="/sales/refund.list" style="color:#4fc08d">Refunds </a><br>' +
-      '<a href="/sales/boxes.list" style="color:#4fc08d">Boxes </a>',
+            '<a href="/sales/vending.list" style="color:#4fc08d">Sales </a><br>' +
+            '<a href="/sales/refund.list" style="color:#4fc08d">Refunds </a><br>' +
+            '<a href="/sales/boxes.list" style="color:#4fc08d">Boxes </a>',
     step6: '<strong> Employee management </strong>! <br>' +
-      '<a href="/users/employer.list" style="color:#4fc08d">Employee</a> list  <br>' +
-      '<a href="/users/assistance.list" style="color:#4fc08d">Attendance</a> cards',
+            '<a href="/users/employer.list" style="color:#4fc08d">Employee</a> list  <br>' +
+            '<a href="/users/assistance.list" style="color:#4fc08d">Attendance</a> cards',
     step7: '<strong> Management of <a href="/clients/client.list" style="color:#4fc08d"> clients </a> </strong>!',
     step8: '<strong> Managing my finances </strong>! <br>' +
-      '<a href="/finance/supplier.list" style="color:#4fc08d">Suppliers </a> <br>' +
-      '<a href="/finance/buy_list" style="color:#4fc08d">Purchasing management </a>',
+            '<a href="/finance/supplier.list" style="color:#4fc08d">Suppliers </a> <br>' +
+            '<a href="/finance/buy_list" style="color:#4fc08d">Purchasing management </a>',
     step9: '<strong>Summary</strong>!<br>Graphical summary of my sales',
     step10: '<strong> Nav Icon </strong>! <br> Open and close the general menu',
     step11: '<strong> Lock Icon </strong>! <br> Lock screen or app',
@@ -638,8 +646,8 @@ export default {
     step14: '<strong> Purchases </strong>! <br> Direct access to product purchases',
     step15: '<strong> Language selector </strong>! <br> Language selector for display',
     step16: '<strong> User Icon </strong>! <br>' +
-      '<a href="/user/profile" style="color:#4fc08d"> Profile </a> <br>' +
-      'Sing Out',
+            '<a href="/user/profile" style="color:#4fc08d"> Profile </a> <br>' +
+            'Sing Out',
     step17: '<strong> Theme Setting </strong>! <br> Select application colors, languages and styles',
     step18: '<strong> General statistics </strong>! <br> Main company indicators'
   },
@@ -708,9 +716,9 @@ export default {
   },
   supply_state: {
     state: {
-      state: 'State',
+      name: 'State',
       requested: 'Requested',
-      accepted: 'accepted',
+      accepted: 'Accepted',
       process: 'Process',
       ship: 'Ship',
       received: 'Received',
@@ -743,7 +751,7 @@ export default {
     referralsList: 'Referrals List',
     activate: 'Activate your Referral Program',
     description: 'If you invite a person and this person pays for a membership, you get a free month. ' +
-     'If you get 10 people to sign up as your referrals, you get $ 100 as a thank you.',
+            'If you get 10 people to sign up as your referrals, you get $ 100 as a thank you.',
     confirm_copied: 'Your referral link has been copied: ',
     error_copied: 'The text could not be copied'
   },
@@ -762,10 +770,15 @@ export default {
     assets: 'Assets(Credit)',
     description_nature: {
       creditor: 'By their nature, they increase their balance when registering a credit (credit, credit).\n' +
-              'On the other hand, your balance is reduced by making a debit record (credit, credit) in them\n',
+                'On the other hand, your balance is reduced by making a debit record (credit, credit) in them\n',
       debtor: 'By its nature, your balance decreases when you register a credit (credit, credit).\n' +
-              'On the other hand, your balance is increased by making a debit record (credit, credit) in them.\n'
+                'On the other hand, your balance is increased by making a debit record (credit, credit) in them.\n'
     }
+  },
+  fiscal: {
+    rnc: 'RNC',
+    first_facture: 'First Facture',
+    prefix: 'Prefix of Facture'
   },
   ...en
 }

@@ -29,11 +29,12 @@
           <template v-slot:item.name="{ item }">
             <v-chip
               :key="JSON.stringify(item)"
-              style="width: 40%"
+              style="max-width: 20%"
             >
               <v-avatar
                 v-if="item.color && item.images.length === 0"
                 class="white--text"
+                style="margin: 3px"
                 :color="item.color"
                 left
                 v-text="item.name.slice(0, 1).toUpperCase()"
@@ -235,6 +236,7 @@ export default {
         {
           text: this.$vuetify.lang.t('$vuetify.firstName'),
           value: 'name',
+          style: "width: '10%'",
           select_filter: true
         },
         {
